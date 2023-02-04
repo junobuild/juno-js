@@ -1,0 +1,36 @@
+{
+  "name": "@junobuild/juno-js",
+  "version": "0.0.1",
+  "description": "JavaScript libraries for interfacing with Juno",
+  "main": "index.js",
+  "scripts": {
+    "declarations": "node ./scripts/declarations.mjs",
+    "format": "prettier --write .",
+    "lint": "eslint --max-warnings 0 ."
+  },
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "packages/core",
+    "packages/admin"
+  ],
+  "devDependencies": {
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "esbuild": "^0.17.5",
+    "eslint": "^8.33.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "prettier": "^2.8.3",
+    "prettier-plugin-organize-imports": "^3.2.2",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@dfinity/agent": "^0.15.3",
+    "@dfinity/auth-client": "^0.15.3",
+    "@dfinity/identity": "^0.15.3",
+    "@dfinity/principal": "^0.15.3"
+  }
+}

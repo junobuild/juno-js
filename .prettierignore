@@ -1,0 +1,9 @@
+**/src/components.d.ts
+dist
+www
+loader
+.stencil
+
+.dfx
+
+target

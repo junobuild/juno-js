@@ -2,14 +2,14 @@
   "name": "@junobuild/juno-js",
   "version": "0.0.1",
   "description": "JavaScript libraries for interfacing with Juno",
+  "author": "David Dal Busco (https://daviddalbusco.com)",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "declarations": "node ./scripts/declarations.mjs",
     "format": "prettier --write .",
     "lint": "eslint --max-warnings 0 ."
   },
-  "author": "",
-  "license": "ISC",
   "workspaces": [
     "packages/core",
     "packages/admin"

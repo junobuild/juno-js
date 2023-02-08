@@ -5,7 +5,7 @@ JavaScript libraries for interfacing with [Juno].
 ## Libraries
 
 - [core](/packages/core): core client library
-- [admin](/packages/admin):  interfacing with admin features
+- [admin](/packages/admin): interfacing with admin features
 
 ## License
 

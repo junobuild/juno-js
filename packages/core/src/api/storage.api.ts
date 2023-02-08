@@ -3,7 +3,6 @@ import type {
   ListResults as ListAssetsApi,
   _SERVICE as SatelliteActor
 } from '../../../declarations/satellite/satellite.did';
-import {log} from '../events/log.events';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
 import type {Asset, ENCODING_TYPE, Storage} from '../types/storage.types';
@@ -25,9 +24,6 @@ export const uploadAsset = async ({
   Pick<Storage, 'token' | 'encoding'> & {satellite: Satellite}): Promise<void> => {
   const logFileInfo = `${filename}${encoding ? ` (${encoding})` : ''}`;
 
-  log({msg: `[upload][start] ${logFileInfo}`, level: 'info'});
-  const t0 = performance.now();
-
   const actor: SatelliteActor = await getSatelliteActor(satellite);
 
   const {batch_id: batchId} = await actor.init_asset_upload({
@@ -37,9 +33,6 @@ export const uploadAsset = async ({
     token: toNullable<string>(token),
     encoding_type: toNullable<ENCODING_TYPE>(encoding)
   });
-
-  const t1 = performance.now();
-  log({msg: `[upload][create batch] ${logFileInfo}`, duration: t1 - t0, level: 'info'});
 
   const chunkSize = 700000;
 
@@ -60,9 +53,6 @@ export const uploadAsset = async ({
     );
   }
 
-  const t2 = performance.now();
-  log({msg: `[upload][chunks] ${logFileInfo}`, duration: t2 - t1, level: 'info'});
-
   const contentType: [[string, string]] | undefined =
     headers.find(([type, _]) => type.toLowerCase() === 'content-type') === undefined &&
     data.type !== undefined &&
@@ -75,10 +65,6 @@ export const uploadAsset = async ({
     chunk_ids: chunkIds.map(({chunk_id}: {chunk_id: bigint}) => chunk_id),
     headers: [...headers, ...(contentType ? contentType : [])]
   });
-
-  const t3 = performance.now();
-  log({msg: `[upload][commit batch] ${logFileInfo}`, duration: t3 - t2, level: 'info'});
-  log({msg: `[upload][done] ${logFileInfo}`, duration: t3 - t0, level: 'info'});
 };
 
 const uploadChunk = async ({

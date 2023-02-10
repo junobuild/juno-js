@@ -8,7 +8,8 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   idlFactory,
   identity,
   fetch,
-  env = 'prod'
+  env = 'prod',
+  config
 }: {
   idlFactory: IDL.InterfaceFactory;
   canisterId: string;
@@ -26,6 +27,7 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   // Creates an actor with using the candid interface and the HttpAgent
   return Actor.createActor(idlFactory, {
     agent,
-    canisterId
+    canisterId,
+    ...(config !== undefined ? config : {})
   });
 };

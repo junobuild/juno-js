@@ -1,5 +1,10 @@
+export interface StorageConfigHeaders {
+  source: string;
+  headers: [string, string][];
+}
+
 export interface StorageConfig {
-  trailingSlash?: 'always' | 'never';
+  headers: StorageConfigHeaders[];
 }
 
 export interface Config {

@@ -3,22 +3,26 @@ import {Principal} from '@dfinity/principal';
 import {upgradeCode} from '../api/ic.api';
 import {listControllers, setConfig as setConfigApi, version} from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
-import type {Config} from '../types/config.types';
+import type {Config, StorageConfigHeaders} from '../types/config.types';
 
 export const setConfig = async ({
   config: {
-    storage: {trailingSlash}
+    storage: {headers: configHeaders}
   },
   satellite
 }: {
   config: Config;
   satellite: SatelliteParameters;
 }): Promise<void> => {
+  const headers: [string, [string, string][]][] = configHeaders.map(
+    ({source, headers}: StorageConfigHeaders) => [source, headers]
+  );
+
   return setConfigApi({
     satellite,
     config: {
       storage: {
-        trailing_slash: trailingSlash === 'never' ? {Never: null} : {Always: null}
+        headers
       }
     }
   });

@@ -14,7 +14,7 @@ import {AuthStore} from './stores/auth.store';
 import {EnvStore} from './stores/env.store';
 import type {User} from './types/auth.types';
 
-export const initDapp = async (env: Environment) => {
+export const initJuno = async (env: Environment) => {
   EnvStore.getInstance().set(env);
 
   await initAuth();

@@ -1,4 +1,4 @@
-import type {_SERVICE as ICActor} from '../../../declarations/ic/ic.did';
+import type {_SERVICE as ICActor} from '../../declarations/ic/ic.did';
 import type {ActorParameters} from '../types/actor.types';
 import type {InstallCodeParams} from '../types/ic.types';
 import {getICActor} from './actor.api';

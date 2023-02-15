@@ -2,7 +2,7 @@ import type {
   AssetNoContent,
   ListResults as ListAssetsApi,
   _SERVICE as SatelliteActor
-} from '../../../declarations/satellite/satellite.did';
+} from '../../declarations/satellite/satellite.did';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
 import type {Asset, ENCODING_TYPE, Storage} from '../types/storage.types';

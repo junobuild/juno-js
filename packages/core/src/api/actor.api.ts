@@ -1,5 +1,5 @@
-import type {_SERVICE as SatelliteActor} from '../../../declarations/satellite/satellite.did';
-import {idlFactory} from '../../../declarations/satellite/satellite.factory.did.js';
+import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
+import {idlFactory} from '../../declarations/satellite/satellite.factory.did.js';
 import {EnvStore} from '../stores/env.store';
 import type {Satellite} from '../types/satellite.types';
 import {createActor} from '../utils/actor.utils';

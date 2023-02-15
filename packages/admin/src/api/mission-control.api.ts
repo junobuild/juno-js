@@ -1,5 +1,5 @@
 import type {Principal} from '@dfinity/principal';
-import type {_SERVICE as MissionControlActor} from '../../../declarations/mission_control/mission_control.did';
+import type {_SERVICE as MissionControlActor} from '../../declarations/mission_control/mission_control.did';
 import type {MissionControlParameters} from '../types/actor.types';
 import {getMissionControlActor} from './actor.api';
 

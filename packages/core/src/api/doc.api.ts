@@ -2,7 +2,7 @@ import type {
   Doc as DocApi,
   ListResults_1 as ListDocsApi,
   _SERVICE as SatelliteActor
-} from '../../../declarations/satellite/satellite.did';
+} from '../../declarations/satellite/satellite.did';
 import type {Doc} from '../types/doc.types';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';

@@ -2,7 +2,7 @@ import type {Principal} from '@dfinity/principal';
 import type {
   Config,
   _SERVICE as SatelliteActor
-} from '../../../declarations/satellite/satellite.did';
+} from '../../declarations/satellite/satellite.did';
 import type {SatelliteParameters} from '../types/actor.types';
 import {getSatelliteActor} from './actor.api';
 

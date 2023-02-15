@@ -35,4 +35,4 @@ dist/
 
 target/
 
-packages/declarations/
+**/declarations/

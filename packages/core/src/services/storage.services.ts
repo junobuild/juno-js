@@ -1,4 +1,4 @@
-import type {AssetNoContent} from '../../../declarations/satellite/satellite.did';
+import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import {
   deleteAsset as deleteAssetApi,
   deleteAssets as deleteAssetsApi,

@@ -1,4 +1,4 @@
-import type {AssetNoContent} from '../../../declarations/satellite/satellite.did';
+import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import type {ListResults} from './list.types';
 
 export interface AssetEncoding {

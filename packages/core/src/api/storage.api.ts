@@ -22,8 +22,6 @@ export const uploadAsset = async ({
   satellite
 }: Required<Omit<Storage, 'token' | 'encoding'>> &
   Pick<Storage, 'token' | 'encoding'> & {satellite: Satellite}): Promise<void> => {
-  const logFileInfo = `${filename}${encoding ? ` (${encoding})` : ''}`;
-
   const actor: SatelliteActor = await getSatelliteActor(satellite);
 
   const {batch_id: batchId} = await actor.init_asset_upload({

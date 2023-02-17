@@ -40,7 +40,7 @@ const uploadAssetIC = async ({
   const identity = getIdentity(satellite?.identity);
 
   const filename: string = encodeFilename(storageFilename);
-  const fullPath: string = storagePath || `/${filename}`;
+  const fullPath: string = storagePath || `/${collection}/${filename}`;
 
   await uploadAssetApi({
     data,

@@ -1,9 +1,10 @@
 import type {Identity} from '@dfinity/agent';
 import {AuthClient} from '@dfinity/auth-client';
-import {delegationIdentityExpiration} from '../constants/auth.constants';
+import {delegationIdentityExpiration, popupHeight, popupWidth} from '../constants/auth.constants';
 import {AuthStore} from '../stores/auth.store';
 import {EnvStore} from '../stores/env.store';
 import type {SignInOptions} from '../types/auth.types';
+import {popupCenter} from '../utils/window.utils';
 import {initUser} from './user.services';
 
 let authClient: AuthClient | undefined;
@@ -49,8 +50,8 @@ export const signIn = async (options?: SignInOptions) =>
         }.localhost:8000?#authorize`
       }),
       ...(options?.derivationOrigin !== undefined && {derivationOrigin: options.derivationOrigin}),
-      ...(options?.windowOpenerFeatures !== undefined && {
-        windowOpenerFeatures: options.windowOpenerFeatures
+      ...(options?.windowed !== false && {
+        windowOpenerFeatures: popupCenter({width: popupWidth, height: popupHeight})
       })
     });
   });

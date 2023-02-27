@@ -3,4 +3,5 @@
 // For Juno: 4 hours
 export const delegationIdentityExpiration = BigInt(4 * 60 * 60 * 1000 * 1000 * 1000);
 
-export const internetIdentityMainnet = 'https://identity.ic0.app';
+export const popupWidth = 576;
+export const popupHeight = 576;

@@ -13,5 +13,5 @@ export type User = Doc<UserData>;
 export interface SignInOptions {
   maxTimeToLive?: bigint;
   derivationOrigin?: string | URL;
-  windowOpenerFeatures?: string;
+  windowed?: boolean;
 }

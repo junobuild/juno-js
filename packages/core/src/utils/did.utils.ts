@@ -13,8 +13,8 @@ export const toArray = async <T>(data: T): Promise<Uint8Array> => {
   return new Uint8Array(await blob.arrayBuffer());
 };
 
-export const fromArray = async <T>(data: Uint8Array): Promise<T> => {
-  const blob: Blob = new Blob([data], {
+export const fromArray = async <T>(data: Uint8Array | number[]): Promise<T> => {
+  const blob: Blob = new Blob([data instanceof Uint8Array ? data : new Uint8Array(data)], {
     type: 'application/json; charset=utf-8'
   });
   return JSON.parse(await blob.text());

@@ -4,17 +4,20 @@ export interface ListResults<T> {
   matches_length: bigint;
 }
 
-export interface PaginateDocs {
+export interface ListPaginate {
   startAfter?: string;
   limit?: number;
 }
 
-export interface OrderDocs {
+export type ListOrderField = 'keys' | 'updated_at' | 'created_at';
+
+export interface ListOrder {
   desc: boolean;
+  field: ListOrderField;
 }
 
 export interface ListParams {
   matcher?: string;
-  paginate?: PaginateDocs;
-  order?: OrderDocs;
+  paginate?: ListPaginate;
+  order?: ListOrder;
 }

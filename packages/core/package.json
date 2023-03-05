@@ -16,6 +16,7 @@
   "files": [
     "dist",
     "types",
+    "declarations",
     "README.md",
     "LICENSE"
   ],

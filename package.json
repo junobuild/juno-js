@@ -16,7 +16,7 @@
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
-    "esbuild": "^0.17.10",
+    "esbuild": "^0.17.11",
     "eslint": "^8.35.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.27.5",

@@ -32,6 +32,8 @@ Thumbs.db
 UserInterfaceState.xcuserstate
 
 dist/
+packages/admin/types/
+packages/core/types/
 
 target/
 

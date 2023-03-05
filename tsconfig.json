@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "declaration": true,
     "target": "esnext",
     "lib": ["esnext", "dom"],
     "strict": true,
@@ -9,7 +8,12 @@
     "moduleResolution": "node",
     "module": "esnext",
     "skipLibCheck": true,
-    "outDir": "./dist"
+    "useDefineForClassFields": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true
   },
   "exclude": ["**/src/**/*.test.ts", "**/src/**/*.spec.ts", "**/src/**/*.mock.ts"]
 }

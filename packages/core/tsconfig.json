@@ -1,4 +1,7 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*", "candid/**/*"]
+  "compilerOptions": {
+    "outDir": "types"
+  },
+  "include": ["src/**/*", "declarations/**/*"]
 }

@@ -3,8 +3,8 @@
 import {existsSync, rmSync} from 'fs';
 import {join} from 'path';
 
-const rmDir = () => {
-  const dir = join(process.cwd(), 'dist');
+const rmDir = (folder) => {
+  const dir = join(process.cwd(), folder);
 
   if (!existsSync(dir)) {
     return;
@@ -13,4 +13,5 @@ const rmDir = () => {
   rmSync(dir, {recursive: true});
 };
 
-rmDir();
+rmDir('dist');
+rmDir('types');

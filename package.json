@@ -14,9 +14,7 @@
     "packages/admin"
   ],
   "devDependencies": {
-    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
-    "esbuild": "^0.17.11",
     "eslint": "^8.35.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.27.5",
@@ -24,6 +22,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "prettier": "^2.8.4",
     "prettier-plugin-organize-imports": "^3.2.2",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "vite": "^4.1.4"
   }
 }

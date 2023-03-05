@@ -5,7 +5,7 @@ export * from './services/doc.services';
 export * from './services/storage.services';
 export * from './types/auth.types';
 export * from './types/doc.types';
-export {ListOrder, ListPaginate, ListParams, ListResults} from './types/list.types';
+export type {ListOrder, ListPaginate, ListParams, ListResults} from './types/list.types';
 export * from './types/satellite.types';
 export * from './types/storage.types';
 

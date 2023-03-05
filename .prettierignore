@@ -1,5 +1,7 @@
 **/src/components.d.ts
 dist
+packages/admin/types/
+packages/core/types/
 www
 loader
 .stencil

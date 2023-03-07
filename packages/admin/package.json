@@ -4,12 +4,13 @@
   "description": "A library for interfacing with admin features of Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.umd.cjs",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "require": "./dist/index.umd.cjs"
     }
   },

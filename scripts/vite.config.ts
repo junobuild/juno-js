@@ -1,8 +1,9 @@
 import {resolve} from 'path';
 import {readFileSync} from "fs";
 import {join} from 'path';
+import type {UserConfigExport} from "vite";
 
-export const viteConfig = () => {
+export const viteConfig = (): UserConfigExport => {
   const file = join(process.cwd(), "package.json");
   const json = readFileSync(file, "utf8");
   const { name } = JSON.parse(json);

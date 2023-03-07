@@ -1,13 +1,6 @@
-import {resolve} from 'path';
-import {defineConfig} from 'vite';
+import {viteConfig} from "../../scripts/vite.config";
+import {defineConfig} from "vite";
 
 export default defineConfig({
-  build: {
-    lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: '@junobuild/core',
-      fileName: 'index'
-    },
-    sourcemap: true
-  }
+    ...viteConfig()
 });

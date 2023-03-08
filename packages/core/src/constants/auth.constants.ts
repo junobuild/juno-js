@@ -5,3 +5,6 @@ export const delegationIdentityExpiration = BigInt(4 * 60 * 60 * 1000 * 1000 * 1
 
 export const popupWidth = 576;
 export const popupHeight = 576;
+
+// Worker
+export const AUTH_TIMER_INTERVAL = 1000;

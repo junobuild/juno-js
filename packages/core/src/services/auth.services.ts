@@ -4,18 +4,12 @@ import {delegationIdentityExpiration, popupHeight, popupWidth} from '../constant
 import {AuthStore} from '../stores/auth.store';
 import {EnvStore} from '../stores/env.store';
 import type {SignInOptions} from '../types/auth.types';
+import {createAuthClient} from '../utils/auth.utils';
 import {popupCenter} from '../utils/window.utils';
+import {supportsWorker} from '../utils/worker.utils';
 import {initUser} from './user.services';
 
 let authClient: AuthClient | undefined;
-
-const createAuthClient = (): Promise<AuthClient> =>
-  AuthClient.create({
-    idleOptions: {
-      disableIdle: true,
-      disableDefaultIdleCallback: true
-    }
-  });
 
 export const initAuth = async () => {
   authClient = authClient ?? (await createAuthClient());
@@ -29,7 +23,25 @@ export const initAuth = async () => {
   const user = await initUser();
   AuthStore.getInstance().set(user);
 
-  // TODO: idle timer worker
+  startIdleTimer().then(() => {
+    // In Astro awaiting promise after auth in Papyrs was blocker
+  });
+};
+
+let worker: Worker | undefined;
+
+const startIdleTimer = async () => {
+  // Firefox < v111 does not support Web Worker loaded as module
+  if (!supportsWorker()) {
+    return;
+  }
+
+  const {WORKER_ENTRY_FILE_URL: workerUrl} = await import('../workers/auth.worker');
+
+  const blob = new Blob([`import "${workerUrl}";`], {type: 'text/javascript'});
+  worker = new Worker(URL.createObjectURL(blob), {type: 'module'});
+
+  worker.postMessage('junoStartIdleTimer');
 };
 
 export const signIn = async (options?: SignInOptions) =>

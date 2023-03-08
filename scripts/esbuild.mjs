@@ -49,7 +49,7 @@ const buildEsmCjs = () => {
       sourcemap: true,
       minify: true,
       platform: 'node',
-      target: ['node16']
+      target: ['node18']
     })
     .catch(() => process.exit(1));
 };

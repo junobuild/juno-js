@@ -24,7 +24,7 @@ export const startIdleTimer = async (signOut: () => Promise<void>) => {
         }
     };
 
-    worker?.postMessage('junoStartIdleTimer');
+    worker?.postMessage({msg: 'junoStartIdleTimer'});
 };
 
-export const stopIdleTimer = () => worker?.postMessage('junoStopIdleTimer');
+export const stopIdleTimer = () => worker?.postMessage({msg: 'junoStopIdleTimer'});

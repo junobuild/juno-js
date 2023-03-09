@@ -7,7 +7,6 @@ import type {SignInOptions} from '../types/auth.types';
 import {createAuthClient} from '../utils/auth.utils';
 import {popupCenter} from '../utils/window.utils';
 import {initUser} from './user.services';
-import {startIdleTimer, stopIdleTimer} from "./worker.auth.services";
 
 let authClient: AuthClient | undefined;
 
@@ -22,10 +21,6 @@ export const initAuth = async () => {
 
   const user = await initUser();
   AuthStore.getInstance().set(user);
-
-  startIdleTimer(signOut).then(() => {
-    // In Astro awaiting promise after auth in Papyrs was blocker
-  });
 };
 
 export const signIn = async (options?: SignInOptions) =>
@@ -53,8 +48,6 @@ export const signIn = async (options?: SignInOptions) =>
   });
 
 export const signOut = async (): Promise<void> => {
-  stopIdleTimer();
-
   await authClient?.logout();
 
   // Reset local object otherwise next sign in (sign in - sign out - sign in) might not work out - i.e. agent-js might not recreate the delegation or identity if not resetted

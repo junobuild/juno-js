@@ -1,4 +1,5 @@
 import type {User} from '../types/auth.types';
+import type {Unsubscribe} from '../types/subscription.types';
 import {Store} from './store';
 
 export class AuthStore extends Store<User | null> {
@@ -27,7 +28,7 @@ export class AuthStore extends Store<User | null> {
     return this.authUser;
   }
 
-  override subscribe(callback: (data: User | null) => void): () => void {
+  override subscribe(callback: (data: User | null) => void): Unsubscribe {
     const unsubscribe: () => void = super.subscribe(callback);
 
     callback(this.authUser);

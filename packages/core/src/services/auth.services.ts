@@ -7,6 +7,7 @@ import type {SignInOptions} from '../types/auth.types';
 import {createAuthClient} from '../utils/auth.utils';
 import {popupCenter} from '../utils/window.utils';
 import {initUser} from './user.services';
+import {startIdleTimer, stopIdleTimer} from "./worker.auth.services";
 
 let authClient: AuthClient | undefined;
 
@@ -22,20 +23,9 @@ export const initAuth = async () => {
   const user = await initUser();
   AuthStore.getInstance().set(user);
 
-  startIdleTimer().then(() => {
+  startIdleTimer(signOut).then(() => {
     // In Astro awaiting promise after auth in Papyrs was blocker
   });
-};
-
-let worker: Worker | undefined;
-
-const startIdleTimer = async () => {
-  const content = await import('../workers/auth.worker');
-
-  // @ts-ignore default is the base64 string representation of the script
-  worker = new Worker(content.default);
-
-  worker?.postMessage('junoStartIdleTimer');
 };
 
 export const signIn = async (options?: SignInOptions) =>
@@ -63,7 +53,7 @@ export const signIn = async (options?: SignInOptions) =>
   });
 
 export const signOut = async (): Promise<void> => {
-  worker?.postMessage('junoStopIdleTimer');
+  stopIdleTimer();
 
   await authClient?.logout();
 

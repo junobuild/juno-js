@@ -4,6 +4,7 @@ import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill'
 import esbuild from 'esbuild';
 import {existsSync, mkdirSync, readdirSync, statSync, writeFileSync} from 'fs';
 import {join} from 'path';
+import {PluginInlineWebWorker} from './esbuild-web-worker.mjs';
 
 const dist = join(process.cwd(), 'dist');
 
@@ -36,7 +37,7 @@ const buildEsmCjs = () => {
       format: 'esm',
       define: {global: 'window'},
       target: ['esnext'],
-      plugins: [NodeModulesPolyfillPlugin()]
+      plugins: [NodeModulesPolyfillPlugin(), PluginInlineWebWorker()]
     })
     .catch(() => process.exit(1));
 

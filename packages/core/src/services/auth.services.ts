@@ -36,12 +36,12 @@ const startIdleTimer = async () => {
     return;
   }
 
-  const {WORKER_ENTRY_FILE_URL: workerUrl} = await import('../workers/auth.worker');
+  const content = await import('../workers/auth.worker');
 
-  const blob = new Blob([`import "${workerUrl}";`], {type: 'text/javascript'});
-  worker = new Worker(URL.createObjectURL(blob), {type: 'module'});
+  // @ts-ignore default is the base64 string representation of the script
+  worker = new Worker(content.default);
 
-  worker.postMessage('junoStartIdleTimer');
+  worker?.postMessage('junoStartIdleTimer');
 };
 
 export const signIn = async (options?: SignInOptions) =>

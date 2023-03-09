@@ -6,7 +6,6 @@ import {EnvStore} from '../stores/env.store';
 import type {SignInOptions} from '../types/auth.types';
 import {createAuthClient} from '../utils/auth.utils';
 import {popupCenter} from '../utils/window.utils';
-import {supportsWorker} from '../utils/worker.utils';
 import {initUser} from './user.services';
 
 let authClient: AuthClient | undefined;
@@ -31,11 +30,6 @@ export const initAuth = async () => {
 let worker: Worker | undefined;
 
 const startIdleTimer = async () => {
-  // Firefox < v111 does not support Web Worker loaded as module
-  if (!supportsWorker()) {
-    return;
-  }
-
   const content = await import('../workers/auth.worker');
 
   // @ts-ignore default is the base64 string representation of the script

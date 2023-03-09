@@ -2,11 +2,10 @@ import {IdbStorage, KEY_STORAGE_DELEGATION} from '@dfinity/auth-client';
 import {DelegationChain, isDelegationValid} from '@dfinity/identity';
 import {AUTH_TIMER_INTERVAL} from '../constants/auth.constants';
 import {PostMessage} from '../types/post-message';
+import {createAuthClient} from '../utils/auth.utils';
 
 onmessage = ({data}: MessageEvent<PostMessage>) => {
   const {msg} = data;
-
-  console.log('WOrker', data);
 
   switch (msg) {
     case 'junoStartIdleTimer':
@@ -36,14 +35,24 @@ export const stopIdleTimer = () => {
 };
 
 const onIdleSignOut = async () => {
-  const delegation = await checkDelegationChain();
+  const [auth, delegation] = await Promise.all([checkAuthentication(), checkDelegationChain()]);
 
-  // Delegation are alright, so all good
-  if (delegation) {
+  // Both identity and delegation are alright, so all good
+  if (auth && delegation) {
     return;
   }
 
   logout();
+};
+
+/**
+ * If user is not authenticated - i.e. no identity or anonymous and there is no valid delegation chain, then identity is not valid
+ *
+ * @returns true if authenticated
+ */
+const checkAuthentication = async (): Promise<boolean> => {
+  const authClient = await createAuthClient();
+  return authClient.isAuthenticated();
 };
 
 /**

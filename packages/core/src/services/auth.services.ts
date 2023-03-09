@@ -63,6 +63,8 @@ export const signIn = async (options?: SignInOptions) =>
   });
 
 export const signOut = async (): Promise<void> => {
+  worker?.postMessage('junoStopIdleTimer');
+
   await authClient?.logout();
 
   // Reset local object otherwise next sign in (sign in - sign out - sign in) might not work out - i.e. agent-js might not recreate the delegation or identity if not resetted

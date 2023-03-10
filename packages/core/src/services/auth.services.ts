@@ -4,18 +4,11 @@ import {delegationIdentityExpiration, popupHeight, popupWidth} from '../constant
 import {AuthStore} from '../stores/auth.store';
 import {EnvStore} from '../stores/env.store';
 import type {SignInOptions} from '../types/auth.types';
+import {createAuthClient} from '../utils/auth.utils';
 import {popupCenter} from '../utils/window.utils';
 import {initUser} from './user.services';
 
 let authClient: AuthClient | undefined;
-
-const createAuthClient = (): Promise<AuthClient> =>
-  AuthClient.create({
-    idleOptions: {
-      disableIdle: true,
-      disableDefaultIdleCallback: true
-    }
-  });
 
 export const initAuth = async () => {
   authClient = authClient ?? (await createAuthClient());
@@ -28,8 +21,6 @@ export const initAuth = async () => {
 
   const user = await initUser();
   AuthStore.getInstance().set(user);
-
-  // TODO: idle timer worker
 };
 
 export const signIn = async (options?: SignInOptions) =>

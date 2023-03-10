@@ -59,11 +59,8 @@ const buildEsmCjs = () => {
 };
 
 const writeEntries = () => {
-  // an entry file for cjs at the root of the bundle
-  writeFileSync(join(dist, 'index.js'), "export * from './esm/index.js';");
-
-  // an entry file for esm at the root of the bundle
-  writeFileSync(join(dist, 'index.cjs.js'), "module.exports = require('./cjs/index.cjs.js');");
+  // an entry for the browser as default
+  writeFileSync(join(dist, 'index.js'), "export * from './browser/index.js';");
 };
 
 export const build = () => {

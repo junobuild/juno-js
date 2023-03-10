@@ -1,6 +1,6 @@
-export type PostMessageRequest = 'junoStartIdleTimer' | 'junoStopIdleTimer';
+export type PostMessageRequest = 'junoStartAuthTimer' | 'junoStopAuthTimer';
 
-export type PostMessageResponse = 'junoSignOutIdleTimer';
+export type PostMessageResponse = 'junoSignOutAuthTimer';
 
 export interface PostMessage {
   msg: PostMessageRequest | PostMessageResponse;

@@ -8,11 +8,11 @@ onmessage = ({data}: MessageEvent<PostMessage>) => {
   const {msg} = data;
 
   switch (msg) {
-    case 'junoStartIdleTimer':
-      startIdleTimer();
+    case 'junoStartAuthTimer':
+      startTimer();
       return;
-    case 'junoStopIdleTimer':
-      stopIdleTimer();
+    case 'junoStopAuthTimer':
+      stopTimer();
       return;
   }
 };
@@ -22,10 +22,10 @@ let timer: NodeJS.Timeout | undefined = undefined;
 /**
  * The timer is executed only if user has signed in
  */
-export const startIdleTimer = () =>
-  (timer = setInterval(async () => await onIdleSignOut(), AUTH_TIMER_INTERVAL));
+export const startTimer = () =>
+  (timer = setInterval(async () => await onTimerSignOut(), AUTH_TIMER_INTERVAL));
 
-export const stopIdleTimer = () => {
+export const stopTimer = () => {
   if (!timer) {
     return;
   }
@@ -34,7 +34,7 @@ export const stopIdleTimer = () => {
   timer = undefined;
 };
 
-const onIdleSignOut = async () => {
+const onTimerSignOut = async () => {
   const [auth, delegation] = await Promise.all([checkAuthentication(), checkDelegationChain()]);
 
   // Both identity and delegation are alright, so all good
@@ -69,7 +69,7 @@ const checkDelegationChain = async (): Promise<boolean> => {
 
 const logout = () => {
   // Clear timer to not emit sign-out multiple times
-  stopIdleTimer();
+  stopTimer();
 
-  postMessage({msg: 'junoSignOutIdleTimer'});
+  postMessage({msg: 'junoSignOutAuthTimer'});
 };

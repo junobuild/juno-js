@@ -1,5 +1,5 @@
+import {initAuthTimeoutWorker} from './services/auth-timout.services';
 import {initAuth} from './services/auth.services';
-import {initIdleWorker} from './services/idle.services';
 import {AuthStore} from './stores/auth.store';
 import {EnvStore} from './stores/env.store';
 import type {User} from './types/auth.types';
@@ -22,10 +22,10 @@ export const initJuno = async (env: Environment): Promise<Unsubscribe[]> => {
 
   await initAuth();
 
-  const idleSubscribe =
-    env.workers?.idle !== undefined ? initIdleWorker(env.workers.idle) : undefined;
+  const authSubscribe =
+    env.workers?.auth !== undefined ? initAuthTimeoutWorker(env.workers.auth) : undefined;
 
-  return [...(idleSubscribe ? [idleSubscribe] : [])];
+  return [...(authSubscribe ? [authSubscribe] : [])];
 };
 
 export const authSubscribe = (callback: (authUser: User | null) => void): Unsubscribe =>

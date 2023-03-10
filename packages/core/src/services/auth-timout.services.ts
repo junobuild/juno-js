@@ -7,12 +7,12 @@ import {emit} from '../utils/events.utils';
 import {isNullish} from '../utils/utils';
 import {signOut} from './auth.services';
 
-export const initIdleWorker = (idle: EnvironmentWorker): Unsubscribe => {
-  const workerUrl = idle === true ? './workers/idle.worker.js' : idle;
+export const initAuthTimeoutWorker = (auth: EnvironmentWorker): Unsubscribe => {
+  const workerUrl = auth === true ? './workers/auth.worker.js' : auth;
   const worker = new Worker(workerUrl);
 
-  const idleSignOut = async () => {
-    emit({message: 'junoSignOutIdleTimer'});
+  const timeoutSignOut = async () => {
+    emit({message: 'junoSignOutAuthTimer'});
     await signOut();
   };
 
@@ -20,18 +20,18 @@ export const initIdleWorker = (idle: EnvironmentWorker): Unsubscribe => {
     const {msg} = data;
 
     switch (msg) {
-      case 'junoSignOutIdleTimer':
-        await idleSignOut();
+      case 'junoSignOutAuthTimer':
+        await timeoutSignOut();
         return;
     }
   };
 
   return AuthStore.getInstance().subscribe((user: User | null) => {
     if (isNullish(user)) {
-      worker.postMessage({msg: 'junoStopIdleTimer'});
+      worker.postMessage({msg: 'junoStopAuthTimer'});
       return;
     }
 
-    worker.postMessage({msg: 'junoStartIdleTimer'});
+    worker.postMessage({msg: 'junoStartAuthTimer'});
   });
 };

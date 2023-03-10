@@ -4,7 +4,7 @@ export type EnvironmentWorkerPath = string;
 export type EnvironmentWorker = true | EnvironmentWorkerPath;
 
 export interface EnvironmentWorkers {
-  idle?: EnvironmentWorker;
+  auth?: EnvironmentWorker;
 }
 
 export type Environment = {

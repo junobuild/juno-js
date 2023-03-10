@@ -25,7 +25,7 @@ const buildWebWorkers = () => {
       entryPoints,
       outdir: 'dist/workers',
       bundle: true,
-      sourcemap: true,
+      sourcemap: "external",
       minify: true,
       target: ['node18']
     })

@@ -28,7 +28,7 @@ const buildEsmCjs = () => {
   esbuild
     .build({
       entryPoints,
-      outdir: 'dist/esm',
+      outdir: 'dist/browser',
       bundle: true,
       sourcemap: true,
       minify: true,
@@ -44,12 +44,16 @@ const buildEsmCjs = () => {
   esbuild
     .build({
       entryPoints: ['src/index.ts'],
-      outfile: 'dist/cjs/index.cjs.js',
+      outfile: 'dist/node/index.mjs',
       bundle: true,
       sourcemap: true,
       minify: true,
+      format: 'esm',
       platform: 'node',
-      target: ['node18']
+      target: ['node18', 'esnext'],
+      banner: {
+        js: "import { createRequire as topLevelCreateRequire } from 'module';\n const require = topLevelCreateRequire(import.meta.url);"
+      }
     })
     .catch(() => process.exit(1));
 };

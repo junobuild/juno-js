@@ -1,5 +1,5 @@
 import type {Identity} from '@dfinity/agent';
-import {AuthClient} from '@dfinity/auth-client';
+import type {AuthClient} from '@dfinity/auth-client';
 import {delegationIdentityExpiration, popupHeight, popupWidth} from '../constants/auth.constants';
 import {AuthStore} from '../stores/auth.store';
 import {EnvStore} from '../stores/env.store';

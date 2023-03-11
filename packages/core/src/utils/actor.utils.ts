@@ -16,7 +16,7 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   Pick<Satellite, 'fetch' | 'env'>): Promise<ActorSubclass<T>> => {
   const localActor = env === 'dev' || EnvStore.getInstance().localIdentity();
 
-  const host: string = localActor ? 'http://127.0.0.1:8000/' : 'https://ic0.app';
+  const host: string = localActor ? 'http://127.0.0.1:8000/' : 'https://icp0.io';
 
   const agent: HttpAgent = new HttpAgent({identity, ...(host && {host}), ...(fetch && {fetch})});
 

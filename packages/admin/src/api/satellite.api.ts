@@ -1,5 +1,9 @@
 import type {Principal} from '@dfinity/principal';
-import type {Config, _SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
+import type {
+  Config,
+  Controller,
+  _SERVICE as SatelliteActor
+} from '../../declarations/satellite/satellite.did';
 import type {SatelliteParameters} from '../types/actor.types';
 import {getSatelliteActor} from './actor.api';
 
@@ -25,7 +29,7 @@ export const listControllers = async ({
   satellite
 }: {
   satellite: SatelliteParameters;
-}): Promise<Principal[]> => {
+}): Promise<[Principal, Controller][]> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
   return actor.list_controllers();
 };

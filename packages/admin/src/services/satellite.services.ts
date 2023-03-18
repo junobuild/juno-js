@@ -52,7 +52,7 @@ export const upgradeSatellite = async ({
         controllers: IDL.Vec(IDL.Principal)
       })
     ],
-    [{controllers}]
+    [{controllers: controllers.map(([controller, _]) => controller)}]
   );
 
   await upgradeCode({

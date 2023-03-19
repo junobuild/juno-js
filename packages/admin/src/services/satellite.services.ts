@@ -1,7 +1,12 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {upgradeCode} from '../api/ic.api';
-import {listControllers, setConfig as setConfigApi, version} from '../api/satellite.api';
+import {
+  listControllers,
+  listDeprecatedControllers,
+  setConfig as setConfigApi,
+  version
+} from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
 import type {Config, StorageConfigHeaders} from '../types/config.types';
 
@@ -33,18 +38,45 @@ export const satelliteVersion = async (params: {satellite: SatelliteParameters})
 
 export const upgradeSatellite = async ({
   satellite,
-  wasm_module
+  wasm_module,
+  deprecated
 }: {
   satellite: SatelliteParameters;
   wasm_module: Array<number>;
+  deprecated: boolean;
 }) => {
-  const controllers = await listControllers({satellite});
-
   const {satelliteId, ...actor} = satellite;
 
   if (!satelliteId) {
     throw new Error('No satellite principal defined.');
   }
+
+  // TODO: remove agent-js "type mismatch: type on the wire principal"
+  if (deprecated) {
+    const controllers = await listDeprecatedControllers({satellite});
+
+    const arg = IDL.encode(
+      [
+        IDL.Record({
+          controllers: IDL.Vec(IDL.Principal)
+        })
+      ],
+      [{controllers}]
+    );
+
+    await upgradeCode({
+      actor,
+      code: {
+        canister_id: Principal.fromText(satelliteId),
+        arg: [...new Uint8Array(arg)],
+        wasm_module
+      }
+    });
+
+    return;
+  }
+
+  const controllers = await listControllers({satellite});
 
   const arg = IDL.encode(
     [

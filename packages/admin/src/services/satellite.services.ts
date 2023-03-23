@@ -4,11 +4,15 @@ import {upgradeCode} from '../api/ic.api';
 import {
   listControllers,
   listDeprecatedControllers,
+  listRules as listRulesApi,
   setConfig as setConfigApi,
+  setRule as setRuleApi,
   version
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
 import type {Config, StorageConfigHeaders} from '../types/config.types';
+import {Rule, RulesType} from '../types/rules.types';
+import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 export const setConfig = async ({
   config: {
@@ -32,6 +36,37 @@ export const setConfig = async ({
     }
   });
 };
+
+export const listRules = async ({
+  type,
+  satellite
+}: {
+  type: RulesType;
+  satellite: SatelliteParameters;
+}): Promise<Rule[]> => {
+  const rules = await listRulesApi({
+    satellite,
+    type: mapRuleType(type)
+  });
+
+  return rules.map((rule) => mapRule(rule));
+};
+
+export const setRule = async ({
+  rule: {collection, ...rest},
+  type,
+  satellite
+}: {
+  rule: Rule;
+  type: RulesType;
+  satellite: SatelliteParameters;
+}): Promise<void> =>
+  setRuleApi({
+    type: mapRuleType(type),
+    rule: mapSetRule(rest),
+    satellite,
+    collection
+  });
 
 export const satelliteVersion = async (params: {satellite: SatelliteParameters}): Promise<string> =>
   version(params);

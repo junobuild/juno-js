@@ -3,6 +3,9 @@ import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/sate
 import type {
   Config,
   Controller,
+  Rule,
+  RulesType,
+  SetRule,
   _SERVICE as SatelliteActor
 } from '../../declarations/satellite/satellite.did';
 import type {SatelliteParameters} from '../types/actor.types';
@@ -16,8 +19,33 @@ export const setConfig = async ({
   satellite: SatelliteParameters;
 }): Promise<void> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
-
   return actor.set_config(config);
+};
+
+export const listRules = async ({
+  satellite,
+  type
+}: {
+  satellite: SatelliteParameters;
+  type: RulesType;
+}): Promise<[string, Rule][]> => {
+  const actor: SatelliteActor = await getSatelliteActor(satellite);
+  return actor.list_rules(type);
+};
+
+export const setRule = async ({
+  type,
+  collection,
+  rule,
+  satellite
+}: {
+  type: RulesType;
+  collection: string;
+  rule: SetRule;
+  satellite: SatelliteParameters;
+}): Promise<void> => {
+  const actor: SatelliteActor = await getSatelliteActor(satellite);
+  return actor.set_rule(type, collection, rule);
 };
 
 export const version = async ({satellite}: {satellite: SatelliteParameters}): Promise<string> => {

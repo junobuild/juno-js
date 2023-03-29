@@ -25,5 +25,6 @@ export const toListParams = ({matcher, paginate, order}: ListParams): ListParams
               ? {UpdatedAt: null}
               : {Keys: null}
         }
-  )
+  ),
+  owner: []
 });

@@ -13,9 +13,6 @@ export const initAuth = async () => {
 
   const isAuthenticated: boolean = (await authClient?.isAuthenticated()) || false;
 
-  console.log(isAuthenticated);
-  console.log(getIdentity()?.getPrincipal().toText());
-
   if (!isAuthenticated) {
     return;
   }

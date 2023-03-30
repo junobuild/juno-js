@@ -28,6 +28,10 @@ export const signIn = async (options?: SignInOptions) =>
   new Promise<void>(async (resolve, reject) => {
     authClient = authClient ?? (await createAuthClient());
 
+    const identityProvider = EnvStore.getInstance().localIdentity()
+      ? `http://${EnvStore.getInstance().get()?.localIdentityCanisterId}.localhost:8000`
+      : `https://identity.${options?.domain ?? 'internetcomputer.org'}`;
+
     await authClient.login({
       onSuccess: async () => {
         await initAuth();
@@ -35,11 +39,7 @@ export const signIn = async (options?: SignInOptions) =>
       },
       onError: (error?: string) => reject(error),
       maxTimeToLive: options?.maxTimeToLive ?? delegationIdentityExpiration,
-      ...(EnvStore.getInstance().localIdentity() && {
-        identityProvider: `http://${
-          EnvStore.getInstance().get()?.localIdentityCanisterId
-        }.localhost:8000?#authorize`
-      }),
+      identityProvider,
       ...(options?.derivationOrigin !== undefined && {derivationOrigin: options.derivationOrigin}),
       ...(options?.windowed !== false && {
         windowOpenerFeatures: popupCenter({width: popupWidth, height: popupHeight})

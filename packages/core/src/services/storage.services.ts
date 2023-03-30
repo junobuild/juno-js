@@ -80,7 +80,7 @@ export const listAssets = async ({
   return {
     assets: items.map(
       ({
-        key: {full_path, token: t, name},
+        key: {full_path, token: t, name, owner},
         headers,
         encodings,
         created_at,
@@ -105,6 +105,7 @@ export const listAssets = async ({
             }),
             {} as Record<string, AssetEncoding>
           ),
+          owner: owner.toText(),
           created_at,
           updated_at
         } as Asset;

@@ -8,6 +8,7 @@ import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
 import {fromArray, fromNullable, toArray, toNullable} from '../utils/did.utils';
 import {toListParams} from '../utils/list.utils';
+import {isNullish} from '../utils/utils';
 import {getSatelliteActor} from './actor.api';
 
 export const getDoc = async <D>({
@@ -22,17 +23,19 @@ export const getDoc = async <D>({
 
   const entry: DocApi | undefined = fromNullable(await actor.get_doc(collection, key));
 
-  if (!entry) {
+  if (isNullish(entry)) {
     return undefined;
   }
 
-  const data: D = await fromArray<D>(entry.data);
+  const {data: dataArray, owner, ...rest} = entry;
+
+  const data: D = await fromArray<D>(dataArray);
 
   return {
     key,
+    owner: owner.toText(),
     data,
-    created_at: entry.created_at,
-    updated_at: entry.updated_at
+    ...rest
   };
 };
 
@@ -54,14 +57,17 @@ export const setDoc = async <D>({
     updated_at: toNullable(updated_at)
   });
 
+  const {owner, updated_at: updatedAt, created_at} = updatedDoc;
+
   // We update the data with the updated_at timestamp generated in the backend.
   // The canister checks if the updated_at date is equals to the entity timestamp otherwise it rejects the update to prevent overwrite of data if user uses multiple devices.
   // In other words: to update a data, the current updated_at information need to be provided.
   return {
     key,
+    owner: owner.toText(),
     data,
-    created_at: updatedDoc.created_at,
-    updated_at: updatedDoc.updated_at
+    created_at,
+    updated_at: updatedAt
   };
 };
 
@@ -102,11 +108,13 @@ export const listDocs = async <D>({
   const docs: Doc<D>[] = [];
 
   for (const [key, item] of items) {
+    const {data: dataArray, owner, ...rest} = item;
+
     docs.push({
       key,
-      data: await fromArray<D>(item.data),
-      created_at: item.created_at,
-      updated_at: item.updated_at
+      owner: owner.toText(),
+      data: await fromArray<D>(dataArray),
+      ...rest
     });
   }
 

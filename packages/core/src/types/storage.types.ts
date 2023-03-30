@@ -19,6 +19,7 @@ export interface Asset extends AssetKey {
   token?: string;
   headers: [string, string][];
   encodings: Record<ENCODING_TYPE, AssetEncoding>;
+  owner?: string;
   created_at?: bigint;
   updated_at?: bigint;
 }

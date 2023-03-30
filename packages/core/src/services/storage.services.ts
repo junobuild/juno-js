@@ -78,28 +78,38 @@ export const listAssets = async ({
   const host: string = satelliteUrl();
 
   return {
-    assets: items.map(({key: {full_path, token: t, name}, headers, encodings}: AssetNoContent) => {
-      const token = fromNullable(t);
-
-      return {
-        fullPath: full_path,
-        name,
-        downloadUrl: `${host}${full_path}${token !== undefined ? `?token=${token}` : ''}`,
-        token,
+    assets: items.map(
+      ({
+        key: {full_path, token: t, name},
         headers,
-        encodings: encodings.reduce(
-          (acc, [type, {modified, sha256, total_length}]) => ({
-            ...acc,
-            [type]: {
-              modified,
-              sha256: sha256ToBase64String(sha256),
-              total_length
-            }
-          }),
-          {} as Record<string, AssetEncoding>
-        )
-      } as Asset;
-    }),
+        encodings,
+        created_at,
+        updated_at
+      }: AssetNoContent) => {
+        const token = fromNullable(t);
+
+        return {
+          fullPath: full_path,
+          name,
+          downloadUrl: `${host}${full_path}${token !== undefined ? `?token=${token}` : ''}`,
+          token,
+          headers,
+          encodings: encodings.reduce(
+            (acc, [type, {modified, sha256, total_length}]) => ({
+              ...acc,
+              [type]: {
+                modified,
+                sha256: sha256ToBase64String(sha256),
+                total_length
+              }
+            }),
+            {} as Record<string, AssetEncoding>
+          ),
+          created_at,
+          updated_at
+        } as Asset;
+      }
+    ),
     ...rest
   };
 };

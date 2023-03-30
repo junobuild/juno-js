@@ -14,4 +14,5 @@ export interface SignInOptions {
   maxTimeToLive?: bigint;
   derivationOrigin?: string | URL;
   windowed?: boolean;
+  domain?: 'internetcomputer.org' | 'ic0.app';
 }

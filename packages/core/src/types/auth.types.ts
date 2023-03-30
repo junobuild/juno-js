@@ -10,9 +10,22 @@ export interface UserData {
 
 export type User = Doc<UserData>;
 
+export type IdentityProvider = InternetIdentity | NFID;
+
+export interface InternetIdentity {
+  name: 'ii';
+  domain?: 'internetcomputer.org' | 'ic0.app';
+}
+
+export interface NFID {
+  name: 'nfid';
+  appName: string;
+  logoUrl: string;
+}
+
 export interface SignInOptions {
   maxTimeToLive?: bigint;
   derivationOrigin?: string | URL;
   windowed?: boolean;
-  domain?: 'internetcomputer.org' | 'ic0.app';
+  provider?: InternetIdentity | NFID;
 }

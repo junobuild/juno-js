@@ -1,11 +1,9 @@
 import type {Identity} from '@dfinity/agent';
 import type {AuthClient} from '@dfinity/auth-client';
-import {delegationIdentityExpiration, popupHeight, popupWidth} from '../constants/auth.constants';
+import {DELEGATION_IDENTITY_EXPIRATION} from '../constants/auth.constants';
 import {AuthStore} from '../stores/auth.store';
-import {EnvStore} from '../stores/env.store';
 import type {SignInOptions} from '../types/auth.types';
-import {createAuthClient} from '../utils/auth.utils';
-import {popupCenter} from '../utils/window.utils';
+import {createAuthClient, signInProvider} from '../utils/auth.utils';
 import {initUser} from './user.services';
 
 let authClient: AuthClient | undefined;
@@ -14,6 +12,9 @@ export const initAuth = async () => {
   authClient = authClient ?? (await createAuthClient());
 
   const isAuthenticated: boolean = (await authClient?.isAuthenticated()) || false;
+
+  console.log(isAuthenticated);
+  console.log(getIdentity()?.getPrincipal().toText());
 
   if (!isAuthenticated) {
     return;
@@ -28,22 +29,15 @@ export const signIn = async (options?: SignInOptions) =>
   new Promise<void>(async (resolve, reject) => {
     authClient = authClient ?? (await createAuthClient());
 
-    const identityProvider = EnvStore.getInstance().localIdentity()
-      ? `http://${EnvStore.getInstance().get()?.localIdentityCanisterId}.localhost:8000`
-      : `https://identity.${options?.domain ?? 'internetcomputer.org'}`;
-
     await authClient.login({
       onSuccess: async () => {
         await initAuth();
         resolve();
       },
       onError: (error?: string) => reject(error),
-      maxTimeToLive: options?.maxTimeToLive ?? delegationIdentityExpiration,
-      identityProvider,
+      maxTimeToLive: options?.maxTimeToLive ?? DELEGATION_IDENTITY_EXPIRATION,
       ...(options?.derivationOrigin !== undefined && {derivationOrigin: options.derivationOrigin}),
-      ...(options?.windowed !== false && {
-        windowOpenerFeatures: popupCenter({width: popupWidth, height: popupHeight})
-      })
+      ...signInProvider(options)
     });
   });
 

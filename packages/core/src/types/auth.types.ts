@@ -1,12 +1,10 @@
-import type {Principal} from '@dfinity/principal';
 import {InternetIdentityProvider, NFIDProvider} from '../providers/auth.providers';
 import type {Doc} from './doc.types';
 
-export interface UserData {
-  principal: Principal;
+export type Provider = 'internet_identity' | 'nfid';
 
-  created_at: Date | number | bigint;
-  updated_at: Date | number | bigint;
+export interface UserData {
+  provider?: Provider;
 }
 
 export type User = Doc<UserData>;

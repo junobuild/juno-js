@@ -1,13 +1,13 @@
 import type {Identity} from '@dfinity/agent';
-import type {Principal} from '@dfinity/principal';
-import type {User, UserData} from '../types/auth.types';
+import type {Provider, User, UserData} from '../types/auth.types';
+import {isNullish} from '../utils/utils';
 import {getIdentity} from './auth.services';
 import {getDoc, setDoc} from './doc.services';
 
-export const initUser = async (): Promise<User> => {
+export const initUser = async (provider?: Provider): Promise<User> => {
   const identity: Identity | undefined = getIdentity();
 
-  if (!identity) {
+  if (isNullish(identity)) {
     throw new Error('No internet identity.');
   }
 
@@ -18,34 +18,24 @@ export const initUser = async (): Promise<User> => {
     key: userId
   });
 
-  if (!user) {
-    const newUser: User = await createUser({userId, principal: identity.getPrincipal()});
+  if (isNullish(user)) {
+    const newUser: User = await createUser({userId, provider});
     return newUser;
   }
 
-  return user;
+  return user as any;
 };
 
 const createUser = async ({
   userId,
-  principal
+  ...rest
 }: {
   userId: string;
-  principal: Principal;
-}): Promise<User> => {
-  const now: Date = new Date();
-
-  const data: UserData = {
-    principal,
-    created_at: now,
-    updated_at: now
-  };
-
-  return setDoc<UserData>({
+} & UserData): Promise<User> =>
+  setDoc<UserData>({
     collection: `#user`,
     doc: {
       key: userId,
-      data
+      data: rest
     }
   });
-};

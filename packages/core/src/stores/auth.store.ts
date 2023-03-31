@@ -36,10 +36,6 @@ export class AuthStore extends Store<User | null> {
     return unsubscribe;
   }
 
-  isLoggedIn(): boolean {
-    return !this.authUser?.data?.principal.isAnonymous();
-  }
-
   reset() {
     this.authUser = null;
 

@@ -1,20 +1,25 @@
 import {II_POPUP, INTERNET_COMPUTER_ORG, NFID_POPUP} from '../constants/auth.constants';
 import {EnvStore} from '../stores/env.store';
-import {SignInOptions} from '../types/auth.types';
+import {Provider, SignInOptions} from '../types/auth.types';
 import {popupCenter} from '../utils/window.utils';
 
-export interface SignInProvider {
+export interface AuthProvider {
+  readonly id: Provider;
   signInOptions: (options: Pick<SignInOptions, 'windowed'>) => {
     identityProvider: string;
     windowOpenerFeatures?: string;
   };
 }
 
-export class InternetIdentityProvider implements SignInProvider {
+export class InternetIdentityProvider implements AuthProvider {
   #domain?: 'internetcomputer.org' | 'ic0.app';
 
   constructor({domain}: {domain?: 'internetcomputer.org' | 'ic0.app'}) {
     this.#domain = domain;
+  }
+
+  get id(): Provider {
+    return 'internet_identity';
   }
 
   signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): {
@@ -34,13 +39,17 @@ export class InternetIdentityProvider implements SignInProvider {
   }
 }
 
-export class NFIDProvider implements SignInProvider {
+export class NFIDProvider implements AuthProvider {
   #appName: string;
   #logoUrl: string;
 
   constructor({appName, logoUrl}: {appName: string; logoUrl: string}) {
     this.#appName = appName;
     this.#logoUrl = logoUrl;
+  }
+
+  get id(): Provider {
+    return 'nfid';
   }
 
   signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): {

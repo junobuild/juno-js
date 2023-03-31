@@ -1,6 +1,7 @@
 import {AuthClient} from '@dfinity/auth-client';
 import {II_POPUP, INTERNET_COMPUTER_ORG, NFID_POPUP} from '../constants/auth.constants';
-import {IdentityProvider, InternetIdentity, NFID, SignInOptions} from '../types/auth.types';
+import {InternetIdentityProvider, NFIDProvider} from '../providers/auth.providers';
+import {SignInOptions, SignInProvider} from '../types/auth.types';
 import {popupCenter} from './window.utils';
 
 export const createAuthClient = (): Promise<AuthClient> =>
@@ -11,11 +12,11 @@ export const createAuthClient = (): Promise<AuthClient> =>
     }
   });
 
-const isNFID = (provider: IdentityProvider | undefined): provider is NFID => {
-  return provider?.name === 'nfid';
+const isNFID = (provider: SignInProvider | undefined): provider is NFIDProvider => {
+  return provider instanceof NFIDProvider;
 };
 
-export const identityProvider = (provider: IdentityProvider | undefined): string => {
+export const identityProvider = (provider: SignInProvider | undefined): string => {
   // TODO: uncomment
   // if (EnvStore.getInstance().localIdentity()) {
   //   return `http://${EnvStore.getInstance().get()?.localIdentityCanisterId}.localhost:8000`;
@@ -28,7 +29,7 @@ export const identityProvider = (provider: IdentityProvider | undefined): string
     )}&applicationLogo=${encodeURI(logoUrl)}`;
   }
 
-  const {domain} = (provider as InternetIdentity) ?? {domain: INTERNET_COMPUTER_ORG};
+  const {domain} = provider ?? new InternetIdentityProvider({domain: INTERNET_COMPUTER_ORG});
 
   return `https://identity.${domain ?? INTERNET_COMPUTER_ORG}`;
 };

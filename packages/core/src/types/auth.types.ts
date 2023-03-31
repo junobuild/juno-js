@@ -1,4 +1,5 @@
 import type {Principal} from '@dfinity/principal';
+import {InternetIdentityProvider, NFIDProvider} from '../providers/auth.providers';
 import type {Doc} from './doc.types';
 
 export interface UserData {
@@ -10,22 +11,11 @@ export interface UserData {
 
 export type User = Doc<UserData>;
 
-export type IdentityProvider = InternetIdentity | NFID;
-
-export interface InternetIdentity {
-  name: 'ii';
-  domain?: 'internetcomputer.org' | 'ic0.app';
-}
-
-export interface NFID {
-  name: 'nfid';
-  appName: string;
-  logoUrl: string;
-}
+export type SignInProvider = InternetIdentityProvider | NFIDProvider;
 
 export interface SignInOptions {
   maxTimeToLive?: bigint;
   derivationOrigin?: string | URL;
   windowed?: boolean;
-  provider?: InternetIdentity | NFID;
+  provider?: InternetIdentityProvider | NFIDProvider;
 }

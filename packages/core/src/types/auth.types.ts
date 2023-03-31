@@ -11,8 +11,6 @@ export interface UserData {
 
 export type User = Doc<UserData>;
 
-export type SignInProvider = InternetIdentityProvider | NFIDProvider;
-
 export interface SignInOptions {
   maxTimeToLive?: bigint;
   derivationOrigin?: string | URL;

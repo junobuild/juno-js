@@ -6,6 +6,7 @@ import type {User} from './types/auth.types';
 import type {Environment} from './types/env.types';
 import type {Unsubscribe} from './types/subscription.types';
 
+export * from './providers/auth.providers';
 export {signIn, signOut} from './services/auth.services';
 export * from './services/doc.services';
 export * from './services/storage.services';

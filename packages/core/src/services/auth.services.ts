@@ -1,16 +1,15 @@
 import type {Identity} from '@dfinity/agent';
 import type {AuthClient} from '@dfinity/auth-client';
-import {delegationIdentityExpiration, popupHeight, popupWidth} from '../constants/auth.constants';
+import {DELEGATION_IDENTITY_EXPIRATION} from '../constants/auth.constants';
+import {InternetIdentityProvider} from '../providers/auth.providers';
 import {AuthStore} from '../stores/auth.store';
-import {EnvStore} from '../stores/env.store';
-import type {SignInOptions} from '../types/auth.types';
+import type {Provider, SignInOptions} from '../types/auth.types';
 import {createAuthClient} from '../utils/auth.utils';
-import {popupCenter} from '../utils/window.utils';
 import {initUser} from './user.services';
 
 let authClient: AuthClient | undefined;
 
-export const initAuth = async () => {
+export const initAuth = async (provider?: Provider) => {
   authClient = authClient ?? (await createAuthClient());
 
   const isAuthenticated: boolean = (await authClient?.isAuthenticated()) || false;
@@ -19,7 +18,7 @@ export const initAuth = async () => {
     return;
   }
 
-  const user = await initUser();
+  const user = await initUser(provider);
   AuthStore.getInstance().set(user);
 };
 
@@ -28,21 +27,18 @@ export const signIn = async (options?: SignInOptions) =>
   new Promise<void>(async (resolve, reject) => {
     authClient = authClient ?? (await createAuthClient());
 
+    const provider = options?.provider ?? new InternetIdentityProvider({});
+
     await authClient.login({
       onSuccess: async () => {
-        await initAuth();
+        await initAuth(provider.id);
         resolve();
       },
       onError: (error?: string) => reject(error),
-      maxTimeToLive: options?.maxTimeToLive ?? delegationIdentityExpiration,
-      ...(EnvStore.getInstance().localIdentity() && {
-        identityProvider: `http://${
-          EnvStore.getInstance().get()?.localIdentityCanisterId
-        }.localhost:8000?#authorize`
-      }),
+      maxTimeToLive: options?.maxTimeToLive ?? DELEGATION_IDENTITY_EXPIRATION,
       ...(options?.derivationOrigin !== undefined && {derivationOrigin: options.derivationOrigin}),
-      ...(options?.windowed !== false && {
-        windowOpenerFeatures: popupCenter({width: popupWidth, height: popupHeight})
+      ...provider.signInOptions({
+        windowed: options?.windowed
       })
     });
   });

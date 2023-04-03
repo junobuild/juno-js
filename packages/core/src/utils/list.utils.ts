@@ -1,9 +1,10 @@
+import {Principal} from '@dfinity/principal';
 import type {ListParams as ListParamsApi} from '../../declarations/satellite/satellite.did';
 import type {ListParams} from '../types/list.types';
 import {toNullable} from './did.utils';
 import {isNullish} from './utils';
 
-export const toListParams = ({matcher, paginate, order}: ListParams): ListParamsApi => ({
+export const toListParams = ({matcher, paginate, order, owner}: ListParams): ListParamsApi => ({
   matcher: toNullable(matcher),
   paginate: toNullable(
     isNullish(paginate)
@@ -25,5 +26,8 @@ export const toListParams = ({matcher, paginate, order}: ListParams): ListParams
               ? {UpdatedAt: null}
               : {Keys: null}
         }
+  ),
+  owner: toNullable(
+    isNullish(owner) ? undefined : typeof owner === 'string' ? Principal.fromText(owner) : owner
   )
 });

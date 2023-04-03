@@ -1,3 +1,5 @@
+import type {Principal} from "@dfinity/principal";
+
 export interface ListResults<T> {
   items: T[];
   length: bigint;
@@ -16,8 +18,11 @@ export interface ListOrder {
   field: ListOrderField;
 }
 
+export type ListOwner = string | Principal;
+
 export interface ListParams {
   matcher?: string;
   paginate?: ListPaginate;
   order?: ListOrder;
+  owner?: ListOwner;
 }

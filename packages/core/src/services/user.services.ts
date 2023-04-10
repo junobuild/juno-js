@@ -8,7 +8,7 @@ export const initUser = async (provider?: Provider): Promise<User> => {
   const identity: Identity | undefined = getIdentity();
 
   if (isNullish(identity)) {
-    throw new Error('No internet identity.');
+    throw new Error('No identity to initialize the user. Have you initialized Juno?');
   }
 
   const userId = identity.getPrincipal().toText();

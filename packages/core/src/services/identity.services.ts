@@ -9,7 +9,7 @@ export const getIdentity = (identity?: Identity): Identity => {
   const authIdentity: Identity | undefined = getAuthIdentity();
 
   if (!authIdentity) {
-    throw new Error('No internet identity.');
+    throw new Error('No identity to perform call. Have you initialized Juno?');
   }
 
   return authIdentity;

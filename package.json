@@ -8,7 +8,9 @@
     "declarations": "node ./scripts/declarations.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "eslint --max-warnings 0 ."
+    "lint": "eslint --max-warnings 0 .",
+    "build": "npm run build --workspaces",
+    "size": "size-limit --json"
   },
   "workspaces": [
     "packages/core",

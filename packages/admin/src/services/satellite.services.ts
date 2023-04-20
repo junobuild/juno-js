@@ -11,7 +11,7 @@ import {
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
 import type {Config, StorageConfigHeaders} from '../types/config.types';
-import {Rule, RulesType} from '../types/rules.types';
+import type {Rule, RulesType} from '../types/rules.types';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 export const setConfig = async ({

@@ -35,14 +35,12 @@
     {
       "name": "@junobuild/admin",
       "path": "./packages/admin/dist/index.js",
-      "limit": "1000 kB",
-      "ignore": []
+      "limit": "91 kB"
     },
     {
       "name": "@junobuild/core",
       "path": "./packages/core/dist/index.js",
-      "limit": "1000 kB",
-      "ignore": []
+      "limit": "110 kB"
     }
   ]
 }

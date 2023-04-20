@@ -7,6 +7,3 @@ loader
 .dfx
 
 target
-
-packages/admin/declarations/**/*
-packages/core/declarations/**/*

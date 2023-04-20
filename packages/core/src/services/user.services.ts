@@ -23,7 +23,7 @@ export const initUser = async (provider?: Provider): Promise<User> => {
     return newUser;
   }
 
-  return user as any;
+  return user;
 };
 
 const createUser = async ({

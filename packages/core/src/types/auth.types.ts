@@ -1,4 +1,4 @@
-import {InternetIdentityProvider, NFIDProvider} from '../providers/auth.providers';
+import type {InternetIdentityProvider, NFIDProvider} from '../providers/auth.providers';
 import type {Doc} from './doc.types';
 
 export type Provider = 'internet_identity' | 'nfid';

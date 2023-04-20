@@ -1,6 +1,6 @@
 import {II_POPUP, INTERNET_COMPUTER_ORG, NFID_POPUP} from '../constants/auth.constants';
 import {EnvStore} from '../stores/env.store';
-import {Provider, SignInOptions} from '../types/auth.types';
+import type {Provider, SignInOptions} from '../types/auth.types';
 import {popupCenter} from '../utils/window.utils';
 
 export interface AuthProvider {

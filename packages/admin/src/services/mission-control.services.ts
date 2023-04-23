@@ -8,7 +8,7 @@ import {
   version
 } from '../api/mission-control.api';
 import type {MissionControlParameters} from '../types/actor.types';
-import {SetControllerParams} from '../types/controllers.types';
+import type {SetControllerParams} from '../types/controllers.types';
 import {mapSetControllerParams} from '../utils/controllers.utils';
 
 export const missionControlVersion = async (params: {

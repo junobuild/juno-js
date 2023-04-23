@@ -1,8 +1,15 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {upgradeCode} from '../api/ic.api';
-import {getUser, version} from '../api/mission-control.api';
+import {
+  getUser,
+  setMissionControlController as setMissionControlControllerApi,
+  setSatellitesController as setSatellitesControllerApi,
+  version
+} from '../api/mission-control.api';
 import type {MissionControlParameters} from '../types/actor.types';
+import {SetControllerParams} from '../types/controllers.types';
+import {mapSetControllerParams} from '../utils/controllers.utils';
 
 export const missionControlVersion = async (params: {
   missionControl: MissionControlParameters;
@@ -41,3 +48,28 @@ export const upgradeMissionControl = async ({
     }
   });
 };
+
+export const setSatellitesController = async ({
+  controllerId,
+  profile,
+  ...rest
+}: {
+  missionControl: MissionControlParameters;
+  satelliteIds: Principal[];
+} & SetControllerParams) =>
+  setSatellitesControllerApi({
+    ...rest,
+    ...mapSetControllerParams({controllerId, profile})
+  });
+
+export const setMissionControlController = async ({
+  controllerId,
+  profile,
+  ...rest
+}: {
+  missionControl: MissionControlParameters;
+} & SetControllerParams) =>
+  setMissionControlControllerApi({
+    ...rest,
+    ...mapSetControllerParams({controllerId, profile})
+  });

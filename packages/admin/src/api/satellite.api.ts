@@ -5,8 +5,8 @@ import type {
   Controller,
   Rule,
   RulesType,
-  SetRule,
-  _SERVICE as SatelliteActor
+  _SERVICE as SatelliteActor,
+  SetRule
 } from '../../declarations/satellite/satellite.did';
 import type {SatelliteParameters} from '../types/actor.types';
 import {getDeprecatedSatelliteActor, getSatelliteActor} from './actor.api';

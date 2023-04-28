@@ -1,4 +1,3 @@
-import type {Identity} from '@dfinity/agent';
 import {
   delDoc as delDocApi,
   getDoc as getDocApi,
@@ -17,7 +16,7 @@ export const getDoc = async <D>({
   collection: string;
   satellite?: SatelliteOptions;
 } & Pick<Doc<D>, 'key'>): Promise<Doc<D> | undefined> => {
-  const identity: Identity | undefined = getIdentity(satellite?.identity);
+  const identity = getIdentity(satellite?.identity);
 
   return getDocApi({...rest, satellite: {...satellite, identity}});
 };
@@ -30,7 +29,7 @@ export const setDoc = async <D>({
   doc: Doc<D>;
   satellite?: SatelliteOptions;
 }): Promise<Doc<D>> => {
-  const identity: Identity | undefined = getIdentity(satellite?.identity);
+  const identity = getIdentity(satellite?.identity);
 
   return setDocApi({...rest, satellite: {...satellite, identity}});
 };
@@ -43,7 +42,7 @@ export const delDoc = async <D>({
   doc: Doc<D>;
   satellite?: SatelliteOptions;
 }): Promise<void> => {
-  const identity: Identity | undefined = getIdentity(satellite?.identity);
+  const identity = getIdentity(satellite?.identity);
 
   return delDocApi({...rest, satellite: {...satellite, identity}});
 };
@@ -56,7 +55,7 @@ export const listDocs = async <D>({
   filter: ListParams;
   satellite?: SatelliteOptions;
 }): Promise<ListResults<Doc<D>>> => {
-  const identity: Identity | undefined = getIdentity(satellite?.identity);
+  const identity = getIdentity(satellite?.identity);
 
   return listDocsApi<D>({...rest, satellite: {...satellite, identity}});
 };

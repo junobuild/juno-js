@@ -4,7 +4,7 @@
 [npm-badge]: https://img.shields.io/npm/v/@junobuild/admin
 [npm-badge-url]: https://www.npmjs.com/package/@junobuild/admin
 [npm-license]: https://img.shields.io/npm/l/@junobuild/admin
-[npm-license-url]: https://github.com/deckgo/junobuild/blob/main/webcomponents/admin/LICENSE
+[npm-license-url]: https://github.com/buildwithjuno/juno-js/blob/main/LICENSE
 
 # Juno JavaScript admin SDK
 

@@ -1,7 +1,7 @@
 {
   "name": "@junobuild/ledger",
   "version": "0.0.1",
-  "description": "A fork used by Juno console",
+  "description": "A fork used by Juno console to parse account identifier for the ICP ledger",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",

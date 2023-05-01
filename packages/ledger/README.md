@@ -8,7 +8,7 @@
 
 # Juno JavaScript core SDK
 
-A fork of [@dfinity/nns](https://github.com/dfinity/ic-js/tree/main/packages/nns) that uses only the required parts - `AccountIdentifier` - of the library effectively used in [Juno] console in order to reduce the bundle size.
+A fork of [@dfinity/nns](https://github.com/dfinity/ic-js/tree/main/packages/nns) that includes only the necessary parts, specifically the `AccountIdentifier`, is used in the Juno console to minimize the bundle size.
 
 ## License
 

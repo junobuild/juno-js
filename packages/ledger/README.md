@@ -8,13 +8,7 @@
 
 # Juno JavaScript core SDK
 
-A library used by [Juno] to interact with the ledger of the Internet Computer.
-
-## Fork
-
-This library is a fork of [@dfinity/nns](https://github.com/dfinity/ic-js/tree/main/packages/nns) that uses only the required parts of the library dedicated to the ledger used in [Juno] console in order to reduce the bundle size.
-
-It also uses various features of [@dfinity/ledger](https://github.com/dfinity/ic-js/tree/main/packages/ledger).
+A fork of [@dfinity/nns](https://github.com/dfinity/ic-js/tree/main/packages/nns) that uses only the required parts - `AccountIdentifier` - of the library effectively used in [Juno] console in order to reduce the bundle size.
 
 ## License
 

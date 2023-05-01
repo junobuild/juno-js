@@ -1,7 +1,7 @@
 {
   "name": "@junobuild/ledger",
   "version": "0.0.1",
-  "description": "A library used by Juno to interact with the ledger of the Internet Computer",
+  "description": "A fork used by Juno console",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
@@ -44,7 +44,6 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
-    "@dfinity/ledger": "^0.0.7",
     "@dfinity/utils": "^0.0.14",
     "js-sha256": "^0.9.0"
   },

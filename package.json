@@ -42,6 +42,16 @@
       "name": "@junobuild/core",
       "path": "./packages/core/dist/index.js",
       "limit": "110 kB"
+    },
+    {
+      "name": "@junobuild/ledger",
+      "path": "./packages/ledger/dist/index.js",
+      "limit": "7 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/principal"
+      ]
     }
   ]
 }

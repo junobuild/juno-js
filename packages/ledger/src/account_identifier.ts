@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import type {Principal} from '@dfinity/principal';
 import {asciiStringToByteArray, bigEndianCrc32, uint8ArrayToHexString} from '@dfinity/utils';
 import {sha224} from 'js-sha256';
 

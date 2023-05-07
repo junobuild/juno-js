@@ -6,7 +6,8 @@ import type {
 import type {Doc} from '../types/doc.types';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
-import {fromArray, fromNullable, toArray, toNullable} from '../utils/did.utils';
+import {mapData} from '../utils/data.utils';
+import {fromNullable, toArray, toNullable} from '../utils/did.utils';
 import {toListParams} from '../utils/list.utils';
 import {isNullish} from '../utils/utils';
 import {getSatelliteActor} from './actor.api';
@@ -29,7 +30,7 @@ export const getDoc = async <D>({
 
   const {data: dataArray, owner, ...rest} = entry;
 
-  const data: D = await fromArray<D>(dataArray);
+  const data: D = await mapData<D>({data: dataArray});
 
   return {
     key,
@@ -113,7 +114,7 @@ export const listDocs = async <D>({
     docs.push({
       key,
       owner: owner.toText(),
-      data: await fromArray<D>(dataArray),
+      data: await mapData<D>({data: dataArray}),
       ...rest
     });
   }

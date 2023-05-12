@@ -8,13 +8,19 @@ export const idlFactory = ({IDL}) => {
   const DeleteControllersArgs = IDL.Record({
     controllers: IDL.Vec(IDL.Principal)
   });
+  const ControllerScope = IDL.Variant({
+    Write: IDL.Null,
+    Admin: IDL.Null
+  });
   const Controller = IDL.Record({
     updated_at: IDL.Nat64,
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
     created_at: IDL.Nat64,
+    scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
   const DelDoc = IDL.Record({updated_at: IDL.Opt(IDL.Nat64)});
+  const RulesType = IDL.Variant({Db: IDL.Null, Storage: IDL.Null});
   const StorageConfig = IDL.Record({
     headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))))
   });
@@ -99,9 +105,11 @@ export const idlFactory = ({IDL}) => {
     created_at: IDL.Nat64
   });
   const ListResults = IDL.Record({
+    matches_pages: IDL.Opt(IDL.Nat64),
     matches_length: IDL.Nat64,
-    length: IDL.Nat64,
-    items: IDL.Vec(IDL.Tuple(IDL.Text, AssetNoContent))
+    items_page: IDL.Opt(IDL.Nat64),
+    items: IDL.Vec(IDL.Tuple(IDL.Text, AssetNoContent)),
+    items_length: IDL.Nat64
   });
   const CustomDomain = IDL.Record({
     updated_at: IDL.Nat64,
@@ -109,11 +117,12 @@ export const idlFactory = ({IDL}) => {
     bn_id: IDL.Opt(IDL.Text)
   });
   const ListResults_1 = IDL.Record({
+    matches_pages: IDL.Opt(IDL.Nat64),
     matches_length: IDL.Nat64,
-    length: IDL.Nat64,
-    items: IDL.Vec(IDL.Tuple(IDL.Text, Doc))
+    items_page: IDL.Opt(IDL.Nat64),
+    items: IDL.Vec(IDL.Tuple(IDL.Text, Doc)),
+    items_length: IDL.Nat64
   });
-  const RulesType = IDL.Variant({Db: IDL.Null, Storage: IDL.Null});
   const Permission = IDL.Variant({
     Controllers: IDL.Null,
     Private: IDL.Null,
@@ -129,6 +138,7 @@ export const idlFactory = ({IDL}) => {
   });
   const SetController = IDL.Record({
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
   const SetControllersArgs = IDL.Record({
@@ -161,6 +171,7 @@ export const idlFactory = ({IDL}) => {
     ),
     del_custom_domain: IDL.Func([IDL.Text], [], []),
     del_doc: IDL.Func([IDL.Text, IDL.Text, DelDoc], [], []),
+    del_rule: IDL.Func([RulesType, IDL.Text, DelDoc], [], []),
     get_config: IDL.Func([], [Config], []),
     get_doc: IDL.Func([IDL.Text, IDL.Text], [IDL.Opt(Doc)], ['query']),
     http_request: IDL.Func([HttpRequest], [HttpResponse], ['query']),

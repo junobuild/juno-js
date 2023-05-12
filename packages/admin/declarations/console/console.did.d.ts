@@ -1,6 +1,11 @@
 import type {ActorMethod} from '@dfinity/agent';
 import type {Principal} from '@dfinity/principal';
 
+export interface AssertMissionControlCenterArgs {
+  mission_control_id: Principal;
+  user: Principal;
+}
+export type ControllerScope = {Write: null} | {Admin: null};
 export interface CreateSatelliteArgs {
   block_index: [] | [bigint];
   user: Principal;
@@ -33,6 +38,7 @@ export interface ReleasesVersion {
 export type Segment = {MissionControl: null} | {Satellite: null};
 export interface SetController {
   metadata: Array<[string, string]>;
+  scope: ControllerScope;
   expires_at: [] | [bigint];
 }
 export interface SetControllersArgs {
@@ -44,13 +50,14 @@ export interface Tokens {
 }
 export interface _SERVICE {
   add_invitation_code: ActorMethod<[string], undefined>;
+  assert_mission_control_center: ActorMethod<[AssertMissionControlCenterArgs], undefined>;
   create_satellite: ActorMethod<[CreateSatelliteArgs], Principal>;
   del_controllers: ActorMethod<[DeleteControllersArgs], undefined>;
   get_create_satellite_fee: ActorMethod<[GetCreateSatelliteFeeArgs], [] | [Tokens]>;
   get_credits: ActorMethod<[], Tokens>;
   get_releases_version: ActorMethod<[], ReleasesVersion>;
   get_user_mission_control_center: ActorMethod<[], [] | [MissionControl]>;
-  init_user_mission_control_center: ActorMethod<[[] | [string]], MissionControl>;
+  init_user_mission_control_center: ActorMethod<[], MissionControl>;
   list_user_mission_control_centers: ActorMethod<[], Array<[Principal, MissionControl]>>;
   load_release: ActorMethod<[Segment, Uint8Array | number[], string], LoadRelease>;
   reset_release: ActorMethod<[Segment], undefined>;

@@ -1,9 +1,16 @@
 import type {Principal} from '@dfinity/principal';
 
 export interface ListResults<T> {
+  // The data - e.g. the documents or assets depending which list was called
   items: T[];
-  length: bigint;
+  // The numbers of items - basically items.length
+  items_length: bigint;
+  // If query is paginated, at what page (starting from 0) the items find place
+  items_page?: bigint;
+  // The total numbers of matching results
   matches_length: bigint;
+  // If query is paginated, the total number (starting from 0) of pages
+  matches_pages?: bigint;
 }
 
 export interface ListPaginate {

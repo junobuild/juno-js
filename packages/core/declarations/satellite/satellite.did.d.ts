@@ -36,8 +36,10 @@ export interface Controller {
   updated_at: bigint;
   metadata: Array<[string, string]>;
   created_at: bigint;
+  scope: ControllerScope;
   expires_at: [] | [bigint];
 }
+export type ControllerScope = {Write: null} | {Admin: null};
 export interface CustomDomain {
   updated_at: bigint;
   created_at: bigint;
@@ -93,14 +95,18 @@ export interface ListParams {
   paginate: [] | [ListPaginate];
 }
 export interface ListResults {
+  matches_pages: [] | [bigint];
   matches_length: bigint;
-  length: bigint;
+  items_page: [] | [bigint];
   items: Array<[string, AssetNoContent]>;
+  items_length: bigint;
 }
 export interface ListResults_1 {
+  matches_pages: [] | [bigint];
   matches_length: bigint;
-  length: bigint;
+  items_page: [] | [bigint];
   items: Array<[string, Doc]>;
+  items_length: bigint;
 }
 export type Permission = {Controllers: null} | {Private: null} | {Public: null} | {Managed: null};
 export interface Rule {
@@ -113,6 +119,7 @@ export interface Rule {
 export type RulesType = {Db: null} | {Storage: null};
 export interface SetController {
   metadata: Array<[string, string]>;
+  scope: ControllerScope;
   expires_at: [] | [bigint];
 }
 export interface SetControllersArgs {
@@ -160,6 +167,7 @@ export interface _SERVICE {
   del_controllers: ActorMethod<[DeleteControllersArgs], Array<[Principal, Controller]>>;
   del_custom_domain: ActorMethod<[string], undefined>;
   del_doc: ActorMethod<[string, string, DelDoc], undefined>;
+  del_rule: ActorMethod<[RulesType, string, DelDoc], undefined>;
   get_config: ActorMethod<[], Config>;
   get_doc: ActorMethod<[string, string], [] | [Doc]>;
   http_request: ActorMethod<[HttpRequest], HttpResponse>;

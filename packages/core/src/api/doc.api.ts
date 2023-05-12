@@ -101,10 +101,8 @@ export const listDocs = async <D>({
 }): Promise<ListResults<Doc<D>>> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
 
-  const {items, matches_length, length}: ListDocsApi = await actor.list_docs(
-    collection,
-    toListParams(filter)
-  );
+  const {items, items_page, items_length, matches_length, matches_pages}: ListDocsApi =
+    await actor.list_docs(collection, toListParams(filter));
 
   const docs: Doc<D>[] = [];
 
@@ -121,7 +119,9 @@ export const listDocs = async <D>({
 
   return {
     items: docs,
-    length,
-    matches_length
+    items_length,
+    items_page: fromNullable(items_page),
+    matches_length,
+    matches_pages: fromNullable(matches_pages)
   };
 };

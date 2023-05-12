@@ -86,7 +86,7 @@ export const listAssets = async ({
         headers,
         encodings,
         created_at,
-        updated_at,
+        updated_at
       }: AssetNoContent) => {
         const token = fromNullable(t);
 

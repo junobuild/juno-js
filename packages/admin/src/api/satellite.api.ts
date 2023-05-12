@@ -9,7 +9,14 @@ import type {
   SetRule
 } from '../../declarations/satellite/satellite.did';
 import type {SatelliteParameters} from '../types/actor.types';
-import {getDeprecatedSatelliteActor, getSatelliteActor} from './actor.api';
+import {
+  getDeprecatedSatelliteActor,
+  getDeprecatedSatelliteNoScopeActor,
+  getSatelliteActor
+} from './actor.api';
+import {
+  _SERVICE as DeprecatedSatelliteNoScopeActor
+} from "../../declarations/satellite/satellite-deprecated-no-scope.did";
 
 export const setConfig = async ({
   config,
@@ -62,6 +69,16 @@ export const listDeprecatedControllers = async ({
 }): Promise<Principal[]> => {
   const actor: DeprecatedSatelliteActor = await getDeprecatedSatelliteActor(satellite);
   return actor.list_controllers();
+};
+
+// TODO: for backwards compatibility - to be removed
+export const listDeprecatedNoScopeControllers = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<[Principal, Controller][]> => {
+  const actor: DeprecatedSatelliteNoScopeActor = await getDeprecatedSatelliteNoScopeActor(satellite);
+  return actor.list_controllers() as Promise<[Principal, Controller][]>;
 };
 
 export const listControllers = async ({

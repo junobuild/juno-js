@@ -7,6 +7,8 @@ import type {_SERVICE as ICActor} from '../../declarations/ic/ic.did';
 import {idlFactory as idlFactorIC} from '../../declarations/ic/ic.factory.did';
 import type {_SERVICE as MissionControlActor} from '../../declarations/mission_control/mission_control.did';
 import {idlFactory as idlFactoryMissionControl} from '../../declarations/mission_control/mission_control.factory.did.js';
+import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
+import {idlFactory as idlDeprecatedFactorySatelliteNoScope} from '../../declarations/satellite/satellite-deprecated-no-scope.factory.did.js';
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
 import {idlFactory as idlDeprecatedFactorySatellite} from '../../declarations/satellite/satellite-deprecated.factory.did.js';
 import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
@@ -38,6 +40,17 @@ export const getSatelliteActor = async ({
     canisterId: satelliteId,
     ...rest,
     idlFactory: idlFactorySatellite
+  });
+
+// TODO: for backwards compatibility - to be removed
+export const getDeprecatedSatelliteNoScopeActor = async ({
+  satelliteId,
+  ...rest
+}: SatelliteParameters): Promise<DeprecatedSatelliteNoScopeActor> =>
+  getActor({
+    canisterId: satelliteId,
+    ...rest,
+    idlFactory: idlDeprecatedFactorySatelliteNoScope
   });
 
 export const getMissionControlActor = async ({

@@ -4,6 +4,7 @@ import {upgradeCode} from '../api/ic.api';
 import {
   listControllers,
   listDeprecatedControllers,
+  listDeprecatedNoScopeControllers,
   listRules as listRulesApi,
   setConfig as setConfigApi,
   setRule as setRuleApi,
@@ -74,11 +75,13 @@ export const satelliteVersion = async (params: {satellite: SatelliteParameters})
 export const upgradeSatellite = async ({
   satellite,
   wasm_module,
-  deprecated
+  deprecated,
+  deprecatedNoScope
 }: {
   satellite: SatelliteParameters;
   wasm_module: Array<number>;
   deprecated: boolean;
+  deprecatedNoScope: boolean;
 }) => {
   const {satelliteId, ...actor} = satellite;
 
@@ -111,7 +114,9 @@ export const upgradeSatellite = async ({
     return;
   }
 
-  const controllers = await listControllers({satellite});
+  const list = deprecatedNoScope ? listDeprecatedNoScopeControllers : listControllers;
+
+  const controllers = await list({satellite});
 
   const arg = IDL.encode(
     [

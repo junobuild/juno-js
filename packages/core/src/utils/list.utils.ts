@@ -5,7 +5,14 @@ import {toNullable} from './did.utils';
 import {isNullish} from './utils';
 
 export const toListParams = ({matcher, paginate, order, owner}: ListParams): ListParamsApi => ({
-  matcher: toNullable(matcher),
+  matcher: isNullish(matcher)
+    ? []
+    : [
+        {
+          key: toNullable(matcher.key),
+          description: toNullable(matcher.description)
+        }
+      ],
   paginate: toNullable(
     isNullish(paginate)
       ? undefined

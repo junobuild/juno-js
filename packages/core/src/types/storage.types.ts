@@ -24,7 +24,8 @@ export interface Asset extends AssetKey {
   updated_at?: bigint;
 }
 
-export interface Assets extends Pick<ListResults<AssetNoContent>, 'length' | 'matches_length'> {
+export interface Assets
+  extends Pick<ListResults<AssetNoContent>, 'items_length' | 'matches_length'> {
   assets: Asset[];
 }
 

@@ -6,7 +6,7 @@ import type {
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
 import type {Asset, ENCODING_TYPE, Storage} from '../types/storage.types';
-import {toNullable} from '../utils/did.utils';
+import {fromNullable, toNullable} from '../utils/did.utils';
 import {isBrowser} from '../utils/env.utils';
 import {toListParams} from '../utils/list.utils';
 import {getSatelliteActor} from './actor.api';
@@ -92,14 +92,18 @@ export const listAssets = async ({
 
   const {
     items: assets,
+    items_length,
+    items_page,
     matches_length,
-    length
+    matches_pages
   }: ListAssetsApi = await actor.list_assets(toNullable<string>(collection), toListParams(filter));
 
   return {
     items: assets.map(([_, asset]) => asset),
-    length,
-    matches_length
+    items_length,
+    items_page: fromNullable(items_page),
+    matches_length,
+    matches_pages: fromNullable(matches_pages)
   };
 };
 

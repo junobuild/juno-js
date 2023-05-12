@@ -16,6 +16,7 @@ export interface AssetKey {
 export type ENCODING_TYPE = 'identity' | 'gzip' | 'compress' | 'deflate' | 'br';
 
 export interface Asset extends AssetKey {
+  description?: string;
   token?: string;
   headers: [string, string][];
   encodings: Record<ENCODING_TYPE, AssetEncoding>;
@@ -25,7 +26,10 @@ export interface Asset extends AssetKey {
 }
 
 export interface Assets
-  extends Pick<ListResults<AssetNoContent>, 'items_length' | 'matches_length'> {
+  extends Pick<
+    ListResults<AssetNoContent>,
+    'items_length' | 'items_page' | 'matches_length' | 'matches_pages'
+  > {
   assets: Asset[];
 }
 
@@ -37,4 +41,5 @@ export interface Storage {
   headers?: [string, string][];
   token?: string;
   encoding?: ENCODING_TYPE;
+  description?: string;
 }

@@ -49,13 +49,14 @@ export const delDoc = async <D>({
 
 export const listDocs = async <D>({
   satellite,
+  filter,
   ...rest
 }: {
   collection: string;
-  filter: ListParams;
+  filter?: ListParams;
   satellite?: SatelliteOptions;
 }): Promise<ListResults<Doc<D>>> => {
   const identity = getIdentity(satellite?.identity);
 
-  return listDocsApi<D>({...rest, satellite: {...satellite, identity}});
+  return listDocsApi<D>({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
 };

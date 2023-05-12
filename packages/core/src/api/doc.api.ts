@@ -28,12 +28,13 @@ export const getDoc = async <D>({
     return undefined;
   }
 
-  const {data: dataArray, owner, ...rest} = entry;
+  const {data: dataArray, owner, description, ...rest} = entry;
 
   const data: D = await mapData<D>({data: dataArray});
 
   return {
     key,
+    description: fromNullable(description),
     owner: owner.toText(),
     data,
     ...rest
@@ -51,20 +52,22 @@ export const setDoc = async <D>({
 }): Promise<Doc<D>> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
 
-  const {key, data, updated_at} = doc;
+  const {key, data, updated_at, description} = doc;
 
   const updatedDoc: DocApi = await actor.set_doc(collection, key, {
+    description: toNullable(description),
     data: await toArray<D>(data),
     updated_at: toNullable(updated_at)
   });
 
-  const {owner, updated_at: updatedAt, created_at} = updatedDoc;
+  const {owner, updated_at: updatedAt, created_at, description: updatedDescription} = updatedDoc;
 
   // We update the data with the updated_at timestamp generated in the backend.
   // The canister checks if the updated_at date is equals to the entity timestamp otherwise it rejects the update to prevent overwrite of data if user uses multiple devices.
   // In other words: to update a data, the current updated_at information need to be provided.
   return {
     key,
+    description: fromNullable(updatedDescription),
     owner: owner.toText(),
     data,
     created_at,
@@ -107,10 +110,11 @@ export const listDocs = async <D>({
   const docs: Doc<D>[] = [];
 
   for (const [key, item] of items) {
-    const {data: dataArray, owner, ...rest} = item;
+    const {data: dataArray, owner, description, ...rest} = item;
 
     docs.push({
       key,
+      description: fromNullable(description),
       owner: owner.toText(),
       data: await mapData<D>({data: dataArray}),
       ...rest

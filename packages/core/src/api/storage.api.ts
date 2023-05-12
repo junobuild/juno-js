@@ -19,9 +19,10 @@ export const uploadAsset = async ({
   token,
   fullPath,
   encoding,
+  description,
   satellite
-}: Required<Omit<Storage, 'token' | 'encoding'>> &
-  Pick<Storage, 'token' | 'encoding'> & {satellite: Satellite}): Promise<void> => {
+}: Required<Omit<Storage, 'token' | 'encoding' | 'description'>> &
+  Pick<Storage, 'token' | 'encoding' | 'description'> & {satellite: Satellite}): Promise<void> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
 
   const {batch_id: batchId} = await actor.init_asset_upload({
@@ -29,7 +30,8 @@ export const uploadAsset = async ({
     full_path: fullPath,
     name: filename,
     token: toNullable<string>(token),
-    encoding_type: toNullable<ENCODING_TYPE>(encoding)
+    encoding_type: toNullable<ENCODING_TYPE>(encoding),
+    description: toNullable(description)
   });
 
   const chunkSize = 700000;

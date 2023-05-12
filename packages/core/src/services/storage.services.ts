@@ -35,7 +35,8 @@ const uploadAssetIC = async ({
   fullPath: storagePath,
   token,
   satellite,
-  encoding
+  encoding,
+  description
 }: Storage & {satellite?: SatelliteOptions}): Promise<AssetKey> => {
   const identity = getIdentity(satellite?.identity);
 
@@ -50,7 +51,8 @@ const uploadAssetIC = async ({
     headers,
     fullPath,
     encoding,
-    satellite: {...satellite, identity}
+    satellite: {...satellite, identity},
+    description
   });
 
   return {
@@ -80,16 +82,17 @@ export const listAssets = async ({
   return {
     assets: items.map(
       ({
-        key: {full_path, token: t, name, owner},
+        key: {full_path, token: t, name, owner, description},
         headers,
         encodings,
         created_at,
-        updated_at
+        updated_at,
       }: AssetNoContent) => {
         const token = fromNullable(t);
 
         return {
           fullPath: full_path,
+          description: fromNullable(description),
           name,
           downloadUrl: `${host}${full_path}${token !== undefined ? `?token=${token}` : ''}`,
           token,

@@ -27,8 +27,13 @@ export interface ListOrder {
 
 export type ListOwner = string | Principal;
 
+export interface ListMatcher {
+  key?: string;
+  description?: string;
+}
+
 export interface ListParams {
-  matcher?: string;
+  matcher?: ListMatcher;
   paginate?: ListPaginate;
   order?: ListOrder;
   owner?: ListOwner;

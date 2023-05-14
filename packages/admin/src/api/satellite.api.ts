@@ -1,8 +1,10 @@
 import type {Principal} from '@dfinity/principal';
+import {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
 import type {
   Config,
   Controller,
+  CustomDomain,
   Rule,
   RulesType,
   _SERVICE as SatelliteActor,
@@ -14,9 +16,6 @@ import {
   getDeprecatedSatelliteNoScopeActor,
   getSatelliteActor
 } from './actor.api';
-import {
-  _SERVICE as DeprecatedSatelliteNoScopeActor
-} from "../../declarations/satellite/satellite-deprecated-no-scope.did";
 
 export const setConfig = async ({
   config,
@@ -77,7 +76,9 @@ export const listDeprecatedNoScopeControllers = async ({
 }: {
   satellite: SatelliteParameters;
 }): Promise<[Principal, Controller][]> => {
-  const actor: DeprecatedSatelliteNoScopeActor = await getDeprecatedSatelliteNoScopeActor(satellite);
+  const actor: DeprecatedSatelliteNoScopeActor = await getDeprecatedSatelliteNoScopeActor(
+    satellite
+  );
   return actor.list_controllers() as Promise<[Principal, Controller][]>;
 };
 
@@ -88,4 +89,13 @@ export const listControllers = async ({
 }): Promise<[Principal, Controller][]> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
   return actor.list_controllers();
+};
+
+export const listCustomDomains = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<[string, CustomDomain][]> => {
+  const actor: SatelliteActor = await getSatelliteActor(satellite);
+  return actor.list_custom_domains();
 };

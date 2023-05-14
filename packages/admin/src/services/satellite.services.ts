@@ -3,6 +3,7 @@ import {Principal} from '@dfinity/principal';
 import {upgradeCode} from '../api/ic.api';
 import {
   listControllers,
+  listCustomDomains as listCustomDomainsApi,
   listDeprecatedControllers,
   listDeprecatedNoScopeControllers,
   listRules as listRulesApi,
@@ -12,7 +13,9 @@ import {
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
 import type {Config, StorageConfigHeaders} from '../types/config.types';
+import {CustomDomain} from '../types/customdomain.types';
 import type {Rule, RulesType} from '../types/rules.types';
+import {fromNullable} from '../utils/did.utils';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 export const setConfig = async ({
@@ -135,4 +138,21 @@ export const upgradeSatellite = async ({
       wasm_module
     }
   });
+};
+
+export const listCustomDomains = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<CustomDomain[]> => {
+  const domains = await listCustomDomainsApi({
+    satellite
+  });
+
+  return domains.map(([domain, details]) => ({
+    domain,
+    bn_id: fromNullable(details.bn_id),
+    created_at: details.created_at,
+    updated_at: details.updated_at
+  }));
 };

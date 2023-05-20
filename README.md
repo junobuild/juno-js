@@ -6,6 +6,7 @@ JavaScript libraries for interfacing with [Juno].
 
 - [core](/packages/core): core client library
 - [admin](/packages/admin): interfacing with admin features
+- [ledger](/packages/ledger): a lightweight fork of `@dfinity/nns` to parse account identifier for the ICP ledger
 
 ## License
 

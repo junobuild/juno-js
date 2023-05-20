@@ -6,7 +6,7 @@
 [npm-license]: https://img.shields.io/npm/l/@junobuild/ledger
 [npm-license-url]: https://github.com/deckgo/junobuild/blob/main/webcomponents/core/LICENSE
 
-# Juno JavaScript core SDK
+# Juno JavaScript ledger fork
 
 A lightweight fork of [@dfinity/nns](https://github.com/dfinity/ic-js/tree/main/packages/nns) that includes only the necessary parts, specifically the `AccountIdentifier`, used in the Juno console to minimize the bundle size.
 

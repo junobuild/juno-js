@@ -21,10 +21,6 @@ export interface AssetNoContent {
   headers: Array<[string, string]>;
   created_at: bigint;
 }
-export interface Chunk {
-  content: Uint8Array | number[];
-  batch_id: bigint;
-}
 export interface CommitBatch {
   batch_id: bigint;
   headers: Array<[string, string]>;
@@ -115,8 +111,10 @@ export interface ListResults_1 {
   items: Array<[string, Doc]>;
   items_length: bigint;
 }
+export type Memory = {Heap: null} | {Stable: null};
 export type Permission = {Controllers: null} | {Private: null} | {Public: null} | {Managed: null};
 export interface Rule {
+  memory: Memory;
   updated_at: bigint;
   max_size: [] | [bigint];
   read: Permission;
@@ -139,6 +137,7 @@ export interface SetDoc {
   description: [] | [string];
 }
 export interface SetRule {
+  memory: [] | [Memory];
   updated_at: [] | [bigint];
   max_size: [] | [bigint];
   read: Permission;
@@ -166,6 +165,11 @@ export type StreamingStrategy = {
   };
 };
 export interface UploadChunk {
+  content: Uint8Array | number[];
+  batch_id: bigint;
+  chunk_id: [] | [bigint];
+}
+export interface UploadChunkResult {
   chunk_id: bigint;
 }
 export interface _SERVICE {
@@ -194,6 +198,6 @@ export interface _SERVICE {
   set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;
   set_doc: ActorMethod<[string, string, SetDoc], Doc>;
   set_rule: ActorMethod<[RulesType, string, SetRule], undefined>;
-  upload_asset_chunk: ActorMethod<[Chunk], UploadChunk>;
+  upload_asset_chunk: ActorMethod<[UploadChunk], UploadChunkResult>;
   version: ActorMethod<[], string>;
 }

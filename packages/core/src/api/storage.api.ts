@@ -34,23 +34,33 @@ export const uploadAsset = async ({
     description: toNullable(description)
   });
 
-  const chunkSize = 700000;
+  // https://forum.dfinity.org/t/optimal-upload-chunk-size/20444/23?u=peterparker
+  const chunkSize = 1900000;
 
-  const chunkIds: {chunk_id: bigint}[] = [];
+  const uploadChunks: UploadChunkParams[] = [];
 
   // Prevent transforming chunk to arrayBuffer error: The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.
   const clone: Blob = isBrowser() ? new Blob([await data.arrayBuffer()]) : data;
 
+  // Split data into chunks
+  let chunkId = 0n;
   for (let start = 0; start < clone.size; start += chunkSize) {
     const chunk: Blob = clone.slice(start, start + chunkSize);
 
-    chunkIds.push(
-      await uploadChunk({
-        batchId,
-        chunk,
-        actor
-      })
-    );
+    uploadChunks.push({
+      batchId,
+      chunk,
+      actor,
+      chunkId
+    });
+
+    chunkId++;
+  }
+
+  // Upload chunks to the IC in batch - i.e. 12 chunks uploaded at a time.
+  let chunkIds: UploadChunkResult[] = [];
+  for await (const results of batchUploadChunks({uploadChunks})) {
+    chunkIds = [...chunkIds, ...results];
   }
 
   const contentType: [[string, string]] | undefined =
@@ -67,18 +77,39 @@ export const uploadAsset = async ({
   });
 };
 
-const uploadChunk = async ({
-  batchId,
-  chunk,
-  actor
+async function* batchUploadChunks({
+  uploadChunks,
+  limit = 12
 }: {
+  uploadChunks: UploadChunkParams[];
+  limit?: number;
+}): AsyncGenerator<UploadChunkResult[], void> {
+  for (let i = 0; i < uploadChunks.length; i = i + limit) {
+    const batch = uploadChunks.slice(i, i + limit);
+    const result = await Promise.all(batch.map((params) => uploadChunk(params)));
+    yield result;
+  }
+}
+
+type UploadChunkResult = {chunk_id: bigint};
+
+type UploadChunkParams = {
   batchId: bigint;
   chunk: Blob;
   actor: SatelliteActor;
-}): Promise<{chunk_id: bigint}> =>
+  chunkId: bigint;
+};
+
+const uploadChunk = async ({
+  batchId,
+  chunk,
+  actor,
+  chunkId
+}: UploadChunkParams): Promise<UploadChunkResult> =>
   actor.upload_asset_chunk({
     batch_id: batchId,
-    content: new Uint8Array(await chunk.arrayBuffer())
+    content: new Uint8Array(await chunk.arrayBuffer()),
+    chunk_id: toNullable(chunkId)
   });
 
 export const listAssets = async ({

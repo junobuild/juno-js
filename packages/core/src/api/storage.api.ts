@@ -43,7 +43,7 @@ export const uploadAsset = async ({
   const clone: Blob = isBrowser() ? new Blob([await data.arrayBuffer()]) : data;
 
   // Split data into chunks
-  let chunkId = 0n;
+  let orderId = 0n;
   for (let start = 0; start < clone.size; start += chunkSize) {
     const chunk: Blob = clone.slice(start, start + chunkSize);
 
@@ -51,10 +51,10 @@ export const uploadAsset = async ({
       batchId,
       chunk,
       actor,
-      chunkId
+      orderId
     });
 
-    chunkId++;
+    orderId++;
   }
 
   // Upload chunks to the IC in batch - i.e. 12 chunks uploaded at a time.
@@ -97,19 +97,19 @@ type UploadChunkParams = {
   batchId: bigint;
   chunk: Blob;
   actor: SatelliteActor;
-  chunkId: bigint;
+  orderId: bigint;
 };
 
 const uploadChunk = async ({
   batchId,
   chunk,
   actor,
-  chunkId
+  orderId
 }: UploadChunkParams): Promise<UploadChunkResult> =>
   actor.upload_asset_chunk({
     batch_id: batchId,
     content: new Uint8Array(await chunk.arrayBuffer()),
-    chunk_id: toNullable(chunkId)
+    order_id: toNullable(orderId)
   });
 
 export const listAssets = async ({

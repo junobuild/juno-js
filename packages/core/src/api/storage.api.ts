@@ -129,7 +129,7 @@ export const listAssets = async ({
     items_page,
     matches_length,
     matches_pages
-  }: ListAssetsApi = await actor.list_assets(toNullable<string>(collection), toListParams(filter));
+  }: ListAssetsApi = await actor.list_assets(collection, toListParams(filter));
 
   return {
     items: assets.map(([_, asset]) => asset),
@@ -160,10 +160,10 @@ export const deleteAssets = async ({
   collection,
   satellite
 }: {
-  collection?: string;
+  collection: string;
   satellite: Satellite;
 }): Promise<void> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
 
-  return actor.del_assets(toNullable(collection));
+  return actor.del_assets(collection);
 };

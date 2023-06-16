@@ -7,7 +7,7 @@ import type {Environment} from './types/env.types';
 import type {Unsubscribe} from './types/subscription.types';
 
 export * from './providers/auth.providers';
-export {signIn, signOut} from './services/auth.services';
+export {signIn, signOut, unsafeIdentity} from './services/auth.services';
 export * from './services/doc.services';
 export * from './services/storage.services';
 export * from './types/auth.types';

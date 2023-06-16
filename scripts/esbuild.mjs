@@ -43,8 +43,9 @@ const buildEsmCjs = () => {
       minify: true,
       splitting: true,
       format: 'esm',
-      define: {global: 'window'},
       target: ['esnext'],
+      platform: 'browser',
+      conditions: ['worker', 'browser'],
       plugins: [NodeModulesPolyfillPlugin()],
       external: [...Object.keys(workspacePeerDependencies)]
     })

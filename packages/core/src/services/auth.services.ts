@@ -55,3 +55,10 @@ export const signOut = async (): Promise<void> => {
 export const getIdentity = (): Identity | undefined => {
   return authClient?.getIdentity();
 };
+
+/**
+ * Return what can be the identity of a sign-in user or an anonymous identity.
+ * Useful to load an identity in web workers.
+ */
+export const unsafeIdentity = async (): Promise<Identity> =>
+  (authClient ?? (await createAuthClient())).getIdentity();

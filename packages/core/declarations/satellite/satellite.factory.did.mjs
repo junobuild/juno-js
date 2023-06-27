@@ -130,7 +130,6 @@ export const idlFactory = ({IDL}) => {
     items: IDL.Vec(IDL.Tuple(IDL.Text, Doc)),
     items_length: IDL.Nat64
   });
-  const Memory = IDL.Variant({Heap: IDL.Null, Stable: IDL.Null});
   const Permission = IDL.Variant({
     Controllers: IDL.Null,
     Private: IDL.Null,
@@ -138,7 +137,6 @@ export const idlFactory = ({IDL}) => {
     Managed: IDL.Null
   });
   const Rule = IDL.Record({
-    memory: Memory,
     updated_at: IDL.Nat64,
     max_size: IDL.Opt(IDL.Nat),
     read: Permission,
@@ -160,7 +158,6 @@ export const idlFactory = ({IDL}) => {
     description: IDL.Opt(IDL.Text)
   });
   const SetRule = IDL.Record({
-    memory: IDL.Opt(Memory),
     updated_at: IDL.Opt(IDL.Nat64),
     max_size: IDL.Opt(IDL.Nat),
     read: Permission,

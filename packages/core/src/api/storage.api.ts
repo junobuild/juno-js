@@ -34,23 +34,33 @@ export const uploadAsset = async ({
     description: toNullable(description)
   });
 
-  const chunkSize = 700000;
+  // https://forum.dfinity.org/t/optimal-upload-chunk-size/20444/23?u=peterparker
+  const chunkSize = 1900000;
 
-  const chunkIds: {chunk_id: bigint}[] = [];
+  const uploadChunks: UploadChunkParams[] = [];
 
   // Prevent transforming chunk to arrayBuffer error: The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.
   const clone: Blob = isBrowser() ? new Blob([await data.arrayBuffer()]) : data;
 
+  // Split data into chunks
+  let orderId = 0n;
   for (let start = 0; start < clone.size; start += chunkSize) {
     const chunk: Blob = clone.slice(start, start + chunkSize);
 
-    chunkIds.push(
-      await uploadChunk({
-        batchId,
-        chunk,
-        actor
-      })
-    );
+    uploadChunks.push({
+      batchId,
+      chunk,
+      actor,
+      orderId
+    });
+
+    orderId++;
+  }
+
+  // Upload chunks to the IC in batch - i.e. 12 chunks uploaded at a time.
+  let chunkIds: UploadChunkResult[] = [];
+  for await (const results of batchUploadChunks({uploadChunks})) {
+    chunkIds = [...chunkIds, ...results];
   }
 
   const contentType: [[string, string]] | undefined =
@@ -62,23 +72,44 @@ export const uploadAsset = async ({
 
   await actor.commit_asset_upload({
     batch_id: batchId,
-    chunk_ids: chunkIds.map(({chunk_id}: {chunk_id: bigint}) => chunk_id),
+    chunk_ids: chunkIds.map(({chunk_id}: UploadChunkResult) => chunk_id),
     headers: [...headers, ...(contentType ? contentType : [])]
   });
+};
+
+async function* batchUploadChunks({
+  uploadChunks,
+  limit = 12
+}: {
+  uploadChunks: UploadChunkParams[];
+  limit?: number;
+}): AsyncGenerator<UploadChunkResult[], void> {
+  for (let i = 0; i < uploadChunks.length; i = i + limit) {
+    const batch = uploadChunks.slice(i, i + limit);
+    const result = await Promise.all(batch.map((params) => uploadChunk(params)));
+    yield result;
+  }
+}
+
+type UploadChunkResult = {chunk_id: bigint};
+
+type UploadChunkParams = {
+  batchId: bigint;
+  chunk: Blob;
+  actor: SatelliteActor;
+  orderId: bigint;
 };
 
 const uploadChunk = async ({
   batchId,
   chunk,
-  actor
-}: {
-  batchId: bigint;
-  chunk: Blob;
-  actor: SatelliteActor;
-}): Promise<{chunk_id: bigint}> =>
+  actor,
+  orderId
+}: UploadChunkParams): Promise<UploadChunkResult> =>
   actor.upload_asset_chunk({
     batch_id: batchId,
-    content: new Uint8Array(await chunk.arrayBuffer())
+    content: new Uint8Array(await chunk.arrayBuffer()),
+    order_id: toNullable(orderId)
   });
 
 export const listAssets = async ({
@@ -98,7 +129,7 @@ export const listAssets = async ({
     items_page,
     matches_length,
     matches_pages
-  }: ListAssetsApi = await actor.list_assets(toNullable<string>(collection), toListParams(filter));
+  }: ListAssetsApi = await actor.list_assets(collection, toListParams(filter));
 
   return {
     items: assets.map(([_, asset]) => asset),
@@ -129,10 +160,10 @@ export const deleteAssets = async ({
   collection,
   satellite
 }: {
-  collection?: string;
+  collection: string;
   satellite: Satellite;
 }): Promise<void> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
 
-  return actor.del_assets(toNullable(collection));
+  return actor.del_assets(collection);
 };

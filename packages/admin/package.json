@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/admin",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "A library for interfacing with admin features of Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -39,8 +39,8 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
-    "@dfinity/agent": "^0.15.4",
-    "@dfinity/identity": "^0.15.4",
-    "@dfinity/principal": "^0.15.4"
+    "@dfinity/agent": "^0.15.6",
+    "@dfinity/identity": "^0.15.6",
+    "@dfinity/principal": "^0.15.6"
   }
 }

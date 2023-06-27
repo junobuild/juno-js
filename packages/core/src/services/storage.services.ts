@@ -137,7 +137,7 @@ export const deleteAssets = async ({
   collection,
   satellite
 }: {
-  collection?: string;
+  collection: string;
   satellite?: SatelliteOptions;
 }): Promise<void> =>
   deleteAssetsApi({

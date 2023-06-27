@@ -21,10 +21,6 @@ export interface AssetNoContent {
   headers: Array<[string, string]>;
   created_at: bigint;
 }
-export interface Chunk {
-  content: Uint8Array | number[];
-  batch_id: bigint;
-}
 export interface CommitBatch {
   batch_id: bigint;
   headers: Array<[string, string]>;
@@ -166,12 +162,17 @@ export type StreamingStrategy = {
   };
 };
 export interface UploadChunk {
+  content: Uint8Array | number[];
+  batch_id: bigint;
+  order_id: [] | [bigint];
+}
+export interface UploadChunkResult {
   chunk_id: bigint;
 }
 export interface _SERVICE {
   commit_asset_upload: ActorMethod<[CommitBatch], undefined>;
   del_asset: ActorMethod<[string, string], undefined>;
-  del_assets: ActorMethod<[[] | [string]], undefined>;
+  del_assets: ActorMethod<[string], undefined>;
   del_controllers: ActorMethod<[DeleteControllersArgs], Array<[Principal, Controller]>>;
   del_custom_domain: ActorMethod<[string], undefined>;
   del_doc: ActorMethod<[string, string, DelDoc], undefined>;
@@ -184,7 +185,7 @@ export interface _SERVICE {
     StreamingCallbackHttpResponse
   >;
   init_asset_upload: ActorMethod<[InitAssetKey], InitUploadResult>;
-  list_assets: ActorMethod<[[] | [string], ListParams], ListResults>;
+  list_assets: ActorMethod<[string, ListParams], ListResults>;
   list_controllers: ActorMethod<[], Array<[Principal, Controller]>>;
   list_custom_domains: ActorMethod<[], Array<[string, CustomDomain]>>;
   list_docs: ActorMethod<[string, ListParams], ListResults_1>;
@@ -194,6 +195,6 @@ export interface _SERVICE {
   set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;
   set_doc: ActorMethod<[string, string, SetDoc], Doc>;
   set_rule: ActorMethod<[RulesType, string, SetRule], undefined>;
-  upload_asset_chunk: ActorMethod<[Chunk], UploadChunk>;
+  upload_asset_chunk: ActorMethod<[UploadChunk], UploadChunkResult>;
   version: ActorMethod<[], string>;
 }

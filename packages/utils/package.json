@@ -1,0 +1,44 @@
+{
+  "name": "@junobuild/utils",
+  "version": "0.0.1",
+  "description": "A collection of utilities and constants for Juno JS libs.",
+  "author": "David Dal Busco (https://daviddalbusco.com)",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/node/index.mjs",
+  "module": "dist/browser/index.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "rmdir": "node ../../scripts/rmdir.mjs",
+    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
+    "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs && npm run ts-declaration",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buildwithjuno/juno-js.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/buildwithjuno/juno-js"
+  },
+  "keywords": [
+    "blockchain-as-a-service",
+    "baas",
+    "dapps",
+    "dapps-development",
+    "internet computer",
+    "smart-contracts",
+    "web3",
+    "utilities",
+    "utils"
+  ],
+  "homepage": "https://juno.build",
+  "dependencies": {},
+  "peerDependencies": {}
+}

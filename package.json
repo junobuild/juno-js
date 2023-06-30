@@ -53,6 +53,11 @@
         "@dfinity/candid",
         "@dfinity/principal"
       ]
+    },
+    {
+      "name": "@junobuild/utils",
+      "path": "./packages/utils/dist/index.js",
+      "limit": "500 B"
     }
   ]
 }

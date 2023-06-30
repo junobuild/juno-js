@@ -1,6 +1,6 @@
 import {PageView} from './track';
 
-export type PostMessageRequest = 'junoTrackPageView' | 'junoTrackEvent';
+export type PostMessageRequest = 'junoStartTimer' | 'junoStopTimer' | 'junoTrackPageView' | 'junoTrackEvent';
 
 export type PostMessagePageView = Omit<PageView, 'timeZone' | 'userAgent' | 'collectedAt'>;
 

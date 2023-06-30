@@ -65,3 +65,15 @@ export const trackEvent = () => {
 
   worker.postMessage({msg: 'junoTrackEvent'});
 };
+
+export const startTracking = () => {
+  assertNonNullish(worker, WORKER_UNDEFINED_MSG);
+
+  worker.postMessage({msg: 'junoStartTimer'});
+}
+
+export const stopTracking = () => {
+  assertNonNullish(worker, WORKER_UNDEFINED_MSG);
+
+  worker.postMessage({msg: 'junoStopTimer'});
+}

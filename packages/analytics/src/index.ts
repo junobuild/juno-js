@@ -1,10 +1,16 @@
-import {initTrackPageViews, initWorker, trackPageView} from './services/track.services';
+import {
+  initTrackPageViews,
+  initWorker,
+  startTracking,
+  stopTracking,
+  trackPageView
+} from './services/track.services';
 import type {Environment} from './types/env';
 
 export {trackEvent, trackPageView} from './services/track.services';
 export * from './types/env';
 
-export const initJunoAnalytics = ({worker}: Environment = {}): {cleanup: () => void} => {
+export const initJunoAnalytics = ({worker}: Environment = {}): (() => void) => {
   initWorker(worker);
 
   // TODO: option to disable auto track pageviews
@@ -13,5 +19,11 @@ export const initJunoAnalytics = ({worker}: Environment = {}): {cleanup: () => v
   // Tack first page
   trackPageView();
 
-  return {cleanup};
+  // Start synchronization (that way previous page view is instantly processed)
+  startTracking();
+
+  return () => {
+    stopTracking();
+    cleanup();
+  };
 };

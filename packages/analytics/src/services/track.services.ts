@@ -1,6 +1,6 @@
+import {assertNonNullish, isNullish} from '@junobuild/utils';
 import {EnvironmentWorker} from '../types/env';
 import {PostMessagePageView} from '../types/post-message';
-import {assertNonNullish, isNullish} from '../utils/utils';
 
 let worker: Worker | undefined;
 
@@ -70,10 +70,10 @@ export const startTracking = () => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
   worker.postMessage({msg: 'junoStartTimer'});
-}
+};
 
 export const stopTracking = () => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
   worker.postMessage({msg: 'junoStopTimer'});
-}
+};

@@ -1,8 +1,8 @@
+import {isNullish} from '@junobuild/utils';
 import {delPageViews, getPageViews, setPageView} from '../services/idb.services';
 import type {PostMessage, PostMessagePageView} from '../types/post-message';
 import {PageView} from '../types/track';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
-import {isNullish} from '../utils/utils';
 
 onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
   const {msg, data} = dataMsg;

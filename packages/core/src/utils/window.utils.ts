@@ -1,5 +1,5 @@
+import {isNullish} from '@junobuild/utils';
 import {isBrowser} from './env.utils';
-import {isNullish} from './utils';
 
 export const popupCenter = ({
   width,

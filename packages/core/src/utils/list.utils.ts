@@ -1,8 +1,7 @@
 import {Principal} from '@dfinity/principal';
+import {isNullish, toNullable} from '@junobuild/utils';
 import type {ListParams as ListParamsApi} from '../../declarations/satellite/satellite.did';
 import type {ListParams} from '../types/list.types';
-import {toNullable} from './did.utils';
-import {isNullish} from './utils';
 
 export const toListParams = ({matcher, paginate, order, owner}: ListParams): ListParamsApi => ({
   matcher: isNullish(matcher)

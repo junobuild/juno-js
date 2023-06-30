@@ -1,10 +1,10 @@
+import {isNullish} from '@junobuild/utils';
 import {AuthStore} from '../stores/auth.store';
 import type {User} from '../types/auth.types';
 import type {EnvironmentWorker} from '../types/env.types';
 import type {PostMessage} from '../types/post-message';
 import type {Unsubscribe} from '../types/subscription.types';
 import {emit} from '../utils/events.utils';
-import {isNullish} from '../utils/utils';
 import {signOut} from './auth.services';
 
 export const initAuthTimeoutWorker = (auth: EnvironmentWorker): Unsubscribe => {

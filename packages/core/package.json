@@ -42,6 +42,7 @@
     "@dfinity/agent": "^0.15.6",
     "@dfinity/auth-client": "^0.15.6",
     "@dfinity/identity": "^0.15.6",
-    "@dfinity/principal": "^0.15.6"
+    "@dfinity/principal": "^0.15.6",
+    "@junobuild/utils": "*"
   }
 }

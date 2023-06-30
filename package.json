@@ -13,10 +13,10 @@
     "size": "size-limit --json"
   },
   "workspaces": [
+    "packages/utils",
     "packages/core",
     "packages/admin",
-    "packages/ledger",
-    "packages/utils"
+    "packages/ledger"
   ],
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",

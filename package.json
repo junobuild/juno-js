@@ -57,7 +57,7 @@
     {
       "name": "@junobuild/utils",
       "path": "./packages/utils/dist/index.js",
-      "limit": "5 kB"
+      "limit": "500 B"
     }
   ]
 }

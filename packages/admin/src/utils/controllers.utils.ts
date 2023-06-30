@@ -1,8 +1,7 @@
 import {Principal} from '@dfinity/principal';
+import {nonNullish, toNullable} from '@junobuild/utils';
 import type {SetController} from '../../declarations/mission_control/mission_control.did';
 import type {SetControllerParams} from '../types/controllers.types';
-import {toNullable} from './did.utils';
-import {nonNullish} from './utils';
 
 export const mapSetControllerParams = ({
   controllerId,

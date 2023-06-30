@@ -1,4 +1,4 @@
-import {nonNullish} from './utils';
+import {nonNullish} from './null.utils';
 
 export const toNullable = <T>(value?: T): [] | [T] => {
   return nonNullish(value) ? [value] : [];

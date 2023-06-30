@@ -1,3 +1,4 @@
+import {fromNullable} from '@junobuild/utils';
 import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import {
   deleteAsset as deleteAssetApi,
@@ -9,7 +10,6 @@ import type {ListParams, ListResults} from '../types/list.types';
 import type {SatelliteOptions} from '../types/satellite.types';
 import type {Asset, AssetEncoding, AssetKey, Assets, Storage} from '../types/storage.types';
 import {sha256ToBase64String} from '../utils/crypto.utils';
-import {fromNullable} from '../utils/did.utils';
 import {satelliteUrl} from '../utils/env.utils';
 import {encodeFilename} from '../utils/storage.utils';
 import {getIdentity} from './identity.services';

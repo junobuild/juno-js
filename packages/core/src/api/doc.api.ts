@@ -1,3 +1,4 @@
+import {fromNullable, isNullish, toArray, toNullable} from '@junobuild/utils';
 import type {
   Doc as DocApi,
   ListResults_1 as ListDocsApi,
@@ -7,9 +8,7 @@ import type {Doc} from '../types/doc.types';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
 import {mapData} from '../utils/data.utils';
-import {fromNullable, toArray, toNullable} from '../utils/did.utils';
 import {toListParams} from '../utils/list.utils';
-import {isNullish} from '../utils/utils';
 import {getSatelliteActor} from './actor.api';
 
 export const getDoc = async <D>({

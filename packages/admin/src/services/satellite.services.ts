@@ -1,5 +1,6 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
+import {fromNullable} from '@junobuild/utils';
 import {upgradeCode} from '../api/ic.api';
 import {
   listControllers,
@@ -15,7 +16,6 @@ import type {SatelliteParameters} from '../types/actor.types';
 import type {Config, StorageConfigHeaders} from '../types/config.types';
 import type {CustomDomain} from '../types/customdomain.types';
 import type {Rule, RulesType} from '../types/rules.types';
-import {fromNullable} from '../utils/did.utils';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 export const setConfig = async ({

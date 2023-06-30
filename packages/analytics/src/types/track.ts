@@ -8,4 +8,5 @@ export interface PageView {
   };
   userAgent: typeof navigator.userAgent;
   timeZone: string;
+  collectedAt: bigint;
 }

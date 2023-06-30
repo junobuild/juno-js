@@ -1,26 +1,29 @@
+import {setPageView} from '../services/idb.services';
 import type {PostMessage, PostMessagePageView} from '../types/post-message';
+import {PageView} from '../types/track';
+import {nowInBigIntNanoSeconds} from '../utils/date.utils';
 
-onmessage = ({data: dataMsg}: MessageEvent<PostMessage>) => {
+onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
   const {msg, data} = dataMsg;
 
   switch (msg) {
     case 'junoTrackPageView':
-      trackPageView(data);
-    case "junoTrackEvent":
-      // TODO: implement
+      await trackPageView(data);
+    case 'junoTrackEvent':
+    // TODO: implement
   }
 };
 
-const trackPageView = (data: PostMessagePageView) => {
+const trackPageView = async (data: PostMessagePageView) => {
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
   const {userAgent} = navigator;
 
-  const pageView = {
+  const pageView: PageView = {
     ...data,
     timeZone,
-    userAgent
+    userAgent,
+    collectedAt: nowInBigIntNanoSeconds()
   };
 
-  // TODO
-  console.log(pageView)
+  await setPageView(pageView);
 };

@@ -1,6 +1,6 @@
 import {EnvironmentWorker} from '../types/env';
+import {PostMessagePageView} from '../types/post-message';
 import {assertNonNullish, isNullish} from '../utils/utils';
-import {PostMessagePageView} from "../types/post-message";
 
 let worker: Worker | undefined;
 
@@ -40,7 +40,11 @@ const WORKER_UNDEFINED_MSG =
 export const trackPageView = () => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  const {title, location: {href}, referrer} = document;
+  const {
+    title,
+    location: {href},
+    referrer
+  } = document;
   const {innerWidth, innerHeight} = window;
 
   const data: PostMessagePageView = {
@@ -51,7 +55,7 @@ export const trackPageView = () => {
       innerWidth,
       innerHeight
     }
-  }
+  };
 
   worker.postMessage({msg: 'junoTrackPageView', data});
 };

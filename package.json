@@ -54,5 +54,9 @@
         "@dfinity/principal"
       ]
     }
-  ]
+  ],
+  "dependencies": {
+    "idb-keyval": "^6.2.1",
+    "nanoid": "^4.0.2"
+  }
 }

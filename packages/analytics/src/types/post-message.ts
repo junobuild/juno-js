@@ -2,7 +2,7 @@ import {PageView} from './track';
 
 export type PostMessageRequest = 'junoTrackPageView' | 'junoTrackEvent';
 
-export type PostMessagePageView = Omit<PageView, 'timeZone' | 'userAgent'>;
+export type PostMessagePageView = Omit<PageView, 'timeZone' | 'userAgent' | 'collectedAt'>;
 
 export interface PostMessage {
   msg: PostMessageRequest;

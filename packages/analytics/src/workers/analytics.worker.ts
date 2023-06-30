@@ -1,16 +1,17 @@
-import {setPageView} from '../services/idb.services';
+import {delPageViews, getPageViews, setPageView} from '../services/idb.services';
 import type {PostMessage, PostMessagePageView} from '../types/post-message';
 import {PageView} from '../types/track';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
+import {isNullish} from '../utils/utils';
 
 onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
   const {msg, data} = dataMsg;
 
   switch (msg) {
-    case "junoStartTimer":
+    case 'junoStartTimer':
       await startTimer();
       return;
-    case "junoStopTimer":
+    case 'junoStopTimer':
       stopTimer();
       return;
     case 'junoTrackPageView':
@@ -45,11 +46,32 @@ const startTimer = async () => {
 
   // TODO: 1000 should be a parameter
   timer = setInterval(execute, 1000);
-}
+};
+
+let inProgress = false;
 
 const syncPageViews = async () => {
-  // TODO
-}
+  // One batch at a time to avoid to process multiple times the same entries
+  if (inProgress) {
+    return;
+  }
+
+  const entries = await getPageViews();
+
+  if (isNullish(entries) || entries.length === 0) {
+    // Nothing to do
+    return;
+  }
+
+  inProgress = true;
+
+  // TODO: persist pages views
+  console.log(entries);
+
+  await delPageViews(entries.map(([key, _]) => key));
+
+  inProgress = false;
+};
 
 const trackPageView = async (data: PostMessagePageView) => {
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();

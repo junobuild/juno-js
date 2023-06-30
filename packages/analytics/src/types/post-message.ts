@@ -1,4 +1,4 @@
-import {PageView} from './track';
+import {PageView, TrackEvent} from './track';
 
 export type PostMessageRequest =
   | 'junoStartTimer'
@@ -8,8 +8,9 @@ export type PostMessageRequest =
 
 export type PostMessagePageView = Omit<PageView, 'timeZone' | 'userAgent' | 'collectedAt'>;
 
-export interface PostMessage {
+export type PostMessageTrackEvent<T> = TrackEvent<T>;
+
+export interface PostMessage<D, T extends PostMessagePageView | PostMessageTrackEvent<T>> {
   msg: PostMessageRequest;
-  // TODO: track event
-  data: PostMessagePageView;
+  data: D;
 }

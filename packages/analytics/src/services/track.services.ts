@@ -1,6 +1,7 @@
 import {assertNonNullish, isNullish} from '@junobuild/utils';
 import {EnvironmentWorker} from '../types/env';
 import {PostMessagePageView} from '../types/post-message';
+import {TrackEvent} from "../types/track";
 
 let worker: Worker | undefined;
 
@@ -60,10 +61,10 @@ export const trackPageView = () => {
   worker.postMessage({msg: 'junoTrackPageView', data});
 };
 
-export const trackEvent = () => {
+export const trackEvent = <T>(data: TrackEvent<T>) => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  worker.postMessage({msg: 'junoTrackEvent'});
+  worker.postMessage({msg: 'junoTrackEvent', data});
 };
 
 export const startTracking = () => {

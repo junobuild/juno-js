@@ -1,10 +1,21 @@
 import {isNullish} from '@junobuild/utils';
-import {delPageViews, getPageViews, setPageView} from '../services/idb.services';
+import {toArray} from '@junobuild/utils/src';
+import {
+  delPageViews,
+  delTrackEvents,
+  getPageViews,
+  getTrackEvents,
+  setPageView,
+  setTrackEvent
+} from '../services/idb.services';
 import type {PostMessage, PostMessagePageView} from '../types/post-message';
+import {PostMessageTrackEvent} from '../types/post-message';
 import {PageView} from '../types/track';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
 
-onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
+onmessage = async <D, T extends PostMessagePageView | PostMessageTrackEvent<T>>({
+  data: dataMsg
+}: MessageEvent<PostMessage<D, T>>) => {
   const {msg, data} = dataMsg;
 
   switch (msg) {
@@ -15,10 +26,11 @@ onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
       stopTimer();
       return;
     case 'junoTrackPageView':
-      await trackPageView(data);
+      await trackPageView(data as PostMessagePageView);
       return;
     case 'junoTrackEvent':
-    // TODO: implement
+      await trackPageEvent(data as PostMessageTrackEvent<T>);
+      return;
   }
 };
 
@@ -39,7 +51,7 @@ const startTimer = async () => {
     return;
   }
 
-  const execute = async () => await syncPageViews();
+  const execute = async () => await Promise.all([syncPageViews(), syncTrackEvents()]);
 
   // We starts now but also schedule the update after wards
   await execute();
@@ -48,11 +60,12 @@ const startTimer = async () => {
   timer = setInterval(execute, 1000);
 };
 
-let inProgress = false;
+let syncViewsInProgress = false;
+let syncEventsInProgress = false;
 
 const syncPageViews = async () => {
   // One batch at a time to avoid to process multiple times the same entries
-  if (inProgress) {
+  if (syncViewsInProgress) {
     return;
   }
 
@@ -63,14 +76,38 @@ const syncPageViews = async () => {
     return;
   }
 
-  inProgress = true;
+  syncViewsInProgress = true;
 
   // TODO: persist pages views
   console.log(entries);
 
   await delPageViews(entries.map(([key, _]) => key));
 
-  inProgress = false;
+  syncViewsInProgress = false;
+};
+
+// TODO: should we duplicate the function for views or events?
+const syncTrackEvents = async () => {
+  // One batch at a time to avoid to process multiple times the same entries
+  if (syncEventsInProgress) {
+    return;
+  }
+
+  const entries = await getTrackEvents();
+
+  if (isNullish(entries) || entries.length === 0) {
+    // Nothing to do
+    return;
+  }
+
+  syncEventsInProgress = true;
+
+  // TODO: persist pages views
+  console.log(entries);
+
+  await delTrackEvents(entries.map(([key, _]) => key));
+
+  syncEventsInProgress = false;
 };
 
 const trackPageView = async (data: PostMessagePageView) => {
@@ -85,4 +122,10 @@ const trackPageView = async (data: PostMessagePageView) => {
   };
 
   await setPageView(pageView);
+};
+
+const trackPageEvent = async <T>(track: PostMessageTrackEvent<T>) => {
+  console.log(await toArray<T>(track.data));
+
+  await setTrackEvent(track);
 };

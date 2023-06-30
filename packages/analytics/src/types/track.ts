@@ -10,3 +10,8 @@ export interface PageView {
   timeZone: string;
   collectedAt: bigint;
 }
+
+export interface TrackEvent<T> {
+  name: string;
+  data: T
+}

@@ -12,6 +12,7 @@ import type {PostMessage, PostMessagePageView} from '../types/post-message';
 import {PostMessageTrackEvent} from '../types/post-message';
 import {PageView} from '../types/track';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
+import {nanoid} from "nanoid";
 
 onmessage = async <D, T extends PostMessagePageView | PostMessageTrackEvent<T>>({
   data: dataMsg
@@ -44,6 +45,8 @@ const stopTimer = () => {
   clearInterval(timer);
   timer = undefined;
 };
+
+let sessionId = nanoid();
 
 const startTimer = async () => {
   // Avoid re-starting the timer
@@ -79,7 +82,7 @@ const syncPageViews = async () => {
   syncViewsInProgress = true;
 
   // TODO: persist pages views
-  console.log(entries);
+  console.log({sessionId}, entries);
 
   await delPageViews(entries.map(([key, _]) => key));
 
@@ -103,7 +106,7 @@ const syncTrackEvents = async () => {
   syncEventsInProgress = true;
 
   // TODO: persist pages views
-  console.log(entries);
+  console.log({sessionId}, entries);
 
   await delTrackEvents(entries.map(([key, _]) => key));
 
@@ -121,11 +124,13 @@ const trackPageView = async (data: PostMessagePageView) => {
     collectedAt: nowInBigIntNanoSeconds()
   };
 
+  console.log({sessionId}, "trackPageView");
+
   await setPageView(pageView);
 };
 
 const trackPageEvent = async <T>(track: PostMessageTrackEvent<T>) => {
-  console.log(await toArray<T>(track.data));
+  console.log({sessionId}, "trackPageEvent");
 
   await setTrackEvent(track);
 };

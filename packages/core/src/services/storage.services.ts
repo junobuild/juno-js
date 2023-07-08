@@ -119,17 +119,16 @@ export const listAssets = async ({
 };
 
 export const deleteAsset = async ({
-  asset,
   collection,
+  fullPath,
   satellite
 }: {
-  asset: Asset;
   collection: string;
   satellite?: SatelliteOptions;
-}): Promise<void> =>
+} & Pick<AssetKey, 'fullPath'>): Promise<void> =>
   deleteAssetApi({
     collection,
-    asset,
+    fullPath,
     satellite: {...satellite, identity: getIdentity(satellite?.identity)}
   });
 

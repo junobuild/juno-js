@@ -6,7 +6,8 @@ import type {
 } from '../../declarations/satellite/satellite.did';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
-import type {Asset, ENCODING_TYPE, Storage} from '../types/storage.types';
+import type {ENCODING_TYPE, Storage} from '../types/storage.types';
+import {AssetKey} from '../types/storage.types';
 import {isBrowser} from '../utils/env.utils';
 import {toListParams} from '../utils/list.utils';
 import {getSatelliteActor} from './actor.api';
@@ -142,16 +143,13 @@ export const listAssets = async ({
 
 export const deleteAsset = async ({
   collection,
-  asset,
+  fullPath,
   satellite
 }: {
   collection: string;
-  asset: Asset;
   satellite: Satellite;
-}): Promise<void> => {
+} & Pick<AssetKey, 'fullPath'>): Promise<void> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
-
-  const {fullPath} = asset;
 
   return actor.del_asset(collection, fullPath);
 };

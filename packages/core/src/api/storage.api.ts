@@ -142,16 +142,16 @@ export const listAssets = async ({
 
 export const deleteAsset = async ({
   collection,
-  storageFile,
+  asset,
   satellite
 }: {
   collection: string;
-  storageFile: Asset;
+  asset: Asset;
   satellite: Satellite;
 }): Promise<void> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
 
-  const {fullPath} = storageFile;
+  const {fullPath} = asset;
 
   return actor.del_asset(collection, fullPath);
 };

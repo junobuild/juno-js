@@ -1,10 +1,18 @@
-export interface StorageConfigHeaders {
-  source: string;
+export type StorageConfigSourceGlob = string;
+
+export interface StorageConfigHeader {
+  source: StorageConfigSourceGlob;
   headers: [string, string][];
 }
 
+export interface StorageConfigRewrite {
+  source: StorageConfigSourceGlob;
+  destination: string;
+}
+
 export interface StorageConfig {
-  headers: StorageConfigHeaders[];
+  headers?: StorageConfigHeader[];
+  rewrites?: StorageConfigRewrite[];
 }
 
 export interface Config {

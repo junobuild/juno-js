@@ -74,7 +74,7 @@ export const setDoc = async <D>({
   };
 };
 
-export const delDoc = async <D>({
+export const deleteDoc = async <D>({
   collection,
   doc,
   satellite

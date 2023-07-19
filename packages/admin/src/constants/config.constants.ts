@@ -1,4 +1,4 @@
-import {StorageConfigRewrite} from '../types/config.types';
+import type {StorageConfigRewrite} from '../types/config.types';
 
 export const DEFAULT_CONFIG_REWRITES: StorageConfigRewrite[] = [
   {

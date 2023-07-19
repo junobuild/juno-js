@@ -88,7 +88,7 @@ export const upgradeSatellite = async ({
   deprecatedNoScope
 }: {
   satellite: SatelliteParameters;
-  wasm_module: Array<number>;
+  wasm_module: Uint8Array;
   deprecated: boolean;
   deprecatedNoScope: boolean;
 }) => {
@@ -115,7 +115,7 @@ export const upgradeSatellite = async ({
       actor,
       code: {
         canister_id: Principal.fromText(satelliteId),
-        arg: [...new Uint8Array(arg)],
+        arg: new Uint8Array(arg),
         wasm_module
       }
     });
@@ -140,7 +140,7 @@ export const upgradeSatellite = async ({
     actor,
     code: {
       canister_id: Principal.fromText(satelliteId),
-      arg: [...new Uint8Array(arg)],
+      arg: new Uint8Array(arg),
       wasm_module
     }
   });

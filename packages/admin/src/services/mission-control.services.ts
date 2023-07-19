@@ -20,7 +20,7 @@ export const upgradeMissionControl = async ({
   wasm_module
 }: {
   missionControl: MissionControlParameters;
-  wasm_module: Array<number>;
+  wasm_module: Uint8Array;
 }) => {
   const user = await getUser({missionControl});
 
@@ -43,7 +43,7 @@ export const upgradeMissionControl = async ({
     actor,
     code: {
       canister_id: Principal.fromText(missionControlId),
-      arg: [...new Uint8Array(arg)],
+      arg: new Uint8Array(arg),
       wasm_module
     }
   });

@@ -12,30 +12,36 @@ import {
   setRule as setRuleApi,
   version
 } from '../api/satellite.api';
+import {DEFAULT_CONFIG_REWRITES} from '../constants/config.constants';
 import type {SatelliteParameters} from '../types/actor.types';
-import type {Config, StorageConfigHeaders} from '../types/config.types';
+import type {Config, StorageConfigHeader, StorageConfigRewrite} from '../types/config.types';
 import type {CustomDomain} from '../types/customdomain.types';
 import type {Rule, RulesType} from '../types/rules.types';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 export const setConfig = async ({
   config: {
-    storage: {headers: configHeaders}
+    storage: {headers: configHeaders, rewrites: configRewrites}
   },
   satellite
 }: {
   config: Config;
   satellite: SatelliteParameters;
 }): Promise<void> => {
-  const headers: [string, [string, string][]][] = configHeaders.map(
-    ({source, headers}: StorageConfigHeaders) => [source, headers]
+  const headers: [string, [string, string][]][] = (configHeaders ?? []).map(
+    ({source, headers}: StorageConfigHeader) => [source, headers]
+  );
+
+  const rewrites: [string, string][] = (configRewrites ?? DEFAULT_CONFIG_REWRITES).map(
+    ({source, destination}: StorageConfigRewrite) => [source, destination]
   );
 
   return setConfigApi({
     satellite,
     config: {
       storage: {
-        headers
+        headers,
+        rewrites
       }
     }
   });
@@ -82,7 +88,7 @@ export const upgradeSatellite = async ({
   deprecatedNoScope
 }: {
   satellite: SatelliteParameters;
-  wasm_module: Array<number>;
+  wasm_module: Uint8Array;
   deprecated: boolean;
   deprecatedNoScope: boolean;
 }) => {
@@ -109,7 +115,7 @@ export const upgradeSatellite = async ({
       actor,
       code: {
         canister_id: Principal.fromText(satelliteId),
-        arg: [...new Uint8Array(arg)],
+        arg: new Uint8Array(arg),
         wasm_module
       }
     });
@@ -134,7 +140,7 @@ export const upgradeSatellite = async ({
     actor,
     code: {
       canister_id: Principal.fromText(satelliteId),
-      arg: [...new Uint8Array(arg)],
+      arg: new Uint8Array(arg),
       wasm_module
     }
   });

@@ -141,6 +141,7 @@ export interface SetRule {
   write: Permission;
 }
 export interface StorageConfig {
+  rewrites: Array<[string, string]>;
   headers: Array<[string, Array<[string, string]>]>;
 }
 export interface StreamingCallbackHttpResponse {

@@ -2,16 +2,15 @@ import type {ActorMethod, ActorSubclass} from '@dfinity/agent';
 import {Actor, AnonymousIdentity, HttpAgent} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {EnvironmentActor} from '../types/env';
-import {nonNullish} from "@junobuild/utils";
 
 export const createActor = async <T = Record<string, ActorMethod>>({
-  satelliteId: canisterId,
+  orbiterId: canisterId,
   idlFactory,
-  localOrbiterCanisterId
+  env
 }: {
   idlFactory: IDL.InterfaceFactory;
 } & EnvironmentActor): Promise<ActorSubclass<T>> => {
-  const localActor = nonNullish(localOrbiterCanisterId);
+  const localActor = env === 'dev';
 
   const host: string = localActor ? 'http://127.0.0.1:8000/' : 'https://icp0.io';
 

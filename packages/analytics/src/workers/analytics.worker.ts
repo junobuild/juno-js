@@ -120,7 +120,9 @@ const syncPageViews = async (env: PostMessageStartTimer) => {
         }
       )
   );
-  await Promise.allSettled(promises);
+  const result = await Promise.allSettled(promises);
+  // TODO: remove and handle errors
+  console.log(result);
 
   await delPageViews(entries.map(([key, _]) => key));
 

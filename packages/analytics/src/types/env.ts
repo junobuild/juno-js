@@ -5,10 +5,11 @@ export interface EnvironmentWorker {
 }
 
 export interface EnvironmentActor {
-  localOrbiterCanisterId?: string;
-  satelliteId: string;
+  orbiterId: string;
+  env?: "dev" | "prod"
 }
 
 export type Environment = EnvironmentActor & {
   worker?: EnvironmentWorker;
+  satelliteId: string;
 };

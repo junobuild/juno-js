@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill';
 import esbuild from 'esbuild';
 import {readdirSync, statSync} from 'fs';
 import {join} from 'path';
@@ -27,7 +28,9 @@ const buildWebWorkers = () => {
       bundle: true,
       sourcemap: 'external',
       minify: true,
-      target: ['node18']
+      target: ['node18'],
+      conditions: ['worker'],
+      plugins: [NodeModulesPolyfillPlugin()]
     })
     .catch(() => process.exit(1));
 };

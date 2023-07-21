@@ -1,8 +1,9 @@
-import {assertNonNullish, isNullish} from '@junobuild/utils';
-import type {EnvironmentWorker} from '../types/env';
-import type {PostMessagePageView} from '../types/post-message';
-import {PostMessageStartTimer} from '../types/post-message';
-import type {TrackEvent} from '../types/track';
+import { assertNonNullish,isNullish } from '@junobuild/utils';
+import { nonNullish } from "@junobuild/utils/src";
+import type { EnvironmentWorker } from '../types/env';
+import type { PostMessagePageView } from '../types/post-message';
+import { PostMessageStartTimer } from '../types/post-message';
+import type { TrackEvent } from '../types/track';
 
 let worker: Worker | undefined;
 
@@ -51,7 +52,7 @@ export const trackPageView = () => {
   const data: PostMessagePageView = {
     title,
     href,
-    referrer,
+    referrer: nonNullish(referrer) && referrer !== '' ? referrer : undefined,
     device: {
       innerWidth,
       innerHeight

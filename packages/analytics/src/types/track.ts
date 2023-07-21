@@ -1,4 +1,9 @@
-export interface PageView {
+export interface AnalyticEvent {
+  sessionId: string;
+  collectedAt: bigint;
+}
+
+export interface PageView extends AnalyticEvent {
   title: typeof document.title;
   href: typeof document.location.href;
   referrer: typeof document.referrer | undefined;
@@ -8,10 +13,9 @@ export interface PageView {
   };
   userAgent: typeof navigator.userAgent;
   timeZone: string;
-  collectedAt: bigint;
 }
 
-export interface TrackEvent<T> {
+export interface TrackEvent<T> extends AnalyticEvent {
   name: string;
   data: T;
 }

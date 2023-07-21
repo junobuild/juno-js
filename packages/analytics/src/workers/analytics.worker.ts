@@ -1,6 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {isNullish} from '@junobuild/utils';
-import {toNullable} from '@junobuild/utils';
+import {isNullish, toNullable} from '@junobuild/utils';
 import {nanoid} from 'nanoid';
 import {getOrbiterActor} from '../api/actor.api';
 import {
@@ -86,24 +85,27 @@ const syncPageViews = async (env: PostMessageStartTimer) => {
   // TODO: persist pages views
   console.log({sessionId}, entries);
 
+  // TODO: handle errors
   const actor = await getOrbiterActor(env);
-  const promises = entries.map(
-    ([
-      key,
-      {
-        title,
-        href,
-        referrer,
-        device: {innerWidth, innerHeight},
-        userAgent,
-        timeZone,
-        collectedAt
-      }
-    ]) =>
-      actor.set_page_view(
+  await actor.set_page_views(
+    entries.map(
+      ([
+        key,
+        {
+          sessionId: session_id,
+          title,
+          href,
+          referrer,
+          device: {innerWidth, innerHeight},
+          userAgent,
+          timeZone,
+          collectedAt
+        }
+      ]) => [
         {
           key: key as string,
-          satellite_id: Principal.fromText(env.satelliteId)
+          satellite_id: Principal.fromText(env.satelliteId),
+          session_id
         },
         {
           title,
@@ -118,11 +120,9 @@ const syncPageViews = async (env: PostMessageStartTimer) => {
           collected_at: collectedAt,
           updated_at: []
         }
-      )
+      ]
+    )
   );
-  const result = await Promise.allSettled(promises);
-  // TODO: remove and handle errors
-  console.log(result);
 
   await delPageViews(entries.map(([key, _]) => key));
 
@@ -158,19 +158,20 @@ const trackPageView = async (data: PostMessagePageView) => {
   const {userAgent} = navigator;
 
   const pageView: PageView = {
+    sessionId,
     ...data,
     timeZone,
     userAgent,
     collectedAt: nowInBigIntNanoSeconds()
   };
 
-  console.log({sessionId}, 'trackPageView');
-
   await setPageView(pageView);
 };
 
 const trackPageEvent = async <T>(track: PostMessageTrackEvent<T>) => {
-  console.log({sessionId}, 'trackPageEvent');
-
-  await setTrackEvent(track);
+  await setTrackEvent({
+    sessionId,
+    ...track,
+    collectedAt: nowInBigIntNanoSeconds()
+  });
 };

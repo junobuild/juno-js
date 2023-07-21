@@ -6,7 +6,7 @@ export interface EnvironmentWorker {
 
 export interface EnvironmentActor {
   orbiterId: string;
-  env?: "dev" | "prod"
+  env?: 'dev' | 'prod';
 }
 
 export type Environment = EnvironmentActor & {

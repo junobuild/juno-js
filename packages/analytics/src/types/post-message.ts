@@ -9,9 +9,9 @@ export type PostMessageRequest =
 
 export type PostMessageStartTimer = Omit<Environment, 'worker'>;
 
-export type PostMessagePageView = Omit<PageView, 'timeZone' | 'userAgent' | 'collectedAt'>;
+export type PostMessagePageView = Omit<PageView, 'sessionId' | 'timeZone' | 'userAgent' | 'collectedAt'>;
 
-export type PostMessageTrackEvent<T> = TrackEvent<T>;
+export type PostMessageTrackEvent<T> = Omit<TrackEvent<T>, "sessionId">;
 
 export interface PostMessage<D, T extends PostMessagePageView | PostMessageTrackEvent<T>> {
   msg: PostMessageRequest;

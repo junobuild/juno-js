@@ -1,5 +1,5 @@
 import {isNullish} from '@junobuild/utils';
-import {toArray} from '@junobuild/utils/src';
+import {nanoid} from 'nanoid';
 import {
   delPageViews,
   delTrackEvents,
@@ -8,11 +8,9 @@ import {
   setPageView,
   setTrackEvent
 } from '../services/idb.services';
-import type {PostMessage, PostMessagePageView} from '../types/post-message';
-import {PostMessageTrackEvent} from '../types/post-message';
-import {PageView} from '../types/track';
+import type {PostMessage, PostMessagePageView, PostMessageTrackEvent} from '../types/post-message';
+import type {PageView} from '../types/track';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
-import {nanoid} from "nanoid";
 
 onmessage = async <D, T extends PostMessagePageView | PostMessageTrackEvent<T>>({
   data: dataMsg
@@ -46,7 +44,7 @@ const stopTimer = () => {
   timer = undefined;
 };
 
-let sessionId = nanoid();
+const sessionId = nanoid();
 
 const startTimer = async () => {
   // Avoid re-starting the timer
@@ -124,13 +122,13 @@ const trackPageView = async (data: PostMessagePageView) => {
     collectedAt: nowInBigIntNanoSeconds()
   };
 
-  console.log({sessionId}, "trackPageView");
+  console.log({sessionId}, 'trackPageView');
 
   await setPageView(pageView);
 };
 
 const trackPageEvent = async <T>(track: PostMessageTrackEvent<T>) => {
-  console.log({sessionId}, "trackPageEvent");
+  console.log({sessionId}, 'trackPageEvent');
 
   await setTrackEvent(track);
 };

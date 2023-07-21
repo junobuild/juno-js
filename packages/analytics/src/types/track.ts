@@ -13,5 +13,5 @@ export interface PageView {
 
 export interface TrackEvent<T> {
   name: string;
-  data: T
+  data: T;
 }

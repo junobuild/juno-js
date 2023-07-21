@@ -1,7 +1,7 @@
 import {assertNonNullish, isNullish} from '@junobuild/utils';
-import {EnvironmentWorker} from '../types/env';
-import {PostMessagePageView} from '../types/post-message';
-import {TrackEvent} from "../types/track";
+import type {EnvironmentWorker} from '../types/env';
+import type {PostMessagePageView} from '../types/post-message';
+import type {TrackEvent} from '../types/track';
 
 let worker: Worker | undefined;
 
@@ -15,7 +15,7 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
     apply: (
       target,
       thisArg,
-      argArray: [data: any, unused: string, url?: string | URL | null | undefined]
+      argArray: [data: unknown, unused: string, url?: string | URL | null | undefined]
     ) => {
       trackPageView();
 

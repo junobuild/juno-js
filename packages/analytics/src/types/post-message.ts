@@ -1,4 +1,4 @@
-import {PageView, TrackEvent} from './track';
+import type {PageView, TrackEvent} from './track';
 
 export type PostMessageRequest =
   | 'junoStartTimer'

@@ -1,5 +1,8 @@
+import {Principal} from '@dfinity/principal';
 import {isNullish} from '@junobuild/utils';
+import {toNullable} from '@junobuild/utils';
 import {nanoid} from 'nanoid';
+import {getOrbiterActor} from '../api/actor.api';
 import {
   delPageViews,
   delTrackEvents,
@@ -9,6 +12,7 @@ import {
   setTrackEvent
 } from '../services/idb.services';
 import type {PostMessage, PostMessagePageView, PostMessageTrackEvent} from '../types/post-message';
+import {PostMessageStartTimer} from '../types/post-message';
 import type {PageView} from '../types/track';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
 
@@ -19,7 +23,7 @@ onmessage = async <D, T extends PostMessagePageView | PostMessageTrackEvent<T>>(
 
   switch (msg) {
     case 'junoStartTimer':
-      await startTimer();
+      await startTimer(data as PostMessageStartTimer);
       return;
     case 'junoStopTimer':
       stopTimer();
@@ -46,13 +50,13 @@ const stopTimer = () => {
 
 const sessionId = nanoid();
 
-const startTimer = async () => {
+const startTimer = async (env: PostMessageStartTimer) => {
   // Avoid re-starting the timer
   if (timer !== undefined) {
     return;
   }
 
-  const execute = async () => await Promise.all([syncPageViews(), syncTrackEvents()]);
+  const execute = async () => await Promise.all([syncPageViews(env), syncTrackEvents(env)]);
 
   // We starts now but also schedule the update after wards
   await execute();
@@ -64,7 +68,7 @@ const startTimer = async () => {
 let syncViewsInProgress = false;
 let syncEventsInProgress = false;
 
-const syncPageViews = async () => {
+const syncPageViews = async (env: PostMessageStartTimer) => {
   // One batch at a time to avoid to process multiple times the same entries
   if (syncViewsInProgress) {
     return;
@@ -82,13 +86,49 @@ const syncPageViews = async () => {
   // TODO: persist pages views
   console.log({sessionId}, entries);
 
+  const actor = await getOrbiterActor(env);
+  const promises = entries.map(
+    ([
+      key,
+      {
+        title,
+        href,
+        referrer,
+        device: {innerWidth, innerHeight},
+        userAgent,
+        timeZone,
+        collectedAt
+      }
+    ]) =>
+      actor.set_page_view(
+        {
+          key: key as string,
+          satellite_id: Principal.fromText(env.satelliteId)
+        },
+        {
+          title,
+          href,
+          referrer: toNullable(referrer),
+          device: {
+            inner_width: innerWidth,
+            inner_height: innerHeight
+          },
+          user_agent: toNullable(userAgent),
+          time_zone: timeZone,
+          collected_at: collectedAt,
+          updated_at: []
+        }
+      )
+  );
+  await Promise.allSettled(promises);
+
   await delPageViews(entries.map(([key, _]) => key));
 
   syncViewsInProgress = false;
 };
 
 // TODO: should we duplicate the function for views or events?
-const syncTrackEvents = async () => {
+const syncTrackEvents = async (env: PostMessageStartTimer) => {
   // One batch at a time to avoid to process multiple times the same entries
   if (syncEventsInProgress) {
     return;

@@ -6,11 +6,14 @@ import {
   trackPageView
 } from './services/track.services';
 import type {Environment} from './types/env';
+import {EnvStore} from "@junobuild/core/src/stores/env.store";
 
 export {trackEvent, trackPageView} from './services/track.services';
 export * from './types/env';
 
-export const initJunoAnalytics = ({worker}: Environment = {}): (() => void) => {
+export const initOrbiter = async (env: Environment): Promise<(() => void)> => {
+  const {worker, ...rest} = env;
+
   initWorker(worker);
 
   // TODO: option to disable auto track pageviews
@@ -20,7 +23,7 @@ export const initJunoAnalytics = ({worker}: Environment = {}): (() => void) => {
   trackPageView();
 
   // Start synchronization (that way previous page view is instantly processed)
-  startTracking();
+  startTracking(rest);
 
   return () => {
     stopTracking();

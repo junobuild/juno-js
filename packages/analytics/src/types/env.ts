@@ -4,6 +4,11 @@ export interface EnvironmentWorker {
   path?: EnvironmentWorkerPath;
 }
 
-export type Environment = {
+export interface EnvironmentActor {
+  localOrbiterCanisterId?: string;
+  satelliteId: string;
+}
+
+export type Environment = EnvironmentActor & {
   worker?: EnvironmentWorker;
 };

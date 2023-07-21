@@ -1,3 +1,4 @@
+import {EnvironmentActor} from './env';
 import type {PageView, TrackEvent} from './track';
 
 export type PostMessageRequest =
@@ -5,6 +6,8 @@ export type PostMessageRequest =
   | 'junoStopTimer'
   | 'junoTrackPageView'
   | 'junoTrackEvent';
+
+export type PostMessageStartTimer = EnvironmentActor;
 
 export type PostMessagePageView = Omit<PageView, 'timeZone' | 'userAgent' | 'collectedAt'>;
 

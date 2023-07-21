@@ -18,9 +18,8 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
       thisArg,
       argArray: [data: unknown, unused: string, url?: string | URL | null | undefined]
     ) => {
+      target.apply(thisArg, argArray);
       trackPageView();
-
-      return target.apply(thisArg, argArray);
     }
   });
 
@@ -59,23 +58,23 @@ export const trackPageView = () => {
     }
   };
 
-  worker.postMessage({msg: 'junoTrackPageView', data});
+  worker?.postMessage({msg: 'junoTrackPageView', data});
 };
 
 export const trackEvent = <T>(data: TrackEvent<T>) => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  worker.postMessage({msg: 'junoTrackEvent', data});
+  worker?.postMessage({msg: 'junoTrackEvent', data});
 };
 
 export const startTracking = (env: PostMessageStartTimer) => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  worker.postMessage({msg: 'junoStartTimer', data: env});
+  worker?.postMessage({msg: 'junoStartTimer', data: env});
 };
 
 export const stopTracking = () => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  worker.postMessage({msg: 'junoStopTimer'});
+  worker?.postMessage({msg: 'junoStopTimer'});
 };

@@ -1,10 +1,12 @@
-import {coerce, compare, eq, gt, lt, type SemVer} from 'semver';
+import {coerce, compare, eq, gt, lt, major, minor, patch, type SemVer} from 'semver';
 import {githubJunoReleases} from '../rest/github.rest';
-import {GitHubRelease} from '../types/github.types';
+import type {GitHubAsset, GitHubRelease} from '../types/github.types';
+
+export type NewerReleasesAssetKey = 'satellite' | 'mission_control';
 
 export type NewerReleasesParams = {
   currentVersion: string;
-  assetKey: 'satellite' | 'mission_control';
+  assetKey: NewerReleasesAssetKey;
 };
 
 export const newerReleases = async ({
@@ -86,4 +88,51 @@ export const newerReleases = async ({
     }, [] as GitHubRelease[]);
 
   return {result: newReleases};
+};
+
+export interface PromptReleases {
+  title: string;
+  value: GitHubAsset;
+}
+
+export const mapPromptReleases = ({
+  githubReleases,
+  assetKey
+}: {
+  githubReleases: GitHubRelease[];
+  assetKey: NewerReleasesAssetKey;
+}): PromptReleases[] =>
+  githubReleases.reduce((acc, {assets}: GitHubRelease) => {
+    const asset = assets?.find(({name}) => name.includes(assetKey));
+
+    const version = coerce(asset?.name ?? '');
+
+    const title = `v${version}`; // (published in Juno ${tag_name})
+
+    return [...acc, ...(asset !== undefined ? [{title, value: asset}] : [])];
+  }, [] as PromptReleases[]);
+
+export const checkUpgradeVersion = ({
+  currentVersion,
+  selectedVersion
+}: {
+  currentVersion: string;
+  selectedVersion: string;
+}): {canUpgrade: boolean} => {
+  const currentMajor = major(currentVersion);
+  const selectedMajor = major(selectedVersion);
+  const currentMinor = minor(currentVersion);
+  const selectedMinor = minor(selectedVersion);
+  const currentPath = patch(currentVersion);
+  const selectedPath = patch(selectedVersion);
+
+  if (
+    currentMajor < selectedMajor - 1 ||
+    currentMinor < selectedMinor - 1 ||
+    currentPath < selectedPath - 1
+  ) {
+    return {canUpgrade: false};
+  }
+
+  return {canUpgrade: true};
 };

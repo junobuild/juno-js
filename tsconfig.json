@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "module": "esnext",
     "skipLibCheck": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "types": ["node"]
   },
   "exclude": ["**/src/**/*.test.ts", "**/src/**/*.spec.ts", "**/src/**/*.mock.ts"]
 }

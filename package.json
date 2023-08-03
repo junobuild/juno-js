@@ -38,12 +38,12 @@
     {
       "name": "@junobuild/admin",
       "path": "./packages/admin/dist/index.js",
-      "limit": "100 kB"
+      "limit": "120 kB"
     },
     {
       "name": "@junobuild/core",
       "path": "./packages/core/dist/index.js",
-      "limit": "110 kB"
+      "limit": "120 kB"
     },
     {
       "name": "@junobuild/ledger",

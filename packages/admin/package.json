@@ -38,11 +38,12 @@
     "web3"
   ],
   "homepage": "https://juno.build",
-  "dependencies": {
+  "dependencies": {},
+  "peerDependencies": {
     "@dfinity/agent": "^0.18.1",
     "@dfinity/identity": "^0.18.1",
     "@dfinity/principal": "^0.18.1",
     "@junobuild/utils": "*",
-    "semver": "^7.5.4"
+    "semver": "6.*"
   }
 }

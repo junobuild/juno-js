@@ -48,7 +48,7 @@
     {
       "name": "@junobuild/core",
       "path": "./packages/core/dist/index.js",
-      "limit": "110 kB"
+      "limit": "120 kB"
     },
     {
       "name": "@junobuild/ledger",

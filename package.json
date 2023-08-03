@@ -37,7 +37,12 @@
     {
       "name": "@junobuild/admin",
       "path": "./packages/admin/dist/index.js",
-      "limit": "100 kB"
+      "limit": "10 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/principal"
+      ]
     },
     {
       "name": "@junobuild/core",

@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/juno-js",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "JavaScript libraries for interfacing with Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@size-limit/esbuild": "^8.2.4",
     "@size-limit/preset-small-lib": "^8.2.4",
+    "@types/node": "^20.4.6",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "esbuild": "^0.18.3",
     "eslint": "^8.42.0",
@@ -38,12 +39,19 @@
     {
       "name": "@junobuild/admin",
       "path": "./packages/admin/dist/index.js",
-      "limit": "95 kB"
+      "limit": "20 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/principal",
+        "@junobuild/utils",
+        "semver"
+      ]
     },
     {
       "name": "@junobuild/core",
       "path": "./packages/core/dist/index.js",
-      "limit": "110 kB"
+      "limit": "120 kB"
     },
     {
       "name": "@junobuild/ledger",

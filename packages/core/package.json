@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/core",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "JavaScript core client for Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -39,10 +39,10 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
-    "@dfinity/agent": "^0.15.6",
-    "@dfinity/auth-client": "^0.15.6",
-    "@dfinity/identity": "^0.15.6",
-    "@dfinity/principal": "^0.15.6",
+    "@dfinity/agent": "^0.18.1",
+    "@dfinity/auth-client": "^0.18.1",
+    "@dfinity/identity": "^0.18.1",
+    "@dfinity/principal": "^0.18.1",
     "@junobuild/utils": "*"
   }
 }

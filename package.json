@@ -42,7 +42,9 @@
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
-        "@dfinity/principal"
+        "@dfinity/principal",
+        "@junobuild/utils",
+        "semver"
       ]
     },
     {

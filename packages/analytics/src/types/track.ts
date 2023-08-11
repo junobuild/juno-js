@@ -1,6 +1,6 @@
 export interface AnalyticEvent {
   sessionId: string;
-  collectedAt: bigint;
+  collectedAt: number;
 }
 
 export interface PageView extends AnalyticEvent {

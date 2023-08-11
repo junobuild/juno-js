@@ -4,12 +4,12 @@ export interface EnvironmentWorker {
   path?: EnvironmentWorkerPath;
 }
 
-export interface EnvironmentActor {
+export type EnvironmentProxy = {
+  proxyUrl?: string;
   orbiterId: string;
-  env?: 'dev' | 'prod';
-}
-
-export type Environment = EnvironmentActor & {
-  worker?: EnvironmentWorker;
   satelliteId: string;
+};
+
+export type Environment = EnvironmentProxy & {
+  worker?: EnvironmentWorker;
 };

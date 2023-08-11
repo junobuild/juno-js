@@ -1,15 +1,18 @@
-import { assertNonNullish,isNullish } from '@junobuild/utils';
-import { nonNullish } from "@junobuild/utils/src";
-import type { EnvironmentWorker } from '../types/env';
-import type { PostMessagePageView } from '../types/post-message';
-import { PostMessageStartTimer } from '../types/post-message';
-import type { TrackEvent } from '../types/track';
+import {assertNonNullish, nonNullish} from '@junobuild/utils';
+import type {EnvironmentWorker} from '../types/env';
+import {Environment} from '../types/env';
+import type {PostMessageInitAnalytics, PostMessagePageView} from '../types/post-message';
+import type {TrackEvent} from '../types/track';
 
 let worker: Worker | undefined;
 
-export const initWorker = ({path}: EnvironmentWorker = {}) => {
-  const workerUrl = isNullish(path) ? './workers/analytics.worker.js' : path;
+export const initWorker = (env: Environment) => {
+  const {path}: EnvironmentWorker = env.worker ?? {};
+  const workerUrl = path === undefined ? './workers/analytics.worker.js' : path;
+
   worker = new Worker(workerUrl);
+
+  initWorkerEnvironment(env);
 };
 
 export const initTrackPageViews = (): {cleanup: () => void} => {
@@ -68,14 +71,8 @@ export const trackEvent = <T>(data: TrackEvent<T>) => {
   worker?.postMessage({msg: 'junoTrackEvent', data});
 };
 
-export const startTracking = (env: PostMessageStartTimer) => {
+export const initWorkerEnvironment = (env: PostMessageInitAnalytics) => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  worker?.postMessage({msg: 'junoStartTimer', data: env});
-};
-
-export const stopTracking = () => {
-  assertNonNullish(worker, WORKER_UNDEFINED_MSG);
-
-  worker?.postMessage({msg: 'junoStopTimer'});
+  worker?.postMessage({msg: 'junoInitEnvironment', data: env});
 };

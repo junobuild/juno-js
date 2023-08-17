@@ -1,8 +1,12 @@
 import {EnvironmentProxy} from '../types/env';
 import {PageView, TrackEvent} from '../types/track';
 
+const FunctionsProxyUrl = 'llaqvdlz6a-uc.a.run.app';
+const pageViewProxyUrl = `https://pageview-${FunctionsProxyUrl}`;
+const pageEventProxyUrl = `https://pageevent-${FunctionsProxyUrl}`;
+
 export const setPageViewProxy = async ({proxyUrl, ...rest}: PageView & EnvironmentProxy) => {
-  const response = await fetch(`https://pageview-llaqvdlz6a-uc.a.run.app`, {
+  const response = await fetch(proxyUrl ?? pageViewProxyUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -19,7 +23,7 @@ export const setPageEventProxy = async <T>({
   proxyUrl,
   ...rest
 }: TrackEvent<T> & EnvironmentProxy) => {
-  const response = await fetch(`https://pageevent-llaqvdlz6a-uc.a.run.app`, {
+  const response = await fetch(proxyUrl ?? pageEventProxyUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

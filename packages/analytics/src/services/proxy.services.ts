@@ -4,7 +4,7 @@ import {jsonReplacer} from '../utils/json.utils';
 
 const JUNO_FUNCTION_PROXY_URL = 'llaqvdlz6a-uc.a.run.app';
 const JUNO_PAGE_VIEW_PROXY_URL = `https://pageview-${JUNO_FUNCTION_PROXY_URL}`;
-const JUNO_PAGE_EVENT_PROXY_URL = `https://trackevent-${JUNO_FUNCTION_PROXY_URL}`;
+const JUNO_TRACK_EVENT_PROXY_URL = `https://trackevent-${JUNO_FUNCTION_PROXY_URL}`;
 
 export const setPageViewProxy = async ({
   pageViewProxyUrl,
@@ -27,7 +27,7 @@ export const setTrackEventProxy = async ({
   trackEventProxyUrl,
   ...rest
 }: TrackEventProxy & Pick<EnvironmentProxy, 'trackEventProxyUrl'>) => {
-  const response = await fetch(trackEventProxyUrl ?? JUNO_PAGE_EVENT_PROXY_URL, {
+  const response = await fetch(trackEventProxyUrl ?? JUNO_TRACK_EVENT_PROXY_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

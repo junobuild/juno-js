@@ -3,6 +3,7 @@ import type {Environment} from './types/env';
 
 export {trackEvent, trackPageView} from './services/analytics.services';
 export * from './types/env';
+export * from './types/proxy';
 
 export const initAnalytics = async (env: Environment): Promise<() => void> => {
   initWorker(env);

@@ -3,18 +3,7 @@ export interface AnalyticEvent {
   collectedAt: number;
 }
 
-export interface PageView extends AnalyticEvent {
-  title: typeof document.title;
-  href: typeof document.location.href;
-  referrer: typeof document.referrer | undefined;
-  device: {
-    innerWidth: typeof window.innerWidth;
-    innerHeight: typeof window.innerHeight;
-  };
-  userAgent: typeof navigator.userAgent;
-  timeZone: string;
-}
-
+// TODO: remove and replace with type from declarations
 export interface TrackEvent<T> extends AnalyticEvent {
   name: string;
   data: T;

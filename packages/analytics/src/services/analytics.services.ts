@@ -1,4 +1,4 @@
-import {assertNonNullish, nonNullish} from '@junobuild/utils';
+import {assertNonNullish, nonNullish, toNullable} from '@junobuild/utils';
 import type {EnvironmentWorker} from '../types/env';
 import {Environment} from '../types/env';
 import type {PostMessageInitAnalytics, PostMessagePageView} from '../types/post-message';
@@ -55,10 +55,10 @@ export const trackPageView = () => {
   const data: PostMessagePageView = {
     title,
     href,
-    referrer: nonNullish(referrer) && referrer !== '' ? referrer : undefined,
+    referrer: toNullable(nonNullish(referrer) && referrer !== '' ? referrer : undefined),
     device: {
-      innerWidth,
-      innerHeight
+      inner_width: innerWidth,
+      inner_height: innerHeight
     }
   };
 

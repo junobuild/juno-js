@@ -1,5 +1,7 @@
-import {assertNonNullish, isNullish} from '@junobuild/utils';
+import {Principal} from '@dfinity/principal';
+import {assertNonNullish, isNullish, toNullable} from '@junobuild/utils';
 import {nanoid} from 'nanoid';
+import type {SetPageView} from '../../declarations/orbiter/orbiter.did';
 import {setPageEventProxy, setPageViewProxy} from '../services/proxy.services';
 import type {EnvironmentProxy} from '../types/env';
 import type {
@@ -8,7 +10,7 @@ import type {
   PostMessagePageView,
   PostMessageTrackEvent
 } from '../types/post-message';
-import type {PageView} from '../types/track';
+import {nowInBigIntNanoSeconds} from '../utils/date.utils';
 
 onmessage = async <D, T extends PostMessagePageView | PostMessageTrackEvent<T>>({
   data: dataMsg
@@ -50,29 +52,36 @@ const sessionId = nanoid();
 const now = (): number => Date.now();
 
 const trackPageView = async (data: PostMessagePageView) => {
-  if (isNullish(env)) {
+  if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
     return;
   }
 
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
   const {userAgent} = navigator;
 
-  const pageView: PageView = {
-    sessionId,
+  const now = nowInBigIntNanoSeconds();
+
+  const pageView: SetPageView = {
     ...data,
-    timeZone,
-    userAgent,
-    collectedAt: now()
+    time_zone: timeZone,
+    user_agent: toNullable(userAgent),
+    collected_at: now,
+    updated_at: []
   };
 
   await setPageViewProxy({
-    ...pageView,
+    key: {
+      key: nanoid(),
+      session_id: sessionId,
+      satellite_id: Principal.fromText(env.satelliteId)
+    },
+    pageView,
     ...env
   });
 };
 
 const trackPageEvent = async <T>(track: PostMessageTrackEvent<T>) => {
-  if (isNullish(env)) {
+  if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
     return;
   }
 

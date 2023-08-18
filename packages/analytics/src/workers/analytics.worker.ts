@@ -1,8 +1,8 @@
 import {Principal} from '@dfinity/principal';
-import {assertNonNullish, isNullish, toNullable} from '@junobuild/utils';
+import {assertNonNullish, isNullish, toArray, toNullable} from '@junobuild/utils';
 import {nanoid} from 'nanoid';
-import type {SetPageView} from '../../declarations/orbiter/orbiter.did';
-import {setPageEventProxy, setPageViewProxy} from '../services/proxy.services';
+import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
+import {setPageViewProxy, setTrackEventProxy} from '../services/proxy.services';
 import type {EnvironmentProxy} from '../types/env';
 import type {
   PostMessage,
@@ -59,36 +59,45 @@ const trackPageView = async (data: PostMessagePageView) => {
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
   const {userAgent} = navigator;
 
-  const now = nowInBigIntNanoSeconds();
-
   const pageView: SetPageView = {
     ...data,
     time_zone: timeZone,
     user_agent: toNullable(userAgent),
-    collected_at: now,
-    updated_at: []
+    ...timestamp()
   };
 
   await setPageViewProxy({
-    key: {
-      key: nanoid(),
-      session_id: sessionId,
-      satellite_id: Principal.fromText(env.satelliteId)
-    },
+    key: key(env),
     pageView,
     ...env
   });
 };
 
-const trackPageEvent = async <T>(track: PostMessageTrackEvent<T>) => {
+const trackPageEvent = async <T>({name, data}: PostMessageTrackEvent<T>) => {
   if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
     return;
   }
 
-  await setPageEventProxy({
-    sessionId,
-    ...track,
-    collectedAt: now(),
+  const trackEvent: SetTrackEvent = {
+    name,
+    data: await toArray(data),
+    ...timestamp()
+  };
+
+  await setTrackEventProxy({
+    key: key(env),
+    trackEvent,
     ...env
   });
 };
+
+const key = (env: EnvironmentProxy): AnalyticKey => ({
+  key: nanoid(),
+  session_id: sessionId,
+  satellite_id: Principal.fromText(env.satelliteId)
+});
+
+const timestamp = (): {collected_at: bigint; updated_at: [] | [bigint]} => ({
+  collected_at: nowInBigIntNanoSeconds(),
+  updated_at: []
+});

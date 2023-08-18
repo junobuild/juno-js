@@ -1,7 +1,14 @@
-import {AnalyticKey, SetPageView} from '../../declarations/orbiter/orbiter.did';
-import {EnvironmentProxy} from './env';
+import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
+import type {EnvironmentProxy} from './env';
+
+export type Proxy = {
+  key: AnalyticKey;
+} & Omit<EnvironmentProxy, 'proxyUrl'>;
 
 export type PageViewProxy = {
-  key: AnalyticKey;
   pageView: SetPageView;
-} & Omit<EnvironmentProxy, 'proxyUrl'>;
+} & Proxy;
+
+export type TrackEventProxy = {
+  trackEvent: SetTrackEvent;
+} & Proxy;

@@ -1,10 +1,4 @@
-export interface AnalyticEvent {
-  sessionId: string;
-  collectedAt: number;
-}
-
-// TODO: remove and replace with type from declarations
-export interface TrackEvent<T> extends AnalyticEvent {
+export interface TrackEvent<T> {
   name: string;
   data: T;
 }

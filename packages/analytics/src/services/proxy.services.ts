@@ -1,17 +1,16 @@
 import type {EnvironmentProxy} from '../types/env';
-import {PageViewProxy} from '../types/proxy';
-import type {TrackEvent} from '../types/track';
+import {PageViewProxy, TrackEventProxy} from '../types/proxy';
 import {jsonReplacer} from '../utils/json.utils';
 
-const FunctionsProxyUrl = 'llaqvdlz6a-uc.a.run.app';
-const pageViewProxyUrl = `https://pageview-${FunctionsProxyUrl}`;
-const pageEventProxyUrl = `https://pageevent-${FunctionsProxyUrl}`;
+const JUNO_FUNCTION_PROXY_URL = 'llaqvdlz6a-uc.a.run.app';
+const JUNO_PAGE_VIEW_PROXY_URL = `https://pageview-${JUNO_FUNCTION_PROXY_URL}`;
+const JUNO_PAGE_EVENT_PROXY_URL = `https://trackevent-${JUNO_FUNCTION_PROXY_URL}`;
 
 export const setPageViewProxy = async ({
-  proxyUrl,
+  pageViewProxyUrl,
   ...rest
-}: PageViewProxy & Pick<EnvironmentProxy, 'proxyUrl'>) => {
-  const response = await fetch(proxyUrl ?? pageViewProxyUrl, {
+}: PageViewProxy & Pick<EnvironmentProxy, 'pageViewProxyUrl'>) => {
+  const response = await fetch(pageViewProxyUrl ?? JUNO_PAGE_VIEW_PROXY_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -24,16 +23,16 @@ export const setPageViewProxy = async ({
   }
 };
 
-export const setPageEventProxy = async <T>({
-  proxyUrl,
+export const setTrackEventProxy = async ({
+  trackEventProxyUrl,
   ...rest
-}: TrackEvent<T> & EnvironmentProxy) => {
-  const response = await fetch(proxyUrl ?? pageEventProxyUrl, {
+}: TrackEventProxy & Pick<EnvironmentProxy, 'trackEventProxyUrl'>) => {
+  const response = await fetch(trackEventProxyUrl ?? JUNO_PAGE_EVENT_PROXY_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(rest)
+    body: JSON.stringify({...rest}, jsonReplacer)
   });
 
   if (!response.ok) {

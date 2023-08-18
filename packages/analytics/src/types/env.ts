@@ -4,11 +4,15 @@ export interface EnvironmentWorker {
   path?: EnvironmentWorkerPath;
 }
 
+export interface EnvironmentProxyUrls {
+  pageViewProxyUrl?: string;
+  trackEventProxyUrl?: string;
+}
+
 export type EnvironmentProxy = {
-  proxyUrl?: string;
   orbiterId: string;
   satelliteId: string;
-};
+} & EnvironmentProxyUrls;
 
 export type Environment = EnvironmentProxy & {
   worker?: EnvironmentWorker;

@@ -2,7 +2,7 @@ import {assertNonNullish, nonNullish, toNullable} from '@junobuild/utils';
 import type {EnvironmentWorker} from '../types/env';
 import {Environment} from '../types/env';
 import type {PostMessageInitAnalytics, PostMessagePageView} from '../types/post-message';
-import type {TrackEvent} from '../types/track';
+import {TrackEvent} from '../types/track';
 
 let worker: Worker | undefined;
 

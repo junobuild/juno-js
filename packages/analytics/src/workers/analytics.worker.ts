@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {assertNonNullish, isNullish, toArray, toNullable} from '@junobuild/utils';
+import {assertNonNullish, isNullish, toNullable} from '@junobuild/utils';
 import {nanoid} from 'nanoid';
 import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {setPageViewProxy, setTrackEventProxy} from '../services/proxy.services';
@@ -12,9 +12,7 @@ import type {
 } from '../types/post-message';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
 
-onmessage = async <D, T extends PostMessagePageView | PostMessageTrackEvent<T>>({
-  data: dataMsg
-}: MessageEvent<PostMessage<D, T>>) => {
+onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
   const {msg, data} = dataMsg;
 
   switch (msg) {
@@ -25,7 +23,7 @@ onmessage = async <D, T extends PostMessagePageView | PostMessageTrackEvent<T>>(
       await trackPageView(data as PostMessagePageView);
       return;
     case 'junoTrackEvent':
-      await trackPageEvent(data as PostMessageTrackEvent<T>);
+      await trackPageEvent(data as PostMessageTrackEvent);
       return;
   }
 };
@@ -73,14 +71,14 @@ const trackPageView = async (data: PostMessagePageView) => {
   });
 };
 
-const trackPageEvent = async <T>({name, data}: PostMessageTrackEvent<T>) => {
+const trackPageEvent = async ({name, metadata}: PostMessageTrackEvent) => {
   if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
     return;
   }
 
   const trackEvent: SetTrackEvent = {
     name,
-    data: await toArray(data),
+    metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
     ...timestamp()
   };
 

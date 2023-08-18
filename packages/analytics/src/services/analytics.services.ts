@@ -65,7 +65,7 @@ export const trackPageView = () => {
   worker?.postMessage({msg: 'junoTrackPageView', data});
 };
 
-export const trackEvent = <T>(data: TrackEvent<T>) => {
+export const trackEvent = (data: TrackEvent) => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
   worker?.postMessage({msg: 'junoTrackEvent', data});

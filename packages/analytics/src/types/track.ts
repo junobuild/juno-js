@@ -1,4 +1,4 @@
-export interface TrackEvent<T> {
+export interface TrackEvent {
   name: string;
-  data: T;
+  metadata?: Record<string, string>;
 }

@@ -11,9 +11,9 @@ export type PostMessagePageView = Omit<
   'time_zone' | 'user_agent' | 'collected_at' | 'updated_at'
 >;
 
-export type PostMessageTrackEvent<T> = Omit<TrackEvent<T>, 'sessionId'>;
+export type PostMessageTrackEvent = TrackEvent;
 
-export interface PostMessage<D, T extends PostMessagePageView | PostMessageTrackEvent<T>> {
+export interface PostMessage {
   msg: PostMessageRequest;
-  data: D;
+  data: PostMessageInitAnalytics | PostMessagePageView | PostMessageTrackEvent;
 }

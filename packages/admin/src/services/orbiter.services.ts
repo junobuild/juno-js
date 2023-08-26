@@ -1,5 +1,4 @@
 import {Principal} from '@dfinity/principal';
-import {isNullish} from '@junobuild/utils';
 import {upgradeCode} from '../api/ic.api';
 import {listControllers, version} from '../api/orbiter.api';
 import type {OrbiterParameters} from '../types/actor.types';

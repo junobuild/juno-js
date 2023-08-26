@@ -17,8 +17,8 @@ import type {SatelliteParameters} from '../types/actor.types';
 import type {Config, StorageConfigHeader, StorageConfigRewrite} from '../types/config.types';
 import type {CustomDomain} from '../types/customdomain.types';
 import type {Rule, RulesType} from '../types/rules.types';
+import {encodeIDLControllers} from '../utils/idl.utils';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
-import {encodeIDLControllers} from "../utils/idl.utils";
 
 export const setConfig = async ({
   config: {

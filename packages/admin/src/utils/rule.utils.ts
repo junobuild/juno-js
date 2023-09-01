@@ -20,15 +20,15 @@ import {fromNullable, toNullable} from './did.utils';
 import {isNullish, nonNullish} from './utils';
 
 export const mapRuleType = (type: RulesType): RulesTypeApi =>
-    type === 'storage' ? StorageRulesType : DbRulesType;
+  type === 'storage' ? StorageRulesType : DbRulesType;
 
 export const mapSetRule = ({
-                             read,
-                             write,
-                             memory,
-                             max_size,
-                             updated_at
-                           }: Pick<Rule, 'read' | 'write' | 'max_size' | 'updated_at' | 'memory'>): SetRule => ({
+  read,
+  write,
+  memory,
+  max_size,
+  updated_at
+}: Pick<Rule, 'read' | 'write' | 'max_size' | 'updated_at' | 'memory'>): SetRule => ({
   read: permissionFromText(read),
   write: permissionFromText(write),
   memory: nonNullish(memory) ? [memoryFromText(memory)] : [],

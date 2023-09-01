@@ -22,6 +22,7 @@ export const idlFactory = ({IDL}) => {
   const DelDoc = IDL.Record({updated_at: IDL.Opt(IDL.Nat64)});
   const RulesType = IDL.Variant({Db: IDL.Null, Storage: IDL.Null});
   const StorageConfig = IDL.Record({
+    rewrites: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
     headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))))
   });
   const Config = IDL.Record({storage: StorageConfig});
@@ -49,7 +50,7 @@ export const idlFactory = ({IDL}) => {
   const StreamingStrategy = IDL.Variant({
     Callback: IDL.Record({
       token: StreamingCallbackToken,
-      callback: IDL.Func([], [], [])
+      callback: IDL.Func([], [], ['query'])
     })
   });
   const HttpResponse = IDL.Record({
@@ -130,6 +131,7 @@ export const idlFactory = ({IDL}) => {
     items: IDL.Vec(IDL.Tuple(IDL.Text, Doc)),
     items_length: IDL.Nat64
   });
+  const Memory = IDL.Variant({Heap: IDL.Null, Stable: IDL.Null});
   const Permission = IDL.Variant({
     Controllers: IDL.Null,
     Private: IDL.Null,
@@ -137,6 +139,7 @@ export const idlFactory = ({IDL}) => {
     Managed: IDL.Null
   });
   const Rule = IDL.Record({
+    memory: Memory,
     updated_at: IDL.Nat64,
     max_size: IDL.Opt(IDL.Nat),
     read: Permission,
@@ -158,6 +161,7 @@ export const idlFactory = ({IDL}) => {
     description: IDL.Opt(IDL.Text)
   });
   const SetRule = IDL.Record({
+    memory: IDL.Opt(Memory),
     updated_at: IDL.Opt(IDL.Nat64),
     max_size: IDL.Opt(IDL.Nat),
     read: Permission,

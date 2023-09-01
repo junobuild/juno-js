@@ -1,4 +1,3 @@
-import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {upgradeCode} from '../api/ic.api';
 import {
@@ -10,6 +9,7 @@ import {
 import type {MissionControlParameters} from '../types/actor.types';
 import type {SetControllerParams} from '../types/controllers.types';
 import {mapSetControllerParams} from '../utils/controllers.utils';
+import {encoreIDLUser} from '../utils/idl.utils';
 
 export const missionControlVersion = async (params: {
   missionControl: MissionControlParameters;
@@ -20,7 +20,7 @@ export const upgradeMissionControl = async ({
   wasm_module
 }: {
   missionControl: MissionControlParameters;
-  wasm_module: Array<number>;
+  wasm_module: Uint8Array;
 }) => {
   const user = await getUser({missionControl});
 
@@ -30,20 +30,13 @@ export const upgradeMissionControl = async ({
     throw new Error('No mission control principal defined.');
   }
 
-  const arg = IDL.encode(
-    [
-      IDL.Record({
-        user: IDL.Principal
-      })
-    ],
-    [{user}]
-  );
+  const arg = encoreIDLUser(user);
 
   await upgradeCode({
     actor,
     code: {
       canister_id: Principal.fromText(missionControlId),
-      arg: [...new Uint8Array(arg)],
+      arg: new Uint8Array(arg),
       wasm_module
     }
   });

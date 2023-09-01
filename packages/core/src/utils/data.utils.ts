@@ -1,5 +1,5 @@
+import {fromArray} from '@junobuild/utils';
 import type {Doc} from '../../declarations/satellite/satellite.did';
-import {fromArray} from './did.utils';
 
 export const mapData = async <D>({data}: Pick<Doc, 'data'>): Promise<D> => {
   try {

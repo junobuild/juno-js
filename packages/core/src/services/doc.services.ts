@@ -1,5 +1,5 @@
 import {
-  delDoc as delDocApi,
+  deleteDoc as deleteDocApi,
   getDoc as getDocApi,
   listDocs as listDocsApi,
   setDoc as setDocApi
@@ -34,7 +34,7 @@ export const setDoc = async <D>({
   return setDocApi({...rest, satellite: {...satellite, identity}});
 };
 
-export const delDoc = async <D>({
+export const deleteDoc = async <D>({
   satellite,
   ...rest
 }: {
@@ -44,7 +44,7 @@ export const delDoc = async <D>({
 }): Promise<void> => {
   const identity = getIdentity(satellite?.identity);
 
-  return delDocApi({...rest, satellite: {...satellite, identity}});
+  return deleteDocApi({...rest, satellite: {...satellite, identity}});
 };
 
 export const listDocs = async <D>({

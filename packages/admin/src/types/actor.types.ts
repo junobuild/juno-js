@@ -17,3 +17,7 @@ export interface MissionControlParameters extends ActorParameters {
 export interface ConsoleParameters extends ActorParameters {
   consoleId?: string;
 }
+
+export interface OrbiterParameters extends ActorParameters {
+  orbiterId?: string;
+}

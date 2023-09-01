@@ -7,6 +7,8 @@ import type {_SERVICE as ICActor} from '../../declarations/ic/ic.did';
 import {idlFactory as idlFactorIC} from '../../declarations/ic/ic.factory.did';
 import type {_SERVICE as MissionControlActor} from '../../declarations/mission_control/mission_control.did';
 import {idlFactory as idlFactoryMissionControl} from '../../declarations/mission_control/mission_control.factory.did.js';
+import type {_SERVICE as OrbiterActor} from '../../declarations/orbiter/orbiter.did';
+import {idlFactory as idlFactoryOrbiter} from '../../declarations/orbiter/orbiter.factory.did.js';
 import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
 import {idlFactory as idlDeprecatedFactorySatelliteNoScope} from '../../declarations/satellite/satellite-deprecated-no-scope.factory.did.js';
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
@@ -17,6 +19,7 @@ import type {
   ActorParameters,
   ConsoleParameters,
   MissionControlParameters,
+  OrbiterParameters,
   SatelliteParameters
 } from '../types/actor.types';
 import {createActor} from '../utils/actor.utils';
@@ -61,6 +64,16 @@ export const getMissionControlActor = async ({
     canisterId: missionControlId,
     ...rest,
     idlFactory: idlFactoryMissionControl
+  });
+
+export const getOrbiterActor = async ({
+  orbiterId,
+  ...rest
+}: OrbiterParameters): Promise<OrbiterActor> =>
+  getActor({
+    canisterId: orbiterId,
+    ...rest,
+    idlFactory: idlFactoryOrbiter
   });
 
 export const getConsoleActor = async ({

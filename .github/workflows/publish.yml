@@ -30,6 +30,9 @@ jobs:
       - run: npm publish --provenance --workspace=packages/admin --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish --provenance --workspace=packages/analytics --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: npm publish --provenance --workspace=packages/ledger --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

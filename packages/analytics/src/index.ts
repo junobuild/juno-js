@@ -5,7 +5,7 @@ export {trackEvent, trackPageView} from './services/analytics.services';
 export * from './types/env';
 export * from './types/proxy';
 
-export const initAnalytics = async (env: Environment): Promise<() => void> => {
+export const initOrbiter = async (env: Environment): Promise<() => void> => {
   initWorker(env);
 
   // TODO: option to disable auto track pageviews

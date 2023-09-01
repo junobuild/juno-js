@@ -68,6 +68,11 @@
       "name": "@junobuild/utils",
       "path": "./packages/utils/dist/index.js",
       "limit": "500 B"
+    },
+    {
+      "name": "@junobuild/analytics",
+      "path": "./packages/analytics/dist/index.js",
+      "limit": "500 B"
     }
   ]
 }

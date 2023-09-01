@@ -8,7 +8,6 @@ export * from './types/proxy';
 export const initOrbiter = async (env: Environment): Promise<() => void> => {
   initWorker(env);
 
-  // TODO: option to disable auto track pageviews
   const {cleanup} = initTrackPageViews();
 
   // Tack first page

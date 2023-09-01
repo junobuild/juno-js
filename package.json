@@ -10,7 +10,8 @@
     "format:check": "prettier --check .",
     "lint": "eslint --max-warnings 0 .",
     "build": "npm run build --workspaces",
-    "size": "size-limit --json"
+    "size": "size-limit --json",
+    "update:agent": "./scripts/update-agent"
   },
   "workspaces": [
     "packages/utils",

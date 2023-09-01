@@ -72,7 +72,17 @@
     {
       "name": "@junobuild/analytics",
       "path": "./packages/analytics/dist/index.js",
-      "limit": "500 B"
+      "limit": "500 B",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/principal"
+      ]
+    },
+    {
+      "name": "@junobuild/analytics-worker",
+      "path": "./packages/analytics/dist/workers/analytics.worker.js",
+      "limit": "6 kB"
     }
   ]
 }

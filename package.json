@@ -68,9 +68,5 @@
       "path": "./packages/utils/dist/index.js",
       "limit": "500 B"
     }
-  ],
-  "dependencies": {
-    "idb-keyval": "^6.2.1",
-    "nanoid": "^4.0.2"
-  }
+  ]
 }

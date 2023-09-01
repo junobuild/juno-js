@@ -1,4 +1,5 @@
 export * from './services/mission-control.services';
+export * from './services/orbiter.services';
 export * from './services/releases.services';
 export * from './services/satellite.services';
 export * from './types/actor.types';

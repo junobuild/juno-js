@@ -17,6 +17,7 @@ import type {SatelliteParameters} from '../types/actor.types';
 import type {Config, StorageConfigHeader, StorageConfigRewrite} from '../types/config.types';
 import type {CustomDomain} from '../types/customdomain.types';
 import type {Rule, RulesType} from '../types/rules.types';
+import {encodeIDLControllers} from '../utils/idl.utils';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 export const setConfig = async ({
@@ -127,14 +128,7 @@ export const upgradeSatellite = async ({
 
   const controllers = await list({satellite});
 
-  const arg = IDL.encode(
-    [
-      IDL.Record({
-        controllers: IDL.Vec(IDL.Principal)
-      })
-    ],
-    [{controllers: controllers.map(([controller, _]) => controller)}]
-  );
+  const arg = encodeIDLControllers(controllers);
 
   await upgradeCode({
     actor,

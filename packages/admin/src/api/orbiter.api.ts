@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import type {Principal} from '@dfinity/principal';
 import type {Controller, _SERVICE as OrbiterActor} from '../../declarations/orbiter/orbiter.did';
 import type {OrbiterParameters} from '../types/actor.types';
 import {getOrbiterActor} from './actor.api';

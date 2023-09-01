@@ -47,8 +47,6 @@ const init = async (environment: PostMessageInitAnalytics) => {
 
 const sessionId = nanoid();
 
-const now = (): number => Date.now();
-
 const trackPageView = async (data: PostMessagePageView) => {
   if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
     return;

@@ -1,5 +1,5 @@
 import type {EnvironmentProxy} from '../types/env';
-import {PageViewProxy, TrackEventProxy} from '../types/proxy';
+import type {PageViewProxy, TrackEventProxy} from '../types/proxy';
 import {jsonReplacer} from '../utils/json.utils';
 
 const JUNO_FUNCTION_PROXY_URL = 'llaqvdlz6a-ew.a.run.app';

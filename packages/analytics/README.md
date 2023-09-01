@@ -6,9 +6,9 @@
 [npm-license]: https://img.shields.io/npm/l/@junobuild/core
 [npm-license-url]: https://github.com/buildwithjuno/juno-js/blob/main/LICENSE
 
-# Juno JavaScript core SDK
+# Juno JavaScript analytics
 
-JavaScript core client for [Juno].
+A tracker for [Juno] analytics.
 
 ## License
 

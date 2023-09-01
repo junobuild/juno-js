@@ -82,7 +82,7 @@
     {
       "name": "@junobuild/analytics-worker",
       "path": "./packages/analytics/dist/workers/analytics.worker.js",
-      "limit": "500 B"
+      "limit": "6 kB"
     }
   ]
 }

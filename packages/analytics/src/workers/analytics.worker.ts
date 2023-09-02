@@ -202,7 +202,7 @@ const timestamp = (): {collected_at: bigint; updated_at: [] | [bigint]} => ({
 const isBot = (): boolean => {
   const {userAgent} = navigator;
 
-  if (userAgent !== undefined && isbot(userAgent)) {
+  if (userAgent !== undefined) {
     return isbot(userAgent);
   }
 

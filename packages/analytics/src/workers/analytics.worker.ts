@@ -159,12 +159,11 @@ const trackPageView = async (data: PostMessagePageView) => {
   }
 
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
-  const {userAgent} = navigator;
 
   const pageView: SetPageView = {
     ...data,
     time_zone: timeZone,
-    user_agent: toNullable(userAgent),
+    ...userAgent(),
     ...timestamp()
   };
 
@@ -183,6 +182,7 @@ const trackPageEvent = async ({name, metadata}: PostMessageTrackEvent) => {
   const trackEvent: SetTrackEvent = {
     name,
     metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
+    ...userAgent(),
     ...timestamp()
   };
 
@@ -198,6 +198,11 @@ const timestamp = (): {collected_at: bigint; updated_at: [] | [bigint]} => ({
   collected_at: nowInBigIntNanoSeconds(),
   updated_at: []
 });
+
+const userAgent = (): {user_agent: [] | [string]} => {
+  const {userAgent} = navigator;
+  return {user_agent: toNullable(userAgent)};
+};
 
 const isBot = (): boolean => {
   const {userAgent} = navigator;

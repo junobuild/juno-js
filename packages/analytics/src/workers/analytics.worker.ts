@@ -1,5 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish, isNullish, toNullable} from '@junobuild/utils';
+import {debounce} from '@junobuild/utils/src';
 import isbot from 'isbot';
 import {nanoid} from 'nanoid';
 import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
@@ -28,12 +29,6 @@ onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
     case 'junoInitEnvironment':
       await init(data as PostMessageInitAnalytics);
       return;
-    case 'junoStartTimer':
-      await startTimer();
-      return;
-    case 'junoStopTimer':
-      stopTimer();
-      return;
     case 'junoTrackPageView':
       await trackPageView(data as PostMessagePageView);
       return;
@@ -60,33 +55,7 @@ const init = async (environment: PostMessageInitAnalytics) => {
   env = environment;
 };
 
-let timer: NodeJS.Timeout | undefined = undefined;
-
-const stopTimer = () => {
-  if (!timer) {
-    return;
-  }
-
-  clearInterval(timer);
-  timer = undefined;
-};
-
 const sessionId = nanoid();
-
-const startTimer = async () => {
-  // Avoid re-starting the timer
-  if (timer !== undefined) {
-    return;
-  }
-
-  const execute = async () => await Promise.all([syncPageViews(), syncTrackEvents()]);
-
-  // We starts now but also schedule the update after wards
-  await execute();
-
-  // TODO: 1000 should be a parameter
-  timer = setInterval(execute, 1000);
-};
 
 let syncViewsInProgress = false;
 let syncEventsInProgress = false;
@@ -122,6 +91,8 @@ const syncPageViews = async () => {
   syncViewsInProgress = false;
 };
 
+const debounceSyncPageViews = debounce(async () => syncPageViews(), 100);
+
 const syncTrackEvents = async () => {
   if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
     return;
@@ -149,7 +120,9 @@ const syncTrackEvents = async () => {
   syncEventsInProgress = false;
 };
 
-const trackPageView = async (data: PostMessagePageView) => {
+const debounceSyncTrackEvents = debounce(async () => await syncTrackEvents(), 250);
+
+const trackPageView = async ({debounce, ...rest}: PostMessagePageView) => {
   if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
     return;
   }
@@ -161,13 +134,20 @@ const trackPageView = async (data: PostMessagePageView) => {
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 
   const pageView: SetPageView = {
-    ...data,
+    ...rest,
     time_zone: timeZone,
     ...userAgent(),
     ...timestamp()
   };
 
   await setPageView(pageView);
+
+  if (debounce) {
+    debounceSyncPageViews();
+    return;
+  }
+
+  await syncPageViews();
 };
 
 const trackPageEvent = async ({name, metadata}: PostMessageTrackEvent) => {
@@ -187,6 +167,8 @@ const trackPageEvent = async ({name, metadata}: PostMessageTrackEvent) => {
   };
 
   await setTrackEvent(trackEvent);
+
+  debounceSyncTrackEvents();
 };
 
 const ids = (env: EnvironmentActor): Pick<AnalyticKey, 'session_id' | 'satellite_id'> => ({

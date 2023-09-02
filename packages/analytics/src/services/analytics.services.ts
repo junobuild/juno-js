@@ -15,6 +15,8 @@ export const initWorker = (env: Environment) => {
 };
 
 export const initTrackPageViews = (): {cleanup: () => void} => {
+  const trackPages = () => trackPageView({debounce: true});
+
   let pushStateProxy: typeof history.pushState | null = new Proxy(history.pushState, {
     apply: (
       target,
@@ -22,18 +24,18 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
       argArray: [data: unknown, unused: string, url?: string | URL | null | undefined]
     ) => {
       target.apply(thisArg, argArray);
-      trackPageView();
+      trackPages();
     }
   });
 
   history.pushState = pushStateProxy;
 
-  addEventListener('popstate', trackPageView, {passive: true});
+  addEventListener('popstate', trackPages, {passive: true});
 
   return {
     cleanup() {
       pushStateProxy = null;
-      removeEventListener('popstate', trackPageView, false);
+      removeEventListener('popstate', trackPages, false);
     }
   };
 };
@@ -41,7 +43,7 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
 const WORKER_UNDEFINED_MSG =
   'Analytics worker not initialized. Did you call `initWorker`?' as const;
 
-export const trackPageView = () => {
+export const trackPageView = ({debounce}: Pick<PostMessagePageView, 'debounce'>) => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
   const {
@@ -58,7 +60,8 @@ export const trackPageView = () => {
     device: {
       inner_width: innerWidth,
       inner_height: innerHeight
-    }
+    },
+    debounce
   };
 
   worker?.postMessage({msg: 'junoTrackPageView', data});
@@ -74,16 +77,4 @@ export const initWorkerEnvironment = (env: PostMessageInitAnalytics) => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
   worker?.postMessage({msg: 'junoInitEnvironment', data: env});
-};
-
-export const startTracking = () => {
-  assertNonNullish(worker, WORKER_UNDEFINED_MSG);
-
-  worker?.postMessage({msg: 'junoStartTimer'});
-};
-
-export const stopTracking = () => {
-  assertNonNullish(worker, WORKER_UNDEFINED_MSG);
-
-  worker?.postMessage({msg: 'junoStopTimer'});
 };

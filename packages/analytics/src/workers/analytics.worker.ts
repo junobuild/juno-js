@@ -1,5 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish, isNullish, toNullable} from '@junobuild/utils';
+import isbot from 'isbot';
 import {nanoid} from 'nanoid';
 import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
@@ -153,6 +154,10 @@ const trackPageView = async (data: PostMessagePageView) => {
     return;
   }
 
+  if (isBot()) {
+    return;
+  }
+
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
   const {userAgent} = navigator;
 
@@ -168,6 +173,10 @@ const trackPageView = async (data: PostMessagePageView) => {
 
 const trackPageEvent = async ({name, metadata}: PostMessageTrackEvent) => {
   if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
+    return;
+  }
+
+  if (isBot()) {
     return;
   }
 
@@ -189,3 +198,13 @@ const timestamp = (): {collected_at: bigint; updated_at: [] | [bigint]} => ({
   collected_at: nowInBigIntNanoSeconds(),
   updated_at: []
 });
+
+const isBot = (): boolean => {
+  const {userAgent} = navigator;
+
+  if (userAgent !== undefined && isbot(userAgent)) {
+    return isbot(userAgent);
+  }
+
+  return false;
+};

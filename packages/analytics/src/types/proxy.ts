@@ -1,9 +1,9 @@
 import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
-import type {EnvironmentProxy} from './env';
+import type {EnvironmentActor} from './env';
 
 export type Proxy = {
   key: AnalyticKey;
-} & Omit<EnvironmentProxy, 'proxyUrl'>;
+} & Omit<EnvironmentActor, 'proxyUrl'>;
 
 export type PageViewProxy = {
   pageView: SetPageView;

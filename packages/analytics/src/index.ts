@@ -1,19 +1,18 @@
 import {
   initTrackPageViews,
   initWorker,
+  setPageView,
   startTracking,
-  stopTracking,
-  trackPageView
+  stopTracking
 } from './services/analytics.services';
 import type {Environment} from './types/env';
 
 export {trackEvent, trackPageView} from './services/analytics.services';
 export * from './types/env';
-export * from './types/proxy';
 
 export const initOrbiter = async (env: Environment): Promise<() => void> => {
-  // Track first page as soon as possible
-  await trackPageView();
+  // Save first page as soon as possible
+  await setPageView();
 
   initWorker(env);
 

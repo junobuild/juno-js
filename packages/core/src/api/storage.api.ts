@@ -1,4 +1,4 @@
-import {fromNullable, toNullable} from '@junobuild/utils';
+import {fromNullable, isBrowser, toNullable} from '@junobuild/utils';
 import type {
   AssetNoContent,
   ListResults as ListAssetsApi,
@@ -7,7 +7,6 @@ import type {
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
 import type {AssetKey, ENCODING_TYPE, Storage} from '../types/storage.types';
-import {isBrowser} from '../utils/env.utils';
 import {toListParams} from '../utils/list.utils';
 import {getSatelliteActor} from './actor.api';
 

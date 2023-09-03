@@ -1,7 +1,5 @@
 import {EnvStore} from '../stores/env.store';
 
-export const isBrowser = () => typeof window !== `undefined`;
-
 export const satelliteUrl = (): string => {
   const satelliteId: string = EnvStore.getInstance().get()?.satelliteId ?? 'unknown';
 

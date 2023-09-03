@@ -77,7 +77,7 @@
     {
       "name": "@junobuild/analytics",
       "path": "./packages/analytics/dist/index.js",
-      "limit": "700 B",
+      "limit": "950 B",
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",

@@ -15,7 +15,7 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   canisterId: string;
   config?: Pick<ActorConfig, 'callTransform' | 'queryTransform'>;
 } & ActorParameters): Promise<ActorSubclass<T>> => {
-  const host: string = env === 'dev' ? 'http://127.0.0.1:8000/' : 'https://icp0.io';
+  const host: string = env === 'dev' ? 'http://127.0.0.1:8000/' : 'https://icp-api.io';
 
   const agent: HttpAgent = new HttpAgent({identity, ...(host && {host}), ...(fetch && {fetch})});
 

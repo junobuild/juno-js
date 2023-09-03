@@ -1,6 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {assertNonNullish, isNullish, nonNullish, toNullable} from '@junobuild/utils';
-import {debounce} from '@junobuild/utils/src';
+import {assertNonNullish, debounce, isNullish, nonNullish, toNullable} from '@junobuild/utils';
 import isbot from 'isbot';
 import {nanoid} from 'nanoid';
 import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';

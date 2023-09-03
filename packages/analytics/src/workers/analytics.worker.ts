@@ -85,8 +85,6 @@ const syncPageViews = async () => {
   try {
     const actor = await getOrbiterActor(env!);
 
-    console.log('setPageVies', entries);
-
     await actor.set_page_views(
       entries.map(([key, entry]) => [{...ids(env!), key: key as string}, entry])
     );
@@ -123,8 +121,6 @@ const syncTrackEvents = async () => {
 
   try {
     const actor = await getOrbiterActor(env!);
-
-    console.log('setTrack', entries);
 
     await actor.set_track_events(
       entries.map(([key, entry]) => [{...ids(env!), key: key as string}, entry])

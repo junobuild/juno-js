@@ -204,7 +204,7 @@ const userAgent = (): {user_agent: [] | [string]} => {
 const isBot = (): boolean => {
   const {userAgent} = navigator;
 
-  if (userAgent !== undefined) {
+  if (nonNullish(userAgent)) {
     return isbot(userAgent);
   }
 

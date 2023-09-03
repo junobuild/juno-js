@@ -8,15 +8,16 @@ import {getOrbiterActor} from '../api/actor.api';
 import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';
 import type {EnvironmentActor} from '../types/env';
 import type {IdbPageView, IdbTrackEvent} from '../types/idb';
-import type {PostMessage, PostMessageInitAnalytics} from '../types/post-message';
+import type {PostMessage, PostMessageInitEnvData} from '../types/post-message';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
+import {Environment} from "../types/env";
 
 onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
   const {msg, data} = dataMsg;
 
   switch (msg) {
     case 'junoInitEnvironment':
-      await init(data as PostMessageInitAnalytics);
+      await init(data as PostMessageInitEnvData);
       return;
     case 'junoTrackPageView':
       trackPageView();
@@ -39,9 +40,9 @@ const SATELLITE_ID_UNDEFINED_MSG =
 const ORBITER_ID_UNDEFINED_MSG =
   'Analytics worker not initialized. Did you set `orbiterId`?' as const;
 
-let env: EnvironmentActor | undefined;
+let env: Environment | undefined;
 
-const init = async (environment: PostMessageInitAnalytics) => {
+const init = async (environment: PostMessageInitEnvData) => {
   const {orbiterId, satelliteId} = environment;
 
   assertNonNullish(orbiterId, ORBITER_ID_UNDEFINED_MSG);
@@ -75,7 +76,7 @@ const startTimer = async () => {
   // We starts now but also schedule the update after wards
   await sync();
 
-  timer = setInterval(sync, 1000);
+  timer = setInterval(sync, env?.worker?.timerInterval ?? 1000);
 };
 
 const sessionId = nanoid();

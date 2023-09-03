@@ -1,4 +1,4 @@
-import type {EnvironmentActor} from './env';
+import {Environment} from './env';
 
 export type PostMessageRequest =
   | 'junoInitEnvironment'
@@ -7,9 +7,9 @@ export type PostMessageRequest =
   | 'junoStartTrackTimer'
   | 'junoStopTrackTimer';
 
-export type PostMessageInitAnalytics = EnvironmentActor;
+export type PostMessageInitEnvData = Environment;
 
 export interface PostMessage {
   msg: PostMessageRequest;
-  data?: PostMessageInitAnalytics;
+  data?: PostMessageInitEnvData;
 }

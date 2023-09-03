@@ -2,6 +2,7 @@ export type EnvironmentWorkerPath = string;
 
 export interface EnvironmentWorker {
   path?: EnvironmentWorkerPath;
+  timerInterval?: number;
 }
 
 export type EnvironmentActor = {

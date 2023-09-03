@@ -1,7 +1,7 @@
 import { assertNonNullish,nonNullish,toNullable } from '@junobuild/utils';
 import type { Environment,EnvironmentWorker } from '../types/env';
 import type { IdbPageView } from '../types/idb';
-import type { PostMessageInitAnalytics } from '../types/post-message';
+import type { PostMessageInitEnvData } from '../types/post-message';
 import type { TrackEvent } from '../types/track';
 import { setPageView as idbSetPageView,setTrackEvent } from './idb.services';
 
@@ -82,7 +82,7 @@ export const trackEvent = async (data: TrackEvent) => {
   worker?.postMessage({msg: 'junoTrackEvent'});
 };
 
-export const initWorkerEnvironment = (env: PostMessageInitAnalytics) => {
+export const initWorkerEnvironment = (env: PostMessageInitEnvData) => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
   worker?.postMessage({msg: 'junoInitEnvironment', data: env});

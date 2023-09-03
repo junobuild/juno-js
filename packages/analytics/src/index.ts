@@ -1,6 +1,7 @@
 import {
   initTrackPageViews,
-  initWorker, syncTrackEvents,
+  initWorker,
+  syncTrackEvents,
   trackPageView
 } from './services/analytics.services';
 import type {Environment} from './types/env';

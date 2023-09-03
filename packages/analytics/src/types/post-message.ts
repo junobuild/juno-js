@@ -4,7 +4,8 @@ export type PostMessageRequest =
   | 'junoInitEnvironment'
   | 'junoTrackPageView'
   | 'junoTrackEvent'
-  | 'junoTrackSync';
+  | 'junoStartTrackTimer'
+  | 'junoStopTrackTimer';
 
 export type PostMessageInitAnalytics = EnvironmentActor;
 

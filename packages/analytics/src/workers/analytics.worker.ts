@@ -24,8 +24,11 @@ onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
     case 'junoTrackEvent':
       trackPageEvent();
       return;
-    case 'junoTrackSync':
-      await sync();
+    case 'junoStartTrackTimer':
+      await startTimer();
+      return;
+    case 'junoStopTrackTimer':
+      await stopTimer();
       return;
   }
 };
@@ -47,18 +50,39 @@ const init = async (environment: PostMessageInitAnalytics) => {
   env = environment;
 };
 
-const sessionId = nanoid();
+let timer: NodeJS.Timeout | undefined = undefined;
 
-let syncViewsInProgress = false;
-let syncEventsInProgress = false;
+const sync = async () => await Promise.all([syncPageViews(), syncTrackEvents()]);
 
-const sync = async () => {
-  if (isBot()) {
+const stopTimer = async () => {
+  if (isNullish(timer)) {
     return;
   }
 
-  await Promise.all([syncPageViews(), syncTrackEvents()]);
+  // In case there is something left to sync
+  await sync();
+
+  clearInterval(timer);
+  timer = undefined;
 };
+
+const startTimer = async () => {
+  // Avoid re-starting the timer
+  if (nonNullish(timer)) {
+    return;
+  }
+
+  // We starts now but also schedule the update after wards
+  await sync();
+
+  timer = setInterval(sync, 1000);
+};
+
+const sessionId = nanoid();
+
+// We use a timer in addition to debouncing the tracked pages and events. This means that if some data is not synchronized with the backend because a job is already in progress, the timer will trigger data syncing on the next click of the clock.
+let syncViewsInProgress = false;
+let syncEventsInProgress = false;
 
 const syncPageViews = async () => {
   if (!isEnvInitialized(env)) {

@@ -1,8 +1,9 @@
 import {
   initTrackPageViews,
   initWorker,
-  trackPageView,
-  trackSync
+  startTracking,
+  stopTracking,
+  trackPageView
 } from './services/analytics.services';
 import type {Environment} from './types/env';
 
@@ -11,18 +12,18 @@ export * from './types/env';
 export * from './types/proxy';
 
 export const initOrbiter = async (env: Environment): Promise<() => void> => {
-  // Tack first page
+  // Track first page as soon as possible
   await trackPageView();
 
   initWorker(env);
 
   const {cleanup} = initTrackPageViews();
 
-  // Sync page views, the first page above and those from previous sessions
-  // Sync track events in case there are remaining events from a previous session
-  trackSync();
+  // Starting tracking will instantly sync the first page and the data from previous sessions that have not been synced yet
+  startTracking();
 
   return () => {
+    stopTracking();
     cleanup();
   };
 };

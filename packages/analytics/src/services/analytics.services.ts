@@ -84,8 +84,14 @@ export const initWorkerEnvironment = (env: PostMessageInitAnalytics) => {
   worker?.postMessage({msg: 'junoInitEnvironment', data: env});
 };
 
-export const trackSync = () => {
+export const startTracking = () => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  worker?.postMessage({msg: 'junoTrackSync'});
+  worker?.postMessage({msg: 'junoStartTrackTimer'});
+};
+
+export const stopTracking = () => {
+  assertNonNullish(worker, WORKER_UNDEFINED_MSG);
+
+  worker?.postMessage({msg: 'junoStopTrackTimer'});
 };

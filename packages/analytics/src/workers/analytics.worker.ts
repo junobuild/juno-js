@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {assertNonNullish, isNullish, toNullable} from '@junobuild/utils';
+import {assertNonNullish, isNullish, nonNullish, toNullable} from '@junobuild/utils';
 import {debounce} from '@junobuild/utils/src';
 import isbot from 'isbot';
 import {nanoid} from 'nanoid';
@@ -35,6 +35,9 @@ onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
     case 'junoTrackEvent':
       await trackPageEvent(data as PostMessageTrackEvent);
       return;
+    case 'junoSyncTrackEvents':
+      await syncTrackEvents();
+      return;
   }
 };
 
@@ -61,7 +64,7 @@ let syncViewsInProgress = false;
 let syncEventsInProgress = false;
 
 const syncPageViews = async () => {
-  if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
+  if (!isEnvInitialized()) {
     return;
   }
 
@@ -80,9 +83,9 @@ const syncPageViews = async () => {
   syncViewsInProgress = true;
 
   try {
-    const actor = await getOrbiterActor(env);
+    const actor = await getOrbiterActor(env!);
 
-    console.log("setPageVies", entries)
+    console.log('setPageVies', entries);
 
     await actor.set_page_views(
       entries.map(([key, entry]) => [{...ids(env!), key: key as string}, entry])
@@ -100,7 +103,7 @@ const syncPageViews = async () => {
 const debounceSyncPageViews = debounce(async () => syncPageViews(), 100);
 
 const syncTrackEvents = async () => {
-  if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
+  if (!isEnvInitialized()) {
     return;
   }
 
@@ -119,9 +122,9 @@ const syncTrackEvents = async () => {
   syncEventsInProgress = true;
 
   try {
-    const actor = await getOrbiterActor(env);
+    const actor = await getOrbiterActor(env!);
 
-    console.log("setTrack", entries)
+    console.log('setTrack', entries);
 
     await actor.set_track_events(
       entries.map(([key, entry]) => [{...ids(env!), key: key as string}, entry])
@@ -139,7 +142,7 @@ const syncTrackEvents = async () => {
 const debounceSyncTrackEvents = debounce(async () => await syncTrackEvents(), 250);
 
 const trackPageView = async ({debounce, ...rest}: PostMessagePageView) => {
-  if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
+  if (!isEnvInitialized()) {
     return;
   }
 
@@ -167,7 +170,7 @@ const trackPageView = async ({debounce, ...rest}: PostMessagePageView) => {
 };
 
 const trackPageEvent = async ({name, metadata}: PostMessageTrackEvent) => {
-  if (isNullish(env) || env?.orbiterId === undefined || env?.satelliteId === undefined) {
+  if (!isEnvInitialized()) {
     return;
   }
 
@@ -211,3 +214,6 @@ const isBot = (): boolean => {
 
   return false;
 };
+
+const isEnvInitialized = (): boolean =>
+  nonNullish(env) && nonNullish(env!.orbiterId) && nonNullish(env!.satelliteId);

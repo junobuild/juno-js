@@ -78,3 +78,9 @@ export const initWorkerEnvironment = (env: PostMessageInitAnalytics) => {
 
   worker?.postMessage({msg: 'junoInitEnvironment', data: env});
 };
+
+export const syncTrackEvents = () => {
+  assertNonNullish(worker, WORKER_UNDEFINED_MSG);
+
+  worker?.postMessage({msg: 'junoSyncTrackEvents'});
+};

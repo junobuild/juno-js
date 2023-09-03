@@ -2,7 +2,7 @@ import type {SetPageView} from '../../declarations/orbiter/orbiter.did';
 import type {EnvironmentActor} from './env';
 import type {TrackEvent} from './track';
 
-export type PostMessageRequest = 'junoInitEnvironment' | 'junoTrackPageView' | 'junoTrackEvent';
+export type PostMessageRequest = 'junoInitEnvironment' | 'junoTrackPageView' | 'junoTrackEvent' | 'junoSyncTrackEvents';
 
 export type PostMessageInitAnalytics = EnvironmentActor;
 

@@ -5,21 +5,10 @@ import isbot from 'isbot';
 import {nanoid} from 'nanoid';
 import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
-import {
-  delPageViews,
-  delTrackEvents,
-  getPageViews,
-  getTrackEvents,
-  setPageView,
-  setTrackEvent
-} from '../services/idb.services';
-import type {EnvironmentActor} from '../types/env';
-import type {
-  PostMessage,
-  PostMessageInitAnalytics,
-  PostMessagePageView,
-  PostMessageTrackEvent
-} from '../types/post-message';
+import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';
+import type {Environment, EnvironmentActor} from '../types/env';
+import type {IdbPageView, IdbTrackEvent} from '../types/idb';
+import type {PostMessage, PostMessageInitEnvData} from '../types/post-message';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
 
 onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
@@ -27,16 +16,19 @@ onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
 
   switch (msg) {
     case 'junoInitEnvironment':
-      await init(data as PostMessageInitAnalytics);
+      await init(data as PostMessageInitEnvData);
       return;
     case 'junoTrackPageView':
-      await trackPageView(data as PostMessagePageView);
+      trackPageView();
       return;
     case 'junoTrackEvent':
-      await trackPageEvent(data as PostMessageTrackEvent);
+      trackPageEvent();
       return;
-    case 'junoSyncTrackEvents':
-      await syncTrackEvents();
+    case 'junoStartTrackTimer':
+      await startTimer();
+      return;
+    case 'junoStopTrackTimer':
+      await stopTimer();
       return;
   }
 };
@@ -47,9 +39,9 @@ const SATELLITE_ID_UNDEFINED_MSG =
 const ORBITER_ID_UNDEFINED_MSG =
   'Analytics worker not initialized. Did you set `orbiterId`?' as const;
 
-let env: EnvironmentActor | undefined;
+let env: Environment | undefined;
 
-const init = async (environment: PostMessageInitAnalytics) => {
+const init = async (environment: PostMessageInitEnvData) => {
   const {orbiterId, satelliteId} = environment;
 
   assertNonNullish(orbiterId, ORBITER_ID_UNDEFINED_MSG);
@@ -58,8 +50,37 @@ const init = async (environment: PostMessageInitAnalytics) => {
   env = environment;
 };
 
+let timer: NodeJS.Timeout | undefined = undefined;
+
+const sync = async () => await Promise.all([syncPageViews(), syncTrackEvents()]);
+
+const stopTimer = async () => {
+  if (isNullish(timer)) {
+    return;
+  }
+
+  // In case there is something left to sync
+  await sync();
+
+  clearInterval(timer);
+  timer = undefined;
+};
+
+const startTimer = async () => {
+  // Avoid re-starting the timer
+  if (nonNullish(timer)) {
+    return;
+  }
+
+  // We starts now but also schedule the update after wards
+  await sync();
+
+  timer = setInterval(sync, env?.worker?.timerInterval ?? 1000);
+};
+
 const sessionId = nanoid();
 
+// We use a timer in addition to debouncing the tracked pages and events. This means that if some data is not synchronized with the backend because a job is already in progress, the timer will trigger data syncing on the next click of the clock.
 let syncViewsInProgress = false;
 let syncEventsInProgress = false;
 
@@ -85,8 +106,22 @@ const syncPageViews = async () => {
   try {
     const actor = await getOrbiterActor(env);
 
+    const toSetPageView = (pageView: IdbPageView): SetPageView => {
+      const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
+
+      return {
+        ...pageView,
+        time_zone: timeZone,
+        ...userAgent(),
+        ...timestamp()
+      };
+    };
+
     await actor.set_page_views(
-      entries.map(([key, entry]) => [{...ids(env as EnvironmentActor), key: key as string}, entry])
+      entries.map(([key, entry]) => [
+        {...ids(env as EnvironmentActor), key: key as string},
+        toSetPageView(entry)
+      ])
     );
 
     await delPageViews(entries.map(([key, _]) => key));
@@ -98,7 +133,7 @@ const syncPageViews = async () => {
   syncViewsInProgress = false;
 };
 
-const debounceSyncPageViews = debounce(async () => syncPageViews(), 100);
+const debounceSyncPageViews = debounce(async () => await syncPageViews(), 100);
 
 const syncTrackEvents = async () => {
   if (!isEnvInitialized(env)) {
@@ -122,8 +157,18 @@ const syncTrackEvents = async () => {
   try {
     const actor = await getOrbiterActor(env);
 
+    const toTrackEvent = ({name, metadata}: IdbTrackEvent): SetTrackEvent => ({
+      name,
+      metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
+      ...userAgent(),
+      ...timestamp()
+    });
+
     await actor.set_track_events(
-      entries.map(([key, entry]) => [{...ids(env as EnvironmentActor), key: key as string}, entry])
+      entries.map(([key, entry]) => [
+        {...ids(env as EnvironmentActor), key: key as string},
+        toTrackEvent(entry)
+      ])
     );
 
     await delTrackEvents(entries.map(([key, _]) => key));
@@ -137,7 +182,7 @@ const syncTrackEvents = async () => {
 
 const debounceSyncTrackEvents = debounce(async () => await syncTrackEvents(), 250);
 
-const trackPageView = async ({debounce, ...rest}: PostMessagePageView) => {
+const trackPageView = () => {
   if (!isEnvInitialized(env)) {
     return;
   }
@@ -146,26 +191,10 @@ const trackPageView = async ({debounce, ...rest}: PostMessagePageView) => {
     return;
   }
 
-  const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
-
-  const pageView: SetPageView = {
-    ...rest,
-    time_zone: timeZone,
-    ...userAgent(),
-    ...timestamp()
-  };
-
-  await setPageView(pageView);
-
-  if (debounce) {
-    debounceSyncPageViews();
-    return;
-  }
-
-  await syncPageViews();
+  debounceSyncPageViews();
 };
 
-const trackPageEvent = async ({name, metadata}: PostMessageTrackEvent) => {
+const trackPageEvent = () => {
   if (!isEnvInitialized(env)) {
     return;
   }
@@ -173,15 +202,6 @@ const trackPageEvent = async ({name, metadata}: PostMessageTrackEvent) => {
   if (isBot()) {
     return;
   }
-
-  const trackEvent: SetTrackEvent = {
-    name,
-    metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
-    ...userAgent(),
-    ...timestamp()
-  };
-
-  await setTrackEvent(trackEvent);
 
   debounceSyncTrackEvents();
 };

@@ -5,21 +5,10 @@ import isbot from 'isbot';
 import {nanoid} from 'nanoid';
 import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
-import {
-  delPageViews,
-  delTrackEvents,
-  getPageViews,
-  getTrackEvents,
-  setPageView,
-  setTrackEvent
-} from '../services/idb.services';
+import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';
 import type {EnvironmentActor} from '../types/env';
-import type {
-  PostMessage,
-  PostMessageInitAnalytics,
-  PostMessagePageView,
-  PostMessageTrackEvent
-} from '../types/post-message';
+import {IdbPageView, IdbTrackEvent} from '../types/idb';
+import type {PostMessage, PostMessageInitAnalytics} from '../types/post-message';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
 
 onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
@@ -30,13 +19,13 @@ onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
       await init(data as PostMessageInitAnalytics);
       return;
     case 'junoTrackPageView':
-      await trackPageView(data as PostMessagePageView);
+      trackPageView();
       return;
     case 'junoTrackEvent':
-      await trackPageEvent(data as PostMessageTrackEvent);
+      trackPageEvent();
       return;
-    case 'junoSyncTrackEvents':
-      await syncTrackEvents();
+    case 'junoTrackSync':
+      await sync();
       return;
   }
 };
@@ -63,6 +52,14 @@ const sessionId = nanoid();
 let syncViewsInProgress = false;
 let syncEventsInProgress = false;
 
+const sync = async () => {
+  if (isBot()) {
+    return;
+  }
+
+  await Promise.all([syncPageViews(), syncTrackEvents()]);
+};
+
 const syncPageViews = async () => {
   if (!isEnvInitialized(env)) {
     return;
@@ -85,8 +82,22 @@ const syncPageViews = async () => {
   try {
     const actor = await getOrbiterActor(env);
 
+    const toSetPageView = (pageView: IdbPageView): SetPageView => {
+      const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
+
+      return {
+        ...pageView,
+        time_zone: timeZone,
+        ...userAgent(),
+        ...timestamp()
+      };
+    };
+
     await actor.set_page_views(
-      entries.map(([key, entry]) => [{...ids(env as EnvironmentActor), key: key as string}, entry])
+      entries.map(([key, entry]) => [
+        {...ids(env as EnvironmentActor), key: key as string},
+        toSetPageView(entry)
+      ])
     );
 
     await delPageViews(entries.map(([key, _]) => key));
@@ -98,7 +109,7 @@ const syncPageViews = async () => {
   syncViewsInProgress = false;
 };
 
-const debounceSyncPageViews = debounce(async () => syncPageViews(), 100);
+const debounceSyncPageViews = debounce(async () => await syncPageViews(), 100);
 
 const syncTrackEvents = async () => {
   if (!isEnvInitialized(env)) {
@@ -122,8 +133,18 @@ const syncTrackEvents = async () => {
   try {
     const actor = await getOrbiterActor(env);
 
+    const toTrackEvent = ({name, metadata}: IdbTrackEvent): SetTrackEvent => ({
+      name,
+      metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
+      ...userAgent(),
+      ...timestamp()
+    });
+
     await actor.set_track_events(
-      entries.map(([key, entry]) => [{...ids(env as EnvironmentActor), key: key as string}, entry])
+      entries.map(([key, entry]) => [
+        {...ids(env as EnvironmentActor), key: key as string},
+        toTrackEvent(entry)
+      ])
     );
 
     await delTrackEvents(entries.map(([key, _]) => key));
@@ -137,7 +158,7 @@ const syncTrackEvents = async () => {
 
 const debounceSyncTrackEvents = debounce(async () => await syncTrackEvents(), 250);
 
-const trackPageView = async ({debounce, ...rest}: PostMessagePageView) => {
+const trackPageView = () => {
   if (!isEnvInitialized(env)) {
     return;
   }
@@ -146,26 +167,10 @@ const trackPageView = async ({debounce, ...rest}: PostMessagePageView) => {
     return;
   }
 
-  const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
-
-  const pageView: SetPageView = {
-    ...rest,
-    time_zone: timeZone,
-    ...userAgent(),
-    ...timestamp()
-  };
-
-  await setPageView(pageView);
-
-  if (debounce) {
-    debounceSyncPageViews();
-    return;
-  }
-
-  await syncPageViews();
+  debounceSyncPageViews();
 };
 
-const trackPageEvent = async ({name, metadata}: PostMessageTrackEvent) => {
+const trackPageEvent = () => {
   if (!isEnvInitialized(env)) {
     return;
   }
@@ -173,15 +178,6 @@ const trackPageEvent = async ({name, metadata}: PostMessageTrackEvent) => {
   if (isBot()) {
     return;
   }
-
-  const trackEvent: SetTrackEvent = {
-    name,
-    metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
-    ...userAgent(),
-    ...timestamp()
-  };
-
-  await setTrackEvent(trackEvent);
 
   debounceSyncTrackEvents();
 };

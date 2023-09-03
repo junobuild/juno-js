@@ -1,7 +1,9 @@
 import {assertNonNullish, nonNullish, toNullable} from '@junobuild/utils';
 import type {Environment, EnvironmentWorker} from '../types/env';
-import type {PostMessageInitAnalytics, PostMessagePageView} from '../types/post-message';
+import {IdbPageView} from '../types/idb';
+import type {PostMessageInitAnalytics} from '../types/post-message';
 import type {TrackEvent} from '../types/track';
+import {setPageView, setTrackEvent} from './idb.services';
 
 let worker: Worker | undefined;
 
@@ -15,16 +17,16 @@ export const initWorker = (env: Environment) => {
 };
 
 export const initTrackPageViews = (): {cleanup: () => void} => {
-  const trackPages = () => trackPageView({debounce: true});
+  const trackPages = async () => await trackPageView();
 
   let pushStateProxy: typeof history.pushState | null = new Proxy(history.pushState, {
-    apply: (
+    apply: async (
       target,
       thisArg,
       argArray: [data: unknown, unused: string, url?: string | URL | null | undefined]
     ) => {
       target.apply(thisArg, argArray);
-      trackPages();
+      await trackPages();
     }
   });
 
@@ -43,7 +45,7 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
 const WORKER_UNDEFINED_MSG =
   'Analytics worker not initialized. Did you call `initWorker`?' as const;
 
-export const trackPageView = ({debounce}: Pick<PostMessagePageView, 'debounce'>) => {
+export const trackPageView = async () => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
   const {
@@ -53,24 +55,27 @@ export const trackPageView = ({debounce}: Pick<PostMessagePageView, 'debounce'>)
   } = document;
   const {innerWidth, innerHeight} = window;
 
-  const data: PostMessagePageView = {
+  const data: IdbPageView = {
     title,
     href,
     referrer: toNullable(nonNullish(referrer) && referrer !== '' ? referrer : undefined),
     device: {
       inner_width: innerWidth,
       inner_height: innerHeight
-    },
-    debounce
+    }
   };
 
-  worker?.postMessage({msg: 'junoTrackPageView', data});
+  await setPageView(data);
+
+  worker?.postMessage({msg: 'junoTrackPageView'});
 };
 
-export const trackEvent = (data: TrackEvent) => {
+export const trackEvent = async (data: TrackEvent) => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  worker?.postMessage({msg: 'junoTrackEvent', data});
+  await setTrackEvent(data);
+
+  worker?.postMessage({msg: 'junoTrackEvent'});
 };
 
 export const initWorkerEnvironment = (env: PostMessageInitAnalytics) => {
@@ -79,8 +84,8 @@ export const initWorkerEnvironment = (env: PostMessageInitAnalytics) => {
   worker?.postMessage({msg: 'junoInitEnvironment', data: env});
 };
 
-export const syncTrackEvents = () => {
+export const trackSync = () => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  worker?.postMessage({msg: 'junoSyncTrackEvents'});
+  worker?.postMessage({msg: 'junoTrackSync'});
 };

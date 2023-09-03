@@ -6,18 +6,11 @@ export type PostMessageRequest =
   | 'junoInitEnvironment'
   | 'junoTrackPageView'
   | 'junoTrackEvent'
-  | 'junoSyncTrackEvents';
+  | 'junoTrackSync';
 
 export type PostMessageInitAnalytics = EnvironmentActor;
 
-export type PostMessagePageView = Omit<
-  SetPageView,
-  'time_zone' | 'user_agent' | 'collected_at' | 'updated_at'
-> & {debounce: boolean};
-
-export type PostMessageTrackEvent = TrackEvent;
-
 export interface PostMessage {
   msg: PostMessageRequest;
-  data: PostMessageInitAnalytics | PostMessagePageView | PostMessageTrackEvent;
+  data?: PostMessageInitAnalytics;
 }

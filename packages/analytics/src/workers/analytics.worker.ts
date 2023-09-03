@@ -1,26 +1,26 @@
-import { Principal } from '@dfinity/principal';
-import { assertNonNullish,isNullish,nonNullish,toNullable } from '@junobuild/utils';
-import { debounce } from '@junobuild/utils/src';
+import {Principal} from '@dfinity/principal';
+import {assertNonNullish, isNullish, nonNullish, toNullable} from '@junobuild/utils';
+import {debounce} from '@junobuild/utils/src';
 import isbot from 'isbot';
-import { nanoid } from 'nanoid';
-import type { AnalyticKey,SetPageView,SetTrackEvent } from '../../declarations/orbiter/orbiter.did';
-import { getOrbiterActor } from '../api/actor.api';
+import {nanoid} from 'nanoid';
+import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
+import {getOrbiterActor} from '../api/actor.api';
 import {
-delPageViews,
-delTrackEvents,
-getPageViews,
-getTrackEvents,
-setPageView,
-setTrackEvent
+  delPageViews,
+  delTrackEvents,
+  getPageViews,
+  getTrackEvents,
+  setPageView,
+  setTrackEvent
 } from '../services/idb.services';
-import type { EnvironmentActor } from '../types/env';
+import type {EnvironmentActor} from '../types/env';
 import type {
-PostMessage,
-PostMessageInitAnalytics,
-PostMessagePageView,
-PostMessageTrackEvent
+  PostMessage,
+  PostMessageInitAnalytics,
+  PostMessagePageView,
+  PostMessageTrackEvent
 } from '../types/post-message';
-import { nowInBigIntNanoSeconds } from '../utils/date.utils';
+import {nowInBigIntNanoSeconds} from '../utils/date.utils';
 
 onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
   const {msg, data} = dataMsg;

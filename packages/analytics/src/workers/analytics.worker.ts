@@ -79,14 +79,20 @@ const syncPageViews = async () => {
 
   syncViewsInProgress = true;
 
-  // TODO: handle errors
-  const actor = await getOrbiterActor(env);
+  try {
+    const actor = await getOrbiterActor(env);
 
-  await actor.set_page_views(
-    entries.map(([key, entry]) => [{...ids(env!), key: key as string}, entry])
-  );
+    console.log("setPageVies", entries)
 
-  await delPageViews(entries.map(([key, _]) => key));
+    await actor.set_page_views(
+      entries.map(([key, entry]) => [{...ids(env!), key: key as string}, entry])
+    );
+
+    await delPageViews(entries.map(([key, _]) => key));
+  } catch (err: unknown) {
+    // The canister does not trap so, if we land here there was a network issue or so.
+    // So we keep the entries to try to transmit those next time.
+  }
 
   syncViewsInProgress = false;
 };
@@ -112,10 +118,20 @@ const syncTrackEvents = async () => {
 
   syncEventsInProgress = true;
 
-  // TODO: persist track events
-  console.log({sessionId}, entries);
+  try {
+    const actor = await getOrbiterActor(env);
 
-  await delTrackEvents(entries.map(([key, _]) => key));
+    console.log("setTrack", entries)
+
+    await actor.set_track_events(
+      entries.map(([key, entry]) => [{...ids(env!), key: key as string}, entry])
+    );
+
+    await delTrackEvents(entries.map(([key, _]) => key));
+  } catch (err: unknown) {
+    // The canister does not trap so, if we land here there was a network issue or so.
+    // So we keep the entries to try to transmit those next time.
+  }
 
   syncEventsInProgress = false;
 };

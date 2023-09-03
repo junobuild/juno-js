@@ -1,4 +1,3 @@
-import {isBrowser} from '@junobuild/utils';
 import {
   initTrackPageViews,
   initWorker,
@@ -12,11 +11,6 @@ export {trackEvent, trackPageView} from './services/analytics.services';
 export * from './types/env';
 
 export const initOrbiter = async (env: Environment): Promise<() => void> => {
-  if (!isBrowser()) {
-    // Avoid pre-rendering issue when window and indexedDB is not available
-    return Promise.resolve;
-  }
-
   // Save first page as soon as possible
   await setPageView();
 

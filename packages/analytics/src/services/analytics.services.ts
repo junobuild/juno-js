@@ -1,9 +1,8 @@
-import {assertNonNullish, nonNullish, toNullable} from '@junobuild/utils';
+import {assertNonNullish, isBrowser, nonNullish, toNullable} from '@junobuild/utils';
 import type {Environment, EnvironmentWorker} from '../types/env';
 import type {IdbPageView} from '../types/idb';
 import type {PostMessageInitEnvData} from '../types/post-message';
 import type {TrackEvent} from '../types/track';
-import {setPageView as idbSetPageView, setTrackEvent} from './idb.services';
 
 let worker: Worker | undefined;
 
@@ -46,6 +45,10 @@ const WORKER_UNDEFINED_MSG =
   'Analytics worker not initialized. Did you call `initWorker`?' as const;
 
 export const setPageView = async () => {
+  if (!isBrowser()) {
+    return;
+  }
+
   const {
     title,
     location: {href},
@@ -63,7 +66,8 @@ export const setPageView = async () => {
     }
   };
 
-  await idbSetPageView(data);
+  const idb = await import('./idb.services');
+  await idb.setPageView(data);
 };
 
 export const trackPageView = async () => {
@@ -75,9 +79,14 @@ export const trackPageView = async () => {
 };
 
 export const trackEvent = async (data: TrackEvent) => {
+  if (!isBrowser()) {
+    return;
+  }
+
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  await setTrackEvent(data);
+  const idb = await import('./idb.services');
+  await idb.setTrackEvent(data);
 
   worker?.postMessage({msg: 'junoTrackEvent'});
 };

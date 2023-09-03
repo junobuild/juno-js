@@ -57,7 +57,7 @@
     {
       "name": "@junobuild/core-worker",
       "path": "./packages/core/dist/workers/auth.worker.js",
-      "limit": "91 kB"
+      "limit": "90 kB"
     },
     {
       "name": "@junobuild/ledger",
@@ -87,7 +87,7 @@
     {
       "name": "@junobuild/analytics-worker",
       "path": "./packages/analytics/dist/workers/analytics.worker.js",
-      "limit": "91 kB"
+      "limit": "90 kB"
     }
   ]
 }

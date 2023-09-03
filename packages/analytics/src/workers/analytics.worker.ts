@@ -6,11 +6,10 @@ import {nanoid} from 'nanoid';
 import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
 import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';
-import type {EnvironmentActor} from '../types/env';
+import type {Environment, EnvironmentActor} from '../types/env';
 import type {IdbPageView, IdbTrackEvent} from '../types/idb';
 import type {PostMessage, PostMessageInitEnvData} from '../types/post-message';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
-import {Environment} from "../types/env";
 
 onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
   const {msg, data} = dataMsg;

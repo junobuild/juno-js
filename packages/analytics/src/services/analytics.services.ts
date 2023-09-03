@@ -1,9 +1,9 @@
-import { assertNonNullish,nonNullish,toNullable } from '@junobuild/utils';
-import type { Environment,EnvironmentWorker } from '../types/env';
-import type { IdbPageView } from '../types/idb';
-import type { PostMessageInitEnvData } from '../types/post-message';
-import type { TrackEvent } from '../types/track';
-import { setPageView as idbSetPageView,setTrackEvent } from './idb.services';
+import {assertNonNullish, nonNullish, toNullable} from '@junobuild/utils';
+import type {Environment, EnvironmentWorker} from '../types/env';
+import type {IdbPageView} from '../types/idb';
+import type {PostMessageInitEnvData} from '../types/post-message';
+import type {TrackEvent} from '../types/track';
+import {setPageView as idbSetPageView, setTrackEvent} from './idb.services';
 
 let worker: Worker | undefined;
 

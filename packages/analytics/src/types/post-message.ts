@@ -1,4 +1,4 @@
-import {Environment} from './env';
+import type {Environment} from './env';
 
 export type PostMessageRequest =
   | 'junoInitEnvironment'

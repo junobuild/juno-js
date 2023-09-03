@@ -7,7 +7,7 @@ import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/o
 import {getOrbiterActor} from '../api/actor.api';
 import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';
 import type {EnvironmentActor} from '../types/env';
-import {IdbPageView, IdbTrackEvent} from '../types/idb';
+import type {IdbPageView, IdbTrackEvent} from '../types/idb';
 import type {PostMessage, PostMessageInitAnalytics} from '../types/post-message';
 import {nowInBigIntNanoSeconds} from '../utils/date.utils';
 

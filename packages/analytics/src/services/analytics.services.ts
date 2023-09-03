@@ -1,6 +1,6 @@
 import {assertNonNullish, nonNullish, toNullable} from '@junobuild/utils';
 import type {Environment, EnvironmentWorker} from '../types/env';
-import {IdbPageView} from '../types/idb';
+import type {IdbPageView} from '../types/idb';
 import type {PostMessageInitAnalytics} from '../types/post-message';
 import type {TrackEvent} from '../types/track';
 import {setPageView, setTrackEvent} from './idb.services';

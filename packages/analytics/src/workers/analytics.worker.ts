@@ -1,14 +1,13 @@
 import {Principal} from '@dfinity/principal';
-import {assertNonNullish, debounce, isNullish, nonNullish, toNullable} from '@junobuild/utils';
+import {assertNonNullish, debounce, isNullish, nonNullish} from '@junobuild/utils';
 import isbot from 'isbot';
 import {nanoid} from 'nanoid';
-import type {AnalyticKey, SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
+import type {AnalyticKey, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
 import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';
 import type {Environment, EnvironmentActor} from '../types/env';
-import type {IdbPageView, IdbTrackEvent} from '../types/idb';
+import type {IdbKey, IdbTrackEvent} from '../types/idb';
 import type {PostMessage, PostMessageInitEnvData} from '../types/post-message';
-import {nowInBigIntNanoSeconds} from '../utils/date.utils';
 
 onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
   const {msg, data} = dataMsg;
@@ -105,21 +104,10 @@ const syncPageViews = async () => {
   try {
     const actor = await getOrbiterActor(env);
 
-    const toSetPageView = (pageView: IdbPageView): SetPageView => {
-      const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
-
-      return {
-        ...pageView,
-        time_zone: timeZone,
-        ...userAgent(),
-        ...timestamp()
-      };
-    };
-
     await actor.set_page_views(
       entries.map(([key, entry]) => [
-        {...ids(env as EnvironmentActor), key: key as string},
-        toSetPageView(entry)
+        ids({env: env as EnvironmentActor, key: key as IdbKey}),
+        entry
       ])
     );
 
@@ -156,16 +144,14 @@ const syncTrackEvents = async () => {
   try {
     const actor = await getOrbiterActor(env);
 
-    const toTrackEvent = ({name, metadata}: IdbTrackEvent): SetTrackEvent => ({
-      name,
+    const toTrackEvent = ({metadata, ...rest}: IdbTrackEvent): SetTrackEvent => ({
       metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
-      ...userAgent(),
-      ...timestamp()
+      ...rest
     });
 
     await actor.set_track_events(
       entries.map(([key, entry]) => [
-        {...ids(env as EnvironmentActor), key: key as string},
+        ids({env: env as EnvironmentActor, key: key as IdbKey}),
         toTrackEvent(entry)
       ])
     );
@@ -205,20 +191,17 @@ const trackPageEvent = () => {
   debounceSyncTrackEvents();
 };
 
-const ids = (env: EnvironmentActor): Pick<AnalyticKey, 'session_id' | 'satellite_id'> => ({
-  session_id: sessionId,
-  satellite_id: Principal.fromText(env.satelliteId)
+const ids = ({
+  env: {satelliteId},
+  key: [key, session_id]
+}: {
+  env: EnvironmentActor;
+  key: IdbKey;
+}): AnalyticKey => ({
+  key,
+  session_id,
+  satellite_id: Principal.fromText(satelliteId)
 });
-
-const timestamp = (): {collected_at: bigint; updated_at: [] | [bigint]} => ({
-  collected_at: nowInBigIntNanoSeconds(),
-  updated_at: []
-});
-
-const userAgent = (): {user_agent: [] | [string]} => {
-  const {userAgent} = navigator;
-  return {user_agent: toNullable(userAgent)};
-};
 
 const isBot = (): boolean => {
   const {userAgent} = navigator;

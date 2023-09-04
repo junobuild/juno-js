@@ -1,8 +1,12 @@
 import {assertNonNullish, isBrowser, nonNullish, toNullable} from '@junobuild/utils';
+import {nanoid} from 'nanoid';
 import type {Environment, EnvironmentWorker} from '../types/env';
 import type {IdbPageView} from '../types/idb';
 import type {PostMessageInitEnvData} from '../types/post-message';
 import type {TrackEvent} from '../types/track';
+import {timestamp, userAgent} from '../utils/analytics.utils';
+
+const sessionId = nanoid();
 
 let worker: Worker | undefined;
 
@@ -55,6 +59,7 @@ export const setPageView = async () => {
     referrer
   } = document;
   const {innerWidth, innerHeight} = window;
+  const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 
   const data: IdbPageView = {
     title,
@@ -63,11 +68,18 @@ export const setPageView = async () => {
     device: {
       inner_width: innerWidth,
       inner_height: innerHeight
-    }
+    },
+    time_zone: timeZone,
+    ...userAgent(),
+    ...timestamp()
   };
 
   const idb = await import('./idb.services');
-  await idb.setPageView(data);
+  await idb.setPageView({
+    sessionId,
+    key: nanoid(),
+    view: data
+  });
 };
 
 export const trackPageView = async () => {
@@ -86,7 +98,11 @@ export const trackEvent = async (data: TrackEvent) => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
   const idb = await import('./idb.services');
-  await idb.setTrackEvent(data);
+  await idb.setTrackEvent({
+    sessionId,
+    key: nanoid(),
+    track: {...data, ...userAgent(), ...timestamp()}
+  });
 
   worker?.postMessage({msg: 'junoTrackEvent'});
 };

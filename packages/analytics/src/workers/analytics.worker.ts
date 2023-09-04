@@ -1,7 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish, debounce, isNullish, nonNullish} from '@junobuild/utils';
 import isbot from 'isbot';
-import {nanoid} from 'nanoid';
 import type {AnalyticKey, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
 import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';
@@ -75,8 +74,6 @@ const startTimer = async () => {
 
   timer = setInterval(sync, env?.worker?.timerInterval ?? 1000);
 };
-
-const sessionId = nanoid();
 
 // We use a timer in addition to debouncing the tracked pages and events. This means that if some data is not synchronized with the backend because a job is already in progress, the timer will trigger data syncing on the next click of the clock.
 let syncViewsInProgress = false;

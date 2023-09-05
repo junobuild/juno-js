@@ -86,12 +86,14 @@ export const upgradeSatellite = async ({
   satellite,
   wasm_module,
   deprecated,
-  deprecatedNoScope
+  deprecatedNoScope,
+  reset = false
 }: {
   satellite: SatelliteParameters;
   wasm_module: Uint8Array;
   deprecated: boolean;
   deprecatedNoScope: boolean;
+  reset?: boolean;
 }) => {
   const {satelliteId, ...actor} = satellite;
 
@@ -117,7 +119,8 @@ export const upgradeSatellite = async ({
       code: {
         canister_id: Principal.fromText(satelliteId),
         arg: new Uint8Array(arg),
-        wasm_module
+        wasm_module,
+        mode: reset ? {reinstall: null} : {upgrade: null}
       }
     });
 
@@ -135,7 +138,8 @@ export const upgradeSatellite = async ({
     code: {
       canister_id: Principal.fromText(satelliteId),
       arg: new Uint8Array(arg),
-      wasm_module
+      wasm_module,
+      mode: reset ? {reinstall: null} : {upgrade: null}
     }
   });
 };

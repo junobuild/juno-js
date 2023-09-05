@@ -37,7 +37,8 @@ export const upgradeMissionControl = async ({
     code: {
       canister_id: Principal.fromText(missionControlId),
       arg: new Uint8Array(arg),
-      wasm_module
+      wasm_module,
+      mode: {upgrade: null}
     }
   });
 };

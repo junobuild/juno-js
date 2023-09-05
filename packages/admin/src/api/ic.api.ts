@@ -8,13 +8,12 @@ export const upgradeCode = async ({
   code
 }: {
   actor: ActorParameters;
-  code: Omit<InstallCodeParams, 'mode' | 'sender_canister_version'>;
+  code: Omit<InstallCodeParams, 'sender_canister_version'>;
 }): Promise<void> => {
   const {install_code}: ICActor = await getICActor(actor);
 
   return install_code({
     ...code,
-    mode: {upgrade: null},
     sender_canister_version: []
   });
 };

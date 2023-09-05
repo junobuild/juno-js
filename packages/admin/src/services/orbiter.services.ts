@@ -9,10 +9,12 @@ export const orbiterVersion = async (params: {orbiter: OrbiterParameters}): Prom
 
 export const upgradeOrbiter = async ({
   orbiter,
-  wasm_module
+  wasm_module,
+  reset = false
 }: {
   orbiter: OrbiterParameters;
   wasm_module: Uint8Array;
+  reset?: boolean;
 }) => {
   const {orbiterId, ...actor} = orbiter;
 
@@ -29,7 +31,8 @@ export const upgradeOrbiter = async ({
     code: {
       canister_id: Principal.fromText(orbiterId),
       arg: new Uint8Array(arg),
-      wasm_module
+      wasm_module,
+      mode: reset ? {reinstall: null} : {upgrade: null}
     }
   });
 };

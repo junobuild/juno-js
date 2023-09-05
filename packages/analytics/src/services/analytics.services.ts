@@ -15,6 +15,11 @@ export const initWorker = (env: Environment) => {
   const workerUrl = path === undefined ? './workers/analytics.worker.js' : path;
 
   worker = new Worker(workerUrl);
+  worker?.addEventListener(
+    'error',
+    () => console.warn('Unable to connect to the analytics web worker. Have you deployed it?'),
+    false
+  );
 
   initWorkerEnvironment(env);
 };

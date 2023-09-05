@@ -6,7 +6,17 @@ import type {PostMessageInitEnvData} from '../types/post-message';
 import type {TrackEvent} from '../types/track';
 import {timestamp, userAgent} from '../utils/analytics.utils';
 
-const sessionId = nanoid();
+const initSessionId = (): string | undefined => {
+  // I faced this issue when I used the library in Docusaurus which does not implement the crypto API when server-side rendering.
+  // https://github.com/ai/nanoid/issues?q=crypto+not+defined
+  if (typeof crypto === 'undefined') {
+    return undefined;
+  }
+
+  return nanoid();
+}
+
+const sessionId = initSessionId();
 
 let worker: Worker | undefined;
 
@@ -57,12 +67,16 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
 };
 
 const WORKER_UNDEFINED_MSG =
-  'Analytics worker not initialized. Did you call `initWorker`?' as const;
+  'Analytics worker not initialized. Did you call `initOrbiter`?' as const;
+const SESSION_ID_UNDEFINED_MSG =
+    'No session ID initialized.' as const;
 
 export const setPageView = async () => {
   if (!isBrowser()) {
     return;
   }
+
+  assertNonNullish(sessionId, SESSION_ID_UNDEFINED_MSG);
 
   const {
     title,
@@ -106,6 +120,7 @@ export const trackEvent = async (data: TrackEvent) => {
     return;
   }
 
+  assertNonNullish(sessionId, SESSION_ID_UNDEFINED_MSG);
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
   const idb = await import('./idb.services');

@@ -1,8 +1,7 @@
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish, debounce, isNullish, nonNullish} from '@junobuild/utils';
 import isbot from 'isbot';
-import type {AnalyticKey, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
-import type {Result_1} from '../../declarations/orbiter/orbiter.did';
+import type {AnalyticKey, Result_1, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
 import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';
 import type {Environment, EnvironmentActor} from '../types/env';
@@ -25,8 +24,8 @@ onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
     case 'junoStartTrackTimer':
       await startTimer();
       return;
-    case 'junoStopTrackTimer':
-      await stopTimer();
+    case 'junoStopTracker':
+      await destroy();
       return;
   }
 };
@@ -52,16 +51,16 @@ let timer: NodeJS.Timeout | undefined = undefined;
 
 const sync = async () => await Promise.all([syncPageViews(), syncTrackEvents()]);
 
-const stopTimer = async () => {
-  if (isNullish(timer)) {
-    return;
-  }
-
+const destroy = async () => {
   // In case there is something left to sync
   await sync();
 
-  clearInterval(timer);
-  timer = undefined;
+  if (nonNullish(timer)) {
+    clearInterval(timer);
+    timer = undefined;
+  }
+
+  self.close();
 };
 
 const startTimer = async () => {

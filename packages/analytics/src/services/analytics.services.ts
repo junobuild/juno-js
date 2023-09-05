@@ -10,13 +10,24 @@ const sessionId = nanoid();
 
 let worker: Worker | undefined;
 
-export const initWorker = (env: Environment) => {
+export const initWorker = (env: Environment): {cleanup: () => void} => {
   const {path}: EnvironmentWorker = env.worker ?? {};
   const workerUrl = path === undefined ? './workers/analytics.worker.js' : path;
 
   worker = new Worker(workerUrl);
 
+  const consoleWarn = () =>
+    console.warn('Unable to connect to the analytics web worker. Have you deployed it?');
+
+  worker?.addEventListener('error', consoleWarn, false);
+
   initWorkerEnvironment(env);
+
+  return {
+    cleanup() {
+      worker?.removeEventListener('error', consoleWarn, false);
+    }
+  };
 };
 
 export const initTrackPageViews = (): {cleanup: () => void} => {
@@ -122,5 +133,5 @@ export const startTracking = () => {
 export const stopTracking = () => {
   assertNonNullish(worker, WORKER_UNDEFINED_MSG);
 
-  worker?.postMessage({msg: 'junoStopTrackTimer'});
+  worker?.postMessage({msg: 'junoStopTracker'});
 };

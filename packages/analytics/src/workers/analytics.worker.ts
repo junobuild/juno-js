@@ -1,7 +1,7 @@
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish, debounce, isNullish, nonNullish} from '@junobuild/utils';
 import isbot from 'isbot';
-import type {AnalyticKey, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
+import type {AnalyticKey, Result_1, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
 import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';
 import type {Environment, EnvironmentActor} from '../types/env';
@@ -24,8 +24,8 @@ onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
     case 'junoStartTrackTimer':
       await startTimer();
       return;
-    case 'junoStopTrackTimer':
-      await stopTimer();
+    case 'junoStopTracker':
+      await destroy();
       return;
   }
 };
@@ -51,16 +51,16 @@ let timer: NodeJS.Timeout | undefined = undefined;
 
 const sync = async () => await Promise.all([syncPageViews(), syncTrackEvents()]);
 
-const stopTimer = async () => {
-  if (isNullish(timer)) {
-    return;
-  }
-
+const destroy = async () => {
   // In case there is something left to sync
   await sync();
 
-  clearInterval(timer);
-  timer = undefined;
+  if (nonNullish(timer)) {
+    clearInterval(timer);
+    timer = undefined;
+  }
+
+  self.close();
 };
 
 const startTimer = async () => {
@@ -101,7 +101,7 @@ const syncPageViews = async () => {
   try {
     const actor = await getOrbiterActor(env);
 
-    await actor.set_page_views(
+    const results = await actor.set_page_views(
       entries.map(([key, entry]) => [
         ids({env: env as EnvironmentActor, key: key as IdbKey}),
         entry
@@ -109,9 +109,12 @@ const syncPageViews = async () => {
     );
 
     await delPageViews(entries.map(([key, _]) => key));
+
+    consoleWarn(results);
   } catch (err: unknown) {
     // The canister does not trap so, if we land here there was a network issue or so.
     // So we keep the entries to try to transmit those next time.
+    console.error(err);
   }
 
   syncViewsInProgress = false;
@@ -146,7 +149,7 @@ const syncTrackEvents = async () => {
       ...rest
     });
 
-    await actor.set_track_events(
+    const results = await actor.set_track_events(
       entries.map(([key, entry]) => [
         ids({env: env as EnvironmentActor, key: key as IdbKey}),
         toTrackEvent(entry)
@@ -154,9 +157,12 @@ const syncTrackEvents = async () => {
     );
 
     await delTrackEvents(entries.map(([key, _]) => key));
+
+    consoleWarn(results);
   } catch (err: unknown) {
     // The canister does not trap so, if we land here there was a network issue or so.
     // So we keep the entries to try to transmit those next time.
+    console.error(err);
   }
 
   syncEventsInProgress = false;
@@ -214,3 +220,11 @@ const isEnvInitialized = (
   env: EnvironmentActor | undefined | null
 ): env is NonNullable<EnvironmentActor> =>
   env !== undefined && env !== null && nonNullish(env.orbiterId) && nonNullish(env.satelliteId);
+
+const consoleWarn = (results: Result_1) => {
+  if ('Ok' in results) {
+    return;
+  }
+
+  results.Err.forEach(([key, error]) => console.warn(`${error} [Key: ${key.key}]`));
+};

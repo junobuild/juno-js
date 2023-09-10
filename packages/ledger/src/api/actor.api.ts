@@ -1,12 +1,13 @@
 import type {IDL} from '@dfinity/candid';
 import type {_SERVICE as IndexActor} from '../../declarations/index/index.did';
 import {idlFactory as idlFactoryIndex} from '../../declarations/index/index.factory.did.js';
+import {ICP_INDEX_CANISTER_ID} from '../constants/index.constants';
 import type {ActorParameters, IndexParameters} from '../types/actor.types';
 import {createActor} from '../utils/actor.utils';
 
 export const getIndexActor = async ({indexId, ...rest}: IndexParameters): Promise<IndexActor> =>
   getActor({
-    canisterId: indexId,
+    canisterId: indexId ?? ICP_INDEX_CANISTER_ID,
     ...rest,
     idlFactory: idlFactoryIndex
   });

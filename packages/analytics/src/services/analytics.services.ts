@@ -14,7 +14,7 @@ const initSessionId = (): string | undefined => {
   }
 
   return nanoid();
-}
+};
 
 const sessionId = initSessionId();
 
@@ -68,8 +68,7 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
 
 const WORKER_UNDEFINED_MSG =
   'Analytics worker not initialized. Did you call `initOrbiter`?' as const;
-const SESSION_ID_UNDEFINED_MSG =
-    'No session ID initialized.' as const;
+const SESSION_ID_UNDEFINED_MSG = 'No session ID initialized.' as const;
 
 export const setPageView = async () => {
   if (!isBrowser()) {

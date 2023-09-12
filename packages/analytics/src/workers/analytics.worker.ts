@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {assertNonNullish, debounce, isNullish, nonNullish} from '@junobuild/utils';
+import {assertNonNullish, debounce, isNullish, nonNullish, toNullable} from '@junobuild/utils';
 import isbot from 'isbot';
 import type {AnalyticKey, Result_1, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
@@ -102,8 +102,8 @@ const syncPageViews = async () => {
     const actor = await getOrbiterActor(env);
 
     const results = await actor.set_page_views(
-      entries.map(([key, entry]) => [
-        ids({env: env as EnvironmentActor, key: key as IdbKey}),
+      entries.map(([key, {collected_at, ...entry}]) => [
+        ids({env: env as EnvironmentActor, key: key as IdbKey, collected_at}),
         entry
       ])
     );
@@ -144,14 +144,17 @@ const syncTrackEvents = async () => {
   try {
     const actor = await getOrbiterActor(env);
 
-    const toTrackEvent = ({metadata, ...rest}: IdbTrackEvent): SetTrackEvent => ({
+    const toTrackEvent = ({
+      metadata,
+      ...rest
+    }: Omit<IdbTrackEvent, 'collected_at'>): SetTrackEvent => ({
       metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
       ...rest
     });
 
     const results = await actor.set_track_events(
-      entries.map(([key, entry]) => [
-        ids({env: env as EnvironmentActor, key: key as IdbKey}),
+      entries.map(([key, {collected_at, ...entry}]) => [
+        ids({env: env as EnvironmentActor, key: key as IdbKey, collected_at}),
         toTrackEvent(entry)
       ])
     );
@@ -196,14 +199,17 @@ const trackPageEvent = () => {
 
 const ids = ({
   env: {satelliteId},
-  key: [key, session_id]
+  key: [key, session_id],
+  collected_at
 }: {
   env: EnvironmentActor;
   key: IdbKey;
+  collected_at: bigint;
 }): AnalyticKey => ({
+  collected_at,
   key,
   session_id,
-  satellite_id: Principal.fromText(satelliteId)
+  satellite_id: toNullable(Principal.fromText(satelliteId))
 });
 
 const isBot = (): boolean => {

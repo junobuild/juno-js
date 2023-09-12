@@ -23,7 +23,8 @@ export const idlFactory = ({IDL}) => {
   const AnalyticKey = IDL.Record({
     key: IDL.Text,
     session_id: IDL.Text,
-    satellite_id: IDL.Principal
+    satellite_id: IDL.Opt(IDL.Principal),
+    collected_at: IDL.Nat64
   });
   const PageViewDevice = IDL.Record({
     inner_height: IDL.Nat16,
@@ -37,15 +38,13 @@ export const idlFactory = ({IDL}) => {
     href: IDL.Text,
     created_at: IDL.Nat64,
     device: PageViewDevice,
-    user_agent: IDL.Opt(IDL.Text),
-    collected_at: IDL.Nat64
+    user_agent: IDL.Opt(IDL.Text)
   });
   const TrackEvent = IDL.Record({
     updated_at: IDL.Nat64,
     metadata: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))),
     name: IDL.Text,
-    created_at: IDL.Nat64,
-    collected_at: IDL.Nat64
+    created_at: IDL.Nat64
   });
   const SatelliteConfig = IDL.Record({
     updated_at: IDL.Nat64,
@@ -68,8 +67,7 @@ export const idlFactory = ({IDL}) => {
     time_zone: IDL.Text,
     href: IDL.Text,
     device: PageViewDevice,
-    user_agent: IDL.Opt(IDL.Text),
-    collected_at: IDL.Nat64
+    user_agent: IDL.Opt(IDL.Text)
   });
   const Result = IDL.Variant({Ok: PageView, Err: IDL.Text});
   const Result_1 = IDL.Variant({
@@ -84,8 +82,7 @@ export const idlFactory = ({IDL}) => {
     updated_at: IDL.Opt(IDL.Nat64),
     metadata: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))),
     name: IDL.Text,
-    user_agent: IDL.Opt(IDL.Text),
-    collected_at: IDL.Nat64
+    user_agent: IDL.Opt(IDL.Text)
   });
   const Result_2 = IDL.Variant({Ok: TrackEvent, Err: IDL.Text});
   return IDL.Service({

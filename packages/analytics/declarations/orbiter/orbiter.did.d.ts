@@ -4,7 +4,8 @@ import type {Principal} from '@dfinity/principal';
 export interface AnalyticKey {
   key: string;
   session_id: string;
-  satellite_id: Principal;
+  satellite_id: [] | [Principal];
+  collected_at: bigint;
 }
 export interface Controller {
   updated_at: bigint;
@@ -34,7 +35,6 @@ export interface PageView {
   created_at: bigint;
   device: PageViewDevice;
   user_agent: [] | [string];
-  collected_at: bigint;
 }
 export interface PageViewDevice {
   inner_height: number;
@@ -65,7 +65,6 @@ export interface SetPageView {
   href: string;
   device: PageViewDevice;
   user_agent: [] | [string];
-  collected_at: bigint;
 }
 export interface SetSatelliteConfig {
   updated_at: [] | [bigint];
@@ -76,14 +75,12 @@ export interface SetTrackEvent {
   metadata: [] | [Array<[string, string]>];
   name: string;
   user_agent: [] | [string];
-  collected_at: bigint;
 }
 export interface TrackEvent {
   updated_at: bigint;
   metadata: [] | [Array<[string, string]>];
   name: string;
   created_at: bigint;
-  collected_at: bigint;
 }
 export interface _SERVICE {
   del_controllers: ActorMethod<[DeleteControllersArgs], Array<[Principal, Controller]>>;

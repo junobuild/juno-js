@@ -209,7 +209,7 @@ const ids = ({
   collected_at,
   key,
   session_id,
-  satellite_id: toNullable(Principal.fromText(satelliteId))
+  satellite_id: Principal.fromText(satelliteId)
 });
 
 const isBot = (): boolean => {

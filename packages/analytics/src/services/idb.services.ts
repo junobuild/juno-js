@@ -4,7 +4,7 @@ import type {IdbKey, IdbPageView, IdbTrackEvent} from '../types/idb';
 const viewsStore = createStore('juno-views', 'views');
 const eventsStore = createStore('juno-events', 'events');
 
-export const setPageView = ({key, view}: {view: IdbPageView; key: IdbKey}): Promise<void> =>
+export const setPageView = ({key, view}: {key: IdbKey; view: IdbPageView}): Promise<void> =>
   set(key, view, viewsStore);
 
 export const getPageViews = (): Promise<[IDBValidKey, IdbPageView][]> => entries(viewsStore);

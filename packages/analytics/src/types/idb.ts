@@ -1,11 +1,9 @@
 import type {SetPageView, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import type {TrackEvent} from './track';
 
-export type IdbKeySessionId = string;
-export type IdbKeyKey = string;
-export type IdbKey = [IdbKeyKey, IdbKeySessionId];
+export type IdbKey = string;
 
-export type IdbPageView = SetPageView & {collected_at: bigint};
+export type IdbPageView = Omit<SetPageView, 'satellite_id'> & {collected_at: bigint};
 
 export type IdbTrackEvent = TrackEvent &
-  Pick<SetTrackEvent, 'user_agent' | 'updated_at'> & {collected_at: bigint};
+  Pick<SetTrackEvent, 'user_agent' | 'updated_at' | 'session_id'> & {collected_at: bigint};

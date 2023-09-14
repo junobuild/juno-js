@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {assertNonNullish, debounce, isNullish, nonNullish, toNullable} from '@junobuild/utils';
+import {assertNonNullish, debounce, isNullish, nonNullish} from '@junobuild/utils';
 import isbot from 'isbot';
 import type {AnalyticKey, Result_1, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
@@ -103,8 +103,8 @@ const syncPageViews = async () => {
 
     const results = await actor.set_page_views(
       entries.map(([key, {collected_at, ...entry}]) => [
-        ids({env: env as EnvironmentActor, key: key as IdbKey, collected_at}),
-        entry
+        ids({key: key as IdbKey, collected_at}),
+        {...entry, ...satelliteId(env as EnvironmentActor)}
       ])
     );
 
@@ -149,12 +149,13 @@ const syncTrackEvents = async () => {
       ...rest
     }: Omit<IdbTrackEvent, 'collected_at'>): SetTrackEvent => ({
       metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
-      ...rest
+      ...rest,
+      ...satelliteId(env as EnvironmentActor)
     });
 
     const results = await actor.set_track_events(
       entries.map(([key, {collected_at, ...entry}]) => [
-        ids({env: env as EnvironmentActor, key: key as IdbKey, collected_at}),
+        ids({key: key as IdbKey, collected_at}),
         toTrackEvent(entry)
       ])
     );
@@ -197,19 +198,13 @@ const trackPageEvent = () => {
   debounceSyncTrackEvents();
 };
 
-const ids = ({
-  env: {satelliteId},
-  key: [key, session_id],
-  collected_at
-}: {
-  env: EnvironmentActor;
-  key: IdbKey;
-  collected_at: bigint;
-}): AnalyticKey => ({
+const ids = ({key, collected_at}: {key: IdbKey; collected_at: bigint}): AnalyticKey => ({
   collected_at,
-  key,
-  session_id,
-  satellite_id: Principal.fromText(satelliteId)
+  key
+});
+
+const satelliteId = (env: EnvironmentActor): {satellite_id: Principal} => ({
+  satellite_id: Principal.fromText((env as EnvironmentActor).satelliteId)
 });
 
 const isBot = (): boolean => {

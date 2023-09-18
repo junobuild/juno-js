@@ -94,13 +94,13 @@ export const setPageView = async () => {
       inner_height: innerHeight
     },
     time_zone: timeZone,
+    session_id: sessionId as string,
     ...userAgent(),
     ...timestamp()
   };
 
   const idb = await import('./idb.services');
   await idb.setPageView({
-    sessionId,
     key: nanoid(),
     view: data
   });
@@ -124,9 +124,8 @@ export const trackEvent = async (data: TrackEvent) => {
 
   const idb = await import('./idb.services');
   await idb.setTrackEvent({
-    sessionId,
     key: nanoid(),
-    track: {...data, ...userAgent(), ...timestamp()}
+    track: {...data, session_id: sessionId as string, ...userAgent(), ...timestamp()}
   });
 
   worker?.postMessage({msg: 'junoTrackEvent'});

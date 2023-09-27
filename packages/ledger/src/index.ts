@@ -1,5 +1,6 @@
 export type {
   GetAccountIdentifierTransactionsResponse,
+  Transaction,
   TransactionWithId
 } from '../declarations/index/index.did';
 export * from './account_identifier';

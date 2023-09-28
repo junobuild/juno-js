@@ -8,7 +8,9 @@
 
 # Juno JavaScript ledger fork
 
-A lightweight fork of [@dfinity/nns](https://github.com/dfinity/ic-js/tree/main/packages/nns) that includes only the necessary parts, specifically the `AccountIdentifier`, used in the Juno console to minimize the bundle size.
+A lightweight fork of [@dfinity/nns](https://github.com/dfinity/ic-js/tree/main/packages/nns), this version includes only the essential components, such as the `AccountIdentifier`, utilized in the Juno console to reduce the bundle size.
+
+Additionally, it has been enhanced to support calling balance and listing transactions through the ICP Index canister.
 
 ## License
 

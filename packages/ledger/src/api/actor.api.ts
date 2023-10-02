@@ -1,4 +1,5 @@
 import type {IDL} from '@dfinity/candid';
+import {isNullish} from '@dfinity/utils';
 import type {_SERVICE as IndexActor} from '../../declarations/index/index.did';
 import {idlFactory as idlFactoryIndex} from '../../declarations/index/index.factory.did.js';
 import {ICP_INDEX_CANISTER_ID} from '../constants/index.constants';
@@ -20,7 +21,7 @@ const getActor = async <T>({
   canisterId: string | undefined;
   idlFactory: IDL.InterfaceFactory;
 }): Promise<T> => {
-  if (!canisterId) {
+  if (isNullish(canisterId)) {
     throw new Error('No canister ID provided.');
   }
 

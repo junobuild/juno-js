@@ -7,11 +7,11 @@ function publish_npm() {
 
   LOCAL_SHASUM=$(npm pack -w packages/"$lib" --json | jq '.[] | .shasum' | sed -r 's/^"|"$//g')
 
-  NPM_TARBALL=$(npm show @dfinity/"$lib" dist.tarball)
+  NPM_TARBALL=$(npm show @junobuild/"$lib" dist.tarball)
   NPM_SHASUM=$(curl -s "$NPM_TARBALL" 2>&1 | shasum | cut -f1 -d' ')
 
   if [ "$LOCAL_SHASUM" == "$NPM_SHASUM" ]; then
-    echo "No changes in @dfinity/$lib need to be published to NPM."
+    echo "No changes in @junobuild/$lib need to be published to NPM."
   else
     npm publish --workspace=packages/"$lib" --provenance --access public
   fi

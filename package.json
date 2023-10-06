@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/juno-js",
-  "version": "0.0.27",
+  "version": "0.0.37",
   "description": "JavaScript libraries for interfacing with Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -55,6 +55,11 @@
       "limit": "120 kB"
     },
     {
+      "name": "@junobuild/core-worker",
+      "path": "./packages/core/dist/workers/auth.worker.js",
+      "limit": "90 kB"
+    },
+    {
       "name": "@junobuild/ledger",
       "path": "./packages/ledger/dist/index.js",
       "limit": "7 kB",
@@ -72,7 +77,17 @@
     {
       "name": "@junobuild/analytics",
       "path": "./packages/analytics/dist/index.js",
-      "limit": "500 B"
+      "limit": "2 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/principal"
+      ]
+    },
+    {
+      "name": "@junobuild/analytics-worker",
+      "path": "./packages/analytics/dist/workers/analytics.worker.js",
+      "limit": "95 kB"
     }
   ]
 }

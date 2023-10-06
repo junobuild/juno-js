@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/ledger",
-  "version": "0.0.10",
+  "version": "0.0.21",
   "description": "A fork used by Juno console to parse account identifier for the ICP ledger",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -11,12 +11,13 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "declarations"
   ],
   "scripts": {
     "rmdir": "node ../../scripts/rmdir.mjs",
     "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
-    "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs && npm run ts-declaration",
+    "build": "npm run rmdir && mkdir -p dist && cp -R declarations dist && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },
   "repository": {
@@ -43,13 +44,13 @@
     "token"
   ],
   "homepage": "https://juno.build",
-  "dependencies": {
-    "js-sha256": "^0.9.0"
-  },
   "peerDependencies": {
     "@dfinity/agent": "^0.19.2",
     "@dfinity/identity": "^0.19.2",
     "@dfinity/principal": "^0.19.2",
     "@dfinity/utils": "*"
+  },
+  "dependencies": {
+    "@noble/hashes": "^1.3.2"
   }
 }

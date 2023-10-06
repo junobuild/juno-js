@@ -1,14 +1,14 @@
 [![npm][npm-badge]][npm-badge-url]
 [![license][npm-license]][npm-license-url]
 
-[npm-badge]: https://img.shields.io/npm/v/@junobuild/core
-[npm-badge-url]: https://www.npmjs.com/package/@junobuild/core
-[npm-license]: https://img.shields.io/npm/l/@junobuild/core
+[npm-badge]: https://img.shields.io/npm/v/@junobuild/analytics
+[npm-badge-url]: https://www.npmjs.com/package/@junobuild/analytics
+[npm-license]: https://img.shields.io/npm/l/@junobuild/analytics
 [npm-license-url]: https://github.com/buildwithjuno/juno-js/blob/main/LICENSE
 
-# Juno JavaScript core SDK
+# Juno JavaScript analytics
 
-JavaScript core client for [Juno].
+A tracker for [Juno] analytics.
 
 ## License
 

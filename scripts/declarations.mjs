@@ -5,7 +5,8 @@ const src = '/Users/daviddalbusco/projects/juno/juno/src/declarations';
 const dest = [
   './packages/core/declarations/',
   './packages/admin/declarations/',
-  './packages/analytics/declarations/'
+  './packages/analytics/declarations/',
+  './packages/ledger/declarations/'
 ];
 
 const promises = dest.map((d) => cp(src, d, {recursive: true}));

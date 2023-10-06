@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/analytics",
-  "version": "0.0.1",
+  "version": "0.0.10",
   "description": "Tracker for Juno analytics",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -17,7 +17,8 @@
   "scripts": {
     "rmdir": "node ../../scripts/rmdir.mjs",
     "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
-    "build": "npm run rmdir && mkdir -p dist && cp -R declarations dist && node esbuild.mjs && npm run ts-declaration",
+    "compress": "../../scripts/compress dist/workers",
+    "build": "npm run rmdir && mkdir -p dist && cp -R declarations dist && node esbuild.mjs && npm run ts-declaration && npm run compress",
     "prepack": "npm run build"
   },
   "repository": {
@@ -44,6 +45,8 @@
   "homepage": "https://juno.build",
   "dependencies": {
     "@junobuild/utils": "*",
+    "idb-keyval": "^6.2.1",
+    "isbot": "^3.6.13",
     "nanoid": "^4.0.2"
   }
 }

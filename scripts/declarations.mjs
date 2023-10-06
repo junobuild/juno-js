@@ -1,19 +1,29 @@
 #!/usr/bin/env node
-import {cp, rm} from 'node:fs/promises';
+import {cp} from 'node:fs/promises';
+import {join} from 'node:path';
 
 const src = '/Users/daviddalbusco/projects/juno/juno/src/declarations';
-const dest = [
-  './packages/core/declarations/',
-  './packages/admin/declarations/',
-  './packages/analytics/declarations/',
-  './packages/ledger/declarations/'
-];
 
-const promises = dest.map((d) => cp(src, d, {recursive: true}));
-await Promise.all(promises);
+const adminDeclarations = ['ic', 'mission_control', 'orbiter', 'satellite'];
+const adminPromises = adminDeclarations.map((d) =>
+  cp(join(src, d), join('./packages/admin/declarations/', d), {recursive: true})
+);
+await Promise.all(adminPromises);
 
-const rmPromises = dest.map(async (d) => {
-  await rm(`${d}/frontend`, {recursive: true});
-  await rm(`${d}/internet_identity`, {recursive: true});
-  await rm(`${d}/ledger`, {recursive: true});
-});
+const analyticsDeclarations = ['orbiter'];
+const analyticsPromises = analyticsDeclarations.map((d) =>
+  cp(join(src, d), join('./packages/analytics/declarations/', d), {recursive: true})
+);
+await Promise.all(analyticsPromises);
+
+const coreDeclarations = ['satellite', 'deprecated'];
+const corePromises = coreDeclarations.map((d) =>
+  cp(join(src, d), join('./packages/core/declarations/', d), {recursive: true})
+);
+await Promise.all(corePromises);
+
+const ledgerDeclarations = ['index'];
+const ledgerPromises = ledgerDeclarations.map((d) =>
+  cp(join(src, d), join('./packages/ledger/declarations/', d), {recursive: true})
+);
+await Promise.all(ledgerPromises);

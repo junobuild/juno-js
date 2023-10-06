@@ -11,7 +11,6 @@ export interface AssetKey {
   collection: string;
   owner: Principal;
   name: string;
-  description: [] | [string];
   full_path: string;
 }
 export interface AssetNoContent {
@@ -20,6 +19,10 @@ export interface AssetNoContent {
   encodings: Array<[string, AssetEncodingNoContent]>;
   headers: Array<[string, string]>;
   created_at: bigint;
+}
+export interface Chunk {
+  content: Uint8Array | number[];
+  batch_id: bigint;
 }
 export interface CommitBatch {
   batch_id: bigint;
@@ -33,10 +36,8 @@ export interface Controller {
   updated_at: bigint;
   metadata: Array<[string, string]>;
   created_at: bigint;
-  scope: ControllerScope;
   expires_at: [] | [bigint];
 }
-export type ControllerScope = {Write: null} | {Admin: null};
 export interface CustomDomain {
   updated_at: bigint;
   created_at: bigint;
@@ -52,7 +53,6 @@ export interface Doc {
   updated_at: bigint;
   owner: Principal;
   data: Uint8Array | number[];
-  description: [] | [string];
   created_at: bigint;
 }
 export interface HttpRequest {
@@ -71,16 +71,11 @@ export interface InitAssetKey {
   token: [] | [string];
   collection: string;
   name: string;
-  description: [] | [string];
   encoding_type: [] | [string];
   full_path: string;
 }
 export interface InitUploadResult {
   batch_id: bigint;
-}
-export interface ListMatcher {
-  key: [] | [string];
-  description: [] | [string];
 }
 export interface ListOrder {
   field: ListOrderField;
@@ -94,22 +89,18 @@ export interface ListPaginate {
 export interface ListParams {
   order: [] | [ListOrder];
   owner: [] | [Principal];
-  matcher: [] | [ListMatcher];
+  matcher: [] | [string];
   paginate: [] | [ListPaginate];
 }
 export interface ListResults {
-  matches_pages: [] | [bigint];
   matches_length: bigint;
-  items_page: [] | [bigint];
+  length: bigint;
   items: Array<[string, AssetNoContent]>;
-  items_length: bigint;
 }
 export interface ListResults_1 {
-  matches_pages: [] | [bigint];
   matches_length: bigint;
-  items_page: [] | [bigint];
+  length: bigint;
   items: Array<[string, Doc]>;
-  items_length: bigint;
 }
 export type Permission = {Controllers: null} | {Private: null} | {Public: null} | {Managed: null};
 export interface Rule {
@@ -122,7 +113,6 @@ export interface Rule {
 export type RulesType = {Db: null} | {Storage: null};
 export interface SetController {
   metadata: Array<[string, string]>;
-  scope: ControllerScope;
   expires_at: [] | [bigint];
 }
 export interface SetControllersArgs {
@@ -132,7 +122,6 @@ export interface SetControllersArgs {
 export interface SetDoc {
   updated_at: [] | [bigint];
   data: Uint8Array | number[];
-  description: [] | [string];
 }
 export interface SetRule {
   updated_at: [] | [bigint];
@@ -141,7 +130,6 @@ export interface SetRule {
   write: Permission;
 }
 export interface StorageConfig {
-  rewrites: Array<[string, string]>;
   headers: Array<[string, Array<[string, string]>]>;
 }
 export interface StreamingCallbackHttpResponse {
@@ -163,21 +151,15 @@ export type StreamingStrategy = {
   };
 };
 export interface UploadChunk {
-  content: Uint8Array | number[];
-  batch_id: bigint;
-  order_id: [] | [bigint];
-}
-export interface UploadChunkResult {
   chunk_id: bigint;
 }
 export interface _SERVICE {
   commit_asset_upload: ActorMethod<[CommitBatch], undefined>;
   del_asset: ActorMethod<[string, string], undefined>;
-  del_assets: ActorMethod<[string], undefined>;
+  del_assets: ActorMethod<[[] | [string]], undefined>;
   del_controllers: ActorMethod<[DeleteControllersArgs], Array<[Principal, Controller]>>;
   del_custom_domain: ActorMethod<[string], undefined>;
   del_doc: ActorMethod<[string, string, DelDoc], undefined>;
-  del_rule: ActorMethod<[RulesType, string, DelDoc], undefined>;
   get_config: ActorMethod<[], Config>;
   get_doc: ActorMethod<[string, string], [] | [Doc]>;
   http_request: ActorMethod<[HttpRequest], HttpResponse>;
@@ -186,7 +168,7 @@ export interface _SERVICE {
     StreamingCallbackHttpResponse
   >;
   init_asset_upload: ActorMethod<[InitAssetKey], InitUploadResult>;
-  list_assets: ActorMethod<[string, ListParams], ListResults>;
+  list_assets: ActorMethod<[[] | [string], ListParams], ListResults>;
   list_controllers: ActorMethod<[], Array<[Principal, Controller]>>;
   list_custom_domains: ActorMethod<[], Array<[string, CustomDomain]>>;
   list_docs: ActorMethod<[string, ListParams], ListResults_1>;
@@ -196,6 +178,6 @@ export interface _SERVICE {
   set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;
   set_doc: ActorMethod<[string, string, SetDoc], Doc>;
   set_rule: ActorMethod<[RulesType, string, SetRule], undefined>;
-  upload_asset_chunk: ActorMethod<[UploadChunk], UploadChunkResult>;
+  upload_asset_chunk: ActorMethod<[Chunk], UploadChunk>;
   version: ActorMethod<[], string>;
 }

@@ -1,7 +1,7 @@
 import type {_SERVICE as IndexActor} from '../../declarations/index/index.did';
 import {
   type GetAccountIdentifierTransactionsArgs,
-  type Result
+  type GetAccountIdentifierTransactionsResult
 } from '../../declarations/index/index.did';
 import type {IndexParameters} from '../types/actor.types';
 import {getIndexActor} from './actor.api';
@@ -23,7 +23,7 @@ export const transactions = async ({
 }: {
   args: GetAccountIdentifierTransactionsArgs;
   index: IndexParameters;
-}): Promise<Result> => {
+}): Promise<GetAccountIdentifierTransactionsResult> => {
   const actor: IndexActor = await getIndexActor(actorParams);
   return actor.get_account_identifier_transactions(args);
 };

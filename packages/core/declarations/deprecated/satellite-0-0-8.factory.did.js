@@ -8,21 +8,14 @@ export const idlFactory = ({IDL}) => {
   const DeleteControllersArgs = IDL.Record({
     controllers: IDL.Vec(IDL.Principal)
   });
-  const ControllerScope = IDL.Variant({
-    Write: IDL.Null,
-    Admin: IDL.Null
-  });
   const Controller = IDL.Record({
     updated_at: IDL.Nat64,
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
     created_at: IDL.Nat64,
-    scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
   const DelDoc = IDL.Record({updated_at: IDL.Opt(IDL.Nat64)});
-  const RulesType = IDL.Variant({Db: IDL.Null, Storage: IDL.Null});
   const StorageConfig = IDL.Record({
-    rewrites: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
     headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))))
   });
   const Config = IDL.Record({storage: StorageConfig});
@@ -30,7 +23,6 @@ export const idlFactory = ({IDL}) => {
     updated_at: IDL.Nat64,
     owner: IDL.Principal,
     data: IDL.Vec(IDL.Nat8),
-    description: IDL.Opt(IDL.Text),
     created_at: IDL.Nat64
   });
   const HttpRequest = IDL.Record({
@@ -39,9 +31,7 @@ export const idlFactory = ({IDL}) => {
     body: IDL.Vec(IDL.Nat8),
     headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))
   });
-  const Memory = IDL.Variant({Heap: IDL.Null, Stable: IDL.Null});
   const StreamingCallbackToken = IDL.Record({
-    memory: Memory,
     token: IDL.Opt(IDL.Text),
     sha256: IDL.Opt(IDL.Vec(IDL.Nat8)),
     headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
@@ -52,7 +42,7 @@ export const idlFactory = ({IDL}) => {
   const StreamingStrategy = IDL.Variant({
     Callback: IDL.Record({
       token: StreamingCallbackToken,
-      callback: IDL.Func([], [], ['query'])
+      callback: IDL.Func([], [], [])
     })
   });
   const HttpResponse = IDL.Record({
@@ -69,7 +59,6 @@ export const idlFactory = ({IDL}) => {
     token: IDL.Opt(IDL.Text),
     collection: IDL.Text,
     name: IDL.Text,
-    description: IDL.Opt(IDL.Text),
     encoding_type: IDL.Opt(IDL.Text),
     full_path: IDL.Text
   });
@@ -80,10 +69,6 @@ export const idlFactory = ({IDL}) => {
     CreatedAt: IDL.Null
   });
   const ListOrder = IDL.Record({field: ListOrderField, desc: IDL.Bool});
-  const ListMatcher = IDL.Record({
-    key: IDL.Opt(IDL.Text),
-    description: IDL.Opt(IDL.Text)
-  });
   const ListPaginate = IDL.Record({
     start_after: IDL.Opt(IDL.Text),
     limit: IDL.Opt(IDL.Nat64)
@@ -91,7 +76,7 @@ export const idlFactory = ({IDL}) => {
   const ListParams = IDL.Record({
     order: IDL.Opt(ListOrder),
     owner: IDL.Opt(IDL.Principal),
-    matcher: IDL.Opt(ListMatcher),
+    matcher: IDL.Opt(IDL.Text),
     paginate: IDL.Opt(ListPaginate)
   });
   const AssetKey = IDL.Record({
@@ -99,7 +84,6 @@ export const idlFactory = ({IDL}) => {
     collection: IDL.Text,
     owner: IDL.Principal,
     name: IDL.Text,
-    description: IDL.Opt(IDL.Text),
     full_path: IDL.Text
   });
   const AssetEncodingNoContent = IDL.Record({
@@ -115,11 +99,9 @@ export const idlFactory = ({IDL}) => {
     created_at: IDL.Nat64
   });
   const ListResults = IDL.Record({
-    matches_pages: IDL.Opt(IDL.Nat64),
     matches_length: IDL.Nat64,
-    items_page: IDL.Opt(IDL.Nat64),
-    items: IDL.Vec(IDL.Tuple(IDL.Text, AssetNoContent)),
-    items_length: IDL.Nat64
+    length: IDL.Nat64,
+    items: IDL.Vec(IDL.Tuple(IDL.Text, AssetNoContent))
   });
   const CustomDomain = IDL.Record({
     updated_at: IDL.Nat64,
@@ -127,12 +109,11 @@ export const idlFactory = ({IDL}) => {
     bn_id: IDL.Opt(IDL.Text)
   });
   const ListResults_1 = IDL.Record({
-    matches_pages: IDL.Opt(IDL.Nat64),
     matches_length: IDL.Nat64,
-    items_page: IDL.Opt(IDL.Nat64),
-    items: IDL.Vec(IDL.Tuple(IDL.Text, Doc)),
-    items_length: IDL.Nat64
+    length: IDL.Nat64,
+    items: IDL.Vec(IDL.Tuple(IDL.Text, Doc))
   });
+  const RulesType = IDL.Variant({Db: IDL.Null, Storage: IDL.Null});
   const Permission = IDL.Variant({
     Controllers: IDL.Null,
     Private: IDL.Null,
@@ -140,7 +121,6 @@ export const idlFactory = ({IDL}) => {
     Managed: IDL.Null
   });
   const Rule = IDL.Record({
-    memory: Memory,
     updated_at: IDL.Nat64,
     max_size: IDL.Opt(IDL.Nat),
     read: Permission,
@@ -149,7 +129,6 @@ export const idlFactory = ({IDL}) => {
   });
   const SetController = IDL.Record({
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
-    scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
   const SetControllersArgs = IDL.Record({
@@ -158,26 +137,23 @@ export const idlFactory = ({IDL}) => {
   });
   const SetDoc = IDL.Record({
     updated_at: IDL.Opt(IDL.Nat64),
-    data: IDL.Vec(IDL.Nat8),
-    description: IDL.Opt(IDL.Text)
+    data: IDL.Vec(IDL.Nat8)
   });
   const SetRule = IDL.Record({
-    memory: IDL.Opt(Memory),
     updated_at: IDL.Opt(IDL.Nat64),
     max_size: IDL.Opt(IDL.Nat),
     read: Permission,
     write: Permission
   });
-  const UploadChunk = IDL.Record({
+  const Chunk = IDL.Record({
     content: IDL.Vec(IDL.Nat8),
-    batch_id: IDL.Nat,
-    order_id: IDL.Opt(IDL.Nat)
+    batch_id: IDL.Nat
   });
-  const UploadChunkResult = IDL.Record({chunk_id: IDL.Nat});
+  const UploadChunk = IDL.Record({chunk_id: IDL.Nat});
   return IDL.Service({
     commit_asset_upload: IDL.Func([CommitBatch], [], []),
     del_asset: IDL.Func([IDL.Text, IDL.Text], [], []),
-    del_assets: IDL.Func([IDL.Text], [], []),
+    del_assets: IDL.Func([IDL.Opt(IDL.Text)], [], []),
     del_controllers: IDL.Func(
       [DeleteControllersArgs],
       [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))],
@@ -185,7 +161,6 @@ export const idlFactory = ({IDL}) => {
     ),
     del_custom_domain: IDL.Func([IDL.Text], [], []),
     del_doc: IDL.Func([IDL.Text, IDL.Text, DelDoc], [], []),
-    del_rule: IDL.Func([RulesType, IDL.Text, DelDoc], [], []),
     get_config: IDL.Func([], [Config], []),
     get_doc: IDL.Func([IDL.Text, IDL.Text], [IDL.Opt(Doc)], ['query']),
     http_request: IDL.Func([HttpRequest], [HttpResponse], ['query']),
@@ -195,7 +170,7 @@ export const idlFactory = ({IDL}) => {
       ['query']
     ),
     init_asset_upload: IDL.Func([InitAssetKey], [InitUploadResult], []),
-    list_assets: IDL.Func([IDL.Text, ListParams], [ListResults], ['query']),
+    list_assets: IDL.Func([IDL.Opt(IDL.Text), ListParams], [ListResults], ['query']),
     list_controllers: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))], ['query']),
     list_custom_domains: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Text, CustomDomain))], ['query']),
     list_docs: IDL.Func([IDL.Text, ListParams], [ListResults_1], ['query']),
@@ -209,7 +184,7 @@ export const idlFactory = ({IDL}) => {
     set_custom_domain: IDL.Func([IDL.Text, IDL.Opt(IDL.Text)], [], []),
     set_doc: IDL.Func([IDL.Text, IDL.Text, SetDoc], [Doc], []),
     set_rule: IDL.Func([RulesType, IDL.Text, SetRule], [], []),
-    upload_asset_chunk: IDL.Func([UploadChunk], [UploadChunkResult], []),
+    upload_asset_chunk: IDL.Func([Chunk], [UploadChunk], []),
     version: IDL.Func([], [IDL.Text], ['query'])
   });
 };

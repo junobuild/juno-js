@@ -1,8 +1,6 @@
 import type {CallConfig} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
-import type {_SERVICE as ConsoleActor} from '../../declarations/console/console.did';
-import {idlFactory as idlFactoryConsole} from '../../declarations/console/console.factory.did.js';
 import type {_SERVICE as ICActor} from '../../declarations/ic/ic.did';
 import {idlFactory as idlFactorIC} from '../../declarations/ic/ic.factory.did';
 import type {_SERVICE as MissionControlActor} from '../../declarations/mission_control/mission_control.did';
@@ -17,7 +15,6 @@ import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/sate
 import {idlFactory as idlFactorySatellite} from '../../declarations/satellite/satellite.factory.did.js';
 import type {
   ActorParameters,
-  ConsoleParameters,
   MissionControlParameters,
   OrbiterParameters,
   SatelliteParameters
@@ -74,16 +71,6 @@ export const getOrbiterActor = async ({
     canisterId: orbiterId,
     ...rest,
     idlFactory: idlFactoryOrbiter
-  });
-
-export const getConsoleActor = async ({
-  consoleId,
-  ...rest
-}: ConsoleParameters): Promise<ConsoleActor> =>
-  getActor({
-    canisterId: consoleId,
-    ...rest,
-    idlFactory: idlFactoryConsole
   });
 
 export const getActor = async <T>({

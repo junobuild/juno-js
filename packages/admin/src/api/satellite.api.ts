@@ -76,9 +76,8 @@ export const listDeprecatedNoScopeControllers = async ({
 }: {
   satellite: SatelliteParameters;
 }): Promise<[Principal, Controller][]> => {
-  const actor: DeprecatedSatelliteNoScopeActor = await getDeprecatedSatelliteNoScopeActor(
-    satellite
-  );
+  const actor: DeprecatedSatelliteNoScopeActor =
+    await getDeprecatedSatelliteNoScopeActor(satellite);
   return actor.list_controllers() as Promise<[Principal, Controller][]>;
 };
 

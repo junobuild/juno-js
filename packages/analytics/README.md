@@ -4,7 +4,7 @@
 [npm-badge]: https://img.shields.io/npm/v/@junobuild/analytics
 [npm-badge-url]: https://www.npmjs.com/package/@junobuild/analytics
 [npm-license]: https://img.shields.io/npm/l/@junobuild/analytics
-[npm-license-url]: https://github.com/buildwithjuno/juno-js/blob/main/LICENSE
+[npm-license-url]: https://github.com/junobuild/juno-js/blob/main/LICENSE
 
 # Juno JavaScript analytics
 

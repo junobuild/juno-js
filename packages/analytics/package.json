@@ -23,11 +23,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/buildwithjuno/juno-js.git",
+    "url": "git+https://github.com/junobuild/juno-js.git",
     "directory": "packages/analytics"
   },
   "bugs": {
-    "url": "https://github.com/buildwithjuno/juno-js"
+    "url": "https://github.com/junobuild/juno-js"
   },
   "keywords": [
     "blockchain-as-a-service",

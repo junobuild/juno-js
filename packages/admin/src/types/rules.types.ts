@@ -10,4 +10,5 @@ export interface Rule {
   created_at?: bigint;
   updated_at?: bigint;
   max_size?: number;
+  mutablePermissions: boolean;
 }

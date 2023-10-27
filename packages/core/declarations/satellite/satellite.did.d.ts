@@ -111,12 +111,15 @@ export interface ListResults_1 {
   items: Array<[string, Doc]>;
   items_length: bigint;
 }
+export type Memory = {Heap: null} | {Stable: null};
 export type Permission = {Controllers: null} | {Private: null} | {Public: null} | {Managed: null};
 export interface Rule {
+  memory: [] | [Memory];
   updated_at: bigint;
   max_size: [] | [bigint];
   read: Permission;
   created_at: bigint;
+  mutable_permissions: [] | [boolean];
   write: Permission;
 }
 export type RulesType = {Db: null} | {Storage: null};
@@ -135,9 +138,11 @@ export interface SetDoc {
   description: [] | [string];
 }
 export interface SetRule {
+  memory: [] | [Memory];
   updated_at: [] | [bigint];
   max_size: [] | [bigint];
   read: Permission;
+  mutable_permissions: [] | [boolean];
   write: Permission;
 }
 export interface StorageConfig {
@@ -149,6 +154,7 @@ export interface StreamingCallbackHttpResponse {
   body: Uint8Array | number[];
 }
 export interface StreamingCallbackToken {
+  memory: Memory;
   token: [] | [string];
   sha256: [] | [Uint8Array | number[]];
   headers: Array<[string, string]>;

@@ -1,6 +1,7 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {fromNullable} from '@junobuild/utils';
+import type {StorageConfigRedirect as StorageConfigRedirectDid} from '../../declarations/satellite/satellite.did';
 import {upgradeCode} from '../api/ic.api';
 import {
   listControllers,
@@ -14,7 +15,12 @@ import {
 } from '../api/satellite.api';
 import {DEFAULT_CONFIG_REWRITES} from '../constants/config.constants';
 import type {SatelliteParameters} from '../types/actor.types';
-import type {Config, StorageConfigHeader, StorageConfigRewrite} from '../types/config.types';
+import type {
+  Config,
+  StorageConfigHeader,
+  StorageConfigRedirect,
+  StorageConfigRewrite
+} from '../types/config.types';
 import type {CustomDomain} from '../types/customdomain.types';
 import type {Rule, RulesType} from '../types/rules.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
@@ -22,7 +28,7 @@ import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 export const setConfig = async ({
   config: {
-    storage: {headers: configHeaders, rewrites: configRewrites}
+    storage: {headers: configHeaders, rewrites: configRewrites, redirects: configRedirects}
   },
   satellite
 }: {
@@ -37,12 +43,17 @@ export const setConfig = async ({
     ({source, destination}: StorageConfigRewrite) => [source, destination]
   );
 
+  const redirects: [string, StorageConfigRedirectDid][] = (configRedirects ?? []).map(
+    ({source, location, code}: StorageConfigRedirect) => [source, {status_code: code, location}]
+  );
+
   return setConfigApi({
     satellite,
     config: {
       storage: {
         headers,
-        rewrites
+        rewrites,
+        redirects: [redirects]
       }
     }
   });

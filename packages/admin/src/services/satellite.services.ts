@@ -13,7 +13,6 @@ import {
   setRule as setRuleApi,
   version
 } from '../api/satellite.api';
-import {DEFAULT_CONFIG_REWRITES} from '../constants/config.constants';
 import type {SatelliteParameters} from '../types/actor.types';
 import type {
   Config,
@@ -39,7 +38,7 @@ export const setConfig = async ({
     ({source, headers}: StorageConfigHeader) => [source, headers]
   );
 
-  const rewrites: [string, string][] = (configRewrites ?? DEFAULT_CONFIG_REWRITES).map(
+  const rewrites: [string, string][] = (configRewrites ?? []).map(
     ({source, destination}: StorageConfigRewrite) => [source, destination]
   );
 

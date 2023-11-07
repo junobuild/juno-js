@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare
-        uses: ./.github/workflows/prepare
+        uses: ./.github/actions/prepare
       - run: npm run build --workspaces
       - name: Publish
         run: ./scripts/publish-npm.sh

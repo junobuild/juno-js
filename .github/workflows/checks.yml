@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare
-        uses: ./.github/workflows/prepare
+        uses: ./.github/actions/prepare
       - name: Build
         run: npm run build --workspaces
 
@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare
-        uses: ./.github/workflows/prepare
+        uses: ./.github/actions/prepare
       - name: Lint
         run: npm run format:check
 
@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare
-        uses: ./.github/workflows/prepare
+        uses: ./.github/actions/prepare
       - name: Lint
         run: npm run lint
 
@@ -44,7 +44,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Prepare
-        uses: ./.github/workflows/prepare
+        uses: ./.github/actions/prepare
       - name: Size check
         uses: andresz1/size-limit-action@v1
         with:

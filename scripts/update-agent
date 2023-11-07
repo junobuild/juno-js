@@ -9,24 +9,20 @@ function rm_agent() {
 function install_agent() {
   local package=$1
 
-  npm i @dfinity/agent@latest @dfinity/identity@latest @dfinity/principal@latest @dfinity/auth-client@latest --workspace=packages/"$package"
-}
-
-function install_agent_peer() {
-  local package=$1
-
   npm i @dfinity/agent@latest @dfinity/identity@latest @dfinity/principal@latest --workspace=packages/"$package" --save-peer
 }
 
-PACKAGES=core
-PACKAGES_PEER=admin,ledger
+function install_auth_client() {
+  local package=$1
+
+  npm i @dfinity/auth-client@latest --workspace=packages/"$package" --save-peer
+}
+
+PACKAGES=core,admin,ledger
+PACKAGES_AUTH_CLIENT=core
 
 # Remove agent-js libraries from all packages first to avoid resolve conflicts between those
 for package in $(echo $PACKAGES | sed "s/,/ /g"); do
-  rm_agent "$package"
-done
-
-for package in $(echo $PACKAGES_PEER | sed "s/,/ /g"); do
   rm_agent "$package"
 done
 
@@ -34,6 +30,6 @@ for package in $(echo $PACKAGES | sed "s/,/ /g"); do
   install_agent "$package"
 done
 
-for package in $(echo $PACKAGES_PEER | sed "s/,/ /g"); do
-  install_agent_peer "$package"
+for package in $(echo $PACKAGES_AUTH_CLIENT | sed "s/,/ /g"); do
+  install_auth_client "$package"
 done

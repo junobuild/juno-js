@@ -13,13 +13,10 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18.x'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm install -g npm
-      - run: npm ci
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Prepare
+        uses: ./.github/workflows/prepare
       - run: npm run build --workspaces
       - name: Publish
         run: ./scripts/publish-npm.sh

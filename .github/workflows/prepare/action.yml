@@ -3,12 +3,14 @@ name: Prepare
 description: Checkout and install dependencies
 
 runs:
-  runs-on: ubuntu-latest
+  using: composite
 
   steps:
     - uses: actions/setup-node@v3
       with:
         node-version: '18.x'
         registry-url: 'https://registry.npmjs.org'
+    - name: Install npm
+      run: npm install -g npm
     - name: Install dependencies
       run: npm ci

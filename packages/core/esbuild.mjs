@@ -1,20 +1,11 @@
 #!/usr/bin/env node
 
 import esbuild from 'esbuild';
-import {readFileSync, readdirSync, statSync} from 'fs';
+import {readdirSync, statSync} from 'fs';
 import {join} from 'path';
 import {build} from '../../scripts/esbuild.mjs';
 
 build();
-
-// Skip peer dependencies
-const peerDependencies = (packageJson) => {
-  const json = readFileSync(packageJson, 'utf8');
-  const {peerDependencies} = JSON.parse(json);
-  return peerDependencies ?? {};
-};
-
-const workspacePeerDependencies = peerDependencies(join(process.cwd(), 'package.json'));
 
 // Build web workers
 
@@ -36,8 +27,7 @@ const buildWebWorkers = () => {
       bundle: true,
       sourcemap: 'external',
       minify: true,
-      target: ['node18'],
-      external: [...Object.keys(workspacePeerDependencies)]
+      target: ['node18']
     })
     .catch(() => process.exit(1));
 };

@@ -52,12 +52,10 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
-    "@junobuild/utils": "*"
-  },
-  "devDependencies": {
     "@dfinity/agent": "^0.19.3",
     "@dfinity/auth-client": "^0.19.3",
     "@dfinity/identity": "^0.19.3",
-    "@dfinity/principal": "^0.19.3"
+    "@dfinity/principal": "^0.19.3",
+    "@junobuild/utils": "*"
   }
 }

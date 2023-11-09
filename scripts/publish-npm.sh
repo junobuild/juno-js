@@ -18,7 +18,7 @@ function publish_npm() {
 }
 
 # Tips: libs use by other libs first
-LIBS=utils,core,admin,ledger,analytics
+LIBS=utils,core,admin,ledger,analytics,core-peer
 
 for lib in $(echo $LIBS | sed "s/,/ /g"); do
   publish_npm "$lib"

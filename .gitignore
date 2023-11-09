@@ -34,3 +34,5 @@ UserInterfaceState.xcuserstate
 dist/
 
 target/
+
+packages/core-peer/src

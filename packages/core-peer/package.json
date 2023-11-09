@@ -1,7 +1,7 @@
 {
-  "name": "@junobuild/admin",
-  "version": "0.0.36",
-  "description": "A library for interfacing with admin features of Juno",
+  "name": "@junobuild/core-peer",
+  "version": "0.0.1",
+  "description": "JavaScript core client for Juno minus DFINITY agent-js dependencies",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
@@ -29,13 +29,17 @@
   "scripts": {
     "rmdir": "node ../../scripts/rmdir.mjs",
     "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
-    "build": "npm run rmdir && mkdir -p dist && cp -R declarations dist && node esbuild.mjs && npm run ts-declaration",
+    "compress": "../../scripts/compress dist/workers",
+    "copy-src": "rm -rf src && cp -R ../core/src .",
+    "copy-declarations": "rm -rf declarations && cp -R ../core/declarations .",
+    "copy": "npm run copy-src && npm run copy-declarations",
+    "build": "npm run rmdir && mkdir -p dist && npm run copy && cp -R declarations dist && node esbuild.mjs && npm run ts-declaration && npm run compress",
     "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/junobuild/juno-js.git",
-    "directory": "packages/admin"
+    "directory": "packages/core"
   },
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"
@@ -50,11 +54,13 @@
     "web3"
   ],
   "homepage": "https://juno.build",
+  "dependencies": {
+    "@junobuild/utils": "*"
+  },
   "peerDependencies": {
     "@dfinity/agent": "^0.19.3",
+    "@dfinity/auth-client": "^0.19.3",
     "@dfinity/identity": "^0.19.3",
-    "@dfinity/principal": "^0.19.3",
-    "@junobuild/utils": "*",
-    "semver": "7.*"
+    "@dfinity/principal": "^0.19.3"
   }
 }

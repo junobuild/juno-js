@@ -35,4 +35,5 @@ dist/
 
 target/
 
+packages/core-peer/declarations
 packages/core-peer/src

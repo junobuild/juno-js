@@ -61,6 +61,11 @@
       "limit": "90 kB"
     },
     {
+      "name": "@junobuild/core-peer",
+      "path": "./packages/core-peer/dist/index.js",
+      "limit": "20 kB"
+    },
+    {
       "name": "@junobuild/ledger",
       "path": "./packages/ledger/dist/index.js",
       "limit": "7 kB",

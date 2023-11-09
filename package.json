@@ -63,7 +63,13 @@
     {
       "name": "@junobuild/core-peer",
       "path": "./packages/core-peer/dist/index.js",
-      "limit": "20 kB"
+      "limit": "20 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/principal",
+        "@dfinity/auth-client"
+      ]
     },
     {
       "name": "@junobuild/ledger",

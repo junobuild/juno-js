@@ -1,13 +1,16 @@
-import {fromNullable, isNullish, toArray, toNullable} from '@junobuild/utils';
+import {fromNullable, isNullish} from '@junobuild/utils';
 import type {
+  DelDoc,
   Doc as DocApi,
   ListResults_1 as ListDocsApi,
-  _SERVICE as SatelliteActor
+  _SERVICE as SatelliteActor,
+  SetDoc
 } from '../../declarations/satellite/satellite.did';
 import type {Doc} from '../types/doc.types';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
 import {mapData} from '../utils/data.utils';
+import {fromDoc, toDelDoc, toSetDoc} from '../utils/doc.utils';
 import {toListParams} from '../utils/list.utils';
 import {getSatelliteActor} from './actor.api';
 
@@ -49,29 +52,40 @@ export const setDoc = async <D>({
   doc: Doc<D>;
   satellite: Satellite;
 }): Promise<Doc<D>> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
+  const {set_doc} = await getSatelliteActor(satellite);
 
-  const {key, data, updated_at, description} = doc;
+  const {key} = doc;
 
-  const updatedDoc: DocApi = await actor.set_doc(collection, key, {
-    description: toNullable(description),
-    data: await toArray<D>(data),
-    updated_at: toNullable(updated_at)
-  });
+  const setDoc = await toSetDoc(doc);
 
-  const {owner, updated_at: updatedAt, created_at, description: updatedDescription} = updatedDoc;
+  const updatedDoc = await set_doc(collection, key, setDoc);
 
-  // We update the data with the updated_at timestamp generated in the backend.
-  // The canister checks if the updated_at date is equals to the entity timestamp otherwise it rejects the update to prevent overwrite of data if user uses multiple devices.
-  // In other words: to update a data, the current updated_at information need to be provided.
-  return {
-    key,
-    description: fromNullable(updatedDescription),
-    owner: owner.toText(),
-    data,
-    created_at,
-    updated_at: updatedAt
-  };
+  return await fromDoc({key, updatedDoc});
+};
+
+export const setDocs = async ({
+  docs,
+  satellite
+}: {
+  docs: {collection: string; doc: Doc<any>}[];
+  satellite: Satellite;
+}): Promise<Doc<any>[]> => {
+  const {set_many_docs} = await getSatelliteActor(satellite);
+
+  const payload: [string, string, SetDoc][] = [];
+  for (const {collection, doc} of docs) {
+    const {key} = doc;
+    payload.push([collection, key, await toSetDoc(doc)]);
+  }
+
+  const updatedDocs = await set_many_docs(payload);
+
+  const results: Doc<any>[] = [];
+  for (const [key, updatedDoc] of updatedDocs) {
+    results.push(await fromDoc({key, updatedDoc}));
+  }
+
+  return results;
 };
 
 export const deleteDoc = async <D>({
@@ -83,13 +97,29 @@ export const deleteDoc = async <D>({
   doc: Doc<D>;
   satellite: Satellite;
 }): Promise<void> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
+  const {del_doc} = await getSatelliteActor(satellite);
 
-  const {key, updated_at} = doc;
+  const {key} = doc;
 
-  return actor.del_doc(collection, key, {
-    updated_at: toNullable(updated_at)
-  });
+  return del_doc(collection, key, toDelDoc(doc));
+};
+
+export const deleteDocs = async <D>({
+  docs,
+  satellite
+}: {
+  docs: {collection: string; doc: Doc<any>}[];
+  satellite: Satellite;
+}): Promise<void> => {
+  const {del_many_docs} = await getSatelliteActor(satellite);
+
+  const payload: [string, string, DelDoc][] = docs.map(({collection, doc}) => [
+    collection,
+    doc.key,
+    toDelDoc(doc)
+  ]);
+
+  await del_many_docs(payload);
 };
 
 export const listDocs = async <D>({

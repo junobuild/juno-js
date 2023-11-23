@@ -10,9 +10,16 @@ export interface StorageConfigRewrite {
   destination: string;
 }
 
+export interface StorageConfigRedirect {
+  source: StorageConfigSourceGlob;
+  location: string;
+  code: 301 | 302;
+}
+
 export interface StorageConfig {
   headers?: StorageConfigHeader[];
   rewrites?: StorageConfigRewrite[];
+  redirects?: StorageConfigRedirect[];
 }
 
 export interface Config {

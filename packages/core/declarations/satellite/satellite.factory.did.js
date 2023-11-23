@@ -21,9 +21,18 @@ export const idlFactory = ({IDL}) => {
   });
   const DelDoc = IDL.Record({updated_at: IDL.Opt(IDL.Nat64)});
   const RulesType = IDL.Variant({Db: IDL.Null, Storage: IDL.Null});
+  const DepositCyclesArgs = IDL.Record({
+    cycles: IDL.Nat,
+    destination_id: IDL.Principal
+  });
+  const StorageConfigRedirect = IDL.Record({
+    status_code: IDL.Nat16,
+    location: IDL.Text
+  });
   const StorageConfig = IDL.Record({
     rewrites: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
-    headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))))
+    headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)))),
+    redirects: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, StorageConfigRedirect)))
   });
   const Config = IDL.Record({storage: StorageConfig});
   const Doc = IDL.Record({
@@ -37,7 +46,8 @@ export const idlFactory = ({IDL}) => {
     url: IDL.Text,
     method: IDL.Text,
     body: IDL.Vec(IDL.Nat8),
-    headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))
+    headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    certificate_version: IDL.Opt(IDL.Nat16)
   });
   const Memory = IDL.Variant({Heap: IDL.Null, Stable: IDL.Null});
   const StreamingCallbackToken = IDL.Record({
@@ -187,7 +197,11 @@ export const idlFactory = ({IDL}) => {
     ),
     del_custom_domain: IDL.Func([IDL.Text], [], []),
     del_doc: IDL.Func([IDL.Text, IDL.Text, DelDoc], [], []),
+    del_docs: IDL.Func([IDL.Text], [], []),
+    del_many_assets: IDL.Func([IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))], [], []),
+    del_many_docs: IDL.Func([IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text, DelDoc))], [], []),
     del_rule: IDL.Func([RulesType, IDL.Text, DelDoc], [], []),
+    deposit_cycles: IDL.Func([DepositCyclesArgs], [], []),
     get_config: IDL.Func([], [Config], []),
     get_doc: IDL.Func([IDL.Text, IDL.Text], [IDL.Opt(Doc)], ['query']),
     http_request: IDL.Func([HttpRequest], [HttpResponse], ['query']),
@@ -210,6 +224,11 @@ export const idlFactory = ({IDL}) => {
     ),
     set_custom_domain: IDL.Func([IDL.Text, IDL.Opt(IDL.Text)], [], []),
     set_doc: IDL.Func([IDL.Text, IDL.Text, SetDoc], [Doc], []),
+    set_many_docs: IDL.Func(
+      [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text, SetDoc))],
+      [IDL.Vec(IDL.Tuple(IDL.Text, Doc))],
+      []
+    ),
     set_rule: IDL.Func([RulesType, IDL.Text, SetRule], [], []),
     upload_asset_chunk: IDL.Func([UploadChunk], [UploadChunkResult], []),
     version: IDL.Func([], [IDL.Text], ['query'])

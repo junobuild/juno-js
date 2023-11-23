@@ -48,6 +48,10 @@ export interface DelDoc {
 export interface DeleteControllersArgs {
   controllers: Array<Principal>;
 }
+export interface DepositCyclesArgs {
+  cycles: bigint;
+  destination_id: Principal;
+}
 export interface Doc {
   updated_at: bigint;
   owner: Principal;
@@ -60,6 +64,7 @@ export interface HttpRequest {
   method: string;
   body: Uint8Array | number[];
   headers: Array<[string, string]>;
+  certificate_version: [] | [number];
 }
 export interface HttpResponse {
   body: Uint8Array | number[];
@@ -148,6 +153,11 @@ export interface SetRule {
 export interface StorageConfig {
   rewrites: Array<[string, string]>;
   headers: Array<[string, Array<[string, string]>]>;
+  redirects: [] | [Array<[string, StorageConfigRedirect]>];
+}
+export interface StorageConfigRedirect {
+  status_code: number;
+  location: string;
 }
 export interface StreamingCallbackHttpResponse {
   token: [] | [StreamingCallbackToken];
@@ -183,7 +193,11 @@ export interface _SERVICE {
   del_controllers: ActorMethod<[DeleteControllersArgs], Array<[Principal, Controller]>>;
   del_custom_domain: ActorMethod<[string], undefined>;
   del_doc: ActorMethod<[string, string, DelDoc], undefined>;
+  del_docs: ActorMethod<[string], undefined>;
+  del_many_assets: ActorMethod<[Array<[string, string]>], undefined>;
+  del_many_docs: ActorMethod<[Array<[string, string, DelDoc]>], undefined>;
   del_rule: ActorMethod<[RulesType, string, DelDoc], undefined>;
+  deposit_cycles: ActorMethod<[DepositCyclesArgs], undefined>;
   get_config: ActorMethod<[], Config>;
   get_doc: ActorMethod<[string, string], [] | [Doc]>;
   http_request: ActorMethod<[HttpRequest], HttpResponse>;
@@ -201,6 +215,7 @@ export interface _SERVICE {
   set_controllers: ActorMethod<[SetControllersArgs], Array<[Principal, Controller]>>;
   set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;
   set_doc: ActorMethod<[string, string, SetDoc], Doc>;
+  set_many_docs: ActorMethod<[Array<[string, string, SetDoc]>], Array<[string, Doc]>>;
   set_rule: ActorMethod<[RulesType, string, SetRule], undefined>;
   upload_asset_chunk: ActorMethod<[UploadChunk], UploadChunkResult>;
   version: ActorMethod<[], string>;

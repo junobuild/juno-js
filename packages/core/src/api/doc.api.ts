@@ -63,13 +63,14 @@ export const setDoc = async <D>({
   return await fromDoc({key, updatedDoc});
 };
 
-export const setManyDocs = async <D>({
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const setManyDocs = async ({
   docs,
   satellite
 }: {
-  docs: {collection: string; doc: Doc<D>}[];
+  docs: {collection: string; doc: Doc<any>}[];
   satellite: Satellite;
-}): Promise<Doc<D>[]> => {
+}): Promise<Doc<any>[]> => {
   const {set_many_docs} = await getSatelliteActor(satellite);
 
   const payload: [string, string, SetDoc][] = [];
@@ -80,13 +81,14 @@ export const setManyDocs = async <D>({
 
   const updatedDocs = await set_many_docs(payload);
 
-  const results: Doc<D>[] = [];
+  const results: Doc<any>[] = [];
   for (const [key, updatedDoc] of updatedDocs) {
     results.push(await fromDoc({key, updatedDoc}));
   }
 
   return results;
 };
+/* eslint-enable */
 
 export const deleteDoc = async <D>({
   collection,
@@ -116,11 +118,12 @@ export const deleteDocs = async ({
   return del_docs(collection);
 };
 
-export const deleteManyDocs = async <D>({
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const deleteManyDocs = async ({
   docs,
   satellite
 }: {
-  docs: {collection: string; doc: Doc<D>}[];
+  docs: {collection: string; doc: Doc<any>}[];
   satellite: Satellite;
 }): Promise<void> => {
   const {del_many_docs} = await getSatelliteActor(satellite);
@@ -133,6 +136,7 @@ export const deleteManyDocs = async <D>({
 
   await del_many_docs(payload);
 };
+/* eslint-enable */
 
 export const listDocs = async <D>({
   collection,

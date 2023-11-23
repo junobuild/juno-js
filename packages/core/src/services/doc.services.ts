@@ -37,17 +37,19 @@ export const setDoc = async <D>({
   return setDocApi({...rest, satellite: {...satellite, identity}});
 };
 
-export const setManyDocs = async <D>({
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const setManyDocs = async ({
   satellite,
   ...rest
 }: {
-  docs: {collection: string; doc: Doc<D>}[];
+  docs: {collection: string; doc: Doc<any>}[];
   satellite?: SatelliteOptions;
-}): Promise<Doc<D>[]> => {
+}): Promise<Doc<any>[]> => {
   const identity = getIdentity(satellite?.identity);
 
   return setManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
+/* eslint-enable */
 
 export const deleteDoc = async <D>({
   satellite,
@@ -74,17 +76,19 @@ export const deleteDocs = async ({
     satellite: {...satellite, identity: getIdentity(satellite?.identity)}
   });
 
-export const deleteManyDocs = async <D>({
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const deleteManyDocs = async ({
   satellite,
   ...rest
 }: {
-  docs: {collection: string; doc: Doc<D>}[];
+  docs: {collection: string; doc: Doc<any>}[];
   satellite?: SatelliteOptions;
 }): Promise<void> => {
   const identity = getIdentity(satellite?.identity);
 
   return deleteManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
+/* eslint-enable */
 
 export const listDocs = async <D>({
   satellite,

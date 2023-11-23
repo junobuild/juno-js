@@ -16,7 +16,8 @@
     "**/*.spec.ts",
     "**/*.test.ts",
     "**/*.mock.ts",
-    "scripts/**/*"
+    "scripts/**/*",
+    "packages/core-peer/src/**/*"
   ],
   "rules": {
     "@typescript-eslint/consistent-type-imports": "error",

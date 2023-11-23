@@ -63,13 +63,13 @@ export const setDoc = async <D>({
   return await fromDoc({key, updatedDoc});
 };
 
-export const setManyDocs = async ({
+export const setManyDocs = async <D>({
   docs,
   satellite
 }: {
-  docs: {collection: string; doc: Doc<any>}[];
+  docs: {collection: string; doc: Doc<D>}[];
   satellite: Satellite;
-}): Promise<Doc<any>[]> => {
+}): Promise<Doc<D>[]> => {
   const {set_many_docs} = await getSatelliteActor(satellite);
 
   const payload: [string, string, SetDoc][] = [];
@@ -80,7 +80,7 @@ export const setManyDocs = async ({
 
   const updatedDocs = await set_many_docs(payload);
 
-  const results: Doc<any>[] = [];
+  const results: Doc<D>[] = [];
   for (const [key, updatedDoc] of updatedDocs) {
     results.push(await fromDoc({key, updatedDoc}));
   }
@@ -116,11 +116,11 @@ export const deleteDocs = async ({
   return del_docs(collection);
 };
 
-export const deleteManyDocs = async ({
+export const deleteManyDocs = async <D>({
   docs,
   satellite
 }: {
-  docs: {collection: string; doc: Doc<any>}[];
+  docs: {collection: string; doc: Doc<D>}[];
   satellite: Satellite;
 }): Promise<void> => {
   const {del_many_docs} = await getSatelliteActor(satellite);

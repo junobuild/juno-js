@@ -37,13 +37,13 @@ export const setDoc = async <D>({
   return setDocApi({...rest, satellite: {...satellite, identity}});
 };
 
-export const setManyDocs = async ({
+export const setManyDocs = async <D>({
   satellite,
   ...rest
 }: {
-  docs: {collection: string; doc: Doc<any>}[];
+  docs: {collection: string; doc: Doc<D>}[];
   satellite?: SatelliteOptions;
-}): Promise<Doc<any>[]> => {
+}): Promise<Doc<D>[]> => {
   const identity = getIdentity(satellite?.identity);
 
   return setManyDocsApi({...rest, satellite: {...satellite, identity}});
@@ -78,7 +78,7 @@ export const deleteManyDocs = async <D>({
   satellite,
   ...rest
 }: {
-  docs: {collection: string; doc: Doc<any>}[];
+  docs: {collection: string; doc: Doc<D>}[];
   satellite?: SatelliteOptions;
 }): Promise<void> => {
   const identity = getIdentity(satellite?.identity);

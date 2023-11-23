@@ -1,10 +1,10 @@
 import {
   deleteDoc as deleteDocApi,
-  deleteDocs as deleteDocsApi,
+  deleteManyDocs as deleteManyDocsApi,
   getDoc as getDocApi,
   listDocs as listDocsApi,
   setDoc as setDocApi,
-  setDocs as setDocsApi
+  setManyDocs as setManyDocsApi
 } from '../api/doc.api';
 import type {Doc} from '../types/doc.types';
 import type {ListParams, ListResults} from '../types/list.types';
@@ -36,7 +36,7 @@ export const setDoc = async <D>({
   return setDocApi({...rest, satellite: {...satellite, identity}});
 };
 
-export const setDocs = async ({
+export const setManyDocs = async ({
   satellite,
   ...rest
 }: {
@@ -45,7 +45,7 @@ export const setDocs = async ({
 }): Promise<Doc<any>[]> => {
   const identity = getIdentity(satellite?.identity);
 
-  return setDocsApi({...rest, satellite: {...satellite, identity}});
+  return setManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
 
 export const deleteDoc = async <D>({
@@ -61,7 +61,7 @@ export const deleteDoc = async <D>({
   return deleteDocApi({...rest, satellite: {...satellite, identity}});
 };
 
-export const deleteDocs = async <D>({
+export const deleteManyDocs = async <D>({
   satellite,
   ...rest
 }: {
@@ -70,7 +70,7 @@ export const deleteDocs = async <D>({
 }): Promise<void> => {
   const identity = getIdentity(satellite?.identity);
 
-  return deleteDocsApi({...rest, satellite: {...satellite, identity}});
+  return deleteManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
 
 export const listDocs = async <D>({

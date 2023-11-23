@@ -63,7 +63,7 @@ export const setDoc = async <D>({
   return await fromDoc({key, updatedDoc});
 };
 
-export const setDocs = async ({
+export const setManyDocs = async ({
   docs,
   satellite
 }: {
@@ -104,7 +104,7 @@ export const deleteDoc = async <D>({
   return del_doc(collection, key, toDelDoc(doc));
 };
 
-export const deleteDocs = async <D>({
+export const deleteManyDocs = async <D>({
   docs,
   satellite
 }: {

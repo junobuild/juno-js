@@ -1,5 +1,6 @@
 import {
   deleteDoc as deleteDocApi,
+  deleteDocs as deleteDocsApi,
   deleteManyDocs as deleteManyDocsApi,
   getDoc as getDocApi,
   listDocs as listDocsApi,
@@ -60,6 +61,18 @@ export const deleteDoc = async <D>({
 
   return deleteDocApi({...rest, satellite: {...satellite, identity}});
 };
+
+export const deleteDocs = async ({
+  collection,
+  satellite
+}: {
+  collection: string;
+  satellite?: SatelliteOptions;
+}): Promise<void> =>
+  deleteDocsApi({
+    collection,
+    satellite: {...satellite, identity: getIdentity(satellite?.identity)}
+  });
 
 export const deleteManyDocs = async <D>({
   satellite,

@@ -104,6 +104,18 @@ export const deleteDoc = async <D>({
   return del_doc(collection, key, toDelDoc(doc));
 };
 
+export const deleteDocs = async ({
+  collection,
+  satellite
+}: {
+  collection: string;
+  satellite: Satellite;
+}): Promise<void> => {
+  const {del_docs} = await getSatelliteActor(satellite);
+
+  return del_docs(collection);
+};
+
 export const deleteManyDocs = async ({
   docs,
   satellite

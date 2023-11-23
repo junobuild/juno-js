@@ -104,7 +104,7 @@ export const deleteDoc = async <D>({
   return del_doc(collection, key, toDelDoc(doc));
 };
 
-export const deleteManyDocs = async <D>({
+export const deleteManyDocs = async ({
   docs,
   satellite
 }: {

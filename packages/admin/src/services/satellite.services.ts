@@ -1,7 +1,10 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {fromNullable} from '@junobuild/utils';
-import type {StorageConfigRedirect as StorageConfigRedirectDid} from '../../declarations/satellite/satellite.did';
+import type {
+  StorageConfigIFrame as StorageConfigIFrameDid,
+  StorageConfigRedirect as StorageConfigRedirectDid
+} from '../../declarations/satellite/satellite.did';
 import {upgradeCode} from '../api/ic.api';
 import {
   listControllers,
@@ -27,7 +30,12 @@ import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 export const setConfig = async ({
   config: {
-    storage: {headers: configHeaders, rewrites: configRewrites, redirects: configRedirects}
+    storage: {
+      headers: configHeaders,
+      rewrites: configRewrites,
+      redirects: configRedirects,
+      iframe: configIFrame
+    }
   },
   satellite
 }: {
@@ -46,13 +54,21 @@ export const setConfig = async ({
     ({source, location, code}: StorageConfigRedirect) => [source, {status_code: code, location}]
   );
 
+  const iframe: StorageConfigIFrameDid =
+    configIFrame === 'same-origin'
+      ? {SameOrigin: null}
+      : configIFrame === 'allow-any'
+      ? {AllowAny: null}
+      : {Deny: null};
+
   return setConfigApi({
     satellite,
     config: {
       storage: {
         headers,
         rewrites,
-        redirects: [redirects]
+        redirects: [redirects],
+        iframe: [iframe]
       }
     }
   });

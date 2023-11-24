@@ -20,6 +20,7 @@ export interface StorageConfig {
   headers?: StorageConfigHeader[];
   rewrites?: StorageConfigRewrite[];
   redirects?: StorageConfigRedirect[];
+  iframe?: 'deny' | 'same-origin' | 'allow-any';
 }
 
 export interface Config {

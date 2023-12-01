@@ -1,10 +1,10 @@
 import {IdbStorage, KEY_STORAGE_DELEGATION} from '@dfinity/auth-client';
 import {DelegationChain, isDelegationValid} from '@dfinity/identity';
 import {AUTH_TIMER_INTERVAL} from '../constants/auth.constants';
-import type {PostMessage} from '../types/post-message';
+import type {PostMessage, PostMessageDataRequest} from '../types/post-message';
 import {createAuthClient} from '../utils/auth.utils';
 
-onmessage = ({data}: MessageEvent<PostMessage>) => {
+onmessage = ({data}: MessageEvent<PostMessage<PostMessageDataRequest>>) => {
   const {msg} = data;
 
   switch (msg) {

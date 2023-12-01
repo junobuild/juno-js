@@ -2,7 +2,7 @@ import {isNullish} from '@junobuild/utils';
 import {AuthStore} from '../stores/auth.store';
 import type {User} from '../types/auth.types';
 import type {EnvironmentWorker} from '../types/env.types';
-import type {PostMessage} from '../types/post-message';
+import type {PostMessage, PostMessageDataResponseAuth} from '../types/post-message';
 import type {Unsubscribe} from '../types/subscription.types';
 import {emit} from '../utils/events.utils';
 import {signOut} from './auth.services';
@@ -16,12 +16,15 @@ export const initAuthTimeoutWorker = (auth: EnvironmentWorker): Unsubscribe => {
     await signOut();
   };
 
-  worker.onmessage = async ({data}: MessageEvent<PostMessage>) => {
-    const {msg} = data;
+  worker.onmessage = async ({data}: MessageEvent<PostMessage<PostMessageDataResponseAuth>>) => {
+    const {msg, data: value} = data;
 
     switch (msg) {
       case 'junoSignOutAuthTimer':
         await timeoutSignOut();
+        return;
+      case 'junoDelegationRemainingTime':
+        emit({message: 'junoDelegationRemainingTime', detail: value?.authRemainingTime});
         return;
     }
   };

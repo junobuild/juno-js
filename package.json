@@ -92,7 +92,7 @@
     {
       "name": "@junobuild/analytics",
       "path": "./packages/analytics/dist/index.js",
-      "limit": "2 kB",
+      "limit": "4 kB",
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",

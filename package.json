@@ -84,7 +84,10 @@
     {
       "name": "@junobuild/utils",
       "path": "./packages/utils/dist/index.js",
-      "limit": "500 B"
+      "limit": "500 B",
+      "ignore": [
+        "@dfinity/principal"
+      ]
     },
     {
       "name": "@junobuild/analytics",

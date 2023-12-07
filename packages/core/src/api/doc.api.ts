@@ -1,4 +1,4 @@
-import {fromNullable, isNullish} from '@junobuild/utils';
+import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
 import type {
   DelDoc,
   Doc as DocApi,
@@ -24,24 +24,38 @@ export const getDoc = async <D>({
 } & Pick<Doc<D>, 'key'>): Promise<Doc<D> | undefined> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
 
-  const entry: DocApi | undefined = fromNullable(await actor.get_doc(collection, key));
+  const doc: DocApi | undefined = fromNullable(await actor.get_doc(collection, key));
 
-  if (isNullish(entry)) {
+  if (isNullish(doc)) {
     return undefined;
   }
 
-  const {data: dataArray, owner, description, ...rest} = entry;
-
-  const data: D = await mapData<D>({data: dataArray});
-
-  return {
-    key,
-    description: fromNullable(description),
-    owner: owner.toText(),
-    data,
-    ...rest
-  };
+  return fromDoc({doc, key});
 };
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const getManyDocs = async ({
+  docs,
+  satellite
+}: {
+  docs: ({collection: string} & Pick<Doc<any>, 'key'>)[];
+  satellite: Satellite;
+}): Promise<(Doc<any> | undefined)[]> => {
+  const {get_many_docs} = await getSatelliteActor(satellite);
+
+  const payload: [string, string][] = docs.map(({collection, key}) => [collection, key]);
+
+  const resultsDocs = await get_many_docs(payload);
+
+  const results: (Doc<any> | undefined)[] = [];
+  for (const [key, resultDoc] of resultsDocs) {
+    const doc = fromNullable(resultDoc);
+    results.push(nonNullish(doc) ? await fromDoc({key, doc}) : undefined);
+  }
+
+  return results;
+};
+/* eslint-enable */
 
 export const setDoc = async <D>({
   collection,
@@ -60,7 +74,7 @@ export const setDoc = async <D>({
 
   const updatedDoc = await set_doc(collection, key, setDoc);
 
-  return await fromDoc({key, updatedDoc});
+  return await fromDoc({key, doc: updatedDoc});
 };
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -83,7 +97,7 @@ export const setManyDocs = async ({
 
   const results: Doc<any>[] = [];
   for (const [key, updatedDoc] of updatedDocs) {
-    results.push(await fromDoc({key, updatedDoc}));
+    results.push(await fromDoc({key, doc: updatedDoc}));
   }
 
   return results;

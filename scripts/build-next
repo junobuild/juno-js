@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -eux
+
+: Update the package.json version before build and publish
+node ./scripts/update-version.mjs utils
+node ./scripts/update-version.mjs core
+node ./scripts/update-version.mjs admin
+node ./scripts/update-version.mjs ledger
+node ./scripts/update-version.mjs analytics
+node ./scripts/update-version.mjs core-peer
+
+: Now we can build
+npm run build --workspaces

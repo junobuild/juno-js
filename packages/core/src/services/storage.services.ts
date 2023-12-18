@@ -28,7 +28,7 @@ export const uploadFile = async (
   });
 
 const uploadAssetIC = async ({
-  filename,
+  filename: storageFilename,
   data,
   collection,
   headers = [],
@@ -40,6 +40,8 @@ const uploadAssetIC = async ({
 }: Storage & {satellite?: SatelliteOptions}): Promise<AssetKey> => {
   const identity = getIdentity(satellite?.identity);
 
+  // The IC certification does not currently support encoding
+  const filename: string = decodeURI(storageFilename);
   const fullPath: string = storagePath ?? `/${collection}/${filename}`;
 
   await uploadAssetApi({

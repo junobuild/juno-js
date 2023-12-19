@@ -12,7 +12,6 @@ import type {SatelliteOptions} from '../types/satellite.types';
 import type {Asset, AssetEncoding, AssetKey, Assets, Storage} from '../types/storage.types';
 import {sha256ToBase64String} from '../utils/crypto.utils';
 import {satelliteUrl} from '../utils/env.utils';
-import {encodeFilename} from '../utils/storage.utils';
 import {getIdentity} from './identity.services';
 
 export const uploadBlob = async (
@@ -41,7 +40,8 @@ const uploadAssetIC = async ({
 }: Storage & {satellite?: SatelliteOptions}): Promise<AssetKey> => {
   const identity = getIdentity(satellite?.identity);
 
-  const filename: string = encodeFilename(storageFilename);
+  // The IC certification does not currently support encoding
+  const filename: string = decodeURI(storageFilename);
   const fullPath: string = storagePath ?? `/${collection}/${filename}`;
 
   await uploadAssetApi({

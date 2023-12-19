@@ -3,6 +3,7 @@ import {
   deleteDocs as deleteDocsApi,
   deleteManyDocs as deleteManyDocsApi,
   getDoc as getDocApi,
+  getManyDocs as getManyDocsApi,
   listDocs as listDocsApi,
   setDoc as setDocApi,
   setManyDocs as setManyDocsApi
@@ -23,6 +24,20 @@ export const getDoc = async <D>({
 
   return getDocApi({...rest, satellite: {...satellite, identity}});
 };
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export const getManyDocs = async ({
+  satellite,
+  ...rest
+}: {
+  docs: ({collection: string} & Pick<Doc<any>, 'key'>)[];
+  satellite?: SatelliteOptions;
+}): Promise<(Doc<any> | undefined)[]> => {
+  const identity = getIdentity(satellite?.identity);
+
+  return getManyDocsApi({...rest, satellite: {...satellite, identity}});
+};
+/* eslint-enable */
 
 export const setDoc = async <D>({
   satellite,

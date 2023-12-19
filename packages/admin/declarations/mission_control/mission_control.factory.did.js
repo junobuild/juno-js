@@ -38,7 +38,7 @@ export const idlFactory = ({IDL}) => {
     memory_allocation: IDL.Nat,
     compute_allocation: IDL.Nat
   });
-  const CanisterStatusResponse = IDL.Record({
+  const SegmentCanisterStatus = IDL.Record({
     status: CanisterStatusType,
     memory_size: IDL.Nat,
     cycles: IDL.Nat,
@@ -48,7 +48,7 @@ export const idlFactory = ({IDL}) => {
   });
   const SegmentStatus = IDL.Record({
     id: IDL.Principal,
-    status: CanisterStatusResponse,
+    status: SegmentCanisterStatus,
     metadata: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))),
     status_at: IDL.Nat64
   });
@@ -112,6 +112,7 @@ export const idlFactory = ({IDL}) => {
     ),
     set_metadata: IDL.Func([IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))], [], []),
     set_mission_control_controllers: IDL.Func([IDL.Vec(IDL.Principal), SetController], [], []),
+    set_orbiter: IDL.Func([IDL.Principal, IDL.Opt(IDL.Text)], [Orbiter], []),
     set_orbiter_metadata: IDL.Func(
       [IDL.Principal, IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))],
       [Orbiter],

@@ -1,14 +1,6 @@
 import type {ActorMethod} from '@dfinity/agent';
 import type {Principal} from '@dfinity/principal';
 
-export interface CanisterStatusResponse {
-  status: CanisterStatusType;
-  memory_size: bigint;
-  cycles: bigint;
-  settings: DefiniteCanisterSettings;
-  idle_cycles_burned_per_day: bigint;
-  module_hash: [] | [Uint8Array | number[]];
-}
 export type CanisterStatusType = {stopped: null} | {stopping: null} | {running: null};
 export interface Controller {
   updated_at: bigint;
@@ -45,9 +37,17 @@ export interface Satellite {
   created_at: bigint;
   satellite_id: Principal;
 }
+export interface SegmentCanisterStatus {
+  status: CanisterStatusType;
+  memory_size: bigint;
+  cycles: bigint;
+  settings: DefiniteCanisterSettings;
+  idle_cycles_burned_per_day: bigint;
+  module_hash: [] | [Uint8Array | number[]];
+}
 export interface SegmentStatus {
   id: Principal;
-  status: CanisterStatusResponse;
+  status: SegmentCanisterStatus;
   metadata: [] | [Array<[string, string]>];
   status_at: bigint;
 }
@@ -92,6 +92,7 @@ export interface _SERVICE {
   remove_satellites_controllers: ActorMethod<[Array<Principal>, Array<Principal>], undefined>;
   set_metadata: ActorMethod<[Array<[string, string]>], undefined>;
   set_mission_control_controllers: ActorMethod<[Array<Principal>, SetController], undefined>;
+  set_orbiter: ActorMethod<[Principal, [] | [string]], Orbiter>;
   set_orbiter_metadata: ActorMethod<[Principal, Array<[string, string]>], Orbiter>;
   set_orbiters_controllers: ActorMethod<
     [Array<Principal>, Array<Principal>, SetController],

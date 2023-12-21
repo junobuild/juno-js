@@ -188,3 +188,14 @@ export const listDocs = async <D>({
     matches_pages: fromNullable(matches_pages)
   };
 };
+
+export const countDocs = async ({
+  collection,
+  satellite
+}: {
+  collection: string;
+  satellite: Satellite;
+}): Promise<bigint> => {
+  const {count_docs} = await getSatelliteActor(satellite);
+  return count_docs(collection);
+};

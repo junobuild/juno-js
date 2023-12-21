@@ -180,3 +180,14 @@ export const deleteManyAssets = async ({
 
   await del_many_assets(payload);
 };
+
+export const countAssets = async ({
+  collection,
+  satellite
+}: {
+  collection: string;
+  satellite: Satellite;
+}): Promise<bigint> => {
+  const {count_assets} = await getSatelliteActor(satellite);
+  return count_assets(collection);
+};

@@ -1,4 +1,5 @@
 import {
+  countDocs as countDocsApi,
   deleteDoc as deleteDocApi,
   deleteDocs as deleteDocsApi,
   deleteManyDocs as deleteManyDocsApi,
@@ -118,3 +119,12 @@ export const listDocs = async <D>({
 
   return listDocsApi<D>({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
 };
+
+export const countDocs = async ({
+  satellite,
+  ...rest
+}: {
+  collection: string;
+  satellite?: SatelliteOptions;
+}): Promise<bigint> =>
+  countDocsApi({...rest, satellite: {...satellite, identity: getIdentity(satellite?.identity)}});

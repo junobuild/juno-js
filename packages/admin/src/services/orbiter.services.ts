@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {MemorySize} from '../../declarations/orbiter/orbiter.did';
+import type {MemorySize} from '../../declarations/orbiter/orbiter.did';
 import {upgradeCode} from '../api/ic.api';
 import {listControllers, memorySize, version} from '../api/orbiter.api';
 import type {OrbiterParameters} from '../types/actor.types';

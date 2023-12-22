@@ -2,6 +2,7 @@ import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {fromNullable, isNullish} from '@junobuild/utils';
 import type {
+  MemorySize,
   StorageConfigIFrame as StorageConfigIFrameDid,
   StorageConfigRedirect as StorageConfigRedirectDid
 } from '../../declarations/satellite/satellite.did';
@@ -12,6 +13,7 @@ import {
   listDeprecatedControllers,
   listDeprecatedNoScopeControllers,
   listRules as listRulesApi,
+  memorySize,
   setConfig as setConfigApi,
   setCustomDomain as setCustomDomainApi,
   setRule as setRuleApi,
@@ -204,3 +206,7 @@ export const setCustomDomains = async ({
       })
     )
   );
+
+export const satelliteMemorySize = (params: {
+  satellite: SatelliteParameters;
+}): Promise<MemorySize> => memorySize(params);

@@ -6,6 +6,7 @@ import type {
   Config,
   Controller,
   CustomDomain,
+  MemorySize,
   Rule,
   RulesType,
   _SERVICE as SatelliteActor,
@@ -111,4 +112,13 @@ export const setCustomDomain = async ({
 }): Promise<void> => {
   const {set_custom_domain} = await getSatelliteActor(satellite);
   await set_custom_domain(domainName, toNullable(boundaryNodesId));
+};
+
+export const memorySize = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<MemorySize> => {
+  const {memory_size} = await getSatelliteActor(satellite);
+  return memory_size();
 };

@@ -1,6 +1,6 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
-import {fromNullable} from '@junobuild/utils';
+import {fromNullable, isNullish} from '@junobuild/utils';
 import type {
   StorageConfigIFrame as StorageConfigIFrameDid,
   StorageConfigRedirect as StorageConfigRedirectDid
@@ -13,6 +13,7 @@ import {
   listDeprecatedNoScopeControllers,
   listRules as listRulesApi,
   setConfig as setConfigApi,
+  setCustomDomain as setCustomDomainApi,
   setRule as setRuleApi,
   version
 } from '../api/satellite.api';
@@ -123,7 +124,7 @@ export const upgradeSatellite = async ({
 }) => {
   const {satelliteId, ...actor} = satellite;
 
-  if (!satelliteId) {
+  if (isNullish(satelliteId)) {
     throw new Error('No satellite principal defined.');
   }
 
@@ -186,3 +187,20 @@ export const listCustomDomains = async ({
     updated_at: details.updated_at
   }));
 };
+
+export const setCustomDomains = async ({
+  satellite,
+  domains
+}: {
+  satellite: SatelliteParameters;
+  domains: CustomDomain[];
+}): Promise<void[]> =>
+  Promise.all(
+    domains.map(({domain: domainName, bn_id: boundaryNodesId}) =>
+      setCustomDomainApi({
+        satellite,
+        domainName,
+        boundaryNodesId
+      })
+    )
+  );

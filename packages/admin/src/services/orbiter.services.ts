@@ -1,6 +1,7 @@
 import {Principal} from '@dfinity/principal';
+import type {MemorySize} from '../../declarations/orbiter/orbiter.did';
 import {upgradeCode} from '../api/ic.api';
-import {listControllers, version} from '../api/orbiter.api';
+import {listControllers, memorySize, version} from '../api/orbiter.api';
 import type {OrbiterParameters} from '../types/actor.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
 
@@ -36,3 +37,6 @@ export const upgradeOrbiter = async ({
     }
   });
 };
+
+export const orbiterMemorySize = (params: {orbiter: OrbiterParameters}): Promise<MemorySize> =>
+  memorySize(params);

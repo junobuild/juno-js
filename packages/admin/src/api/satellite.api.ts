@@ -1,4 +1,5 @@
 import type {Principal} from '@dfinity/principal';
+import {toNullable} from '@junobuild/utils';
 import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
 import type {
@@ -95,6 +96,19 @@ export const listCustomDomains = async ({
 }: {
   satellite: SatelliteParameters;
 }): Promise<[string, CustomDomain][]> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
-  return actor.list_custom_domains();
+  const {list_custom_domains} = await getSatelliteActor(satellite);
+  return list_custom_domains();
+};
+
+export const setCustomDomain = async ({
+  satellite,
+  domainName,
+  boundaryNodesId
+}: {
+  satellite: SatelliteParameters;
+  domainName: string;
+  boundaryNodesId: string | undefined;
+}): Promise<void> => {
+  const {set_custom_domain} = await getSatelliteActor(satellite);
+  await set_custom_domain(domainName, toNullable(boundaryNodesId));
 };

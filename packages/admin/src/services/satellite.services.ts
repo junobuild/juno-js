@@ -8,6 +8,10 @@ import type {
 } from '../../declarations/satellite/satellite.did';
 import {upgradeCode} from '../api/ic.api';
 import {
+  countAssets as countAssetsApi,
+  countDocs as countDocsApi,
+  deleteAssets as deleteAssetsApi,
+  deleteDocs as deleteDocsApi,
   listControllers,
   listCustomDomains as listCustomDomainsApi,
   listDeprecatedControllers,
@@ -210,3 +214,23 @@ export const setCustomDomains = async ({
 export const satelliteMemorySize = (params: {
   satellite: SatelliteParameters;
 }): Promise<MemorySize> => memorySize(params);
+
+export const countDocs = async (params: {
+  collection: string;
+  satellite: SatelliteParameters;
+}): Promise<bigint> => countDocsApi(params);
+
+export const deleteDocs = async (params: {
+  collection: string;
+  satellite: SatelliteParameters;
+}): Promise<void> => deleteDocsApi(params);
+
+export const countAssets = async (params: {
+  collection: string;
+  satellite: SatelliteParameters;
+}): Promise<bigint> => countAssetsApi(params);
+
+export const deleteAssets = async (params: {
+  collection: string;
+  satellite: SatelliteParameters;
+}): Promise<void> => deleteAssetsApi(params);

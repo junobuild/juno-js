@@ -152,18 +152,6 @@ export const deleteAsset = async ({
   return actor.del_asset(collection, fullPath);
 };
 
-export const deleteAssets = async ({
-  collection,
-  satellite
-}: {
-  collection: string;
-  satellite: Satellite;
-}): Promise<void> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
-
-  return actor.del_assets(collection);
-};
-
 export const deleteManyAssets = async ({
   assets,
   satellite
@@ -179,15 +167,4 @@ export const deleteManyAssets = async ({
   ]);
 
   await del_many_assets(payload);
-};
-
-export const countAssets = async ({
-  collection,
-  satellite
-}: {
-  collection: string;
-  satellite: Satellite;
-}): Promise<bigint> => {
-  const {count_assets} = await getSatelliteActor(satellite);
-  return count_assets(collection);
 };

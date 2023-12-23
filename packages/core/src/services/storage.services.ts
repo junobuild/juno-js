@@ -1,9 +1,7 @@
 import {fromNullable} from '@junobuild/utils';
 import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import {
-  countAssets as countAssetsApi,
   deleteAsset as deleteAssetApi,
-  deleteAssets as deleteAssetsApi,
   deleteManyAssets as deleteManyAssetsApi,
   listAssets as listAssetsApi,
   uploadAsset as uploadAssetApi
@@ -134,18 +132,6 @@ export const deleteAsset = async ({
     satellite: {...satellite, identity: getIdentity(satellite?.identity)}
   });
 
-export const deleteAssets = async ({
-  collection,
-  satellite
-}: {
-  collection: string;
-  satellite?: SatelliteOptions;
-}): Promise<void> =>
-  deleteAssetsApi({
-    collection,
-    satellite: {...satellite, identity: getIdentity(satellite?.identity)}
-  });
-
 export const deleteManyAssets = async ({
   assets,
   satellite
@@ -157,12 +143,3 @@ export const deleteManyAssets = async ({
     assets,
     satellite: {...satellite, identity: getIdentity(satellite?.identity)}
   });
-
-export const countAssets = async ({
-  satellite,
-  ...rest
-}: {
-  collection: string;
-  satellite?: SatelliteOptions;
-}): Promise<bigint> =>
-  countAssetsApi({...rest, satellite: {...satellite, identity: getIdentity(satellite?.identity)}});

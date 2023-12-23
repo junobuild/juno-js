@@ -122,3 +122,47 @@ export const memorySize = async ({
   const {memory_size} = await getSatelliteActor(satellite);
   return memory_size();
 };
+
+export const countDocs = async ({
+  collection,
+  satellite
+}: {
+  collection: string;
+  satellite: SatelliteParameters;
+}): Promise<bigint> => {
+  const {count_docs} = await getSatelliteActor(satellite);
+  return count_docs(collection);
+};
+
+export const countAssets = async ({
+  collection,
+  satellite
+}: {
+  collection: string;
+  satellite: SatelliteParameters;
+}): Promise<bigint> => {
+  const {count_assets} = await getSatelliteActor(satellite);
+  return count_assets(collection);
+};
+
+export const deleteDocs = async ({
+  collection,
+  satellite
+}: {
+  collection: string;
+  satellite: SatelliteParameters;
+}): Promise<void> => {
+  const {del_docs} = await getSatelliteActor(satellite);
+  return del_docs(collection);
+};
+
+export const deleteAssets = async ({
+  collection,
+  satellite
+}: {
+  collection: string;
+  satellite: SatelliteParameters;
+}): Promise<void> => {
+  const {del_assets} = await getSatelliteActor(satellite);
+  return del_assets(collection);
+};

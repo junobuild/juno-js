@@ -120,18 +120,6 @@ export const deleteDoc = async <D>({
   return del_doc(collection, key, toDelDoc(doc));
 };
 
-export const deleteDocs = async ({
-  collection,
-  satellite
-}: {
-  collection: string;
-  satellite: Satellite;
-}): Promise<void> => {
-  const {del_docs} = await getSatelliteActor(satellite);
-
-  return del_docs(collection);
-};
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const deleteManyDocs = async ({
   docs,
@@ -187,15 +175,4 @@ export const listDocs = async <D>({
     matches_length,
     matches_pages: fromNullable(matches_pages)
   };
-};
-
-export const countDocs = async ({
-  collection,
-  satellite
-}: {
-  collection: string;
-  satellite: Satellite;
-}): Promise<bigint> => {
-  const {count_docs} = await getSatelliteActor(satellite);
-  return count_docs(collection);
 };

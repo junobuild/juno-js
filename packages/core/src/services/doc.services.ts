@@ -1,7 +1,5 @@
 import {
-  countDocs as countDocsApi,
   deleteDoc as deleteDocApi,
-  deleteDocs as deleteDocsApi,
   deleteManyDocs as deleteManyDocsApi,
   getDoc as getDocApi,
   getManyDocs as getManyDocsApi,
@@ -80,18 +78,6 @@ export const deleteDoc = async <D>({
   return deleteDocApi({...rest, satellite: {...satellite, identity}});
 };
 
-export const deleteDocs = async ({
-  collection,
-  satellite
-}: {
-  collection: string;
-  satellite?: SatelliteOptions;
-}): Promise<void> =>
-  deleteDocsApi({
-    collection,
-    satellite: {...satellite, identity: getIdentity(satellite?.identity)}
-  });
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const deleteManyDocs = async ({
   satellite,
@@ -119,12 +105,3 @@ export const listDocs = async <D>({
 
   return listDocsApi<D>({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
 };
-
-export const countDocs = async ({
-  satellite,
-  ...rest
-}: {
-  collection: string;
-  satellite?: SatelliteOptions;
-}): Promise<bigint> =>
-  countDocsApi({...rest, satellite: {...satellite, identity: getIdentity(satellite?.identity)}});

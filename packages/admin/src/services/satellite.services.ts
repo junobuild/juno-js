@@ -1,7 +1,7 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {fromNullable, isNullish} from '@junobuild/utils';
-import {
+import type {
   Controller,
   MemorySize,
   SetControllersArgs,

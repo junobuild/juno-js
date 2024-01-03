@@ -1,7 +1,9 @@
 import {Principal} from '@dfinity/principal';
+import type {Controller} from '../../declarations/mission_control/mission_control.did';
 import {upgradeCode} from '../api/ic.api';
 import {
   getUser,
+  listControllers,
   setMissionControlController as setMissionControlControllerApi,
   setSatellitesController as setSatellitesControllerApi,
   version
@@ -67,3 +69,7 @@ export const setMissionControlController = async ({
     ...rest,
     ...mapSetControllerParams({controllerId, profile})
   });
+
+export const listMissionControlControllers = (params: {
+  missionControl: MissionControlParameters;
+}): Promise<[Principal, Controller][]> => listControllers(params);

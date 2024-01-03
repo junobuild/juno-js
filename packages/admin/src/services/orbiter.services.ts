@@ -1,4 +1,5 @@
 import {Principal} from '@dfinity/principal';
+import type {Controller} from '../../declarations/mission_control/mission_control.did';
 import type {MemorySize} from '../../declarations/orbiter/orbiter.did';
 import {upgradeCode} from '../api/ic.api';
 import {listControllers, memorySize, version} from '../api/orbiter.api';
@@ -40,3 +41,7 @@ export const upgradeOrbiter = async ({
 
 export const orbiterMemorySize = (params: {orbiter: OrbiterParameters}): Promise<MemorySize> =>
   memorySize(params);
+
+export const listOrbiterControllers = (params: {
+  orbiter: OrbiterParameters;
+}): Promise<[Principal, Controller][]> => listControllers(params);

@@ -2,7 +2,7 @@ import type {Principal} from '@dfinity/principal';
 import {toNullable} from '@junobuild/utils';
 import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
-import type {
+import {
   Config,
   Controller,
   CustomDomain,
@@ -10,6 +10,7 @@ import type {
   Rule,
   RulesType,
   _SERVICE as SatelliteActor,
+  SetControllersArgs,
   SetRule
 } from '../../declarations/satellite/satellite.did';
 import type {SatelliteParameters} from '../types/actor.types';
@@ -165,4 +166,15 @@ export const deleteAssets = async ({
 }): Promise<void> => {
   const {del_assets} = await getSatelliteActor(satellite);
   return del_assets(collection);
+};
+
+export const setControllers = async ({
+  args,
+  satellite
+}: {
+  args: SetControllersArgs;
+  satellite: SatelliteParameters;
+}): Promise<[Principal, Controller][]> => {
+  const {set_controllers} = await getSatelliteActor(satellite);
+  return set_controllers(args);
 };

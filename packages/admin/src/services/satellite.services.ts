@@ -1,9 +1,10 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {fromNullable, isNullish} from '@junobuild/utils';
-import type {
+import {
   Controller,
   MemorySize,
+  SetControllersArgs,
   StorageConfigIFrame as StorageConfigIFrameDid,
   StorageConfigRedirect as StorageConfigRedirectDid
 } from '../../declarations/satellite/satellite.did';
@@ -20,6 +21,7 @@ import {
   listRules as listRulesApi,
   memorySize,
   setConfig as setConfigApi,
+  setControllers,
   setCustomDomain as setCustomDomainApi,
   setRule as setRuleApi,
   version
@@ -239,9 +241,15 @@ export const deleteAssets = async (params: {
 export const listSatelliteControllers = ({
   deprecatedNoScope,
   ...params
-}: {satellite: SatelliteParameters} & {deprecatedNoScope?: boolean}): Promise<
-  [Principal, Controller][]
-> => {
+}: {
+  satellite: SatelliteParameters;
+  deprecatedNoScope?: boolean;
+}): Promise<[Principal, Controller][]> => {
   const list = deprecatedNoScope === true ? listDeprecatedNoScopeControllers : listControllers;
   return list(params);
 };
+
+export const setSatelliteControllers = (params: {
+  satellite: SatelliteParameters;
+  args: SetControllersArgs;
+}): Promise<[Principal, Controller][]> => setControllers(params);

@@ -2,6 +2,7 @@ import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {fromNullable, isNullish} from '@junobuild/utils';
 import type {
+  Controller,
   MemorySize,
   StorageConfigIFrame as StorageConfigIFrameDid,
   StorageConfigRedirect as StorageConfigRedirectDid
@@ -234,3 +235,13 @@ export const deleteAssets = async (params: {
   collection: string;
   satellite: SatelliteParameters;
 }): Promise<void> => deleteAssetsApi(params);
+
+export const listSatelliteControllers = ({
+  deprecatedNoScope,
+  ...params
+}: {satellite: SatelliteParameters} & {deprecatedNoScope?: boolean}): Promise<
+  [Principal, Controller][]
+> => {
+  const list = deprecatedNoScope === true ? listDeprecatedNoScopeControllers : listControllers;
+  return list(params);
+};

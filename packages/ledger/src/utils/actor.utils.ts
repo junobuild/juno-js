@@ -1,6 +1,7 @@
 import type {ActorConfig, ActorMethod, ActorSubclass} from '@dfinity/agent';
 import {Actor, HttpAgent} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
+import {nonNullish} from '@dfinity/utils';
 import type {ActorParameters} from '../types/actor.types';
 
 export const createActor = async <T = Record<string, ActorMethod>>({
@@ -8,18 +9,24 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   idlFactory,
   identity,
   fetch,
-  env = 'prod',
+  container,
   config
 }: {
   idlFactory: IDL.InterfaceFactory;
   canisterId: string;
   config?: Pick<ActorConfig, 'callTransform' | 'queryTransform'>;
 } & ActorParameters): Promise<ActorSubclass<T>> => {
-  const host: string = env === 'dev' ? 'http://127.0.0.1:8000/' : 'https://icp-api.io';
+  const localActor = nonNullish(container) && container !== false;
 
-  const agent: HttpAgent = new HttpAgent({identity, ...(host && {host}), ...(fetch && {fetch})});
+  const host = localActor
+    ? container === true
+      ? 'http://127.0.0.1:5987'
+      : container
+    : 'https://icp-api.io';
 
-  if (env === 'dev') {
+  const agent: HttpAgent = new HttpAgent({identity, host, ...(fetch && {fetch})});
+
+  if (localActor) {
     // Fetch root key for certificate validation during development
     await agent.fetchRootKey();
   }

@@ -15,12 +15,13 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   idlFactory: IDL.InterfaceFactory;
 } & Required<Pick<Satellite, 'satelliteId' | 'identity'>> &
   Pick<Satellite, 'fetch' | 'container'>): Promise<ActorSubclass<T>> => {
-  const host =
-    nonNullish(container) && container !== false
-      ? container === true
-        ? DOCKER_CONTAINER_URL
-        : container
-      : 'https://icp-api.io';
+  const localActor = nonNullish(container) && container !== false;
+
+  const host = localActor
+    ? container === true
+      ? DOCKER_CONTAINER_URL
+      : container
+    : 'https://icp-api.io';
 
   const agent: HttpAgent = new HttpAgent({identity, host, ...(fetch && {fetch})});
 

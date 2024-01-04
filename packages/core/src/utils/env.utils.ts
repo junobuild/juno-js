@@ -11,7 +11,7 @@ export const satelliteUrl = (): string => {
     const {host: containerHost, protocol} = new URL(
       container === true ? DOCKER_CONTAINER_URL : container
     );
-    return `${protocol}://${satelliteId}.${containerHost}`;
+    return `${protocol}//${satelliteId}.${containerHost.replace('127.0.0.1', 'localhost')}`;
   }
 
   return `https://${satelliteId}.icp0.io`;

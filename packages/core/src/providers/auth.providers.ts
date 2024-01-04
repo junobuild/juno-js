@@ -38,15 +38,18 @@ export class InternetIdentityProvider implements AuthProvider {
 
       const env = EnvStore.getInstance().get();
 
-      const internetIdentityId = nonNullish(env?.internetIdentityId) ?? DOCKER_INTERNET_IDENTITY_ID;
+      const internetIdentityId =
+        nonNullish(env) && nonNullish(env?.internetIdentityId)
+          ? env.internetIdentityId
+          : DOCKER_INTERNET_IDENTITY_ID;
 
       const {host: containerHost, protocol} = new URL(
         container === true ? DOCKER_CONTAINER_URL : container
       );
 
       return /apple/i.test(navigator?.vendor)
-        ? `${protocol}://${containerHost}?canisterId=${internetIdentityId}`
-        : `${protocol}://${internetIdentityId}.${containerHost}`;
+        ? `${protocol}//${containerHost}?canisterId=${internetIdentityId}`
+        : `${protocol}//${internetIdentityId}.${containerHost.replace('127.0.0.1', 'localhost')}`;
     };
 
     return {

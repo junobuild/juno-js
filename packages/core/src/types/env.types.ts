@@ -10,4 +10,5 @@ export interface EnvironmentWorkers {
 export type Environment = {
   internetIdentityId?: string;
   workers?: EnvironmentWorkers;
-} & Required<Pick<Satellite, 'satelliteId' | 'container'>>;
+} & Required<Pick<Satellite, 'satelliteId'>> &
+  Pick<Satellite, 'container'>;

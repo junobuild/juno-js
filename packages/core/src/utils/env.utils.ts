@@ -1,4 +1,5 @@
 import {nonNullish} from '@junobuild/utils';
+import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
 import {EnvStore} from '../stores/env.store';
 
 export const satelliteUrl = (): string => {
@@ -6,8 +7,10 @@ export const satelliteUrl = (): string => {
 
   const container = EnvStore.getInstance().get()?.container;
 
-  if (nonNullish(container)) {
-    const {host: containerHost, protocol} = new URL(container);
+  if (nonNullish(container) && container !== false) {
+    const {host: containerHost, protocol} = new URL(
+      container === true ? DOCKER_CONTAINER_URL : container
+    );
     return `${protocol}://${satelliteId}.${containerHost}`;
   }
 

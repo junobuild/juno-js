@@ -1,6 +1,6 @@
 import {isNullish, nonNullish} from '@junobuild/utils';
 import {II_POPUP, INTERNET_COMPUTER_ORG, NFID_POPUP} from '../constants/auth.constants';
-import {DOCKER_INTERNET_IDENTITY_ID} from '../constants/container.constants';
+import {DOCKER_CONTAINER_URL, DOCKER_INTERNET_IDENTITY_ID} from '../constants/container.constants';
 import {EnvStore} from '../stores/env.store';
 import type {Provider, SignInOptions} from '../types/auth.types';
 import {popupCenter} from '../utils/window.utils';
@@ -32,7 +32,7 @@ export class InternetIdentityProvider implements AuthProvider {
       const container = EnvStore.getInstance().get()?.container;
 
       // Production
-      if (isNullish(container)) {
+      if (isNullish(container) || container === false) {
         return `https://identity.${this.#domain ?? INTERNET_COMPUTER_ORG}`;
       }
 
@@ -40,7 +40,9 @@ export class InternetIdentityProvider implements AuthProvider {
 
       const internetIdentityId = nonNullish(env?.internetIdentityId) ?? DOCKER_INTERNET_IDENTITY_ID;
 
-      const {host: containerHost, protocol} = new URL(container);
+      const {host: containerHost, protocol} = new URL(
+        container === true ? DOCKER_CONTAINER_URL : container
+      );
 
       return /apple/i.test(navigator?.vendor)
         ? `${protocol}://${containerHost}?canisterId=${internetIdentityId}`

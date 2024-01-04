@@ -27,10 +27,6 @@ export class EnvStore extends Store<Environment | undefined> {
     return this.env;
   }
 
-  localIdentity(): boolean {
-    return this.get()?.localIdentityCanisterId !== undefined;
-  }
-
   override subscribe(callback: (data: Environment | null | undefined) => void): () => void {
     const unsubscribe: () => void = super.subscribe(callback);
 

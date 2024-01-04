@@ -8,7 +8,7 @@ export interface EnvironmentWorker {
 export type EnvironmentActor = {
   orbiterId: string;
   satelliteId: string;
-  env?: 'dev' | 'prod';
+  container?: boolean | 'string';
 };
 
 export type Environment = EnvironmentActor & {

@@ -8,6 +8,6 @@ export interface EnvironmentWorkers {
 }
 
 export type Environment = {
-  localIdentityCanisterId?: string;
+  internetIdentityId?: string;
   workers?: EnvironmentWorkers;
-} & Required<Pick<Satellite, 'satelliteId'>>;
+} & Required<Pick<Satellite, 'satelliteId' | 'container'>>;

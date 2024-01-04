@@ -1,7 +1,7 @@
 import type {ActorMethod, ActorSubclass} from '@dfinity/agent';
 import {Actor, HttpAgent} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
-import {EnvStore} from '../stores/env.store';
+import {nonNullish} from '@junobuild/utils';
 import type {Satellite} from '../types/satellite.types';
 
 export const createActor = async <T = Record<string, ActorMethod>>({
@@ -9,18 +9,16 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   idlFactory,
   identity,
   fetch,
-  env = 'prod'
+  container
 }: {
   idlFactory: IDL.InterfaceFactory;
 } & Required<Pick<Satellite, 'satelliteId' | 'identity'>> &
-  Pick<Satellite, 'fetch' | 'env'>): Promise<ActorSubclass<T>> => {
-  const localActor = env === 'dev' || EnvStore.getInstance().localIdentity();
+  Pick<Satellite, 'fetch' | 'container'>): Promise<ActorSubclass<T>> => {
+  const host = nonNullish(container) ? container : 'https://icp-api.io';
 
-  const host: string = localActor ? 'http://127.0.0.1:8000/' : 'https://icp-api.io';
+  const agent: HttpAgent = new HttpAgent({identity, host, ...(fetch && {fetch})});
 
-  const agent: HttpAgent = new HttpAgent({identity, ...(host && {host}), ...(fetch && {fetch})});
-
-  if (localActor) {
+  if (nonNullish(container)) {
     // Fetch root key for certificate validation during development
     await agent.fetchRootKey();
   }

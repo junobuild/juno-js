@@ -1,4 +1,6 @@
+import {isNullish, nonNullish} from '@junobuild/utils';
 import {II_POPUP, INTERNET_COMPUTER_ORG, NFID_POPUP} from '../constants/auth.constants';
+import {DOCKER_INTERNET_IDENTITY_ID} from '../constants/container.constants';
 import {EnvStore} from '../stores/env.store';
 import type {Provider, SignInOptions} from '../types/auth.types';
 import {popupCenter} from '../utils/window.utils';
@@ -26,15 +28,30 @@ export class InternetIdentityProvider implements AuthProvider {
     identityProvider: string;
     windowOpenerFeatures?: string;
   } {
-    const identityProvider = EnvStore.getInstance().localIdentity()
-      ? `http://${EnvStore.getInstance().get()?.localIdentityCanisterId}.localhost:8000`
-      : `https://identity.${this.#domain ?? INTERNET_COMPUTER_ORG}`;
+    const identityProviderUrl = (): string => {
+      const container = EnvStore.getInstance().get()?.container;
+
+      // Production
+      if (isNullish(container)) {
+        return `https://identity.${this.#domain ?? INTERNET_COMPUTER_ORG}`;
+      }
+
+      const env = EnvStore.getInstance().get();
+
+      const internetIdentityId = nonNullish(env?.internetIdentityId) ?? DOCKER_INTERNET_IDENTITY_ID;
+
+      const {host: containerHost, protocol} = new URL(container);
+
+      return /apple/i.test(navigator?.vendor)
+        ? `${protocol}://${containerHost}?canisterId=${internetIdentityId}`
+        : `${protocol}://${internetIdentityId}.${containerHost}`;
+    };
 
     return {
       ...(windowed !== false && {
         windowOpenerFeatures: popupCenter(II_POPUP)
       }),
-      identityProvider
+      identityProvider: identityProviderUrl()
     };
   }
 }

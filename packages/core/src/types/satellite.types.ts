@@ -4,7 +4,7 @@ export interface Satellite {
   identity: Identity;
   satelliteId?: string;
   fetch?: typeof fetch;
-  container?: boolean | 'string';
+  container?: boolean | string;
 }
 
 export type SatelliteOptions = Partial<Satellite>;

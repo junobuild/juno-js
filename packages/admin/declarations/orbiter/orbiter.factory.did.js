@@ -44,6 +44,39 @@ export const idlFactory = ({IDL}) => {
     device: PageViewDevice,
     user_agent: IDL.Opt(IDL.Text)
   });
+  const AnalyticsBrowsersPageViews = IDL.Record({
+    safari: IDL.Float64,
+    opera: IDL.Float64,
+    others: IDL.Float64,
+    firefox: IDL.Float64,
+    chrome: IDL.Float64
+  });
+  const AnalyticsDevicesPageViews = IDL.Record({
+    desktop: IDL.Float64,
+    others: IDL.Float64,
+    mobile: IDL.Float64
+  });
+  const AnalyticsClientsPageViews = IDL.Record({
+    browsers: AnalyticsBrowsersPageViews,
+    devices: AnalyticsDevicesPageViews
+  });
+  const CalendarDate = IDL.Record({
+    day: IDL.Nat8,
+    month: IDL.Nat8,
+    year: IDL.Int32
+  });
+  const AnalyticsMetricsPageViews = IDL.Record({
+    bounce_rate: IDL.Float64,
+    average_page_views_per_session: IDL.Float64,
+    daily_total_page_views: IDL.Vec(IDL.Tuple(CalendarDate, IDL.Nat32)),
+    total_page_views: IDL.Nat32,
+    unique_page_views: IDL.Nat64,
+    unique_sessions: IDL.Nat64
+  });
+  const AnalyticsTop10PageViews = IDL.Record({
+    referrers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat32)),
+    pages: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat32))
+  });
   const TrackEvent = IDL.Record({
     updated_at: IDL.Nat64,
     session_id: IDL.Text,
@@ -51,6 +84,9 @@ export const idlFactory = ({IDL}) => {
     name: IDL.Text,
     created_at: IDL.Nat64,
     satellite_id: IDL.Principal
+  });
+  const AnalyticsTrackEvents = IDL.Record({
+    total: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat32))
   });
   const OrbiterSatelliteConfig = IDL.Record({
     updated_at: IDL.Nat64,
@@ -109,11 +145,23 @@ export const idlFactory = ({IDL}) => {
       [IDL.Vec(IDL.Tuple(AnalyticKey, PageView))],
       ['query']
     ),
+    get_page_views_analytics_clients: IDL.Func(
+      [GetAnalytics],
+      [AnalyticsClientsPageViews],
+      ['query']
+    ),
+    get_page_views_analytics_metrics: IDL.Func(
+      [GetAnalytics],
+      [AnalyticsMetricsPageViews],
+      ['query']
+    ),
+    get_page_views_analytics_top_10: IDL.Func([GetAnalytics], [AnalyticsTop10PageViews], ['query']),
     get_track_events: IDL.Func(
       [GetAnalytics],
       [IDL.Vec(IDL.Tuple(AnalyticKey, TrackEvent))],
       ['query']
     ),
+    get_track_events_analytics: IDL.Func([GetAnalytics], [AnalyticsTrackEvents], ['query']),
     list_controllers: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))], ['query']),
     list_satellite_configs: IDL.Func(
       [],

@@ -1,6 +1,7 @@
 import type {CallConfig} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
+import {isNullish} from '@junobuild/utils';
 import type {_SERVICE as ICActor} from '../../declarations/ic/ic.did';
 import {idlFactory as idlFactorIC} from '../../declarations/ic/ic.factory.did';
 import type {_SERVICE as MissionControlActor} from '../../declarations/mission_control/mission_control.did';
@@ -81,7 +82,7 @@ export const getActor = async <T>({
   canisterId: string | undefined;
   idlFactory: IDL.InterfaceFactory;
 }): Promise<T> => {
-  if (!canisterId) {
+  if (isNullish(canisterId)) {
     throw new Error('No canister ID provided.');
   }
 

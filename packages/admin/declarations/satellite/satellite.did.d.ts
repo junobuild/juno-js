@@ -1,4 +1,5 @@
 import type {ActorMethod} from '@dfinity/agent';
+import type {IDL} from '@dfinity/candid';
 import type {Principal} from '@dfinity/principal';
 
 export interface AssetEncodingNoContent {
@@ -58,6 +59,11 @@ export interface Doc {
   data: Uint8Array | number[];
   description: [] | [string];
   created_at: bigint;
+}
+export interface DocContext {
+  key: string;
+  collection: string;
+  data: Doc;
 }
 export interface HttpRequest {
   url: string;
@@ -225,8 +231,10 @@ export interface _SERVICE {
   set_controllers: ActorMethod<[SetControllersArgs], Array<[Principal, Controller]>>;
   set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;
   set_doc: ActorMethod<[string, string, SetDoc], Doc>;
-  set_many_docs: ActorMethod<[Array<[string, string, SetDoc]>], Array<[string, Doc]>>;
+  set_many_docs: ActorMethod<[Array<[string, string, SetDoc]>], Array<DocContext>>;
   set_rule: ActorMethod<[RulesType, string, SetRule], undefined>;
   upload_asset_chunk: ActorMethod<[UploadChunk], UploadChunkResult>;
   version: ActorMethod<[], string>;
+  version_build: ActorMethod<[], string>;
 }
+export declare const idlFactory: IDL.InterfaceFactory;

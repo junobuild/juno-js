@@ -9,3 +9,4 @@ export * from './types/customdomain.types';
 export * from './types/ic.types';
 export * from './types/releases.types';
 export * from './types/rules.types';
+export * from './types/satellite.types';

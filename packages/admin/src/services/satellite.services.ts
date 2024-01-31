@@ -1,7 +1,6 @@
-import type {CanisterStatus} from '@dfinity/agent';
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
-import {fromNullable, isNullish} from '@junobuild/utils';
+import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
 import type {
   Controller,
   MemorySize,
@@ -37,6 +36,7 @@ import type {
 } from '../types/config.types';
 import type {CustomDomain} from '../types/customdomain.types';
 import type {Rule, RulesType} from '../types/rules.types';
+import {SatelliteBuild} from '../types/satellite.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
@@ -123,12 +123,17 @@ export const satelliteVersion = (params: {satellite: SatelliteParameters}): Prom
 export const satelliteVersionBuild = (params: {satellite: SatelliteParameters}): Promise<string> =>
   versionBuild(params);
 
-export const satelliteWasmMetadataBuild = ({
+export const satelliteWasmMetadataBuild = async ({
   satellite: {satelliteId, ...rest}
 }: {
   satellite: SatelliteParameters;
-}): Promise<CanisterStatus.Status | undefined> =>
-  canisterMetadata({...rest, canisterId: satelliteId, path: 'juno:build'});
+}): Promise<SatelliteBuild | undefined> => {
+  const status = await canisterMetadata({...rest, canisterId: satelliteId, path: 'juno:build'});
+
+  return nonNullish(status) && ['stock', 'extended'].includes(status as string)
+    ? (status as SatelliteBuild)
+    : undefined;
+};
 
 export const upgradeSatellite = async ({
   satellite,

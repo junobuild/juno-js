@@ -28,6 +28,7 @@ import {
   versionBuild
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
+import type {BuildType} from '../types/build.types';
 import type {
   Config,
   StorageConfigHeader,
@@ -36,7 +37,6 @@ import type {
 } from '../types/config.types';
 import type {CustomDomain} from '../types/customdomain.types';
 import type {Rule, RulesType} from '../types/rules.types';
-import {SatelliteBuild} from '../types/satellite.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
@@ -123,15 +123,15 @@ export const satelliteVersion = (params: {satellite: SatelliteParameters}): Prom
 export const satelliteVersionBuild = (params: {satellite: SatelliteParameters}): Promise<string> =>
   versionBuild(params);
 
-export const satelliteWasmMetadataBuild = async ({
+export const satelliteBuildType = async ({
   satellite: {satelliteId, ...rest}
 }: {
   satellite: SatelliteParameters;
-}): Promise<SatelliteBuild | undefined> => {
+}): Promise<BuildType | undefined> => {
   const status = await canisterMetadata({...rest, canisterId: satelliteId, path: 'juno:build'});
 
   return nonNullish(status) && ['stock', 'extended'].includes(status as string)
-    ? (status as SatelliteBuild)
+    ? (status as BuildType)
     : undefined;
 };
 

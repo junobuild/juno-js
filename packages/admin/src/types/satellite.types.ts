@@ -1,1 +1,0 @@
-export type SatelliteBuild = "stock" | "extended";

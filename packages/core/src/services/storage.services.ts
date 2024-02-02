@@ -3,6 +3,8 @@ import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import {
   deleteAsset as deleteAssetApi,
   deleteManyAssets as deleteManyAssetsApi,
+  getAsset as getAssetApi,
+  getManyAssets as getManyAssetsApi,
   listAssets as listAssetsApi,
   uploadAsset as uploadAssetApi
 } from '../api/storage.api';
@@ -143,3 +145,27 @@ export const deleteManyAssets = async ({
     assets,
     satellite: {...satellite, identity: getIdentity(satellite?.identity)}
   });
+
+export const getAsset = async ({
+  satellite,
+  ...rest
+}: {
+  collection: string;
+  satellite?: SatelliteOptions;
+} & Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
+  const identity = getIdentity(satellite?.identity);
+
+  return getAssetApi({...rest, satellite: {...satellite, identity}});
+};
+
+export const getManyAssets = async ({
+  satellite,
+  ...rest
+}: {
+  assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
+  satellite?: SatelliteOptions;
+}): Promise<(AssetNoContent | undefined)[]> => {
+  const identity = getIdentity(satellite?.identity);
+
+  return getManyAssetsApi({...rest, satellite: {...satellite, identity}});
+};

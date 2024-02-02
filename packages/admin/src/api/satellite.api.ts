@@ -62,13 +62,13 @@ export const version = async ({satellite}: {satellite: SatelliteParameters}): Pr
   return version();
 };
 
-export const versionBuild = async ({
+export const buildVersion = async ({
   satellite
 }: {
   satellite: SatelliteParameters;
 }): Promise<string> => {
-  const {version_build} = await getSatelliteActor(satellite);
-  return version_build();
+  const {build_version} = await getSatelliteActor(satellite);
+  return build_version();
 };
 
 // TODO: for backwards compatibility - to be removed

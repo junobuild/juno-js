@@ -10,6 +10,7 @@ import type {
 } from '../../declarations/satellite/satellite.did';
 import {canisterMetadata, upgradeCode} from '../api/ic.api';
 import {
+  buildVersion,
   countAssets as countAssetsApi,
   countDocs as countDocsApi,
   deleteAssets as deleteAssetsApi,
@@ -24,8 +25,7 @@ import {
   setControllers,
   setCustomDomain as setCustomDomainApi,
   setRule as setRuleApi,
-  version,
-  versionBuild
+  version
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
 import type {BuildType} from '../types/build.types';
@@ -120,8 +120,8 @@ export const setRule = async ({
 export const satelliteVersion = (params: {satellite: SatelliteParameters}): Promise<string> =>
   version(params);
 
-export const satelliteVersionBuild = (params: {satellite: SatelliteParameters}): Promise<string> =>
-  versionBuild(params);
+export const satelliteBuildVersion = (params: {satellite: SatelliteParameters}): Promise<string> =>
+  buildVersion(params);
 
 export const satelliteBuildType = async ({
   satellite: {satelliteId, ...rest}

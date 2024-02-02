@@ -168,3 +168,34 @@ export const deleteManyAssets = async ({
 
   await del_many_assets(payload);
 };
+
+export const getAsset = async ({
+  collection,
+  fullPath,
+  satellite
+}: {
+  collection: string;
+  satellite: Satellite;
+} & Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
+  const {get_asset} = await getSatelliteActor(satellite);
+  return fromNullable(await get_asset(collection, fullPath));
+};
+
+export const getManyAssets = async ({
+  assets,
+  satellite
+}: {
+  assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
+  satellite: Satellite;
+}): Promise<(AssetNoContent | undefined)[]> => {
+  const {get_many_assets} = await getSatelliteActor(satellite);
+
+  const payload: [string, string][] = assets.map(({collection, fullPath}) => [
+    collection,
+    fullPath
+  ]);
+
+  const resultsAssets = await get_many_assets(payload);
+
+  return resultsAssets.map(([_, resultAsset]) => fromNullable(resultAsset));
+};

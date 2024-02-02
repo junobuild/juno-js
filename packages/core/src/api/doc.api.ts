@@ -96,7 +96,7 @@ export const setManyDocs = async ({
   const updatedDocs = await set_many_docs(payload);
 
   const results: Doc<any>[] = [];
-  for (const {data: updatedDoc, key} of updatedDocs) {
+  for (const [key, updatedDoc] of updatedDocs) {
     results.push(await fromDoc({key, doc: updatedDoc}));
   }
 

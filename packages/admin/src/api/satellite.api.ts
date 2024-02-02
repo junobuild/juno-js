@@ -58,9 +58,17 @@ export const setRule = async ({
 };
 
 export const version = async ({satellite}: {satellite: SatelliteParameters}): Promise<string> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
+  const {version} = await getSatelliteActor(satellite);
+  return version();
+};
 
-  return actor.version();
+export const versionBuild = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<string> => {
+  const {version_build} = await getSatelliteActor(satellite);
+  return version_build();
 };
 
 // TODO: for backwards compatibility - to be removed

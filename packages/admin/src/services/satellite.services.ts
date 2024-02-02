@@ -1,6 +1,6 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
-import {fromNullable, isNullish} from '@junobuild/utils';
+import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
 import type {
   Controller,
   MemorySize,
@@ -8,7 +8,7 @@ import type {
   StorageConfigIFrame as StorageConfigIFrameDid,
   StorageConfigRedirect as StorageConfigRedirectDid
 } from '../../declarations/satellite/satellite.did';
-import {upgradeCode} from '../api/ic.api';
+import {canisterMetadata, upgradeCode} from '../api/ic.api';
 import {
   countAssets as countAssetsApi,
   countDocs as countDocsApi,
@@ -24,9 +24,11 @@ import {
   setControllers,
   setCustomDomain as setCustomDomainApi,
   setRule as setRuleApi,
-  version
+  version,
+  versionBuild
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
+import type {BuildType} from '../types/build.types';
 import type {
   Config,
   StorageConfigHeader,
@@ -115,8 +117,23 @@ export const setRule = async ({
     collection
   });
 
-export const satelliteVersion = async (params: {satellite: SatelliteParameters}): Promise<string> =>
+export const satelliteVersion = (params: {satellite: SatelliteParameters}): Promise<string> =>
   version(params);
+
+export const satelliteVersionBuild = (params: {satellite: SatelliteParameters}): Promise<string> =>
+  versionBuild(params);
+
+export const satelliteBuildType = async ({
+  satellite: {satelliteId, ...rest}
+}: {
+  satellite: SatelliteParameters;
+}): Promise<BuildType | undefined> => {
+  const status = await canisterMetadata({...rest, canisterId: satelliteId, path: 'juno:build'});
+
+  return nonNullish(status) && ['stock', 'extended'].includes(status as string)
+    ? (status as BuildType)
+    : undefined;
+};
 
 export const upgradeSatellite = async ({
   satellite,

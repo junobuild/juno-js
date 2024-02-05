@@ -70,8 +70,8 @@ export const setConfig = async ({
     configIFrame === 'same-origin'
       ? {SameOrigin: null}
       : configIFrame === 'allow-any'
-      ? {AllowAny: null}
-      : {Deny: null};
+        ? {AllowAny: null}
+        : {Deny: null};
 
   return setConfigApi({
     satellite,

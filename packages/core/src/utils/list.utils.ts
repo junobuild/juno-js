@@ -29,8 +29,8 @@ export const toListParams = ({matcher, paginate, order, owner}: ListParams): Lis
             order.field === 'created_at'
               ? {CreatedAt: null}
               : order.field === 'updated_at'
-              ? {UpdatedAt: null}
-              : {Keys: null}
+                ? {UpdatedAt: null}
+                : {Keys: null}
         }
   ),
   owner: toNullable(

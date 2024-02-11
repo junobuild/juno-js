@@ -19,7 +19,8 @@
     "packages/admin",
     "packages/ledger",
     "packages/analytics",
-    "packages/core-peer"
+    "packages/core-peer",
+    "packages/types"
   ],
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",

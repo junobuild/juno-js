@@ -27,3 +27,9 @@ const ledgerPromises = ledgerDeclarations.map((d) =>
   cp(join(src, d), join('./packages/ledger/declarations/', d), {recursive: true})
 );
 await Promise.all(ledgerPromises);
+
+const typesDeclarations = ['ic', 'mission_control', 'orbiter', 'satellite'];
+const typesPromises = typesDeclarations.map((d) =>
+  cp(join(src, d), join('./packages/types/declarations/', d), {recursive: true})
+);
+await Promise.all(typesPromises);

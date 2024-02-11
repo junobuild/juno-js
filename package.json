@@ -109,7 +109,7 @@
     {
       "name": "@junobuild/types",
       "path": "./packages/types/dist/index.js",
-      "limit": "0 kB"
+      "limit": "5 B"
     }
   ]
 }

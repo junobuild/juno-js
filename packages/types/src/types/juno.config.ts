@@ -1,5 +1,5 @@
-import {ENCODING_TYPE} from './encoding';
-import {StorageConfig} from './storage.config';
+import type {ENCODING_TYPE} from './encoding';
+import type {StorageConfig} from './storage.config';
 
 export interface SatelliteAssertions {
   /**

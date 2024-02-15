@@ -20,7 +20,7 @@
     "packages/ledger",
     "packages/analytics",
     "packages/core-peer",
-    "packages/cli-config"
+    "packages/config"
   ],
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
@@ -107,8 +107,8 @@
       "limit": "110 kB"
     },
     {
-      "name": "@junobuild/cli-config",
-      "path": "./packages/cli-config/dist/index.js",
+      "name": "@junobuild/config",
+      "path": "./packages/config/dist/index.js",
       "limit": "5 B"
     }
   ]

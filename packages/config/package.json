@@ -1,5 +1,5 @@
 {
-  "name": "@junobuild/cli-config",
+  "name": "@junobuild/config",
   "version": "0.0.1",
   "description": "Configuration options for Juno CLI",
   "author": "David Dal Busco (https://daviddalbusco.com)",
@@ -34,7 +34,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/junobuild/juno-js.git",
-    "directory": "packages/cli-config"
+    "directory": "packages/config"
   },
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"

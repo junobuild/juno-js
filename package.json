@@ -15,6 +15,7 @@
   },
   "workspaces": [
     "packages/utils",
+    "packages/config",
     "packages/core",
     "packages/admin",
     "packages/ledger",
@@ -104,6 +105,11 @@
       "name": "@junobuild/analytics-worker",
       "path": "./packages/analytics/dist/workers/analytics.worker.js",
       "limit": "110 kB"
+    },
+    {
+      "name": "@junobuild/config",
+      "path": "./packages/config/dist/index.js",
+      "limit": "20 B"
     }
   ]
 }

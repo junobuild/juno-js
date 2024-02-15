@@ -1,7 +1,7 @@
 {
-  "name": "@junobuild/admin",
-  "version": "0.0.45",
-  "description": "A library for interfacing with admin features of Juno",
+  "name": "@junobuild/config",
+  "version": "0.0.1",
+  "description": "Configuration options for Juno CLI",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
@@ -23,39 +23,21 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE",
-    "declarations"
+    "LICENSE"
   ],
   "scripts": {
     "rmdir": "node ../../scripts/rmdir.mjs",
     "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
-    "build": "npm run rmdir && mkdir -p dist && cp -R declarations dist && node esbuild.mjs && npm run ts-declaration",
+    "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/junobuild/juno-js.git",
-    "directory": "packages/admin"
+    "directory": "packages/config"
   },
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"
   },
-  "keywords": [
-    "blockchain-as-a-service",
-    "baas",
-    "dapps",
-    "dapps-development",
-    "internet computer",
-    "smart-contracts",
-    "web3"
-  ],
-  "homepage": "https://juno.build",
-  "peerDependencies": {
-    "@dfinity/agent": "^0.20.2",
-    "@dfinity/identity": "^0.20.2",
-    "@dfinity/principal": "^0.20.2",
-    "@junobuild/config": "*",
-    "@junobuild/utils": "*",
-    "semver": "7.*"
-  }
+  "homepage": "https://juno.build"
 }

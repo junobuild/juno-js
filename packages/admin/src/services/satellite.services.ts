@@ -1,5 +1,11 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
+import type {
+  SatelliteConfig,
+  StorageConfigHeader,
+  StorageConfigRedirect,
+  StorageConfigRewrite
+} from '@junobuild/config';
 import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
 import type {
   Controller,
@@ -29,12 +35,6 @@ import {
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
 import type {BuildType} from '../types/build.types';
-import type {
-  Config,
-  StorageConfigHeader,
-  StorageConfigRedirect,
-  StorageConfigRewrite
-} from '../types/config.types';
 import type {CustomDomain} from '../types/customdomain.types';
 import type {Rule, RulesType} from '../types/rules.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
@@ -51,7 +51,7 @@ export const setConfig = async ({
   },
   satellite
 }: {
-  config: Config;
+  config: Required<Pick<SatelliteConfig, 'storage'>>;
   satellite: SatelliteParameters;
 }): Promise<void> => {
   const headers: [string, [string, string][]][] = (configHeaders ?? []).map(

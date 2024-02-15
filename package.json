@@ -15,12 +15,12 @@
   },
   "workspaces": [
     "packages/utils",
+    "packages/config",
     "packages/core",
     "packages/admin",
     "packages/ledger",
     "packages/analytics",
-    "packages/core-peer",
-    "packages/config"
+    "packages/core-peer"
   ],
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",

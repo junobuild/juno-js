@@ -8,6 +8,8 @@ JavaScript libraries for interfacing with [Juno].
 - [analytics](/packages/analytics): tracker for analytics
 - [admin](/packages/admin): interfacing with admin features
 - [ledger](/packages/ledger): a lightweight fork of `@dfinity/nns` to parse account identifier for the ICP ledger
+- [config](/packages/config): configuration options for the CLI
+- [utils](/packages/utils): various utilities used across Juno's JS code base
 
 ## License
 

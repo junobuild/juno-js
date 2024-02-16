@@ -2,6 +2,7 @@ export type * from './types/encoding';
 export type * from './types/juno.config';
 export type * from './types/juno.env';
 export type * from './types/storage.config';
+export type * from './types/utility';
 
 /// Export and expose functions for user configuration
 

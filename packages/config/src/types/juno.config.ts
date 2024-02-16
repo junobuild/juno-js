@@ -1,7 +1,7 @@
 import type {ENCODING_TYPE} from './encoding';
-import {JunoConfigMode} from './juno.env';
+import type {JunoConfigMode} from './juno.env';
 import type {StorageConfig} from './storage.config';
-import {Either} from './utility';
+import type {Either} from './utility';
 
 export interface SatelliteAssertions {
   /**

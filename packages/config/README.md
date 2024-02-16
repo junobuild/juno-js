@@ -6,7 +6,7 @@
 [npm-license]: https://img.shields.io/npm/l/@junobuild/config
 [npm-license-url]: https://github.com/junobuild/juno-js/blob/main/LICENSE
 
-# Juno JavaScript types
+# Juno Config
 
 Configuration options for [Juno] CLI.
 

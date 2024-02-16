@@ -33,4 +33,4 @@ jobs:
         with:
           add: .
           default_author: github_actions
-          message: "🤖 Documentation auto-update"
+          message: '🤖 Documentation auto-update'

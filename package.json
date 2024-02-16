@@ -39,7 +39,7 @@
     "node-fetch": "^3.3.2",
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "tsdoc-markdown": "^0.2.1",
+    "tsdoc-markdown": "^0.3.0",
     "typescript": "^5.2.2"
   },
   "size-limit": [

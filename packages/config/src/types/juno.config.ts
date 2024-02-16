@@ -20,8 +20,10 @@ export interface SatelliteConfig {
   satelliteId: string;
 
   /**
-   * Specifies the directory from which to deploy to storage. Defaults to 'build'.
+   * Specifies the directory from which to deploy to storage.
    * For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`.
+   *
+   * @default `build`
    */
   source?: string;
 

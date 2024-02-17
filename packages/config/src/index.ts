@@ -1,6 +1,6 @@
 export type * from './core/rules';
 export type * from './dev/juno.dev.config';
-export type * from './mainnet/encoding';
+export type * from './core/encoding';
 export type * from './mainnet/juno.config';
 export type * from './mainnet/juno.env';
 export type * from './mainnet/satellite.config';

@@ -1,6 +1,8 @@
+export type * from './dev/juno.dev.config';
 export type * from './types/encoding';
 export type * from './types/juno.config';
 export type * from './types/juno.env';
+export type * from './types/rules';
 export type * from './types/satellite.config';
 export type * from './types/storage.config';
 export type * from './types/utility';

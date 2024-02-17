@@ -36,7 +36,7 @@ import {
 import type {SatelliteParameters} from '../types/actor.types';
 import type {BuildType} from '../types/build.types';
 import type {CustomDomain} from '../types/customdomain.types';
-import type {Rule, RulesType} from '../types/rules.types';
+import type {Rule, RulesType} from '@junobuild/config';
 import {encodeIDLControllers} from '../utils/idl.utils';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 

@@ -3,7 +3,7 @@ export type * from './mainnet/juno.config';
 export type * from './mainnet/juno.env';
 export type * from './mainnet/satellite.config';
 export type * from './mainnet/storage.config';
-export type * from './types/utility';
+export type * from './utils/ts.utils';
 
 /// Export and expose functions for user configuration
 

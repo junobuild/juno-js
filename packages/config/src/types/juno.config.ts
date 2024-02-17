@@ -1,5 +1,7 @@
 import type {ENCODING_TYPE} from './encoding';
+import type {JunoConfigMode} from './juno.env';
 import type {StorageConfig} from './storage.config';
+import type {Either} from './utility';
 
 export interface SatelliteAssertions {
   /**
@@ -13,12 +15,29 @@ export interface SatelliteAssertions {
   heapMemory?: number | boolean;
 }
 
-export interface SatelliteConfig {
+export interface SatelliteId {
   /**
-   * The unique identifier (ID) of the satellite where the application will be deployed.
+   * The unique identifier (ID) of the satellite for this application.
    */
   satelliteId: string;
+}
 
+export interface SatelliteIds {
+  /**
+   * A mapping of satellite identifiers (IDs) to different configurations based on the mode of the application.
+   *
+   * This allows the application to use different satellite IDs, such as production, staging, etc.
+   *
+   * Example:
+   * {
+   *   "production": "xo2hm-lqaaa-aaaal-ab3oa-cai",
+   *   "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai"
+   * }
+   */
+  satellitesIds: Record<JunoConfigMode, string>;
+}
+
+export type SatelliteConfig = Either<SatelliteId, SatelliteIds> & {
   /**
    * Specifies the directory from which to deploy to storage.
    * For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`.
@@ -59,7 +78,7 @@ export interface SatelliteConfig {
    * Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions.
    */
   assertions?: SatelliteAssertions;
-}
+};
 
 export interface OrbiterConfig {
   /**

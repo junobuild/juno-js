@@ -14,15 +14,22 @@ Configuration options for [Juno] CLI.
 
 ### :tropical_drink: Interfaces
 
+- [JunoConfigEnv](#gear-junoconfigenv)
 - [StorageConfigHeader](#gear-storageconfigheader)
 - [StorageConfigRewrite](#gear-storageconfigrewrite)
 - [StorageConfigRedirect](#gear-storageconfigredirect)
 - [StorageConfig](#gear-storageconfig)
 - [SatelliteAssertions](#gear-satelliteassertions)
-- [SatelliteConfig](#gear-satelliteconfig)
+- [SatelliteId](#gear-satelliteid)
+- [SatelliteIds](#gear-satelliteids)
 - [OrbiterConfig](#gear-orbiterconfig)
 - [JunoConfig](#gear-junoconfig)
-- [JunoConfigEnv](#gear-junoconfigenv)
+
+#### :gear: JunoConfigEnv
+
+| Property | Type     | Description |
+| -------- | -------- | ----------- |
+| `mode`   | `string` |             |
 
 #### :gear: StorageConfigHeader
 
@@ -69,17 +76,17 @@ Configures the Hosting behavior of the Storage.
 | ------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `heapMemory` | `number or boolean` | Configuration for the heap memory size check, which can be:- `true` to enable the check with a default threshold of 900MB,- `false` to disable the heap memory size check,- A `number` to specify a custom threshold in MB (megabytes) for the heap memory size check.If not specified, then `true` is used as default value. |
 
-#### :gear: SatelliteConfig
+#### :gear: SatelliteId
 
-| Property      | Type                        | Description                                                                                                                                                                                                                                                                                                                               |
-| ------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `satelliteId` | `string`                    | The unique identifier (ID) of the satellite where the application will be deployed.                                                                                                                                                                                                                                                       |
-| `source`      | `string`                    | Specifies the directory from which to deploy to storage.For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: `build`                                                                                                                                                                         |
-| `storage`     | `StorageConfig`             | Optional configuration parameters for the satellite, affecting the operational behavior of its Storage.Changes to these parameters must be applied manually afterwards using `juno config` commands.                                                                                                                                      |
-| `ignore`      | `string[]`                  | Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore.                                                                                                                                                                                                                              |
-| `gzip`        | `string or false`           | Controls the Gzip compression optimization for files in the source folder. By default, it targets JavaScript (js), ES Module (mjs), and CSS (css) files.You can disable this by setting it to `false` or customize it with a different file matching pattern using glob syntax.                                                           |
-| `encoding`    | `[string, ENCODING_TYPE][]` | Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension:- `.Z` for compress,- `.gz` for gzip,- `.br` for brotli,- `.zlib` for deflate,- anything else defaults to `identity`.The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types. |
-| `assertions`  | `SatelliteAssertions`       | Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions.                                                                                                                                                                                                                         |
+| Property      | Type     | Description                                                       |
+| ------------- | -------- | ----------------------------------------------------------------- |
+| `satelliteId` | `string` | The unique identifier (ID) of the satellite for this application. |
+
+#### :gear: SatelliteIds
+
+| Property        | Type                     | Description                                                                                                                                                                                                                                                                                             |
+| --------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `satellitesIds` | `Record<string, string>` | A mapping of satellite identifiers (IDs) to different configurations based on the mode of the application.This allows the application to use different satellite IDs, such as production, staging, etc.Example:{ "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai"} |
 
 #### :gear: OrbiterConfig
 
@@ -94,16 +101,14 @@ Configures the Hosting behavior of the Storage.
 | `satellite` | `SatelliteConfig` |             |
 | `orbiter`   | `OrbiterConfig`   |             |
 
-#### :gear: JunoConfigEnv
-
-| Property | Type     | Description |
-| -------- | -------- | ----------- |
-| `mode`   | `string` |             |
-
 ### :cocktail: Types
 
 - [ENCODING_TYPE](#gear-encoding_type)
+- [JunoConfigMode](#gear-junoconfigmode)
 - [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
+- [Only](#gear-only)
+- [Either](#gear-either)
+- [SatelliteConfig](#gear-satelliteconfig)
 
 #### :gear: ENCODING_TYPE
 
@@ -112,6 +117,14 @@ Configures the Hosting behavior of the Storage.
 | `ENCODING_TYPE` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L1)
+
+#### :gear: JunoConfigMode
+
+| Type             | Type                                      |
+| ---------------- | ----------------------------------------- |
+| `JunoConfigMode` | `'production' or 'development' or string` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L1)
 
 #### :gear: StorageConfigSourceGlob
 
@@ -122,6 +135,83 @@ Represents a glob pattern for matching files in the storage configuration.
 | `StorageConfigSourceGlob` |      |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/storage.config.ts#L4)
+
+#### :gear: Only
+
+| Type   | Type |
+| ------ | ---- |
+| `Only` | `{   |
+
+[P in keyof T]: T[P];
+} and {
+[P in keyof U]?: never;
+}` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/utility.ts#L2)
+
+#### :gear: Either
+
+| Type     | Type                       |
+| -------- | -------------------------- |
+| `Either` | `Only<T, U> or Only<U, T>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/utility.ts#L8)
+
+#### :gear: SatelliteConfig
+
+| Type              | Type                                     |
+| ----------------- | ---------------------------------------- |
+| `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> and { |
+
+/\*\*
+
+- Specifies the directory from which to deploy to storage.
+- For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`.
+-
+- @default `build`
+  \*/
+  source?: string;
+
+/\*\*
+
+- Optional configuration parameters for the satellite, affecting the operational behavior of its Storage.
+- Changes to these parameters must be applied manually afterwards using `juno config` commands.
+  \*/
+  storage?: StorageConfig;
+
+/\*\*
+
+- Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore.
+  \*/
+  ignore?: string[];
+
+/\*\*
+
+- Controls the Gzip compression optimization for files in the source folder. By default, it targets JavaScript (js), ES Module (mjs), and CSS (css) files.
+- You can disable this by setting it to `false` or customize it with a different file matching pattern using glob syntax.
+  \*/
+  gzip?: string or false;
+
+/\*\*
+
+- Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension:
+- - `.Z` for compress,
+- - `.gz` for gzip,
+- - `.br` for brotli,
+- - `.zlib` for deflate,
+- - anything else defaults to `identity`.
+- The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types.
+  \*/
+  encoding?: Array<[string, ENCODING_TYPE]>;
+
+/\*\*
+
+- Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions.
+  \*/
+  assertions?: SatelliteAssertions;
+  }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.config.ts#L40)
 
 <!-- TSDOC_END -->
 

@@ -1,4 +1,4 @@
-import type {Rule} from '../types/rules';
+import type {Rule} from '../core/rules';
 
 export type SatelliteDevCollection = Omit<Rule, 'created_at' | 'updated_at'>;
 

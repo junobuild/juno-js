@@ -24,9 +24,9 @@ export interface SatelliteId {
 
 export interface SatelliteIds {
   /**
-   * A mapping of satellite identifiers (IDs) to different configurations based on the environment of the application.
+   * A mapping of satellite identifiers (IDs) to different configurations based on the mode of the application.
    *
-   * This allows the application to use different satellite IDs based on the operating environment, such as production, staging, development, etc.
+   * This allows the application to use different satellite IDs, such as production, staging, development, etc.
    *
    * Example:
    * {

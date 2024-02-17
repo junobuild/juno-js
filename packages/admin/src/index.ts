@@ -8,4 +8,3 @@ export type * from './types/controllers.types';
 export type * from './types/customdomain.types';
 export type * from './types/ic.types';
 export type * from './types/releases.types';
-export type * from './types/rules.types';

@@ -1,3 +1,4 @@
+import type {MemoryText, PermissionText, Rule, RulesType} from '@junobuild/config';
 import {fromNullable, isNullish, nonNullish, toNullable} from '@junobuild/utils';
 import type {
   Memory,
@@ -16,7 +17,6 @@ import {
   PermissionPublic,
   StorageRulesType
 } from '../constants/rules.constants';
-import type {MemoryText, PermissionText, Rule, RulesType} from '../types/rules.types';
 
 export const mapRuleType = (type: RulesType): RulesTypeApi =>
   type === 'storage' ? StorageRulesType : DbRulesType;

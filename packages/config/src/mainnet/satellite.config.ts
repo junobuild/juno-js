@@ -1,4 +1,4 @@
-import {Either} from '../utils/ts.utils';
+import type {Either} from '../utils/ts.utils';
 import type {ENCODING_TYPE} from './encoding';
 import type {JunoConfigMode} from './juno.env';
 import type {StorageConfig} from './storage.config';

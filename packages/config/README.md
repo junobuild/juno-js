@@ -211,7 +211,7 @@ Represents a glob pattern for matching files in the storage configuration.
   assertions?: SatelliteAssertions;
   }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.config.ts#L40)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/satellite.config.ts#L40)
 
 <!-- TSDOC_END -->
 

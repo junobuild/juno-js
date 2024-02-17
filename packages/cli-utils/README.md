@@ -1,14 +1,14 @@
 [![npm][npm-badge]][npm-badge-url]
 [![license][npm-license]][npm-license-url]
 
-[npm-badge]: https://img.shields.io/npm/v/@junobuild/utils
-[npm-badge-url]: https://www.npmjs.com/package/@junobuild/utils
-[npm-license]: https://img.shields.io/npm/l/@junobuild/utils
+[npm-badge]: https://img.shields.io/npm/v/@junobuild/cli-utils
+[npm-badge-url]: https://www.npmjs.com/package/@junobuild/cli-utils
+[npm-license]: https://img.shields.io/npm/l/@junobuild/cli-utils
 [npm-license-url]: https://github.com/junobuild/juno-js/blob/main/LICENSE
 
-# Juno JavaScript utils
+# Juno CLI utils
 
-A collection of utilities and constants for Juno JS libs.
+A collection of utilities and constants for Juno CLIs.
 
 ## License
 

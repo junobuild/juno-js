@@ -84,9 +84,9 @@ Configures the Hosting behavior of the Storage.
 
 #### :gear: SatelliteIds
 
-| Property        | Type                     | Description                                                                                                                                                                                                                                                                                                                                                    |
-| --------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `satellitesIds` | `Record<string, string>` | A mapping of satellite identifiers (IDs) to different configurations based on the environment of the application.This allows the application to use different satellite IDs based on the operating environment, such as production, staging, development, etc.Example:{ "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai"} |
+| Property        | Type                     | Description                                                                                                                                                                                                                                                                                             |
+| --------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `satellitesIds` | `Record<string, string>` | A mapping of satellite identifiers (IDs) to different configurations based on the mode of the application.This allows the application to use different satellite IDs, such as production, staging, etc.Example:{ "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai"} |
 
 #### :gear: OrbiterConfig
 

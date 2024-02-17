@@ -1,4 +1,4 @@
-export type JunoConfigMode = 'production' | 'development' | string;
+export type JunoConfigMode = 'production' | string;
 
 export interface JunoConfigEnv {
   mode: JunoConfigMode;

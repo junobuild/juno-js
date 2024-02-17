@@ -120,9 +120,9 @@ Configures the Hosting behavior of the Storage.
 
 #### :gear: JunoConfigMode
 
-| Type             | Type                                      |
-| ---------------- | ----------------------------------------- |
-| `JunoConfigMode` | `'production' or 'development' or string` |
+| Type             | Type                     |
+| ---------------- | ------------------------ |
+| `JunoConfigMode` | `'production' or string` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L1)
 

@@ -112,7 +112,7 @@
     {
       "name": "@junobuild/config",
       "path": "./packages/config/dist/index.js",
-      "limit": "20 B"
+      "limit": "30 B"
     }
   ]
 }

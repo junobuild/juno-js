@@ -1,5 +1,5 @@
-import {existsSync, readFileSync, writeFileSync} from 'node:fs';
 import fetch from 'node-fetch';
+import {existsSync, readFileSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 
 // The suffix we use to publish to npm wip version of the libs

@@ -12,6 +12,18 @@ Configuration options for [Juno] CLI.
 
 <!-- TSDOC_START -->
 
+### :cocktail: Types
+
+- [ENCODING_TYPE](#gear-encoding_type)
+
+#### :gear: ENCODING_TYPE
+
+| Type            | Type                                                      |
+| --------------- | --------------------------------------------------------- |
+| `ENCODING_TYPE` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L1)
+
 <!-- TSDOC_END -->
 
 ## License

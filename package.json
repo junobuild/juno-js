@@ -117,7 +117,7 @@
     },
     {
       "name": "@junobuild/cli-utils",
-      "path": "./packages/cli-utils/dist/index.js",
+      "path": "./packages/cli-utils/dist/node/index.mjs",
       "limit": "30 kB"
     }
   ]

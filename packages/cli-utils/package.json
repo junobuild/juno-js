@@ -6,13 +6,13 @@
   "license": "MIT",
   "type": "module",
   "main": "./dist/node/index.mjs",
-  "module": "./dist/browser/index.js",
+  "module": "./dist/node/index.mjs",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
       "import": {
         "types": "./dist/types/index.d.ts",
-        "default": "./dist/browser/index.js"
+        "default": "./dist/node/index.mjs"
       },
       "require": {
         "types": "./dist/types/index.d.ts",

@@ -22,17 +22,17 @@ const peerDependencies = (packageJson) => {
 
 const workspacePeerDependencies = peerDependencies(join(process.cwd(), 'package.json'));
 
-const buildEsmCjs = () => {
-  const entryPoints = readdirSync(join(process.cwd(), 'src'))
-    .filter(
-      (file) =>
-        !file.includes('test') &&
-        !file.includes('spec') &&
-        !file.endsWith('.swp') &&
-        statSync(join(process.cwd(), 'src', file)).isFile()
-    )
-    .map((file) => `src/${file}`);
+const entryPoints = readdirSync(join(process.cwd(), 'src'))
+  .filter(
+    (file) =>
+      !file.includes('test') &&
+      !file.includes('spec') &&
+      !file.endsWith('.swp') &&
+      statSync(join(process.cwd(), 'src', file)).isFile()
+  )
+  .map((file) => `src/${file}`);
 
+const buildBrowser = () => {
   // esm output bundles with code splitting
   esbuild
     .build({
@@ -51,7 +51,27 @@ const buildEsmCjs = () => {
     })
     .catch(() => process.exit(1));
 
-  // cjs output bundle
+  // esm output bundle for Node
+  esbuild
+    .build({
+      entryPoints: ['src/index.ts'],
+      outfile: 'dist/node/index.mjs',
+      bundle: true,
+      sourcemap: true,
+      minify: true,
+      format: 'esm',
+      platform: 'node',
+      target: ['node18', 'esnext'],
+      banner: {
+        js: "import { createRequire as topLevelCreateRequire } from 'module';\n const require = topLevelCreateRequire(import.meta.url);"
+      },
+      external: [...Object.keys(workspacePeerDependencies)]
+    })
+    .catch(() => process.exit(1));
+};
+
+const buildNode = () => {
+  // esm output bundle for Node
   esbuild
     .build({
       entryPoints: ['src/index.ts'],
@@ -75,8 +95,23 @@ const writeEntries = () => {
   writeFileSync(join(dist, 'index.js'), "export * from './browser/index.js';");
 };
 
-export const build = () => {
+export const build = (bundle = 'browser_and_node') => {
   createDistFolder();
-  buildEsmCjs();
-  writeEntries();
+
+  switch (bundle) {
+    case 'browser': {
+      buildBrowser();
+      writeEntries();
+      break;
+    }
+    case 'node': {
+      buildNode();
+      break;
+    }
+    default: {
+      buildBrowser();
+      buildNode();
+      writeEntries();
+    }
+  }
 };

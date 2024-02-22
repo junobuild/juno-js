@@ -113,6 +113,11 @@
       "name": "@junobuild/config",
       "path": "./packages/config/dist/index.js",
       "limit": "30 B"
+    },
+    {
+      "name": "@junobuild/cli-utils",
+      "path": "./packages/cli-utils/dist/index.js",
+      "limit": "30 kB"
     }
   ]
 }

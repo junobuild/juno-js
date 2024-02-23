@@ -3,7 +3,7 @@ set -eux
 
 : Update the package.json version before build and publish
 node ./scripts/update-version.mjs utils
-node ./scripts/update-version.mjs cli-utils
+node ./scripts/update-version.mjs cli-tools
 node ./scripts/update-version.mjs config
 node ./scripts/update-version.mjs core
 node ./scripts/update-version.mjs admin

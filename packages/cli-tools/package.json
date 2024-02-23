@@ -1,5 +1,5 @@
 {
-  "name": "@junobuild/cli-utils",
+  "name": "@junobuild/cli-tools",
   "version": "0.0.1",
   "description": "A collection of utilities and constants for Juno CLIs.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
@@ -34,7 +34,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/junobuild/juno-js.git",
-    "directory": "packages/cli-utils"
+    "directory": "packages/cli-tools"
   },
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"

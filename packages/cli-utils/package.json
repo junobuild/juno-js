@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/cli-utils",
-  "version": "0.0.18",
+  "version": "0.0.1",
   "description": "A collection of utilities and constants for Juno CLIs.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

@@ -6,7 +6,7 @@
 [npm-license]: https://img.shields.io/npm/l/@junobuild/cli-tools
 [npm-license-url]: https://github.com/junobuild/juno-js/blob/main/LICENSE
 
-# Juno CLI utils
+# Juno CLI tools
 
 A collection of tools for Juno CLIs and Plugins.
 

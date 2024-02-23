@@ -5,7 +5,6 @@ const {generateDocumentation} = require('tsdoc-markdown');
 const configInputFiles = [
   './packages/config/src/mainnet/juno.config.ts',
   './packages/config/src/mainnet/juno.env.ts',
-  './packages/config/src/mainnet/storage.config.ts',
   './packages/config/src/dev/juno.dev.config.ts',
   './packages/config/src/dev/config.ts',
   './packages/config/src/types/encoding.ts'
@@ -23,5 +22,5 @@ generateDocumentation({
   inputFiles: configInputFiles,
   outputFile: './packages/config/README.md',
   markdownOptions,
-  buildOptions: {...buildOptions, explore: true, types: true}
+  buildOptions: {...buildOptions, explore: false, types: true}
 });

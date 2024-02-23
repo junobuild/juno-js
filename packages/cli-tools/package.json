@@ -1,7 +1,7 @@
 {
   "name": "@junobuild/cli-tools",
   "version": "0.0.1",
-  "description": "A collection of utilities and constants for Juno CLIs.",
+  "description": "A collection of tools for Juno CLIs and Plugins.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",

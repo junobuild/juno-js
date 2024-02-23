@@ -8,7 +8,7 @@
 
 # Juno CLI utils
 
-A collection of utilities and constants for Juno CLIs and Plugins.
+A collection of tools for Juno CLIs and Plugins.
 
 ## License
 

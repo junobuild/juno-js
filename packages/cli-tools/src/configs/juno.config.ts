@@ -65,8 +65,9 @@ export const junoConfigFile = ({
     };
   }
 
-  // Support for original juno.json file
-  const junoJsonDeprecated = join(process.cwd(), filename.replace('config.', ''));
+  // Support for original juno.json or juno.dev.json file
+  // juno.config || juno.dev.config => juno.json || juno.dev.json
+  const junoJsonDeprecated = join(process.cwd(), `${filename.replace('.config', '')}.json`);
 
   if (existsSync(junoJsonDeprecated)) {
     return {

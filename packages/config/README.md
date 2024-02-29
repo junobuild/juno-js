@@ -72,7 +72,7 @@ Configuration options for [Juno] CLI.
 | Property    | Type     | Description                                                              |
 | ----------- | -------- | ------------------------------------------------------------------------ |
 | `id`        | `string` | The identifier of the orbiter used in the dApp.                          |
-| `orbiterId` | `string` | deprecated: `orbiterId` will be removed in the future. use `id` instead. |
+| `orbiterId` | `string` | deprecated: `orbiterId` will be removed in the future. Use `id` instead. |
 
 #### :gear: JunoConfig
 

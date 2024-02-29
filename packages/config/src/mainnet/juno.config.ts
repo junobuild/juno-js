@@ -8,7 +8,7 @@ export interface OrbiterConfig {
   /**
    * @deprecated `orbiterId` will be removed in the future. Use `id` instead.
    */
-  orbiterId: string;
+  orbiterId?: string;
 }
 
 export interface JunoConfig {

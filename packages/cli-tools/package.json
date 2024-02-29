@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/cli-tools",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A collection of tools for Juno CLIs and Plugins.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -53,7 +53,7 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@junobuild/config": "^0.0.2",
+    "@junobuild/config": "^0.0.3",
     "@junobuild/utils": "^0.0.19"
   },
   "dependencies": {

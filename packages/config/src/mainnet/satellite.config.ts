@@ -19,6 +19,10 @@ export interface SatelliteId {
   /**
    * The unique identifier (ID) of the satellite for this application.
    */
+  id: string;
+  /**
+   * @deprecated `satelliteId` will be removed in the future. use `id` instead.
+   */
   satelliteId: string;
 }
 
@@ -34,7 +38,7 @@ export interface SatelliteIds {
    *   "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai"
    * }
    */
-  satellitesIds: Record<JunoConfigMode, string>;
+  ids: Record<JunoConfigMode, string>;
 }
 
 export type SatelliteConfig = Either<SatelliteId, SatelliteIds> & {

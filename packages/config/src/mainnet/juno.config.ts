@@ -4,6 +4,10 @@ export interface OrbiterConfig {
   /**
    * The identifier of the orbiter used in the dApp.
    */
+  id: string;
+  /**
+   * @deprecated `orbiterId` will be removed in the future. use `id` instead.
+   */
   orbiterId: string;
 }
 

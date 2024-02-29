@@ -21,7 +21,7 @@ export interface SatelliteId {
    */
   id: string;
   /**
-   * @deprecated `satelliteId` will be removed in the future. use `id` instead.
+   * @deprecated `satelliteId` will be removed in the future. Use `id` instead.
    */
   satelliteId: string;
 }

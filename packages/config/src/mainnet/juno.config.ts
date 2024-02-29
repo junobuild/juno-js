@@ -6,7 +6,7 @@ export interface OrbiterConfig {
    */
   id: string;
   /**
-   * @deprecated `orbiterId` will be removed in the future. use `id` instead.
+   * @deprecated `orbiterId` will be removed in the future. Use `id` instead.
    */
   orbiterId: string;
 }

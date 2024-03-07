@@ -30,8 +30,6 @@ export const nodeRequire = <T>({id, extension}: {id: string; extension: string})
         plugins: [mod.default]
       }).code;
 
-      console.log('---------------------', fileName, sourceText);
-
       interface NodeModuleWithCompile extends NodeModule {
         // eslint-disable-next-line @typescript-eslint/method-signature-style
         _compile(code: string, filename: string): T;

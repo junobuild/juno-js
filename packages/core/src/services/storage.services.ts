@@ -35,15 +35,17 @@ const uploadAssetIC = async ({
   headers = [],
   fullPath: storagePath,
   token,
-  satellite,
+  satellite: satelliteOptions,
   encoding,
   description
 }: Storage & {satellite?: SatelliteOptions}): Promise<AssetKey> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getIdentity(satelliteOptions?.identity);
 
   // The IC certification does not currently support encoding
   const filename: string = decodeURI(storageFilename);
   const fullPath: string = storagePath ?? `/${collection}/${filename}`;
+
+  const satellite = {...satelliteOptions, identity};
 
   await uploadAssetApi({
     data,
@@ -53,12 +55,12 @@ const uploadAssetIC = async ({
     headers,
     fullPath,
     encoding,
-    satellite: {...satellite, identity},
+    satellite,
     description
   });
 
   return {
-    downloadUrl: `${satelliteUrl()}${fullPath}${token !== undefined ? `?token=${token}` : ''}`,
+    downloadUrl: `${satelliteUrl(satellite)}${fullPath}${token !== undefined ? `?token=${token}` : ''}`,
     fullPath,
     name: filename
   };
@@ -66,20 +68,22 @@ const uploadAssetIC = async ({
 
 export const listAssets = async ({
   collection,
-  satellite,
+  satellite: satelliteOptions,
   filter
 }: {
   collection: string;
   satellite?: SatelliteOptions;
   filter?: ListParams;
 }): Promise<Assets> => {
+  const satellite = {...satelliteOptions, identity: getIdentity(satelliteOptions?.identity)};
+
   const {items, ...rest}: ListResults<AssetNoContent> = await listAssetsApi({
     collection,
-    satellite: {...satellite, identity: getIdentity(satellite?.identity)},
+    satellite,
     filter: filter ?? {}
   });
 
-  const host: string = satelliteUrl();
+  const host: string = satelliteUrl(satellite);
 
   return {
     assets: items.map(

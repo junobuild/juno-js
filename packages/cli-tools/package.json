@@ -53,8 +53,8 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@junobuild/config": "^0.0.4",
-    "@junobuild/utils": "^0.0.19"
+    "@junobuild/config": "*",
+    "@junobuild/utils": "*"
   },
   "dependencies": {
     "@babel/core": "^7.23.9",

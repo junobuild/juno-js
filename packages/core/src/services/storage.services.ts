@@ -79,7 +79,7 @@ export const listAssets = async ({
 
   const {items, ...rest}: ListResults<AssetNoContent> = await listAssetsApi({
     collection,
-    satellite: {...satellite, identity: getIdentity(satellite?.identity)},
+    satellite,
     filter: filter ?? {}
   });
 

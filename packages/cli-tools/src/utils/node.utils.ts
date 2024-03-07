@@ -7,12 +7,11 @@ import {
   type JunoConfig,
   type JunoDevConfig
 } from '@junobuild/config';
-import {readFileSync} from 'node:fs';
 
 /**
  * Adapted source from Stencil (https://github.com/ionic-team/stencil/blob/main/src/compiler/sys/node-require.ts)
  */
-export const nodeRequire = <T>(id: string): {default: T} => {
+export const nodeRequire = <T>({id, extension}: {id: string; extension: string}): {default: T} => {
   // ensure we cleared out node's internal require() cache for this file
   // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete require.cache[id];
@@ -24,21 +23,12 @@ export const nodeRequire = <T>(id: string): {default: T} => {
   try {
     // let's override node's require for a second
     // don't worry, we'll revert this when we're done
-    require.extensions['.ts'] = (module: NodeJS.Module, fileName: string) => {
-      let sourceText = readFileSync(fileName, 'utf8');
-
-      if (fileName.endsWith('.ts')) {
-        // looks like we've got a typed config file
-        // let's transpile it to .js quick
-        sourceText = transformFileSync(fileName, {
-          presets: [ts.default],
-          plugins: [mod.default]
-        }).code;
-      } else {
-        // quick hack to turn a modern es module
-        // into and old school commonjs module
-        sourceText = sourceText.replace(/export\s+\w+\s+(\w+)/gm, 'exports.$1');
-      }
+    require.extensions[extension] = (module: NodeJS.Module, fileName: string) => {
+      // let's transpile with Babel regardless if TS or JS
+      const sourceText = transformFileSync(fileName, {
+        presets: [ts.default],
+        plugins: [mod.default]
+      }).code;
 
       interface NodeModuleWithCompile extends NodeModule {
         // eslint-disable-next-line @typescript-eslint/method-signature-style
@@ -68,7 +58,7 @@ export const nodeRequire = <T>(id: string): {default: T} => {
     return require(id);
   } finally {
     // all set, let's go ahead and reset the require back to the default
-    require.extensions['.ts'] = undefined;
+    require.extensions[extension] = undefined;
 
     // Redo our hack
     Module._load = originalLoad;

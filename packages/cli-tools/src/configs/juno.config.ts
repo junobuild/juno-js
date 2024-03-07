@@ -6,7 +6,7 @@ import type {
 } from '@junobuild/config';
 import {existsSync} from 'node:fs';
 import {access, readFile} from 'node:fs/promises';
-import {join} from 'node:path';
+import {extname, join} from 'node:path';
 import type {ConfigFilename, ConfigType} from '../types/config';
 import {nodeRequire} from '../utils/node.utils';
 
@@ -95,13 +95,13 @@ export const readJunoConfig = async <
   const {configPath, configType} = junoConfigFile({...rest});
 
   switch (configType) {
-    case 'ts': {
-      const {default: userConfig} = nodeRequire<ConfigFnOrObject>(configPath);
-      return config(userConfig);
-    }
+    case 'ts':
     case 'js': {
-      const {default: userConfig} = await import(configPath);
-      return config(userConfig as ConfigFnOrObject);
+      const {default: userConfig} = nodeRequire<ConfigFnOrObject>({
+        id: configPath,
+        extension: extname(configPath)
+      });
+      return config(userConfig);
     }
     default: {
       const buffer = await readFile(configPath);

@@ -12,7 +12,7 @@ import {readFileSync} from 'node:fs';
 /**
  * Adapted source from Stencil (https://github.com/ionic-team/stencil/blob/main/src/compiler/sys/node-require.ts)
  */
-export const nodeRequire = <T>(id: string): {default: T} => {
+export const nodeRequire = <T>({id, extension}: {id: string; extension: string}): {default: T} => {
   // ensure we cleared out node's internal require() cache for this file
   // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete require.cache[id];
@@ -24,10 +24,10 @@ export const nodeRequire = <T>(id: string): {default: T} => {
   try {
     // let's override node's require for a second
     // don't worry, we'll revert this when we're done
-    require.extensions['.ts'] = (module: NodeJS.Module, fileName: string) => {
+    require.extensions[extension] = (module: NodeJS.Module, fileName: string) => {
       let sourceText = readFileSync(fileName, 'utf8');
 
-      if (fileName.endsWith('.ts')) {
+      if (fileName.endsWith(extension)) {
         // looks like we've got a typed config file
         // let's transpile it to .js quick
         sourceText = transformFileSync(fileName, {
@@ -68,7 +68,7 @@ export const nodeRequire = <T>(id: string): {default: T} => {
     return require(id);
   } finally {
     // all set, let's go ahead and reset the require back to the default
-    require.extensions['.ts'] = undefined;
+    require.extensions[extension] = undefined;
 
     // Redo our hack
     Module._load = originalLoad;

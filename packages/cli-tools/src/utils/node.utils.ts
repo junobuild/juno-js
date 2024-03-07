@@ -7,7 +7,6 @@ import {
   type JunoConfig,
   type JunoDevConfig
 } from '@junobuild/config';
-import {readFileSync} from 'node:fs';
 
 /**
  * Adapted source from Stencil (https://github.com/ionic-team/stencil/blob/main/src/compiler/sys/node-require.ts)
@@ -25,20 +24,13 @@ export const nodeRequire = <T>({id, extension}: {id: string; extension: string})
     // let's override node's require for a second
     // don't worry, we'll revert this when we're done
     require.extensions[extension] = (module: NodeJS.Module, fileName: string) => {
-      let sourceText = readFileSync(fileName, 'utf8');
+      // let's transpile with Babel regardless if TS or JS
+      const sourceText = transformFileSync(fileName, {
+        presets: [ts.default],
+        plugins: [mod.default]
+      }).code;
 
-      if (fileName.endsWith(extension)) {
-        // looks like we've got a typed config file
-        // let's transpile it to .js quick
-        sourceText = transformFileSync(fileName, {
-          presets: [ts.default],
-          plugins: [mod.default]
-        }).code;
-      } else {
-        // quick hack to turn a modern es module
-        // into and old school commonjs module
-        sourceText = sourceText.replace(/export\s+\w+\s+(\w+)/gm, 'exports.$1');
-      }
+      console.log('---------------------', fileName, sourceText);
 
       interface NodeModuleWithCompile extends NodeModule {
         // eslint-disable-next-line @typescript-eslint/method-signature-style

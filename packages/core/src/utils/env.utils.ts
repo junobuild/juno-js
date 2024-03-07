@@ -7,8 +7,8 @@ export const satelliteUrl = ({
   satelliteId: customSatelliteId,
   container: customContainer
 }: Satellite): string => {
-  const {satelliteId} = mapSatelliteId({satelliteId: customSatelliteId});
-  const {container} = mapContainer({container: customContainer});
+  const {satelliteId} = customOrEnvSatelliteId({satelliteId: customSatelliteId});
+  const {container} = customOrEnvContainer({container: customContainer});
 
   if (nonNullish(container) && container !== false) {
     const {host: containerHost, protocol} = new URL(
@@ -20,14 +20,14 @@ export const satelliteUrl = ({
   return `https://${satelliteId ?? 'unknown'}.icp0.io`;
 };
 
-export const mapSatelliteId = ({
+export const customOrEnvSatelliteId = ({
   satelliteId
 }: Pick<Satellite, 'satelliteId'>): Pick<Satellite, 'satelliteId'> =>
   nonNullish(satelliteId)
     ? {satelliteId}
     : EnvStore.getInstance().get() ?? {satelliteId: undefined};
 
-export const mapContainer = ({
+export const customOrEnvContainer = ({
   container: customContainer
 }: Pick<Satellite, 'container'>): Pick<Satellite, 'container'> =>
   nonNullish(customContainer)

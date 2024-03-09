@@ -1,4 +1,4 @@
-import type {MemoryText, PermissionText, Rule, RulesType} from '@junobuild/config';
+import type {PermissionText, RulesType} from '@junobuild/config';
 import {fromNullable, isNullish, nonNullish, toNullable} from '@junobuild/utils';
 import type {
   Memory,
@@ -11,12 +11,14 @@ import {
   DbRulesType,
   MemoryHeap,
   MemoryStable,
+  MemoryStableV2,
   PermissionControllers,
   PermissionManaged,
   PermissionPrivate,
   PermissionPublic,
   StorageRulesType
 } from '../constants/rules.constants';
+import type {MemoryText, Rule} from '../types/rules.types';
 
 export const mapRuleType = (type: RulesType): RulesTypeApi =>
   type === 'storage' ? StorageRulesType : DbRulesType;
@@ -87,9 +89,11 @@ const permissionFromText = (text: PermissionText): Permission => {
 };
 
 export const memoryFromText = (text: MemoryText): Memory => {
-  switch (text) {
-    case 'Stable':
+  switch ((text as string).toLowerCase()) {
+    case 'stable':
       return MemoryStable;
+    case 'stablev2':
+      return MemoryStableV2;
     default:
       return MemoryHeap;
   }
@@ -97,8 +101,12 @@ export const memoryFromText = (text: MemoryText): Memory => {
 
 export const memoryToText = (memory: Memory): MemoryText => {
   if ('Stable' in memory) {
-    return 'Stable';
+    return 'stable';
   }
 
-  return 'Heap';
+  if ('StableV2' in memory) {
+    return 'stableV2';
+  }
+
+  return 'heap';
 };

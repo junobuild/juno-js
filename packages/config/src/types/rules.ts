@@ -1,5 +1,5 @@
 export type PermissionText = 'public' | 'private' | 'managed' | 'controllers';
-export type MemoryText = 'Heap' | 'Stable';
+export type MemoryText = 'heap' | 'stable';
 export type RulesType = 'db' | 'storage';
 
 export interface Rule {

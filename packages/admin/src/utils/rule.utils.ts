@@ -25,20 +25,20 @@ export const mapSetRule = ({
   read,
   write,
   memory,
-  max_size,
-  max_capacity,
-  updated_at,
+  maxSize,
+  maxCapacity,
+  updatedAt,
   mutablePermissions
 }: Pick<
   Rule,
-  'read' | 'write' | 'max_size' | 'max_capacity' | 'updated_at' | 'memory' | 'mutablePermissions'
+  'read' | 'write' | 'maxSize' | 'maxCapacity' | 'updatedAt' | 'memory' | 'mutablePermissions'
 >): SetRule => ({
   read: permissionFromText(read),
   write: permissionFromText(write),
   memory: nonNullish(memory) ? [memoryFromText(memory)] : [],
-  updated_at: isNullish(updated_at) ? [] : [updated_at],
-  max_size: toNullable(nonNullish(max_size) && max_size > 0 ? BigInt(max_size) : undefined),
-  max_capacity: toNullable(nonNullish(max_capacity) && max_capacity > 0 ? max_capacity : undefined),
+  updated_at: isNullish(updatedAt) ? [] : [updatedAt],
+  max_size: toNullable(nonNullish(maxSize) && maxSize > 0 ? BigInt(maxSize) : undefined),
+  max_capacity: toNullable(nonNullish(maxCapacity) && maxCapacity > 0 ? maxCapacity : undefined),
   mutable_permissions: toNullable(mutablePermissions)
 });
 
@@ -54,10 +54,10 @@ export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
     read: permissionToText(read),
     write: permissionToText(write),
     memory: memoryToText(fromNullable(memory) ?? MemoryHeap),
-    updated_at,
-    created_at,
-    ...(nonNullish(maxSize) && {max_size: maxSize}),
-    ...(nonNullish(maxCapacity) && {max_capacity: maxCapacity}),
+    updatedAt: updated_at,
+    createdAt: created_at,
+    ...(nonNullish(maxSize) && {maxSize}),
+    ...(nonNullish(maxCapacity) && {maxCapacity}),
     mutablePermissions: fromNullable(mutable_permissions) ?? true
   };
 };
@@ -92,18 +92,18 @@ const permissionFromText = (text: PermissionText): Permission => {
 };
 
 export const memoryFromText = (text: MemoryText): Memory => {
-  switch (text) {
-    case 'Stable':
-      return MemoryStable;
-    default:
+  switch (text.toLowerCase()) {
+    case 'heap':
       return MemoryHeap;
+    default:
+      return MemoryStable;
   }
 };
 
 export const memoryToText = (memory: Memory): MemoryText => {
-  if ('Stable' in memory) {
-    return 'Stable';
+  if ('Heap' in memory) {
+    return 'heap';
   }
 
-  return 'Heap';
+  return 'stable';
 };

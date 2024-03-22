@@ -1,5 +1,5 @@
 export type PermissionText = 'public' | 'private' | 'managed' | 'controllers';
-export type MemoryText = 'Heap' | 'Stable';
+export type MemoryText = 'heap' | 'stable';
 export type RulesType = 'db' | 'storage';
 
 export interface Rule {
@@ -7,9 +7,9 @@ export interface Rule {
   read: PermissionText;
   write: PermissionText;
   memory: MemoryText;
-  created_at?: bigint;
-  updated_at?: bigint;
-  max_size?: number;
-  max_capacity?: number;
+  createdAt?: bigint;
+  updatedAt?: bigint;
+  maxSize?: number;
+  maxCapacity?: number;
   mutablePermissions: boolean;
 }

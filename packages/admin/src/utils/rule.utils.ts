@@ -26,24 +26,28 @@ export const mapSetRule = ({
   write,
   memory,
   max_size,
+  max_capacity,
   updated_at,
   mutablePermissions
 }: Pick<
   Rule,
-  'read' | 'write' | 'max_size' | 'updated_at' | 'memory' | 'mutablePermissions'
+  'read' | 'write' | 'max_size' | 'max_capacity' | 'updated_at' | 'memory' | 'mutablePermissions'
 >): SetRule => ({
   read: permissionFromText(read),
   write: permissionFromText(write),
   memory: nonNullish(memory) ? [memoryFromText(memory)] : [],
   updated_at: isNullish(updated_at) ? [] : [updated_at],
   max_size: toNullable(nonNullish(max_size) && max_size > 0 ? BigInt(max_size) : undefined),
+  max_capacity: toNullable(nonNullish(max_capacity) && max_capacity > 0 ? max_capacity : undefined),
   mutable_permissions: toNullable(mutablePermissions)
 });
 
 export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
-  const {read, write, updated_at, created_at, max_size, memory, mutable_permissions} = rule;
+  const {read, write, updated_at, created_at, max_size, max_capacity, memory, mutable_permissions} =
+    rule;
 
   const maxSize = max_size?.[0] ?? 0n > 0n ? Number(fromNullable(max_size)) : undefined;
+  const maxCapacity = max_capacity?.[0] ?? 0 > 0 ? fromNullable(max_capacity) : undefined;
 
   return {
     collection,
@@ -53,6 +57,7 @@ export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
     updated_at,
     created_at,
     ...(nonNullish(maxSize) && {max_size: maxSize}),
+    ...(nonNullish(maxCapacity) && {max_capacity: maxCapacity}),
     mutablePermissions: fromNullable(mutable_permissions) ?? true
   };
 };

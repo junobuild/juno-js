@@ -1,10 +1,12 @@
 import type {Rule} from '../types/rules';
 
-export type SatelliteDevCollection = Omit<Rule, 'createdAt' | 'updatedAt'>;
+export type SatelliteDevDbCollection = Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize'>;
+
+export type SatelliteDevStorageCollection = Omit<Rule, 'createdAt' | 'updatedAt' | 'maxCapacity'>;
 
 export interface SatelliteDevCollections {
-  db?: SatelliteDevCollection[];
-  storage?: SatelliteDevCollection[];
+  db?: SatelliteDevDbCollection[];
+  storage?: SatelliteDevStorageCollection[];
 }
 
 export interface SatelliteDevController {

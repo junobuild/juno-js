@@ -83,10 +83,10 @@ Configuration options for [Juno] CLI.
 
 #### :gear: SatelliteDevCollections
 
-| Property  | Type                       | Description |
-| --------- | -------------------------- | ----------- |
-| `db`      | `SatelliteDevCollection[]` |             |
-| `storage` | `SatelliteDevCollection[]` |             |
+| Property  | Type                              | Description |
+| --------- | --------------------------------- | ----------- |
+| `db`      | `SatelliteDevDbCollection[]`      |             |
+| `storage` | `SatelliteDevStorageCollection[]` |             |
 
 #### :gear: SatelliteDevController
 
@@ -112,7 +112,8 @@ Configuration options for [Juno] CLI.
 
 - [ENCODING_TYPE](#gear-encoding_type)
 - [JunoConfigMode](#gear-junoconfigmode)
-- [SatelliteDevCollection](#gear-satellitedevcollection)
+- [SatelliteDevDbCollection](#gear-satellitedevdbcollection)
+- [SatelliteDevStorageCollection](#gear-satellitedevstoragecollection)
 - [JunoDevConfigFn](#gear-junodevconfigfn)
 - [JunoDevConfigFnOrObject](#gear-junodevconfigfnorobject)
 
@@ -132,13 +133,21 @@ Configuration options for [Juno] CLI.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/mainnet/juno.env.ts#L1)
 
-#### :gear: SatelliteDevCollection
+#### :gear: SatelliteDevDbCollection
 
-| Type                     | Type                                     |
-| ------------------------ | ---------------------------------------- |
-| `SatelliteDevCollection` | `Omit<Rule, 'createdAt' or 'updatedAt'>` |
+| Type                       | Type                                                  |
+| -------------------------- | ----------------------------------------------------- |
+| `SatelliteDevDbCollection` | `Omit<Rule, 'createdAt' or 'updatedAt' or 'maxSize'>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L3)
+
+#### :gear: SatelliteDevStorageCollection
+
+| Type                            | Type                                                      |
+| ------------------------------- | --------------------------------------------------------- |
+| `SatelliteDevStorageCollection` | `Omit<Rule, 'createdAt' or 'updatedAt' or 'maxCapacity'>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L5)
 
 #### :gear: JunoDevConfigFn
 

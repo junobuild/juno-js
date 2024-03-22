@@ -134,9 +134,9 @@ Configuration options for [Juno] CLI.
 
 #### :gear: SatelliteDevCollection
 
-| Type                     | Type                                       |
-| ------------------------ | ------------------------------------------ |
-| `SatelliteDevCollection` | `Omit<Rule, 'created_at' or 'updated_at'>` |
+| Type                     | Type                                     |
+| ------------------------ | ---------------------------------------- |
+| `SatelliteDevCollection` | `Omit<Rule, 'createdAt' or 'updatedAt'>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L3)
 

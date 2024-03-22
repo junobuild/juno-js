@@ -1,6 +1,6 @@
 import type {Rule} from '../types/rules';
 
-export type SatelliteDevCollection = Omit<Rule, 'created_at' | 'updated_at'>;
+export type SatelliteDevCollection = Omit<Rule, 'createdAt' | 'updatedAt'>;
 
 export interface SatelliteDevCollections {
   db?: SatelliteDevCollection[];

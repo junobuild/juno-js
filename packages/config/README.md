@@ -69,24 +69,24 @@ Configuration options for [Juno] CLI.
 
 #### :gear: OrbiterConfig
 
-| Property    | Type     | Description                                                              |
-| ----------- | -------- | ------------------------------------------------------------------------ |
-| `id`        | `string` | The identifier of the orbiter used in the dApp.                          |
-| `orbiterId` | `string` | deprecated: `orbiterId` will be removed in the future. Use `id` instead. |
+| Property    | Type                  | Description                                                              |
+| ----------- | --------------------- | ------------------------------------------------------------------------ |
+| `id`        | `string`              | The identifier of the orbiter used in the dApp.                          |
+| `orbiterId` | `string or undefined` | deprecated: `orbiterId` will be removed in the future. Use `id` instead. |
 
 #### :gear: JunoConfig
 
-| Property    | Type              | Description |
-| ----------- | ----------------- | ----------- |
-| `satellite` | `SatelliteConfig` |             |
-| `orbiter`   | `OrbiterConfig`   |             |
+| Property    | Type                         | Description |
+| ----------- | ---------------------------- | ----------- |
+| `satellite` | `SatelliteConfig`            |             |
+| `orbiter`   | `OrbiterConfig or undefined` |             |
 
 #### :gear: SatelliteDevCollections
 
-| Property  | Type                              | Description |
-| --------- | --------------------------------- | ----------- |
-| `db`      | `SatelliteDevDbCollection[]`      |             |
-| `storage` | `SatelliteDevStorageCollection[]` |             |
+| Property  | Type                                           | Description |
+| --------- | ---------------------------------------------- | ----------- |
+| `db`      | `SatelliteDevDbCollection[] or undefined`      |             |
+| `storage` | `SatelliteDevStorageCollection[] or undefined` |             |
 
 #### :gear: SatelliteDevController
 
@@ -97,10 +97,10 @@ Configuration options for [Juno] CLI.
 
 #### :gear: SatelliteDevConfig
 
-| Property      | Type                       | Description |
-| ------------- | -------------------------- | ----------- |
-| `collections` | `SatelliteDevCollections`  |             |
-| `controllers` | `SatelliteDevController[]` |             |
+| Property      | Type                                    | Description |
+| ------------- | --------------------------------------- | ----------- |
+| `collections` | `SatelliteDevCollections`               |             |
+| `controllers` | `SatelliteDevController[] or undefined` |             |
 
 #### :gear: JunoDevConfig
 

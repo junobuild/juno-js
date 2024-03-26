@@ -15,3 +15,14 @@ export interface SignInOptions {
   windowed?: boolean;
   provider?: InternetIdentityProvider | NFIDProvider;
 }
+
+export type InternetIdentityDomain = 'internetcomputer.org' | 'ic0.app';
+
+export interface InternetIdentityConfig {
+  domain?: InternetIdentityDomain;
+}
+
+export interface NFIDConfig {
+  appName: string;
+  logoUrl: string;
+}

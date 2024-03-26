@@ -2,7 +2,13 @@ import {isNullish, nonNullish} from '@junobuild/utils';
 import {II_POPUP, INTERNET_COMPUTER_ORG, NFID_POPUP} from '../constants/auth.constants';
 import {DOCKER_CONTAINER_URL, DOCKER_INTERNET_IDENTITY_ID} from '../constants/container.constants';
 import {EnvStore} from '../stores/env.store';
-import type {Provider, SignInOptions} from '../types/auth.types';
+import type {
+  InternetIdentityConfig,
+  InternetIdentityDomain,
+  NFIDConfig,
+  Provider,
+  SignInOptions
+} from '../types/auth.types';
 import {popupCenter} from '../utils/window.utils';
 
 export interface AuthProvider {
@@ -14,9 +20,9 @@ export interface AuthProvider {
 }
 
 export class InternetIdentityProvider implements AuthProvider {
-  #domain?: 'internetcomputer.org' | 'ic0.app';
+  #domain?: InternetIdentityDomain;
 
-  constructor({domain}: {domain?: 'internetcomputer.org' | 'ic0.app'}) {
+  constructor({domain}: InternetIdentityConfig) {
     this.#domain = domain;
   }
 
@@ -65,7 +71,7 @@ export class NFIDProvider implements AuthProvider {
   #appName: string;
   #logoUrl: string;
 
-  constructor({appName, logoUrl}: {appName: string; logoUrl: string}) {
+  constructor({appName, logoUrl}: NFIDConfig) {
     this.#appName = appName;
     this.#logoUrl = logoUrl;
   }

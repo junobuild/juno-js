@@ -63,6 +63,6 @@
     "@dfinity/agent": "^1.2.0",
     "@dfinity/identity": "^1.2.0",
     "@dfinity/principal": "^1.2.0",
-    "@dfinity/utils": "^2.1.3-next-2024-03-26.1"
+    "@dfinity/utils": "^2.1.3"
   }
 }

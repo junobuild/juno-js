@@ -11,29 +11,31 @@ import type {
 } from '../types/auth.types';
 import {popupCenter} from '../utils/window.utils';
 
+export interface AuthProviderSignInOptions {
+  identityProvider: string;
+  windowOpenerFeatures?: string;
+  allowPinAuthentication?: boolean;
+}
+
 export interface AuthProvider {
   readonly id: Provider;
-  signInOptions: (options: Pick<SignInOptions, 'windowed'>) => {
-    identityProvider: string;
-    windowOpenerFeatures?: string;
-  };
+  signInOptions: (options: Pick<SignInOptions, 'windowed'>) => AuthProviderSignInOptions;
 }
 
 export class InternetIdentityProvider implements AuthProvider {
   #domain?: InternetIdentityDomain;
+  #allowPin?: boolean;
 
-  constructor({domain}: InternetIdentityConfig) {
+  constructor({domain, allowPin}: InternetIdentityConfig) {
     this.#domain = domain;
+    this.#allowPin = allowPin;
   }
 
   get id(): Provider {
     return 'internet_identity';
   }
 
-  signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): {
-    identityProvider: string;
-    windowOpenerFeatures?: string;
-  } {
+  signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions {
     const identityProviderUrl = (): string => {
       const container = EnvStore.getInstance().get()?.container;
 
@@ -62,6 +64,7 @@ export class InternetIdentityProvider implements AuthProvider {
       ...(windowed !== false && {
         windowOpenerFeatures: popupCenter(II_POPUP)
       }),
+      allowPinAuthentication: this.#allowPin === true,
       identityProvider: identityProviderUrl()
     };
   }
@@ -80,10 +83,7 @@ export class NFIDProvider implements AuthProvider {
     return 'nfid';
   }
 
-  signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): {
-    identityProvider: string;
-    windowOpenerFeatures?: string;
-  } {
+  signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions {
     return {
       ...(windowed !== false && {
         windowOpenerFeatures: popupCenter(NFID_POPUP)

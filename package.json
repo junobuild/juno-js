@@ -27,12 +27,12 @@
   ],
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
-    "@size-limit/esbuild": "^11.0.2",
-    "@size-limit/preset-small-lib": "^11.0.2",
-    "@types/node": "^20.11.16",
-    "@typescript-eslint/eslint-plugin": "^6.20.0",
-    "esbuild": "^0.20.0",
-    "eslint": "^8.56.0",
+    "@size-limit/esbuild": "^11.1.2",
+    "@size-limit/preset-small-lib": "^11.1.2",
+    "@types/node": "^20.11.30",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "esbuild": "^0.20.2",
+    "eslint": "^8.57.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-node": "^11.1.0",
@@ -40,8 +40,8 @@
     "node-fetch": "^3.3.2",
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "tsdoc-markdown": "^0.3.0",
-    "typescript": "^5.2.2"
+    "tsdoc-markdown": "^0.4.0",
+    "typescript": "^5.4.3"
   },
   "size-limit": [
     {

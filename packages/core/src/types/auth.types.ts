@@ -13,6 +13,7 @@ export interface SignInOptions {
   maxTimeToLive?: bigint;
   derivationOrigin?: string | URL;
   windowed?: boolean;
+  allowPin?: boolean;
   provider?: InternetIdentityProvider | NFIDProvider;
 }
 

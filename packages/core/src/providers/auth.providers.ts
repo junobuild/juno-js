@@ -11,12 +11,14 @@ import type {
 } from '../types/auth.types';
 import {popupCenter} from '../utils/window.utils';
 
+export interface AuthProviderSignInOptions {
+  identityProvider: string;
+  windowOpenerFeatures?: string;
+}
+
 export interface AuthProvider {
   readonly id: Provider;
-  signInOptions: (options: Pick<SignInOptions, 'windowed'>) => {
-    identityProvider: string;
-    windowOpenerFeatures?: string;
-  };
+  signInOptions: (options: Pick<SignInOptions, 'windowed'>) => AuthProviderSignInOptions;
 }
 
 export class InternetIdentityProvider implements AuthProvider {
@@ -30,10 +32,7 @@ export class InternetIdentityProvider implements AuthProvider {
     return 'internet_identity';
   }
 
-  signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): {
-    identityProvider: string;
-    windowOpenerFeatures?: string;
-  } {
+  signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions {
     const identityProviderUrl = (): string => {
       const container = EnvStore.getInstance().get()?.container;
 
@@ -80,10 +79,7 @@ export class NFIDProvider implements AuthProvider {
     return 'nfid';
   }
 
-  signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): {
-    identityProvider: string;
-    windowOpenerFeatures?: string;
-  } {
+  signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions {
     return {
       ...(windowed !== false && {
         windowOpenerFeatures: popupCenter(NFID_POPUP)

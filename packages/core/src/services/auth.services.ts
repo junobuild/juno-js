@@ -1,6 +1,9 @@
 import type {Identity} from '@dfinity/agent';
 import type {AuthClient} from '@dfinity/auth-client';
-import {DELEGATION_IDENTITY_EXPIRATION} from '../constants/auth.constants';
+import {
+  ALLOW_PIN_AUTHENTICATION,
+  DELEGATION_IDENTITY_EXPIRATION
+} from '../constants/auth.constants';
 import {InternetIdentityProvider} from '../providers/auth.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {Provider, SignInOptions} from '../types/auth.types';
@@ -36,6 +39,7 @@ export const signIn = async (options?: SignInOptions) =>
       },
       onError: (error?: string) => reject(error),
       maxTimeToLive: options?.maxTimeToLive ?? DELEGATION_IDENTITY_EXPIRATION,
+      allowPinAuthentication: options?.allowPin ?? ALLOW_PIN_AUTHENTICATION,
       ...(options?.derivationOrigin !== undefined && {derivationOrigin: options.derivationOrigin}),
       ...provider.signInOptions({
         windowed: options?.windowed

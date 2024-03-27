@@ -13,6 +13,7 @@ export interface SignInOptions {
   maxTimeToLive?: bigint;
   derivationOrigin?: string | URL;
   windowed?: boolean;
+  allowPin?: boolean;
   provider?: InternetIdentityProvider | NFIDProvider;
 }
 
@@ -20,7 +21,6 @@ export type InternetIdentityDomain = 'internetcomputer.org' | 'ic0.app';
 
 export interface InternetIdentityConfig {
   domain?: InternetIdentityDomain;
-  allowPin?: boolean;
 }
 
 export interface NFIDConfig {

@@ -14,7 +14,6 @@ import {popupCenter} from '../utils/window.utils';
 export interface AuthProviderSignInOptions {
   identityProvider: string;
   windowOpenerFeatures?: string;
-  allowPinAuthentication?: boolean;
 }
 
 export interface AuthProvider {
@@ -24,11 +23,9 @@ export interface AuthProvider {
 
 export class InternetIdentityProvider implements AuthProvider {
   #domain?: InternetIdentityDomain;
-  #allowPin?: boolean;
 
-  constructor({domain, allowPin}: InternetIdentityConfig) {
+  constructor({domain}: InternetIdentityConfig) {
     this.#domain = domain;
-    this.#allowPin = allowPin;
   }
 
   get id(): Provider {
@@ -64,7 +61,6 @@ export class InternetIdentityProvider implements AuthProvider {
       ...(windowed !== false && {
         windowOpenerFeatures: popupCenter(II_POPUP)
       }),
-      allowPinAuthentication: this.#allowPin === true,
       identityProvider: identityProviderUrl()
     };
   }

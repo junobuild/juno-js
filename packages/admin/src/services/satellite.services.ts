@@ -174,7 +174,7 @@ export const upgradeSatellite = async ({
         canister_id: Principal.fromText(satelliteId),
         arg: new Uint8Array(arg),
         wasm_module,
-        mode: reset ? {reinstall: null} : {upgrade: null}
+        mode: reset ? {reinstall: null} : {upgrade: [{skip_pre_upgrade: [false]}]}
       }
     });
 
@@ -193,7 +193,7 @@ export const upgradeSatellite = async ({
       canister_id: Principal.fromText(satelliteId),
       arg: new Uint8Array(arg),
       wasm_module,
-      mode: reset ? {reinstall: null} : {upgrade: null}
+      mode: reset ? {reinstall: null} : {upgrade: [{skip_pre_upgrade: [false]}]}
     }
   });
 };

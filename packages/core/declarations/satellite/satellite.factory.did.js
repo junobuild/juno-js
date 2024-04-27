@@ -45,6 +45,12 @@ export const idlFactory = ({IDL}) => {
     headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
     created_at: IDL.Nat64
   });
+  const AuthenticationConfigInternetIdentity = IDL.Record({
+    authentication_domain: IDL.Opt(IDL.Text)
+  });
+  const AuthenticationConfig = IDL.Record({
+    internet_identity: IDL.Opt(AuthenticationConfigInternetIdentity)
+  });
   const StorageConfigIFrame = IDL.Variant({
     Deny: IDL.Null,
     AllowAny: IDL.Null,
@@ -60,7 +66,10 @@ export const idlFactory = ({IDL}) => {
     headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)))),
     redirects: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, StorageConfigRedirect)))
   });
-  const Config = IDL.Record({storage: StorageConfig});
+  const Config = IDL.Record({
+    authentication: IDL.Opt(AuthenticationConfig),
+    storage: StorageConfig
+  });
   const Doc = IDL.Record({
     updated_at: IDL.Nat64,
     owner: IDL.Principal,

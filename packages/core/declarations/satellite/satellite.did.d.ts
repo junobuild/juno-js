@@ -22,12 +22,19 @@ export interface AssetNoContent {
   headers: Array<[string, string]>;
   created_at: bigint;
 }
+export interface AuthenticationConfig {
+  internet_identity: [] | [AuthenticationConfigInternetIdentity];
+}
+export interface AuthenticationConfigInternetIdentity {
+  authentication_domain: [] | [string];
+}
 export interface CommitBatch {
   batch_id: bigint;
   headers: Array<[string, string]>;
   chunk_ids: Array<bigint>;
 }
 export interface Config {
+  authentication: [] | [AuthenticationConfig];
   storage: StorageConfig;
 }
 export interface Controller {

@@ -1,4 +1,4 @@
-import {canister_id, install_code_args, wasm_module} from '../../declarations/ic/ic.did';
+import type {canister_id, install_code_args, wasm_module} from '../../declarations/ic/ic.did';
 
 export type InstallCodeParams = {
   arg: Uint8Array;

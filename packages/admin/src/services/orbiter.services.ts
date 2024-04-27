@@ -34,7 +34,7 @@ export const upgradeOrbiter = async ({
       canister_id: Principal.fromText(orbiterId),
       arg: new Uint8Array(arg),
       wasm_module,
-      mode: reset ? {reinstall: null} : {upgrade: null}
+      mode: reset ? {reinstall: null} : {upgrade: [{skip_pre_upgrade: [false]}]}
     }
   });
 };

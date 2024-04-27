@@ -40,7 +40,7 @@ export const upgradeMissionControl = async ({
       canister_id: Principal.fromText(missionControlId),
       arg: new Uint8Array(arg),
       wasm_module,
-      mode: {upgrade: null}
+      mode: {upgrade: [{skip_pre_upgrade: [false]}]}
     }
   });
 };

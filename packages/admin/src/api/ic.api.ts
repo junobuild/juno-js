@@ -12,7 +12,7 @@ export const upgradeCode = async ({
   code
 }: {
   actor: ActorParameters;
-  code: Omit<InstallCodeParams, 'sender_canister_version'>;
+  code: InstallCodeParams;
 }): Promise<void> => {
   const {install_code}: ICActor = await getICActor(actor);
 

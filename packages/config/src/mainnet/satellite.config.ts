@@ -1,5 +1,6 @@
 import type {ENCODING_TYPE} from '../types/encoding';
 import type {Either} from '../utils/ts.utils';
+import type {AuthenticationConfig} from './authentication.config';
 import type {JunoConfigMode} from './juno.env';
 import type {StorageConfig} from './storage.config';
 
@@ -52,9 +53,15 @@ export type SatelliteConfig = Either<SatelliteId, SatelliteIds> & {
 
   /**
    * Optional configuration parameters for the satellite, affecting the operational behavior of its Storage.
-   * Changes to these parameters must be applied manually afterwards using `juno config` commands.
+   * Changes to these parameters must be applied manually afterwards for example with the CLI using `juno config` commands.
    */
   storage?: StorageConfig;
+
+  /**
+   * Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication.
+   * Changes to these parameters must be applied manually afterwards for example with the CLI using `juno config` commands.
+   */
+  authentication?: AuthenticationConfig;
 
   /**
    * Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore.

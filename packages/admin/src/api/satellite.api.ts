@@ -3,6 +3,7 @@ import {toNullable} from '@junobuild/utils';
 import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
 import type {
+  AuthenticationConfig,
   Config,
   Controller,
   CustomDomain,
@@ -27,8 +28,28 @@ export const setConfig = async ({
   config: Config;
   satellite: SatelliteParameters;
 }): Promise<void> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
-  return actor.set_config(config);
+  const {set_config} = await getSatelliteActor(satellite);
+  return set_config(config);
+};
+
+export const setAuthConfig = async ({
+  config,
+  satellite
+}: {
+  config: AuthenticationConfig;
+  satellite: SatelliteParameters;
+}): Promise<void> => {
+  const {set_auth_config} = await getSatelliteActor(satellite);
+  return set_auth_config(config);
+};
+
+export const getAuthConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<[] | [AuthenticationConfig]> => {
+  const {get_auth_config} = await getSatelliteActor(satellite);
+  return get_auth_config();
 };
 
 export const listRules = async ({

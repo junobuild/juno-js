@@ -1,6 +1,7 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import type {
+  AuthenticationConfig,
   Rule,
   RulesType,
   SatelliteConfig,
@@ -23,12 +24,14 @@ import {
   countDocs as countDocsApi,
   deleteAssets as deleteAssetsApi,
   deleteDocs as deleteDocsApi,
+  getAuthConfig as getAuthConfigApi,
   listControllers,
   listCustomDomains as listCustomDomainsApi,
   listDeprecatedControllers,
   listDeprecatedNoScopeControllers,
   listRules as listRulesApi,
   memorySize,
+  setAuthConfig as setAuthConfigApi,
   setConfig as setConfigApi,
   setControllers,
   setCustomDomain as setCustomDomainApi,
@@ -85,6 +88,57 @@ export const setConfig = async ({
       }
     }
   });
+};
+
+export const setAuthConfig = async ({
+  config: {
+    authentication: {internetIdentity}
+  },
+  ...rest
+}: {
+  config: Required<Pick<SatelliteConfig, 'authentication'>>;
+  satellite: SatelliteParameters;
+}) => {
+  await setAuthConfigApi({
+    config: {
+      internet_identity: isNullish(internetIdentity?.derivationOrigin)
+        ? []
+        : [
+            {
+              derivation_origin: [internetIdentity.derivationOrigin]
+            }
+          ]
+    },
+    ...rest
+  });
+};
+
+export const getAuthConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<AuthenticationConfig | undefined> => {
+  const config = fromNullable(
+    await getAuthConfigApi({
+      satellite
+    })
+  );
+
+  if (isNullish(config)) {
+    return undefined;
+  }
+
+  const internetIdentity = fromNullable(config.internet_identity ?? []);
+
+  return {
+    ...(nonNullish(internetIdentity) && {
+      internetIdentity: {
+        ...(nonNullish(fromNullable(internetIdentity.derivation_origin)) && {
+          derivationOrigin: fromNullable(internetIdentity.derivation_origin)
+        })
+      }
+    })
+  };
 };
 
 export const listRules = async ({

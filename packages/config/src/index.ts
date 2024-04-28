@@ -1,4 +1,5 @@
 export type * from './dev/juno.dev.config';
+export type * from './mainnet/authentication.config';
 export type * from './mainnet/juno.config';
 export type * from './mainnet/juno.env';
 export type * from './mainnet/satellite.config';

@@ -22,6 +22,12 @@ export interface AssetNoContent {
   headers: Array<[string, string]>;
   created_at: bigint;
 }
+export interface AuthenticationConfig {
+  internet_identity: [] | [AuthenticationConfigInternetIdentity];
+}
+export interface AuthenticationConfigInternetIdentity {
+  derivation_origin: [] | [string];
+}
 export interface CommitBatch {
   batch_id: bigint;
   headers: Array<[string, string]>;
@@ -211,6 +217,7 @@ export interface _SERVICE {
   del_rule: ActorMethod<[RulesType, string, DelDoc], undefined>;
   deposit_cycles: ActorMethod<[DepositCyclesArgs], undefined>;
   get_asset: ActorMethod<[string, string], [] | [AssetNoContent]>;
+  get_auth_config: ActorMethod<[], [] | [AuthenticationConfig]>;
   get_config: ActorMethod<[], Config>;
   get_doc: ActorMethod<[string, string], [] | [Doc]>;
   get_many_assets: ActorMethod<[Array<[string, string]>], Array<[string, [] | [AssetNoContent]]>>;
@@ -227,6 +234,7 @@ export interface _SERVICE {
   list_docs: ActorMethod<[string, ListParams], ListResults_1>;
   list_rules: ActorMethod<[RulesType], Array<[string, Rule]>>;
   memory_size: ActorMethod<[], MemorySize>;
+  set_auth_config: ActorMethod<[AuthenticationConfig], undefined>;
   set_config: ActorMethod<[Config], undefined>;
   set_controllers: ActorMethod<[SetControllersArgs], Array<[Principal, Controller]>>;
   set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;

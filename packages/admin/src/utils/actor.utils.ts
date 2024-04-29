@@ -37,7 +37,7 @@ export const initAgent = async ({
       : container
     : 'https://icp-api.io';
 
-  const agent = new HttpAgent({identity, host, ...(fetch && {fetch})});
+  const agent = new HttpAgent({identity, host, retryTimes: 10, ...(nonNullish(fetch) && {fetch})});
 
   if (localActor) {
     // Fetch root key for certificate validation during development

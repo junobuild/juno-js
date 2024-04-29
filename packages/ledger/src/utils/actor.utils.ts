@@ -24,7 +24,7 @@ export const createActor = async <T = Record<string, ActorMethod>>({
       : container
     : 'https://icp-api.io';
 
-  const agent: HttpAgent = new HttpAgent({identity, host, ...(fetch && {fetch})});
+  const agent: HttpAgent = new HttpAgent({identity, host, retryTimes: 10, ...(fetch && {fetch})});
 
   if (localActor) {
     // Fetch root key for certificate validation during development

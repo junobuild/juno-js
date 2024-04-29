@@ -21,7 +21,8 @@ export const createActor = async <T = Record<string, ActorMethod>>({
 
   const agent: HttpAgent = new HttpAgent({
     identity: new AnonymousIdentity(),
-    host
+    host,
+    retryTimes: 10
   });
 
   if (localActor) {

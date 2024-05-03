@@ -5,4 +5,5 @@ export interface Doc<D> {
   owner?: string;
   created_at?: bigint;
   updated_at?: bigint;
+  version?: bigint;
 }

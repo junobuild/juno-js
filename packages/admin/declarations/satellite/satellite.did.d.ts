@@ -50,7 +50,7 @@ export interface CustomDomain {
   bn_id: [] | [string];
 }
 export interface DelDoc {
-  updated_at: [] | [bigint];
+  version: [] | [bigint];
 }
 export interface DeleteControllersArgs {
   controllers: Array<Principal>;
@@ -65,6 +65,7 @@ export interface Doc {
   data: Uint8Array | number[];
   description: [] | [string];
   created_at: bigint;
+  version: [] | [bigint];
 }
 export interface HttpRequest {
   url: string;
@@ -136,6 +137,7 @@ export interface Rule {
   max_size: [] | [bigint];
   read: Permission;
   created_at: bigint;
+  version: [] | [bigint];
   mutable_permissions: [] | [boolean];
   write: Permission;
 }
@@ -150,16 +152,16 @@ export interface SetControllersArgs {
   controllers: Array<Principal>;
 }
 export interface SetDoc {
-  updated_at: [] | [bigint];
   data: Uint8Array | number[];
   description: [] | [string];
+  version: [] | [bigint];
 }
 export interface SetRule {
   max_capacity: [] | [number];
   memory: [] | [Memory];
-  updated_at: [] | [bigint];
   max_size: [] | [bigint];
   read: Permission;
+  version: [] | [bigint];
   mutable_permissions: [] | [boolean];
   write: Permission;
 }

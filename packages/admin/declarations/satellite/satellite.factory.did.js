@@ -19,7 +19,7 @@ export const idlFactory = ({IDL}) => {
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
-  const DelDoc = IDL.Record({updated_at: IDL.Opt(IDL.Nat64)});
+  const DelDoc = IDL.Record({version: IDL.Opt(IDL.Nat64)});
   const RulesType = IDL.Variant({Db: IDL.Null, Storage: IDL.Null});
   const DepositCyclesArgs = IDL.Record({
     cycles: IDL.Nat,
@@ -72,7 +72,8 @@ export const idlFactory = ({IDL}) => {
     owner: IDL.Principal,
     data: IDL.Vec(IDL.Nat8),
     description: IDL.Opt(IDL.Text),
-    created_at: IDL.Nat64
+    created_at: IDL.Nat64,
+    version: IDL.Opt(IDL.Nat64)
   });
   const HttpRequest = IDL.Record({
     url: IDL.Text,
@@ -168,6 +169,7 @@ export const idlFactory = ({IDL}) => {
     max_size: IDL.Opt(IDL.Nat),
     read: Permission,
     created_at: IDL.Nat64,
+    version: IDL.Opt(IDL.Nat64),
     mutable_permissions: IDL.Opt(IDL.Bool),
     write: Permission
   });
@@ -182,16 +184,16 @@ export const idlFactory = ({IDL}) => {
     controllers: IDL.Vec(IDL.Principal)
   });
   const SetDoc = IDL.Record({
-    updated_at: IDL.Opt(IDL.Nat64),
     data: IDL.Vec(IDL.Nat8),
-    description: IDL.Opt(IDL.Text)
+    description: IDL.Opt(IDL.Text),
+    version: IDL.Opt(IDL.Nat64)
   });
   const SetRule = IDL.Record({
     max_capacity: IDL.Opt(IDL.Nat32),
     memory: IDL.Opt(Memory),
-    updated_at: IDL.Opt(IDL.Nat64),
     max_size: IDL.Opt(IDL.Nat),
     read: Permission,
+    version: IDL.Opt(IDL.Nat64),
     mutable_permissions: IDL.Opt(IDL.Bool),
     write: Permission
   });

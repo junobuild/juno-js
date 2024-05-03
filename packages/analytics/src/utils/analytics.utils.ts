@@ -1,9 +1,14 @@
 import {toNullable} from '@junobuild/utils';
 import {nowInBigIntNanoSeconds} from './date.utils';
 
-export const timestamp = (): {collected_at: bigint; updated_at: [] | [bigint]} => ({
+export const timestamp = (): {
+  collected_at: bigint;
+  updated_at: [] | [bigint];
+  version: [] | [bigint];
+} => ({
   collected_at: nowInBigIntNanoSeconds(),
-  updated_at: []
+  updated_at: [],
+  version: []
 });
 
 export const userAgent = (): {user_agent: [] | [string]} => {

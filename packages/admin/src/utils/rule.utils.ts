@@ -1,5 +1,5 @@
 import type {MemoryText, PermissionText, Rule, RulesType} from '@junobuild/config';
-import {fromNullable, isNullish, nonNullish, toNullable} from '@junobuild/utils';
+import {fromNullable, nonNullish, toNullable} from '@junobuild/utils';
 import type {
   Memory,
   Permission,
@@ -27,16 +27,16 @@ export const mapSetRule = ({
   memory,
   maxSize,
   maxCapacity,
-  updatedAt,
+  version,
   mutablePermissions
 }: Pick<
   Rule,
-  'read' | 'write' | 'maxSize' | 'maxCapacity' | 'updatedAt' | 'memory' | 'mutablePermissions'
+  'read' | 'write' | 'maxSize' | 'maxCapacity' | 'version' | 'memory' | 'mutablePermissions'
 >): SetRule => ({
   read: permissionFromText(read),
   write: permissionFromText(write),
   memory: nonNullish(memory) ? [memoryFromText(memory)] : [],
-  updated_at: isNullish(updatedAt) ? [] : [updatedAt],
+  version: toNullable(version),
   max_size: toNullable(nonNullish(maxSize) && maxSize > 0 ? BigInt(maxSize) : undefined),
   max_capacity: toNullable(nonNullish(maxCapacity) && maxCapacity > 0 ? maxCapacity : undefined),
   mutable_permissions: toNullable(mutablePermissions)

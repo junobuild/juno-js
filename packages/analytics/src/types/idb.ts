@@ -6,4 +6,6 @@ export type IdbKey = string;
 export type IdbPageView = Omit<SetPageView, 'satellite_id'> & {collected_at: bigint};
 
 export type IdbTrackEvent = TrackEvent &
-  Pick<SetTrackEvent, 'user_agent' | 'updated_at' | 'session_id'> & {collected_at: bigint};
+  Pick<SetTrackEvent, 'user_agent' | 'updated_at' | 'version' | 'session_id'> & {
+    collected_at: bigint;
+  };

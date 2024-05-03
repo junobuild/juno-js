@@ -3,31 +3,32 @@ import type {DelDoc, Doc as DocApi, SetDoc} from '../../declarations/satellite/s
 import type {Doc} from '../types/doc.types';
 
 export const toSetDoc = async <D>(doc: Doc<D>): Promise<SetDoc> => {
-  const {data, updated_at, description} = doc;
+  const {data, version, description} = doc;
 
   return {
     description: toNullable(description),
     data: await toArray<D>(data),
-    updated_at: toNullable(updated_at)
+    version: toNullable(version)
   };
 };
 
 export const toDelDoc = <D>(doc: Doc<D>): DelDoc => {
-  const {updated_at} = doc;
+  const {version} = doc;
 
   return {
-    updated_at: toNullable(updated_at)
+    version: toNullable(version)
   };
 };
 
 export const fromDoc = async <D>({doc, key}: {doc: DocApi; key: string}): Promise<Doc<D>> => {
-  const {owner, description: docDescription, data, ...rest} = doc;
+  const {owner, version, description: docDescription, data, ...rest} = doc;
 
   return {
     key,
     description: fromNullable(docDescription),
     owner: owner.toText(),
     data: await fromArray<D>(data),
+    version: fromNullable(version),
     ...rest
   };
 };

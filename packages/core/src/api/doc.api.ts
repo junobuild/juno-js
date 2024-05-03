@@ -157,13 +157,14 @@ export const listDocs = async <D>({
   const docs: Doc<D>[] = [];
 
   for (const [key, item] of items) {
-    const {data: dataArray, owner, description, ...rest} = item;
+    const {data: dataArray, owner, description, version, ...rest} = item;
 
     docs.push({
       key,
       description: fromNullable(description),
       owner: owner.toText(),
       data: await mapData<D>({data: dataArray}),
+      version: fromNullable(version),
       ...rest
     });
   }

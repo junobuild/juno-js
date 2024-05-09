@@ -5,7 +5,7 @@ import type {IdbPageView} from '../types/idb';
 import type {PostMessageInitEnvData} from '../types/post-message';
 import type {TrackEvent} from '../types/track';
 import {timestamp, userAgent} from '../utils/analytics.utils';
-import {warningNonNullish} from '../utils/log.utils';
+import {warningWorkerNotInitialized} from '../utils/log.utils';
 
 const initSessionId = (): string | undefined => {
   // I faced this issue when I used the library in Docusaurus which does not implement the crypto API when server-side rendering.
@@ -67,8 +67,6 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
   };
 };
 
-const WORKER_UNDEFINED_MSG =
-  'Analytics worker not initialized. Did you call `initOrbiter`?' as const;
 const SESSION_ID_UNDEFINED_MSG = 'No session ID initialized.' as const;
 
 export const setPageView = async () => {
@@ -108,7 +106,7 @@ export const setPageView = async () => {
 };
 
 export const trackPageView = async () => {
-  warningNonNullish(worker, WORKER_UNDEFINED_MSG);
+  warningWorkerNotInitialized(worker);
 
   await setPageView();
 
@@ -121,7 +119,7 @@ export const trackEvent = async (data: TrackEvent) => {
   }
 
   assertNonNullish(sessionId, SESSION_ID_UNDEFINED_MSG);
-  warningNonNullish(worker, WORKER_UNDEFINED_MSG);
+  warningWorkerNotInitialized(worker);
 
   const idb = await import('./idb.services');
   await idb.setTrackEvent({
@@ -133,19 +131,19 @@ export const trackEvent = async (data: TrackEvent) => {
 };
 
 export const initWorkerEnvironment = (env: PostMessageInitEnvData) => {
-  warningNonNullish(worker, WORKER_UNDEFINED_MSG);
+  warningWorkerNotInitialized(worker);
 
   worker?.postMessage({msg: 'junoInitEnvironment', data: env});
 };
 
 export const startTracking = () => {
-  warningNonNullish(worker, WORKER_UNDEFINED_MSG);
+  warningWorkerNotInitialized(worker);
 
   worker?.postMessage({msg: 'junoStartTrackTimer'});
 };
 
 export const stopTracking = () => {
-  warningNonNullish(worker, WORKER_UNDEFINED_MSG);
+  warningWorkerNotInitialized(worker);
 
   worker?.postMessage({msg: 'junoStopTracker'});
 };

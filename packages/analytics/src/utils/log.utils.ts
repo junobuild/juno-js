@@ -1,4 +1,4 @@
-import {isNullish} from '@junobuild/utils/src';
+import {isNullish} from '@junobuild/utils';
 
 export const warningNonNullish = <T>(value: T, message: string) => {
   if (isNullish(value)) {

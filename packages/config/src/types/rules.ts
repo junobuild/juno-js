@@ -9,6 +9,7 @@ export interface Rule {
   memory: MemoryText;
   createdAt?: bigint;
   updatedAt?: bigint;
+  version?: bigint;
   maxSize?: number;
   maxCapacity?: number;
   mutablePermissions: boolean;

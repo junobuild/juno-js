@@ -21,6 +21,7 @@ export interface AssetNoContent {
   encodings: Array<[string, AssetEncodingNoContent]>;
   headers: Array<[string, string]>;
   created_at: bigint;
+  version: [] | [bigint];
 }
 export interface AuthenticationConfig {
   internet_identity: [] | [AuthenticationConfigInternetIdentity];
@@ -47,10 +48,11 @@ export type ControllerScope = {Write: null} | {Admin: null};
 export interface CustomDomain {
   updated_at: bigint;
   created_at: bigint;
+  version: [] | [bigint];
   bn_id: [] | [string];
 }
 export interface DelDoc {
-  updated_at: [] | [bigint];
+  version: [] | [bigint];
 }
 export interface DeleteControllersArgs {
   controllers: Array<Principal>;
@@ -65,6 +67,7 @@ export interface Doc {
   data: Uint8Array | number[];
   description: [] | [string];
   created_at: bigint;
+  version: [] | [bigint];
 }
 export interface HttpRequest {
   url: string;
@@ -136,6 +139,7 @@ export interface Rule {
   max_size: [] | [bigint];
   read: Permission;
   created_at: bigint;
+  version: [] | [bigint];
   mutable_permissions: [] | [boolean];
   write: Permission;
 }
@@ -150,16 +154,16 @@ export interface SetControllersArgs {
   controllers: Array<Principal>;
 }
 export interface SetDoc {
-  updated_at: [] | [bigint];
   data: Uint8Array | number[];
   description: [] | [string];
+  version: [] | [bigint];
 }
 export interface SetRule {
   max_capacity: [] | [number];
   memory: [] | [Memory];
-  updated_at: [] | [bigint];
   max_size: [] | [bigint];
   read: Permission;
+  version: [] | [bigint];
   mutable_permissions: [] | [boolean];
   write: Permission;
 }
@@ -167,9 +171,11 @@ export interface StorageConfig {
   iframe: [] | [StorageConfigIFrame];
   rewrites: Array<[string, string]>;
   headers: Array<[string, Array<[string, string]>]>;
+  raw_access: [] | [StorageConfigRawAccess];
   redirects: [] | [Array<[string, StorageConfigRedirect]>];
 }
 export type StorageConfigIFrame = {Deny: null} | {AllowAny: null} | {SameOrigin: null};
+export type StorageConfigRawAccess = {Deny: null} | {Allow: null};
 export interface StorageConfigRedirect {
   status_code: number;
   location: string;

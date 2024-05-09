@@ -1,6 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish, debounce, isNullish, nonNullish} from '@junobuild/utils';
-import isbot from 'isbot';
+import {isbot} from 'isbot';
 import type {AnalyticKey, Result_1, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
 import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';

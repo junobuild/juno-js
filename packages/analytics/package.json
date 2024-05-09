@@ -57,7 +57,7 @@
   "dependencies": {
     "@junobuild/utils": "*",
     "idb-keyval": "^6.2.1",
-    "isbot": "^3.6.13",
-    "nanoid": "^4.0.2"
+    "isbot": "^5.1.6",
+    "nanoid": "^5.0.7"
   }
 }

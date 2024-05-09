@@ -84,7 +84,8 @@ export const setConfig = async ({
         headers,
         rewrites,
         redirects: [redirects],
-        iframe: [iframe]
+        iframe: [iframe],
+        raw_access: []
       }
     }
   });

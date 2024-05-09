@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/utils",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "A collection of utilities and constants for Juno JS libs.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

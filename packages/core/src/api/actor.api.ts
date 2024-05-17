@@ -12,7 +12,7 @@ export const getSatelliteActor = async ({
 }: Satellite): Promise<SatelliteActor> => {
   const {satelliteId} = customOrEnvSatelliteId({satelliteId: customSatelliteId});
 
-  assertNonNullish(satelliteId, 'No satellite principal defined.');
+  assertNonNullish(satelliteId, 'No satellite ID defined. Did you initialize Juno?');
 
   const {container} = customOrEnvContainer({container: customContainer});
 

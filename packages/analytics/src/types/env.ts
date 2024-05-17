@@ -14,3 +14,6 @@ export type EnvironmentActor = {
 export type Environment = EnvironmentActor & {
   worker?: EnvironmentWorker;
 };
+
+export type UserEnvironment = Omit<Environment, 'orbiterId' | 'satelliteId'> &
+  Partial<Pick<EnvironmentActor, 'orbiterId' | 'satelliteId'>>;

@@ -1,3 +1,4 @@
+import {assertNonNullish} from '@junobuild/utils';
 import {
   initTrackPageViews,
   initWorker,
@@ -5,14 +6,42 @@ import {
   startTracking,
   stopTracking
 } from './services/analytics.services';
-import type {Environment} from './types/env';
+import type {Environment, UserEnvironment} from './types/env';
+import {envContainer, envOrbiterId, envSatelliteId} from './utils/window.env.utils';
 
 export {trackEvent, trackPageView} from './services/analytics.services';
 export * from './types/env';
 
-export const initOrbiter = async (env: Environment): Promise<() => void> => {
+const parseEnv = (userEnv?: UserEnvironment): Environment => {
+  const satelliteId = userEnv?.satelliteId ?? envSatelliteId();
+
+  assertNonNullish(
+    satelliteId,
+    'Satellite ID is not configured. Orbiter cannot be initialized without a target Satellite.'
+  );
+
+  const orbiterId = userEnv?.orbiterId ?? envOrbiterId();
+
+  assertNonNullish(
+    orbiterId,
+    'Orbiter ID is not configured. The analytics cannot be initialized without an Orbiter.'
+  );
+
+  const container = userEnv?.container ?? envContainer();
+
+  return {
+    orbiterId,
+    satelliteId,
+    container,
+    worker: userEnv?.worker
+  };
+};
+
+export const initOrbiter = async (userEnv?: UserEnvironment): Promise<() => void> => {
   // Save first page as soon as possible
   await setPageView();
+
+  const env = parseEnv(userEnv);
 
   const {cleanup: workerCleanup} = initWorker(env);
 

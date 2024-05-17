@@ -1,5 +1,5 @@
-import type { AssetNoContent } from '../../declarations/satellite/satellite.did';
-import type { ListResults } from './list.types';
+import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
+import type {ListResults} from './list.types';
 
 /**
  * Represents the encoding details of an asset.
@@ -109,10 +109,11 @@ export interface Asset extends AssetKey {
  * @interface
  * @extends {Pick<ListResults<AssetNoContent>, 'items_length' | 'items_page' | 'matches_length' | 'matches_pages'>}
  */
-export interface Assets extends Pick<
+export interface Assets
+  extends Pick<
     ListResults<AssetNoContent>,
     'items_length' | 'items_page' | 'matches_length' | 'matches_pages'
-> {
+  > {
   /**
    * The collection of assets.
    * @type {Asset[]}

@@ -1,4 +1,4 @@
-import type { Principal } from '@dfinity/principal';
+import type {Principal} from '@dfinity/principal';
 
 /**
  * Represents the results of a list call.

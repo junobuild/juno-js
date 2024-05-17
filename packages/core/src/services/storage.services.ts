@@ -76,7 +76,6 @@ const uploadAssetIC = async ({
   };
 };
 
-
 /**
  * Lists assets in a collection with optional filtering.
  * @param {Object} params - The parameters for listing the assets.

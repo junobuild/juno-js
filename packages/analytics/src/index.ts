@@ -1,4 +1,4 @@
-import {assertNonNullish, envContainer, envOrbiterId, envSatelliteId} from '@junobuild/utils';
+import {assertNonNullish} from '@junobuild/utils';
 import {
   initTrackPageViews,
   initWorker,
@@ -7,6 +7,7 @@ import {
   stopTracking
 } from './services/analytics.services';
 import type {Environment, UserEnvironment} from './types/env';
+import {envContainer, envOrbiterId, envSatelliteId} from './utils/window.env.utils';
 
 export {trackEvent, trackPageView} from './services/analytics.services';
 export * from './types/env';

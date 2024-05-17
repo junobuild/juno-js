@@ -1,4 +1,4 @@
-import {assertNonNullish, envContainer, envSatelliteId} from '@junobuild/utils';
+import {assertNonNullish} from '@junobuild/utils';
 import {initAuthTimeoutWorker} from './services/auth-timout.services';
 import {initAuth} from './services/auth.services';
 import {AuthStore} from './stores/auth.store';
@@ -6,6 +6,7 @@ import {EnvStore} from './stores/env.store';
 import type {User} from './types/auth.types';
 import type {Environment, UserEnvironment} from './types/env.types';
 import type {Unsubscribe} from './types/subscription.types';
+import {envContainer, envSatelliteId} from './utils/window.env.utils';
 
 export * from './providers/auth.providers';
 export {signIn, signOut, unsafeIdentity} from './services/auth.services';

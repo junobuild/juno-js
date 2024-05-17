@@ -12,3 +12,5 @@ export type Environment = {
   workers?: EnvironmentWorkers;
 } & Required<Pick<Satellite, 'satelliteId'>> &
   Pick<Satellite, 'container'>;
+
+export type UserEnvironment = Omit<Environment, 'satelliteId'> & Pick<Satellite, 'satelliteId'>;

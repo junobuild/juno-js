@@ -1,9 +1,10 @@
+import {assertNonNullish, processEnv} from '@junobuild/utils';
 import {initAuthTimeoutWorker} from './services/auth-timout.services';
 import {initAuth} from './services/auth.services';
 import {AuthStore} from './stores/auth.store';
 import {EnvStore} from './stores/env.store';
 import type {User} from './types/auth.types';
-import type {Environment} from './types/env.types';
+import type {Environment, UserEnvironment} from './types/env.types';
 import type {Unsubscribe} from './types/subscription.types';
 
 export * from './providers/auth.providers';
@@ -18,7 +19,24 @@ export * from './types/satellite.types';
 export * from './types/storage.types';
 export * from './types/subscription.types';
 
-export const initJuno = async (env: Environment): Promise<Unsubscribe[]> => {
+const parseEnv = (userEnv?: UserEnvironment): Environment => {
+  const satelliteId = userEnv?.satelliteId ?? processEnv('SATELLITE_ID');
+
+  assertNonNullish(satelliteId, 'Satellite ID is not configured. Juno cannot be initialized.');
+
+  const container = userEnv?.container ?? processEnv('CONTAINER');
+
+  return {
+    satelliteId,
+    internetIdentityId: userEnv?.internetIdentityId,
+    workers: userEnv?.workers,
+    container
+  };
+};
+
+export const initJuno = async (userEnv?: UserEnvironment): Promise<Unsubscribe[]> => {
+  const env = parseEnv(userEnv);
+
   EnvStore.getInstance().set(env);
 
   await initAuth();

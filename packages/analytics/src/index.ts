@@ -1,4 +1,9 @@
-import {assertNonNullish, processEnv} from '@junobuild/utils';
+import {
+  assertNonNullish,
+  processEnvContainer,
+  processEnvOrbiterId,
+  processEnvSatelliteId
+} from '@junobuild/utils';
 import {
   initTrackPageViews,
   initWorker,
@@ -12,24 +17,21 @@ export {trackEvent, trackPageView} from './services/analytics.services';
 export * from './types/env';
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {
-  const satelliteId =
-    userEnv?.satelliteId ?? processEnv({key: 'SATELLITE_ID', envPrefix: userEnv?.envPrefix});
+  const satelliteId = userEnv?.satelliteId ?? processEnvSatelliteId();
 
   assertNonNullish(
     satelliteId,
     'Satellite ID is not configured. Orbiter cannot be initialized without a target Satellite.'
   );
 
-  const orbiterId =
-    userEnv?.orbiterId ?? processEnv({key: 'ORBITER_ID', envPrefix: userEnv?.envPrefix});
+  const orbiterId = userEnv?.orbiterId ?? processEnvOrbiterId();
 
   assertNonNullish(
     orbiterId,
     'Orbiter ID is not configured. The analytics cannot be initialized without an Orbiter.'
   );
 
-  const container =
-    userEnv?.container ?? processEnv({key: 'CONTAINER', envPrefix: userEnv?.envPrefix});
+  const container = userEnv?.container ?? processEnvContainer();
 
   return {
     orbiterId,

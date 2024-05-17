@@ -16,4 +16,4 @@ export type Environment = EnvironmentActor & {
 };
 
 export type UserEnvironment = Omit<Environment, 'orbiterId' | 'satelliteId'> &
-  Partial<Pick<EnvironmentActor, 'orbiterId' | 'satelliteId'>> & {envPrefix?: string};
+  Partial<Pick<EnvironmentActor, 'orbiterId' | 'satelliteId'>>;

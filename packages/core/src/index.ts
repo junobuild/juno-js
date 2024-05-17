@@ -1,4 +1,4 @@
-import {assertNonNullish, processEnv} from '@junobuild/utils';
+import {assertNonNullish, processEnvContainer, processEnvSatelliteId} from '@junobuild/utils';
 import {initAuthTimeoutWorker} from './services/auth-timout.services';
 import {initAuth} from './services/auth.services';
 import {AuthStore} from './stores/auth.store';
@@ -20,13 +20,11 @@ export * from './types/storage.types';
 export * from './types/subscription.types';
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {
-  const satelliteId =
-    userEnv?.satelliteId ?? processEnv({key: 'SATELLITE_ID', envPrefix: userEnv?.envPrefix});
+  const satelliteId = userEnv?.satelliteId ?? processEnvSatelliteId();
 
   assertNonNullish(satelliteId, 'Satellite ID is not configured. Juno cannot be initialized.');
 
-  const container =
-    userEnv?.container ?? processEnv({key: 'CONTAINER', envPrefix: userEnv?.envPrefix});
+  const container = userEnv?.container ?? processEnvContainer();
 
   return {
     satelliteId,

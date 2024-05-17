@@ -17,7 +17,7 @@ export const processEnvOrbiterId = (): string | undefined =>
     : typeof import.meta !== undefined &&
         typeof (import.meta as unknown as ImportMeta).env !== undefined
       ? (import.meta as unknown as ImportMeta).env.VITE_ORBITER_ID ??
-        (import.meta as unknown as ImportMeta).env.ORBITER_ID
+        (import.meta as unknown as ImportMeta).env.PUBLIC_ORBITER_ID
       : undefined;
 
 export const processEnvContainer = (): string | undefined =>
@@ -25,6 +25,6 @@ export const processEnvContainer = (): string | undefined =>
     ? process.env?.NEXT_PUBLIC_CONTAINER
     : typeof import.meta !== undefined &&
         typeof (import.meta as unknown as ImportMeta).env !== undefined
-      ? (import.meta as unknown as ImportMeta).env.CONTAINER ??
-        (import.meta as unknown as ImportMeta).env.CONTAINER
+      ? (import.meta as unknown as ImportMeta).env.VITE_CONTAINER ??
+        (import.meta as unknown as ImportMeta).env.PUBLIC_CONTAINER
       : undefined;

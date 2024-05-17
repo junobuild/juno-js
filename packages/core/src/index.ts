@@ -35,6 +35,12 @@ const parseEnv = (userEnv?: UserEnvironment): Environment => {
   };
 };
 
+/**
+ * Initializes Juno with the provided optional environment parameters.
+ * If no environment is provided, the variables injected by the Vite or NextJS plugins will be used.
+ * @param {UserEnvironment} [userEnv] - The optional user environment configuration.
+ * @returns {Promise<Unsubscribe[]>} A promise that resolves to an array of unsubscribe functions.
+ */
 export const initJuno = async (userEnv?: UserEnvironment): Promise<Unsubscribe[]> => {
   const env = parseEnv(userEnv);
 
@@ -48,5 +54,10 @@ export const initJuno = async (userEnv?: UserEnvironment): Promise<Unsubscribe[]
   return [...(authSubscribe ? [authSubscribe] : [])];
 };
 
+/**
+ * Subscribes to authentication state changes. i.e. each time a user signs in or signs out, the callback will be triggered.
+ * @param {function(User | null): void} callback - The callback function to execute when the authentication state changes.
+ * @returns {Unsubscribe} A function to unsubscribe from the authentication state changes.
+ */
 export const authSubscribe = (callback: (authUser: User | null) => void): Unsubscribe =>
   AuthStore.getInstance().subscribe(callback);

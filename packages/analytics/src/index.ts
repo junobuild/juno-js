@@ -12,21 +12,24 @@ export {trackEvent, trackPageView} from './services/analytics.services';
 export * from './types/env';
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {
-  const satelliteId = userEnv?.satelliteId ?? processEnv('SATELLITE_ID');
+  const satelliteId =
+    userEnv?.satelliteId ?? processEnv({key: 'SATELLITE_ID', envPrefix: userEnv?.envPrefix});
 
   assertNonNullish(
     satelliteId,
     'Satellite ID is not configured. Orbiter cannot be initialized without a target Satellite.'
   );
 
-  const orbiterId = userEnv?.orbiterId ?? processEnv('ORBITER_ID');
+  const orbiterId =
+    userEnv?.orbiterId ?? processEnv({key: 'ORBITER_ID', envPrefix: userEnv?.envPrefix});
 
   assertNonNullish(
     orbiterId,
     'Orbiter ID is not configured. The analytics cannot be initialized without an Orbiter.'
   );
 
-  const container = userEnv?.container ?? processEnv('CONTAINER');
+  const container =
+    userEnv?.container ?? processEnv({key: 'CONTAINER', envPrefix: userEnv?.envPrefix});
 
   return {
     orbiterId,

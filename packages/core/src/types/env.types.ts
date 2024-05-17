@@ -13,4 +13,5 @@ export type Environment = {
 } & Required<Pick<Satellite, 'satelliteId'>> &
   Pick<Satellite, 'container'>;
 
-export type UserEnvironment = Omit<Environment, 'satelliteId'> & Pick<Satellite, 'satelliteId'>;
+export type UserEnvironment = Omit<Environment, 'satelliteId'> &
+  Pick<Satellite, 'satelliteId'> & {envPrefix?: string};

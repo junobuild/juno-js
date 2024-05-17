@@ -20,11 +20,13 @@ export * from './types/storage.types';
 export * from './types/subscription.types';
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {
-  const satelliteId = userEnv?.satelliteId ?? processEnv('SATELLITE_ID');
+  const satelliteId =
+    userEnv?.satelliteId ?? processEnv({key: 'SATELLITE_ID', envPrefix: userEnv?.envPrefix});
 
   assertNonNullish(satelliteId, 'Satellite ID is not configured. Juno cannot be initialized.');
 
-  const container = userEnv?.container ?? processEnv('CONTAINER');
+  const container =
+    userEnv?.container ?? processEnv({key: 'CONTAINER', envPrefix: userEnv?.envPrefix});
 
   return {
     satelliteId,

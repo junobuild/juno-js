@@ -15,10 +15,20 @@ import {sha256ToBase64String} from '../utils/crypto.utils';
 import {satelliteUrl} from '../utils/env.utils';
 import {getIdentity} from './identity.services';
 
+/**
+ * Uploads a blob to the storage.
+ * @param {Storage & {satellite?: SatelliteOptions}} params - The storage parameters. Satellite options are required only in NodeJS environment.
+ * @returns {Promise<AssetKey>} A promise that resolves to the asset key.
+ */
 export const uploadBlob = async (
   params: Storage & {satellite?: SatelliteOptions}
 ): Promise<AssetKey> => uploadAssetIC(params);
 
+/**
+ * Uploads a file to the storage.
+ * @param {Partial<Pick<Storage, 'filename'>> & Omit<Storage, 'filename' | 'data'> & {data: File} & {satellite?: SatelliteOptions}} params - The storage parameters. Satellite options are required only in NodeJS environment.
+ * @returns {Promise<AssetKey>} A promise that resolves to the asset key.
+ */
 export const uploadFile = async (
   params: Partial<Pick<Storage, 'filename'>> &
     Omit<Storage, 'filename' | 'data'> & {data: File} & {satellite?: SatelliteOptions}
@@ -66,6 +76,15 @@ const uploadAssetIC = async ({
   };
 };
 
+
+/**
+ * Lists assets in a collection with optional filtering.
+ * @param {Object} params - The parameters for listing the assets.
+ * @param {string} params.collection - The name of the collection.
+ * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @param {ListParams} [params.filter] - The filter parameters.
+ * @returns {Promise<Assets>} A promise that resolves to the list of assets.
+ */
 export const listAssets = async ({
   collection,
   satellite: satelliteOptions,
@@ -124,6 +143,14 @@ export const listAssets = async ({
   };
 };
 
+/**
+ * Deletes an asset from the storage.
+ * @param {Object} params - The parameters for deleting the asset.
+ * @param {string} params.collection - The name of the collection.
+ * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @param {string} params.fullPath - The full path of the asset.
+ * @returns {Promise<void>} A promise that resolves when the asset is deleted.
+ */
 export const deleteAsset = async ({
   collection,
   fullPath,
@@ -138,6 +165,13 @@ export const deleteAsset = async ({
     satellite: {...satellite, identity: getIdentity(satellite?.identity)}
   });
 
+/**
+ * Deletes multiple assets from the storage.
+ * @param {Object} params - The parameters for deleting the assets.
+ * @param {Array} params.assets - The list of assets with their collections and full paths.
+ * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @returns {Promise<void>} A promise that resolves when the assets are deleted.
+ */
 export const deleteManyAssets = async ({
   assets,
   satellite
@@ -150,6 +184,14 @@ export const deleteManyAssets = async ({
     satellite: {...satellite, identity: getIdentity(satellite?.identity)}
   });
 
+/**
+ * Retrieves an asset from the storage.
+ * @param {Object} params - The parameters for retrieving the asset.
+ * @param {string} params.collection - The name of the collection.
+ * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @param {string} params.fullPath - The full path of the asset.
+ * @returns {Promise<AssetNoContent | undefined>} A promise that resolves to the asset or undefined if not found.
+ */
 export const getAsset = async ({
   satellite,
   ...rest
@@ -162,6 +204,13 @@ export const getAsset = async ({
   return getAssetApi({...rest, satellite: {...satellite, identity}});
 };
 
+/**
+ * Retrieves multiple assets from the storage.
+ * @param {Object} params - The parameters for retrieving the assets.
+ * @param {Array} params.assets - The list of assets with their collections and full paths.
+ * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @returns {Promise<Array<AssetNoContent | undefined>>} A promise that resolves to an array of assets or undefined if not found.
+ */
 export const getManyAssets = async ({
   satellite,
   ...rest

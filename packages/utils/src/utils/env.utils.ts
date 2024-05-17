@@ -16,5 +16,7 @@ export const processEnvOrbiterId = (): string | undefined =>
 
 export const processEnvContainer = (): string | undefined =>
   typeof process !== 'undefined'
-    ? process.env.NEXT_CONTAINER ?? process.env.VITE_CONTAINERD ?? process.env.PUBLIC_CONTAINER
+    ? process.env.NEXT_PUBLIC_CONTAINER ??
+      process.env.VITE_CONTAINER ??
+      process.env.PUBLIC_CONTAINER
     : undefined;

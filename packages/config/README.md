@@ -63,50 +63,64 @@ Configuration options for [Juno] CLI.
 
 #### :gear: JunoConfigEnv
 
-| Property | Type     | Description |
-| -------- | -------- | ----------- |
-| `mode`   | `string` |             |
+Represents the environment configuration for Juno.
+
+| Property | Type     | Description                                                |
+| -------- | -------- | ---------------------------------------------------------- |
+| `mode`   | `string` | The mode of the Juno configuration. type: {JunoConfigMode} |
 
 #### :gear: OrbiterConfig
 
-| Property    | Type                  | Description                                                              |
-| ----------- | --------------------- | ------------------------------------------------------------------------ |
-| `id`        | `string`              | The identifier of the orbiter used in the dApp.                          |
-| `orbiterId` | `string or undefined` | deprecated: `orbiterId` will be removed in the future. Use `id` instead. |
+Represents the configuration for an orbiter.
+
+| Property    | Type                  | Description                                                                                                                      |
+| ----------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `id`        | `string`              | The identifier of the orbiter used in the dApp. type: {string}                                                                   |
+| `orbiterId` | `string or undefined` | The deprecated identifier of the orbiter. deprecated: `orbiterId` will be removed in the future. Use `id` instead.type: {string} |
 
 #### :gear: JunoConfig
 
-| Property    | Type                         | Description |
-| ----------- | ---------------------------- | ----------- |
-| `satellite` | `SatelliteConfig`            |             |
-| `orbiter`   | `OrbiterConfig or undefined` |             |
+Represents the overall configuration for Juno.
+
+| Property    | Type                         | Description                                                               |
+| ----------- | ---------------------------- | ------------------------------------------------------------------------- |
+| `satellite` | `SatelliteConfig`            | The configuration for the satellite. type: {SatelliteConfig}              |
+| `orbiter`   | `OrbiterConfig or undefined` | The optional configuration for the orbiter. type: {OrbiterConfig}optional |
 
 #### :gear: SatelliteDevCollections
 
-| Property  | Type                                           | Description |
-| --------- | ---------------------------------------------- | ----------- |
-| `db`      | `SatelliteDevDbCollection[] or undefined`      |             |
-| `storage` | `SatelliteDevStorageCollection[] or undefined` |             |
+Represents the collections configuration for a satellite in a development environment.
+
+| Property  | Type                                           | Description                                                                            |
+| --------- | ---------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `db`      | `SatelliteDevDbCollection[] or undefined`      | The database collections configuration. type: {SatelliteDevDbCollection[]}optional     |
+| `storage` | `SatelliteDevStorageCollection[] or undefined` | The storage collections configuration. type: {SatelliteDevStorageCollection[]}optional |
 
 #### :gear: SatelliteDevController
 
-| Property | Type                 | Description |
-| -------- | -------------------- | ----------- |
-| `id`     | `string`             |             |
-| `scope`  | `"write" or "admin"` |             |
+Represents a controller configuration for a satellite in a development environment.
+
+| Property | Type                 | Description                                               |
+| -------- | -------------------- | --------------------------------------------------------- | -------- |
+| `id`     | `string`             | The unique identifier of the controller. type: {string}   |
+| `scope`  | `"write" or "admin"` | The scope of the controller's permissions. type: {'write' | 'admin'} |
 
 #### :gear: SatelliteDevConfig
 
-| Property      | Type                                    | Description |
-| ------------- | --------------------------------------- | ----------- |
-| `collections` | `SatelliteDevCollections`               |             |
-| `controllers` | `SatelliteDevController[] or undefined` |             |
+Represents the development configuration for a satellite.
+
+| Property      | Type                                    | Description                                                                      |
+| ------------- | --------------------------------------- | -------------------------------------------------------------------------------- |
+| `collections` | `SatelliteDevCollections`               | The collections configuration. type: {SatelliteDevCollections}                   |
+| `controllers` | `SatelliteDevController[] or undefined` | The optional controllers configuration. type: {SatelliteDevController[]}optional |
 
 #### :gear: JunoDevConfig
 
-| Property    | Type                 | Description |
-| ----------- | -------------------- | ----------- |
-| `satellite` | `SatelliteDevConfig` |             |
+Represents the development configuration for Juno.
+
+| Property    | Type                 | Description                                                                 |
+| ----------- | -------------------- | --------------------------------------------------------------------------- |
+| `satellite` | `SatelliteDevConfig` | The development configuration for the satellite. type: {SatelliteDevConfig} |
 
 ### :cocktail: Types
 
@@ -123,7 +137,7 @@ Configuration options for [Juno] CLI.
 | --------------- | --------------------------------------------------------- |
 | `ENCODING_TYPE` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L1)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L5)
 
 #### :gear: JunoConfigMode
 
@@ -131,7 +145,7 @@ Configuration options for [Juno] CLI.
 | ---------------- | ------------------------ |
 | `JunoConfigMode` | `'production' or string` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/mainnet/juno.env.ts#L1)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/mainnet/juno.env.ts#L5)
 
 #### :gear: SatelliteDevDbCollection
 
@@ -139,7 +153,7 @@ Configuration options for [Juno] CLI.
 | -------------------------- | ----------------------------------------------------- |
 | `SatelliteDevDbCollection` | `Omit<Rule, 'createdAt' or 'updatedAt' or 'maxSize'>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L3)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L7)
 
 #### :gear: SatelliteDevStorageCollection
 
@@ -147,7 +161,7 @@ Configuration options for [Juno] CLI.
 | ------------------------------- | --------------------------------------------------------- |
 | `SatelliteDevStorageCollection` | `Omit<Rule, 'createdAt' or 'updatedAt' or 'maxCapacity'>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L5)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L13)
 
 #### :gear: JunoDevConfigFn
 

@@ -25,7 +25,13 @@ export const initAuth = async (provider?: Provider) => {
   AuthStore.getInstance().set(user);
 };
 
-export const signIn = async (options?: SignInOptions) =>
+/**
+ * Signs in a user with the specified options.
+ * @param {SignInOptions} [options] - The options for signing in.
+ * @returns {Promise<void>} A promise that resolves when the sign-in process is complete and the authenticated user is initialized.
+ * @throws Will throw an error if the sign-in process fails.
+ */
+export const signIn = async (options?: SignInOptions): Promise<void> =>
   /* eslint-disable no-async-promise-executor */
   new Promise<void>(async (resolve, reject) => {
     authClient = authClient ?? (await createAuthClient());
@@ -47,6 +53,10 @@ export const signIn = async (options?: SignInOptions) =>
     });
   });
 
+/**
+ * Signs out the current user.
+ * @returns {Promise<void>} A promise that resolves when the sign-out process is complete.
+ */
 export const signOut = async (): Promise<void> => {
   await authClient?.logout();
 
@@ -61,8 +71,10 @@ export const getIdentity = (): Identity | undefined => {
 };
 
 /**
- * Return what can be the identity of a sign-in user or an anonymous identity.
- * Useful to load an identity in web workers.
+ * Returns the identity of a signed-in user or an anonymous identity.
+ * This function is useful for loading an identity in web workers.
+ * Used to imperatively get the identity. Please be certain before using it.
+ * @returns {Promise<Identity>} A promise that resolves to the identity of the user or an anonymous identity.
  */
 export const unsafeIdentity = async (): Promise<Identity> =>
   (authClient ?? (await createAuthClient())).getIdentity();

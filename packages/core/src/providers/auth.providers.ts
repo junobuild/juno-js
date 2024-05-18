@@ -11,27 +11,67 @@ import type {
 } from '../types/auth.types';
 import {popupCenter} from '../utils/window.utils';
 
+/**
+ * Options for signing in with an authentication provider.
+ * @interface AuthProviderSignInOptions
+ */
 export interface AuthProviderSignInOptions {
+  /**
+   * The URL of the identity provider - commonly Internet Identity.
+   */
   identityProvider: string;
+  /**
+   * Optional features for the window opener.
+   */
   windowOpenerFeatures?: string;
 }
 
+/**
+ * Common traits for all authentication providers
+ * @interface AuthProvider
+ */
 export interface AuthProvider {
+  /**
+   * The unique identifier of the provider.
+   */
   readonly id: Provider;
+  /**
+   * Method to get the sign-in options for the provider.
+   * @param options - The sign-in options.
+   * @returns The sign-in options for the provider that can be use to effectively perform a sign-in.
+   */
   signInOptions: (options: Pick<SignInOptions, 'windowed'>) => AuthProviderSignInOptions;
 }
 
+/**
+ * Internet Identity authentication provider.
+ * @class InternetIdentityProvider
+ * @implements {AuthProvider}
+ */
 export class InternetIdentityProvider implements AuthProvider {
   #domain?: InternetIdentityDomain;
 
+  /**
+   * Creates an instance of InternetIdentityProvider.
+   * @param {InternetIdentityConfig} config - The configuration for Internet Identity.
+   */
   constructor({domain}: InternetIdentityConfig) {
     this.#domain = domain;
   }
 
+  /**
+   * Gets the identifier of the provider.
+   * @returns {Provider} The identifier of the provider - `internet_identity`.
+   */
   get id(): Provider {
     return 'internet_identity';
   }
 
+  /**
+   * Gets the sign-in options for Internet Identity.
+   * @param {Pick<SignInOptions, 'windowed'>} options - The sign-in options.
+   * @returns {AuthProviderSignInOptions} The sign-in options for Internet Identity.
+   */
   signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions {
     const identityProviderUrl = (): string => {
       const container = EnvStore.getInstance().get()?.container;
@@ -66,19 +106,37 @@ export class InternetIdentityProvider implements AuthProvider {
   }
 }
 
+/**
+ * NFID authentication provider.
+ * @class NFIDProvider
+ * @implements {AuthProvider}
+ */
 export class NFIDProvider implements AuthProvider {
   #appName: string;
   #logoUrl: string;
 
+  /**
+   * Creates an instance of NFIDProvider.
+   * @param {NFIDConfig} config - The configuration for NFID.
+   */
   constructor({appName, logoUrl}: NFIDConfig) {
     this.#appName = appName;
     this.#logoUrl = logoUrl;
   }
 
+  /**
+   * Gets the identifier of the provider.
+   * @returns {Provider} The identifier of the provider- nfid.
+   */
   get id(): Provider {
     return 'nfid';
   }
 
+  /**
+   * Gets the sign-in options for NFID.
+   * @param {Pick<SignInOptions, 'windowed'>} options - The sign-in options.
+   * @returns {AuthProviderSignInOptions} The sign-in options to effectively sign-in with NFID.
+   */
   signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions {
     return {
       ...(windowed !== false && {

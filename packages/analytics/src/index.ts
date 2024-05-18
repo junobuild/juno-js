@@ -37,6 +37,11 @@ const parseEnv = (userEnv?: UserEnvironment): Environment => {
   };
 };
 
+/**
+ * Initializes the Juno Analytics.
+ * @param {UserEnvironment} [userEnv] - The optional user environment configuration. If no environment is provided, the variables injected by the Vite or NextJS plugins will be used.
+ * @returns {Promise<() => void>} A promise that resolves to a cleanup function that stops tracking and cleans up resources.
+ */
 export const initOrbiter = async (userEnv?: UserEnvironment): Promise<() => void> => {
   // Save first page as soon as possible
   await setPageView();

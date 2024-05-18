@@ -105,7 +105,11 @@ export const setPageView = async () => {
   });
 };
 
-export const trackPageView = async () => {
+/**
+ * Tracks a page view in Juno Analytics.
+ * @returns {Promise<void>} A promise that resolves when the page view is tracked.
+ */
+export const trackPageView = async (): Promise<void> => {
   warningWorkerNotInitialized(worker);
 
   await setPageView();
@@ -113,7 +117,12 @@ export const trackPageView = async () => {
   worker?.postMessage({msg: 'junoTrackPageView'});
 };
 
-export const trackEvent = async (data: TrackEvent) => {
+/**
+ * Tracks a custom event in Juno Analytics.
+ * @param {TrackEvent} data - The event details.
+ * @returns {Promise<void>} A promise that resolves when the event is tracked.
+ */
+export const trackEvent = async (data: TrackEvent): Promise<void> => {
   if (!isBrowser()) {
     return;
   }

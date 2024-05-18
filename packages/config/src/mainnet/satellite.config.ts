@@ -1,8 +1,8 @@
-import type { ENCODING_TYPE } from '../types/encoding';
-import type { Either } from '../utils/ts.utils';
-import type { AuthenticationConfig } from './authentication.config';
-import type { JunoConfigMode } from './juno.env';
-import type { StorageConfig } from './storage.config';
+import type {ENCODING_TYPE} from '../types/encoding';
+import type {Either} from '../utils/ts.utils';
+import type {AuthenticationConfig} from './authentication.config';
+import type {JunoConfigMode} from './juno.env';
+import type {StorageConfig} from './storage.config';
 
 /**
  * Configuration for satellite assertions.

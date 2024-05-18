@@ -1,4 +1,4 @@
-import type { SatelliteConfig } from './satellite.config';
+import type {SatelliteConfig} from './satellite.config';
 
 /**
  * Represents the configuration for an orbiter.

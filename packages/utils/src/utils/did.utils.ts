@@ -1,5 +1,5 @@
-import { jsonReplacer, jsonReviver } from './json.utils';
-import { nonNullish } from './null.utils';
+import {jsonReplacer, jsonReviver} from './json.utils';
+import {nonNullish} from './null.utils';
 
 /**
  * Converts a value to a nullable array.

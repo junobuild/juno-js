@@ -1,4 +1,4 @@
-import type { Rule } from '../types/rules';
+import type {Rule} from '../types/rules';
 
 /**
  * Represents a database collection configuration for a satellite in a development environment.

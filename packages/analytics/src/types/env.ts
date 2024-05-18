@@ -56,4 +56,4 @@ export type Environment = EnvironmentActor & {
  * @property {string} [satelliteId] - The ID of the satellite.
  */
 export type UserEnvironment = Omit<Environment, 'orbiterId' | 'satelliteId'> &
-    Partial<Pick<EnvironmentActor, 'orbiterId' | 'satelliteId'>>;
+  Partial<Pick<EnvironmentActor, 'orbiterId' | 'satelliteId'>>;

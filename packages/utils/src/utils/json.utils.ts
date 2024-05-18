@@ -1,5 +1,5 @@
-import { Principal } from '@dfinity/principal';
-import { nonNullish } from './null.utils';
+import {Principal} from '@dfinity/principal';
+import {nonNullish} from './null.utils';
 
 const JSON_KEY_BIGINT = '__bigint__';
 const JSON_KEY_PRINCIPAL = '__principal__';
@@ -13,15 +13,15 @@ const JSON_KEY_UINT8ARRAY = '__uint8array__';
  */
 export const jsonReplacer = (_key: string, value: unknown): unknown => {
   if (typeof value === 'bigint') {
-    return { [JSON_KEY_BIGINT]: `${value}` };
+    return {[JSON_KEY_BIGINT]: `${value}`};
   }
 
   if (nonNullish(value) && value instanceof Principal) {
-    return { [JSON_KEY_PRINCIPAL]: value.toText() };
+    return {[JSON_KEY_PRINCIPAL]: value.toText()};
   }
 
   if (nonNullish(value) && value instanceof Uint8Array) {
-    return { [JSON_KEY_UINT8ARRAY]: Array.from(value) };
+    return {[JSON_KEY_UINT8ARRAY]: Array.from(value)};
   }
 
   return value;

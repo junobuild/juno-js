@@ -5,7 +5,7 @@
  * @returns {boolean} True if the argument is null or undefined, false otherwise.
  */
 export const isNullish = <T>(argument: T | undefined | null): argument is undefined | null =>
-    argument === null || argument === undefined;
+  argument === null || argument === undefined;
 
 /**
  * Checks if the provided argument is neither null nor undefined.
@@ -14,7 +14,7 @@ export const isNullish = <T>(argument: T | undefined | null): argument is undefi
  * @returns {boolean} True if the argument is neither null nor undefined, false otherwise.
  */
 export const nonNullish = <T>(argument: T | undefined | null): argument is NonNullable<T> =>
-    !isNullish(argument);
+  !isNullish(argument);
 
 /**
  * Represents an error thrown when a value is null or undefined.
@@ -32,8 +32,8 @@ export class NullishError extends Error {}
  * @returns {asserts value is NonNullable<T>} Asserts that the value is neither null nor undefined.
  */
 export const assertNonNullish: <T>(
-    value: T,
-    message?: string
+  value: T,
+  message?: string
 ) => asserts value is NonNullable<T> = <T>(value: T, message?: string): void => {
   if (isNullish(value)) {
     throw new NullishError(message);

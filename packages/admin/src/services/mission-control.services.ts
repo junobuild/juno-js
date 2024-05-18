@@ -59,7 +59,6 @@ export const upgradeMissionControl = async ({
   });
 };
 
-
 /**
  * Sets the controller for the specified satellites.
  * @param {Object} params - The parameters for setting the satellites controller.

@@ -1,4 +1,4 @@
-import type { Identity } from '@dfinity/agent';
+import type {Identity} from '@dfinity/agent';
 
 /**
  * Represents the parameters for an actor.

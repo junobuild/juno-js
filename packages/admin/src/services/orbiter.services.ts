@@ -15,7 +15,6 @@ import {encodeIDLControllers} from '../utils/idl.utils';
 export const orbiterVersion = async (params: {orbiter: OrbiterParameters}): Promise<string> =>
   version(params);
 
-
 /**
  * Upgrades the Orbiter with the provided WASM module.
  * @param {Object} params - The parameters for upgrading the Orbiter.
@@ -63,7 +62,6 @@ export const upgradeOrbiter = async ({
  */
 export const orbiterMemorySize = (params: {orbiter: OrbiterParameters}): Promise<MemorySize> =>
   memorySize(params);
-
 
 /**
  * Lists the controllers of the Orbiter.

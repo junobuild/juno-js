@@ -1,5 +1,13 @@
 import {major, minor, patch} from 'semver';
 
+/**
+ * Checks if the selected version can be upgraded from the current version.
+ * @param {Object} params - The parameters for the version check.
+ * @param {string} params.currentVersion - The current version.
+ * @param {string} params.selectedVersion - The selected version.
+ * @returns {Object} An object indicating whether the upgrade can proceed.
+ * @returns {boolean} returns.canUpgrade - Whether the selected version can be upgraded from the current version.
+ */
 export const checkUpgradeVersion = ({
   currentVersion,
   selectedVersion

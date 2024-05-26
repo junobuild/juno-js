@@ -2,15 +2,21 @@ import type {Rule} from '../types/rules';
 
 /**
  * Represents a database collection configuration for a satellite in a development environment.
- * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize'>} SatelliteDevDbCollection
+ * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize' | 'version'>} SatelliteDevDbCollection
  */
-export type SatelliteDevDbCollection = Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize'>;
+export type SatelliteDevDbCollection = Omit<
+  Rule,
+  'createdAt' | 'updatedAt' | 'maxSize' | 'version'
+>;
 
 /**
  * Represents a storage collection configuration for a satellite in a development environment.
- * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxCapacity'>} SatelliteDevStorageCollection
+ * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxCapacity' | 'version'>} SatelliteDevStorageCollection
  */
-export type SatelliteDevStorageCollection = Omit<Rule, 'createdAt' | 'updatedAt' | 'maxCapacity'>;
+export type SatelliteDevStorageCollection = Omit<
+  Rule,
+  'createdAt' | 'updatedAt' | 'maxCapacity' | 'version'
+>;
 
 /**
  * Represents the collections configuration for a satellite in a development environment.

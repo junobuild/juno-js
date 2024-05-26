@@ -149,19 +149,29 @@ Represents the development configuration for Juno.
 
 #### :gear: SatelliteDevDbCollection
 
-| Type                       | Type                                                  |
-| -------------------------- | ----------------------------------------------------- |
-| `SatelliteDevDbCollection` | `Omit<Rule, 'createdAt' or 'updatedAt' or 'maxSize'>` |
+| Type                       | Type   |
+| -------------------------- | ------ |
+| `SatelliteDevDbCollection` | `Omit< |
+
+Rule,
+'createdAt' or 'updatedAt' or 'maxSize' or 'version'
+
+> ` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L7)
 
 #### :gear: SatelliteDevStorageCollection
 
-| Type                            | Type                                                      |
-| ------------------------------- | --------------------------------------------------------- |
-| `SatelliteDevStorageCollection` | `Omit<Rule, 'createdAt' or 'updatedAt' or 'maxCapacity'>` |
+| Type                            | Type   |
+| ------------------------------- | ------ |
+| `SatelliteDevStorageCollection` | `Omit< |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L13)
+Rule,
+'createdAt' or 'updatedAt' or 'maxCapacity' or 'version'
+
+> ` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L16)
 
 #### :gear: JunoDevConfigFn
 

@@ -109,13 +109,15 @@ export interface Asset extends AssetKey {
  * @interface
  * @extends {Pick<ListResults<AssetNoContent>, 'items_length' | 'items_page' | 'matches_length' | 'matches_pages'>}
  */
-export interface Assets
-  extends Pick<
-    ListResults<AssetNoContent>,
-    'items_length' | 'items_page' | 'matches_length' | 'matches_pages'
-  > {
+export interface Assets extends Omit<ListResults<AssetNoContent>, 'items'> {
   /**
    * The collection of assets.
+   * @type {Asset[]}
+   */
+  items: Asset[];
+  /**
+   * The collection of assets. Duplicates items for backwards compatibility. It will ultimately be removed.
+   * @deprecated Use {@link items} instead.
    * @type {Asset[]}
    */
   assets: Asset[];

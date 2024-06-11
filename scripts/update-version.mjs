@@ -8,7 +8,7 @@ const SUFFIX = 'next';
 const nextVersion = async ({project, currentVersion}) => {
   const version = `${currentVersion}-${SUFFIX}-${new Date().toISOString().slice(0, 10)}`;
 
-  const {versions} = await (await fetch(`http://registry.npmjs.org/@junobuild/${project}`)).json();
+  const {versions} = await (await fetch(`https://registry.npmjs.org/@junobuild/${project}`)).json();
 
   // The wip version has never been published
   if (versions[version] === undefined) {

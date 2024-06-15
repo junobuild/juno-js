@@ -1,6 +1,6 @@
+export * from './commands/deploy';
 export * from './configs/juno.config';
 export * from './constants/deploy.constants';
-export * from './services/deploy.services';
 export type * from './types/config';
 export type * from './types/deploy';
 export * from './utils/args.utils';

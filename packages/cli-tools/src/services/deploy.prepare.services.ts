@@ -13,21 +13,9 @@ import {
   DEPLOY_DEFAULT_IGNORE,
   DEPLOY_DEFAULT_SOURCE
 } from '../constants/deploy.constants';
-import type {FileDetails} from '../types/deploy';
+import type {Asset, FileDetails, ListAssets} from '../types/deploy';
 import {gzipFiles} from '../utils/compress.utils';
-import {listSourceFiles} from '../utils/deploy.utils';
-
-// TODO: we duplicate the types currently to not reference @junobuild/core
-export interface AssetEncoding {
-  sha256: string;
-}
-
-export interface Asset {
-  fullPath: string;
-  encodings: Record<ENCODING_TYPE, AssetEncoding>;
-}
-
-export type ListAssets = ({startAfter}: {startAfter?: string}) => Promise<Asset[]>;
+import {fullPath, listSourceFiles} from '../utils/deploy.utils';
 
 export const prepareDeploy = async ({
   config,
@@ -65,14 +53,6 @@ export const prepareDeploy = async ({
     sourceAbsolutePath
   };
 };
-
-export const fullPath = ({
-  file,
-  sourceAbsolutePath
-}: {
-  file: string;
-  sourceAbsolutePath: string;
-}): string => file.replace(sourceAbsolutePath, '').replace(/\\/g, '/');
 
 const filterFilesToUpload = async ({
   files,

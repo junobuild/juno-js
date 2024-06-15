@@ -5,6 +5,14 @@ import {basename} from 'node:path';
 import {IGNORE_OS_FILES} from '../constants/deploy.constants';
 import {files} from './fs.utils';
 
+export const fullPath = ({
+  file,
+  sourceAbsolutePath
+}: {
+  file: string;
+  sourceAbsolutePath: string;
+}): string => file.replace(sourceAbsolutePath, '').replace(/\\/g, '/');
+
 export const listSourceFiles = ({
   sourceAbsolutePath,
   ignore

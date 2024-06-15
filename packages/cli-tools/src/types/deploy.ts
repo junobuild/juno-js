@@ -1,4 +1,5 @@
 import type {ENCODING_TYPE} from '@junobuild/config';
+import type {Blob} from 'buffer';
 import type {MimeType} from 'file-type';
 
 export interface FileDetails {
@@ -8,3 +9,28 @@ export interface FileDetails {
   encoding?: ENCODING_TYPE;
   mime?: MimeType;
 }
+
+// TODO: we duplicate the types currently to not reference @junobuild/core
+export interface AssetEncoding {
+  sha256: string;
+}
+
+export interface Asset {
+  fullPath: string;
+  encodings: Record<ENCODING_TYPE, AssetEncoding>;
+}
+
+export type ListAssets = ({startAfter}: {startAfter?: string}) => Promise<Asset[]>;
+
+export interface UploadFileStorage {
+  filename: string;
+  data: Blob;
+  collection: string;
+  fullPath?: string;
+  headers?: [string, string][];
+  token?: string;
+  encoding?: ENCODING_TYPE;
+  description?: string;
+}
+
+export type UploadFile = (params: UploadFileStorage) => Promise<void>;

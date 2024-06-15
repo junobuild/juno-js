@@ -13,3 +13,4 @@ export type * from './utils/ts.utils';
 /// Export and expose functions for developers' configuration
 export * from './dev/config';
 export * from './mainnet/config';
+export * from './console/config';

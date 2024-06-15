@@ -33,7 +33,7 @@ export interface ConsoleIds {
  * Represents the configuration for a console.
  * @typedef {Either<ConsoleId, ConsoleIds>} ConsoleConfig
  */
-export type ConsoleConfig = Either<ConsoleId, ConsoleIds> &
+export type JunoConsoleConfig = Either<ConsoleId, ConsoleIds> &
   CliConfig & {
     /**
      * Optional configuration parameters for the console, affecting the operational behavior of its Storage.

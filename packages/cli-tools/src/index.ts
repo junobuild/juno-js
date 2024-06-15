@@ -1,4 +1,5 @@
 export * from './configs/juno.config';
+export * from './services/deploy.services';
 export type * from './types/config';
 export * from './utils/args.utils';
 export * from './utils/cmd.utils';

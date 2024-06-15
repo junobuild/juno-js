@@ -59,6 +59,13 @@
   "dependencies": {
     "@babel/core": "^7.24.6",
     "@babel/plugin-transform-modules-commonjs": "^7.24.6",
-    "@babel/preset-typescript": "^7.24.6"
+    "@babel/preset-typescript": "^7.24.6",
+    "file-type": "^19.0.0",
+    "mime-types": "^2.1.35",
+    "minimatch": "^9.0.4"
+  },
+  "devDependencies": {
+    "@types/mime-types": "^2.1.4",
+    "@types/minimatch": "^5.1.2"
   }
 }

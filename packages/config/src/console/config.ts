@@ -5,12 +5,12 @@ export type JunoConsoleConfigFn = (config: JunoConfigEnv) => JunoConsoleConfig;
 
 export type JunoConsoleConfigFnOrObject = JunoConsoleConfig | JunoConsoleConfigFn;
 
-export function defineJunoConsoleConfig(config: JunoConsoleConfig): JunoConsoleConfig;
-export function defineJunoConsoleConfig(config: JunoConsoleConfigFn): JunoConsoleConfigFn;
-export function defineJunoConsoleConfig(
+export function defineConsoleConfig(config: JunoConsoleConfig): JunoConsoleConfig;
+export function defineConsoleConfig(config: JunoConsoleConfigFn): JunoConsoleConfigFn;
+export function defineConsoleConfig(
   config: JunoConsoleConfigFnOrObject
 ): JunoConsoleConfigFnOrObject;
-export function defineJunoConsoleConfig(
+export function defineConsoleConfig(
   config: JunoConsoleConfigFnOrObject
 ): JunoConsoleConfigFnOrObject {
   return config;

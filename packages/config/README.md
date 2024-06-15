@@ -53,21 +53,12 @@ Configuration options for [Juno] CLI.
 
 ### :tropical_drink: Interfaces
 
-- [JunoConfigEnv](#gear-junoconfigenv)
 - [OrbiterConfig](#gear-orbiterconfig)
 - [JunoConfig](#gear-junoconfig)
 - [SatelliteDevCollections](#gear-satellitedevcollections)
 - [SatelliteDevController](#gear-satellitedevcontroller)
 - [SatelliteDevConfig](#gear-satellitedevconfig)
 - [JunoDevConfig](#gear-junodevconfig)
-
-#### :gear: JunoConfigEnv
-
-Represents the environment configuration for Juno.
-
-| Property | Type     | Description                                                |
-| -------- | -------- | ---------------------------------------------------------- |
-| `mode`   | `string` | The mode of the Juno configuration. type: {JunoConfigMode} |
 
 #### :gear: OrbiterConfig
 
@@ -125,7 +116,6 @@ Represents the development configuration for Juno.
 ### :cocktail: Types
 
 - [ENCODING_TYPE](#gear-encoding_type)
-- [JunoConfigMode](#gear-junoconfigmode)
 - [SatelliteDevDbCollection](#gear-satellitedevdbcollection)
 - [SatelliteDevStorageCollection](#gear-satellitedevstoragecollection)
 - [JunoDevConfigFn](#gear-junodevconfigfn)
@@ -138,14 +128,6 @@ Represents the development configuration for Juno.
 | `ENCODING_TYPE` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L5)
-
-#### :gear: JunoConfigMode
-
-| Type             | Type                     |
-| ---------------- | ------------------------ |
-| `JunoConfigMode` | `'production' or string` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/mainnet/juno.env.ts#L5)
 
 #### :gear: SatelliteDevDbCollection
 

@@ -3,8 +3,10 @@ import * as mod from '@babel/plugin-transform-modules-commonjs';
 import * as ts from '@babel/preset-typescript';
 import {
   defineConfig,
+  defineConsoleConfig,
   defineDevConfig,
   type JunoConfig,
+  type JunoConsoleConfig,
   type JunoDevConfig
 } from '@junobuild/config';
 
@@ -46,7 +48,8 @@ export const nodeRequire = <T>({id, extension}: {id: string; extension: string})
       if (request === '@junobuild/config') {
         return {
           defineConfig: (config: JunoConfig) => defineConfig(config),
-          defineDevConfig: (config: JunoDevConfig) => defineDevConfig(config)
+          defineDevConfig: (config: JunoDevConfig) => defineDevConfig(config),
+          defineConsoleConfig: (config: JunoConsoleConfig) => defineConsoleConfig(config)
         };
       }
 

@@ -29,7 +29,7 @@ export interface Asset {
 
 export type ListAssets = ({startAfter}: {startAfter?: string}) => Promise<Asset[]>;
 
-export const listFilesToDeploy = async ({
+export const prepareDeploy = async ({
   config,
   listAssets,
   assertSourceDirExists
@@ -37,7 +37,10 @@ export const listFilesToDeploy = async ({
   config: CliConfig;
   listAssets: ListAssets;
   assertSourceDirExists?: (source: string) => void;
-}): Promise<FileDetails[]> => {
+}): Promise<{
+  files: FileDetails[];
+  sourceAbsolutePath: string;
+}> => {
   const {
     source = DEPLOY_DEFAULT_SOURCE,
     ignore = DEPLOY_DEFAULT_IGNORE,
@@ -49,17 +52,27 @@ export const listFilesToDeploy = async ({
 
   assertSourceDirExists?.(sourceAbsolutePath);
 
-  return await listFiles({
+  const files = await listFiles({
     sourceAbsolutePath,
     ignore,
     encoding,
     gzip,
     listAssets
   });
+
+  return {
+    files,
+    sourceAbsolutePath
+  };
 };
 
-const fullPath = ({file, sourceAbsolutePath}: {file: string; sourceAbsolutePath: string}): string =>
-  file.replace(sourceAbsolutePath, '').replace(/\\/g, '/');
+export const fullPath = ({
+  file,
+  sourceAbsolutePath
+}: {
+  file: string;
+  sourceAbsolutePath: string;
+}): string => file.replace(sourceAbsolutePath, '').replace(/\\/g, '/');
 
 const filterFilesToUpload = async ({
   files,

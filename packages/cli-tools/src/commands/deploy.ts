@@ -1,6 +1,6 @@
 import type {CliConfig} from '@junobuild/config';
 import {prepareDeploy} from '../services/deploy.prepare.services';
-import type {upload} from '../services/deploy.upload.services';
+import {upload} from '../services/deploy.upload.services';
 import type {ListAssets, UploadFile} from '../types/deploy';
 
 export const deploy = async ({

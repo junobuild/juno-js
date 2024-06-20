@@ -15,7 +15,7 @@ import {
   MemorySize,
   SetControllersArgs,
   StorageConfigIFrame as StorageConfigIFrameDid,
-  StorageConfigRawAccess,
+  StorageConfigRawAccess as StorageConfigRawAccessDid,
   StorageConfigRedirect as StorageConfigRedirectDid
 } from '../../declarations/satellite/satellite.did';
 import {canisterMetadata, upgradeCode} from '../api/ic.api';
@@ -91,7 +91,8 @@ export const setConfig = async ({
         ? {AllowAny: null}
         : {Deny: null};
 
-  const rawAccess: StorageConfigRawAccess = configRawAccess === true ? {Allow: null} : {Deny: null};
+  const rawAccess: StorageConfigRawAccessDid =
+    configRawAccess === true ? {Allow: null} : {Deny: null};
 
   return setConfigApi({
     satellite,

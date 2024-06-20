@@ -10,11 +10,12 @@ import type {
   StorageConfigRewrite
 } from '@junobuild/config';
 import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
-import type {
+import {
   Controller,
   MemorySize,
   SetControllersArgs,
   StorageConfigIFrame as StorageConfigIFrameDid,
+  StorageConfigRawAccess,
   StorageConfigRedirect as StorageConfigRedirectDid
 } from '../../declarations/satellite/satellite.did';
 import {canisterMetadata, upgradeCode} from '../api/ic.api';
@@ -62,7 +63,8 @@ export const setConfig = async ({
       headers: configHeaders,
       rewrites: configRewrites,
       redirects: configRedirects,
-      iframe: configIFrame
+      iframe: configIFrame,
+      rawAccess: configRawAccess
     }
   },
   satellite
@@ -89,6 +91,8 @@ export const setConfig = async ({
         ? {AllowAny: null}
         : {Deny: null};
 
+  const rawAccess: StorageConfigRawAccess = configRawAccess === true ? {Allow: null} : {Deny: null};
+
   return setConfigApi({
     satellite,
     config: {
@@ -97,7 +101,7 @@ export const setConfig = async ({
         rewrites,
         redirects: [redirects],
         iframe: [iframe],
-        raw_access: []
+        raw_access: [rawAccess]
       }
     }
   });

@@ -53,6 +53,7 @@ Configuration options for [Juno] CLI.
 
 ### :tropical_drink: Interfaces
 
+- [CliConfig](#gear-cliconfig)
 - [JunoConfigEnv](#gear-junoconfigenv)
 - [OrbiterConfig](#gear-orbiterconfig)
 - [JunoConfig](#gear-junoconfig)
@@ -60,6 +61,15 @@ Configuration options for [Juno] CLI.
 - [SatelliteDevController](#gear-satellitedevcontroller)
 - [SatelliteDevConfig](#gear-satellitedevconfig)
 - [JunoDevConfig](#gear-junodevconfig)
+
+#### :gear: CliConfig
+
+| Property   | Type                                     | Description                                                                                                                                                                                                                                                                                                                                                                              |
+| ---------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `source`   | `string or undefined`                    | Specifies the directory from which to deploy to storage.For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: 'build'type: {string}                                                                                                                                                                                                          |
+| `ignore`   | `string[] or undefined`                  | Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore. type: {string[]}optional                                                                                                                                                                                                                                                    |
+| `gzip`     | `string or false or undefined`           | Controls the Gzip compression optimization for files in the source folder. By default, it targets JavaScript (js), ES Module (mjs), and CSS (css) files.You can disable this by setting it to `false` or customize it with a different file matching pattern using glob syntax. type: {string                                                                                            | false}optional |
+| `encoding` | `[string, ENCODING_TYPE][] or undefined` | Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension:- `.Z` for compress,- `.gz` for gzip,- `.br` for brotli,- `.zlib` for deflate,- anything else defaults to `identity`.The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types. type: {Array<[string, ENCODING_TYPE]>}optional |
 
 #### :gear: JunoConfigEnv
 
@@ -145,7 +155,7 @@ Represents the development configuration for Juno.
 | ---------------- | ------------------------ |
 | `JunoConfigMode` | `'production' or string` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/mainnet/juno.env.ts#L5)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L5)
 
 #### :gear: SatelliteDevDbCollection
 

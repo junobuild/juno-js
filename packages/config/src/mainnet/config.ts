@@ -1,5 +1,5 @@
+import type {JunoConfigEnv} from '../types/juno.env';
 import type {JunoConfig} from './juno.config';
-import type {JunoConfigEnv} from './juno.env';
 
 export type JunoConfigFn = (config: JunoConfigEnv) => JunoConfig;
 

@@ -4,10 +4,11 @@ const {generateDocumentation} = require('tsdoc-markdown');
 
 const configInputFiles = [
   './packages/config/src/mainnet/juno.config.ts',
-  './packages/config/src/mainnet/juno.env.ts',
+  './packages/config/src/types/juno.env.ts',
   './packages/config/src/dev/juno.dev.config.ts',
   './packages/config/src/dev/config.ts',
-  './packages/config/src/types/encoding.ts'
+  './packages/config/src/types/encoding.ts',
+  './packages/config/src/types/cli.config.ts'
 ];
 
 const buildOptions = {

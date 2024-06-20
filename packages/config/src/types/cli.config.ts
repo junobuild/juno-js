@@ -1,0 +1,40 @@
+import type {ENCODING_TYPE} from './encoding';
+
+export interface CliConfig {
+  /**
+   * Specifies the directory from which to deploy to storage.
+   * For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`.
+   *
+   * @default 'build'
+   * @type {string}
+   */
+  source?: string;
+
+  /**
+   * Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore.
+   * @type {string[]}
+   * @optional
+   */
+  ignore?: string[];
+
+  /**
+   * Controls the Gzip compression optimization for files in the source folder. By default, it targets JavaScript (js), ES Module (mjs), and CSS (css) files.
+   * You can disable this by setting it to `false` or customize it with a different file matching pattern using glob syntax.
+   * @type {string | false}
+   * @optional
+   */
+  gzip?: string | false;
+
+  /**
+   * Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension:
+   * - `.Z` for compress,
+   * - `.gz` for gzip,
+   * - `.br` for brotli,
+   * - `.zlib` for deflate,
+   * - anything else defaults to `identity`.
+   * The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types.
+   * @type {Array<[string, ENCODING_TYPE]>}
+   * @optional
+   */
+  encoding?: Array<[string, ENCODING_TYPE]>;
+}

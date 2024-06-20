@@ -101,10 +101,11 @@ Represents the overall configuration for Juno.
 
 Represents the collections configuration for a satellite in a development environment.
 
-| Property  | Type                                           | Description                                                                            |
-| --------- | ---------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `db`      | `SatelliteDevDbCollection[] or undefined`      | The database collections configuration. type: {SatelliteDevDbCollection[]}optional     |
-| `storage` | `SatelliteDevStorageCollection[] or undefined` | The storage collections configuration. type: {SatelliteDevStorageCollection[]}optional |
+| Property    | Type                                             | Description                                                                                                                                      |
+| ----------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `datastore` | `SatelliteDevDataStoreCollection[] or undefined` | The datastore collections configuration. type: {SatelliteDevDataStoreCollection[]}optional                                                       |
+| `db`        | `SatelliteDevDataStoreCollection[] or undefined` | The datastore collections configuration.This property is deprecated. Use {@link datastore} instead. deprecatedtype: {SatelliteDevDbCollection[]} |
+| `storage`   | `SatelliteDevStorageCollection[] or undefined`   | The storage collections configuration. type: {SatelliteDevStorageCollection[]}optional                                                           |
 
 #### :gear: SatelliteDevController
 
@@ -136,6 +137,7 @@ Represents the development configuration for Juno.
 
 - [ENCODING_TYPE](#gear-encoding_type)
 - [JunoConfigMode](#gear-junoconfigmode)
+- [SatelliteDevDataStoreCollection](#gear-satellitedevdatastorecollection)
 - [SatelliteDevDbCollection](#gear-satellitedevdbcollection)
 - [SatelliteDevStorageCollection](#gear-satellitedevstoragecollection)
 - [JunoDevConfigFn](#gear-junodevconfigfn)
@@ -157,11 +159,11 @@ Represents the development configuration for Juno.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L5)
 
-#### :gear: SatelliteDevDbCollection
+#### :gear: SatelliteDevDataStoreCollection
 
-| Type                       | Type   |
-| -------------------------- | ------ |
-| `SatelliteDevDbCollection` | `Omit< |
+| Type                              | Type   |
+| --------------------------------- | ------ |
+| `SatelliteDevDataStoreCollection` | `Omit< |
 
 Rule,
 'createdAt' or 'updatedAt' or 'maxSize' or 'version'
@@ -169,6 +171,14 @@ Rule,
 > ` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L7)
+
+#### :gear: SatelliteDevDbCollection
+
+| Type                       | Type                              |
+| -------------------------- | --------------------------------- |
+| `SatelliteDevDbCollection` | `SatelliteDevDataStoreCollection` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L19)
 
 #### :gear: SatelliteDevStorageCollection
 
@@ -181,7 +191,7 @@ Rule,
 
 > ` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L16)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L25)
 
 #### :gear: JunoDevConfigFn
 

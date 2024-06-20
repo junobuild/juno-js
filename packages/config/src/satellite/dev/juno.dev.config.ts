@@ -2,12 +2,21 @@ import type {Rule} from '../types/rules';
 
 /**
  * Represents a database collection configuration for a satellite in a development environment.
- * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize' | 'version'>} SatelliteDevDbCollection
+ * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize' | 'version'>} SatelliteDevDataStoreCollection
  */
-export type SatelliteDevDbCollection = Omit<
+export type SatelliteDevDataStoreCollection = Omit<
   Rule,
   'createdAt' | 'updatedAt' | 'maxSize' | 'version'
 >;
+
+/**
+ * This type is an alias for SatelliteDevDataStoreCollection and is now deprecated.
+ *
+ * @see SatelliteDevDataStoreCollection
+ * @deprecated Use {@link SatelliteDevDataStoreCollection} instead.
+ * @typedef {SatelliteDevDataStoreCollection} SatelliteDevDbCollection
+ */
+export type SatelliteDevDbCollection = SatelliteDevDataStoreCollection;
 
 /**
  * Represents a storage collection configuration for a satellite in a development environment.
@@ -24,9 +33,18 @@ export type SatelliteDevStorageCollection = Omit<
  */
 export interface SatelliteDevCollections {
   /**
-   * The database collections configuration.
-   * @type {SatelliteDevDbCollection[]}
+   * The datastore collections configuration.
+   * @type {SatelliteDevDataStoreCollection[]}
    * @optional
+   */
+  datastore?: SatelliteDevDataStoreCollection[];
+
+  /**
+   * The datastore collections configuration.
+   * This property is deprecated. Use {@link datastore} instead.
+   *
+   * @deprecated
+   * @type {SatelliteDevDbCollection[]}
    */
   db?: SatelliteDevDbCollection[];
 

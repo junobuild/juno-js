@@ -10,7 +10,7 @@ import type {
   StorageConfigRewrite
 } from '@junobuild/config';
 import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
-import {
+import type {
   Controller,
   MemorySize,
   SetControllersArgs,

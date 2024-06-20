@@ -25,7 +25,7 @@ Configuration options for [Juno] CLI.
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineDevConfig` | `{ (config: JunoDevConfig): JunoDevConfig; (config: JunoDevConfigFn): JunoDevConfigFn; (config: JunoDevConfigFnOrObject): JunoDevConfigFnOrObject; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/config.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L7)
 
 #### :gear: defineDevConfig
 
@@ -33,7 +33,7 @@ Configuration options for [Juno] CLI.
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineDevConfig` | `{ (config: JunoDevConfig): JunoDevConfig; (config: JunoDevConfigFn): JunoDevConfigFn; (config: JunoDevConfigFnOrObject): JunoDevConfigFnOrObject; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/config.ts#L8)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L8)
 
 #### :gear: defineDevConfig
 
@@ -41,7 +41,7 @@ Configuration options for [Juno] CLI.
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineDevConfig` | `{ (config: JunoDevConfig): JunoDevConfig; (config: JunoDevConfigFn): JunoDevConfigFn; (config: JunoDevConfigFnOrObject): JunoDevConfigFnOrObject; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/config.ts#L9)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L9)
 
 #### :gear: defineDevConfig
 
@@ -49,7 +49,7 @@ Configuration options for [Juno] CLI.
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineDevConfig` | `{ (config: JunoDevConfig): JunoDevConfig; (config: JunoDevConfigFn): JunoDevConfigFn; (config: JunoDevConfigFnOrObject): JunoDevConfigFnOrObject; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/config.ts#L10)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L10)
 
 ### :tropical_drink: Interfaces
 
@@ -168,7 +168,7 @@ Rule,
 
 > ` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L7)
 
 #### :gear: SatelliteDevStorageCollection
 
@@ -181,7 +181,7 @@ Rule,
 
 > ` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/juno.dev.config.ts#L16)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L16)
 
 #### :gear: JunoDevConfigFn
 
@@ -189,7 +189,7 @@ Rule,
 | ----------------- | --------------------- |
 | `JunoDevConfigFn` | `() => JunoDevConfig` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/config.ts#L3)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L3)
 
 #### :gear: JunoDevConfigFnOrObject
 
@@ -197,7 +197,7 @@ Rule,
 | ------------------------- | ---------------------------------- |
 | `JunoDevConfigFnOrObject` | `JunoDevConfig or JunoDevConfigFn` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/dev/config.ts#L5)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L5)
 
 <!-- TSDOC_END -->
 

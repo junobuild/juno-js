@@ -55,10 +55,5 @@
   "peerDependencies": {
     "@junobuild/config": "*",
     "@junobuild/utils": "*"
-  },
-  "dependencies": {
-    "@babel/core": "^7.24.6",
-    "@babel/plugin-transform-modules-commonjs": "^7.24.6",
-    "@babel/preset-typescript": "^7.24.6"
   }
 }

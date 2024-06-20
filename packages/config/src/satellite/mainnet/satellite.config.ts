@@ -1,6 +1,6 @@
-import type {CliConfig} from '../types/cli.config';
-import type {JunoConfigMode} from '../types/juno.env';
-import type {Either} from '../utils/ts.utils';
+import type {CliConfig} from '../../types/cli.config';
+import type {JunoConfigMode} from '../../types/juno.env';
+import type {Either} from '../../utils/ts.utils';
 import type {AuthenticationConfig} from './authentication.config';
 import type {StorageConfig} from './storage.config';
 

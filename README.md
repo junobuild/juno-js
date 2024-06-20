@@ -11,6 +11,7 @@ JavaScript libraries for interfacing with [Juno].
 - [config](/packages/config): configuration options for the CLI
 - [utils](/packages/utils): various utilities used across Juno's JS code base
 - [cli-tools](/packages/cli-tools): few tools used in Juno's CLIs and Plugins
+- [config-loader](/packages/config-loader): utilities for reading configuration settings
 
 ## License
 

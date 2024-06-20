@@ -8,7 +8,7 @@
 
 # Juno Config Loader
 
-Utilities for reading and managing Juno's configuration settings.
+Utilities for reading Juno's configuration settings.
 
 ## License
 

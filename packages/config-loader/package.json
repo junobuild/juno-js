@@ -1,7 +1,7 @@
 {
-  "name": "@junobuild/cli-tools",
-  "version": "0.0.10",
-  "description": "A collection of tools for Juno CLIs and Plugins.",
+  "name": "@junobuild/config-loader",
+  "version": "0.0.1",
+  "description": "Utilities for reading and managing Juno's configuration settings.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
@@ -40,15 +40,9 @@
     "url": "https://github.com/junobuild/juno-js"
   },
   "keywords": [
-    "blockchain-as-a-service",
-    "baas",
-    "dapps",
-    "dapps-development",
-    "internet computer",
-    "smart-contracts",
-    "web3",
-    "utilities",
-    "utils",
+    "config",
+    "configuration",
+    "env",
     "cli"
   ],
   "homepage": "https://juno.build",
@@ -57,14 +51,8 @@
     "@junobuild/utils": "*"
   },
   "dependencies": {
-    "file-type": "^19.0.0",
-    "listr": "^0.14.3",
-    "mime-types": "^2.1.35",
-    "minimatch": "^9.0.4"
-  },
-  "devDependencies": {
-    "@types/listr": "^0.14.9",
-    "@types/mime-types": "^2.1.4",
-    "@types/minimatch": "^5.1.2"
+    "@babel/core": "^7.24.6",
+    "@babel/plugin-transform-modules-commonjs": "^7.24.6",
+    "@babel/preset-typescript": "^7.24.6"
   }
 }

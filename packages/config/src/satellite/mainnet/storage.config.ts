@@ -5,7 +5,7 @@
 export type StorageConfigSourceGlob = string;
 
 /**
- * Headers allow the client and the satellite to pass additional information along with a request or a response.
+ * Headers allow the client and the storage to pass additional information along with a request or a response.
  * Some sets of headers can affect how the browser handles the page and its content.
  * @interface StorageConfigHeader
  */
@@ -108,4 +108,19 @@ export interface StorageConfig {
    * @optional
    */
   iframe?: 'deny' | 'same-origin' | 'allow-any';
+
+  /**
+   * Optional flag to enable access for raw URLs.
+   *
+   * ⚠️ **WARNING: Enabling this option is highly discouraged due to security risks.**
+   *
+   * Enabling this option allows access to raw URLs (e.g., https://satellite-id.raw.icp0.io), bypassing certificate validation.
+   * This creates a security vulnerability where a malicious node in the chain can respond to requests with malicious or invalid content.
+   * Since there is no validation on raw URLs, the client may receive and process harmful data.
+   *
+   * If not specified, the default value is `false`.
+   * @type {boolean}
+   * @optional
+   */
+  rawAccess?: boolean;
 }

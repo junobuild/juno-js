@@ -22,7 +22,7 @@ const corePromises = coreDeclarations.map((d) =>
 );
 await Promise.all(corePromises);
 
-const storageDeclarations = ['satellite', 'deprecated'];
+const storageDeclarations = ['satellite', 'console', 'deprecated'];
 const storagePromises = storageDeclarations.map((d) =>
   cp(join(src, d), join('./packages/storage/declarations/', d), {recursive: true})
 );

@@ -1,8 +1,10 @@
-import type {AssetKey} from '@junobuild/storage';
-import {uploadAsset as uploadAssetStorage, type UploadAsset} from '@junobuild/storage';
+import type {UploadAsset} from '@junobuild/storage';
+import {uploadAsset as uploadAssetStorage, type AssetKey} from '@junobuild/storage';
 import {fromNullable} from '@junobuild/utils';
 import type {
   AssetNoContent,
+  InitAssetKey,
+  InitUploadResult,
   ListResults as ListAssetsApi,
   _SERVICE as SatelliteActor
 } from '../../declarations/satellite/satellite.did';
@@ -17,9 +19,14 @@ export const uploadAsset = async ({
 }: UploadAsset & {satellite: Satellite}): Promise<void> => {
   const actor = await getSatelliteActor(satellite);
 
+  const init_asset_upload = async (initAssetKey: InitAssetKey): Promise<InitUploadResult> => {
+    return await actor.init_asset_upload(initAssetKey);
+  };
+
   await uploadAssetStorage({
     actor,
-    asset
+    asset,
+    init_asset_upload
   });
 };
 

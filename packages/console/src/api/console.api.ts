@@ -1,5 +1,5 @@
-import {Proposal, ProposalType} from '../../declarations/console/console.did';
-import {ConsoleParameters} from '../types/actor.types';
+import type {Proposal, ProposalType} from '../../declarations/console/console.did';
+import type {ConsoleParameters} from '../types/actor.types';
 import {getConsoleActor} from './actor.api';
 
 export const init_proposal = async ({

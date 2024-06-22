@@ -1,6 +1,3 @@
-import type {AssetNoContent} from '@junobuild/core/declarations/satellite/satellite.did';
-import type {ListResults} from '@junobuild/core/src/types/list.types';
-
 /**
  * Represents the encoding details of an asset.
  * @interface
@@ -102,25 +99,6 @@ export interface Asset extends AssetKey {
    * @type {bigint}
    */
   updated_at?: bigint;
-}
-
-/**
- * Represents a collection of assets with pagination details.
- * @interface
- * @extends {Pick<ListResults<AssetNoContent>, 'items_length' | 'items_page' | 'matches_length' | 'matches_pages'>}
- */
-export interface Assets extends Omit<ListResults<AssetNoContent>, 'items'> {
-  /**
-   * The collection of assets.
-   * @type {Asset[]}
-   */
-  items: Asset[];
-  /**
-   * The collection of assets. Duplicates items for backwards compatibility. It will ultimately be removed.
-   * @deprecated Use {@link items} instead.
-   * @type {Asset[]}
-   */
-  assets: Asset[];
 }
 
 /**

@@ -6,6 +6,7 @@ node ./scripts/update-version.mjs utils
 node ./scripts/update-version.mjs cli-tools
 node ./scripts/update-version.mjs config
 node ./scripts/update-version.mjs config-loader
+node ./scripts/update-version.mjs storage
 node ./scripts/update-version.mjs core
 node ./scripts/update-version.mjs admin
 node ./scripts/update-version.mjs ledger

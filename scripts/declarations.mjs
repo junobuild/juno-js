@@ -22,6 +22,12 @@ const corePromises = coreDeclarations.map((d) =>
 );
 await Promise.all(corePromises);
 
+const storageDeclarations = ['satellite', 'deprecated'];
+const storagePromises = storageDeclarations.map((d) =>
+    cp(join(src, d), join('./packages/storage/declarations/', d), {recursive: true})
+);
+await Promise.all(storagePromises);
+
 const ledgerDeclarations = ['index'];
 const ledgerPromises = ledgerDeclarations.map((d) =>
   cp(join(src, d), join('./packages/ledger/declarations/', d), {recursive: true})

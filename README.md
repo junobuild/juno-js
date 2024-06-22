@@ -14,6 +14,7 @@ JavaScript libraries for interfacing with [Juno].
 - [config-loader](/packages/config-loader): utilities for reading configuration settings
 - [core-peer](/packages/core-peer): a synchronized copy of [core](/packages/core) for the bundlers that requires polyfilling DFINITY `agent-js` themselves
 - [console](/packages/console): interfacing with Junos' Console
+- [storage](/packages/storage): interfacing with Junos' Storage features
 
 ## License
 

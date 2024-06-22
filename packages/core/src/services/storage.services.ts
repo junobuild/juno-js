@@ -1,3 +1,4 @@
+import type {Asset, AssetEncoding, AssetKey, Storage} from '@junobuild/storage';
 import {fromNullable} from '@junobuild/utils';
 import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import {
@@ -10,7 +11,7 @@ import {
 } from '../api/storage.api';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {SatelliteOptions} from '../types/satellite.types';
-import type {Asset, AssetEncoding, AssetKey, Assets, Storage} from '../types/storage.types';
+import type {Assets} from '../types/storage.types';
 import {sha256ToBase64String} from '../utils/crypto.utils';
 import {satelliteUrl} from '../utils/env.utils';
 import {getIdentity} from './identity.services';

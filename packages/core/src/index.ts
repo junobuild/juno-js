@@ -1,3 +1,11 @@
+import type {
+  Asset,
+  AssetEncoding,
+  AssetKey,
+  Assets,
+  ENCODING_TYPE,
+  Storage
+} from '@junobuild/storage';
 import {assertNonNullish} from '@junobuild/utils';
 import {initAuthTimeoutWorker} from './services/auth-timout.services';
 import {initAuth} from './services/auth.services';
@@ -17,8 +25,8 @@ export * from './types/doc.types';
 export * from './types/env.types';
 export {ListOrder, ListPaginate, ListParams, ListResults} from './types/list.types';
 export * from './types/satellite.types';
-export * from './types/storage.types';
 export * from './types/subscription.types';
+export type {Asset, AssetEncoding, AssetKey, Assets, ENCODING_TYPE, Storage};
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {
   const satelliteId = userEnv?.satelliteId ?? envSatelliteId();

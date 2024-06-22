@@ -1,5 +1,5 @@
-import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
-import type {ListResults} from './list.types';
+import type {AssetNoContent} from '@junobuild/core/declarations/satellite/satellite.did';
+import type {ListResults} from '@junobuild/core/src/types/list.types';
 
 /**
  * Represents the encoding details of an asset.

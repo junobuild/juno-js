@@ -18,6 +18,7 @@
   "workspaces": [
     "packages/utils",
     "packages/config",
+    "packages/storage",
     "packages/core",
     "packages/admin",
     "packages/ledger",
@@ -25,8 +26,7 @@
     "packages/core-peer",
     "packages/cli-tools",
     "packages/config-loader",
-    "packages/console",
-    "packages/storage"
+    "packages/console"
   ],
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",

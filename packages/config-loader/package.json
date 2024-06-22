@@ -34,7 +34,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/junobuild/juno-js.git",
-    "directory": "packages/cli-tools"
+    "directory": "packages/config-loader"
   },
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"

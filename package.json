@@ -117,6 +117,28 @@
       "name": "@junobuild/config",
       "path": "./packages/config/dist/index.js",
       "limit": "30 B"
+    },
+    {
+      "name": "@junobuild/console",
+      "path": "./packages/console/dist/index.js",
+      "limit": "5 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/principal",
+        "@junobuild/utils",
+        "semver"
+      ]
+    },
+    {
+      "name": "@junobuild/storage",
+      "path": "./packages/storage/dist/index.js",
+      "limit": "5 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/principal"
+      ]
     }
   ]
 }

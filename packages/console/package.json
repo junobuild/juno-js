@@ -56,6 +56,7 @@
     "@dfinity/principal": "^1.3.0",
     "@junobuild/config": "*",
     "@junobuild/utils": "*",
+    "@junobuild/storage": "*",
     "semver": "7.*"
   }
 }

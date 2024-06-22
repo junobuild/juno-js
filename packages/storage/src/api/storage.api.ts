@@ -1,5 +1,14 @@
 import {isBrowser, toNullable} from '@junobuild/utils';
-import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
+import type {
+  _SERVICE as ConsoleActor,
+  InitAssetKey as ConsoleInitAssetKey,
+  InitUploadResult as ConsoleInitUploadResult
+} from '../../declarations/console/console.did';
+import {
+  _SERVICE as SatelliteActor,
+  InitAssetKey as SatelliteInitAssetKey,
+  InitUploadResult as SatelliteInitUploadResult
+} from '../../declarations/satellite/satellite.did';
 import type {ENCODING_TYPE, Storage} from '../types/storage.types';
 
 export type UploadAsset = Required<Omit<Storage, 'token' | 'encoding' | 'description'>> &
@@ -7,12 +16,16 @@ export type UploadAsset = Required<Omit<Storage, 'token' | 'encoding' | 'descrip
 
 export const uploadAsset = async ({
   asset: {data, filename, collection, headers, token, fullPath, encoding, description},
-  actor
+  actor,
+  init_asset_upload
 }: {
   asset: UploadAsset;
-  actor: SatelliteActor;
+  actor: SatelliteActor | ConsoleActor;
+  init_asset_upload: (
+    initAssetKey: SatelliteInitAssetKey | ConsoleInitAssetKey
+  ) => Promise<SatelliteInitUploadResult | ConsoleInitUploadResult>;
 }): Promise<void> => {
-  const {batch_id: batchId} = await actor.init_asset_upload({
+  const {batch_id: batchId} = await init_asset_upload({
     collection,
     full_path: fullPath,
     name: filename,
@@ -83,7 +96,7 @@ type UploadChunkResult = {chunk_id: bigint};
 type UploadChunkParams = {
   batchId: bigint;
   chunk: Blob;
-  actor: SatelliteActor;
+  actor: SatelliteActor | ConsoleActor;
   orderId: bigint;
 };
 

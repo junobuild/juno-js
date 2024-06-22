@@ -1,7 +1,7 @@
 import type {UploadAsset} from '@junobuild/storage';
-import {AssetKey, uploadAsset as uploadAssetStorage} from '@junobuild/storage';
+import {uploadAsset as uploadAssetStorage, type AssetKey} from '@junobuild/storage';
 import {fromNullable} from '@junobuild/utils';
-import {
+import type {
   AssetNoContent,
   InitAssetKey,
   InitUploadResult,

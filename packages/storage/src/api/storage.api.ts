@@ -4,7 +4,7 @@ import type {
   InitAssetKey as ConsoleInitAssetKey,
   InitUploadResult as ConsoleInitUploadResult
 } from '../../declarations/console/console.did';
-import {
+import type {
   _SERVICE as SatelliteActor,
   InitAssetKey as SatelliteInitAssetKey,
   InitUploadResult as SatelliteInitUploadResult

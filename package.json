@@ -24,7 +24,8 @@
     "packages/analytics",
     "packages/core-peer",
     "packages/cli-tools",
-    "packages/config-loader"
+    "packages/config-loader",
+    "packages/console"
   ],
   "devDependencies": {
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",

@@ -43,7 +43,7 @@ function install_icjs_utils_next_peer() {
 }
 
 PACKAGES=core
-PACKAGES_PEER=admin,ledger,core-peer
+PACKAGES_PEER=admin,ledger,console,core-peer
 PACKAGES_AUTH_CLIENT_PEER=core-peer
 PACKAGES_PEER_UTILS=utils
 PACKAGES_PEER_ICJS_UTILS=ledger

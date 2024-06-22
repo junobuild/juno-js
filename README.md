@@ -13,6 +13,7 @@ JavaScript libraries for interfacing with [Juno].
 - [cli-tools](/packages/cli-tools): few tools used in Juno's CLIs and Plugins
 - [config-loader](/packages/config-loader): utilities for reading configuration settings
 - [core-peer](/packages/core-peer): a synchronized copy of [core](/packages/core) for the bundlers that requires polyfilling DFINITY `agent-js` themselves
+- [console](/packages/console): interfacing with Junos' Console
 
 ## License
 

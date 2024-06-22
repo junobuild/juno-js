@@ -54,7 +54,8 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
-    "@junobuild/utils": "*"
+    "@junobuild/utils": "*",
+    "@junobuild/storage": "*"
   },
   "peerDependencies": {
     "@dfinity/agent": "^1.3.0",

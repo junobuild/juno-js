@@ -5,7 +5,7 @@ import type {
   JunoDevConfigFnOrObject
 } from '@junobuild/config';
 import {existsSync, readFileSync} from 'node:fs';
-import {access, readFile} from 'node:fs/promises';
+import {access, lstat, readFile} from 'node:fs/promises';
 import {extname, join} from 'node:path';
 import type {ConfigFile, ConfigFilename} from '../types/config';
 import {nodeRequire} from '../utils/node.utils';
@@ -13,8 +13,13 @@ import {nodeRequire} from '../utils/node.utils';
 export const junoConfigExist = async (params: {filename: ConfigFilename}): Promise<boolean> => {
   try {
     const {configPath} = junoConfigFile(params);
+
+    // We can access the file - i.e. it exists.
     await access(configPath);
-    return true;
+
+    // We also double check it's a file and not a directory.
+    // Note: A directory can be created by and on Docker start when the referenced config file in the docker-compose.yml file does not point to an existing file.
+    return (await lstat(configPath)).isFile();
   } catch (err: unknown) {
     if (err instanceof Error && 'code' in err && (err as NodeJS.ErrnoException).code === 'ENOENT') {
       return false;

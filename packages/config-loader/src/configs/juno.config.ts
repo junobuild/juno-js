@@ -86,7 +86,7 @@ export const junoConfigFile = ({
   };
 };
 
-const detectJunoConfigType = ({
+export const detectJunoConfigType = ({
   filename
 }: {
   filename: ConfigFilename;

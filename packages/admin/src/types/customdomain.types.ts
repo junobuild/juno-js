@@ -27,4 +27,11 @@ export interface CustomDomain {
    * @type {bigint}
    */
   created_at: bigint;
+
+  /**
+   * The version of the custom domain.
+   * @type {bigint}
+   * @optional
+   */
+  version?: bigint;
 }

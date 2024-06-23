@@ -342,12 +342,17 @@ export const listCustomDomains = async ({
     satellite
   });
 
-  return domains.map(([domain, details]) => ({
-    domain,
-    bn_id: fromNullable(details.bn_id),
-    created_at: details.created_at,
-    updated_at: details.updated_at
-  }));
+  return domains.map(([domain, details]) => {
+    const domainVersion = fromNullable(details.version);
+
+    return {
+      domain,
+      bn_id: fromNullable(details.bn_id),
+      created_at: details.created_at,
+      updated_at: details.updated_at,
+      ...(nonNullish(domainVersion) && {version: domainVersion})
+    };
+  });
 };
 
 /**

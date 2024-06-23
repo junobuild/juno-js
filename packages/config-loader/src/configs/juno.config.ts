@@ -7,7 +7,7 @@ import type {
 import {existsSync, readFileSync} from 'node:fs';
 import {access, readFile} from 'node:fs/promises';
 import {extname, join} from 'node:path';
-import type {ConfigFilename, ConfigType} from '../types/config';
+import {ConfigFile, ConfigFilename} from '../types/config';
 import {nodeRequire} from '../utils/node.utils';
 
 export const junoConfigExist = async (params: {filename: ConfigFilename}): Promise<boolean> => {
@@ -28,11 +28,7 @@ const ts = (filename: ConfigFilename): string => join(process.cwd(), `${filename
 const js = (filename: ConfigFilename): string => join(process.cwd(), `${filename}.js`);
 const mjs = (filename: ConfigFilename): string => join(process.cwd(), `${filename}.mjs`);
 
-export const junoConfigFile = ({
-  filename
-}: {
-  filename: ConfigFilename;
-}): {configPath: string; configType: ConfigType} => {
+export const junoConfigFile = ({filename}: {filename: ConfigFilename}): ConfigFile => {
   const junoTs = ts(filename);
 
   if (existsSync(junoTs)) {
@@ -90,7 +86,7 @@ export const detectJunoConfigType = ({
   filename
 }: {
   filename: ConfigFilename;
-}): {configPath: string; configType: ConfigType} | undefined => {
+}): ConfigFile | undefined => {
   const tsconfig = join(process.cwd(), 'tsconfig.json');
 
   if (existsSync(tsconfig)) {

@@ -4,7 +4,7 @@ import type {
   JunoDevConfig,
   JunoDevConfigFnOrObject
 } from '@junobuild/config';
-import {existsSync} from 'node:fs';
+import {existsSync, readFileSync} from 'node:fs';
 import {access, readFile} from 'node:fs/promises';
 import {extname, join} from 'node:path';
 import type {ConfigFilename, ConfigType} from '../types/config';
@@ -24,12 +24,16 @@ export const junoConfigExist = async (params: {filename: ConfigFilename}): Promi
   }
 };
 
+const ts = (filename: ConfigFilename): string => join(process.cwd(), `${filename}.ts`);
+const js = (filename: ConfigFilename): string => join(process.cwd(), `${filename}.js`);
+const mjs = (filename: ConfigFilename): string => join(process.cwd(), `${filename}.mjs`);
+
 export const junoConfigFile = ({
   filename
 }: {
   filename: ConfigFilename;
 }): {configPath: string; configType: ConfigType} => {
-  const junoTs = join(process.cwd(), `${filename}.ts`);
+  const junoTs = ts(filename);
 
   if (existsSync(junoTs)) {
     return {
@@ -38,7 +42,7 @@ export const junoConfigFile = ({
     };
   }
 
-  const junoJs = join(process.cwd(), `${filename}.js`);
+  const junoJs = js(filename);
 
   if (existsSync(junoJs)) {
     return {
@@ -47,7 +51,7 @@ export const junoConfigFile = ({
     };
   }
 
-  const junoMjs = join(process.cwd(), `${filename}.mjs`);
+  const junoMjs = mjs(filename);
 
   if (existsSync(junoMjs)) {
     return {
@@ -80,6 +84,62 @@ export const junoConfigFile = ({
     configPath: join(process.cwd(), `${filename}.json`),
     configType: 'json'
   };
+};
+
+const detectJunoConfigType = ({
+  filename
+}: {
+  filename: ConfigFilename;
+}): {configPath: string; configType: ConfigType} | undefined => {
+  const tsconfig = join(process.cwd(), 'tsconfig.json');
+
+  if (existsSync(tsconfig)) {
+    const junoTs = ts(filename);
+
+    return {
+      configPath: junoTs,
+      configType: 'ts'
+    };
+  }
+
+  try {
+    const packageJsonPath = join(process.cwd(), 'package.json');
+
+    if (existsSync(packageJsonPath)) {
+      type PackageJson = {
+        dependencies?: Record<string, string>;
+        devDependencies?: Record<string, string>;
+        type?: string;
+      };
+
+      const packageJson: PackageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+
+      if (
+        'typescript' in (packageJson.dependencies ?? {}) ||
+        'typescript' in (packageJson.devDependencies ?? {})
+      ) {
+        const junoTs = ts(filename);
+
+        return {
+          configPath: junoTs,
+          configType: 'ts'
+        };
+      }
+
+      if (packageJson.type === 'module') {
+        const junoMjs = mjs(filename);
+
+        return {
+          configPath: junoMjs,
+          configType: 'js'
+        };
+      }
+    }
+  } catch (_error: unknown) {
+    // We ignore the error as returning undefined will lead the CLI to ask the user what type of configuration type should be used.
+  }
+
+  return undefined;
 };
 
 export const readJunoConfig = async <

@@ -43,11 +43,22 @@ export const mapSetRule = ({
 });
 
 export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
-  const {read, write, updated_at, created_at, max_size, max_capacity, memory, mutable_permissions} =
-    rule;
+  const {
+    read,
+    write,
+    updated_at,
+    created_at,
+    max_size,
+    max_capacity,
+    memory,
+    mutable_permissions,
+    version
+  } = rule;
 
   const maxSize = max_size?.[0] ?? 0n > 0n ? Number(fromNullable(max_size)) : undefined;
   const maxCapacity = max_capacity?.[0] ?? 0 > 0 ? fromNullable(max_capacity) : undefined;
+
+  const ruleVersion = fromNullable(version);
 
   return {
     collection,
@@ -56,6 +67,7 @@ export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
     memory: memoryToText(fromNullable(memory) ?? MemoryHeap),
     updatedAt: updated_at,
     createdAt: created_at,
+    ...(nonNullish(ruleVersion) && {version: ruleVersion}),
     ...(nonNullish(maxSize) && {maxSize}),
     ...(nonNullish(maxCapacity) && {maxCapacity}),
     mutablePermissions: fromNullable(mutable_permissions) ?? true

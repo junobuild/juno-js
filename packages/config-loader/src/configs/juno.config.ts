@@ -7,7 +7,7 @@ import type {
 import {existsSync, readFileSync} from 'node:fs';
 import {access, readFile} from 'node:fs/promises';
 import {extname, join} from 'node:path';
-import {ConfigFile, ConfigFilename} from '../types/config';
+import type {ConfigFile, ConfigFilename} from '../types/config';
 import {nodeRequire} from '../utils/node.utils';
 
 export const junoConfigExist = async (params: {filename: ConfigFilename}): Promise<boolean> => {

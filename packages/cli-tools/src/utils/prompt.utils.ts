@@ -1,7 +1,5 @@
 import {isNullish, nonNullish} from '@junobuild/utils';
-import kleur from 'kleur';
-
-const {red} = kleur;
+import {red} from 'kleur';
 
 // In case an answer is replaced by control+c
 export const assertAnswerCtrlC: (

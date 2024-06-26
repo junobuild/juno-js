@@ -54,7 +54,8 @@
   "homepage": "https://juno.build",
   "peerDependencies": {
     "@junobuild/config": "*",
-    "@junobuild/utils": "*"
+    "@junobuild/utils": "*",
+    "kleur": "^4.1.5"
   },
   "dependencies": {
     "file-type": "^19.0.0",

@@ -1,5 +1,5 @@
 import type {Asset, AssetEncoding, AssetKey, Storage} from '@junobuild/storage';
-import {fromNullable} from '@junobuild/utils';
+import {fromNullable, nonNullish} from '@junobuild/utils';
 import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import {
   deleteAsset as deleteAssetApi,
@@ -71,7 +71,13 @@ const uploadAssetIC = async ({
   });
 
   return {
-    downloadUrl: `${satelliteUrl(satellite)}${fullPath}${token !== undefined ? `?token=${token}` : ''}`,
+    downloadUrl: downloadUrl({
+      satellite,
+      assetKey: {
+        fullPath,
+        token
+      }
+    }),
     fullPath,
     name: filename
   };
@@ -102,11 +108,9 @@ export const listAssets = async ({
     filter: filter ?? {}
   });
 
-  const host: string = satelliteUrl(satellite);
-
   const assets = items.map(
     ({
-      key: {full_path, token: t, name, owner, description},
+      key: {full_path: fullPath, token: t, name, owner, description},
       headers,
       encodings,
       created_at,
@@ -115,10 +119,13 @@ export const listAssets = async ({
       const token = fromNullable(t);
 
       return {
-        fullPath: full_path,
+        fullPath,
         description: fromNullable(description),
         name,
-        downloadUrl: `${host}${full_path}${token !== undefined ? `?token=${token}` : ''}`,
+        downloadUrl: downloadUrl({
+          satellite,
+          assetKey: {fullPath, token}
+        }),
         token,
         headers,
         encodings: encodings.reduce(
@@ -224,4 +231,26 @@ export const getManyAssets = async ({
   const identity = getIdentity(satellite?.identity);
 
   return getManyAssetsApi({...rest, satellite: {...satellite, identity}});
+};
+
+/**
+ * Generates a download URL for a given asset.
+ *
+ * @param {Object} params - The parameters for generating the download URL.
+ * @param {Object} params.assetKey - The key details of the asset.
+ * @param {string} params.assetKey.fullPath - The full path of the asset.
+ * @param {string} params.assetKey.token - The access token for the asset.
+ * @param {SatelliteOptions} [params.satellite] -  The satellite options (required only in NodeJS environment).
+ *
+ * @returns {string} The generated download URL.
+ */
+export const downloadUrl = ({
+  assetKey: {fullPath, token},
+  satellite: satelliteOptions
+}: {
+  assetKey: Pick<Asset, 'fullPath' | 'token'>;
+} & {satellite?: SatelliteOptions}): string => {
+  const satellite = {...satelliteOptions, identity: getIdentity(satelliteOptions?.identity)};
+
+  return `${satelliteUrl(satellite)}${fullPath}${nonNullish(token) ? `?token=${token}` : ''}`;
 };

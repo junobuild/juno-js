@@ -50,24 +50,6 @@ const buildBrowser = () => {
       external: [...Object.keys(workspacePeerDependencies)]
     })
     .catch(() => process.exit(1));
-
-  // esm output bundle for Node
-  esbuild
-    .build({
-      entryPoints: ['src/index.ts'],
-      outfile: 'dist/node/index.mjs',
-      bundle: true,
-      sourcemap: true,
-      minify: true,
-      format: 'esm',
-      platform: 'node',
-      target: ['node18', 'esnext'],
-      banner: {
-        js: "import { createRequire as topLevelCreateRequire } from 'module';\n const require = topLevelCreateRequire(import.meta.url);"
-      },
-      external: [...Object.keys(workspacePeerDependencies)]
-    })
-    .catch(() => process.exit(1));
 };
 
 const buildNode = () => {

@@ -63,7 +63,7 @@ const buildNode = () => {
       minify: true,
       format: 'esm',
       platform: 'node',
-      target: ['node18', 'esnext'],
+      target: ['node20', 'esnext'],
       banner: {
         js: "import { createRequire as topLevelCreateRequire } from 'module';\n const require = topLevelCreateRequire(import.meta.url);"
       },

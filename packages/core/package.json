@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/core",
-  "version": "0.0.54",
+  "version": "0.0.55",
   "description": "JavaScript core client for Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

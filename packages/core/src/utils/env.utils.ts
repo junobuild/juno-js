@@ -25,11 +25,11 @@ export const customOrEnvSatelliteId = ({
 }: Pick<Satellite, 'satelliteId'>): Pick<Satellite, 'satelliteId'> =>
   nonNullish(satelliteId)
     ? {satelliteId}
-    : EnvStore.getInstance().get() ?? {satelliteId: undefined};
+    : (EnvStore.getInstance().get() ?? {satelliteId: undefined});
 
 export const customOrEnvContainer = ({
   container: customContainer
 }: Pick<Satellite, 'container'>): Pick<Satellite, 'container'> =>
   nonNullish(customContainer)
     ? {container: customContainer}
-    : EnvStore.getInstance().get() ?? {container: undefined};
+    : (EnvStore.getInstance().get() ?? {container: undefined});

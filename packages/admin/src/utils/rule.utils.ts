@@ -55,8 +55,8 @@ export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
     version
   } = rule;
 
-  const maxSize = max_size?.[0] ?? 0n > 0n ? Number(fromNullable(max_size)) : undefined;
-  const maxCapacity = max_capacity?.[0] ?? 0 > 0 ? fromNullable(max_capacity) : undefined;
+  const maxSize = (max_size?.[0] ?? 0n > 0n) ? Number(fromNullable(max_size)) : undefined;
+  const maxCapacity = (max_capacity?.[0] ?? 0 > 0) ? fromNullable(max_capacity) : undefined;
 
   const ruleVersion = fromNullable(version);
 

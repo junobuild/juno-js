@@ -55,7 +55,6 @@ Configuration options for [Juno] CLI.
 
 - [CliConfig](#gear-cliconfig)
 - [JunoConfigEnv](#gear-junoconfigenv)
-- [OrbiterConfig](#gear-orbiterconfig)
 - [JunoConfig](#gear-junoconfig)
 - [SatelliteDevCollections](#gear-satellitedevcollections)
 - [SatelliteDevController](#gear-satellitedevcontroller)
@@ -78,15 +77,6 @@ Represents the environment configuration for Juno.
 | Property | Type     | Description                                                |
 | -------- | -------- | ---------------------------------------------------------- |
 | `mode`   | `string` | The mode of the Juno configuration. type: {JunoConfigMode} |
-
-#### :gear: OrbiterConfig
-
-Represents the configuration for an orbiter.
-
-| Property    | Type                  | Description                                                                                                                      |
-| ----------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `id`        | `string`              | The identifier of the orbiter used in the dApp. type: {string}                                                                   |
-| `orbiterId` | `string or undefined` | The deprecated identifier of the orbiter. deprecated: `orbiterId` will be removed in the future. Use `id` instead.type: {string} |
 
 #### :gear: JunoConfig
 

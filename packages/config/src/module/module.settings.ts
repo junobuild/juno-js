@@ -48,7 +48,7 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  wasmMemoryLimit?: bigint;
+  heapMemoryLimit?: bigint;
 
   /**
    * The amount of memory explicitly allocated to the module.

@@ -23,7 +23,7 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  freezingThreshold: bigint;
+  freezingThreshold?: bigint;
 
   /**
    * The number of cycles reserved for the module's operations to ensure it has enough cycles to function.
@@ -32,14 +32,14 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  reservedCyclesLimit: bigint;
+  reservedCyclesLimit?: bigint;
 
   /**
    * Controls who can see the module's logs.
    *
    * @type {ModuleLogVisibility}
    */
-  logVisibility: ModuleLogVisibility;
+  logVisibility?: ModuleLogVisibility;
 
   /**
    * The maximum amount of WebAssembly (Wasm) memory the module can use on the heap.
@@ -48,7 +48,7 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  wasmMemoryLimit: bigint;
+  wasmMemoryLimit?: bigint;
 
   /**
    * The amount of memory explicitly allocated to the module.
@@ -57,7 +57,7 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  memoryAllocation: bigint;
+  memoryAllocation?: bigint;
 
   /**
    * The proportion of compute capacity allocated to the module.
@@ -66,5 +66,5 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  computeAllocation: bigint;
+  computeAllocation?: bigint;
 }

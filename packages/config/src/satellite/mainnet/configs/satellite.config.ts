@@ -1,3 +1,4 @@
+import {ModuleSettings} from '../../../module/module.settings';
 import type {StorageConfig} from '../../../storage/storage.config';
 import type {CliConfig} from '../../../types/cli.config';
 import type {JunoConfigMode} from '../../../types/juno.env';
@@ -72,4 +73,12 @@ export type SatelliteConfig = Either<SatelliteId, SatelliteIds> &
      * @optional
      */
     assertions?: SatelliteAssertions;
+
+    /**
+     * Optional configuration parameters for the Satellite.
+     * These settings control various aspects of the module's behavior and resource usage.
+     * @type {ModuleSettings}
+     * @optional
+     */
+    settings?: ModuleSettings;
   };

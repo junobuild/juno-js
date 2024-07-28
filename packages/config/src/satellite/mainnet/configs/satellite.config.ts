@@ -2,24 +2,8 @@ import type {StorageConfig} from '../../../storage/storage.config';
 import type {CliConfig} from '../../../types/cli.config';
 import type {JunoConfigMode} from '../../../types/juno.env';
 import type {Either} from '../../../utils/ts.utils';
+import type {SatelliteAssertions} from './assertions.config';
 import type {AuthenticationConfig} from './authentication.config';
-
-/**
- * Configuration for satellite assertions.
- * @interface SatelliteAssertions
- */
-export interface SatelliteAssertions {
-  /**
-   * Configuration for the heap memory size check, which can be:
-   * - `true` to enable the check with a default threshold of 900MB,
-   * - `false` to disable the heap memory size check,
-   * - A `number` to specify a custom threshold in MB (megabytes) for the heap memory size check.
-   *
-   * If not specified, then `true` is used as the default value.
-   * @type {number | boolean}
-   */
-  heapMemory?: number | boolean;
-}
 
 /**
  * Represents the unique identifier for a satellite.

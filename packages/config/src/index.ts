@@ -1,5 +1,6 @@
 export type * from './console/console.config';
 export type * from './satellite/dev/juno.dev.config';
+export type * from './satellite/mainnet/configs/assertions.config';
 export type * from './satellite/mainnet/configs/authentication.config';
 export type * from './satellite/mainnet/configs/orbiter.config';
 export type * from './satellite/mainnet/configs/satellite.config';

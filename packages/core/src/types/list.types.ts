@@ -86,6 +86,58 @@ export interface ListOrder {
 export type ListOwner = string | Principal;
 
 /**
+ * Represents timestamp matching criteria with mutually exclusive options.
+ * This type defines various ways to filter based on timestamp values.
+ */
+export type ListTimestampMatcher =
+  | {
+      /**
+       * Specifies an exact match for the timestamp.
+       */
+      matcher: 'equal';
+
+      /**
+       * The timestamp value to match exactly.
+       */
+      timestamp: bigint;
+    }
+  | {
+      /**
+       * Specifies a greater than comparison for the timestamp.
+       */
+      matcher: 'greaterThan';
+
+      /**
+       * The timestamp value that the target should be greater than.
+       */
+      timestamp: bigint;
+    }
+  | {
+      /**
+       * Specifies a less than comparison for the timestamp.
+       */
+      matcher: 'lessThan';
+
+      /**
+       * The timestamp value that the target should be less than.
+       * Used only when `matchType` is 'lessThan'.
+       */
+      timestamp: bigint;
+    }
+  | {
+      /**
+       * Specifies a range for the timestamp, inclusive of start and end.
+       */
+      matcher: 'between';
+
+      /**
+       * The range of timestamps to match, inclusive of both start and end values.
+       * Must be an array with two numbers: [start, end].
+       */
+      timestamps: [bigint, bigint];
+    };
+
+/**
  * Represents matching parameters for a list call.
  * @interface
  */
@@ -101,6 +153,16 @@ export interface ListMatcher {
    * @type {string}
    */
   description?: string;
+
+  /**
+   * Criteria for matching the creation timestamp.
+   */
+  createdAt?: ListTimestampMatcher;
+
+  /**
+   * Criteria for matching the update timestamp.
+   */
+  updatedAt?: ListTimestampMatcher;
 }
 
 /**

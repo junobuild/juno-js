@@ -1,7 +1,29 @@
 import {Principal} from '@dfinity/principal';
 import {isNullish, toNullable} from '@junobuild/utils';
-import type {ListParams as ListParamsApi} from '../../declarations/satellite/satellite.did';
-import type {ListParams} from '../types/list.types';
+import {
+  ListParams as ListParamsApi,
+  TimestampMatcher
+} from '../../declarations/satellite/satellite.did';
+import {ListParams, ListTimestampMatcher} from '../types/list.types';
+
+const toListMatcherTimestamp = (matcher?: ListTimestampMatcher): [] | [TimestampMatcher] => {
+  if (isNullish(matcher)) {
+    return toNullable();
+  }
+
+  switch (matcher.matcher) {
+    case 'equal':
+      return toNullable({Equal: matcher.timestamp});
+    case 'greaterThan':
+      return toNullable({GreaterThan: matcher.timestamp});
+    case 'lessThan':
+      return toNullable({LessThan: matcher.timestamp});
+    case 'between':
+      return toNullable({Between: matcher.timestamps});
+    default:
+      throw new Error('Invalid list matcher for timestamp', matcher);
+  }
+};
 
 export const toListParams = ({matcher, paginate, order, owner}: ListParams): ListParamsApi => ({
   matcher: isNullish(matcher)
@@ -9,7 +31,9 @@ export const toListParams = ({matcher, paginate, order, owner}: ListParams): Lis
     : [
         {
           key: toNullable(matcher.key),
-          description: toNullable(matcher.description)
+          description: toNullable(matcher.description),
+          created_at: toListMatcherTimestamp(matcher.createdAt),
+          updated_at: toListMatcherTimestamp(matcher.updatedAt)
         }
       ],
   paginate: toNullable(

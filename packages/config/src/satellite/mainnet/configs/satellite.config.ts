@@ -1,4 +1,4 @@
-import {ModuleSettings} from '../../../module/module.settings';
+import type {ModuleSettings} from '../../../module/module.settings';
 import type {StorageConfig} from '../../../storage/storage.config';
 import type {CliConfig} from '../../../types/cli.config';
 import type {JunoConfigMode} from '../../../types/juno.env';

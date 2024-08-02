@@ -1,10 +1,10 @@
 import {Principal} from '@dfinity/principal';
 import {isNullish, toNullable} from '@junobuild/utils';
-import {
+import type {
   ListParams as ListParamsApi,
   TimestampMatcher
 } from '../../declarations/satellite/satellite.did';
-import {ListParams, ListTimestampMatcher} from '../types/list.types';
+import type {ListParams, ListTimestampMatcher} from '../types/list.types';
 
 const toListMatcherTimestamp = (matcher?: ListTimestampMatcher): [] | [TimestampMatcher] => {
   if (isNullish(matcher)) {

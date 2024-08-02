@@ -132,9 +132,11 @@ export type ListTimestampMatcher =
 
       /**
        * The range of timestamps to match, inclusive of both start and end values.
-       * Must be an array with two numbers: [start, end].
        */
-      timestamps: [bigint, bigint];
+      timestamps: {
+        start: bigint;
+        end: bigint;
+      };
     };
 
 /**

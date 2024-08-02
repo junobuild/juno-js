@@ -19,7 +19,7 @@ const toListMatcherTimestamp = (matcher?: ListTimestampMatcher): [] | [Timestamp
     case 'lessThan':
       return toNullable({LessThan: matcher.timestamp});
     case 'between':
-      return toNullable({Between: matcher.timestamps});
+      return toNullable({Between: [matcher.timestamps.start, matcher.timestamps.end]});
     default:
       throw new Error('Invalid list matcher for timestamp', matcher);
   }

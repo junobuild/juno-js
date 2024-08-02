@@ -88,7 +88,9 @@ export interface InitUploadResult {
 }
 export interface ListMatcher {
   key: [] | [string];
+  updated_at: [] | [TimestampMatcher];
   description: [] | [string];
+  created_at: [] | [TimestampMatcher];
 }
 export interface ListOrder {
   field: ListOrderField;
@@ -200,6 +202,11 @@ export type StreamingStrategy = {
     callback: [Principal, string];
   };
 };
+export type TimestampMatcher =
+  | {Equal: bigint}
+  | {Between: [bigint, bigint]}
+  | {GreaterThan: bigint}
+  | {LessThan: bigint};
 export interface Tokens {
   e8s: bigint;
 }
@@ -216,7 +223,7 @@ export interface _SERVICE {
   add_invitation_code: ActorMethod<[string], undefined>;
   assert_mission_control_center: ActorMethod<[AssertMissionControlCenterArgs], undefined>;
   commit_asset_upload: ActorMethod<[CommitBatch], undefined>;
-  commit_proposal: ActorMethod<[CommitProposal], undefined>;
+  commit_proposal: ActorMethod<[CommitProposal], null>;
   create_orbiter: ActorMethod<[CreateCanisterArgs], Principal>;
   create_satellite: ActorMethod<[CreateCanisterArgs], Principal>;
   del_controllers: ActorMethod<[DeleteControllersArgs], undefined>;

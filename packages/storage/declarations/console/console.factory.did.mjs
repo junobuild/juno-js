@@ -131,9 +131,17 @@ export const idlFactory = ({IDL}) => {
     CreatedAt: IDL.Null
   });
   const ListOrder = IDL.Record({field: ListOrderField, desc: IDL.Bool});
+  const TimestampMatcher = IDL.Variant({
+    Equal: IDL.Nat64,
+    Between: IDL.Tuple(IDL.Nat64, IDL.Nat64),
+    GreaterThan: IDL.Nat64,
+    LessThan: IDL.Nat64
+  });
   const ListMatcher = IDL.Record({
     key: IDL.Opt(IDL.Text),
-    description: IDL.Opt(IDL.Text)
+    updated_at: IDL.Opt(TimestampMatcher),
+    description: IDL.Opt(IDL.Text),
+    created_at: IDL.Opt(TimestampMatcher)
   });
   const ListPaginate = IDL.Record({
     start_after: IDL.Opt(IDL.Text),
@@ -225,7 +233,7 @@ export const idlFactory = ({IDL}) => {
     add_invitation_code: IDL.Func([IDL.Text], [], []),
     assert_mission_control_center: IDL.Func([AssertMissionControlCenterArgs], [], ['query']),
     commit_asset_upload: IDL.Func([CommitBatch], [], []),
-    commit_proposal: IDL.Func([CommitProposal], [], []),
+    commit_proposal: IDL.Func([CommitProposal], [IDL.Null], []),
     create_orbiter: IDL.Func([CreateCanisterArgs], [IDL.Principal], []),
     create_satellite: IDL.Func([CreateCanisterArgs], [IDL.Principal], []),
     del_controllers: IDL.Func([DeleteControllersArgs], [], []),

@@ -303,7 +303,9 @@ export const upgradeSatellite = async ({
         canister_id: Principal.fromText(satelliteId),
         arg: new Uint8Array(arg),
         wasm_module,
-        mode: reset ? {reinstall: null} : {upgrade: [{skip_pre_upgrade: [false]}]}
+        mode: reset
+          ? {reinstall: null}
+          : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{keep: null}]}]}
       }
     });
 
@@ -322,7 +324,9 @@ export const upgradeSatellite = async ({
       canister_id: Principal.fromText(satelliteId),
       arg: new Uint8Array(arg),
       wasm_module,
-      mode: reset ? {reinstall: null} : {upgrade: [{skip_pre_upgrade: [false]}]}
+      mode: reset
+        ? {reinstall: null}
+        : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{keep: null}]}]}
     }
   });
 };

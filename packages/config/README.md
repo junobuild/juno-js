@@ -247,6 +247,14 @@ _ @optional
 storage?: StorageConfig;
 
     /**
+     * Optional configuration parameters for the satellite, affecting the operational behavior of its Datastore.
+     * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
+     * @type {DatastoreConfig}
+     * @optional
+     */
+    datastore?: DatastoreConfig;
+
+    /**
      * Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication.
      * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
      * @type {AuthenticationConfig}
@@ -271,7 +279,7 @@ storage?: StorageConfig;
 
 }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L52)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L53)
 
 #### :gear: SatelliteDevDataStoreCollection
 

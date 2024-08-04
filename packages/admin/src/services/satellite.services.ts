@@ -4,7 +4,6 @@ import type {
   AuthenticationConfig,
   Rule,
   RulesType,
-  SatelliteConfig,
   StorageConfig,
   StorageConfigHeader,
   StorageConfigRedirect,
@@ -118,18 +117,15 @@ export const setStorageConfig = async ({
 /**
  * Sets the authentication configuration for a satellite.
  * @param {Object} params - The parameters for setting the authentication configuration.
- * @param {Object} params.config - The satellite configuration.
- * @param {Object} params.config.authentication - The authentication configuration.
+ * @param {Object} params.config - The authentication configuration.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
  * @returns {Promise<void>} A promise that resolves when the authentication configuration is set.
  */
 export const setAuthConfig = async ({
-  config: {
-    authentication: {internetIdentity}
-  },
+  config: {internetIdentity},
   ...rest
 }: {
-  config: Required<Pick<SatelliteConfig, 'authentication'>>;
+  config: AuthenticationConfig;
   satellite: SatelliteParameters;
 }): Promise<void> => {
   await setAuthConfigApi({

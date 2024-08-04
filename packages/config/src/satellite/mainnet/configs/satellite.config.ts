@@ -1,25 +1,11 @@
-import type {CliConfig} from '../../types/cli.config';
-import type {JunoConfigMode} from '../../types/juno.env';
-import type {Either} from '../../utils/ts.utils';
+import type {ModuleSettings} from '../../../module/module.settings';
+import type {StorageConfig} from '../../../shared/storage.config';
+import type {CliConfig} from '../../../types/cli.config';
+import type {JunoConfigMode} from '../../../types/juno.env';
+import type {Either} from '../../../utils/ts.utils';
+import type {SatelliteAssertions} from './assertions.config';
 import type {AuthenticationConfig} from './authentication.config';
-import type {StorageConfig} from './storage.config';
-
-/**
- * Configuration for satellite assertions.
- * @interface SatelliteAssertions
- */
-export interface SatelliteAssertions {
-  /**
-   * Configuration for the heap memory size check, which can be:
-   * - `true` to enable the check with a default threshold of 900MB,
-   * - `false` to disable the heap memory size check,
-   * - A `number` to specify a custom threshold in MB (megabytes) for the heap memory size check.
-   *
-   * If not specified, then `true` is used as the default value.
-   * @type {number | boolean}
-   */
-  heapMemory?: number | boolean;
-}
+import type {DatastoreConfig} from './datastore.config';
 
 /**
  * Represents the unique identifier for a satellite.
@@ -75,6 +61,14 @@ export type SatelliteConfig = Either<SatelliteId, SatelliteIds> &
     storage?: StorageConfig;
 
     /**
+     * Optional configuration parameters for the satellite, affecting the operational behavior of its Datastore.
+     * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
+     * @type {DatastoreConfig}
+     * @optional
+     */
+    datastore?: DatastoreConfig;
+
+    /**
      * Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication.
      * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
      * @type {AuthenticationConfig}
@@ -88,4 +82,12 @@ export type SatelliteConfig = Either<SatelliteId, SatelliteIds> &
      * @optional
      */
     assertions?: SatelliteAssertions;
+
+    /**
+     * Optional configuration parameters for the Satellite.
+     * These settings control various aspects of the module's behavior and resource usage.
+     * @type {ModuleSettings}
+     * @optional
+     */
+    settings?: ModuleSettings;
   };

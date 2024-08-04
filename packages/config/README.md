@@ -53,20 +53,110 @@ Configuration options for [Juno] CLI.
 
 ### :tropical_drink: Interfaces
 
+- [OrbiterConfig](#gear-orbiterconfig)
+- [ModuleSettings](#gear-modulesettings)
+- [MaxMemorySizeConfig](#gear-maxmemorysizeconfig)
+- [StorageConfigHeader](#gear-storageconfigheader)
+- [StorageConfigRewrite](#gear-storageconfigrewrite)
+- [StorageConfigRedirect](#gear-storageconfigredirect)
+- [StorageConfig](#gear-storageconfig)
 - [CliConfig](#gear-cliconfig)
 - [JunoConfigEnv](#gear-junoconfigenv)
-- [OrbiterConfig](#gear-orbiterconfig)
+- [SatelliteAssertions](#gear-satelliteassertions)
+- [AuthenticationConfigInternetIdentity](#gear-authenticationconfiginternetidentity)
+- [AuthenticationConfig](#gear-authenticationconfig)
+- [DatastoreConfig](#gear-datastoreconfig)
+- [SatelliteId](#gear-satelliteid)
+- [SatelliteIds](#gear-satelliteids)
 - [JunoConfig](#gear-junoconfig)
 - [SatelliteDevCollections](#gear-satellitedevcollections)
 - [SatelliteDevController](#gear-satellitedevcontroller)
 - [SatelliteDevConfig](#gear-satellitedevconfig)
 - [JunoDevConfig](#gear-junodevconfig)
 
+#### :gear: OrbiterConfig
+
+Represents the configuration for an orbiter.
+
+| Property    | Type                  | Description                                                                                                                      |
+| ----------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `id`        | `string`              | The identifier of the orbiter used in the dApp. type: {string}                                                                   |
+| `orbiterId` | `string or undefined` | The deprecated identifier of the orbiter. deprecated: `orbiterId` will be removed in the future. Use `id` instead.type: {string} |
+
+#### :gear: ModuleSettings
+
+Settings for a module - Satellite, Mission Control or Orbiter.
+
+These settings control various aspects of the module's behavior and resource usage.
+
+| Property              | Type                               | Description                                                                                                                                                                                                                            |
+| --------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `freezingThreshold`   | `bigint or undefined`              | The cycle threshold below which the module will automatically stop to avoid running out of cycles.For example, if set to `BigInt(1000000)`, the module will stop when it has fewer than 1,000,000 cycles remaining. type: {bigint}     |
+| `reservedCyclesLimit` | `bigint or undefined`              | The number of cycles reserved for the module's operations to ensure it has enough cycles to function.For example, setting it to `BigInt(5000000)` reserves 5,000,000 cycles for the module. type: {bigint}                             |
+| `logVisibility`       | `ModuleLogVisibility or undefined` | Controls who can see the module's logs. type: {ModuleLogVisibility}                                                                                                                                                                    |
+| `heapMemoryLimit`     | `bigint or undefined`              | The maximum amount of WebAssembly (Wasm) memory the module can use on the heap.For example, setting it to `BigInt(1024 * 1024 * 64)` allows the module to use up to 64 MB of Wasm memory. type: {bigint}                               |
+| `memoryAllocation`    | `bigint or undefined`              | The amount of memory explicitly allocated to the module.For example, setting it to `BigInt(1024 * 1024 * 128)` allocates 128 MB of memory to the module. type: {bigint}                                                                |
+| `computeAllocation`   | `bigint or undefined`              | The proportion of compute capacity allocated to the module.This is a fraction of the total compute capacity of the subnet. For example, setting it to `BigInt(10)` allocates 10% of the compute capacity to the module. type: {bigint} |
+
+#### :gear: MaxMemorySizeConfig
+
+Configuration for granting access to features only if the maximum memory size limits are not reached.
+
+The maximum size corresponds to the overall heap or stable memory of the smart contract.
+
+| Property | Type                  | Description                                                                                                                                          |
+| -------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `heap`   | `bigint or undefined` | Maximum allowed heap memory size in bytes.This field is optional. If not specified, no limit is enforced on the heap memory size. type: {bigint}     |
+| `stable` | `bigint or undefined` | Maximum allowed stable memory size in bytes.This field is optional. If not specified, no limit is enforced on the stable memory size. type: {bigint} |
+
+#### :gear: StorageConfigHeader
+
+Headers allow the client and the Storage to pass additional information along with a request or a response.
+Some sets of headers can affect how the browser handles the page and its content.
+
+| Property  | Type                 | Description                                                                                                                                                                                                                 |
+| --------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source`  | `string`             | The glob pattern used to match files within the Storage that these headers will apply to. type: {StorageConfigSourceGlob}                                                                                                   |
+| `headers` | `[string, string][]` | An array of key-value pairs representing the headers to apply.Each pair includes the header name and its value.Example: `[["Cache-Control", "max-age=3600"], ["X-Custom-Header", "value"]]` type: {Array<[string, string]>} |
+
+#### :gear: StorageConfigRewrite
+
+You can utilize optional rewrites to display the same content for multiple URLs.
+Rewrites are especially useful when combined with pattern matching, allowing acceptance of any URL that matches the pattern.
+
+| Property      | Type     | Description                                                                                                                                          |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source`      | `string` | The glob pattern or specific path to match for incoming requests.Matches are rewritten to the specified destination. type: {StorageConfigSourceGlob} |
+| `destination` | `string` | The destination path or file to which matching requests should be rewritten. type: {string}                                                          |
+
+#### :gear: StorageConfigRedirect
+
+Use a URL redirect to prevent broken links if you've moved a page or to shorten URLs.
+
+| Property   | Type         | Description                                                                                                                 |
+| ---------- | ------------ | --------------------------------------------------------------------------------------------------------------------------- | ---- |
+| `source`   | `string`     | The glob pattern or specific path to match for incoming requests that should be redirected. type: {StorageConfigSourceGlob} |
+| `location` | `string`     | The URL or path to which the request should be redirected. type: {string}                                                   |
+| `code`     | `301 or 302` | The HTTP status code to use for the redirect, typically 301 (permanent redirect) or 302 (temporary redirect). type: {301    | 302} |
+
+#### :gear: StorageConfig
+
+Configures the hosting behavior of the Storage.
+
+| Property        | Type                                                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| --------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- | -------------------- |
+| `headers`       | `StorageConfigHeader[] or undefined`                  | Optional array of `StorageConfigHeader` objects to define custom HTTP headers for specific files or patterns. type: {StorageConfigHeader[]}optional                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `rewrites`      | `StorageConfigRewrite[] or undefined`                 | Optional array of `StorageConfigRewrite` objects to define rewrite rules. type: {StorageConfigRewrite[]}optional                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `redirects`     | `StorageConfigRedirect[] or undefined`                | Optional array of `StorageConfigRedirect` objects to define HTTP redirects. type: {StorageConfigRedirect[]}optional                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `iframe`        | `"deny" or "same-origin" or "allow-any" or undefined` | For security reasons and to prevent click-jacking attacks, dapps deployed with Juno are, by default, set to deny embedding in other sites.Options are:- `deny`: Prevents any content from being displayed in an iframe.- `same-origin`: Allows iframe content from the same origin as the page.- `allow-any`: Allows iframe content from any origin.If not specified, then `deny` is used as default value. type: {'deny'                                                                                                                                    | 'same-origin' | 'allow-any'}optional |
+| `rawAccess`     | `boolean or undefined`                                | Optional flag to enable access for raw URLs.⚠️ **WARNING: Enabling this option is highly discouraged due to security risks.**Enabling this option allows access to raw URLs (e.g., https://satellite-id.raw.icp0.io), bypassing certificate validation.This creates a security vulnerability where a malicious node in the chain can respond to requests with malicious or invalid content.Since there is no validation on raw URLs, the client may receive and process harmful data.If not specified, the default value is `false`. type: {boolean}optional |
+| `maxMemorySize` | `MaxMemorySizeConfig or undefined`                    | Configuration for maximum memory size limits for the Storage.This is used to specify optional limits on heap and stable memory for the smart contract.When the limit is reached, the Storage and smart contract continue to operate normally but reject the upload of new assets.If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional                                                                                                                                                                                        |
+
 #### :gear: CliConfig
 
 | Property   | Type                                     | Description                                                                                                                                                                                                                                                                                                                                                                              |
 | ---------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `source`   | `string or undefined`                    | Specifies the directory from which to deploy to storage.For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: 'build'type: {string}                                                                                                                                                                                                          |
+| `source`   | `string or undefined`                    | Specifies the directory from which to deploy to Storage.For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: 'build'type: {string}                                                                                                                                                                                                          |
 | `ignore`   | `string[] or undefined`                  | Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore. type: {string[]}optional                                                                                                                                                                                                                                                    |
 | `gzip`     | `string or false or undefined`           | Controls the Gzip compression optimization for files in the source folder. By default, it targets JavaScript (js), ES Module (mjs), and CSS (css) files.You can disable this by setting it to `false` or customize it with a different file matching pattern using glob syntax. type: {string                                                                                            | false}optional |
 | `encoding` | `[string, ENCODING_TYPE][] or undefined` | Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension:- `.Z` for compress,- `.gz` for gzip,- `.br` for brotli,- `.zlib` for deflate,- anything else defaults to `identity`.The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types. type: {Array<[string, ENCODING_TYPE]>}optional |
@@ -79,14 +169,54 @@ Represents the environment configuration for Juno.
 | -------- | -------- | ---------------------------------------------------------- |
 | `mode`   | `string` | The mode of the Juno configuration. type: {JunoConfigMode} |
 
-#### :gear: OrbiterConfig
+#### :gear: SatelliteAssertions
 
-Represents the configuration for an orbiter.
+Configuration for satellite assertions.
 
-| Property    | Type                  | Description                                                                                                                      |
-| ----------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `id`        | `string`              | The identifier of the orbiter used in the dApp. type: {string}                                                                   |
-| `orbiterId` | `string or undefined` | The deprecated identifier of the orbiter. deprecated: `orbiterId` will be removed in the future. Use `id` instead.type: {string} |
+| Property     | Type                             | Description                                                                                                                                                                                                                                                                                                                                     |
+| ------------ | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `heapMemory` | `number or boolean or undefined` | Configuration for the heap memory size check, which can be:- `true` to enable the check with a default threshold of 900MB,- `false` to disable the heap memory size check,- A `number` to specify a custom threshold in MB (megabytes) for the heap memory size check.If not specified, then `true` is used as the default value. type: {number | boolean} |
+
+#### :gear: AuthenticationConfigInternetIdentity
+
+Configure the behavior of Internet Identity.
+
+| Property           | Type                  | Description                                                                                                                                                                                                                                                                                                                     |
+| ------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `derivationOrigin` | `string or undefined` | This setting ensures that users are recognized on your app, regardless of whether they use the default URL or any other custom domain.For example, if set to hello.com, a user signing on at https://hello.com will receive the same identifier (principal) as when signing on at https://www.hello.com. type: {string}optional |
+
+#### :gear: AuthenticationConfig
+
+Configures the Authentication options of a Satellite.
+
+| Property           | Type                                                | Description                                                                                                             |
+| ------------------ | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `internetIdentity` | `AuthenticationConfigInternetIdentity or undefined` | Optional configuration of Internet Identity authentication method. type: {AuthenticationConfigInternetIdentity}optional |
+
+#### :gear: DatastoreConfig
+
+Configures the behavior of the Datastore.
+
+| Property        | Type                               | Description                                                                                                                                                                                                                                                                                                                                                                           |
+| --------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `maxMemorySize` | `MaxMemorySizeConfig or undefined` | Configuration for maximum memory size limits for the Datastore.This is used to specify optional limits on heap and stable memory for the smart contract.When the limit is reached, the Datastore and smart contract continue to operate normally but reject the creation or updates of documents.If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional |
+
+#### :gear: SatelliteId
+
+Represents the unique identifier for a satellite.
+
+| Property      | Type                  | Description                                                                                                                                      |
+| ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `id`          | `string`              | The unique identifier (ID) of the satellite for this application. type: {string}                                                                 |
+| `satelliteId` | `string or undefined` | The deprecated unique identifier (ID) of the satellite. deprecated: `satelliteId` will be removed in the future. Use `id` instead.type: {string} |
+
+#### :gear: SatelliteIds
+
+Represents a mapping of satellite identifiers to different configurations based on the mode of the application.
+
+| Property | Type                     | Description                                                                                                                                                                                                                                                                                                                                    |
+| -------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ids`    | `Record<string, string>` | A mapping of satellite identifiers (IDs) to different configurations based on the mode of the application.This allows the application to use different satellite IDs, such as production, staging, etc.Example:{ "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai"} type: {Record<JunoConfigMode, string>} |
 
 #### :gear: JunoConfig
 
@@ -103,9 +233,9 @@ Represents the collections configuration for a satellite in a development enviro
 
 | Property    | Type                                             | Description                                                                                                                                      |
 | ----------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `datastore` | `SatelliteDevDataStoreCollection[] or undefined` | The datastore collections configuration. type: {SatelliteDevDataStoreCollection[]}optional                                                       |
-| `db`        | `SatelliteDevDataStoreCollection[] or undefined` | The datastore collections configuration.This property is deprecated. Use {@link datastore} instead. deprecatedtype: {SatelliteDevDbCollection[]} |
-| `storage`   | `SatelliteDevStorageCollection[] or undefined`   | The storage collections configuration. type: {SatelliteDevStorageCollection[]}optional                                                           |
+| `datastore` | `SatelliteDevDataStoreCollection[] or undefined` | The Datastore collections configuration. type: {SatelliteDevDataStoreCollection[]}optional                                                       |
+| `db`        | `SatelliteDevDataStoreCollection[] or undefined` | The Datastore collections configuration.This property is deprecated. Use {@link datastore} instead. deprecatedtype: {SatelliteDevDbCollection[]} |
+| `storage`   | `SatelliteDevStorageCollection[] or undefined`   | The Storage collections configuration. type: {SatelliteDevStorageCollection[]}optional                                                           |
 
 #### :gear: SatelliteDevController
 
@@ -135,13 +265,32 @@ Represents the development configuration for Juno.
 
 ### :cocktail: Types
 
+- [ModuleLogVisibility](#gear-modulelogvisibility)
+- [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
 - [ENCODING_TYPE](#gear-encoding_type)
 - [JunoConfigMode](#gear-junoconfigmode)
+- [SatelliteConfig](#gear-satelliteconfig)
 - [SatelliteDevDataStoreCollection](#gear-satellitedevdatastorecollection)
 - [SatelliteDevDbCollection](#gear-satellitedevdbcollection)
 - [SatelliteDevStorageCollection](#gear-satellitedevstoragecollection)
 - [JunoDevConfigFn](#gear-junodevconfigfn)
 - [JunoDevConfigFnOrObject](#gear-junodevconfigfnorobject)
+
+#### :gear: ModuleLogVisibility
+
+| Type                  | Type                        |
+| --------------------- | --------------------------- |
+| `ModuleLogVisibility` | `'controllers' or 'public'` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/module/module.settings.ts#L9)
+
+#### :gear: StorageConfigSourceGlob
+
+| Type                      | Type |
+| ------------------------- | ---- |
+| `StorageConfigSourceGlob` |      |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L7)
 
 #### :gear: ENCODING_TYPE
 
@@ -158,6 +307,56 @@ Represents the development configuration for Juno.
 | `JunoConfigMode` | `'production' or string` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L5)
+
+#### :gear: SatelliteConfig
+
+| Type              | Type                                 |
+| ----------------- | ------------------------------------ |
+| `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> & |
+
+CliConfig and {
+/\*\*
+_ Optional configuration parameters for the satellite, affecting the operational behavior of its Storage.
+_ Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
+_ @type {StorageConfig}
+_ @optional
+\*/
+storage?: StorageConfig;
+
+    /**
+     * Optional configuration parameters for the satellite, affecting the operational behavior of its Datastore.
+     * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
+     * @type {DatastoreConfig}
+     * @optional
+     */
+    datastore?: DatastoreConfig;
+
+    /**
+     * Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication.
+     * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
+     * @type {AuthenticationConfig}
+     * @optional
+     */
+    authentication?: AuthenticationConfig;
+
+    /**
+     * Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions.
+     * @type {SatelliteAssertions}
+     * @optional
+     */
+    assertions?: SatelliteAssertions;
+
+    /**
+     * Optional configuration parameters for the Satellite.
+     * These settings control various aspects of the module's behavior and resource usage.
+     * @type {ModuleSettings}
+     * @optional
+     */
+    settings?: ModuleSettings;
+
+}` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L53)
 
 #### :gear: SatelliteDevDataStoreCollection
 

@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/ledger",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "description": "A fork used by Juno console to parse account identifier for the ICP ledger",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -63,6 +63,6 @@
     "@dfinity/agent": "^2.0.0",
     "@dfinity/identity": "^2.0.0",
     "@dfinity/principal": "^2.0.0",
-    "@dfinity/utils": "^2.4.0-next-2024-07-22"
+    "@dfinity/utils": "^2.4.0-next-2024-07-30"
   }
 }

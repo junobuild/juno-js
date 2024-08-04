@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/config-loader",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Utilities for reading Juno's configuration settings.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

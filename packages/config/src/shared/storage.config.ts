@@ -1,17 +1,19 @@
+import type {MaxMemorySizeConfig} from './feature.config';
+
 /**
- * Represents a glob pattern for matching files in the storage configuration.
+ * Represents a glob pattern for matching files in the Storage configuration.
  * @typedef {string} StorageConfigSourceGlob
  */
 export type StorageConfigSourceGlob = string;
 
 /**
- * Headers allow the client and the storage to pass additional information along with a request or a response.
+ * Headers allow the client and the Storage to pass additional information along with a request or a response.
  * Some sets of headers can affect how the browser handles the page and its content.
  * @interface StorageConfigHeader
  */
 export interface StorageConfigHeader {
   /**
-   * The glob pattern used to match files within the storage that these headers will apply to.
+   * The glob pattern used to match files within the Storage that these headers will apply to.
    * @type {StorageConfigSourceGlob}
    */
   source: StorageConfigSourceGlob;
@@ -70,7 +72,7 @@ export interface StorageConfigRedirect {
 }
 
 /**
- * Configures the hosting behavior of the storage.
+ * Configures the hosting behavior of the Storage.
  * @interface StorageConfig
  */
 export interface StorageConfig {
@@ -123,4 +125,17 @@ export interface StorageConfig {
    * @optional
    */
   rawAccess?: boolean;
+
+  /**
+   * Configuration for maximum memory size limits for the Storage.
+   *
+   * This is used to specify optional limits on heap and stable memory for the smart contract.
+   * When the limit is reached, the Storage and smart contract continue to operate normally but reject the upload of new assets.
+   *
+   * If not specified, no memory limits are enforced.
+   *
+   * @type {MaxMemorySizeConfig}
+   * @optional
+   */
+  maxMemorySize?: MaxMemorySizeConfig;
 }

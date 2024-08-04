@@ -19,7 +19,7 @@ export type SatelliteDevDataStoreCollection = Omit<
 export type SatelliteDevDbCollection = SatelliteDevDataStoreCollection;
 
 /**
- * Represents a storage collection configuration for a satellite in a development environment.
+ * Represents a Storage collection configuration for a satellite in a development environment.
  * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxCapacity' | 'version'>} SatelliteDevStorageCollection
  */
 export type SatelliteDevStorageCollection = Omit<
@@ -33,14 +33,14 @@ export type SatelliteDevStorageCollection = Omit<
  */
 export interface SatelliteDevCollections {
   /**
-   * The datastore collections configuration.
+   * The Datastore collections configuration.
    * @type {SatelliteDevDataStoreCollection[]}
    * @optional
    */
   datastore?: SatelliteDevDataStoreCollection[];
 
   /**
-   * The datastore collections configuration.
+   * The Datastore collections configuration.
    * This property is deprecated. Use {@link datastore} instead.
    *
    * @deprecated
@@ -49,7 +49,7 @@ export interface SatelliteDevCollections {
   db?: SatelliteDevDbCollection[];
 
   /**
-   * The storage collections configuration.
+   * The Storage collections configuration.
    * @type {SatelliteDevStorageCollection[]}
    * @optional
    */

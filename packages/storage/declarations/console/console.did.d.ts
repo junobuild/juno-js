@@ -42,6 +42,10 @@ export interface CommitProposal {
 export interface Config {
   storage: StorageConfig;
 }
+export interface ConfigMaxMemorySize {
+  stable: [] | [bigint];
+  heap: [] | [bigint];
+}
 export type ControllerScope = {Write: null} | {Admin: null};
 export interface CreateCanisterArgs {
   block_index: [] | [bigint];
@@ -174,6 +178,7 @@ export interface StorageConfig {
   iframe: [] | [StorageConfigIFrame];
   rewrites: Array<[string, string]>;
   headers: Array<[string, Array<[string, string]>]>;
+  max_memory_size: [] | [ConfigMaxMemorySize];
   raw_access: [] | [StorageConfigRawAccess];
   redirects: [] | [Array<[string, StorageConfigRedirect]>];
 }

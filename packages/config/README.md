@@ -55,11 +55,17 @@ Configuration options for [Juno] CLI.
 
 - [OrbiterConfig](#gear-orbiterconfig)
 - [ModuleSettings](#gear-modulesettings)
+- [MaxMemorySizeConfig](#gear-maxmemorysizeconfig)
+- [StorageConfigHeader](#gear-storageconfigheader)
+- [StorageConfigRewrite](#gear-storageconfigrewrite)
+- [StorageConfigRedirect](#gear-storageconfigredirect)
+- [StorageConfig](#gear-storageconfig)
 - [CliConfig](#gear-cliconfig)
 - [JunoConfigEnv](#gear-junoconfigenv)
 - [SatelliteAssertions](#gear-satelliteassertions)
 - [AuthenticationConfigInternetIdentity](#gear-authenticationconfiginternetidentity)
 - [AuthenticationConfig](#gear-authenticationconfig)
+- [DatastoreConfig](#gear-datastoreconfig)
 - [SatelliteId](#gear-satelliteid)
 - [SatelliteIds](#gear-satelliteids)
 - [JunoConfig](#gear-junoconfig)
@@ -91,6 +97,60 @@ These settings control various aspects of the module's behavior and resource usa
 | `heapMemoryLimit`     | `bigint or undefined`              | The maximum amount of WebAssembly (Wasm) memory the module can use on the heap.For example, setting it to `BigInt(1024 * 1024 * 64)` allows the module to use up to 64 MB of Wasm memory. type: {bigint}                               |
 | `memoryAllocation`    | `bigint or undefined`              | The amount of memory explicitly allocated to the module.For example, setting it to `BigInt(1024 * 1024 * 128)` allocates 128 MB of memory to the module. type: {bigint}                                                                |
 | `computeAllocation`   | `bigint or undefined`              | The proportion of compute capacity allocated to the module.This is a fraction of the total compute capacity of the subnet. For example, setting it to `BigInt(10)` allocates 10% of the compute capacity to the module. type: {bigint} |
+
+#### :gear: MaxMemorySizeConfig
+
+Configuration for granting access to features only if the maximum memory size limits are not reached.
+
+The maximum size corresponds to the overall heap or stable memory of the smart contract.
+
+| Property | Type                  | Description                                                                                                                                          |
+| -------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `heap`   | `bigint or undefined` | Maximum allowed heap memory size in bytes.This field is optional. If not specified, no limit is enforced on the heap memory size. type: {bigint}     |
+| `stable` | `bigint or undefined` | Maximum allowed stable memory size in bytes.This field is optional. If not specified, no limit is enforced on the stable memory size. type: {bigint} |
+
+#### :gear: StorageConfigHeader
+
+Headers allow the client and the Storage to pass additional information along with a request or a response.
+Some sets of headers can affect how the browser handles the page and its content.
+
+| Property  | Type                 | Description                                                                                                                                                                                                                 |
+| --------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source`  | `string`             | The glob pattern used to match files within the Storage that these headers will apply to. type: {StorageConfigSourceGlob}                                                                                                   |
+| `headers` | `[string, string][]` | An array of key-value pairs representing the headers to apply.Each pair includes the header name and its value.Example: `[["Cache-Control", "max-age=3600"], ["X-Custom-Header", "value"]]` type: {Array<[string, string]>} |
+
+#### :gear: StorageConfigRewrite
+
+You can utilize optional rewrites to display the same content for multiple URLs.
+Rewrites are especially useful when combined with pattern matching, allowing acceptance of any URL that matches the pattern.
+
+| Property      | Type     | Description                                                                                                                                          |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source`      | `string` | The glob pattern or specific path to match for incoming requests.Matches are rewritten to the specified destination. type: {StorageConfigSourceGlob} |
+| `destination` | `string` | The destination path or file to which matching requests should be rewritten. type: {string}                                                          |
+
+#### :gear: StorageConfigRedirect
+
+Use a URL redirect to prevent broken links if you've moved a page or to shorten URLs.
+
+| Property   | Type         | Description                                                                                                                 |
+| ---------- | ------------ | --------------------------------------------------------------------------------------------------------------------------- | ---- |
+| `source`   | `string`     | The glob pattern or specific path to match for incoming requests that should be redirected. type: {StorageConfigSourceGlob} |
+| `location` | `string`     | The URL or path to which the request should be redirected. type: {string}                                                   |
+| `code`     | `301 or 302` | The HTTP status code to use for the redirect, typically 301 (permanent redirect) or 302 (temporary redirect). type: {301    | 302} |
+
+#### :gear: StorageConfig
+
+Configures the hosting behavior of the Storage.
+
+| Property        | Type                                                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| --------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- | -------------------- |
+| `headers`       | `StorageConfigHeader[] or undefined`                  | Optional array of `StorageConfigHeader` objects to define custom HTTP headers for specific files or patterns. type: {StorageConfigHeader[]}optional                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `rewrites`      | `StorageConfigRewrite[] or undefined`                 | Optional array of `StorageConfigRewrite` objects to define rewrite rules. type: {StorageConfigRewrite[]}optional                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `redirects`     | `StorageConfigRedirect[] or undefined`                | Optional array of `StorageConfigRedirect` objects to define HTTP redirects. type: {StorageConfigRedirect[]}optional                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `iframe`        | `"deny" or "same-origin" or "allow-any" or undefined` | For security reasons and to prevent click-jacking attacks, dapps deployed with Juno are, by default, set to deny embedding in other sites.Options are:- `deny`: Prevents any content from being displayed in an iframe.- `same-origin`: Allows iframe content from the same origin as the page.- `allow-any`: Allows iframe content from any origin.If not specified, then `deny` is used as default value. type: {'deny'                                                                                                                                    | 'same-origin' | 'allow-any'}optional |
+| `rawAccess`     | `boolean or undefined`                                | Optional flag to enable access for raw URLs.⚠️ **WARNING: Enabling this option is highly discouraged due to security risks.**Enabling this option allows access to raw URLs (e.g., https://satellite-id.raw.icp0.io), bypassing certificate validation.This creates a security vulnerability where a malicious node in the chain can respond to requests with malicious or invalid content.Since there is no validation on raw URLs, the client may receive and process harmful data.If not specified, the default value is `false`. type: {boolean}optional |
+| `maxMemorySize` | `MaxMemorySizeConfig or undefined`                    | Configuration for maximum memory size limits for the Storage.This is used to specify optional limits on heap and stable memory for the smart contract.When the limit is reached, the Storage and smart contract continue to operate normally but reject the upload of new assets.If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional                                                                                                                                                                                        |
 
 #### :gear: CliConfig
 
@@ -132,6 +192,14 @@ Configures the Authentication options of a Satellite.
 | Property           | Type                                                | Description                                                                                                             |
 | ------------------ | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `internetIdentity` | `AuthenticationConfigInternetIdentity or undefined` | Optional configuration of Internet Identity authentication method. type: {AuthenticationConfigInternetIdentity}optional |
+
+#### :gear: DatastoreConfig
+
+Configures the behavior of the Datastore.
+
+| Property        | Type                               | Description                                                                                                                                                                                                                                                                                                                                                                           |
+| --------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `maxMemorySize` | `MaxMemorySizeConfig or undefined` | Configuration for maximum memory size limits for the Datastore.This is used to specify optional limits on heap and stable memory for the smart contract.When the limit is reached, the Datastore and smart contract continue to operate normally but reject the creation or updates of documents.If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional |
 
 #### :gear: SatelliteId
 
@@ -198,6 +266,7 @@ Represents the development configuration for Juno.
 ### :cocktail: Types
 
 - [ModuleLogVisibility](#gear-modulelogvisibility)
+- [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
 - [ENCODING_TYPE](#gear-encoding_type)
 - [JunoConfigMode](#gear-junoconfigmode)
 - [SatelliteConfig](#gear-satelliteconfig)
@@ -214,6 +283,14 @@ Represents the development configuration for Juno.
 | `ModuleLogVisibility` | `'controllers' or 'public'` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/module/module.settings.ts#L9)
+
+#### :gear: StorageConfigSourceGlob
+
+| Type                      | Type |
+| ------------------------- | ---- |
+| `StorageConfigSourceGlob` |      |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L7)
 
 #### :gear: ENCODING_TYPE
 

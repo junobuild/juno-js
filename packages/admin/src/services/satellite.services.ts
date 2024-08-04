@@ -2,6 +2,7 @@ import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import type {
   AuthenticationConfig,
+  DatastoreConfig,
   Rule,
   RulesType,
   StorageConfig,
@@ -9,7 +10,7 @@ import type {
   StorageConfigRedirect,
   StorageConfigRewrite
 } from '@junobuild/config';
-import {fromNullable, isNullish, nonNullish, toNullable} from '@junobuild/utils';
+import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
 import type {
   Controller,
   MemorySize,
@@ -35,6 +36,7 @@ import {
   setAuthConfig as setAuthConfigApi,
   setControllers,
   setCustomDomain as setCustomDomainApi,
+  setDatastoreConfig as setDatastoreConfigApi,
   setRule as setRuleApi,
   setStorageConfig as setStorageConfigApi,
   version
@@ -43,6 +45,7 @@ import type {SatelliteParameters} from '../types/actor.types';
 import type {BuildType} from '../types/build.types';
 import type {CustomDomain} from '../types/customdomain.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
+import {toMaxMemorySize} from '../utils/memory.utils';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 /**
@@ -92,15 +95,6 @@ export const setStorageConfig = async ({
   const rawAccess: StorageConfigRawAccessDid =
     configRawAccess === true ? {Allow: null} : {Deny: null};
 
-  const maxMemorySize = toNullable(
-    nonNullish(configMaxMemorySize)
-      ? {
-          heap: toNullable(configMaxMemorySize.heap),
-          stable: toNullable(configMaxMemorySize.stable)
-        }
-      : undefined
-  );
-
   return setStorageConfigApi({
     satellite,
     config: {
@@ -109,8 +103,30 @@ export const setStorageConfig = async ({
       redirects: [redirects],
       iframe: [iframe],
       raw_access: [rawAccess],
-      max_memory_size: maxMemorySize
+      max_memory_size: toMaxMemorySize(configMaxMemorySize)
     }
+  });
+};
+
+/**
+ * Sets the datastore configuration for a satellite.
+ * @param {Object} params - The parameters for setting the authentication configuration.
+ * @param {Object} params.config - The datastore configuration.
+ * @param {SatelliteParameters} params.satellite - The satellite parameters.
+ * @returns {Promise<void>} A promise that resolves when the datastore configuration is set.
+ */
+export const setDatastoreConfig = async ({
+  config: {maxMemorySize},
+  ...rest
+}: {
+  config: DatastoreConfig;
+  satellite: SatelliteParameters;
+}): Promise<void> => {
+  await setDatastoreConfigApi({
+    config: {
+      max_memory_size: toMaxMemorySize(maxMemorySize)
+    },
+    ...rest
   });
 };
 

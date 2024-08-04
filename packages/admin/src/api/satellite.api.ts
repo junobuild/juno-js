@@ -6,6 +6,7 @@ import type {
   AuthenticationConfig,
   Controller,
   CustomDomain,
+  DbConfig,
   MemorySize,
   Rule,
   RulesType,
@@ -32,6 +33,17 @@ export const setStorageConfig = async ({
   return set_storage_config(config);
 };
 
+export const setDatastoreConfig = async ({
+  config,
+  satellite
+}: {
+  config: DbConfig;
+  satellite: SatelliteParameters;
+}): Promise<void> => {
+  const {set_db_config} = await getSatelliteActor(satellite);
+  return set_db_config(config);
+};
+
 export const setAuthConfig = async ({
   config,
   satellite
@@ -41,6 +53,24 @@ export const setAuthConfig = async ({
 }): Promise<void> => {
   const {set_auth_config} = await getSatelliteActor(satellite);
   return set_auth_config(config);
+};
+
+export const getStorageConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<StorageConfig> => {
+  const {get_storage_config} = await getSatelliteActor(satellite);
+  return get_storage_config();
+};
+
+export const getDatastoreConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<[] | [DbConfig]> => {
+  const {get_db_config} = await getSatelliteActor(satellite);
+  return get_db_config();
 };
 
 export const getAuthConfig = async ({

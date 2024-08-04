@@ -5,7 +5,7 @@ import type {JunoConfigMode} from '../../../types/juno.env';
 import type {Either} from '../../../utils/ts.utils';
 import type {SatelliteAssertions} from './assertions.config';
 import type {AuthenticationConfig} from './authentication.config';
-import {DatastoreConfig} from "./datastore.config";
+import type {DatastoreConfig} from './datastore.config';
 
 /**
  * Represents the unique identifier for a satellite.

@@ -4,7 +4,6 @@ import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declaratio
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
 import type {
   AuthenticationConfig,
-  Config,
   Controller,
   CustomDomain,
   MemorySize,
@@ -12,7 +11,8 @@ import type {
   RulesType,
   _SERVICE as SatelliteActor,
   SetControllersArgs,
-  SetRule
+  SetRule,
+  StorageConfig
 } from '../../declarations/satellite/satellite.did';
 import type {SatelliteParameters} from '../types/actor.types';
 import {
@@ -21,15 +21,15 @@ import {
   getSatelliteActor
 } from './actor.api';
 
-export const setConfig = async ({
+export const setStorageConfig = async ({
   config,
   satellite
 }: {
-  config: Config;
+  config: StorageConfig;
   satellite: SatelliteParameters;
 }): Promise<void> => {
-  const {set_config} = await getSatelliteActor(satellite);
-  return set_config(config);
+  const {set_storage_config} = await getSatelliteActor(satellite);
+  return set_storage_config(config);
 };
 
 export const setAuthConfig = async ({

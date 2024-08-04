@@ -5,11 +5,12 @@ import type {
   Rule,
   RulesType,
   SatelliteConfig,
+  StorageConfig,
   StorageConfigHeader,
   StorageConfigRedirect,
   StorageConfigRewrite
 } from '@junobuild/config';
-import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
+import {fromNullable, isNullish, nonNullish, toNullable} from '@junobuild/utils';
 import type {
   Controller,
   MemorySize,
@@ -33,10 +34,10 @@ import {
   listRules as listRulesApi,
   memorySize,
   setAuthConfig as setAuthConfigApi,
-  setConfig as setConfigApi,
   setControllers,
   setCustomDomain as setCustomDomainApi,
   setRule as setRuleApi,
+  setStorageConfig as setStorageConfigApi,
   version
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
@@ -46,30 +47,28 @@ import {encodeIDLControllers} from '../utils/idl.utils';
 import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 /**
- * Sets the configuration for a satellite.
+ * Sets the configuration for the Storage of a Satellite.
  * @param {Object} params - The parameters for setting the configuration.
- * @param {Object} params.config - The satellite configuration.
- * @param {Object} params.config.storage - The storage configuration.
- * @param {Array<StorageConfigHeader>} params.config.storage.headers - The headers configuration.
- * @param {Array<StorageConfigRewrite>} params.config.storage.rewrites - The rewrites configuration.
- * @param {Array<StorageConfigRedirect>} params.config.storage.redirects - The redirects configuration.
- * @param {string} params.config.storage.iframe - The iframe configuration.
+ * @param {Object} params.config - The storage configuration.
+ * @param {Array<StorageConfigHeader>} params.config.headers - The headers configuration.
+ * @param {Array<StorageConfigRewrite>} params.config.rewrites - The rewrites configuration.
+ * @param {Array<StorageConfigRedirect>} params.config.redirects - The redirects configuration.
+ * @param {string} params.config.iframe - The iframe configuration.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
  * @returns {Promise<void>} A promise that resolves when the configuration is set.
  */
-export const setConfig = async ({
+export const setStorageConfig = async ({
   config: {
-    storage: {
-      headers: configHeaders,
-      rewrites: configRewrites,
-      redirects: configRedirects,
-      iframe: configIFrame,
-      rawAccess: configRawAccess
-    }
+    headers: configHeaders,
+    rewrites: configRewrites,
+    redirects: configRedirects,
+    iframe: configIFrame,
+    rawAccess: configRawAccess,
+    maxMemorySize: configMaxMemorySize
   },
   satellite
 }: {
-  config: Required<Pick<SatelliteConfig, 'storage'>>;
+  config: StorageConfig;
   satellite: SatelliteParameters;
 }): Promise<void> => {
   const headers: [string, [string, string][]][] = (configHeaders ?? []).map(
@@ -94,16 +93,24 @@ export const setConfig = async ({
   const rawAccess: StorageConfigRawAccessDid =
     configRawAccess === true ? {Allow: null} : {Deny: null};
 
-  return setConfigApi({
+  const maxMemorySize = toNullable(
+    nonNullish(configMaxMemorySize)
+      ? {
+          heap: toNullable(configMaxMemorySize.heap),
+          stable: toNullable(configMaxMemorySize.stable)
+        }
+      : undefined
+  );
+
+  return setStorageConfigApi({
     satellite,
     config: {
-      storage: {
-        headers,
-        rewrites,
-        redirects: [redirects],
-        iframe: [iframe],
-        raw_access: [rawAccess]
-      }
+      headers,
+      rewrites,
+      redirects: [redirects],
+      iframe: [iframe],
+      raw_access: [rawAccess],
+      max_memory_size: maxMemorySize
     }
   });
 };

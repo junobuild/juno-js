@@ -1,3 +1,5 @@
+import type {MaxMemorySizeConfig} from './feature.config';
+
 /**
  * Represents a glob pattern for matching files in the storage configuration.
  * @typedef {string} StorageConfigSourceGlob
@@ -123,4 +125,17 @@ export interface StorageConfig {
    * @optional
    */
   rawAccess?: boolean;
+
+  /**
+   * Configuration for maximum memory size limits for the Storage.
+   *
+   * This is used to specify optional limits on heap and stable memory for the smart contract.
+   * When the limit is reached, the Storage and smart contract continue to operate normally but reject the upload of new assets.
+   *
+   * If not specified, no memory limits are enforced.
+   *
+   * @type {MaxMemorySizeConfig}
+   * @optional
+   */
+  maxMemorySize?: MaxMemorySizeConfig;
 }

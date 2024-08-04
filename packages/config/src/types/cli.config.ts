@@ -2,7 +2,7 @@ import type {ENCODING_TYPE} from './encoding';
 
 export interface CliConfig {
   /**
-   * Specifies the directory from which to deploy to storage.
+   * Specifies the directory from which to deploy to Storage.
    * For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`.
    *
    * @default 'build'

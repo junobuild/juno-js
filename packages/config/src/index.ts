@@ -3,6 +3,7 @@ export type * from './module/module.settings';
 export type * from './satellite/dev/juno.dev.config';
 export type * from './satellite/mainnet/configs/assertions.config';
 export type * from './satellite/mainnet/configs/authentication.config';
+export type * from './satellite/mainnet/configs/datastore.config';
 export type * from './satellite/mainnet/configs/orbiter.config';
 export type * from './satellite/mainnet/configs/satellite.config';
 export type * from './satellite/mainnet/juno.config';

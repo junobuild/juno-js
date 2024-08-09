@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/console",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A library for interfacing with Juno's Console",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -23,8 +23,7 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE",
-    "declarations"
+    "LICENSE"
   ],
   "scripts": {
     "rmdir": "node ../../scripts/rmdir.mjs",

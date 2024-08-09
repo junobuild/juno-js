@@ -23,7 +23,8 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "declarations"
   ],
   "scripts": {
     "rmdir": "node ../../scripts/rmdir.mjs",

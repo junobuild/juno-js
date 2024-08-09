@@ -24,12 +24,12 @@ export const createActor = async <T = Record<string, ActorMethod>>({
       : container
     : 'https://icp-api.io';
 
-  const agent: HttpAgent = new HttpAgent({identity, host, ...(fetch && {fetch})});
-
-  if (localActor) {
-    // Fetch root key for certificate validation during development
-    await agent.fetchRootKey();
-  }
+  const agent: HttpAgent = await HttpAgent.create({
+    identity,
+    host,
+    shouldFetchRootKey: localActor,
+    ...(fetch && {fetch})
+  });
 
   // Creates an actor with using the candid interface and the HttpAgent
   return Actor.createActor(idlFactory, {

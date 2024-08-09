@@ -32,5 +32,5 @@ export const commitProposal = async ({
   commitProposal: CommitProposal;
 }): Promise<void> => {
   const {commit_proposal} = await getConsoleActor(console);
-  return commit_proposal(commitProposal);
+  await commit_proposal(commitProposal);
 };

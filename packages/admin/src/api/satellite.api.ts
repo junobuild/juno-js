@@ -4,15 +4,16 @@ import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declaratio
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
 import type {
   AuthenticationConfig,
-  Config,
   Controller,
   CustomDomain,
+  DbConfig,
   MemorySize,
   Rule,
   RulesType,
   _SERVICE as SatelliteActor,
   SetControllersArgs,
-  SetRule
+  SetRule,
+  StorageConfig
 } from '../../declarations/satellite/satellite.did';
 import type {SatelliteParameters} from '../types/actor.types';
 import {
@@ -21,15 +22,26 @@ import {
   getSatelliteActor
 } from './actor.api';
 
-export const setConfig = async ({
+export const setStorageConfig = async ({
   config,
   satellite
 }: {
-  config: Config;
+  config: StorageConfig;
   satellite: SatelliteParameters;
 }): Promise<void> => {
-  const {set_config} = await getSatelliteActor(satellite);
-  return set_config(config);
+  const {set_storage_config} = await getSatelliteActor(satellite);
+  return set_storage_config(config);
+};
+
+export const setDatastoreConfig = async ({
+  config,
+  satellite
+}: {
+  config: DbConfig;
+  satellite: SatelliteParameters;
+}): Promise<void> => {
+  const {set_db_config} = await getSatelliteActor(satellite);
+  return set_db_config(config);
 };
 
 export const setAuthConfig = async ({
@@ -41,6 +53,24 @@ export const setAuthConfig = async ({
 }): Promise<void> => {
   const {set_auth_config} = await getSatelliteActor(satellite);
   return set_auth_config(config);
+};
+
+export const getStorageConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<StorageConfig> => {
+  const {get_storage_config} = await getSatelliteActor(satellite);
+  return get_storage_config();
+};
+
+export const getDatastoreConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<[] | [DbConfig]> => {
+  const {get_db_config} = await getSatelliteActor(satellite);
+  return get_db_config();
 };
 
 export const getAuthConfig = async ({

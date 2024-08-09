@@ -1,10 +1,11 @@
 import type {ModuleSettings} from '../../../module/module.settings';
-import type {StorageConfig} from '../../../storage/storage.config';
+import type {StorageConfig} from '../../../shared/storage.config';
 import type {CliConfig} from '../../../types/cli.config';
 import type {JunoConfigMode} from '../../../types/juno.env';
 import type {Either} from '../../../utils/ts.utils';
 import type {SatelliteAssertions} from './assertions.config';
 import type {AuthenticationConfig} from './authentication.config';
+import type {DatastoreConfig} from './datastore.config';
 
 /**
  * Represents the unique identifier for a satellite.
@@ -58,6 +59,14 @@ export type SatelliteConfig = Either<SatelliteId, SatelliteIds> &
      * @optional
      */
     storage?: StorageConfig;
+
+    /**
+     * Optional configuration parameters for the satellite, affecting the operational behavior of its Datastore.
+     * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
+     * @type {DatastoreConfig}
+     * @optional
+     */
+    datastore?: DatastoreConfig;
 
     /**
      * Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication.

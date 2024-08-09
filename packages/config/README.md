@@ -55,6 +55,7 @@ Configuration options for [Juno] CLI.
 
 - [OrbiterConfig](#gear-orbiterconfig)
 - [ModuleSettings](#gear-modulesettings)
+- [MaxMemorySizeConfig](#gear-maxmemorysizeconfig)
 - [StorageConfigHeader](#gear-storageconfigheader)
 - [StorageConfigRewrite](#gear-storageconfigrewrite)
 - [StorageConfigRedirect](#gear-storageconfigredirect)
@@ -64,6 +65,7 @@ Configuration options for [Juno] CLI.
 - [SatelliteAssertions](#gear-satelliteassertions)
 - [AuthenticationConfigInternetIdentity](#gear-authenticationconfiginternetidentity)
 - [AuthenticationConfig](#gear-authenticationconfig)
+- [DatastoreConfig](#gear-datastoreconfig)
 - [SatelliteId](#gear-satelliteid)
 - [SatelliteIds](#gear-satelliteids)
 - [JunoConfig](#gear-junoconfig)
@@ -96,14 +98,25 @@ These settings control various aspects of the module's behavior and resource usa
 | `memoryAllocation`    | `bigint or undefined`              | The amount of memory explicitly allocated to the module.For example, setting it to `BigInt(1024 * 1024 * 128)` allocates 128 MB of memory to the module. type: {bigint}                                                                |
 | `computeAllocation`   | `bigint or undefined`              | The proportion of compute capacity allocated to the module.This is a fraction of the total compute capacity of the subnet. For example, setting it to `BigInt(10)` allocates 10% of the compute capacity to the module. type: {bigint} |
 
+#### :gear: MaxMemorySizeConfig
+
+Configuration for granting access to features only if the maximum memory size limits are not reached.
+
+The maximum size corresponds to the overall heap or stable memory of the smart contract.
+
+| Property | Type                  | Description                                                                                                                                          |
+| -------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `heap`   | `bigint or undefined` | Maximum allowed heap memory size in bytes.This field is optional. If not specified, no limit is enforced on the heap memory size. type: {bigint}     |
+| `stable` | `bigint or undefined` | Maximum allowed stable memory size in bytes.This field is optional. If not specified, no limit is enforced on the stable memory size. type: {bigint} |
+
 #### :gear: StorageConfigHeader
 
-Headers allow the client and the storage to pass additional information along with a request or a response.
+Headers allow the client and the Storage to pass additional information along with a request or a response.
 Some sets of headers can affect how the browser handles the page and its content.
 
 | Property  | Type                 | Description                                                                                                                                                                                                                 |
 | --------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `source`  | `string`             | The glob pattern used to match files within the storage that these headers will apply to. type: {StorageConfigSourceGlob}                                                                                                   |
+| `source`  | `string`             | The glob pattern used to match files within the Storage that these headers will apply to. type: {StorageConfigSourceGlob}                                                                                                   |
 | `headers` | `[string, string][]` | An array of key-value pairs representing the headers to apply.Each pair includes the header name and its value.Example: `[["Cache-Control", "max-age=3600"], ["X-Custom-Header", "value"]]` type: {Array<[string, string]>} |
 
 #### :gear: StorageConfigRewrite
@@ -128,21 +141,22 @@ Use a URL redirect to prevent broken links if you've moved a page or to shorten 
 
 #### :gear: StorageConfig
 
-Configures the hosting behavior of the storage.
+Configures the hosting behavior of the Storage.
 
-| Property    | Type                                                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ----------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- | -------------------- |
-| `headers`   | `StorageConfigHeader[] or undefined`                  | Optional array of `StorageConfigHeader` objects to define custom HTTP headers for specific files or patterns. type: {StorageConfigHeader[]}optional                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `rewrites`  | `StorageConfigRewrite[] or undefined`                 | Optional array of `StorageConfigRewrite` objects to define rewrite rules. type: {StorageConfigRewrite[]}optional                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `redirects` | `StorageConfigRedirect[] or undefined`                | Optional array of `StorageConfigRedirect` objects to define HTTP redirects. type: {StorageConfigRedirect[]}optional                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| `iframe`    | `"deny" or "same-origin" or "allow-any" or undefined` | For security reasons and to prevent click-jacking attacks, dapps deployed with Juno are, by default, set to deny embedding in other sites.Options are:- `deny`: Prevents any content from being displayed in an iframe.- `same-origin`: Allows iframe content from the same origin as the page.- `allow-any`: Allows iframe content from any origin.If not specified, then `deny` is used as default value. type: {'deny'                                                                                                                                    | 'same-origin' | 'allow-any'}optional |
-| `rawAccess` | `boolean or undefined`                                | Optional flag to enable access for raw URLs.⚠️ **WARNING: Enabling this option is highly discouraged due to security risks.**Enabling this option allows access to raw URLs (e.g., https://satellite-id.raw.icp0.io), bypassing certificate validation.This creates a security vulnerability where a malicious node in the chain can respond to requests with malicious or invalid content.Since there is no validation on raw URLs, the client may receive and process harmful data.If not specified, the default value is `false`. type: {boolean}optional |
+| Property        | Type                                                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| --------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- | -------------------- |
+| `headers`       | `StorageConfigHeader[] or undefined`                  | Optional array of `StorageConfigHeader` objects to define custom HTTP headers for specific files or patterns. type: {StorageConfigHeader[]}optional                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `rewrites`      | `StorageConfigRewrite[] or undefined`                 | Optional array of `StorageConfigRewrite` objects to define rewrite rules. type: {StorageConfigRewrite[]}optional                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `redirects`     | `StorageConfigRedirect[] or undefined`                | Optional array of `StorageConfigRedirect` objects to define HTTP redirects. type: {StorageConfigRedirect[]}optional                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `iframe`        | `"deny" or "same-origin" or "allow-any" or undefined` | For security reasons and to prevent click-jacking attacks, dapps deployed with Juno are, by default, set to deny embedding in other sites.Options are:- `deny`: Prevents any content from being displayed in an iframe.- `same-origin`: Allows iframe content from the same origin as the page.- `allow-any`: Allows iframe content from any origin.If not specified, then `deny` is used as default value. type: {'deny'                                                                                                                                    | 'same-origin' | 'allow-any'}optional |
+| `rawAccess`     | `boolean or undefined`                                | Optional flag to enable access for raw URLs.⚠️ **WARNING: Enabling this option is highly discouraged due to security risks.**Enabling this option allows access to raw URLs (e.g., https://satellite-id.raw.icp0.io), bypassing certificate validation.This creates a security vulnerability where a malicious node in the chain can respond to requests with malicious or invalid content.Since there is no validation on raw URLs, the client may receive and process harmful data.If not specified, the default value is `false`. type: {boolean}optional |
+| `maxMemorySize` | `MaxMemorySizeConfig or undefined`                    | Configuration for maximum memory size limits for the Storage.This is used to specify optional limits on heap and stable memory for the smart contract.When the limit is reached, the Storage and smart contract continue to operate normally but reject the upload of new assets.If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional                                                                                                                                                                                        |
 
 #### :gear: CliConfig
 
 | Property   | Type                                     | Description                                                                                                                                                                                                                                                                                                                                                                              |
 | ---------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `source`   | `string or undefined`                    | Specifies the directory from which to deploy to storage.For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: 'build'type: {string}                                                                                                                                                                                                          |
+| `source`   | `string or undefined`                    | Specifies the directory from which to deploy to Storage.For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: 'build'type: {string}                                                                                                                                                                                                          |
 | `ignore`   | `string[] or undefined`                  | Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore. type: {string[]}optional                                                                                                                                                                                                                                                    |
 | `gzip`     | `string or false or undefined`           | Controls the Gzip compression optimization for files in the source folder. By default, it targets JavaScript (js), ES Module (mjs), and CSS (css) files.You can disable this by setting it to `false` or customize it with a different file matching pattern using glob syntax. type: {string                                                                                            | false}optional |
 | `encoding` | `[string, ENCODING_TYPE][] or undefined` | Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension:- `.Z` for compress,- `.gz` for gzip,- `.br` for brotli,- `.zlib` for deflate,- anything else defaults to `identity`.The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types. type: {Array<[string, ENCODING_TYPE]>}optional |
@@ -179,6 +193,14 @@ Configures the Authentication options of a Satellite.
 | ------------------ | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `internetIdentity` | `AuthenticationConfigInternetIdentity or undefined` | Optional configuration of Internet Identity authentication method. type: {AuthenticationConfigInternetIdentity}optional |
 
+#### :gear: DatastoreConfig
+
+Configures the behavior of the Datastore.
+
+| Property        | Type                               | Description                                                                                                                                                                                                                                                                                                                                                                           |
+| --------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `maxMemorySize` | `MaxMemorySizeConfig or undefined` | Configuration for maximum memory size limits for the Datastore.This is used to specify optional limits on heap and stable memory for the smart contract.When the limit is reached, the Datastore and smart contract continue to operate normally but reject the creation or updates of documents.If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional |
+
 #### :gear: SatelliteId
 
 Represents the unique identifier for a satellite.
@@ -211,9 +233,9 @@ Represents the collections configuration for a satellite in a development enviro
 
 | Property    | Type                                             | Description                                                                                                                                      |
 | ----------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `datastore` | `SatelliteDevDataStoreCollection[] or undefined` | The datastore collections configuration. type: {SatelliteDevDataStoreCollection[]}optional                                                       |
-| `db`        | `SatelliteDevDataStoreCollection[] or undefined` | The datastore collections configuration.This property is deprecated. Use {@link datastore} instead. deprecatedtype: {SatelliteDevDbCollection[]} |
-| `storage`   | `SatelliteDevStorageCollection[] or undefined`   | The storage collections configuration. type: {SatelliteDevStorageCollection[]}optional                                                           |
+| `datastore` | `SatelliteDevDataStoreCollection[] or undefined` | The Datastore collections configuration. type: {SatelliteDevDataStoreCollection[]}optional                                                       |
+| `db`        | `SatelliteDevDataStoreCollection[] or undefined` | The Datastore collections configuration.This property is deprecated. Use {@link datastore} instead. deprecatedtype: {SatelliteDevDbCollection[]} |
+| `storage`   | `SatelliteDevStorageCollection[] or undefined`   | The Storage collections configuration. type: {SatelliteDevStorageCollection[]}optional                                                           |
 
 #### :gear: SatelliteDevController
 
@@ -268,7 +290,7 @@ Represents the development configuration for Juno.
 | ------------------------- | ---- |
 | `StorageConfigSourceGlob` |      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/storage/storage.config.ts#L5)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L7)
 
 #### :gear: ENCODING_TYPE
 
@@ -302,6 +324,14 @@ _ @optional
 storage?: StorageConfig;
 
     /**
+     * Optional configuration parameters for the satellite, affecting the operational behavior of its Datastore.
+     * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
+     * @type {DatastoreConfig}
+     * @optional
+     */
+    datastore?: DatastoreConfig;
+
+    /**
      * Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication.
      * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
      * @type {AuthenticationConfig}
@@ -326,7 +356,7 @@ storage?: StorageConfig;
 
 }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L52)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L53)
 
 #### :gear: SatelliteDevDataStoreCollection
 

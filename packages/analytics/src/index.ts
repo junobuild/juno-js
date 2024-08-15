@@ -6,6 +6,7 @@ import {
   startTracking,
   stopTracking
 } from './services/analytics.services';
+import {startMonitoring} from './services/performance.services';
 import type {Environment, UserEnvironment} from './types/env';
 import {envContainer, envOrbiterId, envSatelliteId} from './utils/window.env.utils';
 
@@ -54,6 +55,10 @@ export const initOrbiter = async (userEnv?: UserEnvironment): Promise<() => void
 
   // Starting tracking will instantly sync the first page and the data from previous sessions that have not been synced yet
   startTracking();
+
+  console.log('123');
+
+  startMonitoring();
 
   return () => {
     stopTracking();

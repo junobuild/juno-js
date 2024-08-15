@@ -57,6 +57,7 @@
     "@junobuild/utils": "*",
     "idb-keyval": "^6.2.1",
     "isbot": "^5.1.6",
-    "nanoid": "^5.0.7"
+    "nanoid": "^5.0.7",
+    "perfume.js": "^9.4.0"
   }
 }

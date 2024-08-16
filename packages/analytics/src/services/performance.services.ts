@@ -22,13 +22,7 @@ export const startMonitoring = async (sessionId: string) => {
       // });
     }
 
-    console.log(
-      metricName,
-      data,
-      navigatorInformation,
-      rating,
-      navigationType
-    );
+    console.log(metricName, data, navigatorInformation, rating, navigationType);
   };
 
   const {initPerfume} = await import('perfume.js');

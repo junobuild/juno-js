@@ -110,10 +110,10 @@ export interface PageViewDevice {
 export type PerformanceData =
   | {NetworkInformation: NetworkInformation}
   | {NavigationTiming: NavigationTiming}
-  | {Number: number};
+  | {Value: number};
 export interface PerformanceInformation {
-  low_end_experience: boolean;
-  low_end_device: boolean;
+  low_end_experience: [] | [boolean];
+  low_end_device: [] | [boolean];
 }
 export interface PerformanceMetric {
   updated_at: bigint;

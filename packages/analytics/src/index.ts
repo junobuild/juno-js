@@ -1,6 +1,6 @@
 import {assertNonNullish} from '@junobuild/utils';
 import {
-  initTrackMonitoring,
+  initTrackPerformance,
   initTrackPageViews,
   initWorker,
   setPageView,
@@ -53,7 +53,7 @@ export const initOrbiter = async (userEnv?: UserEnvironment): Promise<() => void
 
   const {cleanup: pushHistoryCleanup} = initTrackPageViews();
 
-  await initTrackMonitoring();
+  await initTrackPerformance();
 
   // Starting tracking will instantly sync the first page and the data from previous sessions that have not been synced yet
   startTracking();

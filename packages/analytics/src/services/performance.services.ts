@@ -1,117 +1,124 @@
-import {isNullish, nonNullish, toNullable} from '@junobuild/utils';
-import type {IAnalyticsTrackerOptions} from 'perfume.js';
-import {IPerfumeNavigationTiming, IPerfumeNetworkInformation} from 'perfume.js/dist/types/types';
-import {PerformanceData, PerformanceInformation} from '../../declarations/orbiter/orbiter.did';
+import {toNullable} from '@junobuild/utils';
+import {nanoid} from 'nanoid';
+import type {Metric} from 'web-vitals';
+import {
+  NavigationType,
+  PerformanceMetricName,
+  WebVitalsMetric
+} from '../../declarations/orbiter/orbiter.did';
 import {IdbPerformanceMetric} from '../types/idb';
 import {timestamp, userAgent} from '../utils/analytics.utils';
-import {MetricName} from "../types/performance";
+
+type SessionMetric = Omit<Metric, 'navigationType'> &
+  Partial<Pick<Metric, 'navigationType'>> & {sessionId: string};
 
 export const startPerformance = async (sessionId: string) => {
-  const analyticsTracker = ({
-    metricName: metricNameText,
-    data
-  }: IAnalyticsTrackerOptions) => {
-    const parseMetricName = (value: string): MetricName | undefined => {
-      return Object.values(MetricName).includes(value as MetricName) ? value as MetricName : undefined;
-    }
+  const {onCLS, onFCP, onINP, onLCP, onTTFB} = await import('web-vitals');
 
-    const metricName = parseMetricName(metricNameText);
-
-    if (isNullish(metricName)) {
-      return;
-    }
-
-
+  const setMetric = (metric: Metric) => {
+    (async () => {
+      await setPerformanceMetric({...metric, sessionId});
+    })();
   };
 
-  const {initPerfume} = await import('perfume.js');
-  initPerfume({resourceTiming: false, elementTiming: false, analyticsTracker});
+  onCLS(setMetric);
+  onFCP(setMetric);
+  onINP(setMetric);
+  onLCP(setMetric);
+  onTTFB(setMetric);
+};
+
+const setPerformanceMetric = async (metric: SessionMetric) => {
+  const data = mapPerformanceMetric(metric);
+
+  if (data === 'unknown') {
+    console.warn('Performance metric ignored. Unknown metric name.', metric);
+    return;
+  }
+
+  if (data === 'deprecated') {
+    return;
+  }
+
+  const idb = await import('./idb.services');
+  await idb.setPerformanceMetric({
+    key: nanoid(),
+    view: data
+  });
 };
 
 const mapPerformanceMetric = ({
-  metricName,
   sessionId,
-  navigatorInformation: {isLowEndExperience, isLowEndDevice},
-  data: perfumeData
-}: Omit<IAnalyticsTrackerOptions, "metricName"> & {sessionId: string, metricName: MetricName}): IdbPerformanceMetric | undefined => {
+  name: metricName,
+  value,
+  delta,
+  id,
+  navigationType
+}: SessionMetric): IdbPerformanceMetric | 'deprecated' | 'unknown' => {
+  const mapMetricName = (): PerformanceMetricName | 'deprecated' | 'unknown' => {
+    switch (metricName) {
+      case 'CLS':
+        return {CLS: null};
+      case 'FCP':
+        return {FCP: null};
+      case 'INP':
+        return {INP: null};
+      case 'LCP':
+        return {LCP: null};
+      case 'TTFB':
+        return {TTFB: null};
+      case 'FID':
+        return 'deprecated';
+      default:
+        return 'unknown';
+    }
+  };
+
+  const metric_name = mapMetricName();
+
+  if (metric_name === 'unknown' || metric_name === 'deprecated') {
+    return metric_name;
+  }
+
+  const mapNavigationType = (): NavigationType | undefined => {
+    switch (navigationType) {
+      case 'navigate':
+        return {Navigate: null};
+      case 'restore':
+        return {Restore: null};
+      case 'reload':
+        return {Reload: null};
+      case 'back-forward':
+        return {BackForward: null};
+      case 'back-forward-cache':
+        return {BackForwardCache: null};
+      case 'prerender':
+        return {Prerender: null};
+      default:
+        return undefined;
+    }
+  };
+
+  const data: WebVitalsMetric = {
+    value,
+    delta,
+    id,
+    navigation_type: toNullable(mapNavigationType())
+  };
+
   const {
     location: {href}
   } = document;
 
   const {updated_at: _, ...timestampRest} = timestamp();
 
-  const info: PerformanceInformation = {
-    low_end_device: toNullable(isLowEndDevice),
-    low_end_experience: toNullable(isLowEndExperience)
-  };
-
-  const mapData = (): PerformanceData | undefined => {
-    if (typeof perfumeData === 'number') {
-      return {Value: perfumeData};
-    }
-
-    const {rtt, downlink, effectiveType} = perfumeData as unknown as IPerfumeNetworkInformation;
-    if (nonNullish(rtt) || nonNullish(downlink) || nonNullish(effectiveType)) {
-      return {
-        NetworkInformation: {
-          rtt: toNullable(rtt),
-          downlink: toNullable(downlink),
-          effective_type: toNullable(effectiveType)
-        }
-      };
-    }
-
-    const {
-      dnsLookupTime,
-      downloadTime,
-      fetchTime,
-      headerSize,
-      redirectTime,
-      timeToFirstByte,
-      totalTime,
-      workerTime
-    } = perfumeData as unknown as IPerfumeNavigationTiming;
-
-    if (
-      nonNullish(dnsLookupTime) ||
-      nonNullish(downloadTime) ||
-      nonNullish(fetchTime) ||
-      nonNullish(headerSize) ||
-      nonNullish(redirectTime) ||
-      nonNullish(timeToFirstByte) ||
-      nonNullish(totalTime) ||
-      nonNullish(workerTime)
-    ) {
-      return {
-        NavigationTiming: {
-          dns_lookup_time: toNullable(dnsLookupTime),
-          download_time: toNullable(downloadTime),
-          fetch_time: toNullable(fetchTime),
-          header_size: toNullable(headerSize),
-          redirect_time: toNullable(redirectTime),
-          time_to_first_byte: toNullable(timeToFirstByte),
-          total_time: toNullable(totalTime),
-          worker_time: toNullable(workerTime)
-        }
-      };
-    }
-
-    return undefined
-  };
-
-  const data = mapData();
-
-  if (isNullish(data)) {
-    console.warn("Unable to map performance metric. Data not collected.", perfumeData);
-    return undefined;
-  }
-
   const metric: IdbPerformanceMetric = {
     href,
-    metric_name: metricName,
+    metric_name,
     session_id: sessionId,
-    info,
-    data,
+    data: {
+      WebVitalsMetric: data
+    },
     ...userAgent(),
     ...timestampRest
   };

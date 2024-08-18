@@ -1,7 +1,7 @@
 import {assertNonNullish} from '@junobuild/utils';
 import {
-  initTrackPerformance,
   initTrackPageViews,
+  initTrackPerformance,
   initWorker,
   setPageView,
   startTracking,

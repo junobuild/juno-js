@@ -69,21 +69,13 @@ export interface MemorySize {
   stable: bigint;
   heap: bigint;
 }
-export interface NavigationTiming {
-  worker_time: [] | [number];
-  redirect_time: [] | [number];
-  fetch_time: [] | [number];
-  time_to_first_byte: [] | [number];
-  total_time: [] | [number];
-  header_size: [] | [number];
-  dns_lookup_time: [] | [number];
-  download_time: [] | [number];
-}
-export interface NetworkInformation {
-  rtt: [] | [number];
-  downlink: [] | [number];
-  effective_type: [] | [string];
-}
+export type NavigationType =
+  | {Navigate: null}
+  | {Restore: null}
+  | {Reload: null}
+  | {BackForward: null}
+  | {BackForwardCache: null}
+  | {Prerender: null};
 export interface OrbiterSatelliteConfig {
   updated_at: bigint;
   created_at: bigint;
@@ -107,25 +99,23 @@ export interface PageViewDevice {
   inner_height: number;
   inner_width: number;
 }
-export type PerformanceData =
-  | {NetworkInformation: NetworkInformation}
-  | {NavigationTiming: NavigationTiming}
-  | {Value: number};
-export interface PerformanceInformation {
-  low_end_experience: [] | [boolean];
-  low_end_device: [] | [boolean];
-}
+export type PerformanceData = {WebVitalsMetric: WebVitalsMetric};
 export interface PerformanceMetric {
   updated_at: bigint;
   session_id: string;
   data: PerformanceData;
   href: string;
-  info: PerformanceInformation;
-  metric_name: string;
+  metric_name: PerformanceMetricName;
   created_at: bigint;
   satellite_id: Principal;
   version: [] | [bigint];
 }
+export type PerformanceMetricName =
+  | {CLS: null}
+  | {FCP: null}
+  | {INP: null}
+  | {LCP: null}
+  | {TTFB: null};
 export type Result = {Ok: PageView} | {Err: string};
 export type Result_1 = {Ok: null} | {Err: Array<[AnalyticKey, string]>};
 export type Result_2 = {Ok: PerformanceMetric} | {Err: string};
@@ -155,8 +145,7 @@ export interface SetPerformanceMetric {
   session_id: string;
   data: PerformanceData;
   href: string;
-  info: PerformanceInformation;
-  metric_name: string;
+  metric_name: PerformanceMetricName;
   satellite_id: Principal;
   version: [] | [bigint];
   user_agent: [] | [string];
@@ -182,6 +171,12 @@ export interface TrackEvent {
   created_at: bigint;
   satellite_id: Principal;
   version: [] | [bigint];
+}
+export interface WebVitalsMetric {
+  id: string;
+  value: number;
+  navigation_type: [] | [NavigationType];
+  delta: number;
 }
 export interface _SERVICE {
   del_controllers: ActorMethod<[DeleteControllersArgs], Array<[Principal, Controller]>>;

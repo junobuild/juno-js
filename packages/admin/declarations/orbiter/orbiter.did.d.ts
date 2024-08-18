@@ -37,12 +37,16 @@ export interface AnalyticsTop10PageViews {
 export interface AnalyticsTrackEvents {
   total: Array<[string, number]>;
 }
+export interface AnalyticsWebVitalsPageMetrics {
+  cls: [] | [number];
+  fcp: [] | [number];
+  inp: [] | [number];
+  lcp: [] | [number];
+  ttfb: [] | [number];
+}
 export interface AnalyticsWebVitalsPerformanceMetrics {
-  cls: number;
-  fcp: number;
-  inp: number;
-  lcp: number;
-  ttfb: number;
+  overall: AnalyticsWebVitalsPageMetrics;
+  pages: Array<[string, AnalyticsWebVitalsPageMetrics]>;
 }
 export interface CalendarDate {
   day: number;
@@ -194,7 +198,7 @@ export interface _SERVICE {
   get_page_views_analytics_metrics: ActorMethod<[GetAnalytics], AnalyticsMetricsPageViews>;
   get_page_views_analytics_top_10: ActorMethod<[GetAnalytics], AnalyticsTop10PageViews>;
   get_performance_metrics: ActorMethod<[GetAnalytics], Array<[AnalyticKey, PerformanceMetric]>>;
-  get_performance_metrics_web_vitals: ActorMethod<
+  get_performance_metrics_analytics_web_vitals: ActorMethod<
     [GetAnalytics],
     AnalyticsWebVitalsPerformanceMetrics
   >;

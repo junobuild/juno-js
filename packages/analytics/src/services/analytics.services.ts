@@ -106,8 +106,12 @@ export const setPageView = async () => {
   });
 };
 
-export const initTrackPerformance = async () => {
+export const initTrackPerformance = async ({options}: Environment) => {
   if (!isBrowser()) {
+    return;
+  }
+
+  if (options?.performance === false) {
     return;
   }
 

@@ -1,12 +1,12 @@
 import {toNullable} from '@junobuild/utils';
 import {nanoid} from 'nanoid';
 import type {Metric} from 'web-vitals';
-import {
+import type {
   NavigationType,
   PerformanceMetricName,
   WebVitalsMetric
 } from '../../declarations/orbiter/orbiter.did';
-import {IdbPerformanceMetric} from '../types/idb';
+import type {IdbPerformanceMetric} from '../types/idb';
 import {timestamp, userAgent} from '../utils/analytics.utils';
 
 type SessionMetric = Omit<Metric, 'navigationType'> &

@@ -188,6 +188,10 @@ const syncPerformanceMetrics = async () => {
     return;
   }
 
+  if (env?.options?.performance === false) {
+    return;
+  }
+
   // One batch at a time to avoid to process multiple times the same entries
   if (syncMetricsInProgress) {
     return;

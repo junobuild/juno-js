@@ -1,6 +1,7 @@
 import {assertNonNullish} from '@junobuild/utils';
 import {
   initTrackPageViews,
+  initTrackPerformance,
   initWorker,
   setPageView,
   startTracking,
@@ -10,7 +11,7 @@ import type {Environment, UserEnvironment} from './types/env';
 import {envContainer, envOrbiterId, envSatelliteId} from './utils/window.env.utils';
 
 export {trackEvent, trackPageView} from './services/analytics.services';
-export * from './types/env';
+export type * from './types/env';
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {
   const satelliteId = userEnv?.satelliteId ?? envSatelliteId();
@@ -33,7 +34,8 @@ const parseEnv = (userEnv?: UserEnvironment): Environment => {
     orbiterId,
     satelliteId,
     container,
-    worker: userEnv?.worker
+    worker: userEnv?.worker,
+    options: userEnv?.options
   };
 };
 
@@ -51,6 +53,8 @@ export const initOrbiter = async (userEnv?: UserEnvironment): Promise<() => void
   const {cleanup: workerCleanup} = initWorker(env);
 
   const {cleanup: pushHistoryCleanup} = initTrackPageViews();
+
+  await initTrackPerformance(env);
 
   // Starting tracking will instantly sync the first page and the data from previous sessions that have not been synced yet
   startTracking();

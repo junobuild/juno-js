@@ -6,6 +6,7 @@ import type {PostMessageInitEnvData} from '../types/post-message';
 import type {TrackEvent} from '../types/track';
 import {timestamp, userAgent} from '../utils/analytics.utils';
 import {warningWorkerNotInitialized} from '../utils/log.utils';
+import {startPerformance} from './performance.services';
 
 const initSessionId = (): string | undefined => {
   // I faced this issue when I used the library in Docusaurus which does not implement the crypto API when server-side rendering.
@@ -103,6 +104,20 @@ export const setPageView = async () => {
     key: nanoid(),
     view: data
   });
+};
+
+export const initTrackPerformance = async ({options}: Environment) => {
+  if (!isBrowser()) {
+    return;
+  }
+
+  if (options?.performance === false) {
+    return;
+  }
+
+  assertNonNullish(sessionId, SESSION_ID_UNDEFINED_MSG);
+
+  await startPerformance(sessionId);
 };
 
 /**

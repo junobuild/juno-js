@@ -324,7 +324,7 @@ export const upgradeSatellite = async ({
         wasm_module,
         mode: reset
           ? {reinstall: null}
-          : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{keep: null}]}]}
+          : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}
       }
     });
 
@@ -345,7 +345,7 @@ export const upgradeSatellite = async ({
       wasm_module,
       mode: reset
         ? {reinstall: null}
-        : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{keep: null}]}]}
+        : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}
     }
   });
 };

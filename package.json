@@ -21,7 +21,6 @@
     "packages/storage",
     "packages/core",
     "packages/admin",
-    "packages/ledger",
     "packages/analytics",
     "packages/core-peer",
     "packages/cli-tools",
@@ -78,16 +77,6 @@
         "@dfinity/candid",
         "@dfinity/principal",
         "@dfinity/auth-client"
-      ]
-    },
-    {
-      "name": "@junobuild/ledger",
-      "path": "./packages/ledger/dist/index.js",
-      "limit": "7 kB",
-      "ignore": [
-        "@dfinity/agent",
-        "@dfinity/candid",
-        "@dfinity/principal"
       ]
     },
     {

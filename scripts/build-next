@@ -9,7 +9,6 @@ node ./scripts/update-version.mjs config-loader
 node ./scripts/update-version.mjs storage
 node ./scripts/update-version.mjs core
 node ./scripts/update-version.mjs admin
-node ./scripts/update-version.mjs ledger
 node ./scripts/update-version.mjs analytics
 node ./scripts/update-version.mjs console
 node ./scripts/update-version.mjs core-peer

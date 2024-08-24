@@ -2,6 +2,7 @@ import type {Asset, AssetEncoding, AssetKey, Storage} from '@junobuild/storage';
 import {fromNullable, nonNullish} from '@junobuild/utils';
 import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import {
+  countAssets as countAssetsApi,
   deleteAsset as deleteAssetApi,
   deleteManyAssets as deleteManyAssetsApi,
   getAsset as getAssetApi,
@@ -9,7 +10,7 @@ import {
   listAssets as listAssetsApi,
   uploadAsset as uploadAssetApi
 } from '../api/storage.api';
-import type {ListParams, ListResults} from '../types/list.types';
+import type {ListParams} from '../types/list.types';
 import type {SatelliteOptions} from '../types/satellite.types';
 import type {Assets} from '../types/storage.types';
 import {sha256ToBase64String} from '../utils/crypto.utils';
@@ -102,7 +103,7 @@ export const listAssets = async ({
 }): Promise<Assets> => {
   const satellite = {...satelliteOptions, identity: getIdentity(satelliteOptions?.identity)};
 
-  const {items, ...rest}: ListResults<AssetNoContent> = await listAssetsApi({
+  const {items, ...rest} = await listAssetsApi({
     collection,
     satellite,
     filter: filter ?? {}
@@ -151,6 +152,32 @@ export const listAssets = async ({
     assets,
     ...rest
   };
+};
+
+/**
+ * Counts assets in a collection with optional filtering.
+ * @param {Object} params - The parameters for counting the assets.
+ * @param {string} params.collection - The name of the collection.
+ * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @param {ListParams} [params.filter] - The filter parameters for narrowing down the count.
+ * @returns {Promise<bigint>} A promise that resolves to the count of assets as a bigint.
+ */
+export const countAssets = async ({
+  collection,
+  satellite: satelliteOptions,
+  filter
+}: {
+  collection: string;
+  satellite?: SatelliteOptions;
+  filter?: ListParams;
+}): Promise<bigint> => {
+  const satellite = {...satelliteOptions, identity: getIdentity(satelliteOptions?.identity)};
+
+  return countAssetsApi({
+    collection,
+    satellite,
+    filter: filter ?? {}
+  });
 };
 
 /**

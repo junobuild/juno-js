@@ -1,4 +1,5 @@
 import {
+  countDocs as countDocsApi,
   deleteDoc as deleteDocApi,
   deleteManyDocs as deleteManyDocsApi,
   getDoc as getDocApi,
@@ -161,4 +162,26 @@ export const listDocs = async <D>({
   const identity = getIdentity(satellite?.identity);
 
   return listDocsApi<D>({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
+};
+
+/**
+ * Counts documents in a collection with optional filtering.
+ * @param {Object} params - The parameters for counting the documents.
+ * @param {string} params.collection - The name of the collection.
+ * @param {ListParams} [params.filter] - Optional filter parameters.
+ * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
+ * @returns {Promise<bigint>} A promise that resolves to the count of documents as a bigint.
+ */
+export const countDocs = async ({
+  satellite,
+  filter,
+  ...rest
+}: {
+  collection: string;
+  filter?: ListParams;
+  satellite?: SatelliteOptions;
+}): Promise<bigint> => {
+  const identity = getIdentity(satellite?.identity);
+
+  return countDocsApi({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
 };

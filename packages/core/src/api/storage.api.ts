@@ -5,7 +5,6 @@ import type {
   AssetNoContent,
   InitAssetKey,
   InitUploadResult,
-  ListResults as ListAssetsApi,
   _SERVICE as SatelliteActor
 } from '../../declarations/satellite/satellite.did';
 import type {ListParams, ListResults} from '../types/list.types';
@@ -39,7 +38,7 @@ export const listAssets = async ({
   satellite: Satellite;
   filter: ListParams;
 }): Promise<ListResults<AssetNoContent>> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
+  const {list_assets} = await getSatelliteActor(satellite);
 
   const {
     items: assets,
@@ -47,7 +46,7 @@ export const listAssets = async ({
     items_page,
     matches_length,
     matches_pages
-  }: ListAssetsApi = await actor.list_assets(collection, toListParams(filter));
+  } = await list_assets(collection, toListParams(filter));
 
   return {
     items: assets.map(([_, asset]) => asset),
@@ -56,6 +55,20 @@ export const listAssets = async ({
     matches_length,
     matches_pages: fromNullable(matches_pages)
   };
+};
+
+export const countAssets = async ({
+  collection,
+  satellite,
+  filter
+}: {
+  collection: string;
+  satellite: Satellite;
+  filter: ListParams;
+}): Promise<bigint> => {
+  const {count_assets} = await getSatelliteActor(satellite);
+
+  return count_assets(collection, toListParams(filter));
 };
 
 export const deleteAsset = async ({

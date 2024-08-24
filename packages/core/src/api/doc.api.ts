@@ -1,11 +1,5 @@
 import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
-import type {
-  DelDoc,
-  Doc as DocApi,
-  ListResults_1 as ListDocsApi,
-  _SERVICE as SatelliteActor,
-  SetDoc
-} from '../../declarations/satellite/satellite.did';
+import type {DelDoc, SetDoc} from '../../declarations/satellite/satellite.did';
 import type {Doc} from '../types/doc.types';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
@@ -22,9 +16,9 @@ export const getDoc = async <D>({
   collection: string;
   satellite: Satellite;
 } & Pick<Doc<D>, 'key'>): Promise<Doc<D> | undefined> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
+  const {get_doc} = await getSatelliteActor(satellite);
 
-  const doc: DocApi | undefined = fromNullable(await actor.get_doc(collection, key));
+  const doc = fromNullable(await get_doc(collection, key));
 
   if (isNullish(doc)) {
     return undefined;
@@ -149,10 +143,12 @@ export const listDocs = async <D>({
   filter: ListParams;
   satellite: Satellite;
 }): Promise<ListResults<Doc<D>>> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
+  const {list_docs} = await getSatelliteActor(satellite);
 
-  const {items, items_page, items_length, matches_length, matches_pages}: ListDocsApi =
-    await actor.list_docs(collection, toListParams(filter));
+  const {items, items_page, items_length, matches_length, matches_pages} = await list_docs(
+    collection,
+    toListParams(filter)
+  );
 
   const docs: Doc<D>[] = [];
 
@@ -176,4 +172,18 @@ export const listDocs = async <D>({
     matches_length,
     matches_pages: fromNullable(matches_pages)
   };
+};
+
+export const countDocs = async ({
+  collection,
+  filter,
+  satellite
+}: {
+  collection: string;
+  filter: ListParams;
+  satellite: Satellite;
+}): Promise<bigint> => {
+  const {count_docs} = await getSatelliteActor(satellite);
+
+  return count_docs(collection, toListParams(filter));
 };

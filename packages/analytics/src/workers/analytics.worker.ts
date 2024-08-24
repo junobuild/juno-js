@@ -3,7 +3,14 @@ import {assertNonNullish, debounce, isNullish, nonNullish} from '@junobuild/util
 import {isbot} from 'isbot';
 import type {AnalyticKey, Result_1, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';
-import {delPageViews, delTrackEvents, getPageViews, getTrackEvents} from '../services/idb.services';
+import {
+  delPageViews,
+  delPerformanceMetrics,
+  delTrackEvents,
+  getPageViews,
+  getPerformanceMetrics,
+  getTrackEvents
+} from '../services/idb.services';
 import type {Environment, EnvironmentActor} from '../types/env';
 import type {IdbKey, IdbTrackEvent} from '../types/idb';
 import type {PostMessage, PostMessageInitEnvData} from '../types/post-message';
@@ -49,7 +56,8 @@ const init = async (environment: PostMessageInitEnvData) => {
 
 let timer: NodeJS.Timeout | undefined = undefined;
 
-const sync = async () => await Promise.all([syncPageViews(), syncTrackEvents()]);
+const sync = async () =>
+  await Promise.all([syncPageViews(), syncTrackEvents(), syncPerformanceMetrics()]);
 
 const destroy = async () => {
   // In case there is something left to sync
@@ -78,6 +86,7 @@ const startTimer = async () => {
 // We use a timer in addition to debouncing the tracked pages and events. This means that if some data is not synchronized with the backend because a job is already in progress, the timer will trigger data syncing on the next click of the clock.
 let syncViewsInProgress = false;
 let syncEventsInProgress = false;
+let syncMetricsInProgress = false;
 
 const syncPageViews = async () => {
   if (!isEnvInitialized(env)) {
@@ -174,6 +183,53 @@ const syncTrackEvents = async () => {
 
 const debounceSyncTrackEvents = debounce(async () => await syncTrackEvents(), 250);
 
+const syncPerformanceMetrics = async () => {
+  if (!isEnvInitialized(env)) {
+    return;
+  }
+
+  if (env?.options?.performance === false) {
+    return;
+  }
+
+  // One batch at a time to avoid to process multiple times the same entries
+  if (syncMetricsInProgress) {
+    return;
+  }
+
+  const entries = await getPerformanceMetrics();
+
+  if (isNullish(entries) || entries.length === 0) {
+    // Nothing to do
+    return;
+  }
+
+  syncMetricsInProgress = true;
+
+  try {
+    const actor = await getOrbiterActor(env);
+
+    const results = await actor.set_performance_metrics(
+      entries.map(([key, {collected_at, ...entry}]) => [
+        ids({key: key as IdbKey, collected_at}),
+        {...entry, ...satelliteId(env as EnvironmentActor)}
+      ])
+    );
+
+    await delPerformanceMetrics(entries.map(([key, _]) => key));
+
+    consoleWarn(results);
+  } catch (err: unknown) {
+    // The canister does not trap so, if we land here there was a network issue or so.
+    // So we keep the entries to try to transmit those next time.
+    console.error(err);
+  }
+
+  syncMetricsInProgress = false;
+};
+
+// Track
+
 const trackPageView = () => {
   if (!isEnvInitialized(env)) {
     return;
@@ -197,6 +253,8 @@ const trackPageEvent = () => {
 
   debounceSyncTrackEvents();
 };
+
+// Utilities
 
 const ids = ({key, collected_at}: {key: IdbKey; collected_at: bigint}): AnalyticKey => ({
   collected_at,

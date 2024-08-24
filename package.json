@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/juno-js",
-  "version": "0.0.87",
+  "version": "0.0.88",
   "description": "JavaScript libraries for interfacing with Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -21,7 +21,6 @@
     "packages/storage",
     "packages/core",
     "packages/admin",
-    "packages/ledger",
     "packages/analytics",
     "packages/core-peer",
     "packages/cli-tools",
@@ -50,7 +49,7 @@
     {
       "name": "@junobuild/admin",
       "path": "./packages/admin/dist/index.js",
-      "limit": "20 kB",
+      "limit": "15 kB",
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
@@ -62,32 +61,22 @@
     {
       "name": "@junobuild/core",
       "path": "./packages/core/dist/index.js",
-      "limit": "120 kB"
+      "limit": "85 kB"
     },
     {
       "name": "@junobuild/core-worker",
       "path": "./packages/core/dist/workers/auth.worker.js",
-      "limit": "100 kB"
+      "limit": "55 kB"
     },
     {
       "name": "@junobuild/core-peer",
       "path": "./packages/core-peer/dist/index.js",
-      "limit": "20 kB",
+      "limit": "10 kB",
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/principal",
         "@dfinity/auth-client"
-      ]
-    },
-    {
-      "name": "@junobuild/ledger",
-      "path": "./packages/ledger/dist/index.js",
-      "limit": "7 kB",
-      "ignore": [
-        "@dfinity/agent",
-        "@dfinity/candid",
-        "@dfinity/principal"
       ]
     },
     {
@@ -101,7 +90,7 @@
     {
       "name": "@junobuild/analytics",
       "path": "./packages/analytics/dist/index.js",
-      "limit": "4 kB",
+      "limit": "10 kB",
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
@@ -111,7 +100,7 @@
     {
       "name": "@junobuild/analytics-worker",
       "path": "./packages/analytics/dist/workers/analytics.worker.js",
-      "limit": "110 kB"
+      "limit": "85 kB"
     },
     {
       "name": "@junobuild/config",

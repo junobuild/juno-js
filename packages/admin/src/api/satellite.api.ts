@@ -190,8 +190,8 @@ export const countDocs = async ({
   collection: string;
   satellite: SatelliteParameters;
 }): Promise<bigint> => {
-  const {count_docs} = await getSatelliteActor(satellite);
-  return count_docs(collection);
+  const {count_collection_docs} = await getSatelliteActor(satellite);
+  return count_collection_docs(collection);
 };
 
 export const countAssets = async ({
@@ -201,8 +201,8 @@ export const countAssets = async ({
   collection: string;
   satellite: SatelliteParameters;
 }): Promise<bigint> => {
-  const {count_assets} = await getSatelliteActor(satellite);
-  return count_assets(collection);
+  const {count_collection_assets} = await getSatelliteActor(satellite);
+  return count_collection_assets(collection);
 };
 
 export const deleteDocs = async ({

@@ -30,23 +30,10 @@ function install_principal_peer() {
   npm i @dfinity/principal@latest --workspace=packages/"$package" --save-peer
 }
 
-function rm_icjs_utils() {
-  local package=$1
-
-  npm rm @dfinity/utils --workspace=packages/"$package"
-}
-
-function install_icjs_utils_next_peer() {
-  local package=$1
-
-  npm i @dfinity/utils@next --workspace=packages/"$package" --save-peer
-}
-
 PACKAGES=core
-PACKAGES_PEER=admin,ledger,console,storage,core-peer
+PACKAGES_PEER=admin,console,storage,core-peer
 PACKAGES_AUTH_CLIENT_PEER=core-peer
 PACKAGES_PEER_UTILS=utils
-PACKAGES_PEER_ICJS_UTILS=ledger
 
 # Remove agent-js libraries from all packages first to avoid resolve conflicts between those
 for package in $(echo $PACKAGES_PEER_UTILS | sed "s/,/ /g"); do
@@ -59,14 +46,6 @@ done
 
 for package in $(echo $PACKAGES_PEER | sed "s/,/ /g"); do
   rm_agent "$package"
-done
-
-for package in $(echo $PACKAGES_PEER_ICJS_UTILS | sed "s/,/ /g"); do
-  rm_icjs_utils "$package"
-done
-
-for package in $(echo $PACKAGES_PEER_ICJS_UTILS | sed "s/,/ /g"); do
-  install_icjs_utils_next_peer "$package"
 done
 
 for package in $(echo $PACKAGES_PEER_UTILS | sed "s/,/ /g"); do

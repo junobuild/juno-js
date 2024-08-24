@@ -89,9 +89,14 @@ export type NavigationType =
   | {Prerender: null};
 export interface OrbiterSatelliteConfig {
   updated_at: bigint;
+  features: [] | [OrbiterSatelliteFeatures];
   created_at: bigint;
   version: [] | [bigint];
-  enabled: boolean;
+}
+export interface OrbiterSatelliteFeatures {
+  performance_metrics: boolean;
+  track_events: boolean;
+  page_views: boolean;
 }
 export interface PageView {
   title: string;
@@ -162,8 +167,8 @@ export interface SetPerformanceMetric {
   user_agent: [] | [string];
 }
 export interface SetSatelliteConfig {
+  features: [] | [OrbiterSatelliteFeatures];
   version: [] | [bigint];
-  enabled: boolean;
 }
 export interface SetTrackEvent {
   updated_at: [] | [bigint];

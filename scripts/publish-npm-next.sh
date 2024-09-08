@@ -3,7 +3,7 @@
 function publish_npm() {
   local lib=$1
 
-  npm publish --workspace=packages/"$lib" --provenance --access public --tag next
+  npm publish --prefix dist --workspace=packages/"$lib" --provenance --access public --tag next
 }
 
 # Tips: libs use by other libs first

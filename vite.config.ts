@@ -6,6 +6,6 @@ export default defineConfig({
     include: ['packages/src/**/*.spec.ts'],
     globals: true,
     watch: false,
-    passWithNoTests: true,
+    passWithNoTests: true
   }
 });

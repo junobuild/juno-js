@@ -25,6 +25,7 @@
     "packages/analytics",
     "packages/core-peer",
     "packages/cli-tools",
+    "packages/did-tools",
     "packages/config-loader",
     "packages/console"
   ],

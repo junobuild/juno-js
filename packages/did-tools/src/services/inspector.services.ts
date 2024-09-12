@@ -17,6 +17,7 @@ import {
   isTSUnknownKeyword,
   isTSVoidKeyword,
   type Identifier,
+  type StringLiteral,
   type TSMethodSignature,
   type TSNamedTupleMember,
   type TSPropertySignature,
@@ -24,7 +25,7 @@ import {
 } from '@babel/types';
 import {isNullish, nonNullish} from '@junobuild/utils';
 import {readFile} from 'node:fs/promises';
-import {MethodSignature} from '../types/method-signature';
+import type {MethodSignature} from '../types/method-signature';
 
 const {parse} = babelParser;
 
@@ -46,6 +47,7 @@ export const collectMethodSignatures = async ({
 
   // I tried hard to use an import but, no success. When build and pack and imported in the CLI ultimately it does not work when used.
   // Example of error: TypeError: (0 , aSe.default) is not a function
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const {default: traverse} = require('@babel/traverse');
 
   traverse(ast, {
@@ -146,7 +148,20 @@ const membersToMethodSignatures = (
 ): MethodSignature | undefined => {
   const {type, key} = member;
 
-  const name = (key as Identifier | undefined)?.name;
+  const findName = (): string | undefined => {
+    if (key.type === 'Identifier') {
+      return (key as Identifier).name;
+    }
+
+    // didc generate function name with quotes, congrats.
+    if (key.type === 'StringLiteral') {
+      return (key as StringLiteral).value;
+    }
+
+    return undefined;
+  };
+
+  const name = findName();
 
   if (isNullish(name)) {
     return undefined;

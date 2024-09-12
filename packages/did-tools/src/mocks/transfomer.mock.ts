@@ -10,6 +10,14 @@ export const build_version = async (): Promise<string> => {
 \treturn await build_version();
 }
 
+export const hello_world = async (value0: Hello, value1: string, value2: bigint): Promise<Result> => {
+\tconst {hello_world} = await getSatelliteExtendedActor<SatelliteActor>({
+\t\tidlFactory
+\t});
+
+\treturn await hello_world(value0, value1, value2);
+}
+
 export const world = async (value0: Hello, value1: string): Promise<string> => {
 \tconst {world} = await getSatelliteExtendedActor<SatelliteActor>({
 \t\tidlFactory
@@ -36,6 +44,14 @@ export const build_version = async () => {
 \t});
 
 \treturn await build_version();
+}
+
+export const hello_world = async (value0, value1, value2) => {
+\tconst {hello_world} = await getSatelliteExtendedActor({
+\t\tidlFactory
+\t});
+
+\treturn await hello_world(value0, value1, value2);
 }
 
 export const world = async (value0, value1) => {

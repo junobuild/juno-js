@@ -33,6 +33,7 @@
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@size-limit/esbuild": "^11.1.4",
     "@size-limit/preset-small-lib": "^11.1.4",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.14.12",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "esbuild": "^0.23.0",

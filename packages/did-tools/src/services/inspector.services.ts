@@ -1,6 +1,5 @@
 import type {ParserOptions} from '@babel/parser';
 import * as babelParser from '@babel/parser';
-import traverse from '@babel/traverse';
 import {
   isTSAnyKeyword,
   isTSArrayType,
@@ -28,7 +27,6 @@ import {readFile} from 'node:fs/promises';
 import {MethodSignature} from '../types/method-signature';
 
 const {parse} = babelParser;
-const {default: babelTraverse} = traverse;
 
 const BABEL_PARSER_OPTIONS: ParserOptions = {
   sourceType: 'module',
@@ -46,7 +44,11 @@ export const collectMethodSignatures = async ({
 
   const result: MethodSignature[] = [];
 
-  babelTraverse(ast, {
+  // I tried hard to use an import but, no success. When build and pack and imported in the CLI ultimately it does not work when used.
+  // Example of error: TypeError: (0 , aSe.default) is not a function
+  const {default: traverse} = require('@babel/traverse');
+
+  traverse(ast, {
     TSInterfaceDeclaration(path) {
       if (path.node.id.name === '_SERVICE') {
         const members = path.node.body.body;

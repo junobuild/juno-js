@@ -130,14 +130,15 @@ const visit = ({
           .filter((member) => isPropertySignature(member) || isMethodSignature(member))
           .map((member) => checker.getSymbolAtLocation(member.name as PropertyName))
           .filter((symbol) => symbol !== undefined)
-          .map((symbol) =>
-            checker.getTypeOfSymbolAtLocation(
+          .map((symbol) => ({
+            name: symbol?.getName(),
+            type: checker.getTypeOfSymbolAtLocation(
               symbol as TypeScriptSymbol,
               (symbol as TypeScriptSymbol).valueDeclaration as Declaration
             )
-          )
-          .filter((member) => member.symbol.getName() === 'ActorMethod')
-          .map((member) => {
+          }))
+          .filter(({name, type}) => name !== undefined && type.symbol.getName() === 'ActorMethod')
+          .map(({type: member, name}) => {
             const paramType = checker.typeToString(
               checker.getTypeArguments(member as TypeReference)[0]
             );
@@ -155,6 +156,7 @@ const visit = ({
                     .map((type) => type.trim());
 
             return {
+              name,
               paramType: paramArray,
               returnType: returnType
             };

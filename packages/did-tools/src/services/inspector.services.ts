@@ -1,6 +1,6 @@
 import type {ParserOptions} from '@babel/parser';
 import * as babelParser from '@babel/parser';
-import traverse from '@babel/traverse';
+import * as babelTraverse from '@babel/traverse';
 import * as babelTypes from '@babel/types';
 import {
   type Identifier,
@@ -14,6 +14,13 @@ import {readFile} from 'node:fs/promises';
 import {MethodSignature} from '../types/method-signature';
 
 const {parse} = babelParser;
+
+console.log('------------------------------->', parse);
+
+const { default: traverse } = babelTraverse;
+
+console.log('------------------------------->', traverse);
+
 const {
   isTSAnyKeyword,
   isTSArrayType,
@@ -31,6 +38,8 @@ const {
   isTSUnknownKeyword,
   isTSVoidKeyword
 } = babelTypes;
+
+console.log('------------------------------->', isTSVoidKeyword);
 
 const BABEL_PARSER_OPTIONS: ParserOptions = {
   sourceType: 'module',

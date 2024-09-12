@@ -1,7 +1,7 @@
 import type {MethodSignature} from '../types/method-signature';
 import type {TransformerOptions} from '../types/transformer-options';
 
-const template = `import type {_SERVICE as SatelliteActor} from './satellite.did';
+const template = `import type {_SERVICE as SatelliteActor%IMPORTS%} from './satellite.did';
 import {idlFactory} from './satellite.factory.did.js';
 import { getSatelliteExtendedActor } from '@junobuild/%CORE_LIB%';
 
@@ -25,10 +25,12 @@ const methodTemplateJavaScript = `export const %METHOD_NAME% = async (%CALL_PARA
 }`;
 
 export const parseApi = ({
-  signatures,
+  methods: signatures,
+  imports,
   transformerOptions: {coreLib, outputLanguage}
 }: {
-  signatures: MethodSignature[];
+  methods: MethodSignature[];
+  imports: string[];
   transformerOptions: TransformerOptions;
 }): string => {
   const langTemplate =
@@ -50,6 +52,7 @@ export const parseApi = ({
   return template
     .replace('%CORE_LIB%', coreLib ?? 'core')
     .replace('%METHODS%', methods)
+    .replace('%IMPORTS%', imports.length === 0 ? '' : `, ${imports.join(', ')}`)
     .trim();
 };
 

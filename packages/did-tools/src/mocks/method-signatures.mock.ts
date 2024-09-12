@@ -12,3 +12,5 @@ export const mockMethodSignatures = [
   },
   {name: 'yolo', paramsType: ['Hello'], returnType: 'string'}
 ];
+
+export const mockImports = ['Hello', 'Result'];

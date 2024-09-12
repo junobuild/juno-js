@@ -34,16 +34,18 @@ const BABEL_PARSER_OPTIONS: ParserOptions = {
   plugins: ['typescript']
 };
 
-export const collectMethodSignatures = async ({
+export const collectApi = async ({
   inputFile
 }: {
   inputFile: string;
-}): Promise<MethodSignature[]> => {
+}): Promise<{methods: MethodSignature[]; imports: string[]}> => {
   const fileContent = await readFile(inputFile, 'utf-8');
 
   const ast = parse(fileContent, BABEL_PARSER_OPTIONS);
 
   const result: MethodSignature[] = [];
+  const interfaces: string[] = [];
+  const types: string[] = [];
 
   // I tried hard to use an import but, no success. When build and pack and imported in the CLI ultimately it does not work when used.
   // Example of error: TypeError: (0 , aSe.default) is not a function
@@ -64,11 +66,20 @@ export const collectMethodSignatures = async ({
             }
           }
         }
+      } else {
+        interfaces.push(path.node.id.name);
       }
+    },
+
+    TSTypeAliasDeclaration(path) {
+      types.push(path.node.id.name);
     }
   });
 
-  return result;
+  return {
+    methods: result,
+    imports: [...interfaces, ...types]
+  };
 };
 
 const getTypeName = (

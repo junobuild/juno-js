@@ -1,12 +1,21 @@
 import {parse, type ParserOptions} from '@babel/parser';
 import traverse from '@babel/traverse';
 import {
+  isTSAnyKeyword,
   isTSArrayType,
+  isTSBigIntKeyword,
   isTSBooleanKeyword,
+  isTSNeverKeyword,
+  isTSNullKeyword,
   isTSNumberKeyword,
+  isTSObjectKeyword,
   isTSStringKeyword,
+  isTSSymbolKeyword,
   isTSTupleType,
   isTSTypeReference,
+  isTSUndefinedKeyword,
+  isTSUnknownKeyword,
+  isTSVoidKeyword,
   type Identifier,
   type TSMethodSignature,
   type TSNamedTupleMember,
@@ -72,6 +81,42 @@ const getTypeName = (
 
   if (isTSBooleanKeyword(typeAnnotation)) {
     return 'boolean';
+  }
+
+  if (isTSBigIntKeyword(typeAnnotation)) {
+    return 'bigint';
+  }
+
+  if (isTSSymbolKeyword(typeAnnotation)) {
+    return 'symbol';
+  }
+
+  if (isTSNullKeyword(typeAnnotation)) {
+    return 'null';
+  }
+
+  if (isTSUndefinedKeyword(typeAnnotation)) {
+    return 'undefined';
+  }
+
+  if (isTSVoidKeyword(typeAnnotation)) {
+    return 'void';
+  }
+
+  if (isTSNeverKeyword(typeAnnotation)) {
+    return 'never';
+  }
+
+  if (isTSUnknownKeyword(typeAnnotation)) {
+    return 'unknown';
+  }
+
+  if (isTSAnyKeyword(typeAnnotation)) {
+    return 'any';
+  }
+
+  if (isTSObjectKeyword(typeAnnotation)) {
+    return 'object';
   }
 
   if (isTSTupleType(typeAnnotation)) {

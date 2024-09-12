@@ -54,6 +54,9 @@ export const collectMethodSignatures = async ({
 
   traverse(ast, {
     TSInterfaceDeclaration(path) {
+
+      console.log('_________________________________', path.node.id.name);
+
       if (path.node.id.name === '_SERVICE') {
         const members = path.node.body.body;
 

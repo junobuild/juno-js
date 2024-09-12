@@ -8,7 +8,7 @@
 
 # Juno DID tools
 
-Tools for generating services and APIs from DID files.
+Tools for generating APIs from DID files.
 
 ## License
 

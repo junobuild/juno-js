@@ -76,7 +76,7 @@ const mapSignature = ({
   PARAMS: string;
   CALL_PARAMS: string;
 } => {
-  const camelize = (s: string): string => s.replace(/-./g, (x) => x[1].toUpperCase());
+  const camelize = (s: string): string => s.replace(/_./g, (x) => x[1].toUpperCase());
 
   const methodName = camelize(name);
 

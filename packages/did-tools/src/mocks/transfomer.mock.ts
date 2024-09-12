@@ -2,7 +2,7 @@ export const mockTransformedCoreTS = `import type {_SERVICE as SatelliteActor} f
 import {idlFactory} from './satellite.factory.did.js';
 import { getSatelliteExtendedActor } from '@junobuild/core';
 
-export const build_version = async (): Promise<string> => {
+export const buildVersion = async (): Promise<string> => {
 \tconst {build_version} = await getSatelliteExtendedActor<SatelliteActor>({
 \t\tidlFactory
 \t});
@@ -10,12 +10,12 @@ export const build_version = async (): Promise<string> => {
 \treturn await build_version();
 }
 
-export const hello_world = async (value0: Hello, value1: string, value2: bigint): Promise<Result> => {
-\tconst {hello_world} = await getSatelliteExtendedActor<SatelliteActor>({
+export const helloWorldWorld = async (value0: Hello, value1: string, value2: bigint): Promise<Result> => {
+\tconst {hello_world_world} = await getSatelliteExtendedActor<SatelliteActor>({
 \t\tidlFactory
 \t});
 
-\treturn await hello_world(value0, value1, value2);
+\treturn await hello_world_world(value0, value1, value2);
 }
 
 export const world = async (value0: Hello, value1: string): Promise<string> => {
@@ -38,7 +38,7 @@ export const mockTransformedCoreJS = `import {_SERVICE as SatelliteActor} from '
 import {idlFactory} from './satellite.factory.did.js';
 import { getSatelliteExtendedActor } from '@junobuild/core';
 
-export const build_version = async () => {
+export const buildVersion = async () => {
 \tconst {build_version} = await getSatelliteExtendedActor({
 \t\tidlFactory
 \t});
@@ -46,12 +46,12 @@ export const build_version = async () => {
 \treturn await build_version();
 }
 
-export const hello_world = async (value0, value1, value2) => {
-\tconst {hello_world} = await getSatelliteExtendedActor({
+export const helloWorldWorld = async (value0, value1, value2) => {
+\tconst {hello_world_world} = await getSatelliteExtendedActor({
 \t\tidlFactory
 \t});
 
-\treturn await hello_world(value0, value1, value2);
+\treturn await hello_world_world(value0, value1, value2);
 }
 
 export const world = async (value0, value1) => {

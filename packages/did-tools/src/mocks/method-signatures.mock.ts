@@ -1,7 +1,7 @@
 export const mockMethodSignatures = [
   {name: 'build_version', paramsType: [], returnType: 'string'},
   {
-    name: 'hello_world',
+    name: 'hello_world_world',
     paramsType: ['Hello', 'string', 'bigint'],
     returnType: 'Result'
   },

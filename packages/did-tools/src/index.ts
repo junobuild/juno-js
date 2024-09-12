@@ -1,12 +1,12 @@
 import {writeFile} from 'node:fs/promises';
 import type {CompilerOptions} from 'typescript';
 import {collectMethodSignatures} from './services/inspector.services';
-import {generateService} from './services/transformer.services';
+import {parseApi} from './services/parser.services';
 import type {TransformerOptions} from './types/transformer-options';
 
 export type * from './types/transformer-options';
 
-export const generate = async ({
+export const generateApi = async ({
   inputFile,
   outputFile,
   compilerOptions,
@@ -22,10 +22,10 @@ export const generate = async ({
     compilerOptions
   });
 
-  const service = generateService({
+  const api = parseApi({
     signatures,
     transformerOptions
   });
 
-  await writeFile(outputFile, service, 'utf-8');
+  await writeFile(outputFile, api, 'utf-8');
 };

@@ -24,7 +24,7 @@ const methodTemplateJavaScript = `export const %METHOD_NAME% = async (%CALL_PARA
 \treturn await %DID_METHOD_NAME%(%CALL_PARAMS%);
 }`;
 
-export const generateService = ({
+export const parseApi = ({
   signatures,
   transformerOptions: {coreLib, outputLanguage}
 }: {

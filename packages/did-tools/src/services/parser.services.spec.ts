@@ -1,10 +1,10 @@
 import {mockMethodSignatures} from '../mocks/method-signatures.mock';
 import {mockTransformedCoreJS, mockTransformedCoreTS} from '../mocks/transfomer.mock';
-import {generateService} from './transformer.services';
+import {parseApi} from './parser.services';
 
-describe('transformer-services', () => {
-  it('should generate TypeScript with core lib', () => {
-    const result = generateService({
+describe('parser-services', () => {
+  it('should parse TypeScript with core lib', () => {
+    const result = parseApi({
       signatures: mockMethodSignatures,
       transformerOptions: {
         outputLanguage: 'ts'
@@ -14,8 +14,8 @@ describe('transformer-services', () => {
     expect(result.trim()).toEqual(mockTransformedCoreTS);
   });
 
-  it('should generate JavaScript with core lib', () => {
-    const result = generateService({
+  it('should parse JavaScript with core lib', () => {
+    const result = parseApi({
       signatures: mockMethodSignatures,
       transformerOptions: {
         outputLanguage: 'js'
@@ -26,7 +26,7 @@ describe('transformer-services', () => {
   });
 
   it('should import from core-peer', () => {
-    const result = generateService({
+    const result = parseApi({
       signatures: mockMethodSignatures,
       transformerOptions: {
         outputLanguage: 'ts',

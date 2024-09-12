@@ -5,6 +5,7 @@ import type { IDL } from '@dfinity/candid';
 export interface Hello { 'world' : string }
 export interface _SERVICE {
     'build_version' : ActorMethod<[], string>,
+    'world' : ActorMethod<[Hello, string], string>,
     'yolo' : ActorMethod<[Hello], string>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;

@@ -1,15 +1,16 @@
 import {mockMethodSignatures} from '../mocks/method-signatures.mock';
 import {generateService} from './transformer.services';
+import {mockTransformedCoreTS} from "../mocks/transfomer.mock";
 
 describe('transformer-services', () => {
-  it('should generate js with core lib', () => {
+  it('should generate TypeScript with core lib', () => {
     const result = generateService({
       signatures: mockMethodSignatures,
       transformerOptions: {
-        outputLanguage: 'js'
+        outputLanguage: 'ts'
       }
     });
 
-    console.log(result);
+    expect(result.trim()).toEqual(mockTransformedCoreTS);
   });
 });

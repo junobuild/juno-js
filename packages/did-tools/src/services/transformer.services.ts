@@ -36,7 +36,7 @@ export const generateService = ({
     })
     .join('\n\n');
 
-  return template.replace('%CORE_LIB%', coreLib ?? 'core').replace('%METHODS%', methods);
+  return template.replace('%CORE_LIB%', coreLib ?? 'core').replace('%METHODS%', methods).trim();
 };
 
 const mapSignature = ({
@@ -50,7 +50,7 @@ const mapSignature = ({
   PARAMS: string;
   DID_PARAMS: string;
 } => {
-  const camelize = (s) => s.replace(/-./g, (x) => x[1].toUpperCase());
+  const camelize = (s: string): string => s.replace(/-./g, (x) => x[1].toUpperCase());
 
   const methodName = camelize(name);
 
@@ -61,7 +61,7 @@ const mapSignature = ({
 
   const paramKeysText = `${params.map(({param}) => param).join(', ')}`;
 
-  const paramsText = `{${paramKeysText}}: {${params.map(({param, type}) => `${param}: ${type}`).join(', ')}}`;
+  const paramsText = params.map(({param, type}) => `${param}: ${type}`).join(', ');
 
   return {
     METHOD_NAME: methodName,

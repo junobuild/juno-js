@@ -1,6 +1,21 @@
-import {parse, type ParserOptions} from '@babel/parser';
-import traverse from '@babel/traverse';
+import type {ParserOptions} from '@babel/parser';
+import * as babelParser from '@babel/parser';
+import * as babelTraverse from '@babel/traverse';
+import * as babelTypes from '@babel/types';
 import {
+  type Identifier,
+  type TSMethodSignature,
+  type TSNamedTupleMember,
+  type TSPropertySignature,
+  type TSType
+} from '@babel/types';
+import {isNullish, nonNullish} from '@junobuild/utils';
+import {readFile} from 'node:fs/promises';
+import {MethodSignature} from '../types/method-signature';
+
+const {parse} = babelParser;
+const {traverse} = babelTraverse;
+const {
   isTSAnyKeyword,
   isTSArrayType,
   isTSBigIntKeyword,
@@ -15,16 +30,8 @@ import {
   isTSTypeReference,
   isTSUndefinedKeyword,
   isTSUnknownKeyword,
-  isTSVoidKeyword,
-  type Identifier,
-  type TSMethodSignature,
-  type TSNamedTupleMember,
-  type TSPropertySignature,
-  type TSType
-} from '@babel/types';
-import {isNullish, nonNullish} from '@junobuild/utils';
-import {readFile} from 'node:fs/promises';
-import {MethodSignature} from '../types/method-signature';
+  isTSVoidKeyword
+} = babelTypes;
 
 const BABEL_PARSER_OPTIONS: ParserOptions = {
   sourceType: 'module',

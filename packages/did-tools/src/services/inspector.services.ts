@@ -14,13 +14,7 @@ import {readFile} from 'node:fs/promises';
 import {MethodSignature} from '../types/method-signature';
 
 const {parse} = babelParser;
-
-console.log('------------------------------->', parse);
-
 const { default: traverse } = babelTraverse;
-
-console.log('------------------------------->', traverse);
-
 const {
   isTSAnyKeyword,
   isTSArrayType,
@@ -53,9 +47,13 @@ export const collectMethodSignatures = async ({
 }): Promise<MethodSignature[]> => {
   const fileContent = await readFile(inputFile, 'utf-8');
 
+  console.log('------------------------------->', '000000');
+
   const ast = parse(fileContent, BABEL_PARSER_OPTIONS);
 
   const result: MethodSignature[] = [];
+
+  console.log('------------------------------->', '111111');
 
   traverse(ast, {
     TSInterfaceDeclaration(path) {
@@ -81,67 +79,100 @@ export const collectMethodSignatures = async ({
 const getTypeName = (
   typeAnnotation: TSType | TSNamedTupleMember | undefined
 ): string | 'unknown' => {
+
+  console.log('------------------------------->', '2');
+
   if (isNullish(typeAnnotation)) {
     return 'unknown';
   }
+
+  console.log('------------------------------->', '3');
 
   if (isTSTypeReference(typeAnnotation)) {
     const typeName = (typeAnnotation.typeName as Identifier)?.name;
     return typeName ?? 'unknown';
   }
 
+  console.log('------------------------------->', '4');
+
   if (isTSStringKeyword(typeAnnotation)) {
     return 'string';
   }
+
+  console.log('------------------------------->', '5');
 
   if (isTSNumberKeyword(typeAnnotation)) {
     return 'number';
   }
 
+  console.log('------------------------------->', '6');
+
   if (isTSBooleanKeyword(typeAnnotation)) {
     return 'boolean';
   }
+
+  console.log('------------------------------->', '7');
 
   if (isTSBigIntKeyword(typeAnnotation)) {
     return 'bigint';
   }
 
+  console.log('------------------------------->', '8');
+
   if (isTSSymbolKeyword(typeAnnotation)) {
     return 'symbol';
   }
+
+  console.log('------------------------------->', '9');
 
   if (isTSNullKeyword(typeAnnotation)) {
     return 'null';
   }
 
+  console.log('------------------------------->', '10');
+
   if (isTSUndefinedKeyword(typeAnnotation)) {
     return 'undefined';
   }
+
+  console.log('------------------------------->', '11');
 
   if (isTSVoidKeyword(typeAnnotation)) {
     return 'void';
   }
 
+  console.log('------------------------------->', '12');
+
   if (isTSNeverKeyword(typeAnnotation)) {
     return 'never';
   }
+
+  console.log('------------------------------->', '13');
 
   if (isTSUnknownKeyword(typeAnnotation)) {
     return 'unknown';
   }
 
+  console.log('------------------------------->', '14');
+
   if (isTSAnyKeyword(typeAnnotation)) {
     return 'any';
   }
+
+  console.log('------------------------------->', '15');
 
   if (isTSObjectKeyword(typeAnnotation)) {
     return 'object';
   }
 
+  console.log('------------------------------->', '16');
+
   if (isTSTupleType(typeAnnotation)) {
     const tupleTypes = typeAnnotation.elementTypes.map(getTypeName);
     return `[${tupleTypes.join(', ')}]`;
   }
+
+  console.log('------------------------------->', '17');
 
   if (isTSArrayType(typeAnnotation)) {
     return getTypeName(typeAnnotation.elementType) + '[]';

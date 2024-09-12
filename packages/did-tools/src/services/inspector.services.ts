@@ -126,7 +126,7 @@ const membersToMethodSignatures = ({
 
       const signature: MethodSignature = {
         name: name!,
-        paramType: paramArray,
+        paramsType: paramArray,
         returnType: returnType
       };
 

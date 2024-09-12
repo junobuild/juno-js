@@ -1,5 +1,5 @@
 export interface MethodSignature {
   name: string;
-  paramType: string[];
+  paramsType: string[];
   returnType: string;
 }

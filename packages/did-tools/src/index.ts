@@ -1,16 +1,17 @@
 import {CompilerOptions} from 'typescript';
 import {collectMethodSignatures} from './services/inspector.services';
+import {TransformerOptions} from "./types/transformer-options";
 
 export const generate = ({
   inputFile,
   outputFile,
   compilerOptions,
-  outputLanguage
+  transformerOptions
 }: {
   inputFile: string;
   outputFile: string;
   compilerOptions?: CompilerOptions;
-  outputLanguage: 'js' | 'ts';
+  transformerOptions: TransformerOptions;
 }) => {
   const signatures = collectMethodSignatures({
     inputFile,

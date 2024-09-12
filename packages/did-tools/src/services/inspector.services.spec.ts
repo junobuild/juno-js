@@ -3,8 +3,8 @@ import {mockMethodSignatures} from '../mocks/method-signatures.mock';
 import {collectMethodSignatures} from './inspector.services';
 
 describe('inspector-services', () => {
-  it('should collect method signatures', () => {
-    const result = collectMethodSignatures({
+  it('should collect method signatures', async () => {
+    const result = await collectMethodSignatures({
       inputFile: join(
         process.cwd(),
         'packages',

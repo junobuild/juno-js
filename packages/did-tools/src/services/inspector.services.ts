@@ -23,7 +23,7 @@ import {
   type TSType
 } from '@babel/types';
 import {isNullish, nonNullish} from '@junobuild/utils';
-import {readFileSync} from 'fs';
+import {readFile} from 'node:fs/promises';
 import {MethodSignature} from '../types/method-signature';
 
 const BABEL_PARSER_OPTIONS: ParserOptions = {
@@ -31,8 +31,12 @@ const BABEL_PARSER_OPTIONS: ParserOptions = {
   plugins: ['typescript']
 };
 
-export const collectMethodSignatures = ({inputFile}: {inputFile: string}): MethodSignature[] => {
-  const fileContent = readFileSync(inputFile, 'utf-8');
+export const collectMethodSignatures = async ({
+  inputFile
+}: {
+  inputFile: string;
+}): Promise<MethodSignature[]> => {
+  const fileContent = await readFile(inputFile, 'utf-8');
 
   const ast = parse(fileContent, BABEL_PARSER_OPTIONS);
 

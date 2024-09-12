@@ -1,20 +1,7 @@
 import type {ParserOptions} from '@babel/parser';
 import * as babelParser from '@babel/parser';
-import traverse from "@babel/traverse";
-import * as babelTypes from '@babel/types';
+import * as babelTraverse from '@babel/traverse';
 import {
-  type Identifier,
-  type TSMethodSignature,
-  type TSNamedTupleMember,
-  type TSPropertySignature,
-  type TSType
-} from '@babel/types';
-import {isNullish, nonNullish} from '@junobuild/utils';
-import {readFile} from 'node:fs/promises';
-import {MethodSignature} from '../types/method-signature';
-
-const {parse} = babelParser;
-const {
   isTSAnyKeyword,
   isTSArrayType,
   isTSBigIntKeyword,
@@ -29,8 +16,19 @@ const {
   isTSTypeReference,
   isTSUndefinedKeyword,
   isTSUnknownKeyword,
-  isTSVoidKeyword
-} = babelTypes;
+  isTSVoidKeyword,
+  type Identifier,
+  type TSMethodSignature,
+  type TSNamedTupleMember,
+  type TSPropertySignature,
+  type TSType
+} from '@babel/types';
+import {isNullish, nonNullish} from '@junobuild/utils';
+import {readFile} from 'node:fs/promises';
+import {MethodSignature} from '../types/method-signature';
+
+const {parse} = babelParser;
+const {default: traverse} = babelTraverse;
 
 const BABEL_PARSER_OPTIONS: ParserOptions = {
   sourceType: 'module',
@@ -54,7 +52,6 @@ export const collectMethodSignatures = async ({
 
   traverse(ast, {
     TSInterfaceDeclaration(path) {
-
       console.log('_________________________________', path.node.id.name);
 
       if (path.node.id.name === '_SERVICE') {
@@ -79,7 +76,6 @@ export const collectMethodSignatures = async ({
 const getTypeName = (
   typeAnnotation: TSType | TSNamedTupleMember | undefined
 ): string | 'unknown' => {
-
   console.log('------------------------------->', '2');
 
   if (isNullish(typeAnnotation)) {

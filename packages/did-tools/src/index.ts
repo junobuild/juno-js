@@ -1,6 +1,6 @@
 import {CompilerOptions} from 'typescript';
 import {collectMethodSignatures} from './services/inspector.services';
-import {TransformerOptions} from "./types/transformer-options";
+import {TransformerOptions} from './types/transformer-options';
 
 export const generate = ({
   inputFile,
@@ -17,6 +17,4 @@ export const generate = ({
     inputFile,
     compilerOptions
   });
-
-
 };

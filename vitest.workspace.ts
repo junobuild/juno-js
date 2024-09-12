@@ -1,7 +1,10 @@
-import { defineWorkspace } from "vitest/config";
+import {defineWorkspace} from 'vitest/config';
 
-export default defineWorkspace(['packages/**/*.spec.ts',{
+export default defineWorkspace([
+  'packages/**/*.spec.ts',
+  {
     test: {
-        globals: true
-    },
-}]);
+      globals: true
+    }
+  }
+]);

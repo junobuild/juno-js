@@ -1,6 +1,6 @@
 import type {ParserOptions} from '@babel/parser';
 import * as babelParser from '@babel/parser';
-import * as babelTraverse from '@babel/traverse';
+import traverse from '@babel/traverse';
 import {
   isTSAnyKeyword,
   isTSArrayType,
@@ -28,7 +28,7 @@ import {readFile} from 'node:fs/promises';
 import {MethodSignature} from '../types/method-signature';
 
 const {parse} = babelParser;
-const {default: traverse} = babelTraverse;
+const {default: babelTraverse} = traverse;
 
 const BABEL_PARSER_OPTIONS: ParserOptions = {
   sourceType: 'module',
@@ -50,7 +50,7 @@ export const collectMethodSignatures = async ({
 
   console.log('------------------------------->', '111111', traverse);
 
-  traverse(ast, {
+  babelTraverse(ast, {
     TSInterfaceDeclaration(path) {
       console.log('_________________________________', path.node.id.name);
 

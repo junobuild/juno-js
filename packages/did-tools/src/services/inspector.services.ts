@@ -48,7 +48,7 @@ export const collectMethodSignatures = async ({
 
   const result: MethodSignature[] = [];
 
-  console.log('------------------------------->', '111111', traverse);
+  console.log('------------------------------->', '111111', babelTraverse);
 
   babelTraverse(ast, {
     TSInterfaceDeclaration(path) {

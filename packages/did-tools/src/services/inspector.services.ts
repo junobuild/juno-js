@@ -1,25 +1,23 @@
 import {isNullish} from '@junobuild/utils';
 import {resolve} from 'path/posix';
 import {
-  CompilerOptions,
-  Declaration,
-  InterfaceDeclaration,
   ModuleKind,
-  Node,
-  PropertyName,
   ScriptTarget,
-  SourceFile,
-  TypeChecker,
-  TypeReference,
-  Symbol as TypeScriptSymbol,
   createProgram,
   forEachChild,
-  isArrowFunction,
   isInterfaceDeclaration,
   isMethodSignature,
-  isPropertySignature
+  isPropertySignature,
+  type CompilerOptions,
+  type Declaration,
+  type InterfaceDeclaration,
+  type Node,
+  type PropertyName,
+  type TypeChecker,
+  type TypeReference,
+  type Symbol as TypeScriptSymbol
 } from 'typescript';
-import {MethodSignature} from '../types/method-signature';
+import type {MethodSignature} from '../types/method-signature';
 
 const DEFAULT_COMPILER_OPTIONS: CompilerOptions = {
   target: ScriptTarget.ES2020,
@@ -56,7 +54,7 @@ export const collectMethodSignatures = ({
   for (const sourceFile of sourceFiles) {
     // Walk the tree to search for classes
     forEachChild(sourceFile, (node: Node) => {
-      const entries = visit({checker, node, sourceFile});
+      const entries = visit({checker, node});
       result.push(...entries);
     });
   }
@@ -81,15 +79,6 @@ const serializeSymbol = ({
     name: symbol.getName(),
     type: checker.typeToString(checker.getTypeOfSymbolAtLocation(symbol, symbol.valueDeclaration!))
   };
-};
-
-// https://stackoverflow.com/a/73338964/5404186
-const findDescendantArrowFunction = (node: Node): Node | undefined => {
-  if (isArrowFunction(node)) {
-    return node;
-  }
-
-  return forEachChild(node, findDescendantArrowFunction);
 };
 
 const membersToMethodSignatures = ({
@@ -135,15 +124,7 @@ const membersToMethodSignatures = ({
 };
 
 /** visit nodes finding exported classes */
-const visit = ({
-  checker,
-  node,
-  ...rest
-}: {
-  checker: TypeChecker;
-  node: Node;
-  sourceFile: SourceFile;
-}): MethodSignature[] => {
+const visit = ({checker, node}: {checker: TypeChecker; node: Node}): MethodSignature[] => {
   if (!isInterfaceDeclaration(node)) {
     return [];
   }

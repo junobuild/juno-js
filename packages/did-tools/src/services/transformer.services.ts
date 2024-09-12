@@ -1,5 +1,5 @@
-import {MethodSignature} from '../types/method-signature';
-import {TransformerOptions} from '../types/transformer-options';
+import type {MethodSignature} from '../types/method-signature';
+import type {TransformerOptions} from '../types/transformer-options';
 
 const template = `import type {_SERVICE as SatelliteActor} from './satellite.did';
 import {idlFactory} from './satellite.factory.did.js';

@@ -1,8 +1,8 @@
 import {writeFile} from 'node:fs/promises';
-import {CompilerOptions} from 'typescript';
+import type {CompilerOptions} from 'typescript';
 import {collectMethodSignatures} from './services/inspector.services';
 import {generateService} from './services/transformer.services';
-import {TransformerOptions} from './types/transformer-options';
+import type {TransformerOptions} from './types/transformer-options';
 
 export type * from './types/transformer-options';
 

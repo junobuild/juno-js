@@ -1,5 +1,6 @@
-import type {ActorMethod, ActorSubclass} from '@dfinity/agent';
+import type {ActorSubclass} from '@dfinity/agent';
 import {Actor, HttpAgent} from '@dfinity/agent';
+import type {ActorMethod} from '@dfinity/agent/lib/esm/actor';
 import type {IDL} from '@dfinity/candid';
 import {nonNullish} from '@junobuild/utils';
 import {DOCKER_CONTAINER_URL} from '../constants/container.constants';

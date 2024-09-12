@@ -8,18 +8,18 @@ import type {User} from './types/auth.types';
 import type {Environment, UserEnvironment} from './types/env.types';
 import type {Unsubscribe} from './types/subscription.types';
 import {envContainer, envSatelliteId} from './utils/window.env.utils';
-
 export * from './providers/auth.providers';
 export {signIn, signOut, unsafeIdentity} from './services/auth.services';
 export * from './services/doc.services';
+export * from './services/factory.services';
 export * from './services/storage.services';
-export * from './types/auth.types';
-export * from './types/doc.types';
-export * from './types/env.types';
+export type * from './types/auth.types';
+export type * from './types/doc.types';
+export type * from './types/env.types';
 export {ListOrder, ListPaginate, ListParams, ListResults} from './types/list.types';
-export * from './types/satellite.types';
-export * from './types/storage.types';
-export * from './types/subscription.types';
+export type * from './types/satellite.types';
+export type * from './types/storage.types';
+export type * from './types/subscription.types';
 export type {Asset, AssetEncoding, AssetKey, ENCODING_TYPE, Storage};
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {

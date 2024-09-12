@@ -13,21 +13,32 @@ const methodTemplateTypeScript = `export const %METHOD_NAME% = async (%PARAMS%):
 \t\tidlFactory
 \t});
 
-\treturn await %DID_METHOD_NAME%(%DID_PARAMS%);
+\treturn await %DID_METHOD_NAME%(%CALL_PARAMS%);
+}`;
+
+const methodTemplateJavaScript = `export const %METHOD_NAME% = async (%CALL_PARAMS%) => {
+\tconst {%DID_METHOD_NAME%} = await getSatelliteExtendedActor({
+\t\tidlFactory
+\t});
+
+\treturn await %DID_METHOD_NAME%(%CALL_PARAMS%);
 }`;
 
 export const generateService = ({
   signatures,
-  transformerOptions: {coreLib}
+  transformerOptions: {coreLib, outputLanguage}
 }: {
   signatures: MethodSignature[];
   transformerOptions: TransformerOptions;
 }): string => {
+  const langTemplate =
+    outputLanguage === 'js' ? methodTemplateJavaScript : methodTemplateTypeScript;
+
   const methods = signatures
     .map((signature) => {
       const replacers = mapSignature(signature);
 
-      let result = methodTemplateTypeScript;
+      let result = langTemplate;
       Object.entries(replacers).map(([key, value]) => {
         result = result.replaceAll(`%${key}%`, value);
       });
@@ -36,7 +47,10 @@ export const generateService = ({
     })
     .join('\n\n');
 
-  return template.replace('%CORE_LIB%', coreLib ?? 'core').replace('%METHODS%', methods).trim();
+  return template
+    .replace('%CORE_LIB%', coreLib ?? 'core')
+    .replace('%METHODS%', methods)
+    .trim();
 };
 
 const mapSignature = ({
@@ -48,7 +62,7 @@ const mapSignature = ({
   DID_METHOD_NAME: string;
   METHOD_RESULT: string;
   PARAMS: string;
-  DID_PARAMS: string;
+  CALL_PARAMS: string;
 } => {
   const camelize = (s: string): string => s.replace(/-./g, (x) => x[1].toUpperCase());
 
@@ -68,6 +82,6 @@ const mapSignature = ({
     DID_METHOD_NAME: name,
     METHOD_RESULT: returnType,
     PARAMS: paramsText,
-    DID_PARAMS: paramKeysText
+    CALL_PARAMS: paramKeysText
   };
 };

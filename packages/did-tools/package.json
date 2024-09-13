@@ -1,0 +1,57 @@
+{
+  "name": "@junobuild/did-tools",
+  "version": "0.0.2",
+  "description": "Tools for generating APIs from DID files.",
+  "author": "David Dal Busco (https://daviddalbusco.com)",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/node/index.mjs",
+  "module": "./dist/node/index.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/node/index.mjs"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/node/index.mjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "rmdir": "node ../../scripts/rmdir.mjs",
+    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
+    "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs && npm run ts-declaration",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junobuild/juno-js.git",
+    "directory": "packages/did-tools"
+  },
+  "bugs": {
+    "url": "https://github.com/junobuild/juno-js"
+  },
+  "keywords": [
+    "candid",
+    "parser",
+    "cli"
+  ],
+  "homepage": "https://juno.build",
+  "peerDependencies": {
+    "@junobuild/utils": "*"
+  },
+  "dependencies": {
+    "@babel/core": "^7.24.6",
+    "@babel/plugin-transform-modules-commonjs": "^7.24.6",
+    "@babel/preset-typescript": "^7.24.6",
+    "@babel/traverse": "^7.24.6"
+  }
+}

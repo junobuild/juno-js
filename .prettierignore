@@ -7,3 +7,5 @@ loader
 .dfx
 
 target
+
+packages/did-tools/src/mocks/satellite.raw.did.mock.ts

@@ -38,7 +38,7 @@ describe('parser-services', () => {
     });
 
     expect(result.trim()).toContain(
-      "import { getSatelliteExtendedActor } from '@junobuild/core-peer';"
+      "import {getSatelliteExtendedActor} from '@junobuild/core-peer';"
     );
   });
 

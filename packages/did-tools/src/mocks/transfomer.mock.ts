@@ -1,6 +1,6 @@
 export const mockTransformedCoreTS = `import type {_SERVICE as SatelliteActor} from './satellite.did';
 import {idlFactory} from './satellite.factory.did.js';
-import { getSatelliteExtendedActor } from '@junobuild/core';
+import {getSatelliteExtendedActor} from '@junobuild/core';
 
 export const buildVersion = async (): Promise<string> => {
 \tconst {build_version} = await getSatelliteExtendedActor<SatelliteActor>({
@@ -35,7 +35,7 @@ export const yolo = async (value0: Hello): Promise<string> => {
 }`;
 
 export const mockTransformedCoreJS = `import {idlFactory} from './satellite.factory.did.js';
-import { getSatelliteExtendedActor } from '@junobuild/core';
+import {getSatelliteExtendedActor} from '@junobuild/core';
 
 export const buildVersion = async () => {
 \tconst {build_version} = await getSatelliteExtendedActor({

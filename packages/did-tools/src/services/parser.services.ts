@@ -3,7 +3,7 @@ import type {TransformerOptions} from '../types/transformer-options';
 
 const template = `%IMPORT%
 import {idlFactory} from './satellite.factory.did.js';
-import { getSatelliteExtendedActor } from '@junobuild/%CORE_LIB%';
+import {getSatelliteExtendedActor} from '@junobuild/%CORE_LIB%';
 
 %METHODS%
 `;

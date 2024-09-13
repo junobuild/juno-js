@@ -5,6 +5,8 @@ import {
   DELEGATION_IDENTITY_EXPIRATION
 } from '../constants/auth.constants';
 import {InternetIdentityProvider} from '../providers/auth.providers';
+import {ActorStore} from '../stores/actor.store';
+import {AgentStore} from '../stores/agent.store';
 import {AuthStore} from '../stores/auth.store';
 import type {Provider, SignInOptions} from '../types/auth.types';
 import {createAuthClient} from '../utils/auth.utils';
@@ -64,6 +66,9 @@ export const signOut = async (): Promise<void> => {
   authClient = undefined;
 
   AuthStore.getInstance().reset();
+
+  ActorStore.getInstance().reset();
+  AgentStore.getInstance().reset();
 };
 
 export const getIdentity = (): Identity | undefined => {

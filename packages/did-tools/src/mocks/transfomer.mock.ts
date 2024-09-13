@@ -34,8 +34,7 @@ export const yolo = async (value0: Hello): Promise<string> => {
 \treturn await yolo(value0);
 }`;
 
-export const mockTransformedCoreJS = `import {_SERVICE as SatelliteActor} from './satellite.did';
-import {idlFactory} from './satellite.factory.did.js';
+export const mockTransformedCoreJS = `import {idlFactory} from './satellite.factory.did.js';
 import { getSatelliteExtendedActor } from '@junobuild/core';
 
 export const buildVersion = async () => {

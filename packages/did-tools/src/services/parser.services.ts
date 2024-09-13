@@ -25,7 +25,6 @@ const methodTemplateJavaScript = `export const %METHOD_NAME% = async (%CALL_PARA
 }`;
 
 const importTemplateTypeScript = `import type {_SERVICE as SatelliteActor%IMPORTS%} from './satellite.did';`;
-const importTemplateJavaScript = `import {_SERVICE as SatelliteActor%IMPORTS%} from './satellite.did';`;
 
 export const parseApi = ({
   methods: signatures,
@@ -52,15 +51,17 @@ export const parseApi = ({
     })
     .join('\n\n');
 
-  const importTemplate =
-    outputLanguage === 'js' ? importTemplateJavaScript : importTemplateTypeScript;
-
   return template
     .replace('%CORE_LIB%', coreLib ?? 'core')
     .replace('%METHODS%', methods)
     .replace(
       '%IMPORT%',
-      importTemplate.replace('%IMPORTS%', imports.length === 0 ? '' : `, ${imports.join(', ')}`)
+      outputLanguage === 'js'
+        ? ''
+        : importTemplateTypeScript.replace(
+            '%IMPORTS%',
+            imports.length === 0 ? '' : `, ${imports.join(', ')}`
+          )
     )
     .trim();
 };

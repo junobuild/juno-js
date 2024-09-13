@@ -55,4 +55,18 @@ describe('parser-services', () => {
       "import type {_SERVICE as SatelliteActor, Hello, Result} from './satellite.did';"
     );
   });
+
+  it('should not add any did imports', () => {
+    const result = parseApi({
+      methods: mockMethodSignatures,
+      imports: [],
+      transformerOptions: {
+        outputLanguage: 'js'
+      }
+    });
+
+    expect(result.trim()).not.toContain(
+      "import type {_SERVICE as SatelliteActor} from './satellite.did';"
+    );
+  });
 });

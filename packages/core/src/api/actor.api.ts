@@ -8,8 +8,6 @@ import {ActorStore} from '../stores/actor.store';
 import type {Satellite} from '../types/satellite.types';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
 
-const actorStore = new ActorStore();
-
 export const getSatelliteActor = async (satellite: Satellite): Promise<SatelliteActor> => {
   return getActor({
     idlFactory: stockIdlFactory,
@@ -39,7 +37,7 @@ const getActor = async <T = Record<string, ActorMethod>>({
 
   const {container} = customOrEnvContainer({container: customContainer});
 
-  return await actorStore.getActor({
+  return await ActorStore.getInstance().getActor({
     satelliteId,
     container,
     idlFactory,

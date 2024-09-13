@@ -6,7 +6,19 @@ import type {Satellite} from '../types/satellite.types';
 type AgentParams = Required<Pick<Satellite, 'identity'>> & Pick<Satellite, 'fetch' | 'container'>;
 
 export class AgentStore {
-  #agents: Record<string, HttpAgent> | undefined = undefined;
+  private static instance: AgentStore;
+
+  #agents: Record<string, HttpAgent> | undefined | null = undefined;
+
+  private constructor() {
+  }
+
+  static getInstance() {
+    if (isNullish(AgentStore.instance)) {
+      AgentStore.instance = new AgentStore();
+    }
+    return AgentStore.instance;
+  }
 
   async getAgent({identity, ...rest}: AgentParams): Promise<Agent> {
     const key = identity.getPrincipal().toText();
@@ -23,6 +35,10 @@ export class AgentStore {
     }
 
     return this.#agents[key];
+  }
+
+  reset() {
+    this.#agents = null;
   }
 
   private async createAgent({identity, fetch, container}: AgentParams): Promise<HttpAgent> {

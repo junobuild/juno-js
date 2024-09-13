@@ -9,6 +9,8 @@ import {AuthStore} from '../stores/auth.store';
 import type {Provider, SignInOptions} from '../types/auth.types';
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser} from './user.services';
+import {ActorStore} from "../stores/actor.store";
+import {AgentStore} from "../stores/agent.store";
 
 let authClient: AuthClient | undefined;
 
@@ -64,6 +66,9 @@ export const signOut = async (): Promise<void> => {
   authClient = undefined;
 
   AuthStore.getInstance().reset();
+
+  ActorStore.getInstance().reset();
+  AgentStore.getInstance().reset();
 };
 
 export const getIdentity = (): Identity | undefined => {

@@ -10,8 +10,7 @@ export class AgentStore {
 
   #agents: Record<string, HttpAgent> | undefined | null = undefined;
 
-  private constructor() {
-  }
+  private constructor() {}
 
   static getInstance() {
     if (isNullish(AgentStore.instance)) {

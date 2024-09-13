@@ -5,12 +5,14 @@ import {assertNonNullish} from '@junobuild/utils';
 import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
 import {idlFactory as stockIdlFactory} from '../../declarations/satellite/satellite.factory.did.js';
 import {ActorStore} from '../stores/actor.store';
+import type {BuildType} from '../types/build.types';
 import type {Satellite} from '../types/satellite.types';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
 
 export const getSatelliteActor = async (satellite: Satellite): Promise<SatelliteActor> => {
   return getActor({
     idlFactory: stockIdlFactory,
+    buildType: 'stock',
     ...satellite
   });
 };
@@ -21,6 +23,7 @@ export const getSatelliteExtendedActor = async <T = Record<string, ActorMethod>>
 }: Satellite & {idlFactory: IDL.InterfaceFactory}): Promise<ActorSubclass<T>> => {
   return getActor({
     idlFactory,
+    buildType: 'extended',
     ...rest
   });
 };
@@ -28,9 +31,10 @@ export const getSatelliteExtendedActor = async <T = Record<string, ActorMethod>>
 const getActor = async <T = Record<string, ActorMethod>>({
   satelliteId: customSatelliteId,
   container: customContainer,
-  idlFactory,
   ...rest
-}: Satellite & {idlFactory: IDL.InterfaceFactory}): Promise<ActorSubclass<T>> => {
+}: Satellite & {idlFactory: IDL.InterfaceFactory; buildType: BuildType}): Promise<
+  ActorSubclass<T>
+> => {
   const {satelliteId} = customOrEnvSatelliteId({satelliteId: customSatelliteId});
 
   assertNonNullish(satelliteId, 'No satellite ID defined. Did you initialize Juno?');
@@ -40,7 +44,6 @@ const getActor = async <T = Record<string, ActorMethod>>({
   return await ActorStore.getInstance().getActor({
     satelliteId,
     container,
-    idlFactory,
     ...rest
   });
 };

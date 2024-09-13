@@ -4,9 +4,11 @@ import type {IDL} from '@dfinity/candid';
 import {assertNonNullish} from '@junobuild/utils';
 import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
 import {idlFactory as stockIdlFactory} from '../../declarations/satellite/satellite.factory.did.js';
+import {ActorStore} from '../stores/actor.store';
 import type {Satellite} from '../types/satellite.types';
-import {createActor} from '../utils/actor.utils';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
+
+const actorStore = new ActorStore();
 
 export const getSatelliteActor = async (satellite: Satellite): Promise<SatelliteActor> => {
   return getActor({
@@ -37,7 +39,7 @@ const getActor = async <T = Record<string, ActorMethod>>({
 
   const {container} = customOrEnvContainer({container: customContainer});
 
-  return createActor({
+  return await actorStore.getActor({
     satelliteId,
     container,
     idlFactory,

@@ -52,6 +52,6 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/principal": "^2.0.0"
+    "@dfinity/principal": "^2.1.3"
   }
 }

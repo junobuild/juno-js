@@ -1,7 +1,16 @@
 import type {CliConfig} from '@junobuild/config';
+import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy} from '../services/deploy.prepare.services';
 import {upload} from '../services/deploy.upload.services';
 import type {FileDetails, ListAssets, UploadFile} from '../types/deploy';
+
+export const preDeploy = async ({config: {predeploy}}: {config: CliConfig}) => {
+  await executeHooks(predeploy);
+};
+
+export const postDeploy = async ({config: {postdeploy}}: {config: CliConfig}) => {
+  await executeHooks(postdeploy);
+};
 
 export const deploy = async ({
   assertMemory,

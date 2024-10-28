@@ -37,4 +37,36 @@ export interface CliConfig {
    * @optional
    */
   encoding?: Array<[string, ENCODING_TYPE]>;
+
+  /**
+   * Defines a list of scripts or commands to be run before the deployment process begins.
+   * This can be useful for tasks such as compiling assets, running tests, or building production-ready files.
+   *
+   * Example:
+   * ```json
+   * {
+   *   "predeploy": ["npm run build", "npm run lint"]
+   * }
+   * ```
+   *
+   * @type {string[]}
+   * @optional
+   */
+  predeploy?: string[];
+
+  /**
+   * Defines a list of scripts or commands to be run after the deployment process completes.
+   * This can be used for tasks such as notifications, cleanup, or sending confirmation messages to services or team members.
+   *
+   * Example:
+   * ```json
+   * {
+   *   "postdeploy": ["./scripts/notify-admins.sh", "echo 'Deployment complete'"]
+   * }
+   * ```
+   *
+   * @type {string[]}
+   * @optional
+   */
+  postdeploy?: string[];
 }

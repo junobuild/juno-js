@@ -33,17 +33,3 @@ generateDocumentation({
   markdownOptions,
   buildOptions: {...buildOptions, explore: false, types: true}
 });
-
-const {basename} = require('path');
-
-configInputFiles.forEach(doc => {
-  generateDocumentation({
-    inputFiles: [doc],
-    outputFile: `./packages/config/docs/${basename(doc, '.ts')}.md`,
-    markdownOptions: {
-      ...markdownOptions,
-      emoji: null
-    },
-    buildOptions: {...buildOptions, explore: false, types: true}
-  })
-})

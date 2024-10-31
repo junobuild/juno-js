@@ -68,6 +68,7 @@ Configuration options for [Juno] CLI.
 - [DatastoreConfig](#gear-datastoreconfig)
 - [SatelliteId](#gear-satelliteid)
 - [SatelliteIds](#gear-satelliteids)
+- [SatelliteConfigOptions](#gear-satelliteconfigoptions)
 - [JunoConfig](#gear-junoconfig)
 - [SatelliteDevCollections](#gear-satellitedevcollections)
 - [SatelliteDevController](#gear-satellitedevcontroller)
@@ -220,6 +221,23 @@ Represents a mapping of satellite identifiers to different configurations based 
 | -------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ids`    | `Record<string, string>` | A mapping of satellite identifiers (IDs) to different configurations based on the mode of the application. This allows the application to use different satellite IDs, such as production, staging, etc. Example: { "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai" } type: {Record<JunoConfigMode, string>} |
 
+#### :gear: SatelliteConfigOptions
+
+SatelliteConfigOptions interface provides configuration settings that allow for fine-tuning
+the operational behavior of various aspects of a Satellite, such as storage, datastore,
+authentication, and deployment assertions.
+
+These options affect specific modules of the Satellite and may require manual application of
+changes, typically through CLI commands (e.g., `juno config`).
+
+| Property         | Type                                | Description                                                                                                                                                                                                                                                                 |
+| ---------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `storage`        | `StorageConfig or undefined`        | Optional configuration parameters for the satellite, affecting the operational behavior of its Storage. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {StorageConfig}optional               |
+| `datastore`      | `DatastoreConfig or undefined`      | Optional configuration parameters for the satellite, affecting the operational behavior of its Datastore. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {DatastoreConfig}optional           |
+| `authentication` | `AuthenticationConfig or undefined` | Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {AuthenticationConfig}optional |
+| `assertions`     | `SatelliteAssertions or undefined`  | Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions. type: {SatelliteAssertions}optional                                                                                                                       |
+| `settings`       | `ModuleSettings or undefined`       | Optional configuration parameters for the Satellite. These settings control various aspects of the module's behavior and resource usage. type: {ModuleSettings}optional                                                                                                     |
+
 #### :gear: JunoConfig
 
 Represents the overall configuration for Juno.
@@ -312,11 +330,11 @@ Represents the development configuration for Juno.
 
 #### :gear: SatelliteConfig
 
-| Type              | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> and CliConfig and { /** * Optional configuration parameters for the satellite, affecting the operational behavior of its Storage. * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config`commands. * @type {StorageConfig} * @optional */ storage?: StorageConfig;  /** * Optional configuration parameters for the satellite, affecting the operational behavior of its Datastore. * Changes to these parameters must be applied manually afterwards, for example with the CLI using`juno config`commands. * @type {DatastoreConfig} * @optional */ datastore?: DatastoreConfig;  /** * Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication. * Changes to these parameters must be applied manually afterwards, for example with the CLI using`juno config` commands. * @type {AuthenticationConfig} * @optional */ authentication?: AuthenticationConfig;  /** * Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions. * @type {SatelliteAssertions} * @optional */ assertions?: SatelliteAssertions;  /** * Optional configuration parameters for the Satellite. * These settings control various aspects of the module's behavior and resource usage. * @type {ModuleSettings} * @optional */ settings?: ModuleSettings; }` |
+| Type              | Type                                                                         |
+| ----------------- | ---------------------------------------------------------------------------- |
+| `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> and CliConfig and SatelliteConfigOptions` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L53)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L114)
 
 #### :gear: SatelliteDevDataStoreCollection
 

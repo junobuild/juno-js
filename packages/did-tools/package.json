@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/did-tools",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Tools for generating APIs from DID files.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

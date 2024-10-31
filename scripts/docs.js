@@ -12,7 +12,6 @@ const configInputFiles = [
   './packages/config/src/shared/storage.config.ts',
   './packages/config/src/satellite/mainnet/configs/satellite.config.ts',
   './packages/config/src/module/module.settings.ts',
-  './packages/config/src/satellite/mainnet/juno.config.ts',
   './packages/config/src/types/juno.env.ts',
   './packages/config/src/satellite/dev/juno.dev.config.ts',
   './packages/config/src/satellite/dev/config.ts',
@@ -34,3 +33,17 @@ generateDocumentation({
   markdownOptions,
   buildOptions: {...buildOptions, explore: false, types: true}
 });
+
+const {basename} = require('path');
+
+configInputFiles.forEach(doc => {
+  generateDocumentation({
+    inputFiles: [doc],
+    outputFile: `./packages/config/docs/${basename(doc, '.ts')}.md`,
+    markdownOptions: {
+      ...markdownOptions,
+      emoji: null
+    },
+    buildOptions: {...buildOptions, explore: false, types: true}
+  })
+})

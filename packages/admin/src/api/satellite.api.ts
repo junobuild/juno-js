@@ -103,9 +103,9 @@ export const setRule = async ({
   collection: string;
   rule: SetRule;
   satellite: SatelliteParameters;
-}): Promise<void> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
-  return actor.set_rule(type, collection, rule);
+}): Promise<Rule> => {
+  const {set_rule} = await getSatelliteActor(satellite);
+  return set_rule(type, collection, rule);
 };
 
 export const version = async ({satellite}: {satellite: SatelliteParameters}): Promise<string> => {

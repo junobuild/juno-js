@@ -134,6 +134,20 @@ export const deleteManyDocs = async ({
 };
 /* eslint-enable */
 
+export const deleteFilteredDocs = async ({
+  collection,
+  filter,
+  satellite
+}: {
+  collection: string;
+  filter: ListParams;
+  satellite: Satellite;
+}): Promise<void> => {
+  const {del_filtered_docs} = await getSatelliteActor(satellite);
+
+  return del_filtered_docs(collection, toListParams(filter));
+};
+
 export const listDocs = async <D>({
   collection,
   filter,

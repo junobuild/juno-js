@@ -1,6 +1,7 @@
 import {
   countDocs as countDocsApi,
   deleteDoc as deleteDocApi,
+  deleteFilteredDocs as deleteFilteredDocsApi,
   deleteManyDocs as deleteManyDocsApi,
   getDoc as getDocApi,
   getManyDocs as getManyDocsApi,
@@ -140,6 +141,34 @@ export const deleteManyDocs = async ({
   return await deleteManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
 /* eslint-enable */
+
+/**
+ * Deletes documents from a collection with optional filtering.
+ *
+ * @param {Object} params - The parameters for deleting documents.
+ * @param {string} params.collection - The name of the collection.
+ * @param {ListParams} [params.filter] - The filter criteria to match documents for deletion.
+ * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
+ *
+ * @returns {Promise<void>} A promise that resolves when the documents are deleted.
+ */
+export const deleteFilteredDocs = async ({
+  satellite,
+  filter,
+  ...rest
+}: {
+  collection: string;
+  filter?: ListParams;
+  satellite?: SatelliteOptions;
+}): Promise<void> => {
+  const identity = getIdentity(satellite?.identity);
+
+  return await deleteFilteredDocsApi({
+    ...rest,
+    filter: filter ?? {},
+    satellite: {...satellite, identity}
+  });
+};
 
 /**
  * Lists documents in a collection with optional filtering.

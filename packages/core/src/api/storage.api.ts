@@ -1,4 +1,8 @@
-import {type UploadAsset,uploadAsset as uploadAssetStorage, type AssetKey} from '@junobuild/storage';
+import {
+  uploadAsset as uploadAssetStorage,
+  type AssetKey,
+  type UploadAsset
+} from '@junobuild/storage';
 import {fromNullable} from '@junobuild/utils';
 import type {
   AssetNoContent,
@@ -17,7 +21,8 @@ export const uploadAsset = async ({
 }: UploadAsset & {satellite: Satellite}): Promise<void> => {
   const actor = await getSatelliteActor(satellite);
 
-  const init_asset_upload = async (initAssetKey: InitAssetKey): Promise<InitUploadResult> => await actor.init_asset_upload(initAssetKey);
+  const init_asset_upload = async (initAssetKey: InitAssetKey): Promise<InitUploadResult> =>
+    await actor.init_asset_upload(initAssetKey);
 
   await uploadAssetStorage({
     actor,

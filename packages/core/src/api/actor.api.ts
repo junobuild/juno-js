@@ -10,7 +10,8 @@ import type {BuildType} from '../types/build.types';
 import type {Satellite} from '../types/satellite.types';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
 
-export const getSatelliteActor = (satellite: Satellite): Promise<SatelliteActor> => getActor({
+export const getSatelliteActor = (satellite: Satellite): Promise<SatelliteActor> =>
+  getActor({
     idlFactory: stockIdlFactory,
     buildType: 'stock',
     ...satellite
@@ -19,7 +20,8 @@ export const getSatelliteActor = (satellite: Satellite): Promise<SatelliteActor>
 export const getSatelliteExtendedActor = <T = Record<string, ActorMethod>>({
   idlFactory,
   ...rest
-}: Satellite & {idlFactory: IDL.InterfaceFactory}): Promise<ActorSubclass<T>> => getActor({
+}: Satellite & {idlFactory: IDL.InterfaceFactory}): Promise<ActorSubclass<T>> =>
+  getActor({
     idlFactory,
     buildType: 'extended',
     ...rest

@@ -70,10 +70,7 @@ export const getMissionControlActor = ({
     idlFactory: idlFactoryMissionControl
   });
 
-export const getOrbiterActor = ({
-  orbiterId,
-  ...rest
-}: OrbiterParameters): Promise<OrbiterActor> =>
+export const getOrbiterActor = ({orbiterId, ...rest}: OrbiterParameters): Promise<OrbiterActor> =>
   getActor({
     canisterId: orbiterId,
     ...rest,

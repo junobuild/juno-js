@@ -19,7 +19,8 @@ export const spawn = async ({
   stdout?: (output: string) => void;
   silentOut?: boolean;
   silentErrors?: boolean;
-}): Promise<number | null> => await new Promise<number | null>((resolve, reject) => {
+}): Promise<number | null> =>
+  await new Promise<number | null>((resolve, reject) => {
     const process: ChildProcessWithoutNullStreams = spawnCommand(command, args, {
       shell: true,
       ...(nonNullish(cwd) && {cwd})
@@ -60,7 +61,8 @@ export const execute = async ({
 }: {
   command: string;
   args?: readonly string[];
-}): Promise<number | null> => await new Promise<number | null>((resolve) => {
+}): Promise<number | null> =>
+  await new Promise<number | null>((resolve) => {
     const childProcess: ChildProcess = spawnCommand(command, args ?? [], {
       stdio: 'inherit'
     });

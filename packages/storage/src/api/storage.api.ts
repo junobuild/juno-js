@@ -91,7 +91,9 @@ async function* batchUploadChunks({
   }
 }
 
-interface UploadChunkResult {chunk_id: bigint}
+interface UploadChunkResult {
+  chunk_id: bigint;
+}
 
 interface UploadChunkParams {
   batchId: bigint;

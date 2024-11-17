@@ -1,4 +1,10 @@
-import {type ActorConfig, type ActorMethod, type ActorSubclass,Actor, HttpAgent} from '@dfinity/agent';
+import {
+  Actor,
+  HttpAgent,
+  type ActorConfig,
+  type ActorMethod,
+  type ActorSubclass
+} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {nonNullish} from '@junobuild/utils';
 import type {ActorParameters} from '../types/actor.types';

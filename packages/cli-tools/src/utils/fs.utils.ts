@@ -15,8 +15,7 @@ export const fileExists = async (path: string): Promise<boolean> => {
   } catch (err: unknown) {
     if (err instanceof Error && 'code' in err && (err as NodeJS.ErrnoException).code === 'ENOENT') {
       return false;
-    } 
-      throw err;
-    
+    }
+    throw err;
   }
 };

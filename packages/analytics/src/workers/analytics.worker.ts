@@ -262,7 +262,7 @@ const ids = ({key, collected_at}: {key: IdbKey; collected_at: bigint}): Analytic
 });
 
 const satelliteId = (env: EnvironmentActor): {satellite_id: Principal} => ({
-  satellite_id: Principal.fromText((env).satelliteId)
+  satellite_id: Principal.fromText(env.satelliteId)
 });
 
 const isBot = (): boolean => {
@@ -275,9 +275,7 @@ const isBot = (): boolean => {
   return false;
 };
 
-const isEnvInitialized = (
-  env: Option<EnvironmentActor>
-): env is NonNullable<EnvironmentActor> =>
+const isEnvInitialized = (env: Option<EnvironmentActor>): env is NonNullable<EnvironmentActor> =>
   env !== undefined && env !== null && nonNullish(env.orbiterId) && nonNullish(env.satelliteId);
 
 const consoleWarn = (results: Result_1) => {

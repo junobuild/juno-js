@@ -22,9 +22,8 @@ import {getIdentity} from './identity.services';
  * @param {Storage & {satellite?: SatelliteOptions}} params - The storage parameters. Satellite options are required only in NodeJS environment.
  * @returns {Promise<AssetKey>} A promise that resolves to the asset key.
  */
-export const uploadBlob = (
-  params: Storage & {satellite?: SatelliteOptions}
-): Promise<AssetKey> => uploadAssetIC(params);
+export const uploadBlob = (params: Storage & {satellite?: SatelliteOptions}): Promise<AssetKey> =>
+  uploadAssetIC(params);
 
 /**
  * Uploads a file to the storage.

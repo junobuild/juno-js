@@ -7,7 +7,7 @@ import {nonNullish} from './null.utils';
  * @param {T} [value] - The value to convert.
  * @returns {([] | [T])} A nullable array containing the value if non-nullish, or an empty array if nullish.
  */
-export const toNullable = <T>(value?: T): [] | [T] => nonNullish(value) ? [value] : [];
+export const toNullable = <T>(value?: T): [] | [T] => (nonNullish(value) ? [value] : []);
 
 /**
  * Extracts a value from a nullable array.

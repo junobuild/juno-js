@@ -6,10 +6,7 @@ import {idlFactory as idlFactoryConsole} from '../../declarations/console/consol
 import type {ActorParameters, ConsoleParameters} from '../types/actor.types';
 import {createActor} from '../utils/actor.utils';
 
-export const getConsoleActor = ({
-  consoleId,
-  ...rest
-}: ConsoleParameters): Promise<ConsoleActor> =>
+export const getConsoleActor = ({consoleId, ...rest}: ConsoleParameters): Promise<ConsoleActor> =>
   getActor({
     canisterId: consoleId,
     ...rest,

@@ -26,7 +26,7 @@ export const initUser = async (provider?: Provider): Promise<User> => {
   return user;
 };
 
-const createUser = async ({
+const createUser = ({
   userId,
   ...rest
 }: {

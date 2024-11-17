@@ -44,7 +44,7 @@ const parseEnv = (userEnv?: UserEnvironment): Environment => {
  * @param {UserEnvironment} [userEnv] - The optional user environment configuration.
  * @returns {Promise<Unsubscribe[]>} A promise that resolves to an array of unsubscribe functions.
  */
-export const initJuno = async (userEnv?: UserEnvironment): Promise<Unsubscribe[]> =>
+export const initJuno = (userEnv?: UserEnvironment): Promise<Unsubscribe[]> =>
   initSatellite(userEnv);
 
 /**

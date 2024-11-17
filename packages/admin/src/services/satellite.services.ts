@@ -95,7 +95,7 @@ export const setStorageConfig = async ({
   const rawAccess: StorageConfigRawAccessDid =
     configRawAccess === true ? {Allow: null} : {Deny: null};
 
-  return setStorageConfigApi({
+  return await setStorageConfigApi({
     satellite,
     config: {
       headers,
@@ -386,7 +386,7 @@ export const listCustomDomains = async ({
  * @param {CustomDomain[]} params.domains - The custom domains to set.
  * @returns {Promise<void[]>} A promise that resolves when the custom domains are set.
  */
-export const setCustomDomains = async ({
+export const setCustomDomains = ({
   satellite,
   domains
 }: {
@@ -420,7 +420,7 @@ export const satelliteMemorySize = (params: {
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
  * @returns {Promise<bigint>} A promise that resolves to the number of documents in the collection.
  */
-export const countDocs = async (params: {
+export const countDocs = (params: {
   collection: string;
   satellite: SatelliteParameters;
 }): Promise<bigint> => countDocsApi(params);
@@ -432,7 +432,7 @@ export const countDocs = async (params: {
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
  * @returns {Promise<void>} A promise that resolves when the documents are deleted.
  */
-export const deleteDocs = async (params: {
+export const deleteDocs = (params: {
   collection: string;
   satellite: SatelliteParameters;
 }): Promise<void> => deleteDocsApi(params);
@@ -444,7 +444,7 @@ export const deleteDocs = async (params: {
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
  * @returns {Promise<bigint>} A promise that resolves to the number of assets in the collection.
  */
-export const countAssets = async (params: {
+export const countAssets = (params: {
   collection: string;
   satellite: SatelliteParameters;
 }): Promise<bigint> => countAssetsApi(params);
@@ -456,7 +456,7 @@ export const countAssets = async (params: {
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
  * @returns {Promise<void>} A promise that resolves when the assets are deleted.
  */
-export const deleteAssets = async (params: {
+export const deleteAssets = (params: {
   collection: string;
   satellite: SatelliteParameters;
 }): Promise<void> => deleteAssetsApi(params);

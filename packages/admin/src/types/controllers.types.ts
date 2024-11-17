@@ -4,7 +4,7 @@
  * @property {string} controllerId - The ID of the controller.
  * @property {string | null | undefined} profile - The profile of the controller.
  */
-export type SetControllerParams = {
+export interface SetControllerParams {
   controllerId: string;
-  profile: string | null | undefined;
-};
+  profile: Option<string>;
+}

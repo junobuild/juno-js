@@ -23,9 +23,9 @@ export const junoConfigExist = async (params: {filename: ConfigFilename}): Promi
   } catch (err: unknown) {
     if (err instanceof Error && 'code' in err && (err as NodeJS.ErrnoException).code === 'ENOENT') {
       return false;
-    } else {
+    } 
       throw err;
-    }
+    
   }
 };
 
@@ -107,11 +107,11 @@ export const detectJunoConfigType = ({
     const packageJsonPath = join(process.cwd(), 'package.json');
 
     if (existsSync(packageJsonPath)) {
-      type PackageJson = {
+      interface PackageJson {
         dependencies?: Record<string, string>;
         devDependencies?: Record<string, string>;
         type?: string;
-      };
+      }
 
       const packageJson: PackageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
 

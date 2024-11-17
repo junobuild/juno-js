@@ -42,11 +42,11 @@ export interface EnvironmentOptions {
  * @property {string} satelliteId - The ID of the satellite.
  * @property {boolean | string} [container] - Specifies whether the actor is running in a container or provides the container URL.
  */
-export type EnvironmentActor = {
+export interface EnvironmentActor {
   orbiterId: string;
   satelliteId: string;
   container?: boolean | string;
-};
+}
 
 /**
  * Represents the overall environment configuration.

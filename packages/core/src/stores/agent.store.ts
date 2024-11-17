@@ -8,7 +8,7 @@ type AgentParams = Required<Pick<Satellite, 'identity'>> & Pick<Satellite, 'fetc
 export class AgentStore {
   private static instance: AgentStore;
 
-  #agents: Record<string, HttpAgent> | undefined | null = undefined;
+  #agents: Option<Record> = undefined;
 
   private constructor() {}
 

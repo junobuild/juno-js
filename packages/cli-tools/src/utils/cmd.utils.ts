@@ -19,8 +19,7 @@ export const spawn = async ({
   stdout?: (output: string) => void;
   silentOut?: boolean;
   silentErrors?: boolean;
-}): Promise<number | null> => {
-  return await new Promise<number | null>((resolve, reject) => {
+}): Promise<number | null> => await new Promise<number | null>((resolve, reject) => {
     const process: ChildProcessWithoutNullStreams = spawnCommand(command, args, {
       shell: true,
       ...(nonNullish(cwd) && {cwd})
@@ -36,6 +35,7 @@ export const spawn = async ({
         return;
       }
 
+      // eslint-disable-next-line no-console
       console.log(`${data}`);
     });
     process.stderr.on('data', (data) => {
@@ -53,7 +53,6 @@ export const spawn = async ({
       reject(err);
     });
   });
-};
 
 export const execute = async ({
   command,
@@ -61,8 +60,7 @@ export const execute = async ({
 }: {
   command: string;
   args?: readonly string[];
-}): Promise<number | null> => {
-  return await new Promise<number | null>((resolve) => {
+}): Promise<number | null> => await new Promise<number | null>((resolve) => {
     const childProcess: ChildProcess = spawnCommand(command, args ?? [], {
       stdio: 'inherit'
     });
@@ -77,4 +75,3 @@ export const execute = async ({
       process.exit(1);
     });
   });
-};

@@ -4,7 +4,7 @@
  * @param {number} [timeout=300] - The number of milliseconds to delay. Defaults to 300ms if not specified or invalid.
  * @returns {Function} A debounced function.
  */
-/* eslint-disable-next-line @typescript-eslint/ban-types */
+// eslint-disable-next-line @typescript-eslint/ban-types, local-rules/prefer-object-params
 export const debounce = (func: Function, timeout?: number): Function => {
   let timer: ReturnType<typeof setTimeout> | undefined;
 

@@ -22,7 +22,7 @@ import {getIdentity} from './identity.services';
  * @param {Storage & {satellite?: SatelliteOptions}} params - The storage parameters. Satellite options are required only in NodeJS environment.
  * @returns {Promise<AssetKey>} A promise that resolves to the asset key.
  */
-export const uploadBlob = async (
+export const uploadBlob = (
   params: Storage & {satellite?: SatelliteOptions}
 ): Promise<AssetKey> => uploadAssetIC(params);
 
@@ -31,7 +31,7 @@ export const uploadBlob = async (
  * @param {Partial<Pick<Storage, 'filename'>> & Omit<Storage, 'filename' | 'data'> & {data: File} & {satellite?: SatelliteOptions}} params - The storage parameters. Satellite options are required only in NodeJS environment.
  * @returns {Promise<AssetKey>} A promise that resolves to the asset key.
  */
-export const uploadFile = async (
+export const uploadFile = (
   params: Partial<Pick<Storage, 'filename'>> &
     Omit<Storage, 'filename' | 'data'> & {data: File} & {satellite?: SatelliteOptions}
 ): Promise<AssetKey> =>
@@ -129,7 +129,7 @@ export const listAssets = async ({
         }),
         token,
         headers,
-        encodings: encodings.reduce(
+        encodings: encodings.reduce<Record<string, AssetEncoding>>(
           (acc, [type, {modified, sha256, total_length}]) => ({
             ...acc,
             [type]: {
@@ -138,7 +138,7 @@ export const listAssets = async ({
               total_length
             }
           }),
-          {} as Record<string, AssetEncoding>
+          {}
         ),
         owner: owner.toText(),
         created_at,
@@ -173,7 +173,7 @@ export const countAssets = async ({
 }): Promise<bigint> => {
   const satellite = {...satelliteOptions, identity: getIdentity(satelliteOptions?.identity)};
 
-  return countAssetsApi({
+  return await countAssetsApi({
     collection,
     satellite,
     filter: filter ?? {}
@@ -188,7 +188,7 @@ export const countAssets = async ({
  * @param {string} params.fullPath - The full path of the asset.
  * @returns {Promise<void>} A promise that resolves when the asset is deleted.
  */
-export const deleteAsset = async ({
+export const deleteAsset = ({
   collection,
   fullPath,
   satellite
@@ -209,7 +209,7 @@ export const deleteAsset = async ({
  * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
  * @returns {Promise<void>} A promise that resolves when the assets are deleted.
  */
-export const deleteManyAssets = async ({
+export const deleteManyAssets = ({
   assets,
   satellite
 }: {
@@ -238,7 +238,7 @@ export const getAsset = async ({
 } & Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
   const identity = getIdentity(satellite?.identity);
 
-  return getAssetApi({...rest, satellite: {...satellite, identity}});
+  return await getAssetApi({...rest, satellite: {...satellite, identity}});
 };
 
 /**
@@ -257,7 +257,7 @@ export const getManyAssets = async ({
 }): Promise<(AssetNoContent | undefined)[]> => {
   const identity = getIdentity(satellite?.identity);
 
-  return getManyAssetsApi({...rest, satellite: {...satellite, identity}});
+  return await getManyAssetsApi({...rest, satellite: {...satellite, identity}});
 };
 
 /**

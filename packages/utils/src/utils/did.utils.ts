@@ -7,9 +7,7 @@ import {nonNullish} from './null.utils';
  * @param {T} [value] - The value to convert.
  * @returns {([] | [T])} A nullable array containing the value if non-nullish, or an empty array if nullish.
  */
-export const toNullable = <T>(value?: T): [] | [T] => {
-  return nonNullish(value) ? [value] : [];
-};
+export const toNullable = <T>(value?: T): [] | [T] => nonNullish(value) ? [value] : [];
 
 /**
  * Extracts a value from a nullable array.
@@ -17,9 +15,7 @@ export const toNullable = <T>(value?: T): [] | [T] => {
  * @param {([] | [T])} value - The nullable array.
  * @returns {(T | undefined)} The value if present, or undefined if the array is empty.
  */
-export const fromNullable = <T>(value: [] | [T]): T | undefined => {
-  return value?.[0];
-};
+export const fromNullable = <T>(value: [] | [T]): T | undefined => value?.[0];
 
 /**
  * Converts data to a Uint8Array for transmission or storage.

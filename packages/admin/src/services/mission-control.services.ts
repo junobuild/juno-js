@@ -19,7 +19,7 @@ import {encoreIDLUser} from '../utils/idl.utils';
  * @param {MissionControlParameters} params.missionControl - The Mission Control parameters.
  * @returns {Promise<string>} A promise that resolves to the version of Mission Control.
  */
-export const missionControlVersion = async (params: {
+export const missionControlVersion = (params: {
   missionControl: MissionControlParameters;
 }): Promise<string> => version(params);
 
@@ -67,7 +67,7 @@ export const upgradeMissionControl = async ({
  * @param {SetControllerParams} params - Additional parameters for setting the controller.
  * @returns {Promise<void>} A promise that resolves when the controller is set.
  */
-export const setSatellitesController = async ({
+export const setSatellitesController = ({
   controllerId,
   profile,
   ...rest
@@ -87,7 +87,7 @@ export const setSatellitesController = async ({
  * @param {SetControllerParams} params - Additional parameters for setting the controller.
  * @returns {Promise<void>} A promise that resolves when the controller is set.
  */
-export const setMissionControlController = async ({
+export const setMissionControlController = ({
   controllerId,
   profile,
   ...rest

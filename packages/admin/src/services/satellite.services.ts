@@ -230,13 +230,14 @@ export const setRule = async ({
   rule: Rule;
   type: RulesType;
   satellite: SatelliteParameters;
-}): Promise<void> =>
-  setRuleApi({
+}): Promise<void> => {
+  await setRuleApi({
     type: mapRuleType(type),
     rule: mapSetRule(rest),
     satellite,
     collection
   });
+};
 
 /**
  * Retrieves the version of the satellite.

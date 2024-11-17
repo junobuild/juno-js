@@ -39,7 +39,9 @@ export const mapSetRule = ({
   version: toNullable(version),
   max_size: toNullable(nonNullish(maxSize) && maxSize > 0 ? BigInt(maxSize) : undefined),
   max_capacity: toNullable(nonNullish(maxCapacity) && maxCapacity > 0 ? maxCapacity : undefined),
-  mutable_permissions: toNullable(mutablePermissions)
+  mutable_permissions: toNullable(mutablePermissions),
+  // TODO: support for rate config
+  rate_config: []
 });
 
 export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {

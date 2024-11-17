@@ -86,4 +86,9 @@ export interface Rule {
    * @type {boolean}
    */
   mutablePermissions: boolean;
+
+  /**
+   * The maximum number of writes and deletes per minute.
+   */
+  maxTokens?: number;
 }

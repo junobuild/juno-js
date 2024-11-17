@@ -9,6 +9,7 @@ import type {
 } from '../../declarations/satellite/satellite.did';
 import {
   DbRulesType,
+  DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS,
   MemoryHeap,
   MemoryStable,
   PermissionControllers,
@@ -28,10 +29,18 @@ export const mapSetRule = ({
   maxSize,
   maxCapacity,
   version,
-  mutablePermissions
+  mutablePermissions,
+  maxTokens
 }: Pick<
   Rule,
-  'read' | 'write' | 'maxSize' | 'maxCapacity' | 'version' | 'memory' | 'mutablePermissions'
+  | 'read'
+  | 'write'
+  | 'maxSize'
+  | 'maxCapacity'
+  | 'version'
+  | 'memory'
+  | 'mutablePermissions'
+  | 'maxTokens'
 >): SetRule => ({
   read: permissionFromText(read),
   write: permissionFromText(write),
@@ -40,8 +49,14 @@ export const mapSetRule = ({
   max_size: toNullable(nonNullish(maxSize) && maxSize > 0 ? BigInt(maxSize) : undefined),
   max_capacity: toNullable(nonNullish(maxCapacity) && maxCapacity > 0 ? maxCapacity : undefined),
   mutable_permissions: toNullable(mutablePermissions),
-  // TODO: support for rate config
-  rate_config: []
+  rate_config: nonNullish(maxTokens)
+    ? [
+        {
+          max_tokens: BigInt(maxTokens),
+          time_per_token_ns: DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS
+        }
+      ]
+    : []
 });
 
 export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
@@ -54,13 +69,17 @@ export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
     max_capacity,
     memory,
     mutable_permissions,
-    version
+    version,
+    rate_config
   } = rule;
 
   const maxSize = (max_size?.[0] ?? 0n > 0n) ? Number(fromNullable(max_size)) : undefined;
   const maxCapacity = (max_capacity?.[0] ?? 0 > 0) ? fromNullable(max_capacity) : undefined;
 
   const ruleVersion = fromNullable(version);
+
+  const maxTokens =
+    (rate_config?.[0]?.max_tokens ?? 0n > 0n) ? fromNullable(rate_config)?.max_tokens : undefined;
 
   return {
     collection,
@@ -72,7 +91,8 @@ export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
     ...(nonNullish(ruleVersion) && {version: ruleVersion}),
     ...(nonNullish(maxSize) && {maxSize}),
     ...(nonNullish(maxCapacity) && {maxCapacity}),
-    mutablePermissions: fromNullable(mutable_permissions) ?? true
+    mutablePermissions: fromNullable(mutable_permissions) ?? true,
+    ...(nonNullish(maxTokens) && {maxTokens: Number(maxTokens)})
   };
 };
 

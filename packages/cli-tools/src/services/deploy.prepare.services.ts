@@ -142,12 +142,15 @@ const listFiles = async ({
     if (ext === 'Z') {
       return 'compress';
     }
+
     if (ext === 'gz') {
       return 'gzip';
     }
+
     if (extname(file) === '.br') {
       return 'br';
     }
+
     if (extname(file) === '.zlib') {
       return 'deflate';
     }

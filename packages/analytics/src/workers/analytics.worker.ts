@@ -275,7 +275,10 @@ const isBot = (): boolean => {
   return false;
 };
 
-const isEnvInitialized = (env: Option<EnvironmentActor>): env is NonNullable<EnvironmentActor> =>
+const isEnvInitialized = (
+  // eslint-disable-next-line local-rules/use-option-type-wrapper
+  env: EnvironmentActor | undefined | null
+): env is NonNullable<EnvironmentActor> =>
   env !== undefined && env !== null && nonNullish(env.orbiterId) && nonNullish(env.satelliteId);
 
 const consoleWarn = (results: Result_1) => {

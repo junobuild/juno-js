@@ -8,7 +8,8 @@ type AgentParams = Required<Pick<Satellite, 'identity'>> & Pick<Satellite, 'fetc
 export class AgentStore {
   private static instance: AgentStore;
 
-  #agents: Option<Record> = undefined;
+  // eslint-disable-next-line local-rules/use-option-type-wrapper
+  #agents: Record<string, HttpAgent> | undefined | null = undefined;
 
   private constructor() {}
 

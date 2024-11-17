@@ -4,7 +4,8 @@
  * @param {T | undefined | null} argument - The argument to check.
  * @returns {boolean} True if the argument is null or undefined, false otherwise.
  */
-export const isNullish = <T>(argument: Option<T>): argument is undefined | null =>
+// eslint-disable-next-line local-rules/use-option-type-wrapper
+export const isNullish = <T>(argument: T | undefined | null): argument is undefined | null =>
   argument === null || argument === undefined;
 
 /**
@@ -13,7 +14,8 @@ export const isNullish = <T>(argument: Option<T>): argument is undefined | null 
  * @param {T | undefined | null} argument - The argument to check.
  * @returns {boolean} True if the argument is neither null nor undefined, false otherwise.
  */
-export const nonNullish = <T>(argument: Option<T>): argument is NonNullable<T> =>
+// eslint-disable-next-line local-rules/use-option-type-wrapper
+export const nonNullish = <T>(argument: T | undefined | null): argument is NonNullable<T> =>
   !isNullish(argument);
 
 /**

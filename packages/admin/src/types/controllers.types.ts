@@ -6,5 +6,6 @@
  */
 export interface SetControllerParams {
   controllerId: string;
-  profile: Option<string>;
+  // eslint-disable-next-line local-rules/use-option-type-wrapper
+  profile: string | null | undefined;
 }

@@ -1,5 +1,10 @@
-import type {ActorConfig, ActorMethod, ActorSubclass} from '@dfinity/agent';
-import {Actor, HttpAgent} from '@dfinity/agent';
+import {
+  Actor,
+  HttpAgent,
+  type ActorConfig,
+  type ActorMethod,
+  type ActorSubclass
+} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {nonNullish} from '@junobuild/utils';
 import type {ActorParameters} from '../types/actor.types';
@@ -20,7 +25,7 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   return Actor.createActor(idlFactory, {
     agent,
     canisterId,
-    ...(config !== undefined ? config : {})
+    ...(config ?? {})
   });
 };
 

@@ -17,7 +17,6 @@ import {
   isTSUnknownKeyword,
   isTSVoidKeyword,
   type Identifier,
-  type StringLiteral,
   type TSMethodSignature,
   type TSNamedTupleMember,
   type TSPropertySignature,
@@ -148,7 +147,7 @@ const getTypeName = (
   }
 
   if (isTSArrayType(typeAnnotation)) {
-    return getTypeName(typeAnnotation.elementType) + '[]';
+    return `${getTypeName(typeAnnotation.elementType)}[]`;
   }
 
   return 'unknown';
@@ -161,12 +160,12 @@ const membersToMethodSignatures = (
 
   const findName = (): string | undefined => {
     if (key.type === 'Identifier') {
-      return (key as Identifier).name;
+      return key.name;
     }
 
     // didc generate function name with quotes, congrats.
     if (key.type === 'StringLiteral') {
-      return (key as StringLiteral).value;
+      return key.value;
     }
 
     return undefined;

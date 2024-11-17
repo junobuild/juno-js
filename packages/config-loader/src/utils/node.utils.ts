@@ -25,6 +25,7 @@ export const nodeRequire = <T>({id, extension}: {id: string; extension: string})
   try {
     // let's override node's require for a second
     // don't worry, we'll revert this when we're done
+    // eslint-disable-next-line local-rules/prefer-object-params
     require.extensions[extension] = (module: NodeJS.Module, fileName: string) => {
       // let's transpile with Babel regardless if TS or JS
       const sourceText = transformFileSync(fileName, {

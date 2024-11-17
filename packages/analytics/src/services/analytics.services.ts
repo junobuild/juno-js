@@ -24,7 +24,7 @@ let worker: Worker | undefined;
 
 export const initWorker = (env: Environment): {cleanup: () => void} => {
   const {path}: EnvironmentWorker = env.worker ?? {};
-  const workerUrl = path === undefined ? './workers/analytics.worker.js' : path;
+  const workerUrl = path ?? './workers/analytics.worker.js';
 
   worker = new Worker(workerUrl);
 
@@ -46,6 +46,7 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
   const trackPages = async () => await trackPageView();
 
   let pushStateProxy: typeof history.pushState | null = new Proxy(history.pushState, {
+    // eslint-disable-next-line local-rules/prefer-object-params
     apply: async (
       target,
       thisArg,
@@ -94,7 +95,7 @@ export const setPageView = async () => {
       inner_height: innerHeight
     },
     time_zone: timeZone,
-    session_id: sessionId as string,
+    session_id: sessionId,
     ...userAgent(),
     ...timestamp()
   };
@@ -148,7 +149,7 @@ export const trackEvent = async (data: TrackEvent): Promise<void> => {
   const idb = await import('./idb.services');
   await idb.setTrackEvent({
     key: nanoid(),
-    track: {...data, session_id: sessionId as string, ...userAgent(), ...timestamp()}
+    track: {...data, session_id: sessionId, ...userAgent(), ...timestamp()}
   });
 
   worker?.postMessage({msg: 'junoTrackEvent'});

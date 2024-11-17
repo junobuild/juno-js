@@ -16,6 +16,7 @@ type ActorRecord = Record<string, ActorMethod>;
 export class ActorStore {
   private static instance: ActorStore;
 
+  // eslint-disable-next-line local-rules/use-option-type-wrapper
   #actors: Record<string, ActorSubclass<ActorRecord>> | undefined | null = undefined;
 
   private constructor() {}

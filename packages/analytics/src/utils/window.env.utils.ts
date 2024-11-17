@@ -1,5 +1,7 @@
 // TODO: duplicated because those should not be bundled in web worker. We can avoid this by transforming utils into a library of modules.
-type ImportMeta = {env: Record<string, string> | undefined};
+interface ImportMeta {
+  env: Record<string, string> | undefined;
+}
 
 export const envSatelliteId = (): string | undefined => {
   const viteEnvSatelliteId = (): string | undefined =>

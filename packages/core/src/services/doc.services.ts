@@ -31,7 +31,7 @@ export const getDoc = async <D>({
 } & Pick<Doc<D>, 'key'>): Promise<Doc<D> | undefined> => {
   const identity = getIdentity(satellite?.identity);
 
-  return getDocApi({...rest, satellite: {...satellite, identity}});
+  return await getDocApi({...rest, satellite: {...satellite, identity}});
 };
 
 /**
@@ -51,7 +51,7 @@ export const getManyDocs = async ({
 }): Promise<(Doc<any> | undefined)[]> => {
   const identity = getIdentity(satellite?.identity);
 
-  return getManyDocsApi({...rest, satellite: {...satellite, identity}});
+  return await getManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
 /* eslint-enable */
 
@@ -74,7 +74,7 @@ export const setDoc = async <D>({
 }): Promise<Doc<D>> => {
   const identity = getIdentity(satellite?.identity);
 
-  return setDocApi({...rest, satellite: {...satellite, identity}});
+  return await setDocApi({...rest, satellite: {...satellite, identity}});
 };
 
 /**
@@ -94,7 +94,7 @@ export const setManyDocs = async ({
 }): Promise<Doc<any>[]> => {
   const identity = getIdentity(satellite?.identity);
 
-  return setManyDocsApi({...rest, satellite: {...satellite, identity}});
+  return await setManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
 /* eslint-enable */
 
@@ -117,7 +117,7 @@ export const deleteDoc = async <D>({
 }): Promise<void> => {
   const identity = getIdentity(satellite?.identity);
 
-  return deleteDocApi({...rest, satellite: {...satellite, identity}});
+  return await deleteDocApi({...rest, satellite: {...satellite, identity}});
 };
 
 /**
@@ -137,7 +137,7 @@ export const deleteManyDocs = async ({
 }): Promise<void> => {
   const identity = getIdentity(satellite?.identity);
 
-  return deleteManyDocsApi({...rest, satellite: {...satellite, identity}});
+  return await deleteManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
 /* eslint-enable */
 
@@ -161,7 +161,7 @@ export const listDocs = async <D>({
 }): Promise<ListResults<Doc<D>>> => {
   const identity = getIdentity(satellite?.identity);
 
-  return listDocsApi<D>({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
+  return await listDocsApi<D>({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
 };
 
 /**
@@ -183,5 +183,5 @@ export const countDocs = async ({
 }): Promise<bigint> => {
   const identity = getIdentity(satellite?.identity);
 
-  return countDocsApi({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
+  return await countDocsApi({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
 };

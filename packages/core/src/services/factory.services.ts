@@ -14,7 +14,7 @@ export const getSatelliteExtendedActor = async <T = Record<string, ActorMethod>>
 }): Promise<ActorSubclass<T>> => {
   const identity = getIdentity(satellite?.identity);
 
-  return getSatelliteExtendedActorApi({
+  return await getSatelliteExtendedActorApi({
     idlFactory,
     ...satellite,
     identity

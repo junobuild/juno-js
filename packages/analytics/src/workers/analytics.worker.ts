@@ -20,7 +20,7 @@ onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
 
   switch (msg) {
     case 'junoInitEnvironment':
-      await init(data as PostMessageInitEnvData);
+      init(data as PostMessageInitEnvData);
       return;
     case 'junoTrackPageView':
       trackPageView();
@@ -45,7 +45,7 @@ const ORBITER_ID_UNDEFINED_MSG =
 
 let env: Environment | undefined;
 
-const init = async (environment: PostMessageInitEnvData) => {
+const init = (environment: PostMessageInitEnvData) => {
   const {orbiterId, satelliteId} = environment;
 
   assertNonNullish(orbiterId, ORBITER_ID_UNDEFINED_MSG);
@@ -262,7 +262,7 @@ const ids = ({key, collected_at}: {key: IdbKey; collected_at: bigint}): Analytic
 });
 
 const satelliteId = (env: EnvironmentActor): {satellite_id: Principal} => ({
-  satellite_id: Principal.fromText((env as EnvironmentActor).satelliteId)
+  satellite_id: Principal.fromText(env.satelliteId)
 });
 
 const isBot = (): boolean => {
@@ -276,6 +276,7 @@ const isBot = (): boolean => {
 };
 
 const isEnvInitialized = (
+  // eslint-disable-next-line local-rules/use-option-type-wrapper
   env: EnvironmentActor | undefined | null
 ): env is NonNullable<EnvironmentActor> =>
   env !== undefined && env !== null && nonNullish(env.orbiterId) && nonNullish(env.satelliteId);

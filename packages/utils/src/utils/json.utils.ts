@@ -11,6 +11,7 @@ const JSON_KEY_UINT8ARRAY = '__uint8array__';
  * @param {unknown} value - The value being stringified.
  * @returns {unknown} The altered value for stringification.
  */
+// eslint-disable-next-line local-rules/prefer-object-params
 export const jsonReplacer = (_key: string, value: unknown): unknown => {
   if (typeof value === 'bigint') {
     return {[JSON_KEY_BIGINT]: `${value}`};
@@ -33,6 +34,7 @@ export const jsonReplacer = (_key: string, value: unknown): unknown => {
  * @param {unknown} value - The value being parsed.
  * @returns {unknown} The parsed value.
  */
+// eslint-disable-next-line local-rules/prefer-object-params
 export const jsonReviver = (_key: string, value: unknown): unknown => {
   const mapValue = <T>(key: string): T => (value as Record<string, T>)[key];
 

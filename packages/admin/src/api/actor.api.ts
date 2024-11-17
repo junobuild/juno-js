@@ -3,16 +3,22 @@ import type {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {isNullish} from '@junobuild/utils';
 import type {_SERVICE as ICActor} from '../../declarations/ic/ic.did';
+// eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactorIC} from '../../declarations/ic/ic.factory.did';
 import type {_SERVICE as MissionControlActor} from '../../declarations/mission_control/mission_control.did';
+// eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactoryMissionControl} from '../../declarations/mission_control/mission_control.factory.did.js';
 import type {_SERVICE as OrbiterActor} from '../../declarations/orbiter/orbiter.did';
+// eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactoryOrbiter} from '../../declarations/orbiter/orbiter.factory.did.js';
 import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
+// eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlDeprecatedFactorySatelliteNoScope} from '../../declarations/satellite/satellite-deprecated-no-scope.factory.did.js';
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
+// eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlDeprecatedFactorySatellite} from '../../declarations/satellite/satellite-deprecated.factory.did.js';
 import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
+// eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactorySatellite} from '../../declarations/satellite/satellite.factory.did.js';
 import type {
   ActorParameters,
@@ -23,7 +29,7 @@ import type {
 import {createActor} from '../utils/actor.utils';
 
 // TODO: for backwards compatibility - to be removed
-export const getDeprecatedSatelliteActor = async ({
+export const getDeprecatedSatelliteActor = ({
   satelliteId,
   ...rest
 }: SatelliteParameters): Promise<DeprecatedSatelliteActor> =>
@@ -33,7 +39,7 @@ export const getDeprecatedSatelliteActor = async ({
     idlFactory: idlDeprecatedFactorySatellite
   });
 
-export const getSatelliteActor = async ({
+export const getSatelliteActor = ({
   satelliteId,
   ...rest
 }: SatelliteParameters): Promise<SatelliteActor> =>
@@ -44,7 +50,7 @@ export const getSatelliteActor = async ({
   });
 
 // TODO: for backwards compatibility - to be removed
-export const getDeprecatedSatelliteNoScopeActor = async ({
+export const getDeprecatedSatelliteNoScopeActor = ({
   satelliteId,
   ...rest
 }: SatelliteParameters): Promise<DeprecatedSatelliteNoScopeActor> =>
@@ -54,7 +60,7 @@ export const getDeprecatedSatelliteNoScopeActor = async ({
     idlFactory: idlDeprecatedFactorySatelliteNoScope
   });
 
-export const getMissionControlActor = async ({
+export const getMissionControlActor = ({
   missionControlId,
   ...rest
 }: MissionControlParameters): Promise<MissionControlActor> =>
@@ -64,17 +70,14 @@ export const getMissionControlActor = async ({
     idlFactory: idlFactoryMissionControl
   });
 
-export const getOrbiterActor = async ({
-  orbiterId,
-  ...rest
-}: OrbiterParameters): Promise<OrbiterActor> =>
+export const getOrbiterActor = ({orbiterId, ...rest}: OrbiterParameters): Promise<OrbiterActor> =>
   getActor({
     canisterId: orbiterId,
     ...rest,
     idlFactory: idlFactoryOrbiter
   });
 
-export const getActor = async <T>({
+export const getActor = <T>({
   canisterId,
   idlFactory,
   ...rest
@@ -96,12 +99,13 @@ export const getActor = async <T>({
 const MANAGEMENT_CANISTER_ID = Principal.fromText('aaaaa-aa');
 
 // Source nns-dapp - dart -> JS bridge
+// eslint-disable-next-line local-rules/prefer-object-params
 const transform = (
   _methodName: string,
   args: unknown[],
   _callConfig: CallConfig
 ): {effectiveCanisterId: Principal} => {
-  const first = args[0] as unknown;
+  const first = args[0];
   let effectiveCanisterId = MANAGEMENT_CANISTER_ID;
   if (first && typeof first === 'object' && first['canister_id']) {
     effectiveCanisterId = Principal.from(first['canister_id'] as unknown);

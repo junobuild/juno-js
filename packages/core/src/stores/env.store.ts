@@ -27,6 +27,7 @@ export class EnvStore extends Store<Environment | undefined> {
     return this.env;
   }
 
+  // eslint-disable-next-line local-rules/use-option-type-wrapper
   override subscribe(callback: (data: Environment | null | undefined) => void): () => void {
     const unsubscribe: () => void = super.subscribe(callback);
 

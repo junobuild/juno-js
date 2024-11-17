@@ -12,7 +12,7 @@ import {encodeIDLControllers} from '../utils/idl.utils';
  * @param {OrbiterParameters} params.orbiter - The Orbiter parameters.
  * @returns {Promise<string>} A promise that resolves to the version of the Orbiter.
  */
-export const orbiterVersion = async (params: {orbiter: OrbiterParameters}): Promise<string> =>
+export const orbiterVersion = (params: {orbiter: OrbiterParameters}): Promise<string> =>
   version(params);
 
 /**

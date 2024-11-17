@@ -91,14 +91,16 @@ async function* batchUploadChunks({
   }
 }
 
-type UploadChunkResult = {chunk_id: bigint};
+interface UploadChunkResult {
+  chunk_id: bigint;
+}
 
-type UploadChunkParams = {
+interface UploadChunkParams {
   batchId: bigint;
   chunk: Blob;
   actor: SatelliteActor | ConsoleActor;
   orderId: bigint;
-};
+}
 
 const uploadChunk = async ({
   batchId,

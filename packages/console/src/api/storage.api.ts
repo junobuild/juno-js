@@ -14,9 +14,8 @@ export const uploadAsset = async ({
 }): Promise<void> => {
   const actor = await getConsoleActor(console);
 
-  const init_asset_upload = async (initAssetKey: InitAssetKey): Promise<InitUploadResult> => {
-    return await actor.init_asset_upload(initAssetKey, proposalId);
-  };
+  const init_asset_upload = async (initAssetKey: InitAssetKey): Promise<InitUploadResult> =>
+    await actor.init_asset_upload(initAssetKey, proposalId);
 
   await uploadAssetStorage({
     actor,

@@ -3,30 +3,29 @@ import type {ActorMethod} from '@dfinity/agent/lib/esm/actor';
 import type {IDL} from '@dfinity/candid';
 import {assertNonNullish} from '@junobuild/utils';
 import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
+// eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as stockIdlFactory} from '../../declarations/satellite/satellite.factory.did.js';
 import {ActorStore} from '../stores/actor.store';
 import type {BuildType} from '../types/build.types';
 import type {Satellite} from '../types/satellite.types';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
 
-export const getSatelliteActor = async (satellite: Satellite): Promise<SatelliteActor> => {
-  return getActor({
+export const getSatelliteActor = (satellite: Satellite): Promise<SatelliteActor> =>
+  getActor({
     idlFactory: stockIdlFactory,
     buildType: 'stock',
     ...satellite
   });
-};
 
-export const getSatelliteExtendedActor = async <T = Record<string, ActorMethod>>({
+export const getSatelliteExtendedActor = <T = Record<string, ActorMethod>>({
   idlFactory,
   ...rest
-}: Satellite & {idlFactory: IDL.InterfaceFactory}): Promise<ActorSubclass<T>> => {
-  return getActor({
+}: Satellite & {idlFactory: IDL.InterfaceFactory}): Promise<ActorSubclass<T>> =>
+  getActor({
     idlFactory,
     buildType: 'extended',
     ...rest
   });
-};
 
 const getActor = async <T = Record<string, ActorMethod>>({
   satelliteId: customSatelliteId,

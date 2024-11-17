@@ -33,7 +33,7 @@ export const initAuth = async (provider?: Provider) => {
  * @returns {Promise<void>} A promise that resolves when the sign-in process is complete and the authenticated user is initialized.
  * @throws Will throw an error if the sign-in process fails.
  */
-export const signIn = async (options?: SignInOptions): Promise<void> =>
+export const signIn = (options?: SignInOptions): Promise<void> =>
   /* eslint-disable no-async-promise-executor */
   new Promise<void>(async (resolve, reject) => {
     authClient = authClient ?? (await createAuthClient());
@@ -71,9 +71,7 @@ export const signOut = async (): Promise<void> => {
   AgentStore.getInstance().reset();
 };
 
-export const getIdentity = (): Identity | undefined => {
-  return authClient?.getIdentity();
-};
+export const getIdentity = (): Identity | undefined => authClient?.getIdentity();
 
 /**
  * Returns the identity of a signed-in user or an anonymous identity.

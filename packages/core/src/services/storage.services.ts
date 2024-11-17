@@ -4,6 +4,7 @@ import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import {
   countAssets as countAssetsApi,
   deleteAsset as deleteAssetApi,
+  deleteFilteredAssets as deleteFilteredAssetsApi,
   deleteManyAssets as deleteManyAssetsApi,
   getAsset as getAssetApi,
   getManyAssets as getManyAssetsApi,
@@ -219,6 +220,34 @@ export const deleteManyAssets = ({
     assets,
     satellite: {...satellite, identity: getIdentity(satellite?.identity)}
   });
+
+/**
+ * Deletes multiple assets from a collection based on filtering criteria.
+ *
+ * @param {Object} params - The parameters for deleting the assets.
+ * @param {string} params.collection - The name of the collection from which to delete assets.
+ * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @param {ListParams} [params.filter] - The filter criteria to match assets for deletion.
+ *
+ * @returns {Promise<void>} A promise that resolves when the assets matching the filter criteria are deleted.
+ */
+export const deleteFilteredAssets = async ({
+  collection,
+  satellite: satelliteOptions,
+  filter
+}: {
+  collection: string;
+  satellite?: SatelliteOptions;
+  filter?: ListParams;
+}): Promise<void> => {
+  const satellite = {...satelliteOptions, identity: getIdentity(satelliteOptions?.identity)};
+
+  return await deleteFilteredAssetsApi({
+    collection,
+    satellite,
+    filter: filter ?? {}
+  });
+};
 
 /**
  * Retrieves an asset from the storage.

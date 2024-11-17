@@ -103,6 +103,20 @@ export const deleteManyAssets = async ({
   await del_many_assets(payload);
 };
 
+export const deleteFilteredAssets = async ({
+  collection,
+  satellite,
+  filter
+}: {
+  collection: string;
+  satellite: Satellite;
+  filter: ListParams;
+}): Promise<void> => {
+  const {del_filtered_assets} = await getSatelliteActor(satellite);
+
+  return del_filtered_assets(collection, toListParams(filter));
+};
+
 export const getAsset = async ({
   collection,
   fullPath,

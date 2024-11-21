@@ -334,7 +334,7 @@ export const upgradeSatellite = async ({
 
   const list = deprecatedNoScope ? listDeprecatedNoScopeControllers : listControllers;
 
-  // We pass the controllers to the upgrade but, it's just for the state of the art. The module's post_upgrade do not consider the init parameters.
+  // We pass the controllers to the upgrade but, it's just for the state of the art because I don't want to call the install without passing args. The module's post_upgrade do not consider the init parameters.
   const controllers = await list({satellite});
 
   const arg = encodeIDLControllers(controllers);

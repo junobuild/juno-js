@@ -1,5 +1,8 @@
 export * from './services/mission-control.services';
-export * from './services/orbiter.services';
+export * from './services/orbiter.controllers.services';
+export * from './services/orbiter.memory.services';
+export * from './services/orbiter.upgrade.services';
+export * from './services/orbiter.version.services';
 export * from './services/releases.services';
 export * from './services/satellite.services';
 export type * from './types/actor.types';

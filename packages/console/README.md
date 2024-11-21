@@ -1,9 +1,9 @@
 [![npm][npm-badge]][npm-badge-url]
 [![license][npm-license]][npm-license-url]
 
-[npm-badge]: https://img.shields.io/npm/v/@junobuild/storage
-[npm-badge-url]: https://www.npmjs.com/package/@junobuild/storage
-[npm-license]: https://img.shields.io/npm/l/@junobuild/storage
+[npm-badge]: https://img.shields.io/npm/v/@junobuild/console
+[npm-badge-url]: https://www.npmjs.com/package/@junobuild/console
+[npm-license]: https://img.shields.io/npm/l/@junobuild/console
 [npm-license-url]: https://github.com/junobuild/juno-js/blob/main/LICENSE
 
 # Juno JavaScript Console SDK

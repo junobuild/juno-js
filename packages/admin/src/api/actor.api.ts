@@ -1,10 +1,5 @@
-import type {CallConfig} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
-import {Principal} from '@dfinity/principal';
 import {isNullish} from '@junobuild/utils';
-import type {_SERVICE as ICActor} from '../../declarations/ic/ic.did';
-// eslint-disable-next-line import/no-relative-parent-imports
-import {idlFactory as idlFactorIC} from '../../declarations/ic/ic.factory.did';
 import type {_SERVICE as MissionControlActor} from '../../declarations/mission_control/mission_control.did';
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactoryMissionControl} from '../../declarations/mission_control/mission_control.factory.did.js';
@@ -95,32 +90,3 @@ export const getActor = <T>({
     ...rest
   });
 };
-
-const MANAGEMENT_CANISTER_ID = Principal.fromText('aaaaa-aa');
-
-// Source nns-dapp - dart -> JS bridge
-// eslint-disable-next-line local-rules/prefer-object-params
-const transform = (
-  _methodName: string,
-  args: unknown[],
-  _callConfig: CallConfig
-): {effectiveCanisterId: Principal} => {
-  const first = args[0];
-  let effectiveCanisterId = MANAGEMENT_CANISTER_ID;
-  if (first && typeof first === 'object' && first['canister_id']) {
-    effectiveCanisterId = Principal.from(first['canister_id'] as unknown);
-  }
-
-  return {effectiveCanisterId};
-};
-
-export const getICActor = (params: ActorParameters): Promise<ICActor> =>
-  createActor<ICActor>({
-    canisterId: MANAGEMENT_CANISTER_ID.toText(),
-    config: {
-      callTransform: transform,
-      queryTransform: transform
-    },
-    idlFactory: idlFactorIC,
-    ...params
-  });

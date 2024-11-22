@@ -15,11 +15,11 @@ import {encodeIDLControllers} from '../utils/idl.utils';
  */
 export const upgradeOrbiter = async ({
   orbiter,
-  wasm_module,
+  wasmModule,
   reset = false
 }: {
   orbiter: OrbiterParameters;
-  wasm_module: Uint8Array;
+  wasmModule: Uint8Array;
   reset?: boolean;
 }): Promise<void> => {
   const {orbiterId, ...actor} = orbiter;
@@ -35,9 +35,9 @@ export const upgradeOrbiter = async ({
   await upgradeCode({
     actor,
     code: {
-      canister_id: Principal.fromText(orbiterId),
+      canisterId: Principal.fromText(orbiterId),
       arg: new Uint8Array(arg),
-      wasm_module,
+      wasmModule,
       mode: reset
         ? {reinstall: null}
         : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}

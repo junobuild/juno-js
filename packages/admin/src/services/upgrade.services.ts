@@ -1,7 +1,7 @@
 import type {chunk_hash} from '@dfinity/ic-management';
 import {Principal} from '@dfinity/principal';
 import {nonNullish} from '@junobuild/utils';
-import {storedChunks} from '../api/ic.api';
+import {storedChunks, uploadChunk as uploadChunkApi} from '../api/ic.api';
 import {ActorParameters} from '../types/actor.types';
 import {blobSha256, uint8ArraySha256} from '../utils/crypto.utils';
 
@@ -40,17 +40,17 @@ export const upgradeCode = async ({
     missionControlId
   });
 
-  // TODO: maybe clean chunked stores
+  // TODO: maybe clean chunked stores - param
 
   // Upload chunks to the IC in batch - i.e. 12 chunks uploaded at a time.
   let chunkIds: UploadChunkResult[] = [];
-  for await (const results of batchUploadChunks({uploadChunks})) {
+  for await (const results of batchUploadChunks({uploadChunks, actor, canisterId})) {
     chunkIds = [...chunkIds, ...results];
   }
 
   // TODO: install chunked code
 
-  // TODO: maybe clean chunked stores
+  // TODO: maybe clean chunked stores - param
 };
 
 const wasmToChunks = async ({
@@ -120,14 +120,43 @@ const filterChunksToUpload = async ({
 
 async function* batchUploadChunks({
   uploadChunks,
-  limit = 12
-}: {
+  limit = 12,
+  ...rest
+}: Pick<UpgradeCodeParams, 'actor' | 'canisterId'> & {
   uploadChunks: UploadChunkParams[];
   limit?: number;
 }): AsyncGenerator<UploadChunkResult[], void> {
   for (let i = 0; i < uploadChunks.length; i = i + limit) {
     const batch = uploadChunks.slice(i, i + limit);
-    const result = await Promise.all(batch.map((params) => uploadChunk(params)));
+    const result = await Promise.all(
+      batch.map((uploadChunkParams) =>
+        uploadChunk({
+          uploadChunk: uploadChunkParams,
+          ...rest
+        })
+      )
+    );
     yield result;
   }
 }
+
+const uploadChunk = async ({
+  actor,
+  canisterId,
+  uploadChunk: {chunk, ...rest}
+}: Pick<UpgradeCodeParams, 'actor' | 'canisterId'> & {
+  uploadChunk: UploadChunkParams;
+}): Promise<UploadChunkResult> => {
+  const chunkHash = await uploadChunkApi({
+    actor,
+    chunk: {
+      canisterId,
+      chunk: new Uint8Array(await chunk.arrayBuffer())
+    }
+  });
+
+  return {
+    hash: chunkHash,
+    ...rest
+  };
+};

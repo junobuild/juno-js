@@ -1,7 +1,7 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {isNullish} from '@junobuild/utils';
-import {upgradeCode} from '../api/ic.api';
+import {installCode} from '../api/ic.api';
 import {
   listControllers,
   listDeprecatedControllers,
@@ -52,7 +52,7 @@ export const upgradeSatellite = async ({
       [{controllers}]
     );
 
-    await upgradeCode({
+    await installCode({
       actor,
       code: {
         canisterId: Principal.fromText(satelliteId),
@@ -74,7 +74,7 @@ export const upgradeSatellite = async ({
 
   const arg = encodeIDLControllers(controllers);
 
-  await upgradeCode({
+  await installCode({
     actor,
     code: {
       canisterId: Principal.fromText(satelliteId),

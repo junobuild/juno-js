@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {upgradeCode} from '../api/ic.api';
+import {installCode} from '../api/ic.api';
 import {listControllers} from '../api/orbiter.api';
 import type {OrbiterParameters} from '../types/actor.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
@@ -32,7 +32,7 @@ export const upgradeOrbiter = async ({
 
   const arg = encodeIDLControllers(controllers);
 
-  await upgradeCode({
+  await installCode({
     actor,
     code: {
       canisterId: Principal.fromText(orbiterId),

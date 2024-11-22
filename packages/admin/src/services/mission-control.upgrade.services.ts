@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {upgradeCode} from '../api/ic.api';
+import {installCode} from '../api/ic.api';
 import {getUser} from '../api/mission-control.api';
 import type {MissionControlParameters} from '../types/actor.types';
 import {encoreIDLUser} from '../utils/idl.utils';
@@ -29,7 +29,7 @@ export const upgradeMissionControl = async ({
 
   const arg = encoreIDLUser(user);
 
-  await upgradeCode({
+  await installCode({
     actor,
     code: {
       canisterId: Principal.fromText(missionControlId),

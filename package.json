@@ -53,6 +53,8 @@
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/principal",
+        "@dfinity/utils",
+        "@dfinity/ic-management",
         "@junobuild/utils",
         "semver"
       ]

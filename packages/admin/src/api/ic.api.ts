@@ -1,11 +1,9 @@
 import {CanisterStatus} from '@dfinity/agent';
+import {ICManagementCanister, InstallCodeParams} from '@dfinity/ic-management';
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish} from '@junobuild/utils';
-import type {_SERVICE as ICActor} from '../../declarations/ic/ic.did';
 import type {ActorParameters} from '../types/actor.types';
-import type {InstallCodeParams} from '../types/ic.types';
 import {initAgent} from '../utils/actor.utils';
-import {getICActor} from './actor.api';
 
 export const upgradeCode = async ({
   actor,
@@ -14,12 +12,13 @@ export const upgradeCode = async ({
   actor: ActorParameters;
   code: InstallCodeParams;
 }): Promise<void> => {
-  const {install_code}: ICActor = await getICActor(actor);
+  const agent = await initAgent(actor);
 
-  return install_code({
-    ...code,
-    sender_canister_version: []
+  const {installCode} = ICManagementCanister.create({
+    agent
   });
+
+  return installCode(code);
 };
 
 export const canisterMetadata = async ({

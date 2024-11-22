@@ -14,10 +14,10 @@ import {encoreIDLUser} from '../utils/idl.utils';
  */
 export const upgradeMissionControl = async ({
   missionControl,
-  wasm_module
+  wasmModule
 }: {
   missionControl: MissionControlParameters;
-  wasm_module: Uint8Array;
+  wasmModule: Uint8Array;
 }): Promise<void> => {
   const user = await getUser({missionControl});
 
@@ -32,9 +32,9 @@ export const upgradeMissionControl = async ({
   await upgradeCode({
     actor,
     code: {
-      canister_id: Principal.fromText(missionControlId),
+      canisterId: Principal.fromText(missionControlId),
       arg: new Uint8Array(arg),
-      wasm_module,
+      wasmModule,
       mode: {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}
     }
   });

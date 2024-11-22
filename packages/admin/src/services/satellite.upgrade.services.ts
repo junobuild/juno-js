@@ -22,13 +22,13 @@ import {encodeIDLControllers} from '../utils/idl.utils';
  */
 export const upgradeSatellite = async ({
   satellite,
-  wasm_module,
+  wasmModule,
   deprecated,
   deprecatedNoScope,
   reset = false
 }: {
   satellite: SatelliteParameters;
-  wasm_module: Uint8Array;
+  wasmModule: Uint8Array;
   deprecated: boolean;
   deprecatedNoScope: boolean;
   reset?: boolean;
@@ -55,9 +55,9 @@ export const upgradeSatellite = async ({
     await upgradeCode({
       actor,
       code: {
-        canister_id: Principal.fromText(satelliteId),
+        canisterId: Principal.fromText(satelliteId),
         arg: new Uint8Array(arg),
-        wasm_module,
+        wasmModule,
         mode: reset
           ? {reinstall: null}
           : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}
@@ -77,9 +77,9 @@ export const upgradeSatellite = async ({
   await upgradeCode({
     actor,
     code: {
-      canister_id: Principal.fromText(satelliteId),
+      canisterId: Principal.fromText(satelliteId),
       arg: new Uint8Array(arg),
-      wasm_module,
+      wasmModule,
       mode: reset
         ? {reinstall: null}
         : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}

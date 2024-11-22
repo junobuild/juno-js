@@ -1,5 +1,6 @@
 import {CanisterStatus} from '@dfinity/agent';
 import {ICManagementCanister, InstallCodeParams} from '@dfinity/ic-management';
+import type {chunk_hash} from '@dfinity/ic-management/dist/candid/ic-management';
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish} from '@junobuild/utils';
 import type {ActorParameters} from '../types/actor.types';
@@ -19,6 +20,22 @@ export const upgradeCode = async ({
   });
 
   return installCode(code);
+};
+
+export const storedChunks = async ({
+  actor,
+  canisterId
+}: {
+  actor: ActorParameters;
+  canisterId: Principal;
+}): Promise<chunk_hash[]> => {
+  const agent = await initAgent(actor);
+
+  const {storedChunks} = ICManagementCanister.create({
+    agent
+  });
+
+  return storedChunks({canisterId});
 };
 
 export const canisterMetadata = async ({

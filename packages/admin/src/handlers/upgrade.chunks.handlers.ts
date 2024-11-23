@@ -32,17 +32,15 @@ export const upgradeChunkedCode = async ({
 }: UpgradeCodeParams) => {
   const wasmChunks = await wasmToChunks({wasmModule});
 
-  const {uploadChunks, storedChunks} = await prepareUpload({
+  const {uploadChunks, storedChunks, preClearChunks, postClearChunks} = await prepareUpload({
     actor,
     wasmChunks,
     canisterId,
     missionControlId
   });
 
-  // Alright, let's start by clearing existing chunks if necessary:
-  // either when targeting a specific canister, or if a mission control is provided
-  // and any new chunk differs from the existing ones.
-  if (isNullish(missionControlId)) {
+  // Alright, let's start by clearing existing chunks if there are already stored chunks but, none are matching those we want to upload.
+  if (preClearChunks) {
     await clearChunkStore({actor, canisterId});
   }
 
@@ -67,8 +65,8 @@ export const upgradeChunkedCode = async ({
     }
   });
 
-  // Post-processing and clearing only if no mission control is provided, as the chunks might be reused in that case.
-  if (isNullish(missionControlId)) {
+  // Finally let's clear only if no mission control is provided, as the chunks might be reused in that case.
+  if (postClearChunks) {
     await clearChunkStore({actor, canisterId});
   }
 };
@@ -101,6 +99,8 @@ const wasmToChunks = async ({
 interface PrepareUpload {
   uploadChunks: UploadChunkParams[];
   storedChunks: UploadChunkResult[];
+  preClearChunks: boolean;
+  postClearChunks: boolean;
 }
 
 /**
@@ -157,7 +157,9 @@ const prepareUpload = async ({
     sha256: uint8ArrayToHexString(hash)
   }));
 
-  const {storedChunks, uploadChunks} = wasmChunks.reduce<Omit<PrepareUpload, 'clearChunks'>>(
+  const {storedChunks, uploadChunks} = wasmChunks.reduce<
+    Omit<PrepareUpload, 'preClearChunks' | 'postClearChunks'>
+  >(
     ({uploadChunks, storedChunks}, {sha256, ...rest}) => {
       const existingStoredChunk = existingStoredChunks.find(
         ({sha256: storedSha256}) => storedSha256 === sha256
@@ -182,7 +184,9 @@ const prepareUpload = async ({
 
   return {
     uploadChunks,
-    storedChunks
+    storedChunks,
+    preClearChunks: stored.length > 0 && storedChunks.length === 0,
+    postClearChunks: isNullish(missionControlId)
   };
 };
 

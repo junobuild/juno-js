@@ -1,5 +1,5 @@
 import type {chunk_hash} from '@dfinity/ic-management';
-import {isNullish, nonNullish} from '@junobuild/utils';
+import {isNullish} from '@junobuild/utils';
 import {
   clearChunkStore,
   installChunkedCode,
@@ -35,6 +35,7 @@ export const upgradeChunkedCode = async ({
   const {uploadChunks, clearChunks} = await prepareUpload({
     actor,
     wasmChunks,
+    canisterId,
     missionControlId
   });
 
@@ -62,7 +63,7 @@ export const upgradeChunkedCode = async ({
         .map(({hash}) => hash),
       targetCanisterId: canisterId,
       storeCanisterId: missionControlId,
-      wasmModuleHash: wasmModule
+      wasmModuleHash: await uint8ArraySha256(wasmModule)
     }
   });
 
@@ -99,7 +100,6 @@ const wasmToChunks = async ({
 
 interface PrepareUpload {
   uploadChunks: UploadChunkParams[];
-  storedChunks: UploadChunkParams[];
   clearChunks: boolean;
 }
 
@@ -130,45 +130,44 @@ interface PrepareUpload {
  * and whether to clear stored chunks.
  */
 const prepareUpload = async ({
+  canisterId,
   missionControlId,
   actor,
   wasmChunks
-}: Pick<UpgradeCodeParams, 'missionControlId' | 'actor'> & {
+}: Pick<UpgradeCodeParams, 'canisterId' | 'missionControlId' | 'actor'> & {
   wasmChunks: UploadChunkParams[];
 }): Promise<PrepareUpload> => {
-  const stored = nonNullish(missionControlId)
-    ? await storedChunks({
-        actor,
-        canisterId: missionControlId
-      })
-    : [];
+  const stored = await storedChunks({
+    actor,
+    canisterId: missionControlId ?? canisterId
+  });
 
-  // We convert existing hash to an easily comparable sha256 - i.e. string
-  const promises = stored.map(({hash}) =>
-    uint8ArraySha256(hash instanceof Uint8Array ? hash : new Uint8Array(hash))
-  );
-  const storedHashes = await Promise.all(promises);
-
-  const {storedChunks: existingStoredChunks, ...rest} = wasmChunks.reduce<
-    Omit<PrepareUpload, 'clearChunks'>
-  >(
-    ({uploadChunks, storedChunks}, {sha256, ...rest}) => ({
-      uploadChunks: [
-        ...uploadChunks,
-        ...(storedHashes.includes(sha256) ? [] : [{sha256, ...rest}])
-      ],
-      storedChunks: [...storedChunks, ...(storedHashes.includes(sha256) ? [{sha256, ...rest}] : [])]
-    }),
-    {
-      uploadChunks: [],
-      storedChunks: []
-    }
-  );
+  // TODO: we cannot compare which chunks are already uploaded or not because the chunk_hash returned by the IC is actually the hash of a variant CanisterId, u64 and not the effective hash of the chunk which is the only information we know.
+  // // We convert existing hash to an easily comparable sha256 - i.e. string
+  // const promises = stored.map(({hash}) =>
+  //     uint8ArraySha256(hash instanceof Uint8Array ? hash : new Uint8Array(hash))
+  // );
+  // const storedHashes = await Promise.all(promises);
+  //
+  // const {storedChunks: existingStoredChunks, ...rest} = wasmChunks.reduce<
+  //     Omit<PrepareUpload, 'clearChunks'>
+  // >(
+  //     ({uploadChunks, storedChunks}, {sha256, ...rest}) => ({
+  //       uploadChunks: [
+  //         ...uploadChunks,
+  //         ...(storedHashes.includes(sha256) ? [] : [{sha256, ...rest}])
+  //       ],
+  //       storedChunks: [...storedChunks, ...(storedHashes.includes(sha256) ? [{sha256, ...rest}] : [])]
+  //     }),
+  //     {
+  //       uploadChunks: [],
+  //       storedChunks: []
+  //     }
+  // );
 
   return {
-    ...rest,
-    storedChunks: existingStoredChunks,
-    clearChunks: existingStoredChunks.length > 0
+    uploadChunks: wasmChunks,
+    clearChunks: stored.length > 0
   };
 };
 

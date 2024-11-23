@@ -6,6 +6,7 @@ import {
   storedChunks,
   uploadChunk as uploadChunkApi
 } from '../api/ic.api';
+import {INSTALL_MAX_CHUNK_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeParams} from '../types/upgrade.types';
 import {blobSha256, uint8ArraySha256} from '../utils/crypto.utils';
 
@@ -79,7 +80,7 @@ const wasmToChunks = async ({
 
   const uploadChunks: UploadChunkParams[] = [];
 
-  const chunkSize = 1000000;
+  const chunkSize = INSTALL_MAX_CHUNK_SIZE;
 
   // Split data into chunks
   let orderId = 0;

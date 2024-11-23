@@ -42,6 +42,22 @@ export const storedChunks = async ({
   return storedChunks({canisterId});
 };
 
+export const clearChunkStore = async ({
+  actor,
+  canisterId
+}: {
+  actor: ActorParameters;
+  canisterId: Principal;
+}): Promise<void> => {
+  const agent = await initAgent(actor);
+
+  const {clearChunkStore} = ICManagementCanister.create({
+    agent
+  });
+
+  return clearChunkStore({canisterId});
+};
+
 export const uploadChunk = async ({
   actor,
   chunk

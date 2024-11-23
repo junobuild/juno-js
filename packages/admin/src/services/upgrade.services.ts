@@ -1,7 +1,7 @@
 import type {chunk_hash} from '@dfinity/ic-management';
 import {Principal} from '@dfinity/principal';
 import {nonNullish} from '@junobuild/utils';
-import {storedChunks, uploadChunk as uploadChunkApi} from '../api/ic.api';
+import {installChunkedCode, storedChunks, uploadChunk as uploadChunkApi} from '../api/ic.api';
 import {ActorParameters} from '../types/actor.types';
 import {blobSha256, uint8ArraySha256} from '../utils/crypto.utils';
 
@@ -30,7 +30,8 @@ export const upgradeCode = async ({
   actor,
   canisterId,
   missionControlId,
-  wasmModule
+  wasmModule,
+  arg
 }: UpgradeCodeParams) => {
   const wasmChunks = await wasmToChunks({wasmModule});
 
@@ -48,7 +49,17 @@ export const upgradeCode = async ({
     chunkIds = [...chunkIds, ...results];
   }
 
-  // TODO: install chunked code
+  await installChunkedCode({
+    actor,
+    code: {
+      chunkHashesList: chunkIds.map(({hash}) => hash),
+      targetCanisterId: canisterId,
+      storeCanisterId: missionControlId,
+      arg,
+      mode: {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]},
+      wasmModuleHash: wasmModule
+    }
+  });
 
   // TODO: maybe clean chunked stores - param
 };

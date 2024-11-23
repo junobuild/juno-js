@@ -20,6 +20,7 @@ import {encodeIDLControllers} from '../utils/idl.utils';
  * @param {boolean} params.deprecated - Whether the upgrade is deprecated.
  * @param {boolean} params.deprecatedNoScope - Whether the upgrade is deprecated with no scope.
  * @param {boolean} [params.reset=false] - Whether to reset the satellite (reinstall) instead of upgrading.
+ * @param {boolean} [params.preClearChunks] - An optional parameter to force clearing the chunks before uploading the chunked WASM. Apply if WASM > 2Mb.
  * @returns {Promise<void>} A promise that resolves when the upgrade is complete.
  */
 export const upgradeSatellite = async ({
@@ -28,7 +29,8 @@ export const upgradeSatellite = async ({
   wasmModule,
   deprecated,
   deprecatedNoScope,
-  reset = false
+  reset = false,
+  preClearChunks
 }: {
   satellite: SatelliteParameters;
   missionControlId?: Principal;
@@ -36,6 +38,7 @@ export const upgradeSatellite = async ({
   deprecated: boolean;
   deprecatedNoScope: boolean;
   reset?: boolean;
+  preClearChunks?: boolean;
 }): Promise<void> => {
   const {satelliteId, ...actor} = satellite;
 
@@ -62,7 +65,8 @@ export const upgradeSatellite = async ({
       missionControlId,
       arg: new Uint8Array(arg),
       wasmModule,
-      mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE
+      mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
+      preClearChunks
     });
 
     return;
@@ -81,6 +85,7 @@ export const upgradeSatellite = async ({
     missionControlId,
     arg: new Uint8Array(arg),
     wasmModule,
-    mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE
+    mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
+    preClearChunks
   });
 };

@@ -29,8 +29,16 @@ export const upgradeChunkedCode = async ({
   canisterId,
   missionControlId,
   wasmModule,
+  preClearChunks: userPreClearChunks,
   ...rest
 }: UpgradeCodeParams) => {
+  console.log('--------------------> userPreClearChunks:', userPreClearChunks);
+
+  // If the user want to clear - reset - any chunks that have been uploaded before we start by removing those.
+  if (userPreClearChunks) {
+    await clearChunkStore({actor, canisterId});
+  }
+
   const wasmChunks = await wasmToChunks({wasmModule});
 
   const {uploadChunks, storedChunks, preClearChunks, postClearChunks} = await prepareUpload({
@@ -39,6 +47,14 @@ export const upgradeChunkedCode = async ({
     canisterId,
     missionControlId
   });
+
+  console.log(
+    '---------------WHAT',
+    uploadChunks.length,
+    storedChunks.length,
+    preClearChunks,
+    postClearChunks
+  );
 
   // Alright, let's start by clearing existing chunks if there are already stored chunks but, none are matching those we want to upload.
   if (preClearChunks) {
@@ -55,6 +71,11 @@ export const upgradeChunkedCode = async ({
   })) {
     chunkIds = [...chunkIds, ...results];
   }
+
+  console.log('-----> installChunkedCode', {
+    targetCanisterId: canisterId?.toText(),
+    storeCanisterId: missionControlId?.toText()
+  });
 
   // Install the chunked code.
   // ⚠️ The order of the chunks is really important! ⚠️
@@ -143,6 +164,11 @@ const prepareUpload = async ({
 }: Pick<UpgradeCodeParams, 'canisterId' | 'missionControlId' | 'actor'> & {
   wasmChunks: UploadChunkParams[];
 }): Promise<PrepareUpload> => {
+  console.log('-----> storedChunksApi', {
+    targetCanisterId: canisterId?.toText(),
+    storeCanisterId: missionControlId?.toText()
+  });
+
   const stored = await storedChunksApi({
     actor,
     canisterId: missionControlId ?? canisterId
@@ -218,6 +244,13 @@ const uploadChunk = async ({
 }: Pick<UpgradeCodeParams, 'actor' | 'canisterId' | 'missionControlId'> & {
   uploadChunk: UploadChunkParams;
 }): Promise<UploadChunkResult> => {
+  console.log(
+    '-----> uploadChunkApi',
+    missionControlId ?? canisterId,
+    missionControlId,
+    canisterId
+  );
+
   const chunkHash = await uploadChunkApi({
     actor,
     chunk: {

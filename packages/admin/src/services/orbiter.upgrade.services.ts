@@ -12,6 +12,7 @@ import {encodeIDLControllers} from '../utils/idl.utils';
  * @param {Principal} [params.missionControlId] - The optional Mission Control ID in which the WASM chunks can potentially be stored. Useful to reuse chunks across installations.
  * @param {Uint8Array} params.wasm_module - The WASM module for the upgrade.
  * @param {boolean} [params.reset=false] - Whether to reset the Orbiter (reinstall) instead of upgrading.
+ * @param {boolean} [params.preClearChunks] - An optional parameter to force clearing the chunks before uploading the chunked WASM. Apply if WASM > 2Mb.
  * @throws Will throw an error if no orbiter principal is defined.
  * @returns {Promise<void>} A promise that resolves when the upgrade is complete.
  */
@@ -19,12 +20,14 @@ export const upgradeOrbiter = async ({
   orbiter,
   missionControlId,
   wasmModule,
-  reset = false
+  reset = false,
+  preClearChunks
 }: {
   orbiter: OrbiterParameters;
   missionControlId?: Principal;
   wasmModule: Uint8Array;
   reset?: boolean;
+  preClearChunks?: boolean;
 }): Promise<void> => {
   const {orbiterId, ...actor} = orbiter;
 
@@ -42,6 +45,7 @@ export const upgradeOrbiter = async ({
     missionControlId,
     arg: new Uint8Array(arg),
     wasmModule,
-    mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE
+    mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
+    preClearChunks
   });
 };

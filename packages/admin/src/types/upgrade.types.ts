@@ -9,6 +9,7 @@ export interface UpgradeCodeParams {
   wasmModule: Uint8Array;
   arg: Uint8Array;
   mode: canister_install_mode;
+  preClearChunks?: boolean;
 }
 
 export class UpgradeCodeUnchangedError extends Error {

@@ -1,6 +1,7 @@
 import {Principal} from '@dfinity/principal';
-import {installCode} from '../api/ic.api';
 import {getUser} from '../api/mission-control.api';
+import {INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
+import {upgrade} from '../handlers/upgrade.handlers';
 import type {MissionControlParameters} from '../types/actor.types';
 import {encoreIDLUser} from '../utils/idl.utils';
 
@@ -29,13 +30,11 @@ export const upgradeMissionControl = async ({
 
   const arg = encoreIDLUser(user);
 
-  await installCode({
+  await upgrade({
     actor,
-    code: {
-      canisterId: Principal.fromText(missionControlId),
-      arg: new Uint8Array(arg),
-      wasmModule,
-      mode: {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}
-    }
+    canisterId: Principal.fromText(missionControlId),
+    arg: new Uint8Array(arg),
+    wasmModule,
+    mode: INSTALL_MODE_UPGRADE
   });
 };

@@ -1,5 +1,4 @@
 import type {chunk_hash} from '@dfinity/ic-management';
-import {Principal} from '@dfinity/principal';
 import {isNullish, nonNullish} from '@junobuild/utils';
 import {
   clearChunkStore,
@@ -7,7 +6,7 @@ import {
   storedChunks,
   uploadChunk as uploadChunkApi
 } from '../api/ic.api';
-import {ActorParameters} from '../types/actor.types';
+import {UpgradeCodeParams} from '../types/upgrade.types';
 import {blobSha256, uint8ArraySha256} from '../utils/crypto.utils';
 
 interface UploadChunkOrderId {
@@ -23,20 +22,12 @@ interface UploadChunkResult extends UploadChunkOrderId {
   hash: chunk_hash;
 }
 
-export type UpgradeCodeParams = {
-  actor: ActorParameters;
-  missionControlId?: Principal;
-  canisterId: Principal;
-  wasmModule: Uint8Array;
-  arg: Uint8Array;
-};
-
-export const upgradeCode = async ({
+export const upgradeChunkedCode = async ({
   actor,
   canisterId,
   missionControlId,
   wasmModule,
-  arg
+  ...rest
 }: UpgradeCodeParams) => {
   const wasmChunks = await wasmToChunks({wasmModule});
 
@@ -64,13 +55,12 @@ export const upgradeCode = async ({
   await installChunkedCode({
     actor,
     code: {
+      ...rest,
       chunkHashesList: chunkIds
         .sort(({orderId: orderIdA}, {orderId: orderIdB}) => orderIdA - orderIdB)
         .map(({hash}) => hash),
       targetCanisterId: canisterId,
       storeCanisterId: missionControlId,
-      arg,
-      mode: {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]},
       wasmModuleHash: wasmModule
     }
   });
@@ -107,11 +97,11 @@ const wasmToChunks = async ({
   return uploadChunks;
 };
 
-type PrepareUpload = {
+interface PrepareUpload {
   uploadChunks: UploadChunkParams[];
   storedChunks: UploadChunkParams[];
   clearChunks: boolean;
-};
+}
 
 /**
  * Prepares the upload by comparing the provided WASM chunks with already stored chunks,

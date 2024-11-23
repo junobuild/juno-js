@@ -1,12 +1,13 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {isNullish} from '@junobuild/utils';
-import {installCode} from '../api/ic.api';
 import {
   listControllers,
   listDeprecatedControllers,
   listDeprecatedNoScopeControllers
 } from '../api/satellite.api';
+import {INSTALL_MODE_RESET, INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
+import {upgrade} from '../handlers/upgrade.handlers';
 import type {SatelliteParameters} from '../types/actor.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
 
@@ -52,16 +53,12 @@ export const upgradeSatellite = async ({
       [{controllers}]
     );
 
-    await installCode({
+    await upgrade({
       actor,
-      code: {
-        canisterId: Principal.fromText(satelliteId),
-        arg: new Uint8Array(arg),
-        wasmModule,
-        mode: reset
-          ? {reinstall: null}
-          : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}
-      }
+      canisterId: Principal.fromText(satelliteId),
+      arg: new Uint8Array(arg),
+      wasmModule,
+      mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE
     });
 
     return;
@@ -74,15 +71,11 @@ export const upgradeSatellite = async ({
 
   const arg = encodeIDLControllers(controllers);
 
-  await installCode({
+  await upgrade({
     actor,
-    code: {
-      canisterId: Principal.fromText(satelliteId),
-      arg: new Uint8Array(arg),
-      wasmModule,
-      mode: reset
-        ? {reinstall: null}
-        : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}
-    }
+    canisterId: Principal.fromText(satelliteId),
+    arg: new Uint8Array(arg),
+    wasmModule,
+    mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE
   });
 };

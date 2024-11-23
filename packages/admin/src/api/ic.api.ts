@@ -1,10 +1,6 @@
 import {CanisterStatus} from '@dfinity/agent';
+import type {chunk_hash, InstallChunkedCodeParams, UploadChunkParams} from '@dfinity/ic-management';
 import {ICManagementCanister, InstallCodeParams} from '@dfinity/ic-management';
-import type {chunk_hash} from '@dfinity/ic-management/dist/candid/ic-management';
-import type {
-  InstallChunkedCodeParams,
-  UploadChunkParams
-} from '@dfinity/ic-management/dist/types/types/ic-management.params';
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish} from '@junobuild/utils';
 import type {ActorParameters} from '../types/actor.types';

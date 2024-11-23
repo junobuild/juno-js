@@ -1,9 +1,9 @@
 import type {chunk_hash} from '@dfinity/ic-management';
-import {isNullish} from '@junobuild/utils';
+import {isNullish, nonNullish} from '@junobuild/utils';
 import {
   clearChunkStore,
   installChunkedCode,
-  storedChunks,
+  storedChunks as storedChunksApi,
   uploadChunk as uploadChunkApi
 } from '../api/ic.api';
 import {INSTALL_MAX_CHUNK_SIZE} from '../constants/upgrade.constants';
@@ -20,7 +20,7 @@ interface UploadChunkParams extends UploadChunkOrderId {
 }
 
 interface UploadChunkResult extends UploadChunkOrderId {
-  hash: chunk_hash;
+  chunkHash: chunk_hash;
 }
 
 export const upgradeChunkedCode = async ({
@@ -32,7 +32,7 @@ export const upgradeChunkedCode = async ({
 }: UpgradeCodeParams) => {
   const wasmChunks = await wasmToChunks({wasmModule});
 
-  const {uploadChunks, clearChunks} = await prepareUpload({
+  const {uploadChunks, storedChunks} = await prepareUpload({
     actor,
     wasmChunks,
     canisterId,
@@ -42,7 +42,7 @@ export const upgradeChunkedCode = async ({
   // Alright, let's start by clearing existing chunks if necessary:
   // either when targeting a specific canister, or if a mission control is provided
   // and any new chunk differs from the existing ones.
-  if (clearChunks) {
+  if (isNullish(missionControlId)) {
     await clearChunkStore({actor, canisterId});
   }
 
@@ -58,9 +58,9 @@ export const upgradeChunkedCode = async ({
     actor,
     code: {
       ...rest,
-      chunkHashesList: chunkIds
+      chunkHashesList: [...chunkIds, ...storedChunks]
         .sort(({orderId: orderIdA}, {orderId: orderIdB}) => orderIdA - orderIdB)
-        .map(({hash}) => hash),
+        .map(({chunkHash}) => chunkHash),
       targetCanisterId: canisterId,
       storeCanisterId: missionControlId,
       wasmModuleHash: await uint8ArraySha256(wasmModule)
@@ -68,7 +68,7 @@ export const upgradeChunkedCode = async ({
   });
 
   // Post-processing and clearing only if no mission control is provided, as the chunks might be reused in that case.
-  if (clearChunks && isNullish(missionControlId)) {
+  if (isNullish(missionControlId)) {
     await clearChunkStore({actor, canisterId});
   }
 };
@@ -100,7 +100,7 @@ const wasmToChunks = async ({
 
 interface PrepareUpload {
   uploadChunks: UploadChunkParams[];
-  clearChunks: boolean;
+  storedChunks: UploadChunkResult[];
 }
 
 /**
@@ -137,37 +137,52 @@ const prepareUpload = async ({
 }: Pick<UpgradeCodeParams, 'canisterId' | 'missionControlId' | 'actor'> & {
   wasmChunks: UploadChunkParams[];
 }): Promise<PrepareUpload> => {
-  const stored = await storedChunks({
+  const stored = await storedChunksApi({
     actor,
     canisterId: missionControlId ?? canisterId
   });
 
-  // TODO: we cannot compare which chunks are already uploaded or not because the chunk_hash returned by the IC is actually the hash of a variant CanisterId, u64 and not the effective hash of the chunk which is the only information we know.
-  // // We convert existing hash to an easily comparable sha256 - i.e. string
-  // const promises = stored.map(({hash}) =>
-  //     uint8ArraySha256(hash instanceof Uint8Array ? hash : new Uint8Array(hash))
-  // );
-  // const storedHashes = await Promise.all(promises);
-  //
-  // const {storedChunks: existingStoredChunks, ...rest} = wasmChunks.reduce<
-  //     Omit<PrepareUpload, 'clearChunks'>
-  // >(
-  //     ({uploadChunks, storedChunks}, {sha256, ...rest}) => ({
-  //       uploadChunks: [
-  //         ...uploadChunks,
-  //         ...(storedHashes.includes(sha256) ? [] : [{sha256, ...rest}])
-  //       ],
-  //       storedChunks: [...storedChunks, ...(storedHashes.includes(sha256) ? [{sha256, ...rest}] : [])]
-  //     }),
-  //     {
-  //       uploadChunks: [],
-  //       storedChunks: []
-  //     }
-  // );
+  // Duplicates @dfinity/utils
+  const uint8ArrayToHexString = (bytes: Uint8Array | number[]) => {
+    if (!(bytes instanceof Uint8Array)) {
+      bytes = Uint8Array.from(bytes);
+    }
+    return bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
+  };
+
+  // We convert existing hash to extend with an easily comparable sha256 as hex value
+  const existingStoredChunks: (Pick<UploadChunkResult, 'chunkHash'> &
+    Pick<UploadChunkParams, 'sha256'>)[] = stored.map(({hash}) => ({
+    chunkHash: {hash},
+    sha256: uint8ArrayToHexString(hash)
+  }));
+
+  const {storedChunks, uploadChunks} = wasmChunks.reduce<Omit<PrepareUpload, 'clearChunks'>>(
+    ({uploadChunks, storedChunks}, {sha256, ...rest}) => {
+      const existingStoredChunk = existingStoredChunks.find(
+        ({sha256: storedSha256}) => storedSha256 === sha256
+      );
+
+      return {
+        uploadChunks: [
+          ...uploadChunks,
+          ...(nonNullish(existingStoredChunk) ? [] : [{sha256, ...rest}])
+        ],
+        storedChunks: [
+          ...storedChunks,
+          ...(nonNullish(existingStoredChunk) ? [{...rest, ...existingStoredChunk}] : [])
+        ]
+      };
+    },
+    {
+      uploadChunks: [],
+      storedChunks: []
+    }
+  );
 
   return {
-    uploadChunks: wasmChunks,
-    clearChunks: stored.length > 0
+    uploadChunks,
+    storedChunks
   };
 };
 
@@ -209,7 +224,7 @@ const uploadChunk = async ({
   });
 
   return {
-    hash: chunkHash,
+    chunkHash: chunkHash,
     ...rest
   };
 };

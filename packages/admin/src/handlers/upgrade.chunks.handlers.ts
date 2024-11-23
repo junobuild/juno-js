@@ -66,7 +66,6 @@ export const upgradeChunkedCode = async ({
     }
   });
 
-  // TODO: catch errors
   // Post-processing and clearing only if no mission control is provided, as the chunks might be reused in that case.
   if (clearChunks && isNullish(missionControlId)) {
     await clearChunkStore({actor, canisterId});

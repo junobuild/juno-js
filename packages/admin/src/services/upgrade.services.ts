@@ -11,7 +11,7 @@ import {ActorParameters} from '../types/actor.types';
 import {blobSha256, uint8ArraySha256} from '../utils/crypto.utils';
 
 interface UploadChunkOrderId {
-  orderId: bigint;
+  orderId: number;
 }
 
 interface UploadChunkParams extends UploadChunkOrderId {
@@ -59,12 +59,14 @@ export const upgradeCode = async ({
     chunkIds = [...chunkIds, ...results];
   }
 
-  // Install the chunked code. The order of the chunks is really important!
+  // Install the chunked code.
+  // ⚠️ The order of the chunks is really important! ⚠️
   await installChunkedCode({
     actor,
     code: {
-      // TODO: Fix me
-      chunkHashesList: chunkIds.map(({hash}) => hash),
+      chunkHashesList: chunkIds
+        .sort(({orderId: orderIdA}, {orderId: orderIdB}) => orderIdA - orderIdB)
+        .map(({hash}) => hash),
       targetCanisterId: canisterId,
       storeCanisterId: missionControlId,
       arg,
@@ -90,7 +92,7 @@ const wasmToChunks = async ({
   const chunkSize = 1000000;
 
   // Split data into chunks
-  let orderId = 0n;
+  let orderId = 0;
   for (let start = 0; start < blob.size; start += chunkSize) {
     const chunk = blob.slice(start, start + chunkSize);
     uploadChunks.push({

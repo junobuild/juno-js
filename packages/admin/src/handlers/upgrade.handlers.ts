@@ -1,10 +1,13 @@
-import {installCode} from '../api/ic.api';
+import {fromNullable, isNullish} from '@junobuild/utils';
+import {canisterStatus, installCode} from '../api/ic.api';
 import {SIMPLE_INSTALL_MAX_WASM_SIZE} from '../constants/upgrade.constants';
-import {UpgradeCodeParams} from '../types/upgrade.types';
+import {UpgradeCodeParams, UpgradeCodeUnchangedError} from '../types/upgrade.types';
+import {uint8ArrayToHexString} from '../utils/array.utils';
+import {uint8ArraySha256} from '../utils/crypto.utils';
 import {upgradeChunkedCode} from './upgrade.chunks.handlers';
 
 export const upgrade = async ({wasmModule, ...rest}: UpgradeCodeParams) => {
-  // TODO verify hash and don't install if not necessary
+  await assertExistingCode({wasmModule, ...rest});
 
   const upgradeType = (): 'simple' | 'chunked' => {
     const blob = new Blob([wasmModule]);
@@ -13,6 +16,32 @@ export const upgrade = async ({wasmModule, ...rest}: UpgradeCodeParams) => {
 
   const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeCode;
   await fn({wasmModule, ...rest});
+};
+
+const assertExistingCode = async ({
+  actor,
+  canisterId,
+  wasmModule
+}: Pick<UpgradeCodeParams, 'actor' | 'canisterId' | 'wasmModule'>) => {
+  const {module_hash} = await canisterStatus({
+    actor,
+    canisterId
+  });
+
+  const installedHash = fromNullable(module_hash);
+
+  if (isNullish(installedHash)) {
+    return;
+  }
+
+  const newWasmModuleHash = await uint8ArraySha256(wasmModule);
+  const existingWasmModuleHash = uint8ArrayToHexString(installedHash);
+
+  if (newWasmModuleHash !== existingWasmModuleHash) {
+    return;
+  }
+
+  throw new UpgradeCodeUnchangedError();
 };
 
 const upgradeCode = async ({actor, ...rest}: UpgradeCodeParams) => {

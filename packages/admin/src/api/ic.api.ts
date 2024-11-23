@@ -6,6 +6,7 @@ import {
   ICManagementCanister,
   InstallCodeParams
 } from '@dfinity/ic-management';
+import type {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish} from '@junobuild/utils';
 import type {ActorParameters} from '../types/actor.types';
@@ -89,6 +90,22 @@ export const installChunkedCode = async ({
   });
 
   return installChunkedCode(code);
+};
+
+export const canisterStatus = async ({
+  actor,
+  canisterId
+}: {
+  actor: ActorParameters;
+  canisterId: Principal;
+}): Promise<CanisterStatusResponse> => {
+  const agent = await initAgent(actor);
+
+  const {canisterStatus} = ICManagementCanister.create({
+    agent
+  });
+
+  return canisterStatus(canisterId);
 };
 
 export const canisterMetadata = async ({

@@ -20,4 +20,5 @@ export type * from './types/build.types';
 export type * from './types/controllers.types';
 export type * from './types/customdomain.types';
 export type * from './types/releases.types';
+export * from './types/upgrade.types';
 export * from './utils/crypto.utils';

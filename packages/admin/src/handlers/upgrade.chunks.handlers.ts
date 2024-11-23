@@ -9,6 +9,7 @@ import {
 import {INSTALL_MAX_CHUNK_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeParams} from '../types/upgrade.types';
 import {blobSha256, uint8ArraySha256} from '../utils/crypto.utils';
+import {uint8ArrayToHexString} from "../utils/array.utils";
 
 interface UploadChunkOrderId {
   orderId: number;
@@ -141,14 +142,6 @@ const prepareUpload = async ({
     actor,
     canisterId: missionControlId ?? canisterId
   });
-
-  // Duplicates @dfinity/utils
-  const uint8ArrayToHexString = (bytes: Uint8Array | number[]) => {
-    if (!(bytes instanceof Uint8Array)) {
-      bytes = Uint8Array.from(bytes);
-    }
-    return bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-  };
 
   // We convert existing hash to extend with an easily comparable sha256 as hex value
   const existingStoredChunks: (Pick<UploadChunkResult, 'chunkHash'> &

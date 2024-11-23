@@ -4,6 +4,8 @@ import {UpgradeCodeParams} from '../types/upgrade.types';
 import {upgradeChunkedCode} from './upgrade.chunks.handlers';
 
 export const upgrade = async ({wasmModule, ...rest}: UpgradeCodeParams) => {
+  // TODO verify hash and don't install if not necessary
+
   const upgradeType = (): 'simple' | 'chunked' => {
     const blob = new Blob([wasmModule]);
     return blob.size > SIMPLE_INSTALL_MAX_WASM_SIZE ? 'chunked' : 'simple';

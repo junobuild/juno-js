@@ -17,7 +17,7 @@ import {encodeIDLControllers} from '../utils/idl.utils';
  */
 export const upgradeOrbiter = async ({
   orbiter,
-                                       missionControlId,
+  missionControlId,
   wasmModule,
   reset = false
 }: {

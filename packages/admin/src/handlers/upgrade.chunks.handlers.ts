@@ -8,8 +8,8 @@ import {
 } from '../api/ic.api';
 import {INSTALL_MAX_CHUNK_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeParams} from '../types/upgrade.types';
+import {uint8ArrayToHexString} from '../utils/array.utils';
 import {blobSha256, uint8ArraySha256} from '../utils/crypto.utils';
-import {uint8ArrayToHexString} from "../utils/array.utils";
 
 interface UploadChunkOrderId {
   orderId: number;
@@ -47,7 +47,12 @@ export const upgradeChunkedCode = async ({
 
   // Upload chunks to the IC in batch - i.e. 12 chunks uploaded at a time.
   let chunkIds: UploadChunkResult[] = [];
-  for await (const results of batchUploadChunks({uploadChunks, actor, canisterId})) {
+  for await (const results of batchUploadChunks({
+    uploadChunks,
+    actor,
+    canisterId,
+    missionControlId
+  })) {
     chunkIds = [...chunkIds, ...results];
   }
 
@@ -187,7 +192,7 @@ async function* batchUploadChunks({
   uploadChunks,
   limit = 12,
   ...rest
-}: Pick<UpgradeCodeParams, 'actor' | 'canisterId'> & {
+}: Pick<UpgradeCodeParams, 'actor' | 'canisterId' | 'missionControlId'> & {
   uploadChunks: UploadChunkParams[];
   limit?: number;
 }): AsyncGenerator<UploadChunkResult[], void> {
@@ -208,14 +213,15 @@ async function* batchUploadChunks({
 const uploadChunk = async ({
   actor,
   canisterId,
+  missionControlId,
   uploadChunk: {chunk, ...rest}
-}: Pick<UpgradeCodeParams, 'actor' | 'canisterId'> & {
+}: Pick<UpgradeCodeParams, 'actor' | 'canisterId' | 'missionControlId'> & {
   uploadChunk: UploadChunkParams;
 }): Promise<UploadChunkResult> => {
   const chunkHash = await uploadChunkApi({
     actor,
     chunk: {
-      canisterId,
+      canisterId: missionControlId ?? canisterId,
       chunk: new Uint8Array(await chunk.arrayBuffer())
     }
   });

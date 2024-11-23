@@ -78,6 +78,7 @@ export const upgradeSatellite = async ({
   await upgrade({
     actor,
     canisterId: Principal.fromText(satelliteId),
+    missionControlId,
     arg: new Uint8Array(arg),
     wasmModule,
     mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE

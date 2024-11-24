@@ -1,6 +1,7 @@
 import {Principal} from '@dfinity/principal';
-import {upgradeCode} from '../api/ic.api';
 import {getUser} from '../api/mission-control.api';
+import {INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
+import {upgrade} from '../handlers/upgrade.handlers';
 import type {MissionControlParameters} from '../types/actor.types';
 import {encoreIDLUser} from '../utils/idl.utils';
 
@@ -9,15 +10,18 @@ import {encoreIDLUser} from '../utils/idl.utils';
  * @param {Object} params - The parameters for upgrading Mission Control.
  * @param {MissionControlParameters} params.missionControl - The Mission Control parameters.
  * @param {Uint8Array} params.wasm_module - The WASM module for the upgrade.
+ * @param {boolean} [params.preClearChunks] - An optional parameter to force clearing the chunks before uploading the chunked WASM. Apply if WASM > 2Mb.
  * @throws Will throw an error if no mission control principal is defined.
  * @returns {Promise<void>} A promise that resolves when the upgrade is complete.
  */
 export const upgradeMissionControl = async ({
   missionControl,
-  wasmModule
+  wasmModule,
+  preClearChunks
 }: {
   missionControl: MissionControlParameters;
   wasmModule: Uint8Array;
+  preClearChunks?: boolean;
 }): Promise<void> => {
   const user = await getUser({missionControl});
 
@@ -29,13 +33,12 @@ export const upgradeMissionControl = async ({
 
   const arg = encoreIDLUser(user);
 
-  await upgradeCode({
+  await upgrade({
     actor,
-    code: {
-      canisterId: Principal.fromText(missionControlId),
-      arg: new Uint8Array(arg),
-      wasmModule,
-      mode: {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}
-    }
+    canisterId: Principal.fromText(missionControlId),
+    arg: new Uint8Array(arg),
+    wasmModule,
+    mode: INSTALL_MODE_UPGRADE,
+    preClearChunks
   });
 };

@@ -1,12 +1,13 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {isNullish} from '@junobuild/utils';
-import {upgradeCode} from '../api/ic.api';
 import {
   listControllers,
   listDeprecatedControllers,
   listDeprecatedNoScopeControllers
 } from '../api/satellite.api';
+import {INSTALL_MODE_RESET, INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
+import {upgrade} from '../handlers/upgrade.handlers';
 import type {SatelliteParameters} from '../types/actor.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
 
@@ -14,24 +15,30 @@ import {encodeIDLControllers} from '../utils/idl.utils';
  * Upgrades the satellite with the provided WASM module.
  * @param {Object} params - The parameters for upgrading the satellite.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
+ * @param {Principal} [params.missionControlId] - The optional Mission Control ID in which the WASM chunks can potentially be stored. Useful to reuse chunks across installations.
  * @param {Uint8Array} params.wasm_module - The WASM module for the upgrade.
  * @param {boolean} params.deprecated - Whether the upgrade is deprecated.
  * @param {boolean} params.deprecatedNoScope - Whether the upgrade is deprecated with no scope.
  * @param {boolean} [params.reset=false] - Whether to reset the satellite (reinstall) instead of upgrading.
+ * @param {boolean} [params.preClearChunks] - An optional parameter to force clearing the chunks before uploading the chunked WASM. Apply if WASM > 2Mb.
  * @returns {Promise<void>} A promise that resolves when the upgrade is complete.
  */
 export const upgradeSatellite = async ({
   satellite,
+  missionControlId,
   wasmModule,
   deprecated,
   deprecatedNoScope,
-  reset = false
+  reset = false,
+  preClearChunks
 }: {
   satellite: SatelliteParameters;
+  missionControlId?: Principal;
   wasmModule: Uint8Array;
   deprecated: boolean;
   deprecatedNoScope: boolean;
   reset?: boolean;
+  preClearChunks?: boolean;
 }): Promise<void> => {
   const {satelliteId, ...actor} = satellite;
 
@@ -52,16 +59,14 @@ export const upgradeSatellite = async ({
       [{controllers}]
     );
 
-    await upgradeCode({
+    await upgrade({
       actor,
-      code: {
-        canisterId: Principal.fromText(satelliteId),
-        arg: new Uint8Array(arg),
-        wasmModule,
-        mode: reset
-          ? {reinstall: null}
-          : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}
-      }
+      canisterId: Principal.fromText(satelliteId),
+      missionControlId,
+      arg: new Uint8Array(arg),
+      wasmModule,
+      mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
+      preClearChunks
     });
 
     return;
@@ -74,15 +79,13 @@ export const upgradeSatellite = async ({
 
   const arg = encodeIDLControllers(controllers);
 
-  await upgradeCode({
+  await upgrade({
     actor,
-    code: {
-      canisterId: Principal.fromText(satelliteId),
-      arg: new Uint8Array(arg),
-      wasmModule,
-      mode: reset
-        ? {reinstall: null}
-        : {upgrade: [{skip_pre_upgrade: [false], wasm_memory_persistence: [{replace: null}]}]}
-    }
+    canisterId: Principal.fromText(satelliteId),
+    missionControlId,
+    arg: new Uint8Array(arg),
+    wasmModule,
+    mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
+    preClearChunks
   });
 };

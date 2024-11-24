@@ -1,11 +1,18 @@
 import {CanisterStatus} from '@dfinity/agent';
-import {ICManagementCanister, InstallCodeParams} from '@dfinity/ic-management';
+import {
+  type chunk_hash,
+  type InstallChunkedCodeParams,
+  type UploadChunkParams,
+  ICManagementCanister,
+  InstallCodeParams
+} from '@dfinity/ic-management';
+import type {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish} from '@junobuild/utils';
 import type {ActorParameters} from '../types/actor.types';
 import {initAgent} from '../utils/actor.utils';
 
-export const upgradeCode = async ({
+export const installCode = async ({
   actor,
   code
 }: {
@@ -19,6 +26,86 @@ export const upgradeCode = async ({
   });
 
   return installCode(code);
+};
+
+export const storedChunks = async ({
+  actor,
+  canisterId
+}: {
+  actor: ActorParameters;
+  canisterId: Principal;
+}): Promise<chunk_hash[]> => {
+  const agent = await initAgent(actor);
+
+  const {storedChunks} = ICManagementCanister.create({
+    agent
+  });
+
+  return storedChunks({canisterId});
+};
+
+export const clearChunkStore = async ({
+  actor,
+  canisterId
+}: {
+  actor: ActorParameters;
+  canisterId: Principal;
+}): Promise<void> => {
+  const agent = await initAgent(actor);
+
+  const {clearChunkStore} = ICManagementCanister.create({
+    agent
+  });
+
+  return clearChunkStore({canisterId});
+};
+
+export const uploadChunk = async ({
+  actor,
+  chunk
+}: {
+  actor: ActorParameters;
+  chunk: UploadChunkParams;
+}): Promise<chunk_hash> => {
+  const agent = await initAgent(actor);
+
+  const {uploadChunk} = ICManagementCanister.create({
+    agent
+  });
+
+  return uploadChunk(chunk);
+};
+
+export const installChunkedCode = async ({
+  actor,
+  code
+}: {
+  actor: ActorParameters;
+  code: InstallChunkedCodeParams;
+}): Promise<void> => {
+  const agent = await initAgent(actor);
+
+  const {installChunkedCode} = ICManagementCanister.create({
+    agent
+  });
+
+  return installChunkedCode(code);
+};
+
+export const canisterStatus = async ({
+  actor,
+  canisterId
+}: {
+  actor: ActorParameters;
+  canisterId: Principal;
+}): Promise<CanisterStatusResponse> => {
+  const agent = await initAgent(actor);
+
+  const {canisterStatus} = ICManagementCanister.create({
+    agent
+  });
+
+  return canisterStatus(canisterId);
 };
 
 export const canisterMetadata = async ({

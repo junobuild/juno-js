@@ -14,7 +14,14 @@ export const upgrade = async ({wasmModule, ...rest}: UpgradeCodeParams) => {
     return blob.size > SIMPLE_INSTALL_MAX_WASM_SIZE ? 'chunked' : 'simple';
   };
 
-  const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeCode;
+  // TODO: upgradeChunkedCode does not work on mainnet. Either an IC or agent-js issue.
+  // e: Server returned an error:
+  //   Code: 400 (Bad Request)
+  //   Body: error: canister_not_found
+  // details: The specified canister does not exist.
+  // const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeCode;
+  const fn = upgradeCode;
+
   await fn({wasmModule, ...rest});
 };
 

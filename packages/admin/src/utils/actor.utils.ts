@@ -42,8 +42,6 @@ export const initAgent = async ({
       : container
     : 'https://icp-api.io';
 
-  console.log('AGENT', host);
-
   return await HttpAgent.create({
     identity,
     host,

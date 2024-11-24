@@ -225,7 +225,7 @@ const uploadChunk = async ({
   });
 
   return {
-    chunkHash: chunkHash,
+    chunkHash,
     ...rest
   };
 };

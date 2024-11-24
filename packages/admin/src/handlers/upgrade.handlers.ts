@@ -1,7 +1,8 @@
 import {fromNullable, isNullish} from '@junobuild/utils';
 import {canisterStatus, installCode} from '../api/ic.api';
 import {SIMPLE_INSTALL_MAX_WASM_SIZE} from '../constants/upgrade.constants';
-import {UpgradeCodeParams, UpgradeCodeUnchangedError} from '../types/upgrade.types';
+import {UpgradeCodeUnchangedError} from '../errors/upgrade.errors';
+import {UpgradeCodeParams} from '../types/upgrade.types';
 import {uint8ArrayToHexString} from '../utils/array.utils';
 import {uint8ArraySha256} from '../utils/crypto.utils';
 

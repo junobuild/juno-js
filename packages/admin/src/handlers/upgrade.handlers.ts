@@ -4,11 +4,12 @@ import {SIMPLE_INSTALL_MAX_WASM_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeParams, UpgradeCodeUnchangedError} from '../types/upgrade.types';
 import {uint8ArrayToHexString} from '../utils/array.utils';
 import {uint8ArraySha256} from '../utils/crypto.utils';
-import {upgradeChunkedCode} from './upgrade.chunks.handlers';
 
 export const upgrade = async ({wasmModule, ...rest}: UpgradeCodeParams) => {
   await assertExistingCode({wasmModule, ...rest});
 
+  // TODO: remove eslint ignore
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const upgradeType = (): 'simple' | 'chunked' => {
     const blob = new Blob([wasmModule]);
     return blob.size > SIMPLE_INSTALL_MAX_WASM_SIZE ? 'chunked' : 'simple';

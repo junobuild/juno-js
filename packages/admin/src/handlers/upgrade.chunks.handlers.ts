@@ -116,30 +116,22 @@ interface PrepareUpload {
 }
 
 /**
- * Prepares the upload by comparing the provided WASM chunks with already stored chunks,
- * determining which chunks need to be uploaded and which are already stored.
+ * Prepares the upload of WASM chunks by determining which chunks need to be uploaded
+ * and which are already stored. Additionally, it provides flags for pre-clear and post-clear operations.
  *
  * If a `missionControlId` is provided, the function fetches the already stored chunks
- * for the given mission control canister. If not provided, no stored chunks are fetched,
- * and all WASM chunks are treated as new.
+ * for the given mission control canister. Otherwise, it fetches them from the `canisterId`.
  *
- * In other words:
- * - If chunks are uploaded for a specific canister, all existing chunks will be cleared,
- *   and the new chunks will be uploaded.
- * - If a mission control is used, only differences between the existing chunks and the
- *   new chunks are processed. This allows reusing the same chunks when developers update
- *   multiple satellites to the same version, optimizing the process. Note that if any differences
- *   are detected, all existing chunks will also be cleared.
+ * In the response, `preClearChunks` is set to `true` if no stored chunks matching the one we are looking to upload are detected.
+ * `postClearChunks` is set to `true` if no `missionControlId` is given, as the chunks might be reused for other installations.
  *
- * @async
- * @function
- * @param {Object} params - The parameters for preparing the upload.
- * @param {string | null} params.missionControlId - The ID of the mission control canister.
- * If null, no stored chunks are fetched, and all chunks are treated as new.
- * @param {ActorSubclass} params.actor - The actor to interact with the canister for fetching stored chunks.
- * @param {UploadChunkParams[]} params.wasmChunks - The WASM chunks to be checked and potentially uploaded.
- * @returns {Promise<PrepareUpload>} - An object containing details about chunks to upload, stored chunks,
- * and whether to clear stored chunks.
+ * @param {Object} params - The input parameters.
+ * @param {string} params.canisterId - The ID of the target canister.
+ * @param {string} [params.missionControlId] - The ID of the mission control canister, if provided.
+ * @param {Object} params.actor - The actor instance for interacting with the canister.
+ * @param {UploadChunkParams[]} params.wasmChunks - The WASM chunks to be uploaded, including their hashes and metadata.
+ *
+ * @returns {Promise<PrepareUpload>} Resolves to an object containing:
  */
 const prepareUpload = async ({
   canisterId,

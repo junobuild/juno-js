@@ -10,7 +10,7 @@ import type {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/typ
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish} from '@junobuild/utils';
 import type {ActorParameters} from '../types/actor.types';
-import {initAgent} from '../utils/actor.utils';
+import {useOrInitAgent} from '../utils/actor.utils';
 
 export const installCode = async ({
   actor,
@@ -19,7 +19,7 @@ export const installCode = async ({
   actor: ActorParameters;
   code: InstallCodeParams;
 }): Promise<void> => {
-  const agent = await initAgent(actor);
+  const agent = await useOrInitAgent(actor);
 
   const {installCode} = ICManagementCanister.create({
     agent
@@ -35,7 +35,7 @@ export const storedChunks = async ({
   actor: ActorParameters;
   canisterId: Principal;
 }): Promise<chunk_hash[]> => {
-  const agent = await initAgent(actor);
+  const agent = await useOrInitAgent(actor);
 
   const {storedChunks} = ICManagementCanister.create({
     agent
@@ -51,7 +51,7 @@ export const clearChunkStore = async ({
   actor: ActorParameters;
   canisterId: Principal;
 }): Promise<void> => {
-  const agent = await initAgent(actor);
+  const agent = await useOrInitAgent(actor);
 
   const {clearChunkStore} = ICManagementCanister.create({
     agent
@@ -67,7 +67,7 @@ export const uploadChunk = async ({
   actor: ActorParameters;
   chunk: UploadChunkParams;
 }): Promise<chunk_hash> => {
-  const agent = await initAgent(actor);
+  const agent = await useOrInitAgent(actor);
 
   const {uploadChunk} = ICManagementCanister.create({
     agent
@@ -83,7 +83,7 @@ export const installChunkedCode = async ({
   actor: ActorParameters;
   code: InstallChunkedCodeParams;
 }): Promise<void> => {
-  const agent = await initAgent(actor);
+  const agent = await useOrInitAgent(actor);
 
   const {installChunkedCode} = ICManagementCanister.create({
     agent
@@ -99,7 +99,7 @@ export const canisterStatus = async ({
   actor: ActorParameters;
   canisterId: Principal;
 }): Promise<CanisterStatusResponse> => {
-  const agent = await initAgent(actor);
+  const agent = await useOrInitAgent(actor);
 
   const {canisterStatus} = ICManagementCanister.create({
     agent
@@ -118,7 +118,7 @@ export const canisterMetadata = async ({
 }): Promise<CanisterStatus.Status | undefined> => {
   assertNonNullish(canisterId, 'A canister ID must be provided to request its status.');
 
-  const agent = await initAgent(rest);
+  const agent = await useOrInitAgent(rest);
 
   const result = await CanisterStatus.request({
     canisterId: Principal.from(canisterId),

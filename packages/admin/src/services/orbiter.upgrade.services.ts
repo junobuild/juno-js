@@ -3,32 +3,33 @@ import {listControllers} from '../api/orbiter.api';
 import {INSTALL_MODE_RESET, INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';
 import type {OrbiterParameters} from '../types/actor.types';
+import {UpgradeCodeParams} from '../types/upgrade.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
 
 /**
  * Upgrades the Orbiter with the provided WASM module.
  * @param {Object} params - The parameters for upgrading the Orbiter.
- * @param {OrbiterParameters} params.orbiter - The Orbiter parameters.
- * @param {Principal} [params.missionControlId] - The optional Mission Control ID in which the WASM chunks can potentially be stored. Useful to reuse chunks across installations.
- * @param {Uint8Array} params.wasm_module - The WASM module for the upgrade.
- * @param {boolean} [params.reset=false] - Whether to reset the Orbiter (reinstall) instead of upgrading.
- * @param {boolean} [params.preClearChunks] - An optional parameter to force clearing the chunks before uploading the chunked WASM. Apply if WASM > 2Mb.
- * @throws Will throw an error if no orbiter principal is defined.
- * @returns {Promise<void>} A promise that resolves when the upgrade is complete.
+ * @param {OrbiterParameters} params.orbiter - The Orbiter parameters, including the actor and orbiter ID.
+ * @param {Principal} [params.missionControlId] - Optional. The Mission Control ID to potentially store WASM chunks, enabling reuse across installations.
+ * @param {Uint8Array} params.wasmModule - The WASM module to be installed during the upgrade.
+ * @param {boolean} [params.reset=false] - Optional. Indicates whether to reset the Orbiter (reinstall) instead of performing an upgrade. Defaults to `false`.
+ * @param {boolean} [params.preClearChunks] - Optional. Forces clearing existing chunks before uploading a chunked WASM module. Recommended if the WASM exceeds 2MB.
+ * @param {function} [params.onProgress] - Optional. Callback function to track progress during the upgrade process.
+ * @throws {Error} Will throw an error if the Orbiter principal is not defined.
+ * @returns {Promise<void>} Resolves when the upgrade process is complete.
  */
+
 export const upgradeOrbiter = async ({
   orbiter,
-  missionControlId,
-  wasmModule,
   reset = false,
-  preClearChunks
+  ...rest
 }: {
   orbiter: OrbiterParameters;
-  missionControlId?: Principal;
-  wasmModule: Uint8Array;
   reset?: boolean;
-  preClearChunks?: boolean;
-}): Promise<void> => {
+} & Pick<
+  UpgradeCodeParams,
+  'wasmModule' | 'missionControlId' | 'preClearChunks' | 'onProgress'
+>): Promise<void> => {
   const {orbiterId, ...actor} = orbiter;
 
   if (!orbiterId) {
@@ -42,10 +43,8 @@ export const upgradeOrbiter = async ({
   await upgrade({
     actor,
     canisterId: Principal.fromText(orbiterId),
-    missionControlId,
     arg: new Uint8Array(arg),
-    wasmModule,
     mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
-    preClearChunks
+    ...rest
   });
 };

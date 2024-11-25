@@ -16,6 +16,7 @@ export const upgrade = async ({
   // 1. Asserting existing code
   onProgress?.(UpgradeCodeProgress.AssertingExistingCode);
 
+
   // We verify that the code to be installed is different from the code already deployed. If the codes are identical, we skip the installation.
   // TODO: unless mode is reinstall
   await assertExistingCode({wasmModule, canisterId, actor, ...rest});

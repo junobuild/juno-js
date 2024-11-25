@@ -3,26 +3,25 @@ import {getUser} from '../api/mission-control.api';
 import {INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';
 import type {MissionControlParameters} from '../types/actor.types';
+import {UpgradeCodeParams} from '../types/upgrade.types';
 import {encoreIDLUser} from '../utils/idl.utils';
 
 /**
  * Upgrades the Mission Control with the provided WASM module.
- * @param {Object} params - The parameters for upgrading Mission Control.
- * @param {MissionControlParameters} params.missionControl - The Mission Control parameters.
- * @param {Uint8Array} params.wasm_module - The WASM module for the upgrade.
- * @param {boolean} [params.preClearChunks] - An optional parameter to force clearing the chunks before uploading the chunked WASM. Apply if WASM > 2Mb.
- * @throws Will throw an error if no mission control principal is defined.
- * @returns {Promise<void>} A promise that resolves when the upgrade is complete.
+ * @param {Object} params - The parameters for upgrading the Mission Control.
+ * @param {MissionControlParameters} params.missionControl - The Mission Control parameters, including the actor and mission control ID.
+ * @param {Uint8Array} params.wasmModule - The WASM module to be installed during the upgrade.
+ * @param {boolean} [params.preClearChunks] - Optional. Whether to force clearing chunks before uploading a chunked WASM module. Recommended if the WASM exceeds 2MB.
+ * @param {function} [params.onProgress] - Optional. Callback function to report progress during the upgrade process.
+ * @throws {Error} Will throw an error if the mission control principal is not defined.
+ * @returns {Promise<void>} Resolves when the upgrade process is complete.
  */
 export const upgradeMissionControl = async ({
   missionControl,
-  wasmModule,
-  preClearChunks
+  ...rest
 }: {
   missionControl: MissionControlParameters;
-  wasmModule: Uint8Array;
-  preClearChunks?: boolean;
-}): Promise<void> => {
+} & Pick<UpgradeCodeParams, 'wasmModule' | 'preClearChunks' | 'onProgress'>): Promise<void> => {
   const user = await getUser({missionControl});
 
   const {missionControlId, ...actor} = missionControl;
@@ -37,8 +36,7 @@ export const upgradeMissionControl = async ({
     actor,
     canisterId: Principal.fromText(missionControlId),
     arg: new Uint8Array(arg),
-    wasmModule,
     mode: INSTALL_MODE_UPGRADE,
-    preClearChunks
+    ...rest
   });
 };

@@ -1,4 +1,4 @@
-import type {Identity} from '@dfinity/agent';
+import type {HttpAgent, Identity} from '@dfinity/agent';
 
 /**
  * Represents the parameters for an actor.
@@ -24,6 +24,11 @@ export interface ActorParameters {
    * @optional
    */
   container?: boolean | string;
+
+  /**
+   * An optional HttpAgent. If none is provided, a new agent will automatically be created to execute calls.
+   */
+  agent?: HttpAgent;
 }
 
 /**

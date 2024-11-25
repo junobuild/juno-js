@@ -19,7 +19,7 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   canisterId: string;
   config?: Pick<ActorConfig, 'callTransform' | 'queryTransform'>;
 } & ActorParameters): Promise<ActorSubclass<T>> => {
-  const agent = await initAgent(rest);
+  const agent = await useOrInitAgent(rest);
 
   // Creates an actor with using the candid interface and the HttpAgent
   return Actor.createActor(idlFactory, {
@@ -29,11 +29,14 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   });
 };
 
-export const initAgent = async ({
+export const useOrInitAgent = async ({agent, ...rest}: ActorParameters): Promise<HttpAgent> =>
+  agent ?? (await initAgent(rest));
+
+const initAgent = async ({
   identity,
   fetch,
   container
-}: ActorParameters): Promise<HttpAgent> => {
+}: Omit<ActorParameters, 'agent'>): Promise<HttpAgent> => {
   const localActor = nonNullish(container) && container !== false;
 
   const host = localActor

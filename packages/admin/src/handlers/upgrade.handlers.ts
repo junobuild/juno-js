@@ -1,14 +1,20 @@
 import {fromNullable, isNullish} from '@junobuild/utils';
-import {canisterStatus, installCode} from '../api/ic.api';
+import {canisterStart, canisterStatus, canisterStop, installCode} from '../api/ic.api';
 import {SIMPLE_INSTALL_MAX_WASM_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeUnchangedError} from '../errors/upgrade.errors';
 import {UpgradeCodeParams} from '../types/upgrade.types';
 import {uint8ArrayToHexString} from '../utils/array.utils';
 import {uint8ArraySha256} from '../utils/crypto.utils';
 
-export const upgrade = async ({wasmModule, ...rest}: UpgradeCodeParams) => {
-  await assertExistingCode({wasmModule, ...rest});
+export const upgrade = async ({wasmModule, canisterId, actor, ...rest}: UpgradeCodeParams) => {
+  // 1. We verify that the code to be installed is different from the code already deployed. If the codes are identical, we skip the installation.
+  // TODO: unless mode is reinstall
+  await assertExistingCode({wasmModule, canisterId, actor, ...rest});
 
+  // 2. We stop the canister to prepare for the upgrade.
+  await canisterStop({canisterId, actor});
+
+  // 3.We install the new code, effectively performing an upgrade.
   // TODO: remove eslint ignore
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const upgradeType = (): 'simple' | 'chunked' => {
@@ -24,7 +30,10 @@ export const upgrade = async ({wasmModule, ...rest}: UpgradeCodeParams) => {
   // const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeCode;
   const fn = upgradeCode;
 
-  await fn({wasmModule, ...rest});
+  await fn({wasmModule, canisterId, actor, ...rest});
+
+  // 4. We restart the canister to finalize the process.
+  await canisterStart({canisterId, actor});
 };
 
 const assertExistingCode = async ({

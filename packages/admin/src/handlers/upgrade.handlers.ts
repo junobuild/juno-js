@@ -26,32 +26,34 @@ export const upgrade = async ({
   // We stop the canister to prepare for the upgrade.
   await canisterStop({canisterId, actor});
 
-  // 3. Notify progress: Upgrading code
-  onProgress?.(UpgradeCodeProgress.UpgradingCode);
+  try {
+    // 3. Notify progress: Upgrading code
+    onProgress?.(UpgradeCodeProgress.UpgradingCode);
 
-  // We install the new code, effectively performing an upgrade.
-  // TODO: remove eslint ignore
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const upgradeType = (): 'simple' | 'chunked' => {
-    const blob = new Blob([wasmModule]);
-    return blob.size > SIMPLE_INSTALL_MAX_WASM_SIZE ? 'chunked' : 'simple';
-  };
+    // We install the new code, effectively performing an upgrade.
+    // TODO: remove eslint ignore
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const upgradeType = (): 'simple' | 'chunked' => {
+      const blob = new Blob([wasmModule]);
+      return blob.size > SIMPLE_INSTALL_MAX_WASM_SIZE ? 'chunked' : 'simple';
+    };
 
-  // TODO: upgradeChunkedCode does not work on mainnet. Either an IC or agent-js issue.
-  // e: Server returned an error:
-  //   Code: 400 (Bad Request)
-  //   Body: error: canister_not_found
-  // details: The specified canister does not exist.
-  // const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeCode;
-  const fn = upgradeCode;
+    // TODO: upgradeChunkedCode does not work on mainnet. Either an IC or agent-js issue.
+    // e: Server returned an error:
+    //   Code: 400 (Bad Request)
+    //   Body: error: canister_not_found
+    // details: The specified canister does not exist.
+    // const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeCode;
+    const fn = upgradeCode;
 
-  await fn({wasmModule, canisterId, actor, ...rest});
+    await fn({wasmModule, canisterId, actor, ...rest});
+  } finally {
+    // 4. Restarting canister
+    onProgress?.(UpgradeCodeProgress.RestartingCanister);
 
-  // 4. Restarting canister
-  onProgress?.(UpgradeCodeProgress.RestartingCanister);
-
-  // We restart the canister to finalize the process.
-  await canisterStart({canisterId, actor});
+    // We restart the canister to finalize the process.
+    await canisterStart({canisterId, actor});
+  }
 };
 
 const assertExistingCode = async ({

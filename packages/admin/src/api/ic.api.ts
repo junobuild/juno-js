@@ -12,6 +12,38 @@ import {assertNonNullish} from '@junobuild/utils';
 import type {ActorParameters} from '../types/actor.types';
 import {useOrInitAgent} from '../utils/actor.utils';
 
+export const canisterStop = async ({
+  canisterId,
+  actor
+}: {
+  canisterId: Principal;
+  actor: ActorParameters;
+}): Promise<void> => {
+  const agent = await useOrInitAgent(actor);
+
+  const {stopCanister} = ICManagementCanister.create({
+    agent
+  });
+
+  await stopCanister(canisterId);
+};
+
+export const canisterStart = async ({
+  canisterId,
+  actor
+}: {
+  canisterId: Principal;
+  actor: ActorParameters;
+}): Promise<void> => {
+  const agent = await useOrInitAgent(actor);
+
+  const {startCanister} = ICManagementCanister.create({
+    agent
+  });
+
+  await startCanister(canisterId);
+};
+
 export const installCode = async ({
   actor,
   code

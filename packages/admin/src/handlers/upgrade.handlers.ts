@@ -1,22 +1,51 @@
 import {fromNullable, isNullish} from '@junobuild/utils';
-import {canisterStatus, installCode} from '../api/ic.api';
+import {canisterStart, canisterStatus, canisterStop, installCode} from '../api/ic.api';
 import {SIMPLE_INSTALL_MAX_WASM_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeUnchangedError} from '../errors/upgrade.errors';
-import {UpgradeCodeParams} from '../types/upgrade.types';
+import {UpgradeCodeParams, UpgradeCodeProgress} from '../types/upgrade.types';
 import {uint8ArrayToHexString} from '../utils/array.utils';
 import {uint8ArraySha256} from '../utils/crypto.utils';
 import {upgradeChunkedCode} from './upgrade.chunks.handlers';
 
-export const upgrade = async ({wasmModule, ...rest}: UpgradeCodeParams) => {
-  await assertExistingCode({wasmModule, ...rest});
+export const upgrade = async ({
+  wasmModule,
+  canisterId,
+  actor,
+  onProgress,
+  ...rest
+}: UpgradeCodeParams) => {
+  // 1. Asserting existing code
+  onProgress?.(UpgradeCodeProgress.AssertingExistingCode);
 
-  const upgradeType = (): 'simple' | 'chunked' => {
-    const blob = new Blob([wasmModule]);
-    return blob.size > SIMPLE_INSTALL_MAX_WASM_SIZE ? 'chunked' : 'simple';
-  };
+  // We verify that the code to be installed is different from the code already deployed. If the codes are identical, we skip the installation.
+  // TODO: unless mode is reinstall
+  await assertExistingCode({wasmModule, canisterId, actor, ...rest});
 
-  const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeCode;
-  await fn({wasmModule, ...rest});
+  // 2. Stopping canister: We stop the canister to prepare for the upgrade.
+  onProgress?.(UpgradeCodeProgress.StoppingCanister);
+
+  // We stop the canister to prepare for the upgrade.
+  await canisterStop({canisterId, actor});
+
+  try {
+    // 3. Notify progress: Upgrading code
+    onProgress?.(UpgradeCodeProgress.UpgradingCode);
+
+    // We install the new code, effectively performing an upgrade.
+    const upgradeType = (): 'simple' | 'chunked' => {
+      const blob = new Blob([wasmModule]);
+      return blob.size > SIMPLE_INSTALL_MAX_WASM_SIZE ? 'chunked' : 'simple';
+    };
+
+    const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeCode;
+    await fn({wasmModule, canisterId, actor, ...rest});
+  } finally {
+    // 4. Restarting canister
+    onProgress?.(UpgradeCodeProgress.RestartingCanister);
+
+    // We restart the canister to finalize the process.
+    await canisterStart({canisterId, actor});
+  }
 };
 
 const assertExistingCode = async ({

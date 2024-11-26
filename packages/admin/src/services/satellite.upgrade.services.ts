@@ -9,37 +9,38 @@ import {
 import {INSTALL_MODE_RESET, INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';
 import type {SatelliteParameters} from '../types/actor.types';
+import {UpgradeCodeParams} from '../types/upgrade.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
 
 /**
- * Upgrades the satellite with the provided WASM module.
+ * Upgrades a satellite with the provided WASM module.
  * @param {Object} params - The parameters for upgrading the satellite.
- * @param {SatelliteParameters} params.satellite - The satellite parameters.
- * @param {Principal} [params.missionControlId] - The optional Mission Control ID in which the WASM chunks can potentially be stored. Useful to reuse chunks across installations.
- * @param {Uint8Array} params.wasm_module - The WASM module for the upgrade.
- * @param {boolean} params.deprecated - Whether the upgrade is deprecated.
- * @param {boolean} params.deprecatedNoScope - Whether the upgrade is deprecated with no scope.
- * @param {boolean} [params.reset=false] - Whether to reset the satellite (reinstall) instead of upgrading.
- * @param {boolean} [params.preClearChunks] - An optional parameter to force clearing the chunks before uploading the chunked WASM. Apply if WASM > 2Mb.
- * @returns {Promise<void>} A promise that resolves when the upgrade is complete.
+ * @param {SatelliteParameters} params.satellite - The satellite parameters, including the actor and satellite ID.
+ * @param {Principal} [params.missionControlId] - Optional. The Mission Control ID to potentially store WASM chunks, enabling reuse across installations.
+ * @param {Uint8Array} params.wasmModule - The WASM module to be installed during the upgrade.
+ * @param {boolean} params.deprecated - Indicates whether the upgrade is deprecated.
+ * @param {boolean} params.deprecatedNoScope - Indicates whether the upgrade is deprecated and has no scope.
+ * @param {boolean} [params.reset=false] - Optional. Specifies whether to reset the satellite (reinstall) instead of performing an upgrade. Defaults to `false`.
+ * @param {boolean} [params.preClearChunks] - Optional. Forces clearing existing chunks before uploading a chunked WASM module. Recommended if the WASM exceeds 2MB.
+ * @param {function} [params.onProgress] - Optional. Callback function to track progress during the upgrade process.
+ * @throws {Error} Will throw an error if the satellite parameters are invalid or missing required fields.
+ * @returns {Promise<void>} Resolves when the upgrade process is complete.
  */
 export const upgradeSatellite = async ({
   satellite,
-  missionControlId,
-  wasmModule,
   deprecated,
   deprecatedNoScope,
   reset = false,
-  preClearChunks
+  ...rest
 }: {
   satellite: SatelliteParameters;
-  missionControlId?: Principal;
-  wasmModule: Uint8Array;
   deprecated: boolean;
   deprecatedNoScope: boolean;
   reset?: boolean;
-  preClearChunks?: boolean;
-}): Promise<void> => {
+} & Pick<
+  UpgradeCodeParams,
+  'wasmModule' | 'missionControlId' | 'preClearChunks' | 'onProgress'
+>): Promise<void> => {
   const {satelliteId, ...actor} = satellite;
 
   if (isNullish(satelliteId)) {
@@ -62,11 +63,9 @@ export const upgradeSatellite = async ({
     await upgrade({
       actor,
       canisterId: Principal.fromText(satelliteId),
-      missionControlId,
       arg: new Uint8Array(arg),
-      wasmModule,
       mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
-      preClearChunks
+      ...rest
     });
 
     return;
@@ -82,10 +81,8 @@ export const upgradeSatellite = async ({
   await upgrade({
     actor,
     canisterId: Principal.fromText(satelliteId),
-    missionControlId,
     arg: new Uint8Array(arg),
-    wasmModule,
     mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
-    preClearChunks
+    ...rest
   });
 };

@@ -1,5 +1,5 @@
 import {fromNullable, isNullish} from '@junobuild/utils';
-import {canisterStatus, installCode} from '../api/ic.api';
+import {canisterStart, canisterStatus, canisterStop, installCode} from '../api/ic.api';
 import {SIMPLE_INSTALL_MAX_WASM_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeUnchangedError} from '../errors/upgrade.errors';
 import {UpgradeCodeParams, UpgradeCodeProgress} from '../types/upgrade.types';
@@ -21,10 +21,10 @@ export const upgrade = async ({
   await assertExistingCode({wasmModule, canisterId, actor, ...rest});
 
   // 2. Stopping canister: We stop the canister to prepare for the upgrade.
-  // TODO: onProgress?.(UpgradeCodeProgress.StoppingCanister);
+  onProgress?.(UpgradeCodeProgress.StoppingCanister);
 
   // We stop the canister to prepare for the upgrade.
-  // TODO: await canisterStop({canisterId, actor});
+  await canisterStop({canisterId, actor});
 
   // 3. Notify progress: Upgrading code
   onProgress?.(UpgradeCodeProgress.UpgradingCode);
@@ -48,10 +48,10 @@ export const upgrade = async ({
   await fn({wasmModule, canisterId, actor, ...rest});
 
   // 4. Restarting canister
-  // TODO: onProgress?.(UpgradeCodeProgress.RestartingCanister);
+  onProgress?.(UpgradeCodeProgress.RestartingCanister);
 
   // We restart the canister to finalize the process.
-  // TODO: await canisterStart({canisterId, actor});
+  await canisterStart({canisterId, actor});
 };
 
 const assertExistingCode = async ({

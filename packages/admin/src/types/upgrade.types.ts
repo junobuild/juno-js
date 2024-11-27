@@ -2,11 +2,18 @@ import type {canister_install_mode} from '@dfinity/ic-management';
 import {Principal} from '@dfinity/principal';
 import {ActorParameters} from './actor.types';
 
-export enum UpgradeCodeProgress {
+export enum UpgradeCodeProgressStep {
   AssertingExistingCode,
   StoppingCanister,
   UpgradingCode,
   RestartingCanister
+}
+
+export type UpgradeCodeProgressState = 'in_progress' | 'success' | 'error';
+
+export interface UpgradeCodeProgress {
+  step: UpgradeCodeProgressStep;
+  state: UpgradeCodeProgressState;
 }
 
 export interface UpgradeCodeParams {

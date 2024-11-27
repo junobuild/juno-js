@@ -103,9 +103,9 @@ const upgradeCode = async ({
   actor,
   ...rest
 }: Omit<UpgradeCodeParams, 'onProgress'>) => {
-  const upgradeType = (): 'simple' | 'chunked' => {
+  const upgradeType = (): 'chunked' | 'single' => {
     const blob = new Blob([wasmModule]);
-    return blob.size > SIMPLE_INSTALL_MAX_WASM_SIZE ? 'chunked' : 'simple';
+    return blob.size > SIMPLE_INSTALL_MAX_WASM_SIZE ? 'chunked' : 'single';
   };
 
   const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeSingleChunkCode;

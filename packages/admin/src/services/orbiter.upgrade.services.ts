@@ -45,6 +45,7 @@ export const upgradeOrbiter = async ({
     canisterId: Principal.fromText(orbiterId),
     arg: new Uint8Array(arg),
     mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
+    reset,
     ...rest
   });
 };

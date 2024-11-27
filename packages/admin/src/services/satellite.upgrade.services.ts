@@ -65,6 +65,7 @@ export const upgradeSatellite = async ({
       canisterId: Principal.fromText(satelliteId),
       arg: new Uint8Array(arg),
       mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
+      reset,
       ...rest
     });
 
@@ -83,6 +84,7 @@ export const upgradeSatellite = async ({
     canisterId: Principal.fromText(satelliteId),
     arg: new Uint8Array(arg),
     mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
+    reset,
     ...rest
   });
 };

@@ -9,11 +9,11 @@ export enum UpgradeCodeProgressStep {
   RestartingCanister
 }
 
-export type UpgradeCodeProgressStatus = 'in_progress' | 'success' | 'error';
+export type UpgradeCodeProgressState = 'in_progress' | 'success' | 'error';
 
 export interface UpgradeCodeProgress {
   step: UpgradeCodeProgressStep;
-  status: UpgradeCodeProgressStatus;
+  state: UpgradeCodeProgressState;
 }
 
 export interface UpgradeCodeParams {

@@ -44,7 +44,7 @@ const execute = async ({
 >) => {
   onProgress?.({
     step,
-    status: 'in_progress'
+    state: 'in_progress'
   });
 
   try {
@@ -52,12 +52,12 @@ const execute = async ({
 
     onProgress?.({
       step,
-      status: 'success'
+      state: 'success'
     });
   } catch (err: unknown) {
     onProgress?.({
       step,
-      status: 'error'
+      state: 'error'
     });
 
     throw err;

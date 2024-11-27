@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/juno-js",
-  "version": "0.0.94",
+  "version": "0.0.95",
   "description": "JavaScript libraries for interfacing with Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

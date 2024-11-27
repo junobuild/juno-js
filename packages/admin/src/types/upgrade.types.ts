@@ -9,6 +9,8 @@ export enum UpgradeCodeProgress {
   RestartingCanister
 }
 
+export type UpgradeCodeProgressStatus = 'in_progress' | 'success' | 'error';
+
 export interface UpgradeCodeParams {
   actor: ActorParameters;
   canisterId: Principal;
@@ -17,5 +19,5 @@ export interface UpgradeCodeParams {
   arg: Uint8Array;
   mode: canister_install_mode;
   preClearChunks?: boolean;
-  onProgress?: (progress: UpgradeCodeProgress) => void;
+  onProgress?: (params: {progress: UpgradeCodeProgress; status: UpgradeCodeProgressStatus}) => void;
 }

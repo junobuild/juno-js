@@ -1,10 +1,11 @@
 import {fromNullable, isNullish} from '@junobuild/utils';
-import {canisterStart, canisterStatus, canisterStop, installCode} from '../api/ic.api';
+import {canisterStart, canisterStatus, canisterStop} from '../api/ic.api';
 import {SIMPLE_INSTALL_MAX_WASM_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeUnchangedError} from '../errors/upgrade.errors';
 import {UpgradeCodeParams, UpgradeCodeProgress} from '../types/upgrade.types';
 import {uint8ArrayToHexString} from '../utils/array.utils';
 import {uint8ArraySha256} from '../utils/crypto.utils';
+import {upgradeSingleChunkCode} from './upgrade.single.handlers';
 
 export const upgrade = async ({
   wasmModule,
@@ -43,8 +44,8 @@ export const upgrade = async ({
     //   Code: 400 (Bad Request)
     //   Body: error: canister_not_found
     // details: The specified canister does not exist.
-    // const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeCode;
-    const fn = upgradeCode;
+    // const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeSingleChunkCode;
+    const fn = upgradeSingleChunkCode;
 
     await fn({wasmModule, canisterId, actor, ...rest});
   } finally {
@@ -80,11 +81,4 @@ const assertExistingCode = async ({
   }
 
   throw new UpgradeCodeUnchangedError();
-};
-
-const upgradeCode = async ({actor, ...rest}: UpgradeCodeParams) => {
-  await installCode({
-    actor,
-    code: rest
-  });
 };

@@ -13,7 +13,7 @@ export const upgrade = async ({
   actor,
   onProgress,
   ...rest
-}: UpgradeCodeParams) => {
+}: UpgradeCodeParams & {reset?: boolean}) => {
   // 1. We verify that the code to be installed is different from the code already deployed. If the codes are identical, we skip the installation.
   // TODO: unless mode is reinstall
   const assert = async () => await assertExistingCode({wasmModule, canisterId, actor, ...rest});
@@ -67,8 +67,14 @@ const execute = async ({
 const assertExistingCode = async ({
   actor,
   canisterId,
-  wasmModule
-}: Pick<UpgradeCodeParams, 'actor' | 'canisterId' | 'wasmModule'>) => {
+  wasmModule,
+  reset
+}: Pick<UpgradeCodeParams, 'actor' | 'canisterId' | 'wasmModule'> & {reset?: boolean}) => {
+  // If we want to reinstall the module we are fine reinstalling the same version of the code
+  if (reset === true) {
+    return;
+  }
+
   const {module_hash} = await canisterStatus({
     actor,
     canisterId

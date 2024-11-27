@@ -2,7 +2,7 @@ import {fromNullable, isNullish} from '@junobuild/utils';
 import {canisterStart, canisterStatus, canisterStop} from '../api/ic.api';
 import {SIMPLE_INSTALL_MAX_WASM_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeUnchangedError} from '../errors/upgrade.errors';
-import {UpgradeCodeParams, UpgradeCodeProgress} from '../types/upgrade.types';
+import {UpgradeCodeParams, UpgradeCodeProgressStep} from '../types/upgrade.types';
 import {uint8ArrayToHexString} from '../utils/array.utils';
 import {uint8ArraySha256} from '../utils/crypto.utils';
 import {upgradeSingleChunkCode} from './upgrade.single.handlers';
@@ -17,33 +17,33 @@ export const upgrade = async ({
   // 1. We verify that the code to be installed is different from the code already deployed. If the codes are identical, we skip the installation.
   // TODO: unless mode is reinstall
   const assert = async () => await assertExistingCode({wasmModule, canisterId, actor, ...rest});
-  await execute({fn: assert, onProgress, progress: UpgradeCodeProgress.AssertingExistingCode});
+  await execute({fn: assert, onProgress, step: UpgradeCodeProgressStep.AssertingExistingCode});
 
   // 2. We stop the canister to prepare for the upgrade.
   const stop = async () => await canisterStop({canisterId, actor});
-  await execute({fn: stop, onProgress, progress: UpgradeCodeProgress.StoppingCanister});
+  await execute({fn: stop, onProgress, step: UpgradeCodeProgressStep.StoppingCanister});
 
   try {
     // 3. Upgrading code: If the WASM is > 2MB we proceed with the chunked installation otherwise we use the original single chunk installation method.
     const upgrade = async () => await upgradeCode({wasmModule, canisterId, actor, ...rest});
-    await execute({fn: upgrade, onProgress, progress: UpgradeCodeProgress.UpgradingCode});
+    await execute({fn: upgrade, onProgress, step: UpgradeCodeProgressStep.UpgradingCode});
   } finally {
     // 4. We restart the canister to finalize the process.
     const restart = async () => await canisterStart({canisterId, actor});
-    await execute({fn: restart, onProgress, progress: UpgradeCodeProgress.RestartingCanister});
+    await execute({fn: restart, onProgress, step: UpgradeCodeProgressStep.RestartingCanister});
   }
 };
 
 const execute = async ({
   fn,
-  progress,
+  step,
   onProgress
-}: {fn: () => Promise<void>; progress: UpgradeCodeProgress} & Pick<
+}: {fn: () => Promise<void>; step: UpgradeCodeProgressStep} & Pick<
   UpgradeCodeParams,
   'onProgress'
 >) => {
   onProgress?.({
-    progress,
+    step,
     status: 'in_progress'
   });
 
@@ -51,12 +51,12 @@ const execute = async ({
     await fn();
 
     onProgress?.({
-      progress,
+      step,
       status: 'success'
     });
   } catch (err: unknown) {
     onProgress?.({
-      progress,
+      step,
       status: 'error'
     });
 

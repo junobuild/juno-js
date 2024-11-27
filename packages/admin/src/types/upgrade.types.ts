@@ -2,7 +2,7 @@ import type {canister_install_mode} from '@dfinity/ic-management';
 import {Principal} from '@dfinity/principal';
 import {ActorParameters} from './actor.types';
 
-export enum UpgradeCodeProgress {
+export enum UpgradeCodeProgressStep {
   AssertingExistingCode,
   StoppingCanister,
   UpgradingCode,
@@ -10,6 +10,11 @@ export enum UpgradeCodeProgress {
 }
 
 export type UpgradeCodeProgressStatus = 'in_progress' | 'success' | 'error';
+
+export interface UpgradeCodeProgress {
+  step: UpgradeCodeProgressStep;
+  status: UpgradeCodeProgressStatus;
+}
 
 export interface UpgradeCodeParams {
   actor: ActorParameters;
@@ -19,5 +24,5 @@ export interface UpgradeCodeParams {
   arg: Uint8Array;
   mode: canister_install_mode;
   preClearChunks?: boolean;
-  onProgress?: (params: {progress: UpgradeCodeProgress; status: UpgradeCodeProgressStatus}) => void;
+  onProgress?: (progress: UpgradeCodeProgress) => void;
 }

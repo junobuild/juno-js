@@ -2,6 +2,7 @@ export * from './errors/upgrade.errors';
 export * from './services/mission-control.controllers.services';
 export * from './services/mission-control.upgrade.services';
 export * from './services/mission-control.version.services';
+export * from './services/module.upgrade.services';
 export * from './services/orbiter.controllers.services';
 export * from './services/orbiter.memory.services';
 export * from './services/orbiter.upgrade.services';

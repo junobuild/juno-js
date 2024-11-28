@@ -5,6 +5,7 @@ import {ActorParameters} from './actor.types';
 export enum UpgradeCodeProgressStep {
   AssertingExistingCode,
   StoppingCanister,
+  TakingSnapshot,
   UpgradingCode,
   RestartingCanister
 }
@@ -24,5 +25,6 @@ export interface UpgradeCodeParams {
   arg: Uint8Array;
   mode: canister_install_mode;
   preClearChunks?: boolean;
+  takeSnapshot?: boolean;
   onProgress?: (progress: UpgradeCodeProgress) => void;
 }

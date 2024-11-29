@@ -19,7 +19,7 @@ export const upgrade = async ({
   canisterId,
   actor,
   onProgress,
-  takeSnapshot,
+  takeSnapshot = true,
   ...rest
 }: UpgradeCodeParams & {reset?: boolean}) => {
   // 1. We verify that the code to be installed is different from the code already deployed. If the codes are identical, we skip the installation.

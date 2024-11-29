@@ -34,7 +34,7 @@ export const upgrade = async ({
   try {
     // 3. We take a snapshot - create a backup - unless the dev opted-out
     const snapshot = async () =>
-      takeSnapshot ? Promise.resolve() : await createSnapshot({canisterId, actor});
+      takeSnapshot ? await createSnapshot({canisterId, actor}) : Promise.resolve();
     await execute({fn: snapshot, onProgress, step: UpgradeCodeProgressStep.TakingSnapshot});
 
     // 4. Upgrading code: If the WASM is > 2MB we proceed with the chunked installation otherwise we use the original single chunk installation method.

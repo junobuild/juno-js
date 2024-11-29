@@ -14,6 +14,7 @@ import {encodeIDLControllers} from '../utils/idl.utils';
  * @param {Uint8Array} params.wasmModule - The WASM module to be installed during the upgrade.
  * @param {boolean} [params.reset=false] - Optional. Indicates whether to reset the Orbiter (reinstall) instead of performing an upgrade. Defaults to `false`.
  * @param {boolean} [params.preClearChunks] - Optional. Forces clearing existing chunks before uploading a chunked WASM module. Recommended if the WASM exceeds 2MB.
+ * @param {boolean} [params.takeSnapshot=true] - Optional. Whether to take a snapshot before performing the upgrade. Defaults to true.
  * @param {function} [params.onProgress] - Optional. Callback function to track progress during the upgrade process.
  * @throws {Error} Will throw an error if the Orbiter principal is not defined.
  * @returns {Promise<void>} Resolves when the upgrade process is complete.
@@ -28,7 +29,7 @@ export const upgradeOrbiter = async ({
   reset?: boolean;
 } & Pick<
   UpgradeCodeParams,
-  'wasmModule' | 'missionControlId' | 'preClearChunks' | 'onProgress'
+  'wasmModule' | 'missionControlId' | 'preClearChunks' | 'takeSnapshot' | 'onProgress'
 >): Promise<void> => {
   const {orbiterId, ...actor} = orbiter;
 

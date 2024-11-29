@@ -4,8 +4,11 @@ import {
   type InstallChunkedCodeParams,
   type UploadChunkParams,
   ICManagementCanister,
-  InstallCodeParams
+  InstallCodeParams,
+  list_canister_snapshots_result,
+  snapshot_id
 } from '@dfinity/ic-management';
+import type {take_canister_snapshot_result} from '@dfinity/ic-management/dist/candid/ic-management';
 import type {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish} from '@junobuild/utils';
@@ -166,4 +169,37 @@ export const canisterMetadata = async ({
   });
 
   return result.get(path);
+};
+
+export const listCanisterSnapshots = async ({
+  actor,
+  canisterId
+}: {
+  actor: ActorParameters;
+  canisterId: Principal;
+}): Promise<list_canister_snapshots_result> => {
+  const agent = await useOrInitAgent(actor);
+
+  const {listCanisterSnapshots} = ICManagementCanister.create({
+    agent
+  });
+
+  return listCanisterSnapshots({canisterId});
+};
+
+export const takeCanisterSnapshot = async ({
+  actor,
+  ...rest
+}: {
+  actor: ActorParameters;
+  canisterId: Principal;
+  snapshotId?: snapshot_id;
+}): Promise<take_canister_snapshot_result> => {
+  const agent = await useOrInitAgent(actor);
+
+  const {takeCanisterSnapshot} = ICManagementCanister.create({
+    agent
+  });
+
+  return takeCanisterSnapshot(rest);
 };

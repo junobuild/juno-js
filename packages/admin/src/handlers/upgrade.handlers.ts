@@ -1,5 +1,11 @@
 import {fromNullable, isNullish} from '@junobuild/utils';
-import {canisterStart, canisterStatus, canisterStop} from '../api/ic.api';
+import {
+  canisterStart,
+  canisterStatus,
+  canisterStop,
+  listCanisterSnapshots,
+  takeCanisterSnapshot
+} from '../api/ic.api';
 import {SIMPLE_INSTALL_MAX_WASM_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeUnchangedError} from '../errors/upgrade.errors';
 import {UpgradeCodeParams, UpgradeCodeProgressStep} from '../types/upgrade.types';
@@ -13,6 +19,7 @@ export const upgrade = async ({
   canisterId,
   actor,
   onProgress,
+  takeSnapshot = true,
   ...rest
 }: UpgradeCodeParams & {reset?: boolean}) => {
   // 1. We verify that the code to be installed is different from the code already deployed. If the codes are identical, we skip the installation.
@@ -25,11 +32,16 @@ export const upgrade = async ({
   await execute({fn: stop, onProgress, step: UpgradeCodeProgressStep.StoppingCanister});
 
   try {
-    // 3. Upgrading code: If the WASM is > 2MB we proceed with the chunked installation otherwise we use the original single chunk installation method.
+    // 3. We take a snapshot - create a backup - unless the dev opted-out
+    const snapshot = async () =>
+      takeSnapshot ? await createSnapshot({canisterId, actor}) : Promise.resolve();
+    await execute({fn: snapshot, onProgress, step: UpgradeCodeProgressStep.TakingSnapshot});
+
+    // 4. Upgrading code: If the WASM is > 2MB we proceed with the chunked installation otherwise we use the original single chunk installation method.
     const upgrade = async () => await upgradeCode({wasmModule, canisterId, actor, ...rest});
     await execute({fn: upgrade, onProgress, step: UpgradeCodeProgressStep.UpgradingCode});
   } finally {
-    // 4. We restart the canister to finalize the process.
+    // 5. We restart the canister to finalize the process.
     const restart = async () => await canisterStart({canisterId, actor});
     await execute({fn: restart, onProgress, step: UpgradeCodeProgressStep.RestartingCanister});
   }
@@ -110,4 +122,14 @@ const upgradeCode = async ({
 
   const fn = upgradeType() === 'chunked' ? upgradeChunkedCode : upgradeSingleChunkCode;
   await fn({wasmModule, canisterId, actor, ...rest});
+};
+
+const createSnapshot = async (params: Pick<UpgradeCodeParams, 'canisterId' | 'actor'>) => {
+  const snapshots = await listCanisterSnapshots(params);
+
+  // TODO: currently only one snapshot per canister is supported on the IC
+  await takeCanisterSnapshot({
+    ...params,
+    snapshotId: snapshots?.[0]?.id
+  });
 };

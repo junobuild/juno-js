@@ -22,6 +22,7 @@ import {encodeIDLControllers} from '../utils/idl.utils';
  * @param {boolean} params.deprecatedNoScope - Indicates whether the upgrade is deprecated and has no scope.
  * @param {boolean} [params.reset=false] - Optional. Specifies whether to reset the satellite (reinstall) instead of performing an upgrade. Defaults to `false`.
  * @param {boolean} [params.preClearChunks] - Optional. Forces clearing existing chunks before uploading a chunked WASM module. Recommended if the WASM exceeds 2MB.
+ * @param {boolean} [params.takeSnapshot=true] - Optional. Whether to take a snapshot before performing the upgrade. Defaults to true.
  * @param {function} [params.onProgress] - Optional. Callback function to track progress during the upgrade process.
  * @throws {Error} Will throw an error if the satellite parameters are invalid or missing required fields.
  * @returns {Promise<void>} Resolves when the upgrade process is complete.
@@ -39,7 +40,7 @@ export const upgradeSatellite = async ({
   reset?: boolean;
 } & Pick<
   UpgradeCodeParams,
-  'wasmModule' | 'missionControlId' | 'preClearChunks' | 'onProgress'
+  'wasmModule' | 'missionControlId' | 'preClearChunks' | 'takeSnapshot' | 'onProgress'
 >): Promise<void> => {
   const {satelliteId, ...actor} = satellite;
 

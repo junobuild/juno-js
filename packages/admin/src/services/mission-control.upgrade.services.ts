@@ -12,6 +12,7 @@ import {encoreIDLUser} from '../utils/idl.utils';
  * @param {MissionControlParameters} params.missionControl - The Mission Control parameters, including the actor and mission control ID.
  * @param {Uint8Array} params.wasmModule - The WASM module to be installed during the upgrade.
  * @param {boolean} [params.preClearChunks] - Optional. Whether to force clearing chunks before uploading a chunked WASM module. Recommended if the WASM exceeds 2MB.
+ * @param {boolean} [params.takeSnapshot=true] - Optional. Whether to take a snapshot before performing the upgrade. Defaults to true.
  * @param {function} [params.onProgress] - Optional. Callback function to report progress during the upgrade process.
  * @throws {Error} Will throw an error if the mission control principal is not defined.
  * @returns {Promise<void>} Resolves when the upgrade process is complete.
@@ -21,7 +22,10 @@ export const upgradeMissionControl = async ({
   ...rest
 }: {
   missionControl: MissionControlParameters;
-} & Pick<UpgradeCodeParams, 'wasmModule' | 'preClearChunks' | 'onProgress'>): Promise<void> => {
+} & Pick<
+  UpgradeCodeParams,
+  'wasmModule' | 'preClearChunks' | 'takeSnapshot' | 'onProgress'
+>): Promise<void> => {
   const user = await getUser({missionControl});
 
   const {missionControlId, ...actor} = missionControl;

@@ -32,7 +32,7 @@ function install_principal_peer() {
 
 PACKAGES=core-standalone
 PACKAGES_PEER=admin,console,storage,core,core-peer
-PACKAGES_AUTH_CLIENT_PEER=core-peer
+PACKAGES_AUTH_CLIENT_PEER=core,core-peer
 PACKAGES_PEER_UTILS=utils
 
 # Remove agent-js libraries from all packages first to avoid resolve conflicts between those

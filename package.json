@@ -63,7 +63,13 @@
     {
       "name": "@junobuild/core",
       "path": "./packages/core/dist/index.js",
-      "limit": "85 kB"
+      "limit": "10 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/principal",
+        "@dfinity/auth-client"
+      ]
     },
     {
       "name": "@junobuild/core-worker",

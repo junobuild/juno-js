@@ -24,6 +24,7 @@
     "packages/admin",
     "packages/analytics",
     "packages/core-peer",
+    "packages/core-standalone",
     "packages/cli-tools",
     "packages/did-tools",
     "packages/config-loader",

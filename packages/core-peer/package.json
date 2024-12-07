@@ -37,7 +37,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/junobuild/juno-js.git",
-    "directory": "packages/core"
+    "directory": "packages/core-peer"
   },
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"

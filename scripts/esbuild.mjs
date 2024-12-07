@@ -29,6 +29,7 @@ const entryPoints = readdirSync(join(process.cwd(), 'src'))
       !file.includes('spec') &&
       !file.includes('mock') &&
       !file.endsWith('.swp') &&
+      !file.endsWith('.worker.ts') &&
       statSync(join(process.cwd(), 'src', file)).isFile()
   )
   .map((file) => `src/${file}`);

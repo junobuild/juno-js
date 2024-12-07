@@ -82,6 +82,17 @@
       ]
     },
     {
+      "name": "@junobuild/core-standalone",
+      "path": "./packages/core-standalone/dist/index.js",
+      "limit": "10 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/principal",
+        "@dfinity/auth-client"
+      ]
+    },
+    {
       "name": "@junobuild/utils",
       "path": "./packages/utils/dist/index.js",
       "limit": "1 kB",

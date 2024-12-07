@@ -24,6 +24,7 @@
     "packages/admin",
     "packages/analytics",
     "packages/core-peer",
+    "packages/core-standalone",
     "packages/cli-tools",
     "packages/did-tools",
     "packages/config-loader",
@@ -79,6 +80,11 @@
         "@dfinity/principal",
         "@dfinity/auth-client"
       ]
+    },
+    {
+      "name": "@junobuild/core-standalone",
+      "path": "./packages/core-standalone/dist/index.js",
+      "limit": "85 kB"
     },
     {
       "name": "@junobuild/utils",

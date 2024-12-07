@@ -30,7 +30,7 @@ function install_principal_peer() {
   npm i @dfinity/principal@latest --workspace=packages/"$package" --save-peer
 }
 
-PACKAGES=core
+PACKAGES=core,core-standalone
 PACKAGES_PEER=admin,console,storage,core-peer
 PACKAGES_AUTH_CLIENT_PEER=core-peer
 PACKAGES_PEER_UTILS=utils

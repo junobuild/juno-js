@@ -8,7 +8,7 @@ function copy_license() {
   cp LICENSE packages/"$lib"
 }
 
-LIBS=utils,config,storage,core,admin,console,analytics,core-peer,cli-tools,did-tools,config-loader
+LIBS=utils,config,storage,core,admin,console,analytics,core-peer,core-standalone,cli-tools,did-tools,config-loader
 
 for lib in $(echo $LIBS | sed "s/,/ /g"); do
   copy_license "$lib"

@@ -13,6 +13,7 @@ node ./scripts/update-version.mjs admin
 node ./scripts/update-version.mjs analytics
 node ./scripts/update-version.mjs console
 node ./scripts/update-version.mjs core-peer
+node ./scripts/update-version.mjs core-standalone
 
 : Now we can build
 npm run build --workspaces

@@ -8,15 +8,9 @@
 
 # Juno JavaScript core SDK
 
-JavaScript [core](../core/README.md) client for Juno minus DFINITY agent-js dependencies.
+This library was originally a clone of [core](../core/README.md), with the DFINITY agent-js set as peer-dependencies.
 
-## Context
-
-There might be a use case in which you are using the Juno core library in an application where you are already utilizing DFINITY's [agent-js](https://github.com/dfinity/agent-js/).
-
-You might also be building your app with a framework such as Next.js, which can lead to issues when interpreting agent-js provided through our libraries.
-
-For such use cases, you can use this specific library, which sets the DFINITY libraries as peer dependencies. This way, those dependencies will be packaged on your side.
+However, since `core` now also uses agent-js as peer dependencies, this library has been **deprecated**.
 
 ## License
 

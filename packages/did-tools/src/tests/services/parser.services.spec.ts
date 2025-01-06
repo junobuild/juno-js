@@ -27,18 +27,18 @@ describe('parser-services', () => {
     expect(result.trim()).toEqual(mockTransformedCoreJS);
   });
 
-  it('should import from core-peer', () => {
+  it('should import from core-standalone', () => {
     const result = parseApi({
       methods: mockMethodSignatures,
       imports: [],
       transformerOptions: {
         outputLanguage: 'ts',
-        coreLib: 'core-peer'
+        coreLib: 'core-standalone'
       }
     });
 
     expect(result.trim()).toContain(
-      "import {getSatelliteExtendedActor} from '@junobuild/core-peer';"
+      "import {getSatelliteExtendedActor} from '@junobuild/core-standalone';"
     );
   });
 

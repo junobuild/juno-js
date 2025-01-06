@@ -1,4 +1,4 @@
 export interface TransformerOptions {
   outputLanguage: 'js' | 'ts';
-  coreLib?: 'core' | 'core-peer';
+  coreLib?: 'core' | 'core-standalone';
 }

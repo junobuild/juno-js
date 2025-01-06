@@ -1,6 +1,6 @@
 import {join} from 'node:path';
+import {collectApi} from '../../services/inspector.services';
 import {mockImports, mockMethodSignatures} from '../mocks/method-signatures.mock';
-import {collectApi} from './inspector.services';
 
 describe('inspector-services', () => {
   it('should collect method signatures if did file has been formatted with prettier', async () => {
@@ -10,6 +10,7 @@ describe('inspector-services', () => {
         'packages',
         'did-tools',
         'src',
+        'tests',
         'mocks',
         'satellite.formatted.did.mock.ts'
       )
@@ -25,6 +26,7 @@ describe('inspector-services', () => {
         'packages',
         'did-tools',
         'src',
+        'tests',
         'mocks',
         'satellite.raw.did.mock.ts'
       )
@@ -40,6 +42,7 @@ describe('inspector-services', () => {
         'packages',
         'did-tools',
         'src',
+        'tests',
         'mocks',
         'satellite.formatted.did.mock.ts'
       )
@@ -55,6 +58,7 @@ describe('inspector-services', () => {
         'packages',
         'did-tools',
         'src',
+        'tests',
         'mocks',
         'satellite.raw.did.mock.ts'
       )

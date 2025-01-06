@@ -1,6 +1,6 @@
+import {parseApi} from '../../services/parser.services';
 import {mockImports, mockMethodSignatures} from '../mocks/method-signatures.mock';
 import {mockTransformedCoreJS, mockTransformedCoreTS} from '../mocks/transfomer.mock';
-import {parseApi} from './parser.services';
 
 describe('parser-services', () => {
   it('should parse TypeScript with core lib', () => {

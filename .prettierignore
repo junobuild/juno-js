@@ -8,4 +8,4 @@ loader
 
 target
 
-packages/did-tools/src/mocks/satellite.raw.did.mock.ts
+packages/did-tools/src/tests/mocks/satellite.raw.did.mock.ts

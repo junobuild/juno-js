@@ -1,10 +1,24 @@
 // @ts-ignore
 export const idlFactory = ({IDL}) => {
+  const CyclesThreshold = IDL.Record({
+    fund_cycles: IDL.Nat,
+    min_cycles: IDL.Nat
+  });
+  const CyclesMonitoringStrategy = IDL.Variant({
+    BelowThreshold: CyclesThreshold
+  });
+  const CyclesMonitoring = IDL.Record({
+    strategy: IDL.Opt(CyclesMonitoringStrategy),
+    enabled: IDL.Bool
+  });
+  const Monitoring = IDL.Record({cycles: IDL.Opt(CyclesMonitoring)});
+  const Settings = IDL.Record({monitoring: IDL.Opt(Monitoring)});
   const Orbiter = IDL.Record({
     updated_at: IDL.Nat64,
     orbiter_id: IDL.Principal,
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
-    created_at: IDL.Nat64
+    created_at: IDL.Nat64,
+    settings: IDL.Opt(Settings)
   });
   const CreateCanisterConfig = IDL.Record({
     subnet_id: IDL.Opt(IDL.Principal),
@@ -14,11 +28,64 @@ export const idlFactory = ({IDL}) => {
     updated_at: IDL.Nat64,
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
     created_at: IDL.Nat64,
-    satellite_id: IDL.Principal
+    satellite_id: IDL.Principal,
+    settings: IDL.Opt(Settings)
   });
   const DepositCyclesArgs = IDL.Record({
     cycles: IDL.Nat,
     destination_id: IDL.Principal
+  });
+  const DepositedCyclesEmailNotification = IDL.Record({
+    to: IDL.Opt(IDL.Text),
+    enabled: IDL.Bool
+  });
+  const CyclesMonitoringConfig = IDL.Record({
+    notification: IDL.Opt(DepositedCyclesEmailNotification),
+    default_strategy: IDL.Opt(CyclesMonitoringStrategy)
+  });
+  const MonitoringConfig = IDL.Record({
+    cycles: IDL.Opt(CyclesMonitoringConfig)
+  });
+  const Config = IDL.Record({monitoring: IDL.Opt(MonitoringConfig)});
+  const GetMonitoringHistory = IDL.Record({
+    to: IDL.Opt(IDL.Nat64),
+    from: IDL.Opt(IDL.Nat64),
+    segment_id: IDL.Principal
+  });
+  const MonitoringHistoryKey = IDL.Record({
+    segment_id: IDL.Principal,
+    created_at: IDL.Nat64,
+    nonce: IDL.Int32
+  });
+  const CyclesBalance = IDL.Record({
+    timestamp: IDL.Nat64,
+    amount: IDL.Nat
+  });
+  const MonitoringHistoryCycles = IDL.Record({
+    deposited_cycles: IDL.Opt(CyclesBalance),
+    cycles: CyclesBalance
+  });
+  const MonitoringHistory = IDL.Record({
+    cycles: IDL.Opt(MonitoringHistoryCycles)
+  });
+  const CyclesMonitoringStatus = IDL.Record({
+    monitored_ids: IDL.Vec(IDL.Principal),
+    running: IDL.Bool
+  });
+  const MonitoringStatus = IDL.Record({
+    cycles: IDL.Opt(CyclesMonitoringStatus)
+  });
+  const MissionControlSettings = IDL.Record({
+    updated_at: IDL.Nat64,
+    created_at: IDL.Nat64,
+    monitoring: IDL.Opt(Monitoring)
+  });
+  const User = IDL.Record({
+    updated_at: IDL.Nat64,
+    metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    user: IDL.Opt(IDL.Principal),
+    created_at: IDL.Nat64,
+    config: IDL.Opt(Config)
   });
   const Tokens = IDL.Record({e8s: IDL.Nat64});
   const Timestamp = IDL.Record({timestamp_nanos: IDL.Nat64});
@@ -75,51 +142,30 @@ export const idlFactory = ({IDL}) => {
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
-  const CanisterStatusType = IDL.Variant({
-    stopped: IDL.Null,
-    stopping: IDL.Null,
-    running: IDL.Null
-  });
-  const SegmentCanisterSettings = IDL.Record({
-    freezing_threshold: IDL.Nat,
-    controllers: IDL.Vec(IDL.Principal),
-    memory_allocation: IDL.Nat,
-    compute_allocation: IDL.Nat
-  });
-  const SegmentCanisterStatus = IDL.Record({
-    status: CanisterStatusType,
-    memory_size: IDL.Nat,
-    cycles: IDL.Nat,
-    settings: SegmentCanisterSettings,
-    idle_cycles_burned_per_day: IDL.Nat,
-    module_hash: IDL.Opt(IDL.Vec(IDL.Nat8))
-  });
-  const SegmentStatus = IDL.Record({
-    id: IDL.Principal,
-    status: SegmentCanisterStatus,
-    metadata: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))),
-    status_at: IDL.Nat64
-  });
-  const Result_2 = IDL.Variant({Ok: SegmentStatus, Err: IDL.Text});
   const SetController = IDL.Record({
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
-  const CronJobStatusesConfig = IDL.Record({
-    enabled: IDL.Bool,
-    cycles_threshold: IDL.Opt(IDL.Nat64)
+  const SegmentsMonitoringStrategy = IDL.Record({
+    ids: IDL.Vec(IDL.Principal),
+    strategy: CyclesMonitoringStrategy
   });
-  const StatusesArgs = IDL.Record({
-    mission_control_cycles_threshold: IDL.Opt(IDL.Nat64),
-    orbiters: IDL.Vec(IDL.Tuple(IDL.Principal, CronJobStatusesConfig)),
-    satellites: IDL.Vec(IDL.Tuple(IDL.Principal, CronJobStatusesConfig)),
-    cycles_threshold: IDL.Opt(IDL.Nat64)
+  const CyclesMonitoringStartConfig = IDL.Record({
+    orbiters_strategy: IDL.Opt(SegmentsMonitoringStrategy),
+    mission_control_strategy: IDL.Opt(CyclesMonitoringStrategy),
+    satellites_strategy: IDL.Opt(SegmentsMonitoringStrategy)
   });
-  const SegmentsStatuses = IDL.Record({
-    orbiters: IDL.Opt(IDL.Vec(Result_2)),
-    satellites: IDL.Opt(IDL.Vec(Result_2)),
-    mission_control: Result_2
+  const MonitoringStartConfig = IDL.Record({
+    cycles_config: IDL.Opt(CyclesMonitoringStartConfig)
+  });
+  const CyclesMonitoringStopConfig = IDL.Record({
+    satellite_ids: IDL.Opt(IDL.Vec(IDL.Principal)),
+    try_mission_control: IDL.Opt(IDL.Bool),
+    orbiter_ids: IDL.Opt(IDL.Vec(IDL.Principal))
+  });
+  const MonitoringStopConfig = IDL.Record({
+    cycles_config: IDL.Opt(CyclesMonitoringStopConfig)
   });
   return IDL.Service({
     add_mission_control_controllers: IDL.Func([IDL.Vec(IDL.Principal)], [], []),
@@ -134,7 +180,17 @@ export const idlFactory = ({IDL}) => {
     del_satellite: IDL.Func([IDL.Principal, IDL.Nat], [], []),
     del_satellites_controllers: IDL.Func([IDL.Vec(IDL.Principal), IDL.Vec(IDL.Principal)], [], []),
     deposit_cycles: IDL.Func([DepositCyclesArgs], [], []),
+    get_config: IDL.Func([], [IDL.Opt(Config)], ['query']),
+    get_metadata: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))], ['query']),
+    get_monitoring_history: IDL.Func(
+      [GetMonitoringHistory],
+      [IDL.Vec(IDL.Tuple(MonitoringHistoryKey, MonitoringHistory))],
+      ['query']
+    ),
+    get_monitoring_status: IDL.Func([], [MonitoringStatus], ['query']),
+    get_settings: IDL.Func([], [IDL.Opt(MissionControlSettings)], ['query']),
     get_user: IDL.Func([], [IDL.Principal], ['query']),
+    get_user_data: IDL.Func([], [User], ['query']),
     icp_transfer: IDL.Func([TransferArgs], [Result], []),
     icrc_transfer: IDL.Func([IDL.Principal, TransferArg], [Result_1], []),
     list_mission_control_controllers: IDL.Func(
@@ -142,22 +198,7 @@ export const idlFactory = ({IDL}) => {
       [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))],
       ['query']
     ),
-    list_mission_control_statuses: IDL.Func(
-      [],
-      [IDL.Vec(IDL.Tuple(IDL.Nat64, Result_2))],
-      ['query']
-    ),
-    list_orbiter_statuses: IDL.Func(
-      [IDL.Principal],
-      [IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Nat64, Result_2)))],
-      ['query']
-    ),
     list_orbiters: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Principal, Orbiter))], ['query']),
-    list_satellite_statuses: IDL.Func(
-      [IDL.Principal],
-      [IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Nat64, Result_2)))],
-      ['query']
-    ),
     list_satellites: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Principal, Satellite))], ['query']),
     remove_mission_control_controllers: IDL.Func([IDL.Vec(IDL.Principal)], [], []),
     remove_satellites_controllers: IDL.Func(
@@ -165,6 +206,7 @@ export const idlFactory = ({IDL}) => {
       [],
       []
     ),
+    set_config: IDL.Func([IDL.Opt(Config)], [], []),
     set_metadata: IDL.Func([IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))], [], []),
     set_mission_control_controllers: IDL.Func([IDL.Vec(IDL.Principal), SetController], [], []),
     set_orbiter: IDL.Func([IDL.Principal, IDL.Opt(IDL.Text)], [Orbiter], []),
@@ -189,10 +231,13 @@ export const idlFactory = ({IDL}) => {
       [],
       []
     ),
-    status: IDL.Func([StatusesArgs], [SegmentsStatuses], []),
+    start_monitoring: IDL.Func([], [], []),
+    stop_monitoring: IDL.Func([], [], []),
     top_up: IDL.Func([IDL.Principal, Tokens], [], []),
     unset_orbiter: IDL.Func([IDL.Principal], [], []),
     unset_satellite: IDL.Func([IDL.Principal], [], []),
+    update_and_start_monitoring: IDL.Func([MonitoringStartConfig], [], []),
+    update_and_stop_monitoring: IDL.Func([MonitoringStopConfig], [], []),
     version: IDL.Func([], [IDL.Text], ['query'])
   });
 };

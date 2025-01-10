@@ -6,7 +6,9 @@ export interface Account {
   owner: Principal;
   subaccount: [] | [Uint8Array | number[]];
 }
-export type CanisterStatusType = {stopped: null} | {stopping: null} | {running: null};
+export interface Config {
+  monitoring: [] | [MonitoringConfig];
+}
 export interface Controller {
   updated_at: bigint;
   metadata: Array<[string, string]>;
@@ -19,64 +21,109 @@ export interface CreateCanisterConfig {
   subnet_id: [] | [Principal];
   name: [] | [string];
 }
-export interface CronJobStatusesConfig {
+export interface CyclesBalance {
+  timestamp: bigint;
+  amount: bigint;
+}
+export interface CyclesMonitoring {
+  strategy: [] | [CyclesMonitoringStrategy];
   enabled: boolean;
-  cycles_threshold: [] | [bigint];
+}
+export interface CyclesMonitoringConfig {
+  notification: [] | [DepositedCyclesEmailNotification];
+  default_strategy: [] | [CyclesMonitoringStrategy];
+}
+export interface CyclesMonitoringStartConfig {
+  orbiters_strategy: [] | [SegmentsMonitoringStrategy];
+  mission_control_strategy: [] | [CyclesMonitoringStrategy];
+  satellites_strategy: [] | [SegmentsMonitoringStrategy];
+}
+export interface CyclesMonitoringStatus {
+  monitored_ids: Array<Principal>;
+  running: boolean;
+}
+export interface CyclesMonitoringStopConfig {
+  satellite_ids: [] | [Array<Principal>];
+  try_mission_control: [] | [boolean];
+  orbiter_ids: [] | [Array<Principal>];
+}
+export type CyclesMonitoringStrategy = {BelowThreshold: CyclesThreshold};
+export interface CyclesThreshold {
+  fund_cycles: bigint;
+  min_cycles: bigint;
 }
 export interface DepositCyclesArgs {
   cycles: bigint;
   destination_id: Principal;
+}
+export interface DepositedCyclesEmailNotification {
+  to: [] | [string];
+  enabled: boolean;
+}
+export interface GetMonitoringHistory {
+  to: [] | [bigint];
+  from: [] | [bigint];
+  segment_id: Principal;
+}
+export interface MissionControlSettings {
+  updated_at: bigint;
+  created_at: bigint;
+  monitoring: [] | [Monitoring];
+}
+export interface Monitoring {
+  cycles: [] | [CyclesMonitoring];
+}
+export interface MonitoringConfig {
+  cycles: [] | [CyclesMonitoringConfig];
+}
+export interface MonitoringHistory {
+  cycles: [] | [MonitoringHistoryCycles];
+}
+export interface MonitoringHistoryCycles {
+  deposited_cycles: [] | [CyclesBalance];
+  cycles: CyclesBalance;
+}
+export interface MonitoringHistoryKey {
+  segment_id: Principal;
+  created_at: bigint;
+  nonce: number;
+}
+export interface MonitoringStartConfig {
+  cycles_config: [] | [CyclesMonitoringStartConfig];
+}
+export interface MonitoringStatus {
+  cycles: [] | [CyclesMonitoringStatus];
+}
+export interface MonitoringStopConfig {
+  cycles_config: [] | [CyclesMonitoringStopConfig];
 }
 export interface Orbiter {
   updated_at: bigint;
   orbiter_id: Principal;
   metadata: Array<[string, string]>;
   created_at: bigint;
+  settings: [] | [Settings];
 }
 export type Result = {Ok: bigint} | {Err: TransferError};
 export type Result_1 = {Ok: bigint} | {Err: TransferError_1};
-export type Result_2 = {Ok: SegmentStatus} | {Err: string};
 export interface Satellite {
   updated_at: bigint;
   metadata: Array<[string, string]>;
   created_at: bigint;
   satellite_id: Principal;
+  settings: [] | [Settings];
 }
-export interface SegmentCanisterSettings {
-  freezing_threshold: bigint;
-  controllers: Array<Principal>;
-  memory_allocation: bigint;
-  compute_allocation: bigint;
-}
-export interface SegmentCanisterStatus {
-  status: CanisterStatusType;
-  memory_size: bigint;
-  cycles: bigint;
-  settings: SegmentCanisterSettings;
-  idle_cycles_burned_per_day: bigint;
-  module_hash: [] | [Uint8Array | number[]];
-}
-export interface SegmentStatus {
-  id: Principal;
-  status: SegmentCanisterStatus;
-  metadata: [] | [Array<[string, string]>];
-  status_at: bigint;
-}
-export interface SegmentsStatuses {
-  orbiters: [] | [Array<Result_2>];
-  satellites: [] | [Array<Result_2>];
-  mission_control: Result_2;
+export interface SegmentsMonitoringStrategy {
+  ids: Array<Principal>;
+  strategy: CyclesMonitoringStrategy;
 }
 export interface SetController {
   metadata: Array<[string, string]>;
   scope: ControllerScope;
   expires_at: [] | [bigint];
 }
-export interface StatusesArgs {
-  mission_control_cycles_threshold: [] | [bigint];
-  orbiters: Array<[Principal, CronJobStatusesConfig]>;
-  satellites: Array<[Principal, CronJobStatusesConfig]>;
-  cycles_threshold: [] | [bigint];
+export interface Settings {
+  monitoring: [] | [Monitoring];
 }
 export interface Timestamp {
   timestamp_nanos: bigint;
@@ -119,6 +166,13 @@ export type TransferError_1 =
   | {CreatedInFuture: {ledger_time: bigint}}
   | {TooOld: null}
   | {InsufficientFunds: {balance: bigint}};
+export interface User {
+  updated_at: bigint;
+  metadata: Array<[string, string]>;
+  user: [] | [Principal];
+  created_at: bigint;
+  config: [] | [Config];
+}
 export interface _SERVICE {
   add_mission_control_controllers: ActorMethod<[Array<Principal>], undefined>;
   add_satellites_controllers: ActorMethod<[Array<Principal>, Array<Principal>], undefined>;
@@ -132,17 +186,24 @@ export interface _SERVICE {
   del_satellite: ActorMethod<[Principal, bigint], undefined>;
   del_satellites_controllers: ActorMethod<[Array<Principal>, Array<Principal>], undefined>;
   deposit_cycles: ActorMethod<[DepositCyclesArgs], undefined>;
+  get_config: ActorMethod<[], [] | [Config]>;
+  get_metadata: ActorMethod<[], Array<[string, string]>>;
+  get_monitoring_history: ActorMethod<
+    [GetMonitoringHistory],
+    Array<[MonitoringHistoryKey, MonitoringHistory]>
+  >;
+  get_monitoring_status: ActorMethod<[], MonitoringStatus>;
+  get_settings: ActorMethod<[], [] | [MissionControlSettings]>;
   get_user: ActorMethod<[], Principal>;
+  get_user_data: ActorMethod<[], User>;
   icp_transfer: ActorMethod<[TransferArgs], Result>;
   icrc_transfer: ActorMethod<[Principal, TransferArg], Result_1>;
   list_mission_control_controllers: ActorMethod<[], Array<[Principal, Controller]>>;
-  list_mission_control_statuses: ActorMethod<[], Array<[bigint, Result_2]>>;
-  list_orbiter_statuses: ActorMethod<[Principal], [] | [Array<[bigint, Result_2]>]>;
   list_orbiters: ActorMethod<[], Array<[Principal, Orbiter]>>;
-  list_satellite_statuses: ActorMethod<[Principal], [] | [Array<[bigint, Result_2]>]>;
   list_satellites: ActorMethod<[], Array<[Principal, Satellite]>>;
   remove_mission_control_controllers: ActorMethod<[Array<Principal>], undefined>;
   remove_satellites_controllers: ActorMethod<[Array<Principal>, Array<Principal>], undefined>;
+  set_config: ActorMethod<[[] | [Config]], undefined>;
   set_metadata: ActorMethod<[Array<[string, string]>], undefined>;
   set_mission_control_controllers: ActorMethod<[Array<Principal>, SetController], undefined>;
   set_orbiter: ActorMethod<[Principal, [] | [string]], Orbiter>;
@@ -157,10 +218,13 @@ export interface _SERVICE {
     [Array<Principal>, Array<Principal>, SetController],
     undefined
   >;
-  status: ActorMethod<[StatusesArgs], SegmentsStatuses>;
+  start_monitoring: ActorMethod<[], undefined>;
+  stop_monitoring: ActorMethod<[], undefined>;
   top_up: ActorMethod<[Principal, Tokens], undefined>;
   unset_orbiter: ActorMethod<[Principal], undefined>;
   unset_satellite: ActorMethod<[Principal], undefined>;
+  update_and_start_monitoring: ActorMethod<[MonitoringStartConfig], undefined>;
+  update_and_stop_monitoring: ActorMethod<[MonitoringStopConfig], undefined>;
   version: ActorMethod<[], string>;
 }
 export declare const idlFactory: IDL.InterfaceFactory;

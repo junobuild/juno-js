@@ -1,5 +1,5 @@
 import type {IDL} from '@dfinity/candid';
-import {isNullish} from '@junobuild/utils';
+import {isNullish} from '@dfinity/utils';
 import type {_SERVICE as ConsoleActor} from '../../declarations/console/console.did';
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactoryConsole} from '../../declarations/console/console.factory.did.js';

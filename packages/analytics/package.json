@@ -54,6 +54,7 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
+    "@dfinity/utils": "^2",
     "@junobuild/utils": "*",
     "idb-keyval": "^6.2.1",
     "isbot": "^5.1.6",

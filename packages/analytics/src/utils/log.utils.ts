@@ -1,4 +1,4 @@
-import {isNullish} from '@junobuild/utils';
+import {isNullish} from '@dfinity/utils';
 
 const WORKER_UNDEFINED_MSG =
   'Analytics worker not initialized. Did you call `initOrbiter`?' as const;

@@ -1,4 +1,4 @@
-import {toNullable} from '@junobuild/utils';
+import {toNullable} from '@dfinity/utils';
 import {nanoid} from 'nanoid';
 import type {Metric} from 'web-vitals';
 import type {

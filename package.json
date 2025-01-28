@@ -53,9 +53,11 @@
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
+        "@dfinity/ic-management",
+        "@dfinity/identity",
         "@dfinity/principal",
         "@dfinity/utils",
-        "@dfinity/ic-management",
+        "@junobuild/config",
         "semver"
       ]
     },
@@ -106,12 +108,7 @@
     {
       "name": "@junobuild/analytics",
       "path": "./packages/analytics/dist/index.js",
-      "limit": "10 kB",
-      "ignore": [
-        "@dfinity/agent",
-        "@dfinity/candid",
-        "@dfinity/principal"
-      ]
+      "limit": "10 kB"
     },
     {
       "name": "@junobuild/analytics-worker",
@@ -130,8 +127,11 @@
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
+        "@dfinity/identity",
         "@dfinity/principal",
         "@dfinity/utils",
+        "@junobuild/config",
+        "@junobuild/storage",
         "semver"
       ]
     },
@@ -142,6 +142,7 @@
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
+        "@dfinity/identity",
         "@dfinity/principal",
         "@dfinity/utils",
         "@junobuild/utils"

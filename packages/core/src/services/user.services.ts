@@ -1,5 +1,5 @@
 import type {Identity} from '@dfinity/agent';
-import {isNullish} from '@junobuild/utils';
+import {isNullish} from '@dfinity/utils';
 import type {Provider, User, UserData} from '../types/auth.types';
 import {getIdentity} from './auth.services';
 import {getDoc, setDoc} from './doc.services';

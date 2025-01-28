@@ -1,4 +1,4 @@
-import {toNullable} from '@junobuild/utils';
+import {toNullable} from '@dfinity/utils';
 import {nowInBigIntNanoSeconds} from './date.utils';
 
 export const timestamp = (): {

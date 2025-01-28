@@ -1,4 +1,5 @@
-import {assertNonNullish, isBrowser, nonNullish, toNullable} from '@junobuild/utils';
+import {assertNonNullish, nonNullish, toNullable} from '@dfinity/utils';
+import {isBrowser} from '@junobuild/utils';
 import {nanoid} from 'nanoid';
 import type {Environment, EnvironmentWorker} from '../types/env';
 import type {IdbPageView} from '../types/idb';

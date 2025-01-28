@@ -1,4 +1,5 @@
-import {fromArray, fromNullable, toArray, toNullable} from '@junobuild/utils';
+import {fromNullable, toNullable} from '@dfinity/utils';
+import {fromArray, toArray} from '@junobuild/utils';
 import type {DelDoc, Doc as DocApi, SetDoc} from '../../declarations/satellite/satellite.did';
 import type {Doc} from '../types/doc.types';
 

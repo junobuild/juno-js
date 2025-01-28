@@ -1,3 +1,4 @@
+import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import type {
   AuthenticationConfig,
   DatastoreConfig,
@@ -6,7 +7,6 @@ import type {
   StorageConfigRedirect,
   StorageConfigRewrite
 } from '@junobuild/config';
-import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
 import type {
   StorageConfigIFrame as StorageConfigIFrameDid,
   StorageConfigRawAccess as StorageConfigRawAccessDid,

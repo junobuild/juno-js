@@ -53,8 +53,8 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@junobuild/config": "*",
-    "@junobuild/utils": "*"
+    "@dfinity/utils": "^2",
+    "@junobuild/config": "*"
   },
   "dependencies": {
     "file-type": "^19.0.0",

@@ -30,33 +30,18 @@ function install_agent_auth_client_peer() {
   npm i @dfinity/auth-client@latest --workspace=packages/"$package" --save-peer
 }
 
-function install_principal_peer() {
-  local package=$1
-
-  npm i @dfinity/principal@latest --workspace=packages/"$package" --save-peer
-}
-
 PACKAGES=core-standalone,analytics
 PACKAGES_PEER=admin,console,storage,core,core-peer
 PACKAGES_AUTH_CLIENT=core-standalone
 PACKAGES_AUTH_CLIENT_PEER=core,core-peer
-PACKAGES_PEER_UTILS=utils
 
 # Remove agent-js libraries from all packages first to avoid resolve conflicts between those
-for package in $(echo $PACKAGES_PEER_UTILS | sed "s/,/ /g"); do
-  rm_agent "$package"
-done
-
 for package in $(echo $PACKAGES | sed "s/,/ /g"); do
   rm_agent "$package"
 done
 
 for package in $(echo $PACKAGES_PEER | sed "s/,/ /g"); do
   rm_agent "$package"
-done
-
-for package in $(echo $PACKAGES_PEER_UTILS | sed "s/,/ /g"); do
-  install_principal_peer "$package"
 done
 
 for package in $(echo $PACKAGES | sed "s/,/ /g"); do

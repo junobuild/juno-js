@@ -1,4 +1,4 @@
-import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
+import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import type {DelDoc, SetDoc} from '../../declarations/satellite/satellite.did';
 import type {Doc} from '../types/doc.types';
 import type {ListParams, ListResults} from '../types/list.types';

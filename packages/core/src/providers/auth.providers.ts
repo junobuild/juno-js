@@ -1,4 +1,4 @@
-import {isNullish, nonNullish} from '@junobuild/utils';
+import {isNullish, nonNullish} from '@dfinity/utils';
 import {II_POPUP, INTERNET_COMPUTER_ORG, NFID_POPUP} from '../constants/auth.constants';
 import {DOCKER_CONTAINER_URL, DOCKER_INTERNET_IDENTITY_ID} from '../constants/container.constants';
 import {EnvStore} from '../stores/env.store';

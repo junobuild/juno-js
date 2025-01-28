@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {assertNonNullish, debounce, isNullish, nonNullish} from '@junobuild/utils';
+import {assertNonNullish, debounce, isNullish, nonNullish} from '@dfinity/utils';
 import {isbot} from 'isbot';
 import type {AnalyticKey, Result_1, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
 import {getOrbiterActor} from '../api/actor.api';

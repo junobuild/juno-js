@@ -1,4 +1,4 @@
-import {assertNonNullish} from '@junobuild/utils';
+import {assertNonNullish} from '@dfinity/utils';
 import {
   initTrackPageViews,
   initTrackPerformance,

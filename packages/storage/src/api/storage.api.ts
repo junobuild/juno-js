@@ -1,4 +1,5 @@
-import {isBrowser, toNullable} from '@junobuild/utils';
+import {toNullable} from '@dfinity/utils';
+import {isBrowser} from '@junobuild/utils';
 import type {
   _SERVICE as ConsoleActor,
   InitAssetKey as ConsoleInitAssetKey,

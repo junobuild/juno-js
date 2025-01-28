@@ -1,4 +1,4 @@
-import {isNullish} from '@junobuild/utils';
+import {isNullish} from '@dfinity/utils';
 import {AuthStore} from '../stores/auth.store';
 import type {User} from '../types/auth.types';
 import type {EnvironmentWorker} from '../types/env.types';

@@ -1,5 +1,5 @@
 import type {IDL} from '@dfinity/candid';
-import {isNullish} from '@junobuild/utils';
+import {isNullish} from '@dfinity/utils';
 import type {_SERVICE as MissionControlActor} from '../../declarations/mission_control/mission_control.did';
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactoryMissionControl} from '../../declarations/mission_control/mission_control.factory.did.js';

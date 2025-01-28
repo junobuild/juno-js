@@ -1,4 +1,4 @@
-import {isNullish, nonNullish} from '@junobuild/utils';
+import {isNullish, nonNullish} from '@dfinity/utils';
 import {Blob} from 'buffer';
 import Listr from 'listr';
 import {readFile} from 'node:fs/promises';

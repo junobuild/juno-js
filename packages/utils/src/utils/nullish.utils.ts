@@ -5,6 +5,7 @@
  * @param {T | undefined | null} argument - The argument to check.
  * @returns {argument is undefined | null} `true` if the argument is null or undefined; otherwise, `false`.
  */
+// eslint-disable-next-line local-rules/use-option-type-wrapper
 export const isNullish = <T>(argument: T | undefined | null): argument is undefined | null =>
   argument === null || argument === undefined;
 
@@ -15,6 +16,7 @@ export const isNullish = <T>(argument: T | undefined | null): argument is undefi
  * @param {T | undefined | null} argument - The argument to check.
  * @returns {argument is NonNullable<T>} `true` if the argument is not null or undefined; otherwise, `false`.
  */
+// eslint-disable-next-line local-rules/use-option-type-wrapper
 export const nonNullish = <T>(argument: T | undefined | null): argument is NonNullable<T> =>
   !isNullish(argument);
 
@@ -24,6 +26,7 @@ export const nonNullish = <T>(argument: T | undefined | null): argument is NonNu
  * @param {string | undefined | null} value - The value to check.
  * @returns {boolean} `true` if the value is not null, not undefined, and not an empty string; otherwise, `false`.
  */
+// eslint-disable-next-line local-rules/use-option-type-wrapper
 export const notEmptyString = (value: string | undefined | null): boolean =>
   nonNullish(value) && value !== '';
 
@@ -33,4 +36,5 @@ export const notEmptyString = (value: string | undefined | null): boolean =>
  * @param {string | undefined | null} value - The value to check.
  * @returns {boolean} `true` if the value is null, undefined, or an empty string; otherwise, `false`.
  */
+// eslint-disable-next-line local-rules/use-option-type-wrapper
 export const isEmptyString = (value: string | undefined | null): boolean => !notEmptyString(value);

@@ -2,7 +2,7 @@
 // https://stackoverflow.com/a/70891826/5404186
 // https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
 
-const digestSha256 = (data: ArrayBuffer): Promise<ArrayBuffer> =>
+const digestSha256 = (data: ArrayBuffer | Uint8Array<ArrayBufferLike>): Promise<ArrayBuffer> =>
   crypto.subtle.digest('SHA-256', data);
 
 const sha256ToHex = (hashBuffer: ArrayBuffer): string => {

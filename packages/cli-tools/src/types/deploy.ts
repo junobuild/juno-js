@@ -1,6 +1,9 @@
 import type {ENCODING_TYPE} from '@junobuild/config';
 import type {Blob} from 'buffer';
-import type {MimeType} from 'file-type';
+
+export type MimeType = string;
+
+export type FileExtension = string;
 
 export interface FileDetails {
   file: string;

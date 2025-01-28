@@ -61,8 +61,8 @@
     "@dfinity/utils": "^2",
     "@junobuild/utils": "*",
     "idb-keyval": "^6.2.1",
-    "isbot": "^5.1.6",
+    "isbot": "^5.1.21",
     "nanoid": "^5.0.9",
-    "web-vitals": "^4.2.3"
+    "web-vitals": "^4.2.4"
   }
 }

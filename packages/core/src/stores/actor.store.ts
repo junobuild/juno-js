@@ -1,7 +1,7 @@
 import {Actor, type ActorSubclass} from '@dfinity/agent';
 import type {ActorMethod} from '@dfinity/agent/lib/esm/actor';
 import type {IDL} from '@dfinity/candid';
-import {isNullish} from '@junobuild/utils';
+import {isNullish} from '@dfinity/utils';
 import type {BuildType} from '../types/build.types';
 import type {Satellite} from '../types/satellite.types';
 import {AgentStore} from './agent.store';

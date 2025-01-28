@@ -1,5 +1,5 @@
+import {fromNullable, nonNullish} from '@dfinity/utils';
 import type {Asset, AssetEncoding, AssetKey, Storage} from '@junobuild/storage';
-import {fromNullable, nonNullish} from '@junobuild/utils';
 import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import {
   countAssets as countAssetsApi,

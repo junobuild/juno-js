@@ -1,5 +1,5 @@
+import {assertNonNullish} from '@dfinity/utils';
 import type {Asset, AssetEncoding, AssetKey, ENCODING_TYPE, Storage} from '@junobuild/storage';
-import {assertNonNullish} from '@junobuild/utils';
 import {initAuthTimeoutWorker} from './services/auth-timout.services';
 import {initAuth} from './services/auth.services';
 import {AuthStore} from './stores/auth.store';

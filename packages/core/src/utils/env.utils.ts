@@ -1,4 +1,4 @@
-import {nonNullish} from '@junobuild/utils';
+import {nonNullish} from '@dfinity/utils';
 import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
 import {EnvStore} from '../stores/env.store';
 import type {Satellite} from '../types/satellite.types';

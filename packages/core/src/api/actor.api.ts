@@ -1,7 +1,7 @@
 import type {ActorSubclass} from '@dfinity/agent';
 import type {ActorMethod} from '@dfinity/agent/lib/esm/actor';
 import type {IDL} from '@dfinity/candid';
-import {assertNonNullish} from '@junobuild/utils';
+import {assertNonNullish} from '@dfinity/utils';
 import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as stockIdlFactory} from '../../declarations/satellite/satellite.factory.did.js';

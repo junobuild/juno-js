@@ -1,9 +1,9 @@
+import {fromNullable} from '@dfinity/utils';
 import {
   uploadAsset as uploadAssetStorage,
   type AssetKey,
   type UploadAsset
 } from '@junobuild/storage';
-import {fromNullable} from '@junobuild/utils';
 import type {
   AssetNoContent,
   InitAssetKey,

@@ -1,5 +1,5 @@
 import {HttpAgent, type Agent} from '@dfinity/agent';
-import {isNullish, nonNullish} from '@junobuild/utils';
+import {isNullish, nonNullish} from '@dfinity/utils';
 import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
 import type {Satellite} from '../types/satellite.types';
 

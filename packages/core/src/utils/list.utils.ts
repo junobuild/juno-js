@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {isNullish, toNullable} from '@junobuild/utils';
+import {isNullish, toNullable} from '@dfinity/utils';
 import type {
   ListParams as ListParamsApi,
   TimestampMatcher

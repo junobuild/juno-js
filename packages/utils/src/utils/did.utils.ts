@@ -1,21 +1,55 @@
+import {assertNonNullish} from './asserts.utils';
 import {jsonReplacer, jsonReviver} from './json.utils';
-import {nonNullish} from './null.utils';
+import {nonNullish} from './nullish.utils';
 
 /**
- * Converts a value to a nullable array.
- * @template T
- * @param {T} [value] - The value to convert.
- * @returns {([] | [T])} A nullable array containing the value if non-nullish, or an empty array if nullish.
+ * Converts a value into a Candid-style variant representation of an optional value.
+ *
+ * @template T The type of the value.
+ * @param {T | null | undefined} value - The value to convert into a Candid-style variant.
+ * @returns {[] | [T]} A Candid-style variant representation: an empty array for `null` and `undefined` or an array with the value.
  */
-export const toNullable = <T>(value?: T): [] | [T] => (nonNullish(value) ? [value] : []);
+export const toNullable = <T>(value?: T | null): [] | [T] => {
+  return nonNullish(value) ? [value] : [];
+};
 
 /**
- * Extracts a value from a nullable array.
- * @template T
- * @param {([] | [T])} value - The nullable array.
- * @returns {(T | undefined)} The value if present, or undefined if the array is empty.
+ * Extracts the value from a Candid-style variant representation of an optional value.
+ *
+ * @template T The type of the value.
+ * @param {[] | [T]} value - A Candid-style variant representing an optional value.
+ * @returns {T | undefined} The extracted value, or `undefined` if the array is empty.
  */
-export const fromNullable = <T>(value: [] | [T]): T | undefined => value?.[0];
+export const fromNullable = <T>(value: [] | [T]): T | undefined => {
+  return value?.[0];
+};
+
+/**
+ * Extracts the value from a Candid-style variant representation of an optional value,
+ * ensuring the value is defined. Throws an error if the array is empty or the value is nullish.
+ *
+ * @template T The type of the value.
+ * @param {[] | [T]} value - A Candid-style variant representing an optional value.
+ * @returns {T} The extracted value.
+ * @throws {Error} If the array is empty or the value is nullish.
+ */
+export const fromDefinedNullable = <T>(value: [] | [T]): T => {
+  const result = fromNullable(value);
+
+  assertNonNullish(result);
+
+  return result;
+};
+
+/**
+ * Extracts the value from a nullish Candid-style variant representation.
+ *
+ * @template T The type of the value.
+ * @param {([] | [T]) | undefined} value - A Candid-style variant or `undefined`.
+ * @returns {T | undefined} The extracted value, or `undefined` if the input is nullish or the array is empty.
+ */
+export const fromNullishNullable = <T>(value: ([] | [T]) | undefined): T | undefined =>
+  fromNullable(value ?? []);
 
 /**
  * Converts data to a Uint8Array for transmission or storage.

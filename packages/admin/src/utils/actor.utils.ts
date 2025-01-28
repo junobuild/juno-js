@@ -6,7 +6,7 @@ import {
   type ActorSubclass
 } from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
-import {nonNullish} from '@junobuild/utils';
+import {nonNullish} from '@dfinity/utils';
 import type {ActorParameters} from '../types/actor.types';
 
 export const createActor = async <T = Record<string, ActorMethod>>({

@@ -1,4 +1,4 @@
-import {fromNullable, isNullish} from '@junobuild/utils';
+import {fromNullable, isNullish} from '@dfinity/utils';
 import {
   canisterStart,
   canisterStatus,

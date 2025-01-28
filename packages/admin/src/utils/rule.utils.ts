@@ -1,5 +1,5 @@
+import {fromNullable, nonNullish, toNullable} from '@dfinity/utils';
 import type {MemoryText, PermissionText, Rule, RulesType} from '@junobuild/config';
-import {fromNullable, nonNullish, toNullable} from '@junobuild/utils';
 import type {
   Memory,
   Permission,

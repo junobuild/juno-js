@@ -1,4 +1,4 @@
-import {fromNullable, nonNullish} from '@junobuild/utils';
+import {fromNullable, nonNullish} from '@dfinity/utils';
 import {
   listCustomDomains as listCustomDomainsApi,
   setCustomDomain as setCustomDomainApi

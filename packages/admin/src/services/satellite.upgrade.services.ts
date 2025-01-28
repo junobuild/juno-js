@@ -1,6 +1,6 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
-import {isNullish} from '@junobuild/utils';
+import {isNullish} from '@dfinity/utils';
 import {
   listControllers,
   listDeprecatedControllers,

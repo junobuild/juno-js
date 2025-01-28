@@ -1,5 +1,5 @@
 import type {chunk_hash} from '@dfinity/ic-management';
-import {isNullish, nonNullish} from '@junobuild/utils';
+import {isNullish, nonNullish} from '@dfinity/utils';
 import {
   clearChunkStore,
   installChunkedCode,

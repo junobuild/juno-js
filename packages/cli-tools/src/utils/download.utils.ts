@@ -1,4 +1,4 @@
-import {nonNullish} from '@junobuild/utils';
+import {nonNullish} from '@dfinity/utils';
 import {get, type RequestOptions} from 'https';
 
 export const downloadFromURL = async (url: string | RequestOptions): Promise<Buffer> =>

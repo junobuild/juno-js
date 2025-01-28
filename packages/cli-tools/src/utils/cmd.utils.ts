@@ -1,4 +1,4 @@
-import {nonNullish} from '@junobuild/utils';
+import {nonNullish} from '@dfinity/utils';
 import {
   spawn as spawnCommand,
   type ChildProcess,

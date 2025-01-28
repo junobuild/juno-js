@@ -1,5 +1,5 @@
+import {isNullish, nonNullish} from '@dfinity/utils';
 import type {CliConfig, ENCODING_TYPE} from '@junobuild/config';
-import {isNullish, nonNullish} from '@junobuild/utils';
 import crypto from 'crypto';
 import {fileTypeFromFile, type MimeType} from 'file-type';
 import {type FileExtension} from 'file-type/core';

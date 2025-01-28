@@ -9,13 +9,19 @@ function rm_agent() {
 function install_agent() {
   local package=$1
 
-  npm i @dfinity/agent@latest @dfinity/candid@latest @dfinity/identity@latest @dfinity/principal@latest @dfinity/auth-client@latest --workspace=packages/"$package"
+  npm i @dfinity/agent@latest @dfinity/candid@latest @dfinity/identity@latest @dfinity/principal@latest --workspace=packages/"$package"
 }
 
 function install_agent_peer() {
   local package=$1
 
   npm i @dfinity/agent@latest @dfinity/candid@latest @dfinity/identity@latest @dfinity/principal@latest --workspace=packages/"$package" --save-peer
+}
+
+function install_agent_auth_client() {
+  local package=$1
+
+  npm i @dfinity/auth-client@latest --workspace=packages/"$package"
 }
 
 function install_agent_auth_client_peer() {
@@ -30,8 +36,9 @@ function install_principal_peer() {
   npm i @dfinity/principal@latest --workspace=packages/"$package" --save-peer
 }
 
-PACKAGES=core-standalone
+PACKAGES=core-standalone,analytics
 PACKAGES_PEER=admin,console,storage,core,core-peer
+PACKAGES_AUTH_CLIENT=core-standalone
 PACKAGES_AUTH_CLIENT_PEER=core,core-peer
 PACKAGES_PEER_UTILS=utils
 
@@ -58,6 +65,10 @@ done
 
 for package in $(echo $PACKAGES_PEER | sed "s/,/ /g"); do
   install_agent_peer "$package"
+done
+
+for package in $(echo $PACKAGES_AUTH_CLIENT | sed "s/,/ /g"); do
+  install_agent_auth_client "$package"
 done
 
 for package in $(echo $PACKAGES_AUTH_CLIENT_PEER | sed "s/,/ /g"); do

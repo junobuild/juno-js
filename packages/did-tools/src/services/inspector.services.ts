@@ -22,7 +22,7 @@ import {
   type TSPropertySignature,
   type TSType
 } from '@babel/types';
-import {isNullish, nonNullish} from '@junobuild/utils';
+import {isNullish, nonNullish} from '@dfinity/utils';
 import {readFile} from 'node:fs/promises';
 import type {MethodSignature} from '../types/method-signature';
 

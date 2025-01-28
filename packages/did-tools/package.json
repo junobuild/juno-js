@@ -45,13 +45,13 @@
     "cli"
   ],
   "homepage": "https://juno.build",
-  "peerDependencies": {
-    "@junobuild/utils": "*"
-  },
   "dependencies": {
     "@babel/core": "^7.25.2",
     "@babel/plugin-transform-modules-commonjs": "^7.24.8",
     "@babel/preset-typescript": "^7.24.7",
     "@babel/traverse": "^7.25.6"
+  },
+  "peerDependencies": {
+    "@dfinity/utils": "^2"
   }
 }

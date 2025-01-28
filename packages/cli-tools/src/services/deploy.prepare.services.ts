@@ -1,8 +1,7 @@
 import {isNullish, nonNullish} from '@dfinity/utils';
 import type {CliConfig, ENCODING_TYPE} from '@junobuild/config';
 import crypto from 'crypto';
-import {fileTypeFromFile, type MimeType} from 'file-type';
-import {type FileExtension} from 'file-type/core';
+import {fileTypeFromFile} from 'file-type';
 import mime from 'mime-types';
 import {minimatch} from 'minimatch';
 import {readFile} from 'node:fs/promises';
@@ -13,7 +12,7 @@ import {
   DEPLOY_DEFAULT_IGNORE,
   DEPLOY_DEFAULT_SOURCE
 } from '../constants/deploy.constants';
-import type {Asset, FileDetails, ListAssets} from '../types/deploy';
+import type {Asset, FileDetails, FileExtension, ListAssets} from '../types/deploy';
 import {gzipFiles} from '../utils/compress.utils';
 import {fullPath, listSourceFiles} from '../utils/deploy.utils';
 
@@ -185,7 +184,7 @@ const listFiles = async ({
     return {
       file,
       alternateFile,
-      mime: typeof mimeType === 'string' ? (mimeType as MimeType) : undefined,
+      mime: typeof mimeType === 'string' ? mimeType : undefined,
       encoding: encodingType
     };
   };

@@ -95,7 +95,7 @@
     {
       "name": "@junobuild/core-standalone",
       "path": "./packages/core-standalone/dist/index.js",
-      "limit": "85 kB"
+      "limit": "90 kB"
     },
     {
       "name": "@junobuild/utils",

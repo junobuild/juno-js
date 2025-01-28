@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/core-peer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "JavaScript core client for Juno minus DFINITY agent-js dependencies",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

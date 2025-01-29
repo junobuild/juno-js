@@ -30,8 +30,8 @@ function install_agent_auth_client_peer() {
   npm i @dfinity/auth-client@latest --workspace=packages/"$package" --save-peer
 }
 
-PACKAGES=core-standalone,analytics
-PACKAGES_PEER=admin,console,storage,core,core-peer
+PACKAGES=core-standalone
+PACKAGES_PEER=admin,console,storage,core,core-peer,analytics
 PACKAGES_AUTH_CLIENT=core-standalone
 PACKAGES_AUTH_CLIENT_PEER=core,core-peer
 

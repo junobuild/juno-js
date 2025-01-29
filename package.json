@@ -108,7 +108,15 @@
     {
       "name": "@junobuild/analytics",
       "path": "./packages/analytics/dist/index.js",
-      "limit": "65 kB"
+      "limit": "10 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/identity",
+        "@dfinity/principal",
+        "@dfinity/utils",
+        "@junobuild/utils"
+      ]
     },
     {
       "name": "@junobuild/analytics-worker",

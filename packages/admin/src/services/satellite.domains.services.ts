@@ -35,10 +35,10 @@ export const listCustomDomains = async ({
 };
 
 /**
- * Sets the custom domains for a satellite.
+ * Sets some custom domains for a satellite.
  * @param {Object} params - The parameters for setting the custom domains.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
- * @param {CustomDomain[]} params.domains - The custom domains to set.
+ * @param {Pick<CustomDomain, "domain" | "bn_id">}[] params.domains - The custom domains - name and optional BN ID - to set.
  * @returns {Promise<void[]>} A promise that resolves when the custom domains are set.
  */
 export const setCustomDomains = ({
@@ -46,7 +46,7 @@ export const setCustomDomains = ({
   domains
 }: {
   satellite: SatelliteParameters;
-  domains: CustomDomain[];
+  domains: Pick<CustomDomain, 'domain' | 'bn_id'>[];
 }): Promise<void[]> =>
   Promise.all(
     domains.map(({domain: domainName, bn_id: boundaryNodesId}) =>
@@ -57,3 +57,23 @@ export const setCustomDomains = ({
       })
     )
   );
+
+/**
+ * Sets a custom domain for a satellite.
+ * @param {Object} params - The parameters for setting the custom domain.
+ * @param {SatelliteParameters} params.satellite - The satellite parameters.
+ * @param {Pick<CustomDomain, "domain" | "bn_id">} params.domain - The custom domain name and optional BN ID to set.
+ * @returns {Promise<void>} A promise that resolves when the custom domain is set.
+ */
+export const setCustomDomain = ({
+  satellite,
+  domain
+}: {
+  satellite: SatelliteParameters;
+  domain: Pick<CustomDomain, 'domain' | 'bn_id'>;
+}): Promise<void> =>
+  setCustomDomainApi({
+    satellite,
+    domainName: domain.domain,
+    boundaryNodesId: domain.bn_id
+  });

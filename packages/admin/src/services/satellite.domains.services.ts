@@ -46,7 +46,7 @@ export const setCustomDomains = ({
   domains
 }: {
   satellite: SatelliteParameters;
-  domains: CustomDomain[];
+  domains: Pick<CustomDomain, 'domain' | 'bn_id'>[];
 }): Promise<void[]> =>
   Promise.all(
     domains.map(({domain: domainName, bn_id: boundaryNodesId}) =>

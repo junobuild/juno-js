@@ -1,6 +1,7 @@
 import type {Identity} from '@dfinity/agent';
 import {isNullish} from '@dfinity/utils';
 import type {Provider, User, UserData} from '../types/auth.types';
+import {InitError} from '../types/errors.types';
 import {getIdentity} from './auth.services';
 import {getDoc, setDoc} from './doc.services';
 
@@ -8,7 +9,7 @@ export const initUser = async (provider?: Provider): Promise<User> => {
   const identity: Identity | undefined = getIdentity();
 
   if (isNullish(identity)) {
-    throw new Error('No identity to initialize the user. Have you initialized Juno?');
+    throw new InitError('No identity to initialize the user. Have you initialized Juno?');
   }
 
   const userId = identity.getPrincipal().toText();

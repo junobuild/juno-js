@@ -16,6 +16,7 @@ export * from './services/storage.services';
 export type * from './types/auth.types';
 export type * from './types/doc.types';
 export type * from './types/env.types';
+export * from './types/errors.types';
 export {ListOrder, ListPaginate, ListParams, ListResults} from './types/list.types';
 export type * from './types/satellite.types';
 export type * from './types/storage.types';

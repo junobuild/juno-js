@@ -4,6 +4,7 @@ import type {
   ListParams as ListParamsApi,
   TimestampMatcher
 } from '../../declarations/satellite/satellite.did';
+import {ListError} from '../types/errors.types';
 import type {ListParams, ListTimestampMatcher} from '../types/list.types';
 
 const toListMatcherTimestamp = (matcher?: ListTimestampMatcher): [] | [TimestampMatcher] => {
@@ -21,7 +22,7 @@ const toListMatcherTimestamp = (matcher?: ListTimestampMatcher): [] | [Timestamp
     case 'between':
       return toNullable({Between: [matcher.timestamps.start, matcher.timestamps.end]});
     default:
-      throw new Error('Invalid list matcher for timestamp', matcher);
+      throw new ListError('Invalid list matcher for timestamp', matcher);
   }
 };
 

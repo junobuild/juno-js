@@ -12,7 +12,7 @@ import type {Provider, SignInOptions} from '../types/auth.types';
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser} from './user.services';
 
-let authClient: AuthClient | undefined;
+let authClient: AuthClient | undefined | null;
 
 export const initAuth = async (provider?: Provider) => {
   authClient = authClient ?? (await createAuthClient());
@@ -63,12 +63,18 @@ export const signOut = async (): Promise<void> => {
   await authClient?.logout();
 
   // Reset local object otherwise next sign in (sign in - sign out - sign in) might not work out - i.e. agent-js might not recreate the delegation or identity if not resetted
-  authClient = undefined;
+  // Technically we do not need this since we recreate the agent below. We just keep it to make the reset explicit.
+  authClient = null;
 
   AuthStore.getInstance().reset();
 
   ActorStore.getInstance().reset();
   AgentStore.getInstance().reset();
+
+  // Recreate an HttpClient immediately because next sign-in, if window is not reloaded, would fail if the agent is created within the process.
+  // For example, Safari blocks the Internet Identity (II) window if the agent is created during the interaction.
+  // Agent-js must be created either globally or at least before performing a sign-in.
+  authClient = await createAuthClient();
 };
 
 export const getIdentity = (): Identity | undefined => authClient?.getIdentity();

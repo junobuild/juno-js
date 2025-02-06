@@ -1,5 +1,5 @@
 import type {Identity} from '@dfinity/agent';
-import type {AuthClient} from '@dfinity/auth-client';
+import {AuthClient, ERROR_USER_INTERRUPT} from '@dfinity/auth-client';
 import {isNullish} from '@dfinity/utils';
 import {
   ALLOW_PIN_AUTHENTICATION,
@@ -10,7 +10,7 @@ import {ActorStore} from '../stores/actor.store';
 import {AgentStore} from '../stores/agent.store';
 import {AuthStore} from '../stores/auth.store';
 import type {Provider, SignInOptions} from '../types/auth.types';
-import {SignInError} from '../types/errors.types';
+import {SignInError, SignInUserInterruptError} from '../types/errors.types';
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser} from './user.services';
 
@@ -56,7 +56,14 @@ export const signIn = (options?: SignInOptions): Promise<void> =>
         await initAuth(provider.id);
         resolve();
       },
-      onError: (error?: string) => reject(new SignInError(error)),
+      onError: (error?: string) => {
+        if (error === ERROR_USER_INTERRUPT) {
+          reject(new SignInUserInterruptError(error));
+          return;
+        }
+
+        reject(new SignInError(error));
+      },
       maxTimeToLive: options?.maxTimeToLive ?? DELEGATION_IDENTITY_EXPIRATION,
       allowPinAuthentication: options?.allowPin ?? ALLOW_PIN_AUTHENTICATION,
       ...(options?.derivationOrigin !== undefined && {derivationOrigin: options.derivationOrigin}),

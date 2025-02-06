@@ -10,7 +10,7 @@ import {ActorStore} from '../stores/actor.store';
 import {AgentStore} from '../stores/agent.store';
 import {AuthStore} from '../stores/auth.store';
 import type {Provider, SignInOptions} from '../types/auth.types';
-import {SignInError, SignInUserInterruptError} from '../types/errors.types';
+import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors.types';
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser} from './user.services';
 
@@ -42,7 +42,7 @@ export const signIn = (options?: SignInOptions): Promise<void> =>
   new Promise<void>(async (resolve, reject) => {
     if (isNullish(authClient)) {
       reject(
-        new SignInError(
+        new SignInInitError(
           'No client is ready to perform a sign-in. Have you initialized the Satellite?'
         )
       );

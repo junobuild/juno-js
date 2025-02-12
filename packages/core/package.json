@@ -50,6 +50,7 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
+    "@junobuild/errors": "*",
     "@junobuild/storage": "*",
     "@junobuild/utils": "*"
   },

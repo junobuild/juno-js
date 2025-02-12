@@ -1,5 +1,6 @@
 import type {Identity} from '@dfinity/agent';
-import {isNullish} from '@dfinity/utils';
+import {isNullish, nonNullish} from '@dfinity/utils';
+import {isSatelliteError, JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE} from '@junobuild/errors';
 import type {Provider, User, UserData} from '../types/auth.types';
 import {InitError} from '../types/errors.types';
 import {getIdentity} from './auth.services';
@@ -14,17 +15,37 @@ export const initUser = async (provider?: Provider): Promise<User> => {
 
   const userId = identity.getPrincipal().toText();
 
-  const user: User | undefined = await getDoc<UserData>({
-    collection: `#user`,
-    key: userId
-  });
+  const loadUser = (): Promise<User | undefined> =>
+    getDoc<UserData>({
+      collection: `#user`,
+      key: userId
+    });
 
-  if (isNullish(user)) {
-    const newUser: User = await createUser({userId, provider});
-    return newUser;
+  const user = await loadUser();
+
+  if (nonNullish(user)) {
+    return user;
   }
 
-  return user;
+  try {
+    return await createUser({userId, provider});
+  } catch (error: unknown) {
+    // When a user signs in for the first time and get user returns `undefined`,
+    // a new user entry is created. If the browser is reloaded and get user
+    // still returns `undefined`, another try is made to create user entry, which is not
+    // allowed since only the controller can update users, assuming the entry has been
+    // created in the meantime. To prevent errors, we reload the user data,
+    // as the issue indicates the user entity exists.
+    if (isSatelliteError({error, type: JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE})) {
+      const userOnCreateError = await loadUser();
+
+      if (nonNullish(userOnCreateError)) {
+        return userOnCreateError;
+      }
+    }
+
+    throw error;
+  }
 };
 
 const createUser = ({

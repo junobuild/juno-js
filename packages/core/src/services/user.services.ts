@@ -21,34 +21,31 @@ export const initUser = async (provider?: Provider): Promise<User> => {
       key: userId
     });
 
-  // TODO: uncomment
-  const user = undefined; // await loadUser();
+  const user = await loadUser();
 
-  if (isNullish(user)) {
-    try {
-      return await createUser({userId, provider});
-    } catch (error: unknown) {
-      console.log('----->', error);
-
-      // When a user signs in for the first time and get user returns `undefined`,
-      // a new user entry is created. If the browser is reloaded and get user
-      // still returns `undefined`, another try is made to create user entry, which is not
-      // allowed since only the controller can update users, assuming the entry has been
-      // created in the meantime. To prevent errors, we reload the user data,
-      // as the issue indicates the user entity exists.
-      if (isSatelliteError({error, type: JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE})) {
-        const userOnCreateError = await loadUser();
-
-        if (nonNullish(userOnCreateError)) {
-          return userOnCreateError;
-        }
-      }
-
-      throw error;
-    }
+  if (nonNullish(user)) {
+    return user;
   }
 
-  return user;
+  try {
+    return await createUser({userId, provider});
+  } catch (error: unknown) {
+    // When a user signs in for the first time and get user returns `undefined`,
+    // a new user entry is created. If the browser is reloaded and get user
+    // still returns `undefined`, another try is made to create user entry, which is not
+    // allowed since only the controller can update users, assuming the entry has been
+    // created in the meantime. To prevent errors, we reload the user data,
+    // as the issue indicates the user entity exists.
+    if (isSatelliteError({error, type: JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE})) {
+      const userOnCreateError = await loadUser();
+
+      if (nonNullish(userOnCreateError)) {
+        return userOnCreateError;
+      }
+    }
+
+    throw error;
+  }
 };
 
 const createUser = ({

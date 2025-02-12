@@ -18,6 +18,7 @@
   },
   "workspaces": [
     "packages/utils",
+    "packages/errors",
     "packages/config",
     "packages/storage",
     "packages/core",
@@ -104,6 +105,11 @@
       "ignore": [
         "@dfinity/utils"
       ]
+    },
+    {
+      "name": "@junobuild/errors",
+      "path": "./packages/errors/dist/index.js",
+      "limit": "5 kB"
     },
     {
       "name": "@junobuild/analytics",

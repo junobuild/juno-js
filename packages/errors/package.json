@@ -1,0 +1,60 @@
+{
+  "name": "@junobuild/errors",
+  "version": "0.0.1",
+  "description": "A collection of predefined error constants and utilities for Juno applications.",
+  "author": "David Dal Busco (https://daviddalbusco.com)",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/node/index.mjs",
+  "module": "./dist/browser/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/browser/index.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/node/index.mjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "rmdir": "node ../../scripts/rmdir.mjs",
+    "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junobuild/juno-js.git",
+    "directory": "packages/errors"
+  },
+  "bugs": {
+    "url": "https://github.com/junobuild/juno-js"
+  },
+  "keywords": [
+    "juno",
+    "junobuild",
+    "errors",
+    "error-handling",
+    "constants",
+    "datastore",
+    "storage",
+    "authentication",
+    "auth",
+    "validation",
+    "exceptions",
+    "typescript",
+    "javascript",
+    "library",
+    "utilities",
+    "developer-tools"
+  ],
+  "homepage": "https://juno.build"
+}

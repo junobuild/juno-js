@@ -20,5 +20,5 @@ export const JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE = 'juno.datastore.error.use
 export const JUNO_DATASTORE_ERROR_USER_INVALID_DATA = 'juno.datastore.error.user.invalid_data';
 export const JUNO_DATASTORE_ERROR_USER_CALLER_KEY = 'juno.datastore.error.user.caller_key';
 export const JUNO_DATASTORE_ERROR_USER_KEY_NO_PRINCIPAL =
-    'juno.datastore.error.user.key_no_principal';
+  'juno.datastore.error.user.key_no_principal';
 export const JUNO_DATASTORE_ERROR_USER_NOT_ALLOWED = 'juno.datastore.error.user.not_allowed';

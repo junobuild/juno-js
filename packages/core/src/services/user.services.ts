@@ -1,6 +1,6 @@
 import type {Identity} from '@dfinity/agent';
 import {isNullish, nonNullish} from '@dfinity/utils';
-import {isSatelliteError, JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE} from '@junobuild/errors/src';
+import {isSatelliteError, JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE} from '@junobuild/errors';
 import type {Provider, User, UserData} from '../types/auth.types';
 import {InitError} from '../types/errors.types';
 import {getIdentity} from './auth.services';

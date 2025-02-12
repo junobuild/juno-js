@@ -1,5 +1,5 @@
 import type {Identity} from '@dfinity/agent';
-import {isNullish} from '@dfinity/utils';
+import {isNullish, nonNullish} from '@dfinity/utils';
 import type {Provider, User, UserData} from '../types/auth.types';
 import {InitError} from '../types/errors.types';
 import {getIdentity} from './auth.services';
@@ -14,14 +14,30 @@ export const initUser = async (provider?: Provider): Promise<User> => {
 
   const userId = identity.getPrincipal().toText();
 
-  const user: User | undefined = await getDoc<UserData>({
-    collection: `#user`,
-    key: userId
-  });
+  const loadUser = (): Promise<User | undefined> =>
+    getDoc<UserData>({
+      collection: `#user`,
+      key: userId
+    });
+
+  // TODO: uncomment
+  const user = undefined; // await loadUser();
 
   if (isNullish(user)) {
-    const newUser: User = await createUser({userId, provider});
-    return newUser;
+    try {
+      return await createUser({userId, provider});
+    } catch (error: unknown) {
+
+      console.log('----->', error);
+
+      const userOnCreateError = await loadUser();
+
+      if (nonNullish(userOnCreateError)) {
+        return userOnCreateError
+      }
+
+      throw error;
+    }
   }
 
   return user;

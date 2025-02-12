@@ -15,6 +15,7 @@ JavaScript libraries for interfacing with [Juno].
 - [config-loader](/packages/config-loader): utilities for reading configuration settings
 - [console](/packages/console): interfacing with Junos' Console
 - [storage](/packages/storage): interfacing with Junos' Storage features
+- [errors](/packages/errors): error constants and utilities
 
 ## License
 

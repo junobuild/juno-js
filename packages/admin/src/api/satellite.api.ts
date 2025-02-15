@@ -4,12 +4,12 @@ import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declaratio
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
 import type {
   AuthenticationConfig,
+  CollectionType,
   Controller,
   CustomDomain,
   DbConfig,
   MemorySize,
   Rule,
-  RulesType,
   _SERVICE as SatelliteActor,
   SetControllersArgs,
   SetRule,
@@ -87,7 +87,7 @@ export const listRules = async ({
   type
 }: {
   satellite: SatelliteParameters;
-  type: RulesType;
+  type: CollectionType;
 }): Promise<[string, Rule][]> => {
   const actor: SatelliteActor = await getSatelliteActor(satellite);
   return actor.list_rules(type);
@@ -99,7 +99,7 @@ export const setRule = async ({
   rule,
   satellite
 }: {
-  type: RulesType;
+  type: CollectionType;
   collection: string;
   rule: SetRule;
   satellite: SatelliteParameters;

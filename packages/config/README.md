@@ -184,9 +184,10 @@ Configuration for satellite assertions.
 
 Configure the behavior of Internet Identity.
 
-| Property           | Type                  | Description                                                                                                                                                                                                                                                                                                                      |
-| ------------------ | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `derivationOrigin` | `string or undefined` | This setting ensures that users are recognized on your app, regardless of whether they use the default URL or any other custom domain. For example, if set to hello.com, a user signing on at https://hello.com will receive the same identifier (principal) as when signing on at https://www.hello.com. type: {string}optional |
+| Property                     | Type                    | Description                                                                                                                                                                                                                                                                                                                      |
+| ---------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `derivationOrigin`           | `string or undefined`   | This setting ensures that users are recognized on your app, regardless of whether they use the default URL or any other custom domain. For example, if set to hello.com, a user signing on at https://hello.com will receive the same identifier (principal) as when signing on at https://www.hello.com. type: {string}optional |
+| `externalAlternativeOrigins` | `string[] or undefined` | An optional list of external alternative origins allowed for authentication, which can be useful if you want to reuse the same derivation origin across multiple Satellites. type: {string[]}optional                                                                                                                            |
 
 #### :gear: AuthenticationConfig
 

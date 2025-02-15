@@ -10,6 +10,13 @@ export interface AuthenticationConfigInternetIdentity {
    * @optional
    */
   derivationOrigin?: string;
+
+  /**
+   * An optional list of external alternative origins allowed for authentication, which can be useful if you want to reuse the same derivation origin across multiple Satellites.
+   * @type {string[]}
+   * @optional
+   */
+  externalAlternativeOrigins?: string[];
 }
 
 /**

@@ -1,4 +1,4 @@
-import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
+import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
 import type {
   AuthenticationConfig,
   DatastoreConfig,
@@ -119,11 +119,12 @@ export const setAuthConfig = async ({
 }): Promise<void> => {
   await setAuthConfigApi({
     config: {
-      internet_identity: isNullish(internetIdentity?.derivationOrigin)
+      internet_identity: isNullish(internetIdentity)
         ? []
         : [
             {
-              derivation_origin: [internetIdentity.derivationOrigin]
+              derivation_origin: toNullable(internetIdentity?.derivationOrigin),
+              external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
             }
           ]
     },

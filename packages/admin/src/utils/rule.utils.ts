@@ -1,10 +1,10 @@
 import {fromNullable, nonNullish, toNullable} from '@dfinity/utils';
 import type {MemoryText, PermissionText, Rule, RulesType} from '@junobuild/config';
 import type {
+  CollectionType as CollectionTypeApi,
   Memory,
   Permission,
   Rule as RuleApi,
-  RulesType as RulesTypeApi,
   SetRule
 } from '../../declarations/satellite/satellite.did';
 import {
@@ -19,7 +19,7 @@ import {
   StorageRulesType
 } from '../constants/rules.constants';
 
-export const mapRuleType = (type: RulesType): RulesTypeApi =>
+export const mapRuleType = (type: RulesType): CollectionTypeApi =>
   type === 'storage' ? StorageRulesType : DbRulesType;
 
 export const mapSetRule = ({
@@ -27,6 +27,7 @@ export const mapSetRule = ({
   write,
   memory,
   maxSize,
+  maxChangesPerUser,
   maxCapacity,
   version,
   mutablePermissions,
@@ -36,6 +37,7 @@ export const mapSetRule = ({
   | 'read'
   | 'write'
   | 'maxSize'
+  | 'maxChangesPerUser'
   | 'maxCapacity'
   | 'version'
   | 'memory'
@@ -48,6 +50,9 @@ export const mapSetRule = ({
   version: toNullable(version),
   max_size: toNullable(nonNullish(maxSize) && maxSize > 0 ? BigInt(maxSize) : undefined),
   max_capacity: toNullable(nonNullish(maxCapacity) && maxCapacity > 0 ? maxCapacity : undefined),
+  max_changes_per_user: toNullable(
+    nonNullish(maxChangesPerUser) && maxChangesPerUser > 0 ? maxChangesPerUser : undefined
+  ),
   mutable_permissions: toNullable(mutablePermissions),
   rate_config: nonNullish(maxTokens)
     ? [
@@ -66,6 +71,7 @@ export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
     updated_at,
     created_at,
     max_size,
+    max_changes_per_user,
     max_capacity,
     memory,
     mutable_permissions,
@@ -74,6 +80,8 @@ export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
   } = rule;
 
   const maxSize = (max_size?.[0] ?? 0n > 0n) ? Number(fromNullable(max_size)) : undefined;
+  const maxChangesPerUser =
+    (max_changes_per_user?.[0] ?? 0 > 0) ? fromNullable(max_changes_per_user) : undefined;
   const maxCapacity = (max_capacity?.[0] ?? 0 > 0) ? fromNullable(max_capacity) : undefined;
 
   const ruleVersion = fromNullable(version);
@@ -89,6 +97,7 @@ export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
     updatedAt: updated_at,
     createdAt: created_at,
     ...(nonNullish(ruleVersion) && {version: ruleVersion}),
+    ...(nonNullish(maxChangesPerUser) && {maxChangesPerUser}),
     ...(nonNullish(maxSize) && {maxSize}),
     ...(nonNullish(maxCapacity) && {maxCapacity}),
     mutablePermissions: fromNullable(mutable_permissions) ?? true,

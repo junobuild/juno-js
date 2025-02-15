@@ -75,6 +75,13 @@ export interface Rule {
   maxSize?: number;
 
   /**
+   * The maximum number of changes (create, update or delete) per user for the collection.
+   * @type {number}
+   * @optional
+   */
+  maxChangesPerUser?: number;
+
+  /**
    * The maximum capacity of the collection.
    * @type {number}
    * @optional

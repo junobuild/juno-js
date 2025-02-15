@@ -9,6 +9,7 @@ export const spawn = async ({
   command,
   cwd,
   args,
+  env,
   stdout,
   silentOut = false,
   silentErrors = false
@@ -16,6 +17,7 @@ export const spawn = async ({
   command: string;
   cwd?: string;
   args?: readonly string[];
+  env?: NodeJS.ProcessEnv;
   stdout?: (output: string) => void;
   silentOut?: boolean;
   silentErrors?: boolean;
@@ -23,7 +25,8 @@ export const spawn = async ({
   await new Promise<number | null>((resolve, reject) => {
     const process: ChildProcessWithoutNullStreams = spawnCommand(command, args, {
       shell: true,
-      ...(nonNullish(cwd) && {cwd})
+      ...(nonNullish(cwd) && {cwd}),
+      ...(nonNullish(env) && {env})
     });
 
     process.stdout.on('data', (data) => {
@@ -57,14 +60,17 @@ export const spawn = async ({
 
 export const execute = async ({
   command,
-  args
+  args,
+  env
 }: {
   command: string;
   args?: readonly string[];
+  env?: NodeJS.ProcessEnv;
 }): Promise<number | null> =>
   await new Promise<number | null>((resolve) => {
     const childProcess: ChildProcess = spawnCommand(command, args ?? [], {
-      stdio: 'inherit'
+      stdio: 'inherit',
+      ...(nonNullish(env) && {env})
     });
 
     childProcess.on('close', (code) => {

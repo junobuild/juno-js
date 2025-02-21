@@ -1,4 +1,7 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*", "candid/**/*"]
+  "include": ["src/**/*", "candid/**/*"],
+  "compilerOptions": {
+    "moduleResolution": "bundler"
+  }
 }

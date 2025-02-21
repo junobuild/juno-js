@@ -4,6 +4,7 @@ import {
   type ChildProcess,
   type ChildProcessWithoutNullStreams
 } from 'child_process';
+import {applyForceShell} from './cmd.windows.utils';
 
 export const spawn = async ({
   command,
@@ -22,12 +23,19 @@ export const spawn = async ({
   silentOut?: boolean;
   silentErrors?: boolean;
 }): Promise<number | null> =>
-  await new Promise<number | null>((resolve, reject) => {
-    const process: ChildProcessWithoutNullStreams = spawnCommand(command, args, {
+  // eslint-disable-next-line no-async-promise-executor
+  await new Promise<number | null>(async (resolve, reject) => {
+    const [escapedCommand, escapedArgs, options] = await applyForceShell(command, args ?? [], {
       shell: true,
       ...(nonNullish(cwd) && {cwd}),
       ...(nonNullish(env) && {env})
     });
+
+    const process: ChildProcessWithoutNullStreams = spawnCommand(
+      escapedCommand,
+      escapedArgs,
+      options
+    );
 
     process.stdout.on('data', (data) => {
       if (nonNullish(stdout)) {
@@ -67,11 +75,14 @@ export const execute = async ({
   args?: readonly string[];
   env?: NodeJS.ProcessEnv;
 }): Promise<number | null> =>
-  await new Promise<number | null>((resolve) => {
-    const childProcess: ChildProcess = spawnCommand(command, args ?? [], {
+  // eslint-disable-next-line no-async-promise-executor
+  await new Promise<number | null>(async (resolve) => {
+    const [escapedCommand, escapedArgs, options] = await applyForceShell(command, args ?? [], {
       stdio: 'inherit',
       ...(nonNullish(env) && {env})
     });
+
+    const childProcess: ChildProcess = spawnCommand(escapedCommand, escapedArgs ?? [], options);
 
     childProcess.on('close', (code) => {
       if (code === 0) {

@@ -55,8 +55,8 @@
   "homepage": "https://juno.build",
   "dependencies": {
     "idb-keyval": "^6.2.1",
-    "isbot": "^5.1.21",
-    "nanoid": "^5.0.9",
+    "isbot": "^5.1.23",
+    "nanoid": "^5.1.0",
     "web-vitals": "^4.2.4"
   },
   "peerDependencies": {

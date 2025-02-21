@@ -57,7 +57,7 @@
     "@junobuild/config": "*"
   },
   "dependencies": {
-    "file-type": "^20.0.0",
+    "file-type": "^20.1.0",
     "listr": "^0.14.3",
     "mime-types": "^2.1.35",
     "minimatch": "^10.0.1"

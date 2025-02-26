@@ -46,7 +46,6 @@ const shouldForceShell = async <Options extends SpawnOptions>(
 // Windows allows omitting file extensions (present in the `PATHEXT` environment variable).
 // Therefore we must use the `PATH` environment variable and make `stat` calls to check this.
 // Environment variables are case-insensitive on Windows, so we check both `PATH` and `Path`.
-// eslint-disable-next-line no-return-assign
 // eslint-disable-next-line local-rules/prefer-object-params
 const isExe = async (
   file: string,
@@ -95,7 +94,6 @@ const mIsExe = async (
             return;
           }
 
-          // eslint-disable-next-line no-throw-literal
           throw 0;
         })
     );

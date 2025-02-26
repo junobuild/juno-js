@@ -13,7 +13,7 @@ export type * from './shared/storage.config';
 export type * from './types/cli.config';
 export type * from './types/encoding';
 export type * from './types/juno.env';
-export type * from './utils/ts.utils';
+export type * from './types/utility.types';
 
 /// Export and expose functions for developers' configuration
 export * from './console/config';

@@ -1,7 +1,7 @@
 import type {StorageConfig} from '../shared/storage.config';
 import type {CliConfig} from '../types/cli.config';
 import type {JunoConfigMode} from '../types/juno.env';
-import type {Either} from '../utils/ts.utils';
+import type {Either} from '../types/utility.types';
 
 /**
  * Represents the unique identifier for a console.

@@ -70,7 +70,7 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
   };
 };
 
-const SESSION_ID_UNDEFINED_MSG = 'No session ID initialized.' as const;
+const SESSION_ID_UNDEFINED_MSG = 'No session ID initialized.';
 
 export const setPageView = async () => {
   if (!isBrowser()) {

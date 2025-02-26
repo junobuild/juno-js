@@ -37,11 +37,9 @@ onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
   }
 };
 
-const SATELLITE_ID_UNDEFINED_MSG =
-  'Analytics worker not initialized. Did you set `satelliteId`?' as const;
+const SATELLITE_ID_UNDEFINED_MSG = 'Analytics worker not initialized. Did you set `satelliteId`?';
 
-const ORBITER_ID_UNDEFINED_MSG =
-  'Analytics worker not initialized. Did you set `orbiterId`?' as const;
+const ORBITER_ID_UNDEFINED_MSG = 'Analytics worker not initialized. Did you set `orbiterId`?';
 
 let env: Environment | undefined;
 

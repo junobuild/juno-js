@@ -15,10 +15,9 @@ import {
  */
 export const nodeRequire = <T>({id, extension}: {id: string; extension: string}): {default: T} => {
   // ensure we cleared out node's internal require() cache for this file
-  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete require.cache[id];
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const Module = require('module');
   const originalLoad = Module._load;
 
@@ -34,7 +33,6 @@ export const nodeRequire = <T>({id, extension}: {id: string; extension: string})
       }).code;
 
       interface NodeModuleWithCompile extends NodeModule {
-        // eslint-disable-next-line @typescript-eslint/method-signature-style
         _compile(code: string, filename: string): T;
       }
 
@@ -59,6 +57,7 @@ export const nodeRequire = <T>({id, extension}: {id: string; extension: string})
     };
 
     // let's do this!
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     return require(id);
   } finally {
     // all set, let's go ahead and reset the require back to the default

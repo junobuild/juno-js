@@ -74,7 +74,7 @@ export const uploadAsset = async ({
   await actor.commit_asset_upload({
     batch_id: batchId,
     chunk_ids: chunkIds.map(({chunk_id}: UploadChunkResult) => chunk_id),
-    headers: [...headers, ...(contentType ? contentType : [])]
+    headers: [...headers, ...(contentType ?? [])]
   });
 };
 

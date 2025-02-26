@@ -1,7 +1,6 @@
 import {isNullish, nonNullish} from '@dfinity/utils';
 
 // In case an answer is replaced by control+c
-// eslint-disable-next-line local-rules/prefer-object-params
 export const assertAnswerCtrlC: (
   answer: null | undefined | '' | string,
   message?: string

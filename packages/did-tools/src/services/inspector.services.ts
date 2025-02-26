@@ -48,7 +48,7 @@ export const collectApi = async ({
 
   // I tried hard to use an import but, no success. When build and pack and imported in the CLI ultimately it does not work when used.
   // Example of error: TypeError: (0 , aSe.default) is not a function
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const {default: traverse} = require('@babel/traverse');
 
   traverse(ast, {

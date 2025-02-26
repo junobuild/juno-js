@@ -4,8 +4,6 @@ import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill'
 import esbuild from 'esbuild';
 import {readdirSync, statSync} from 'fs';
 import {join} from 'path';
-
-// eslint-disable-next-line import/no-relative-parent-imports
 import {build} from '../../scripts/esbuild.mjs';
 
 build();

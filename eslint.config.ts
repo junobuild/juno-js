@@ -16,7 +16,8 @@ export default [
       'scripts/**/*',
       'packages/core-peer/src/**/*',
       'packages/core-standalone/src/**/*',
-      'eslint-local-rules.cjs'
+      'eslint-local-rules.cjs',
+      '**/esbuild.mjs'
     ]
   }
 ];

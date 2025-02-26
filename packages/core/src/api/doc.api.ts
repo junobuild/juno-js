@@ -3,6 +3,7 @@ import type {DelDoc, SetDoc} from '../../declarations/satellite/satellite.did';
 import type {Doc} from '../types/doc.types';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
+import {ExcludeDate} from '../types/utility.types';
 import {mapData} from '../utils/data.utils';
 import {fromDoc, toDelDoc, toSetDoc} from '../utils/doc.utils';
 import {toListParams} from '../utils/list.utils';
@@ -173,7 +174,7 @@ export const listDocs = async <D>({
       key,
       description: fromNullable(description),
       owner: owner.toText(),
-      data: await mapData<D>({data: dataArray}),
+      data: await mapData<ExcludeDate<D>>({data: dataArray}),
       version: fromNullable(version),
       ...rest
     });

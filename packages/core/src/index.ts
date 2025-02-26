@@ -21,6 +21,7 @@ export {ListOrder, ListPaginate, ListParams, ListResults} from './types/list.typ
 export type * from './types/satellite.types';
 export type * from './types/storage.types';
 export type * from './types/subscription.types';
+export type * from './types/utility.types';
 export type {Asset, AssetEncoding, AssetKey, ENCODING_TYPE, Storage};
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {

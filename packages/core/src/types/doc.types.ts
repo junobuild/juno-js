@@ -1,3 +1,5 @@
+import {ExcludeDate} from './utility.types';
+
 /**
  * Represents a document stored in a collection.
  * @template D - The type of data contained in the document.
@@ -18,9 +20,13 @@ export interface Doc<D> {
 
   /**
    * The data contained in the document.
-   * @type {D}
+   *
+   * Note that it is advised not to use native `Date` objects for fields,
+   * which is why they are recursively excluded using TypeScript.
+   *
+   * @type {ExcludeDate<D>}
    */
-  data: D;
+  data: ExcludeDate<D>;
 
   /**
    * The owner of the document.

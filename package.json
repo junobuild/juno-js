@@ -115,7 +115,10 @@
     {
       "name": "@junobuild/functions",
       "path": "./packages/functions/dist/index.js",
-      "limit": "5 kB"
+      "limit": "5 kB",
+      "ignore": [
+        "@dfinity/utils"
+      ]
     },
     {
       "name": "@junobuild/analytics",

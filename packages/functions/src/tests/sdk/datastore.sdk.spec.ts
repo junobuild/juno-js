@@ -1,7 +1,7 @@
 import {Principal} from '@dfinity/principal';
+import {jsonReplacer} from '@dfinity/utils';
 import type {RawData} from '../../hooks/core';
 import {decodeDocData, encodeDocData} from '../../sdk/datastore.sdk';
-import {jsonReplacer} from "@dfinity/utils";
 
 global.__juno_satellite_datastore_raw_data_to_text = vi.fn((data: RawData) =>
   new TextDecoder().decode(data)
@@ -16,7 +16,9 @@ describe('datastore.sdk', () => {
 
   describe('decodeDocData', () => {
     it('should decode RawData into an object', () => {
-      const inputData: RawData = new TextEncoder().encode(JSON.stringify(inputObject, jsonReplacer));
+      const inputData: RawData = new TextEncoder().encode(
+        JSON.stringify(inputObject, jsonReplacer)
+      );
 
       const result = decodeDocData<typeof inputObject>(inputData);
 
@@ -26,7 +28,9 @@ describe('datastore.sdk', () => {
 
     it('should decode RawData into a number', () => {
       const inputNumber = 42;
-      const inputData: RawData = new TextEncoder().encode(JSON.stringify(inputNumber, jsonReplacer));
+      const inputData: RawData = new TextEncoder().encode(
+        JSON.stringify(inputNumber, jsonReplacer)
+      );
 
       const result = decodeDocData<number>(inputData);
 

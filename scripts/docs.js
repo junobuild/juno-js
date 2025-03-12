@@ -40,5 +40,5 @@ generateDocumentation({
   inputFiles: functionsInputFiles,
   outputFile: './packages/functions/README.md',
   markdownOptions,
-  buildOptions: {...buildOptions, explore: false, types: true}
+  buildOptions: {...buildOptions, explore: true, types: true}
 });

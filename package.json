@@ -29,7 +29,8 @@
     "packages/cli-tools",
     "packages/did-tools",
     "packages/config-loader",
-    "packages/console"
+    "packages/console",
+    "packages/functions"
   ],
   "devDependencies": {
     "@dfinity/eslint-config-oisy-wallet": "^0.1.0",
@@ -109,6 +110,11 @@
     {
       "name": "@junobuild/errors",
       "path": "./packages/errors/dist/index.js",
+      "limit": "5 kB"
+    },
+    {
+      "name": "@junobuild/functions",
+      "path": "./packages/functions/dist/index.js",
       "limit": "5 kB"
     },
     {

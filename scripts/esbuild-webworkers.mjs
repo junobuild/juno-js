@@ -1,6 +1,7 @@
 import esbuild from 'esbuild';
 import {readdirSync, statSync} from 'fs';
 import {join} from 'path';
+import {DIST} from './esbuild-utils.mjs';
 
 export const buildWebWorkers = () => {
   const entryPoints = readdirSync(join(process.cwd(), 'src', 'workers'))
@@ -16,7 +17,7 @@ export const buildWebWorkers = () => {
   esbuild
     .build({
       entryPoints,
-      outdir: 'dist/workers',
+      outdir: join(DIST, 'workers'),
       bundle: true,
       sourcemap: 'external',
       minify: true,

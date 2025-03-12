@@ -16,6 +16,7 @@ JavaScript libraries for interfacing with [Juno].
 - [console](/packages/console): interfacing with Junos' Console
 - [storage](/packages/storage): interfacing with Junos' Storage features
 - [errors](/packages/errors): error constants and utilities
+- [functions](/packages/functions): utilities for Serverless Functions
 
 ## License
 

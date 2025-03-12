@@ -19,9 +19,7 @@ const configInputFiles = [
   './packages/config/src/types/cli.config.ts'
 ];
 
-const functionsInputFiles = [
-  './packages/functions/src/index.ts'
-];
+const functionsInputFiles = ['./packages/functions/src/index.ts'];
 
 const buildOptions = {
   repo: {url: 'https://github.com/junobuild/juno-js'}

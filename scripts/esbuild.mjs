@@ -2,18 +2,9 @@
 
 import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill';
 import esbuild from 'esbuild';
-import {readdirSync, readFileSync, statSync} from 'fs';
+import {readdirSync, statSync} from 'fs';
 import {join} from 'path';
-import {createDistFolder, DIST, writeEntries} from './esbuild-utils.mjs';
-
-// Skip peer dependencies
-const peerDependencies = (packageJson) => {
-  const json = readFileSync(packageJson, 'utf8');
-  const {peerDependencies} = JSON.parse(json);
-  return peerDependencies ?? {};
-};
-
-const workspacePeerDependencies = peerDependencies(join(process.cwd(), 'package.json'));
+import {createDistFolder, DIST, workspacePeerDependencies, writeEntries} from './esbuild-utils.mjs';
 
 const entryPoints = readdirSync(join(process.cwd(), 'src'))
   .filter(

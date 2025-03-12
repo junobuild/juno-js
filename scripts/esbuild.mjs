@@ -2,7 +2,7 @@
 
 import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill';
 import esbuild from 'esbuild';
-import {readdirSync, readFileSync, statSync} from 'fs';
+import {readdirSync, statSync} from 'fs';
 import {join} from 'path';
 import {createDistFolder, DIST, workspacePeerDependencies, writeEntries} from './esbuild-utils.mjs';
 

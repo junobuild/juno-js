@@ -1,6 +1,6 @@
-import {OnSetDocContext} from '../hooks/context';
-import {CollectionsConfig} from './collection.config';
-import {SatelliteConfigEnv} from './satellite.config';
+import type {OnSetDocContext} from '../hooks/context';
+import type {CollectionsConfig} from './collection.config';
+import type {SatelliteConfigEnv} from './satellite.config';
 
 /**
  * The generic configuration for hooks that manage collections.

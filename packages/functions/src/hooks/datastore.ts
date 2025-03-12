@@ -1,4 +1,4 @@
-import {RawData, RawUserId, Timestamp, Version} from './core';
+import type {RawData, RawUserId, Timestamp, Version} from './core';
 
 /**
  * Represents a document update operation.

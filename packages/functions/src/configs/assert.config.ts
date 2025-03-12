@@ -1,6 +1,6 @@
-import {AssertSetDocContext} from '../hooks/context';
-import {CollectionsConfig} from './collection.config';
-import {SatelliteConfigEnv} from './satellite.config';
+import type {AssertSetDocContext} from '../hooks/context';
+import type {CollectionsConfig} from './collection.config';
+import type {SatelliteConfigEnv} from './satellite.config';
 
 /**
  * The generic configuration for assertion hooks that manage collections.

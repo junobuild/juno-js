@@ -5,8 +5,8 @@
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/browser/index.mjs",
-  "module": "./dist/browser/index.mjs",
+  "main": "./dist/browser/index.js",
+  "module": "./dist/browser/index.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "rmdir": "node ../../scripts/rmdir.mjs",
-    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
+    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types && cp -R src/*.d.ts dist/types/",
     "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },

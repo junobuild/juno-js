@@ -1,6 +1,6 @@
 import esbuild from 'esbuild';
 import {join} from 'path';
-import {createDistFolder, DIST, writeEntries} from './esbuild-utils.mjs';
+import {createDistFolder, DIST, workspacePeerDependencies, writeEntries} from './esbuild-utils.mjs';
 
 export const buildFunctions = () => {
   createDistFolder();
@@ -24,7 +24,8 @@ export const buildFunctions = () => {
       },
       define: {
         self: 'globalThis'
-      }
+      },
+      external: [...Object.keys(workspacePeerDependencies)]
     })
     .catch(() => process.exit(1));
 };

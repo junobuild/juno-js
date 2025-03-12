@@ -2,16 +2,9 @@
 
 import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill';
 import esbuild from 'esbuild';
-import {existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync} from 'fs';
+import {readdirSync, readFileSync, statSync, writeFileSync} from 'fs';
 import {join} from 'path';
-
-const dist = join(process.cwd(), 'dist');
-
-const createDistFolder = () => {
-  if (!existsSync(dist)) {
-    mkdirSync(dist);
-  }
-};
+import {createDistFolder, DIST} from './esbuild-utils.mjs';
 
 // Skip peer dependencies
 const peerDependencies = (packageJson) => {
@@ -39,7 +32,7 @@ const buildBrowser = () => {
   esbuild
     .build({
       entryPoints,
-      outdir: 'dist/browser',
+      outdir: join(DIST, 'browser'),
       bundle: true,
       sourcemap: true,
       minify: true,
@@ -59,7 +52,7 @@ const buildNode = () => {
   esbuild
     .build({
       entryPoints: ['src/index.ts'],
-      outfile: 'dist/node/index.mjs',
+      outfile: join(DIST, 'node', 'index.mjs'),
       bundle: true,
       sourcemap: true,
       minify: true,
@@ -76,7 +69,7 @@ const buildNode = () => {
 
 const writeEntries = () => {
   // an entry for the browser as default
-  writeFileSync(join(dist, 'index.js'), "export * from './browser/index.js';");
+  writeFileSync(join(DIST, 'index.js'), "export * from './browser/index.js';");
 };
 
 export const build = (bundle = 'browser_and_node') => {

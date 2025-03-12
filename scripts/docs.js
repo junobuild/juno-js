@@ -19,6 +19,10 @@ const configInputFiles = [
   './packages/config/src/types/cli.config.ts'
 ];
 
+const functionsInputFiles = [
+  './packages/functions/src/index.ts'
+];
+
 const buildOptions = {
   repo: {url: 'https://github.com/junobuild/juno-js'}
 };
@@ -30,6 +34,13 @@ const markdownOptions = {
 generateDocumentation({
   inputFiles: configInputFiles,
   outputFile: './packages/config/README.md',
+  markdownOptions,
+  buildOptions: {...buildOptions, explore: false, types: true}
+});
+
+generateDocumentation({
+  inputFiles: functionsInputFiles,
+  outputFile: './packages/functions/README.md',
   markdownOptions,
   buildOptions: {...buildOptions, explore: false, types: true}
 });

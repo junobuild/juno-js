@@ -113,6 +113,11 @@
       "limit": "5 kB"
     },
     {
+      "name": "@junobuild/functions",
+      "path": "./packages/functions/dist/index.js",
+      "limit": "5 kB"
+    },
+    {
       "name": "@junobuild/analytics",
       "path": "./packages/analytics/dist/index.js",
       "limit": "10 kB",

@@ -5,8 +5,8 @@
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/browser/index.mjs",
-  "module": "./dist/browser/index.mjs",
+  "main": "./dist/browser/index.js",
+  "module": "./dist/browser/index.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {

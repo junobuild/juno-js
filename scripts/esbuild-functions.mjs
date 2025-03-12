@@ -1,6 +1,6 @@
 import esbuild from 'esbuild';
 import {join} from 'path';
-import {createDistFolder, DIST} from './esbuild-utils.mjs';
+import {createDistFolder, DIST, writeEntries} from './esbuild-utils.mjs';
 
 export const buildFunctions = () => {
   createDistFolder();
@@ -28,3 +28,5 @@ export const buildFunctions = () => {
     })
     .catch(() => process.exit(1));
 };
+
+writeEntries();

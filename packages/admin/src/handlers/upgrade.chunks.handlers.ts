@@ -1,5 +1,5 @@
 import type {chunk_hash} from '@dfinity/ic-management';
-import {isNullish, nonNullish} from '@dfinity/utils';
+import {isNullish, nonNullish, uint8ArrayToHexString} from '@dfinity/utils';
 import {
   clearChunkStore,
   installChunkedCode,
@@ -8,7 +8,6 @@ import {
 } from '../api/ic.api';
 import {INSTALL_MAX_CHUNK_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeParams} from '../types/upgrade.types';
-import {uint8ArrayToHexString} from '../utils/array.utils';
 import {blobSha256, uint8ArraySha256} from '../utils/crypto.utils';
 
 interface UploadChunkOrderId {

@@ -1,5 +1,5 @@
-import {RawUserId} from './core';
-import {DocAssertSet, DocUpsert} from './datastore';
+import type {RawUserId} from './core';
+import type {DocAssertSet, DocUpsert} from './datastore';
 
 /**
  * Represents the context provided to hooks, containing information about the caller and related data.

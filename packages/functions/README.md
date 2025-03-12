@@ -107,17 +107,25 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 ### :tropical_drink: Interfaces
 
+- [CollectionsConfig](#gear-collectionsconfig)
 - [DocUpsert](#gear-docupsert)
 - [DocAssertSet](#gear-docassertset)
 - [Doc](#gear-doc)
 - [SetDoc](#gear-setdoc)
 - [HookContext](#gear-hookcontext)
 - [DocContext](#gear-doccontext)
-- [CollectionsConfig](#gear-collectionsconfig)
 - [AssertAssertConfig](#gear-assertassertconfig)
 - [AssertSetDocConfig](#gear-assertsetdocconfig)
 - [OnHookConfig](#gear-onhookconfig)
 - [OnSetDocConfig](#gear-onsetdocconfig)
+
+#### :gear: CollectionsConfig
+
+Defines the collections where a hook or assertion should run.
+
+| Property      | Type       | Description                                                              |
+| ------------- | ---------- | ------------------------------------------------------------------------ |
+| `collections` | `string[]` | A list of collection names where the hook or assertion will be executed. |
 
 #### :gear: DocUpsert
 
@@ -186,14 +194,6 @@ Represents the context of a document operation within a collection.
 | `key`        | `string` | The unique key identifying the document within the collection. |
 | `data`       | `T`      | The data associated with the document operation.               |
 
-#### :gear: CollectionsConfig
-
-Defines the collections where a hook or assertion should run.
-
-| Property      | Type       | Description                                                              |
-| ------------- | ---------- | ------------------------------------------------------------------------ |
-| `collections` | `string[]` | A list of collection names where the hook or assertion will be executed. |
-
 #### :gear: AssertAssertConfig
 
 The generic configuration for assertion hooks that manage collections.
@@ -230,6 +230,7 @@ This function is called when a document is created or updated.
 
 ### :cocktail: Types
 
+- [SatelliteConfigEnv](#gear-satelliteconfigenv)
 - [Timestamp](#gear-timestamp)
 - [Version](#gear-version)
 - [RawData](#gear-rawdata)
@@ -237,13 +238,27 @@ This function is called when a document is created or updated.
 - [RawUserId](#gear-rawuserid)
 - [OnSetDocContext](#gear-onsetdoccontext)
 - [AssertSetDocContext](#gear-assertsetdoccontext)
-- [SatelliteConfigEnv](#gear-satelliteconfigenv)
 - [AssertConfig](#gear-assertconfig)
 - [AssertFn](#gear-assertfn)
 - [AssertFnOrObject](#gear-assertfnorobject)
 - [HookConfig](#gear-hookconfig)
 - [HookFn](#gear-hookfn)
 - [HookFnOrObject](#gear-hookfnorobject)
+
+#### :gear: SatelliteConfigEnv
+
+Placeholder for future environment-specific configurations.
+
+Currently unused, but it may support features such as:
+
+- Defining the execution mode (e.g., staging or production).
+- Providing environment-specific values like `ckBtcLedgerId` for test or production.
+
+| Type                 | Type |
+| -------------------- | ---- |
+| `SatelliteConfigEnv` |      |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/satellite.config.ts#L8)
 
 #### :gear: Timestamp
 
@@ -330,21 +345,6 @@ it is created or updated. If validation fails, the developer should throw an err
 | `AssertSetDocContext` | `HookContext<DocContext<DocAssertSet>>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/context.ts#L57)
-
-#### :gear: SatelliteConfigEnv
-
-Placeholder for future environment-specific configurations.
-
-Currently unused, but it may support features such as:
-
-- Defining the execution mode (e.g., staging or production).
-- Providing environment-specific values like `ckBtcLedgerId` for test or production.
-
-| Type                 | Type |
-| -------------------- | ---- |
-| `SatelliteConfigEnv` |      |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/satellite.config.ts#L8)
 
 #### :gear: AssertConfig
 

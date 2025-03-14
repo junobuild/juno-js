@@ -1,17 +1,17 @@
 import {Principal} from '@dfinity/principal';
 import {
   defineHook,
-  HookConfigSchema,
   HookFnOrObjectSchema,
-  OnSetDocConfig,
-  OnSetDocConfigSchema
-} from '../../configs/hook.config';
+  HookSchema,
+  OnSetDoc,
+  OnSetDocSchema
+} from '../../configs/hooks';
 import type {DocUpsert} from '../../hooks/datastore';
 
 describe('hook.config', () => {
   const mockOnSetDoc = vi.fn(async () => {});
 
-  const mockOnSetDocConfig: OnSetDocConfig = {
+  const mockOnSetDocConfig: OnSetDoc = {
     collections: ['products', 'transactions'],
     run: mockOnSetDoc
   };
@@ -51,33 +51,33 @@ describe('hook.config', () => {
 
   describe('OnSetDocConfigSchema', () => {
     it('should validate a correct OnSetDocConfig', () => {
-      expect(() => OnSetDocConfigSchema.parse(mockOnSetDocConfig)).not.toThrow();
+      expect(() => OnSetDocSchema.parse(mockOnSetDocConfig)).not.toThrow();
     });
 
     it('should reject an empty collections array', () => {
       const invalidConfig = {...mockOnSetDocConfig, collections: []};
-      expect(() => OnSetDocConfigSchema.parse(invalidConfig)).toThrow();
+      expect(() => OnSetDocSchema.parse(invalidConfig)).toThrow();
     });
 
     it('should reject an invalid run function', () => {
       const invalidConfig = {...mockOnSetDocConfig, run: 'not a function'};
-      expect(() => OnSetDocConfigSchema.parse(invalidConfig)).toThrow();
+      expect(() => OnSetDocSchema.parse(invalidConfig)).toThrow();
     });
 
     it('should reject unknown fields due to .strict()', () => {
       const invalidConfig = {...mockOnSetDocConfig, extraField: 'not allowed'};
-      expect(() => OnSetDocConfigSchema.parse(invalidConfig)).toThrow();
+      expect(() => OnSetDocSchema.parse(invalidConfig)).toThrow();
     });
   });
 
   describe('HookConfigSchema', () => {
     it('should validate a correct HookConfig', () => {
-      expect(() => HookConfigSchema.parse(mockOnSetDocConfig)).not.toThrow();
+      expect(() => HookSchema.parse(mockOnSetDocConfig)).not.toThrow();
     });
 
     it('should reject an unknown field', () => {
       const invalidHookConfig = {...mockOnSetDocConfig, invalidField: 'not allowed'};
-      expect(() => HookConfigSchema.parse(invalidHookConfig)).toThrow();
+      expect(() => HookSchema.parse(invalidHookConfig)).toThrow();
     });
   });
 
@@ -85,16 +85,16 @@ describe('hook.config', () => {
     const validHookFn = () => mockOnSetDocConfig;
 
     it('should validate a correct Hook function', () => {
-      expect(() => HookFnOrObjectSchema(HookConfigSchema).parse(validHookFn)).not.toThrow();
+      expect(() => HookFnOrObjectSchema(HookSchema).parse(validHookFn)).not.toThrow();
     });
 
     it('should validate a correct Hook object', () => {
-      expect(() => HookFnOrObjectSchema(HookConfigSchema).parse(mockOnSetDocConfig)).not.toThrow();
+      expect(() => HookFnOrObjectSchema(HookSchema).parse(mockOnSetDocConfig)).not.toThrow();
     });
 
     it('should reject an invalid Hook object with unknown fields', () => {
       const invalidObjectHook = {...mockOnSetDocConfig, invalidField: 'extra'};
-      expect(() => HookFnOrObjectSchema(HookConfigSchema).parse(invalidObjectHook)).toThrow();
+      expect(() => HookFnOrObjectSchema(HookSchema).parse(invalidObjectHook)).toThrow();
     });
   });
 });

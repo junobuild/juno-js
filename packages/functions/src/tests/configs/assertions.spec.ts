@@ -1,15 +1,15 @@
 import {
-  AssertConfigSchema,
   AssertFnOrObjectSchema,
-  AssertSetDocConfig,
-  AssertSetDocConfigSchema,
+  AssertSchema,
+  AssertSetDoc,
+  AssertSetDocSchema,
   defineAssert
-} from '../../configs/assert.config';
+} from '../../configs/assertions';
 
 describe('assert.config', () => {
   const mockAssertSetDoc = vi.fn();
 
-  const mockAssertSetDocConfig: AssertSetDocConfig = {
+  const mockAssertSetDocConfig: AssertSetDoc = {
     collections: ['users', 'orders'],
     assert: mockAssertSetDoc
   };
@@ -40,33 +40,33 @@ describe('assert.config', () => {
 
   describe('AssertSetDocConfigSchema', () => {
     it('should validate a correct AssertSetDocConfig', () => {
-      expect(() => AssertSetDocConfigSchema.parse(mockAssertSetDocConfig)).not.toThrow();
+      expect(() => AssertSetDocSchema.parse(mockAssertSetDocConfig)).not.toThrow();
     });
 
     it('should reject an empty collections array', () => {
       const invalidConfig = {...mockAssertSetDocConfig, collections: []};
-      expect(() => AssertSetDocConfigSchema.parse(invalidConfig)).toThrow();
+      expect(() => AssertSetDocSchema.parse(invalidConfig)).toThrow();
     });
 
     it('should reject an invalid assert function', () => {
       const invalidConfig = {...mockAssertSetDocConfig, assert: 'not a function'};
-      expect(() => AssertSetDocConfigSchema.parse(invalidConfig)).toThrow();
+      expect(() => AssertSetDocSchema.parse(invalidConfig)).toThrow();
     });
 
     it('should reject unknown fields due to .strict()', () => {
       const invalidConfig = {...mockAssertSetDocConfig, extraField: 'not allowed'};
-      expect(() => AssertSetDocConfigSchema.parse(invalidConfig)).toThrow();
+      expect(() => AssertSetDocSchema.parse(invalidConfig)).toThrow();
     });
   });
 
   describe('AssertConfigSchema', () => {
     it('should validate a correct AssertConfig', () => {
-      expect(() => AssertConfigSchema.parse(mockAssertSetDocConfig)).not.toThrow();
+      expect(() => AssertSchema.parse(mockAssertSetDocConfig)).not.toThrow();
     });
 
     it('should reject an unknown field', () => {
       const invalidAssertConfig = {...mockAssertSetDocConfig, invalidField: 'not allowed'};
-      expect(() => AssertConfigSchema.parse(invalidAssertConfig)).toThrow();
+      expect(() => AssertSchema.parse(invalidAssertConfig)).toThrow();
     });
   });
 
@@ -74,18 +74,18 @@ describe('assert.config', () => {
     const validAssertFn = () => mockAssertSetDocConfig;
 
     it('should validate a correct Assert function', () => {
-      expect(() => AssertFnOrObjectSchema(AssertConfigSchema).parse(validAssertFn)).not.toThrow();
+      expect(() => AssertFnOrObjectSchema(AssertSchema).parse(validAssertFn)).not.toThrow();
     });
 
     it('should validate a correct Assert object', () => {
       expect(() =>
-        AssertFnOrObjectSchema(AssertConfigSchema).parse(mockAssertSetDocConfig)
+        AssertFnOrObjectSchema(AssertSchema).parse(mockAssertSetDocConfig)
       ).not.toThrow();
     });
 
     it('should reject an invalid Assert object with unknown fields', () => {
       const invalidObjectAssert = {...mockAssertSetDocConfig, invalidField: 'extra'};
-      expect(() => AssertFnOrObjectSchema(AssertConfigSchema).parse(invalidObjectAssert)).toThrow();
+      expect(() => AssertFnOrObjectSchema(AssertSchema).parse(invalidObjectAssert)).toThrow();
     });
   });
 });

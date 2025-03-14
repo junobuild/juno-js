@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
 /**
- * Defines the collections where a hook or assertion should run.
+ * @see CollectionsConfig
  */
 export const CollectionsConfigSchema = z
   .object({
@@ -12,5 +12,7 @@ export const CollectionsConfigSchema = z
   })
   .strict();
 
-/** @typedef {z.infer<typeof CollectionsConfigSchema>} CollectionsConfig */
+/**
+ * Defines the collections where a hook or assertion should run.
+ */
 export type CollectionsConfig = z.infer<typeof CollectionsConfigSchema>;

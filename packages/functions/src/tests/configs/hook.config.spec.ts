@@ -55,17 +55,17 @@ describe('hook.config', () => {
     });
 
     it('should reject an empty collections array', () => {
-      const invalidConfig = { ...mockOnSetDocConfig, collections: [] };
+      const invalidConfig = {...mockOnSetDocConfig, collections: []};
       expect(() => OnSetDocConfigSchema.parse(invalidConfig)).toThrow();
     });
 
     it('should reject an invalid run function', () => {
-      const invalidConfig = { ...mockOnSetDocConfig, run: "not a function" };
+      const invalidConfig = {...mockOnSetDocConfig, run: 'not a function'};
       expect(() => OnSetDocConfigSchema.parse(invalidConfig)).toThrow();
     });
 
     it('should reject unknown fields due to .strict()', () => {
-      const invalidConfig = { ...mockOnSetDocConfig, extraField: "not allowed" };
+      const invalidConfig = {...mockOnSetDocConfig, extraField: 'not allowed'};
       expect(() => OnSetDocConfigSchema.parse(invalidConfig)).toThrow();
     });
   });
@@ -76,13 +76,13 @@ describe('hook.config', () => {
     });
 
     it('should reject an unknown field', () => {
-      const invalidHookConfig = { ...mockOnSetDocConfig, invalidField: "not allowed" };
+      const invalidHookConfig = {...mockOnSetDocConfig, invalidField: 'not allowed'};
       expect(() => HookConfigSchema.parse(invalidHookConfig)).toThrow();
     });
   });
 
   describe('HookFnOrObjectSchema', () => {
-    const validHookFn = () => (mockOnSetDocConfig);
+    const validHookFn = () => mockOnSetDocConfig;
 
     it('should validate a correct Hook function', () => {
       expect(() => HookFnOrObjectSchema(HookConfigSchema).parse(validHookFn)).not.toThrow();
@@ -93,9 +93,8 @@ describe('hook.config', () => {
     });
 
     it('should reject an invalid Hook object with unknown fields', () => {
-      const invalidObjectHook = { ...mockOnSetDocConfig, invalidField: "extra" };
+      const invalidObjectHook = {...mockOnSetDocConfig, invalidField: 'extra'};
       expect(() => HookFnOrObjectSchema(HookConfigSchema).parse(invalidObjectHook)).toThrow();
     });
   });
-
 });

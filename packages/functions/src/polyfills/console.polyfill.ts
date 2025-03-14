@@ -1,6 +1,10 @@
+import {jsonReplacer} from '@dfinity/utils';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const __juno_satellite_console_log = (v: any[]) => {
-  const msg = v.map((arg) => (typeof arg === 'object' ? JSON.stringify(arg) : arg)).join(' ');
+  const msg = v
+    .map((arg) => (typeof arg === 'object' ? JSON.stringify(arg, jsonReplacer) : arg))
+    .join(' ');
 
   globalThis.__ic_cdk_print(msg);
 };

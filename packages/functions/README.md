@@ -198,19 +198,19 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 #### :gear: RawPrincipalSchema
 
-| Constant             | Type                                                                    |
-| -------------------- | ----------------------------------------------------------------------- |
-| `RawPrincipalSchema` | `ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<ArrayBuffer>>` |
+| Constant             | Type                                                                            |
+| -------------------- | ------------------------------------------------------------------------------- |
+| `RawPrincipalSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L42)
 
 #### :gear: RawUserIdSchema
 
-| Constant          | Type                                                                    |
-| ----------------- | ----------------------------------------------------------------------- |
-| `RawUserIdSchema` | `ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<ArrayBuffer>>` |
+| Constant          | Type                                                                            |
+| ----------------- | ------------------------------------------------------------------------------- |
+| `RawUserIdSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L54)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L56)
 
 #### :gear: DocDescriptionSchema
 
@@ -222,17 +222,17 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 #### :gear: DocSchema
 
-| Constant    | Type                                                                                                                                                                                                                                                                                                                  |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DocSchema` | `ZodObject<{ owner: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<ArrayBuffer>>; data: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<...>>; description: ZodOptional<...>; created_at: ZodBigInt; updated_at: ZodBigInt; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant    | Type                                                                                                                                                                                        |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DocSchema` | `ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/datastore.ts#L17)
 
 #### :gear: DocUpsertSchema
 
-| Constant          | Type                                                                                                                                                                                                                                                                                                                               |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DocUpsertSchema` | `ZodObject<{ before: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<ArrayBuffer>>; data: ZodType<...>; description: ZodOptional<...>; created_at: ZodBigInt; updated_at: ZodBigInt; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; after: ZodObject<...>; }...` |
+| Constant          | Type                                                                                                                                                                                                                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DocUpsertSchema` | `ZodObject<{ before: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; after: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/datastore.ts#L60)
 
@@ -246,9 +246,9 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 #### :gear: DocAssertSetSchema
 
-| Constant             | Type                                                                                                                                                                                                                                                                                                                               |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DocAssertSetSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<ArrayBuffer>>; data: ZodType<...>; description: ZodOptional<...>; created_at: ZodBigInt; updated_at: ZodBigInt; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; proposed: ZodObject<......` |
+| Constant             | Type                                                                                                                                                                                                                                                                                                  |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DocAssertSetSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; proposed: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/datastore.ts#L113)
 
@@ -262,17 +262,17 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 #### :gear: OnSetDocContextSchema
 
-| Constant                | Type                                                                                                                                                                                                                                                                   |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OnSetDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<ArrayBuffer>>; data: ZodObject<{ collection: ZodString; key: ZodString; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                | Type                                                                                                                                                                    |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OnSetDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/context.ts#L63)
 
 #### :gear: AssertSetDocContextSchema
 
-| Constant                    | Type                                                                                                                                                                                                                                                                   |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AssertSetDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<ArrayBuffer>>; data: ZodObject<{ collection: ZodString; key: ZodString; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                    | Type                                                                                                                                                                    |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AssertSetDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/context.ts#L76)
 
@@ -305,7 +305,7 @@ Currently unused, but it may support features such as:
 
 | Constant                   | Type                                                                                                                                                                                                                                                                                                                               |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AssertSetDocConfigSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { assert: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodPromise<...>>; }>, "strict", ZodTypeAny, { ...; ...` |
+| `AssertSetDocConfigSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { assert: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodPromise<...>>; }>, "strict", ZodTypeAny, { ....` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L25)
 
@@ -313,7 +313,7 @@ Currently unused, but it may support features such as:
 
 | Constant             | Type                                                                                                                                                                                                                                                                                                                               |
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AssertConfigSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { assert: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodPromise<...>>; }>, "strict", ZodTypeAny, { ...; ...` |
+| `AssertConfigSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { assert: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodPromise<...>>; }>, "strict", ZodTypeAny, { ....` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L36)
 
@@ -321,7 +321,7 @@ Currently unused, but it may support features such as:
 
 | Constant               | Type                                                                                                                                                                                                                                                                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OnSetDocConfigSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { run: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodPromise<...>>; }>, "strict", ZodTypeAny, { ...; }, ...` |
+| `OnSetDocConfigSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { run: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodPromise<...>>; }>, "strict", ZodTypeAny, { ...;...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L25)
 
@@ -329,7 +329,7 @@ Currently unused, but it may support features such as:
 
 | Constant           | Type                                                                                                                                                                                                                                                                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `HookConfigSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { run: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodPromise<...>>; }>, "strict", ZodTypeAny, { ...; }, ...` |
+| `HookConfigSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { run: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodPromise<...>>; }>, "strict", ZodTypeAny, { ...;...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L36)
 
@@ -407,7 +407,7 @@ Principals are unique identities used in authentication and authorization.
 | -------------- | ------------------------------------ |
 | `RawPrincipal` | `z.infer<typeof RawPrincipalSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L51)
 
 #### :gear: RawUserId
 
@@ -419,7 +419,7 @@ This is a principal associated with a user.
 | ----------- | --------------------------------- |
 | `RawUserId` | `z.infer<typeof RawUserIdSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L61)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L63)
 
 #### :gear: DocDescription
 
@@ -541,7 +541,7 @@ it is created or updated. If validation fails, the developer should throw an err
 | ------------------- | ----------------------------------------- |
 | `CollectionsConfig` | `z.infer<typeof CollectionsConfigSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/collections.config.ts#L14)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/collections.config.ts#L16)
 
 #### :gear: SatelliteConfigEnv
 

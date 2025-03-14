@@ -14,9 +14,9 @@ const OnAssertSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
      * A function that runs when the assertion is triggered for the specified collections.
      *
      * @param {T} context - Contains information about the affected document(s).
-     * @returns {Promise<void>} Resolves when the operation completes.
+     * @returns {void} Resolves when the assertion completes.
      */
-    assert: z.function().args(contextSchema).returns(z.promise(z.void()))
+    assert: z.function().args(contextSchema).returns(z.void())
   }).strict();
 
 /**

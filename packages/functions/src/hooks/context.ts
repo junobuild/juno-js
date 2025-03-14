@@ -1,44 +1,66 @@
-import type {RawUserId} from './core';
-import type {DocAssertSet, DocUpsert} from './datastore';
+import * as z from 'zod';
+import {RawUserIdSchema} from './core';
+import {DocAssertSetSchema, DocUpsertSchema} from './datastore';
+
+/**
+ * @see HookContext
+ */
+const HookContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z
+    .object({
+      /**
+       * The user who originally triggered the function that in turn triggered the hook.
+       */
+      caller: RawUserIdSchema,
+
+      /**
+       * The data associated with the hook execution.
+       */
+      data: dataSchema
+    })
+    .strict();
 
 /**
  * Represents the context provided to hooks, containing information about the caller and related data.
  *
  * @template T - The type of data associated with the hook.
  */
-export interface HookContext<T> {
-  /**
-   * The user who originally triggered the function that in turn triggered the hook.
-   */
-  caller: RawUserId;
+export type HookContext<T extends z.ZodTypeAny> = z.infer<ReturnType<typeof HookContextSchema<T>>>;
 
-  /**
-   * The data associated with the hook execution.
-   */
-  data: T;
-}
+/**
+ * @see DocContext
+ */
+export const DocContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z
+    .object({
+      /**
+       * The name of the collection where the document is stored.
+       */
+      collection: z.string(),
+
+      /**
+       * The unique key identifying the document within the collection.
+       */
+      key: z.string(),
+
+      /**
+       * The data associated with the document operation.
+       */
+      data: dataSchema
+    })
+    .strict();
 
 /**
  * Represents the context of a document operation within a collection.
  *
  * @template T - The type of data associated with the document.
  */
-export interface DocContext<T> {
-  /**
-   * The name of the collection where the document is stored.
-   */
-  collection: string;
+export type DocContext<T extends z.ZodTypeAny> = z.infer<ReturnType<typeof DocContextSchema<T>>>;
 
-  /**
-   * The unique key identifying the document within the collection.
-   */
-  key: string;
-
-  /**
-   * The data associated with the document operation.
-   */
-  data: T;
-}
+/**
+ * @see OnSetDocContext
+ */
+export const OnSetDocContextSchema = HookContextSchema(DocContextSchema(DocUpsertSchema));
 
 /**
  * The context provided to the `onSetDoc` hook.
@@ -46,7 +68,12 @@ export interface DocContext<T> {
  * This context contains information about the document being created or updated,
  * along with details about the user who triggered the operation.
  */
-export type OnSetDocContext = HookContext<DocContext<DocUpsert>>;
+export type OnSetDocContext = z.infer<typeof OnSetDocContextSchema>;
+
+/**
+ * @see AssertSetDocContext
+ */
+export const AssertSetDocContextSchema = HookContextSchema(DocContextSchema(DocAssertSetSchema));
 
 /**
  * The context provided to the `assertSetDoc` hook.
@@ -54,4 +81,4 @@ export type OnSetDocContext = HookContext<DocContext<DocUpsert>>;
  * This context contains information about the document being validated before
  * it is created or updated. If validation fails, the developer should throw an error.
  */
-export type AssertSetDocContext = HookContext<DocContext<DocAssertSet>>;
+export type AssertSetDocContext = z.infer<typeof AssertSetDocContextSchema>;

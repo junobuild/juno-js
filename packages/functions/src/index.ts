@@ -1,5 +1,5 @@
 export * from './configs/assert.config';
-export * from './configs/collection.config';
+export * from './configs/collections.config';
 export * from './configs/hook.config';
 export * from './configs/satellite.config';
 export * from './hooks/context';

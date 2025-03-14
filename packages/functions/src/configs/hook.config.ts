@@ -1,6 +1,6 @@
 import * as z from 'zod';
 import {OnSetDocContextSchema} from '../hooks/context';
-import {CollectionsConfigSchema} from './collection.config';
+import {CollectionsConfigSchema} from './collections.config';
 import {SatelliteConfigEnvSchema} from './satellite.config';
 
 /**
@@ -8,7 +8,7 @@ import {SatelliteConfigEnvSchema} from './satellite.config';
  *
  * @template T - The type of context passed to the hook when triggered.
  */
-export const OnHookConfigSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
+const OnHookConfigSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
   CollectionsConfigSchema.extend({
     /**
      * A function that runs when the hook is triggered for the specified collections.
@@ -17,7 +17,7 @@ export const OnHookConfigSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
      * @returns {Promise<void>} Resolves when the operation completes.
      */
     run: z.function().args(contextSchema).returns(z.promise(z.void()))
-  });
+  }).strict();
 
 /**
  * @see OnSetDocConfig

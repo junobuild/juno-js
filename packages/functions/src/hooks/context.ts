@@ -5,18 +5,20 @@ import {DocAssertSetSchema, DocUpsertSchema} from './datastore';
 /**
  * @see HookContext
  */
-export const HookContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
-  z.object({
-    /**
-     * The user who originally triggered the function that in turn triggered the hook.
-     */
-    caller: RawUserIdSchema,
+const HookContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
+  z
+    .object({
+      /**
+       * The user who originally triggered the function that in turn triggered the hook.
+       */
+      caller: RawUserIdSchema,
 
-    /**
-     * The data associated with the hook execution.
-     */
-    data: dataSchema
-  });
+      /**
+       * The data associated with the hook execution.
+       */
+      data: dataSchema
+    })
+    .strict();
 
 /**
  * Represents the context provided to hooks, containing information about the caller and related data.
@@ -29,22 +31,24 @@ export type HookContext<T extends z.ZodTypeAny> = z.infer<ReturnType<typeof Hook
  * @see DocContext
  */
 export const DocContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
-  z.object({
-    /**
-     * The name of the collection where the document is stored.
-     */
-    collection: z.string(),
+  z
+    .object({
+      /**
+       * The name of the collection where the document is stored.
+       */
+      collection: z.string(),
 
-    /**
-     * The unique key identifying the document within the collection.
-     */
-    key: z.string(),
+      /**
+       * The unique key identifying the document within the collection.
+       */
+      key: z.string(),
 
-    /**
-     * The data associated with the document operation.
-     */
-    data: dataSchema
-  });
+      /**
+       * The data associated with the document operation.
+       */
+      data: dataSchema
+    })
+    .strict();
 
 /**
  * Represents the context of a document operation within a collection.

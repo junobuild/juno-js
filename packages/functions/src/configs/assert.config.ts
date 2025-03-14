@@ -1,6 +1,6 @@
 import * as z from 'zod';
 import {AssertSetDocContextSchema} from '../hooks/context';
-import {CollectionsConfigSchema} from './collection.config';
+import {CollectionsConfigSchema} from './collections.config';
 import {SatelliteConfigEnvSchema} from './satellite.config';
 
 /**
@@ -8,7 +8,7 @@ import {SatelliteConfigEnvSchema} from './satellite.config';
  *
  * @template T - The type of context passed to the assertions when triggered.
  */
-export const OnAssertConfigSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
+const OnAssertConfigSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
   CollectionsConfigSchema.extend({
     /**
      * A function that runs when the assertion is triggered for the specified collections.
@@ -17,7 +17,7 @@ export const OnAssertConfigSchema = <T extends z.ZodTypeAny>(contextSchema: T) =
      * @returns {Promise<void>} Resolves when the operation completes.
      */
     assert: z.function().args(contextSchema).returns(z.promise(z.void()))
-  });
+  }).strict();
 
 /**
  * @see AssertSetDocConfig

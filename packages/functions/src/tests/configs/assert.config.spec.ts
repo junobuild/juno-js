@@ -1,32 +1,91 @@
-import {AssertSetDocConfig, defineAssert} from '../../configs/assert.config';
+import {
+  AssertConfigSchema,
+  AssertFnOrObjectSchema,
+  AssertSetDocConfig,
+  AssertSetDocConfigSchema,
+  defineAssert
+} from '../../configs/assert.config';
 
 describe('assert.config', () => {
   const mockAssertSetDoc = vi.fn();
 
-  const mockConfig: AssertSetDocConfig = {
+  const mockAssertSetDocConfig: AssertSetDocConfig = {
     collections: ['users', 'orders'],
     assert: mockAssertSetDoc
   };
 
   it('should return the same configuration object if given an object', () => {
-    const result = defineAssert(mockConfig);
-    expect(result).toBe(mockConfig);
+    const result = defineAssert(mockAssertSetDocConfig);
+    expect(result).toBe(mockAssertSetDocConfig);
   });
 
-  it('should return the same function if given a function', () => {
-    const mockFn = vi.fn(() => mockConfig);
-    const result = defineAssert(mockFn);
-    expect(result).toBe(mockFn);
+  describe('defineAssert', () => {
+    it('should return the same function if given a function', () => {
+      const mockFn = vi.fn(() => mockAssertSetDocConfig);
+      const result = defineAssert(mockFn);
+      expect(result).toBe(mockFn);
+    });
+
+    it('should execute the function and return a configuration when called', () => {
+      const mockFn = vi.fn(() => mockAssertSetDocConfig);
+      const result = defineAssert(mockFn);
+      expect(result({})).toBe(mockAssertSetDocConfig);
+    });
+
+    it('should not modify the configuration object', () => {
+      const result = defineAssert(mockAssertSetDocConfig);
+      expect(result).toEqual(mockAssertSetDocConfig);
+    });
   });
 
-  it('should execute the function and return a configuration when called', () => {
-    const mockFn = vi.fn(() => mockConfig);
-    const result = defineAssert(mockFn);
-    expect(result({})).toBe(mockConfig);
+  describe('AssertSetDocConfigSchema', () => {
+    it('should validate a correct AssertSetDocConfig', () => {
+      expect(() => AssertSetDocConfigSchema.parse(mockAssertSetDocConfig)).not.toThrow();
+    });
+
+    it('should reject an empty collections array', () => {
+      const invalidConfig = {...mockAssertSetDocConfig, collections: []};
+      expect(() => AssertSetDocConfigSchema.parse(invalidConfig)).toThrow();
+    });
+
+    it('should reject an invalid assert function', () => {
+      const invalidConfig = {...mockAssertSetDocConfig, assert: 'not a function'};
+      expect(() => AssertSetDocConfigSchema.parse(invalidConfig)).toThrow();
+    });
+
+    it('should reject unknown fields due to .strict()', () => {
+      const invalidConfig = {...mockAssertSetDocConfig, extraField: 'not allowed'};
+      expect(() => AssertSetDocConfigSchema.parse(invalidConfig)).toThrow();
+    });
   });
 
-  it('should not modify the configuration object', () => {
-    const result = defineAssert(mockConfig);
-    expect(result).toEqual(mockConfig);
+  describe('AssertConfigSchema', () => {
+    it('should validate a correct AssertConfig', () => {
+      expect(() => AssertConfigSchema.parse(mockAssertSetDocConfig)).not.toThrow();
+    });
+
+    it('should reject an unknown field', () => {
+      const invalidAssertConfig = {...mockAssertSetDocConfig, invalidField: 'not allowed'};
+      expect(() => AssertConfigSchema.parse(invalidAssertConfig)).toThrow();
+    });
+  });
+
+  describe('AssertFnOrObjectSchema', () => {
+    const validAssertFn = () => mockAssertSetDocConfig;
+
+    it('should validate a correct Assert function', () => {
+      expect(() => AssertFnOrObjectSchema(AssertConfigSchema).parse(validAssertFn)).not.toThrow();
+    });
+
+    it('should validate a correct Assert object', () => {
+      expect(() =>
+        AssertFnOrObjectSchema(AssertConfigSchema).parse(mockAssertSetDocConfig)
+      ).not.toThrow();
+    });
+
+    it('should reject an invalid Assert object with unknown fields', () => {
+      const invalidObjectAssert = {...mockAssertSetDocConfig, invalidField: 'extra'};
+      expect(() => AssertFnOrObjectSchema(AssertConfigSchema).parse(invalidObjectAssert)).toThrow();
+    });
   });
 });

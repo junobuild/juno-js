@@ -136,17 +136,17 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 #### :gear: decodeDocData
 
-| Function        | Type                                      |
-| --------------- | ----------------------------------------- |
-| `decodeDocData` | `<T>(data: Uint8Array<ArrayBuffer>) => T` |
+| Function        | Type                                          |
+| --------------- | --------------------------------------------- |
+| `decodeDocData` | `<T>(data: Uint8Array<ArrayBufferLike>) => T` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/datastore.sdk.ts#L4)
 
 #### :gear: encodeDocData
 
-| Function        | Type                                      |
-| --------------- | ----------------------------------------- |
-| `encodeDocData` | `<T>(data: T) => Uint8Array<ArrayBuffer>` |
+| Function        | Type                                          |
+| --------------- | --------------------------------------------- |
+| `encodeDocData` | `<T>(data: T) => Uint8Array<ArrayBufferLike>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/datastore.sdk.ts#L7)
 
@@ -190,9 +190,9 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 #### :gear: RawDataSchema
 
-| Constant        | Type                                                                    |
-| --------------- | ----------------------------------------------------------------------- |
-| `RawDataSchema` | `ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<ArrayBuffer>>` |
+| Constant        | Type                                                                            |
+| --------------- | ------------------------------------------------------------------------------- |
+| `RawDataSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L30)
 
@@ -202,7 +202,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------------- | ------------------------------------------------------------------------------- |
 | `RawPrincipalSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L42)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L44)
 
 #### :gear: RawUserIdSchema
 
@@ -210,7 +210,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ----------------- | ------------------------------------------------------------------------------- |
 | `RawUserIdSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L56)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L58)
 
 #### :gear: DocDescriptionSchema
 
@@ -238,9 +238,9 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 #### :gear: ProposedDocSchema
 
-| Constant            | Type                                                                                                                                                                                                    |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ProposedDocSchema` | `ZodObject<{ data: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<ArrayBuffer>>; description: ZodOptional<ZodString>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant            | Type                                                                                                                                                                                                      |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ProposedDocSchema` | `ZodObject<{ data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; description: ZodOptional<...>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/datastore.ts#L85)
 
@@ -254,9 +254,9 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 #### :gear: SetDocSchema
 
-| Constant       | Type                                                                                                                                                                                                    |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SetDocSchema` | `ZodObject<{ data: ZodType<Uint8Array<ArrayBuffer>, ZodTypeDef, Uint8Array<ArrayBuffer>>; description: ZodOptional<ZodString>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant       | Type                                                                                                                                                                                                      |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SetDocSchema` | `ZodObject<{ data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; description: ZodOptional<...>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/datastore.ts#L140)
 
@@ -395,7 +395,7 @@ This is used to store unstructured data in a document.
 | --------- | ------------------------------- |
 | `RawData` | `z.infer<typeof RawDataSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L37)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L39)
 
 #### :gear: RawPrincipal
 
@@ -407,7 +407,7 @@ Principals are unique identities used in authentication and authorization.
 | -------------- | ------------------------------------ |
 | `RawPrincipal` | `z.infer<typeof RawPrincipalSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L51)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L53)
 
 #### :gear: RawUserId
 
@@ -419,7 +419,7 @@ This is a principal associated with a user.
 | ----------- | --------------------------------- |
 | `RawUserId` | `z.infer<typeof RawUserIdSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L63)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/core.ts#L65)
 
 #### :gear: DocDescription
 

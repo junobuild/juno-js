@@ -1,11 +1,11 @@
-import {defineAssert} from '../../configs/assert.config';
+import {AssertSetDocConfig, defineAssert} from '../../configs/assert.config';
 
 describe('assert.config', () => {
   const mockAssertSetDoc = vi.fn();
 
-  const mockConfig = {
+  const mockConfig: AssertSetDocConfig = {
     collections: ['users', 'orders'],
-    assertSetDoc: mockAssertSetDoc
+    assert: mockAssertSetDoc
   };
 
   it('should return the same configuration object if given an object', () => {

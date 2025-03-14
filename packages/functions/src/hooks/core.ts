@@ -27,7 +27,9 @@ export type Version = z.infer<typeof VersionSchema>;
 /**
  * @see RawData
  */
-export const RawDataSchema = z.instanceof(Uint8Array);
+export const RawDataSchema = z.custom<Uint8Array>((val) => val instanceof Uint8Array, {
+  message: 'Expected Uint8Array'
+});
 
 /**
  * Represents raw binary data.

@@ -7,3 +7,5 @@ export type * from './hooks/datastore';
 export * from './configs/assert.config';
 export * from './configs/hook.config';
 export * from './sdk/datastore.sdk';
+
+import 'polyfills/console.polyfill';

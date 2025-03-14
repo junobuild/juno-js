@@ -27,67 +27,67 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 #### :gear: defineAssert
 
-| Function       | Type                                                                                                                                |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `defineAssert` | `{ (config: AssertSetDocConfig): AssertSetDocConfig; (config: AssertFn): AssertFn; (config: AssertFnOrObject): AssertFnOrObject; }` |
+| Function       | Type                                                                                                                                                                                    |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineAssert` | `{ <T extends AssertConfig>(config: T): T; <T extends AssertConfig>(config: AssertFn<T>): AssertFn<T>; <T extends AssertConfig>(config: AssertFnOrObject<T>): AssertFnOrObject<...>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L34)
-
-#### :gear: defineAssert
-
-| Function       | Type                                                                                                                                |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `defineAssert` | `{ (config: AssertSetDocConfig): AssertSetDocConfig; (config: AssertFn): AssertFn; (config: AssertFnOrObject): AssertFnOrObject; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L35)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L31)
 
 #### :gear: defineAssert
 
-| Function       | Type                                                                                                                                |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `defineAssert` | `{ (config: AssertSetDocConfig): AssertSetDocConfig; (config: AssertFn): AssertFn; (config: AssertFnOrObject): AssertFnOrObject; }` |
+| Function       | Type                                                                                                                                                                                    |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineAssert` | `{ <T extends AssertConfig>(config: T): T; <T extends AssertConfig>(config: AssertFn<T>): AssertFn<T>; <T extends AssertConfig>(config: AssertFnOrObject<T>): AssertFnOrObject<...>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L32)
+
+#### :gear: defineAssert
+
+| Function       | Type                                                                                                                                                                                    |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineAssert` | `{ <T extends AssertConfig>(config: T): T; <T extends AssertConfig>(config: AssertFn<T>): AssertFn<T>; <T extends AssertConfig>(config: AssertFnOrObject<T>): AssertFnOrObject<...>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L33)
+
+#### :gear: defineAssert
+
+| Function       | Type                                                                                                                                                                                    |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineAssert` | `{ <T extends AssertConfig>(config: T): T; <T extends AssertConfig>(config: AssertFn<T>): AssertFn<T>; <T extends AssertConfig>(config: AssertFnOrObject<T>): AssertFnOrObject<...>; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L36)
 
-#### :gear: defineAssert
+#### :gear: defineHook
 
-| Function       | Type                                                                                                                                |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `defineAssert` | `{ (config: AssertSetDocConfig): AssertSetDocConfig; (config: AssertFn): AssertFn; (config: AssertFnOrObject): AssertFnOrObject; }` |
+| Function     | Type                                                                                                                                                                    |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineHook` | `{ <T extends HookConfig>(config: T): T; <T extends HookConfig>(config: HookFn<T>): HookFn<T>; <T extends HookConfig>(config: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L37)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L31)
 
 #### :gear: defineHook
 
-| Function     | Type                                                                                                                |
-| ------------ | ------------------------------------------------------------------------------------------------------------------- |
-| `defineHook` | `{ (config: OnSetDocConfig): OnSetDocConfig; (config: HookFn): HookFn; (config: HookFnOrObject): HookFnOrObject; }` |
+| Function     | Type                                                                                                                                                                    |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineHook` | `{ <T extends HookConfig>(config: T): T; <T extends HookConfig>(config: HookFn<T>): HookFn<T>; <T extends HookConfig>(config: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L32)
 
 #### :gear: defineHook
 
-| Function     | Type                                                                                                                |
-| ------------ | ------------------------------------------------------------------------------------------------------------------- |
-| `defineHook` | `{ (config: OnSetDocConfig): OnSetDocConfig; (config: HookFn): HookFn; (config: HookFnOrObject): HookFnOrObject; }` |
+| Function     | Type                                                                                                                                                                    |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineHook` | `{ <T extends HookConfig>(config: T): T; <T extends HookConfig>(config: HookFn<T>): HookFn<T>; <T extends HookConfig>(config: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L33)
 
 #### :gear: defineHook
 
-| Function     | Type                                                                                                                |
-| ------------ | ------------------------------------------------------------------------------------------------------------------- |
-| `defineHook` | `{ (config: OnSetDocConfig): OnSetDocConfig; (config: HookFn): HookFn; (config: HookFnOrObject): HookFnOrObject; }` |
+| Function     | Type                                                                                                                                                                    |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineHook` | `{ <T extends HookConfig>(config: T): T; <T extends HookConfig>(config: HookFn<T>): HookFn<T>; <T extends HookConfig>(config: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L34)
-
-#### :gear: defineHook
-
-| Function     | Type                                                                                                                |
-| ------------ | ------------------------------------------------------------------------------------------------------------------- |
-| `defineHook` | `{ (config: OnSetDocConfig): OnSetDocConfig; (config: HookFn): HookFn; (config: HookFnOrObject): HookFnOrObject; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L35)
 
 #### :gear: decodeDocData
 
@@ -114,18 +114,16 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [SetDoc](#gear-setdoc)
 - [HookContext](#gear-hookcontext)
 - [DocContext](#gear-doccontext)
-- [AssertAssertConfig](#gear-assertassertconfig)
-- [AssertSetDocConfig](#gear-assertsetdocconfig)
+- [OnAssertConfig](#gear-onassertconfig)
 - [OnHookConfig](#gear-onhookconfig)
-- [OnSetDocConfig](#gear-onsetdocconfig)
 
 #### :gear: CollectionsConfig
 
 Defines the collections where a hook or assertion should run.
 
-| Property      | Type       | Description                                                              |
-| ------------- | ---------- | ------------------------------------------------------------------------ |
-| `collections` | `string[]` | A list of collection names where the hook or assertion will be executed. |
+| Property      | Type                    | Description                                                                                    |
+| ------------- | ----------------------- | ---------------------------------------------------------------------------------------------- |
+| `collections` | `[string, ...string[]]` | An array containing at least one collection name where the hook or assertion will be executed. |
 
 #### :gear: DocUpsert
 
@@ -194,39 +192,21 @@ Represents the context of a document operation within a collection.
 | `key`        | `string` | The unique key identifying the document within the collection. |
 | `data`       | `T`      | The data associated with the document operation.               |
 
-#### :gear: AssertAssertConfig
+#### :gear: OnAssertConfig
 
-The generic configuration for assertion hooks that manage collections.
+A generic configuration interface for defining assertions related to collections.
 
-| Property       | Type    | Description |
-| -------------- | ------- | ----------- |
-| `assertSetDoc` | `never` |             |
-
-#### :gear: AssertSetDocConfig
-
-A configuration object that includes the `assertSetDoc` function.
-This function is called to validate a document before it is created or updated.
-
-| Property       | Type                                     | Description                                                                                                                                                                                                                                                                                                  |
-| -------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `assertSetDoc` | `(context: AssertSetDocContext) => void` | A function that runs synchronously before a document is set in the Datastore. This can be used to enforce your validation rules. param: context - Provides details about the document being validated.throws: {Error} If your validation fails, throw an exception to prevent the document from being saved. |
+| Property | Type                            | Description                                                                                                                                                                                              |
+| -------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `assert` | `(context: T) => Promise<void>` | A function that runs when the assertion is triggered for the specified collections. param: context - Contains information about the affected document(s).returns: Resolves when the operation completes. |
 
 #### :gear: OnHookConfig
 
-The generic configuration for hooks that manage collections.
+A generic configuration interface for defining hooks related to collections.
 
-| Property   | Type    | Description |
-| ---------- | ------- | ----------- |
-| `onSetDoc` | `never` |             |
-
-#### :gear: OnSetDocConfig
-
-A configuration object that includes the `onSetDoc` function.
-This function is called when a document is created or updated.
-
-| Property   | Type                                          | Description                                                                                                                                                                       |
-| ---------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `onSetDoc` | `(context: OnSetDocContext) => Promise<void>` | A function that runs when a document is set in the Datastore. param: context - Provides details about the document being saved.returns: Resolves when your operation is complete. |
+| Property | Type                            | Description                                                                                                                                                                                         |
+| -------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `run`    | `(context: T) => Promise<void>` | A function that runs when the hook is triggered for the specified collections. param: context - Contains information about the affected document(s).returns: Resolves when the operation completes. |
 
 ### :cocktail: Types
 
@@ -238,9 +218,11 @@ This function is called when a document is created or updated.
 - [RawUserId](#gear-rawuserid)
 - [OnSetDocContext](#gear-onsetdoccontext)
 - [AssertSetDocContext](#gear-assertsetdoccontext)
+- [AssertSetDocConfig](#gear-assertsetdocconfig)
 - [AssertConfig](#gear-assertconfig)
 - [AssertFn](#gear-assertfn)
 - [AssertFnOrObject](#gear-assertfnorobject)
+- [OnSetDocConfig](#gear-onsetdocconfig)
 - [HookConfig](#gear-hookconfig)
 - [HookFn](#gear-hookfn)
 - [HookFnOrObject](#gear-hookfnorobject)
@@ -346,29 +328,49 @@ it is created or updated. If validation fails, the developer should throw an err
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/context.ts#L57)
 
+#### :gear: AssertSetDocConfig
+
+Configuration for an assertion that runs when a document is created or updated.
+
+| Type                 | Type                                  |
+| -------------------- | ------------------------------------- |
+| `AssertSetDocConfig` | `OnAssertConfig<AssertSetDocContext>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L23)
+
 #### :gear: AssertConfig
 
 | Type           | Type                 |
 | -------------- | -------------------- |
 | `AssertConfig` | `AssertSetDocConfig` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L28)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L25)
 
 #### :gear: AssertFn
 
-| Type       | Type                                           |
-| ---------- | ---------------------------------------------- |
-| `AssertFn` | `(config: SatelliteConfigEnv) => AssertConfig` |
+| Type       | Type                                |
+| ---------- | ----------------------------------- |
+| `AssertFn` | `(config: SatelliteConfigEnv) => T` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L30)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L27)
 
 #### :gear: AssertFnOrObject
 
-| Type               | Type                       |
-| ------------------ | -------------------------- |
-| `AssertFnOrObject` | `AssertConfig or AssertFn` |
+| Type               | Type               |
+| ------------------ | ------------------ |
+| `AssertFnOrObject` | `T or AssertFn<T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L32)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/assert.config.ts#L29)
+
+#### :gear: OnSetDocConfig
+
+Configuration for a hook that runs when a document is created or updated.
+
+| Type             | Type                            |
+| ---------------- | ------------------------------- |
+| `OnSetDocConfig` | `OnHookConfig<OnSetDocContext>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L23)
 
 #### :gear: HookConfig
 
@@ -376,23 +378,23 @@ it is created or updated. If validation fails, the developer should throw an err
 | ------------ | ---------------- |
 | `HookConfig` | `OnSetDocConfig` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L26)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L25)
 
 #### :gear: HookFn
 
-| Type     | Type                                         |
-| -------- | -------------------------------------------- |
-| `HookFn` | `(config: SatelliteConfigEnv) => HookConfig` |
+| Type     | Type                                |
+| -------- | ----------------------------------- |
+| `HookFn` | `(config: SatelliteConfigEnv) => T` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L28)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L27)
 
 #### :gear: HookFnOrObject
 
-| Type             | Type                   |
-| ---------------- | ---------------------- |
-| `HookFnOrObject` | `HookConfig or HookFn` |
+| Type             | Type             |
+| ---------------- | ---------------- |
+| `HookFnOrObject` | `T or HookFn<T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L30)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/configs/hook.config.ts#L29)
 
 <!-- TSDOC_END -->
 

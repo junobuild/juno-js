@@ -1,13 +1,13 @@
 import {Principal} from '@dfinity/principal';
-import {defineHook} from '../../configs/hook.config';
+import {defineHook, OnSetDocConfig} from '../../configs/hook.config';
 import type {DocUpsert} from '../../hooks/datastore';
 
 describe('hook.config', () => {
   const mockOnSetDoc = vi.fn(async () => {});
 
-  const mockConfig = {
+  const mockConfig: OnSetDocConfig = {
     collections: ['products', 'transactions'],
-    onSetDoc: mockOnSetDoc
+    run: mockOnSetDoc
   };
 
   it('should return the same configuration object if given an object', () => {
@@ -34,7 +34,7 @@ describe('hook.config', () => {
 
   it('should call onSetDoc function when invoked', async () => {
     const result = defineHook(mockConfig);
-    await result.onSetDoc({
+    await result.run({
       caller: Principal.anonymous().toUint8Array(),
       data: {collection: 'products', key: '123', data: {} as unknown as DocUpsert}
     });

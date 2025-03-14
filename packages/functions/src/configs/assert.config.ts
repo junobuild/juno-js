@@ -3,37 +3,38 @@ import type {CollectionsConfig} from './collection.config';
 import type {SatelliteConfigEnv} from './satellite.config';
 
 /**
- * The generic configuration for assertion hooks that manage collections.
+ * A generic configuration interface for defining assertions related to collections.
+ *
+ * @template T - The type of context passed to the assertions when triggered.
  */
-export interface AssertAssertConfig extends CollectionsConfig {
-  assertSetDoc: never;
+export interface OnAssertConfig<T> extends CollectionsConfig {
+  /**
+   * A function that runs when the assertion is triggered for the specified collections.
+   *
+   * @param {T} context - Contains information about the affected document(s).
+   * @returns {Promise<void>} Resolves when the operation completes.
+   */
+  assert: (context: T) => Promise<void>;
 }
 
 /**
- * A configuration object that includes the `assertSetDoc` function.
- * This function is called to validate a document before it is created or updated.
+ * Configuration for an assertion that runs when a document is created or updated.
  */
-export interface AssertSetDocConfig extends Omit<AssertAssertConfig, 'assertSetDoc'> {
-  /**
-   * A function that runs synchronously before a document is set in the Datastore.
-   * This can be used to enforce your validation rules.
-   *
-   * @param {AssertSetDocContext} context - Provides details about the document being validated.
-   * @throws {Error} If your validation fails, throw an exception to prevent the document from being saved.
-   *
-   */
-  assertSetDoc: (context: AssertSetDocContext) => void;
-}
+export type AssertSetDocConfig = OnAssertConfig<AssertSetDocContext>;
 
-export type AssertConfig = AssertSetDocConfig;
+export type AssertConfig = AssertSetDocConfig; // TODO: to be extended
 
-export type AssertFn = (config: SatelliteConfigEnv) => AssertConfig;
+export type AssertFn<T extends AssertConfig> = (config: SatelliteConfigEnv) => T;
 
-export type AssertFnOrObject = AssertConfig | AssertFn;
+export type AssertFnOrObject<T extends AssertConfig> = T | AssertFn<T>;
 
-export function defineAssert(config: AssertConfig): AssertConfig;
-export function defineAssert(config: AssertFn): AssertFn;
-export function defineAssert(config: AssertFnOrObject): AssertFnOrObject;
-export function defineAssert(config: AssertFnOrObject): AssertFnOrObject {
+export function defineAssert<T extends AssertConfig>(config: T): T;
+export function defineAssert<T extends AssertConfig>(config: AssertFn<T>): AssertFn<T>;
+export function defineAssert<T extends AssertConfig>(
+  config: AssertFnOrObject<T>
+): AssertFnOrObject<T>;
+export function defineAssert<T extends AssertConfig>(
+  config: AssertFnOrObject<T>
+): AssertFnOrObject<T> {
   return config;
 }

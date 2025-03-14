@@ -39,7 +39,9 @@ export type RawData = z.infer<typeof RawDataSchema>;
 /**
  * @see RawPrincipal
  */
-export const RawPrincipalSchema = z.instanceof(Uint8Array);
+export const RawPrincipalSchema = z.custom<Uint8Array>((val) => val instanceof Uint8Array, {
+  message: 'Expected Uint8Array'
+});
 
 /**
  * Represents a raw principal identifier.

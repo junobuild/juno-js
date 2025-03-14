@@ -3,7 +3,7 @@
  */
 export interface CollectionsConfig {
   /**
-   * A list of collection names where the hook or assertion will be executed.
+   * An array containing at least one collection name where the hook or assertion will be executed.
    */
-  collections: string[];
+  collections: [string, ...string[]];
 }

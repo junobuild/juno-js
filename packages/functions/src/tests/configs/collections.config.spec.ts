@@ -1,6 +1,6 @@
 import {CollectionsConfigSchema} from '../../configs/collections.config';
 
-describe('CollectionsConfig', () => {
+describe('collections.config', () => {
   it('should validate a valid collections config', () => {
     const validConfig = {collections: ['users', 'orders']};
     expect(() => CollectionsConfigSchema.parse(validConfig)).not.toThrow();

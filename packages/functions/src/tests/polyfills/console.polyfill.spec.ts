@@ -4,7 +4,7 @@ import '../../polyfills/console.polyfill';
 
 globalThis.__ic_cdk_print = vi.fn();
 
-describe('Console', () => {
+describe('console.polyfill', () => {
   const obj = {
     id: 546n,
     owner: Principal.anonymous(),

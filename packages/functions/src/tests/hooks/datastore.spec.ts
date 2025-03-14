@@ -7,7 +7,7 @@ import {
   SetDocSchema
 } from '../../hooks/datastore';
 
-describe('Datastore', () => {
+describe('datastore', () => {
   describe('DocDescriptionSchema', () => {
     it('should validate a valid description', () => {
       expect(() => DocDescriptionSchema.parse('This is a valid description.')).not.toThrow();

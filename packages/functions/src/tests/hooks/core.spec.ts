@@ -6,7 +6,7 @@ import {
   VersionSchema
 } from '../../hooks/core';
 
-describe('Core', () => {
+describe('core', () => {
   it('should validate a valid Timestamp', () => {
     expect(() => TimestampSchema.parse(1700000000000000n)).not.toThrow();
   });

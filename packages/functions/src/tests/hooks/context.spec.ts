@@ -5,7 +5,7 @@ import {
   OnSetDocContextSchema
 } from '../../hooks/context';
 
-describe('Context', () => {
+describe('context', () => {
   describe('DocContextSchema', () => {
     it('should validate a valid DocContext', () => {
       const validDocContext = {

@@ -117,7 +117,8 @@
       "path": "./packages/functions/dist/index.js",
       "limit": "5 kB",
       "ignore": [
-        "@dfinity/utils"
+        "@dfinity/utils",
+        "zod"
       ]
     },
     {

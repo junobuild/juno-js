@@ -1,4 +1,4 @@
-import {CollectionsSchema} from '../../../schemas/hooks/collections';
+import {CollectionsSchema} from '../../../hooks/schemas/collections';
 
 describe('collections', () => {
   it('should validate a valid collections config', () => {

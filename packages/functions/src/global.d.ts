@@ -1,5 +1,5 @@
 import type {RawData, RawPrincipal, RawUserId} from './schemas/core';
-import type {SetDoc} from './schemas/db/sdk';
+import type {SetDoc} from './sdk/schemas/db';
 
 declare global {
   function __juno_satellite_datastore_raw_data_to_text(data: RawData): string;

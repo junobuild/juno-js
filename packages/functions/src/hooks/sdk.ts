@@ -8,14 +8,19 @@ import {DocDescriptionSchema} from './datastore';
 export const SetDocSchema = z
   .object({
     /**
-     * The raw data of the document.
+     * The unique key identifying the document within the collection.
      */
-    data: RawDataSchema,
+    key: KeySchema,
 
     /**
      * An optional description of the document.
      */
     description: DocDescriptionSchema.optional(),
+
+    /**
+     * The raw data of the document.
+     */
+    data: RawDataSchema,
 
     /**
      * The expected version number to ensure consistency.
@@ -35,22 +40,24 @@ export type SetDoc = z.infer<typeof SetDocSchema>;
 /**
  * @see SetDocStoreParams
  */
-export const SetDocStoreParamsSchema = SetDocSchema.extend({
-  /**
-   * The caller who initiate the document operation.
-   */
-  caller: RawUserIdSchema,
+export const SetDocStoreParamsSchema = z
+  .object({
+    /**
+     * The caller who initiate the document operation.
+     */
+    caller: RawUserIdSchema,
 
-  /**
-   * The name of the collection where the document is stored.
-   */
-  collection: CollectionSchema,
+    /**
+     * The name of the collection where the document is stored.
+     */
+    collection: CollectionSchema,
 
-  /**
-   * The unique key identifying the document within the collection.
-   */
-  key: KeySchema
-}).strict();
+    /**
+     * The data, key and other information required to create or update a document.
+     */
+    doc: SetDocSchema
+  })
+  .strict();
 
 /**
  * Represents the parameters required to store or update a document.

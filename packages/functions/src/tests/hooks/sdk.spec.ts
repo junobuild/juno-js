@@ -4,6 +4,7 @@ import {SetDocSchema, SetDocStoreParamsSchema} from '../../hooks/sdk';
 describe('sdk', () => {
   describe('SetDocSchema', () => {
     const requiredFields = {
+      key: 'doc123',
       data: new Uint8Array([1, 2, 3])
     };
 
@@ -21,16 +22,18 @@ describe('sdk', () => {
       expect(() => SetDocSchema.parse(requiredFields)).not.toThrow();
     });
 
-    it('should reject an invalid SetDoc without data', () => {
-      const invalidSetDoc = {description: 'Missing data'};
-      expect(() => SetDocSchema.parse(invalidSetDoc)).toThrow();
+    it('should reject a SetDoc without key', () => {
+      const {key, ...invalidDoc} = validSetDoc;
+      expect(() => SetDocSchema.parse(invalidDoc)).toThrow();
     });
 
-    it('should reject if unknown fields', () => {
-      const invalidDoc = {
-        ...requiredFields,
-        extra_field: 'should not be allowed'
-      };
+    it('should reject an invalid SetDoc without data', () => {
+      const {data, ...invalidDoc} = validSetDoc;
+      expect(() => SetDocSchema.parse(invalidDoc)).toThrow();
+    });
+
+    it('should reject if unknown fields are present', () => {
+      const invalidDoc = {...validSetDoc, extra_field: 'should not be allowed'};
       expect(() => SetDocSchema.parse(invalidDoc)).toThrow();
     });
   });
@@ -39,14 +42,19 @@ describe('sdk', () => {
     const requiredFields = {
       caller: Principal.anonymous().toUint8Array(),
       collection: 'users',
-      key: 'user123',
-      data: new Uint8Array([4, 5, 6])
+      doc: {
+        key: 'doc123',
+        data: new Uint8Array([4, 5, 6])
+      }
     };
 
     const validSetDocStoreParams = {
       ...requiredFields,
-      description: 'Set a new document',
-      version: 1n
+      doc: {
+        ...requiredFields.doc,
+        description: 'Set a new document',
+        version: 1n
+      }
     };
 
     it('should validate a SetDocStoreParams with all fields', () => {
@@ -67,13 +75,20 @@ describe('sdk', () => {
       expect(() => SetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
 
-    it('should reject a SetDocStoreParams without key', () => {
-      const {key, ...invalidParams} = validSetDocStoreParams;
+    it('should reject a SetDocStoreParams without doc', () => {
+      const {doc, ...invalidParams} = validSetDocStoreParams;
       expect(() => SetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
 
-    it('should reject a SetDocStoreParams without data', () => {
-      const {data, ...invalidParams} = validSetDocStoreParams;
+    it('should reject a SetDocStoreParams if doc is missing key', () => {
+      const {key, ...invalidDoc} = validSetDocStoreParams.doc;
+      const invalidParams = {...validSetDocStoreParams, doc: invalidDoc};
+      expect(() => SetDocStoreParamsSchema.parse(invalidParams)).toThrow();
+    });
+
+    it('should reject a SetDocStoreParams if doc is missing data', () => {
+      const {data, ...invalidDoc} = validSetDocStoreParams.doc;
+      const invalidParams = {...validSetDocStoreParams, doc: invalidDoc};
       expect(() => SetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
 
@@ -92,8 +107,8 @@ describe('sdk', () => {
       expect(() => SetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
 
-    it('should reject a SetDocStoreParams with an invalid key type', () => {
-      const invalidParams = {...validSetDocStoreParams, key: null};
+    it('should reject a SetDocStoreParams with an invalid doc type', () => {
+      const invalidParams = {...validSetDocStoreParams, doc: 'invalid_doc'};
       expect(() => SetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
   });

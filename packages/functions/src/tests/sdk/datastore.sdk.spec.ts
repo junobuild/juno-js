@@ -9,10 +9,12 @@ describe('datastore.sdk', () => {
   const validParams: SetDocStoreParams = {
     caller: Principal.anonymous().toUint8Array(),
     collection: 'users',
-    key: 'user123',
-    data: new Uint8Array([4, 5, 6]),
-    description: 'Test document',
-    version: BigInt(1)
+    doc: {
+      key: 'user123',
+      data: new Uint8Array([4, 5, 6]),
+      description: 'Test document',
+      version: BigInt(1)
+    }
   };
 
   it('should call __juno_satellite_datastore_set_doc_store with correct parameters', () => {
@@ -21,11 +23,11 @@ describe('datastore.sdk', () => {
     expect(global.__juno_satellite_datastore_set_doc_store).toHaveBeenCalledWith(
       validParams.caller,
       validParams.collection,
-      validParams.key,
+      validParams.doc.key,
       {
-        data: validParams.data,
-        description: validParams.description,
-        version: validParams.version
+        data: validParams.doc.data,
+        description: validParams.doc.description,
+        version: validParams.doc.version
       }
     );
   });

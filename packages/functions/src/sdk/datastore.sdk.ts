@@ -14,7 +14,9 @@ import {SetDocStoreParams, SetDocStoreParamsSchema} from '../hooks/sdk';
 export const setDocStore = (params: SetDocStoreParams) => {
   SetDocStoreParamsSchema.parse(params);
 
-  const {caller, collection, key, ...setDoc} = params;
+  const {caller, collection, doc} = params;
+
+  const {key, ...setDoc} = doc;
 
   __juno_satellite_datastore_set_doc_store(caller, collection, key, setDoc);
 };

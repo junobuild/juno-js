@@ -9,7 +9,7 @@ declare global {
     caller: RawUserId,
     collection: string,
     key: string,
-    value: SetDoc
+    value: Omit<SetDoc, 'key'>
   ): void;
 
   function __ic_cdk_print(msg: string): void;

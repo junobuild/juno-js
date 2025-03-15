@@ -28,6 +28,9 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
+- [setDocStore](#gear-setdocstore)
+- [decodeDocData](#gear-decodedocdata)
+- [encodeDocData](#gear-encodedocdata)
 
 #### :gear: HookContextSchema
 
@@ -35,7 +38,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `HookContextSchema` | `<T extends z.ZodTypeAny>(dataSchema: T) => ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: T; }, "strict", ZodTypeAny, { [k in keyof addQuestionMarks<...>]: addQuestionMarks<...>[k]; }, { [k in keyof baseObjectInputType<...>]: baseObjectInputType<...>[k]; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/hooks/context.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L7)
 
 #### :gear: DocContextSchema
 
@@ -43,7 +46,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocContextSchema` | `<T extends z.ZodTypeAny>(dataSchema: T) => ZodObject<{ collection: ZodString; key: ZodString; data: T; }, "strict", ZodTypeAny, { [k in keyof addQuestionMarks<baseObjectOutputType<{ collection: ZodString; key: ZodString; data: T; }>, any>]: addQuestionMarks<...>[k]; }, { [k in keyof baseObjectInputType<...>]: baseOb...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/context.ts#L9)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L9)
 
 #### :gear: AssertFnSchema
 
@@ -141,8 +144,54 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L54)
 
+#### :gear: setDocStore
+
+Stores or updates a document in the datastore.
+
+The data must have been encoded - using encodeDocData - before calling this function.
+
+| Function      | Type                                                                                                                                                                                                         |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `setDocStore` | `(params: { caller: Uint8Array<ArrayBufferLike>; collection: string; doc: { data: Uint8Array<ArrayBufferLike>; key: string; description?: string or undefined; version?: bigint or undefined; }; }) => void` |
+
+Parameters:
+
+- `params`: - The parameters required to store the document,
+  including the caller, collection, key, and document data.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L14)
+
+#### :gear: decodeDocData
+
+Decodes the raw data of a document into a JavaScript object.
+
+| Function        | Type                                          |
+| --------------- | --------------------------------------------- |
+| `decodeDocData` | `<T>(data: Uint8Array<ArrayBufferLike>) => T` |
+
+Parameters:
+
+- `data`: - The raw data to be decoded.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L11)
+
+#### :gear: encodeDocData
+
+Encodes a JavaScript object into a raw data format to be applied to a document.
+
+| Function        | Type                                          |
+| --------------- | --------------------------------------------- |
+| `encodeDocData` | `<T>(data: T) => Uint8Array<ArrayBufferLike>` |
+
+Parameters:
+
+- `data`: - The data to be encoded.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
+
 ### :wrench: Constants
 
+- [CollectionsSchema](#gear-collectionsschema)
 - [TimestampSchema](#gear-timestampschema)
 - [VersionSchema](#gear-versionschema)
 - [RawDataSchema](#gear-rawdataschema)
@@ -157,7 +206,6 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [DocAssertSetSchema](#gear-docassertsetschema)
 - [OnSetDocContextSchema](#gear-onsetdoccontextschema)
 - [AssertSetDocContextSchema](#gear-assertsetdoccontextschema)
-- [CollectionsSchema](#gear-collectionsschema)
 - [SatelliteEnvSchema](#gear-satelliteenvschema)
 - [AssertSetDocSchema](#gear-assertsetdocschema)
 - [AssertSchema](#gear-assertschema)
@@ -165,6 +213,14 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [HookSchema](#gear-hookschema)
 - [SetDocSchema](#gear-setdocschema)
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
+
+#### :gear: CollectionsSchema
+
+| Constant            | Type                                                                                                                                     |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `CollectionsSchema` | `ZodObject<{ collections: ZodArray<ZodString, "many">; }, "strict", ZodTypeAny, { collections: string[]; }, { collections: string[]; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L6)
 
 #### :gear: TimestampSchema
 
@@ -228,7 +284,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ---------------------- | ----------- |
 | `DocDescriptionSchema` | `ZodString` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/store.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L7)
 
 #### :gear: DocSchema
 
@@ -236,7 +292,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocSchema` | `ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/store.ts#L17)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L17)
 
 #### :gear: DocUpsertSchema
 
@@ -244,7 +300,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocUpsertSchema` | `ZodObject<{ before: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; after: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/store.ts#L60)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L8)
 
 #### :gear: ProposedDocSchema
 
@@ -252,7 +308,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ProposedDocSchema` | `ZodObject<{ data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; description: ZodOptional<...>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/store.ts#L85)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L33)
 
 #### :gear: DocAssertSetSchema
 
@@ -260,7 +316,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocAssertSetSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; proposed: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/store.ts#L113)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L61)
 
 #### :gear: OnSetDocContextSchema
 
@@ -268,7 +324,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnSetDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/context.ts#L39)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L39)
 
 #### :gear: AssertSetDocContextSchema
 
@@ -276,15 +332,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertSetDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/context.ts#L52)
-
-#### :gear: CollectionsSchema
-
-| Constant            | Type                                                                                                                                     |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `CollectionsSchema` | `ZodObject<{ collections: ZodArray<ZodString, "many">; }, "strict", ZodTypeAny, { collections: string[]; }, { collections: string[]; }>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/hooks/collections.ts#L6)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L52)
 
 #### :gear: SatelliteEnvSchema
 
@@ -292,7 +340,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------------- | ---------------------------------- |
 | `SatelliteEnvSchema` | `ZodRecord<ZodString, ZodUnknown>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/hooks/satellite.env.ts#L6)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/satellite.env.ts#L6)
 
 #### :gear: AssertSetDocSchema
 
@@ -332,7 +380,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocSchema` | `ZodObject<{ key: ZodString; description: ZodOptional<ZodString>; data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/sdk.ts#L8)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L14)
 
 #### :gear: SetDocStoreParamsSchema
 
@@ -340,10 +388,11 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocStoreParamsSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; collection: ZodString; doc: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/sdk.ts#L43)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L49)
 
 ### :cocktail: Types
 
+- [Collections](#gear-collections)
 - [Timestamp](#gear-timestamp)
 - [Version](#gear-version)
 - [RawData](#gear-rawdata)
@@ -360,7 +409,6 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [DocContext](#gear-doccontext)
 - [OnSetDocContext](#gear-onsetdoccontext)
 - [AssertSetDocContext](#gear-assertsetdoccontext)
-- [Collections](#gear-collections)
 - [SatelliteEnv](#gear-satelliteenv)
 - [AssertSetDoc](#gear-assertsetdoc)
 - [Assert](#gear-assert)
@@ -372,6 +420,16 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [HookFnOrObject](#gear-hookfnorobject)
 - [SetDoc](#gear-setdoc)
 - [SetDocStoreParams](#gear-setdocstoreparams)
+
+#### :gear: Collections
+
+Defines the collections where a hook or assertion should run.
+
+| Type          | Type                                |
+| ------------- | ----------------------------------- |
+| `Collections` | `z.infer<typeof CollectionsSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L18)
 
 #### :gear: Timestamp
 
@@ -461,7 +519,7 @@ Represents the context provided to hooks, containing information about the calle
 | ------------- | -------------------------------------------------- |
 | `HookContext` | `z.infer<ReturnType<typeof HookContextSchema<T>>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/hooks/context.ts#L27)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L27)
 
 #### :gear: DocDescription
 
@@ -471,7 +529,7 @@ Represents a document description with a maximum length of 1024 characters.
 | ---------------- | -------------------------------------- |
 | `DocDescription` | `z.infer<typeof DocDescriptionSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/store.ts#L12)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L12)
 
 #### :gear: Doc
 
@@ -481,7 +539,7 @@ Represents a document stored in a collection.
 | ----- | --------------------------- |
 | `Doc` | `z.infer<typeof DocSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/store.ts#L55)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L55)
 
 #### :gear: DocUpsert
 
@@ -493,7 +551,7 @@ This is used in hooks where a document is either being created or updated.
 | ----------- | --------------------------------- |
 | `DocUpsert` | `z.infer<typeof DocUpsertSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/store.ts#L80)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L28)
 
 #### :gear: ProposedDoc
 
@@ -504,7 +562,7 @@ This can be validated before allowing the operation.
 | ------------- | ----------------------------------- |
 | `ProposedDoc` | `z.infer<typeof ProposedDocSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/store.ts#L108)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L56)
 
 #### :gear: DocAssertSet
 
@@ -517,7 +575,7 @@ throw an error if their validation fails.
 | -------------- | ------------------------------------ |
 | `DocAssertSet` | `z.infer<typeof DocAssertSetSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/store.ts#L135)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L83)
 
 #### :gear: DocContext
 
@@ -527,7 +585,7 @@ Represents the context of a document operation within a collection.
 | ------------ | ------------------------------------------------- |
 | `DocContext` | `z.infer<ReturnType<typeof DocContextSchema<T>>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/context.ts#L34)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L34)
 
 #### :gear: OnSetDocContext
 
@@ -540,7 +598,7 @@ along with details about the user who triggered the operation.
 | ----------------- | --------------------------------------- |
 | `OnSetDocContext` | `z.infer<typeof OnSetDocContextSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/context.ts#L47)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L47)
 
 #### :gear: AssertSetDocContext
 
@@ -553,17 +611,7 @@ it is created or updated. If validation fails, the developer should throw an err
 | --------------------- | ------------------------------------------- |
 | `AssertSetDocContext` | `z.infer<typeof AssertSetDocContextSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/context.ts#L60)
-
-#### :gear: Collections
-
-Defines the collections where a hook or assertion should run.
-
-| Type          | Type                                |
-| ------------- | ----------------------------------- |
-| `Collections` | `z.infer<typeof CollectionsSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/hooks/collections.ts#L18)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L60)
 
 #### :gear: SatelliteEnv
 
@@ -578,7 +626,7 @@ Currently unused, but it may support features such as:
 | -------------- | ------------------------------------ |
 | `SatelliteEnv` | `z.infer<typeof SatelliteEnvSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/hooks/satellite.env.ts#L15)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/satellite.env.ts#L15)
 
 #### :gear: AssertSetDoc
 
@@ -662,7 +710,7 @@ This is used when submitting new document data.
 | -------- | ------------------------------ |
 | `SetDoc` | `z.infer<typeof SetDocSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/sdk.ts#L38)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L44)
 
 #### :gear: SetDocStoreParams
 
@@ -675,7 +723,7 @@ collection, and key.
 | ------------------- | ----------------------------------------- |
 | `SetDocStoreParams` | `z.infer<typeof SetDocStoreParamsSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db/sdk.ts#L68)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L74)
 
 <!-- TSDOC_END -->
 

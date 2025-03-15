@@ -3,7 +3,7 @@ import {
   AssertSetDocContextSchema,
   DocContextSchema,
   OnSetDocContextSchema
-} from '../../../schemas/db/context';
+} from '../../../../hooks/schemas/db/context';
 
 describe('context', () => {
   describe('DocContextSchema', () => {

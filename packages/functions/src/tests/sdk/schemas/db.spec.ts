@@ -1,7 +1,7 @@
 import {Principal} from '@dfinity/principal';
-import {SetDocSchema, SetDocStoreParamsSchema} from '../../../schemas/db/sdk';
+import {SetDocSchema, SetDocStoreParamsSchema} from '../../../sdk/schemas/db';
 
-describe('sdk', () => {
+describe('sdk > db', () => {
   describe('SetDocSchema', () => {
     const requiredFields = {
       key: 'doc123',

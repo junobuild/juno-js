@@ -12,6 +12,10 @@
     ".": {
       "types": "./index.d.ts",
       "import": "./index.js"
+    },
+    "./sdk": {
+      "types": "./sdk.d.ts",
+      "import": "./sdk.js"
     }
   },
   "files": [

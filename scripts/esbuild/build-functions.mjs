@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import esbuild from 'esbuild';
-import {externalPeerDependencies} from './esbuild-pkg.mjs';
-import {collectEntryPoints} from './esbuild-utils.mjs';
+import {externalPeerDependencies} from './pkg.mjs';
+import {collectEntryPoints} from './utils.mjs';
 
 const build = () => {
   const entryPoints = collectEntryPoints();

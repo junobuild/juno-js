@@ -3,8 +3,8 @@
 import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill';
 import esbuild from 'esbuild';
 import {join} from 'path';
-import {externalPeerDependencies} from './esbuild-pkg.mjs';
-import {collectEntryPoints, createDistFolder, DIST, writeEntries} from './esbuild-utils.mjs';
+import {externalPeerDependencies} from './pkg.mjs';
+import {collectEntryPoints, createDistFolder, DIST, writeEntries} from './utils.mjs';
 
 const entryPoints = collectEntryPoints();
 

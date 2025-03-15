@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-import {buildFunctions} from '../../scripts/esbuild-functions.mjs';
+import {buildFunctions} from '../../scripts/esbuild/build-functions.mjs';
 
 buildFunctions();

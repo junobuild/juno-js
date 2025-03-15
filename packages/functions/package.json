@@ -16,6 +16,10 @@
     "./sdk": {
       "types": "./sdk.d.ts",
       "import": "./sdk.js"
+    },
+    "./ic-cdk": {
+      "types": "./ic-cdk.d.ts",
+      "import": "./ic-cdk.js"
     }
   },
   "files": [

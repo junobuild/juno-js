@@ -21,7 +21,8 @@ const configInputFiles = [
 
 const functionsInputFiles = [
   './packages/functions/src/index.ts',
-  './packages/functions/src/sdk.ts'
+  './packages/functions/src/sdk.ts',
+  './packages/functions/src/ic-cdk.ts'
 ];
 
 const buildOptions = {

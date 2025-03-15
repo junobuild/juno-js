@@ -16,14 +16,14 @@ export const writeEntries = () => {
 
 export const collectEntryPoints = () => {
   return readdirSync(join(process.cwd(), 'src'))
-      .filter(
-          (file) =>
-              !file.includes('test') &&
-              !file.includes('spec') &&
-              !file.includes('mock') &&
-              !file.endsWith('.swp') &&
-              !file.endsWith('.worker.ts') &&
-              statSync(join(process.cwd(), 'src', file)).isFile()
-      )
-      .map((file) => `src/${file}`);
-}
+    .filter(
+      (file) =>
+        !file.includes('test') &&
+        !file.includes('spec') &&
+        !file.includes('mock') &&
+        !file.endsWith('.swp') &&
+        !file.endsWith('.worker.ts') &&
+        statSync(join(process.cwd(), 'src', file)).isFile()
+    )
+    .map((file) => `src/${file}`);
+};

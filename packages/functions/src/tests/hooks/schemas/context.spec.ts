@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {HookContextSchema} from '../../../schemas/hooks/context';
+import {HookContextSchema} from '../../../hooks/schemas/context';
 
 describe('context', () => {
   const MockDataSchema = z.object({

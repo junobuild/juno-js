@@ -1,6 +1,12 @@
 import * as z from 'zod';
-import {CollectionSchema, KeySchema, RawDataSchema, RawUserIdSchema, VersionSchema} from '../core';
-import {DocDescriptionSchema} from './store';
+import {
+  CollectionSchema,
+  KeySchema,
+  RawDataSchema,
+  RawUserIdSchema,
+  VersionSchema
+} from '../../schemas/core';
+import {DocDescriptionSchema} from '../../schemas/db';
 
 /**
  * @see SetDoc

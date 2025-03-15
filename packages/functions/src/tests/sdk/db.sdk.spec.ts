@@ -1,11 +1,11 @@
 import {Principal} from '@dfinity/principal';
 import {ZodError} from 'zod';
-import {SetDocStoreParams} from '../../schemas/db/sdk';
-import {setDocStore} from '../../sdk/datastore.sdk';
+import {setDocStore} from '../../sdk/db.sdk';
+import {SetDocStoreParams} from '../../sdk/schemas/db';
 
 vi.stubGlobal('__juno_satellite_datastore_set_doc_store', vi.fn());
 
-describe('datastore.sdk', () => {
+describe('db.sdk', () => {
   const validParams: SetDocStoreParams = {
     caller: Principal.anonymous().toUint8Array(),
     collection: 'users',

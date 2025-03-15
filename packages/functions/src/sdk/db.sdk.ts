@@ -1,4 +1,4 @@
-import {SetDocStoreParams, SetDocStoreParamsSchema} from '../schemas/db/sdk';
+import {SetDocStoreParams, SetDocStoreParamsSchema} from './schemas/db';
 
 /**
  * Stores or updates a document in the datastore.

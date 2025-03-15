@@ -1,7 +1,7 @@
 import * as z from 'zod';
-import {AssertSetDocContextSchema} from '../../schemas/db/context';
-import {CollectionsSchema} from '../../schemas/hooks/collections';
-import {SatelliteEnvSchema} from '../../schemas/hooks/satellite.env';
+import {CollectionsSchema} from '../schemas/collections';
+import {AssertSetDocContextSchema} from '../schemas/db/context';
+import {SatelliteEnvSchema} from '../schemas/satellite.env';
 
 /**
  * A generic schema for defining assertions related to collections.

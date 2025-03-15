@@ -1,7 +1,7 @@
 import * as z from 'zod';
-import {CollectionSchema, KeySchema} from '../core';
-import {HookContextSchema} from '../hooks/context';
-import {DocAssertSetSchema, DocUpsertSchema} from './store';
+import {CollectionSchema, KeySchema} from '../../../schemas/core';
+import {HookContextSchema} from '../context';
+import {DocAssertSetSchema, DocUpsertSchema} from './payload';
 
 /**
  * @see DocContext

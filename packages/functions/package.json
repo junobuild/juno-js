@@ -5,26 +5,27 @@
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/browser/index.js",
-  "module": "./dist/browser/index.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/browser/index.js"
-      }
+      "types": "./index.d.ts",
+      "import": "./index.js"
     }
   },
   "files": [
-    "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "**/*.js",
+    "**/*.js.map",
+    "**/*.d.ts",
+    "**/*.d.ts.map"
   ],
   "scripts": {
     "rmdir": "node ../../scripts/rmdir.mjs",
-    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types && cp -R src/*.d.ts dist/types/",
-    "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs && npm run ts-declaration",
+    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist && cp -R src/*.d.ts dist/",
+    "build": "npm run rmdir && mkdir -p dist && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },
   "repository": {

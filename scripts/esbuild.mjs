@@ -2,21 +2,11 @@
 
 import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill';
 import esbuild from 'esbuild';
-import {readdirSync, statSync} from 'fs';
 import {join} from 'path';
-import {createDistFolder, DIST, workspacePeerDependencies, writeEntries} from './esbuild-utils.mjs';
+import {externalPeerDependencies} from './esbuild-pkg.mjs';
+import {collectEntryPoints, createDistFolder, DIST, writeEntries} from './esbuild-utils.mjs';
 
-const entryPoints = readdirSync(join(process.cwd(), 'src'))
-  .filter(
-    (file) =>
-      !file.includes('test') &&
-      !file.includes('spec') &&
-      !file.includes('mock') &&
-      !file.endsWith('.swp') &&
-      !file.endsWith('.worker.ts') &&
-      statSync(join(process.cwd(), 'src', file)).isFile()
-  )
-  .map((file) => `src/${file}`);
+const entryPoints = collectEntryPoints();
 
 const buildBrowser = () => {
   // esm output bundles with code splitting
@@ -33,7 +23,7 @@ const buildBrowser = () => {
       platform: 'browser',
       conditions: ['worker', 'browser'],
       plugins: [NodeModulesPolyfillPlugin()],
-      external: [...Object.keys(workspacePeerDependencies)]
+      external: externalPeerDependencies
     })
     .catch(() => process.exit(1));
 };
@@ -53,7 +43,7 @@ const buildNode = () => {
       banner: {
         js: "import { createRequire as topLevelCreateRequire } from 'module';\n const require = topLevelCreateRequire(import.meta.url);"
       },
-      external: [...Object.keys(workspacePeerDependencies)]
+      external: externalPeerDependencies
     })
     .catch(() => process.exit(1));
 };

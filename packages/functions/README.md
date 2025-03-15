@@ -28,6 +28,9 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
+- [setDocStore](#gear-setdocstore)
+- [decodeDocData](#gear-decodedocdata)
+- [encodeDocData](#gear-encodedocdata)
 
 #### :gear: HookContextSchema
 
@@ -141,6 +144,51 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L54)
 
+#### :gear: setDocStore
+
+Stores or updates a document in the datastore.
+
+The data must have been encoded - using encodeDocData - before calling this function.
+
+| Function      | Type                                                                                                                                                                                                         |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `setDocStore` | `(params: { caller: Uint8Array<ArrayBufferLike>; collection: string; doc: { data: Uint8Array<ArrayBufferLike>; key: string; description?: string or undefined; version?: bigint or undefined; }; }) => void` |
+
+Parameters:
+
+- `params`: - The parameters required to store the document,
+  including the caller, collection, key, and document data.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L14)
+
+#### :gear: decodeDocData
+
+Decodes the raw data of a document into a JavaScript object.
+
+| Function        | Type                                          |
+| --------------- | --------------------------------------------- |
+| `decodeDocData` | `<T>(data: Uint8Array<ArrayBufferLike>) => T` |
+
+Parameters:
+
+- `data`: - The raw data to be decoded.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L11)
+
+#### :gear: encodeDocData
+
+Encodes a JavaScript object into a raw data format to be applied to a document.
+
+| Function        | Type                                          |
+| --------------- | --------------------------------------------- |
+| `encodeDocData` | `<T>(data: T) => Uint8Array<ArrayBufferLike>` |
+
+Parameters:
+
+- `data`: - The data to be encoded.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
+
 ### :wrench: Constants
 
 - [CollectionsSchema](#gear-collectionsschema)
@@ -163,6 +211,8 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [AssertSchema](#gear-assertschema)
 - [OnSetDocSchema](#gear-onsetdocschema)
 - [HookSchema](#gear-hookschema)
+- [SetDocSchema](#gear-setdocschema)
+- [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
 
 #### :gear: CollectionsSchema
 
@@ -324,6 +374,22 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L36)
 
+#### :gear: SetDocSchema
+
+| Constant       | Type                                                                                                                                                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SetDocSchema` | `ZodObject<{ key: ZodString; description: ZodOptional<ZodString>; data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L14)
+
+#### :gear: SetDocStoreParamsSchema
+
+| Constant                  | Type                                                                                                                                                                                          |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SetDocStoreParamsSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; collection: ZodString; doc: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L49)
+
 ### :cocktail: Types
 
 - [Collections](#gear-collections)
@@ -352,6 +418,8 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [Hook](#gear-hook)
 - [HookFn](#gear-hookfn)
 - [HookFnOrObject](#gear-hookfnorobject)
+- [SetDoc](#gear-setdoc)
+- [SetDocStoreParams](#gear-setdocstoreparams)
 
 #### :gear: Collections
 
@@ -631,6 +699,31 @@ All hooks definitions.
 | `HookFnOrObject` | `T or HookFn<T>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L49)
+
+#### :gear: SetDoc
+
+Represents a request to set or update a document.
+
+This is used when submitting new document data.
+
+| Type     | Type                           |
+| -------- | ------------------------------ |
+| `SetDoc` | `z.infer<typeof SetDocSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L44)
+
+#### :gear: SetDocStoreParams
+
+Represents the parameters required to store or update a document.
+
+This includes the document data along with metadata such as the caller,
+collection, and key.
+
+| Type                | Type                                      |
+| ------------------- | ----------------------------------------- |
+| `SetDocStoreParams` | `z.infer<typeof SetDocStoreParamsSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L74)
 
 <!-- TSDOC_END -->
 

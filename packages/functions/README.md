@@ -28,9 +28,6 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
-- [setDocStore](#gear-setdocstore)
-- [decodeDocData](#gear-decodedocdata)
-- [encodeDocData](#gear-encodedocdata)
 
 #### :gear: HookContextSchema
 
@@ -143,51 +140,6 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L54)
-
-#### :gear: setDocStore
-
-Stores or updates a document in the datastore.
-
-The data must have been encoded - using encodeDocData - before calling this function.
-
-| Function      | Type                                                                                                                                                                                                         |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `setDocStore` | `(params: { caller: Uint8Array<ArrayBufferLike>; collection: string; doc: { data: Uint8Array<ArrayBufferLike>; key: string; description?: string or undefined; version?: bigint or undefined; }; }) => void` |
-
-Parameters:
-
-- `params`: - The parameters required to store the document,
-  including the caller, collection, key, and document data.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/datastore.sdk.ts#L14)
-
-#### :gear: decodeDocData
-
-Decodes the raw data of a document into a JavaScript object.
-
-| Function        | Type                                          |
-| --------------- | --------------------------------------------- |
-| `decodeDocData` | `<T>(data: Uint8Array<ArrayBufferLike>) => T` |
-
-Parameters:
-
-- `data`: - The raw data to be decoded.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L11)
-
-#### :gear: encodeDocData
-
-Encodes a JavaScript object into a raw data format to be applied to a document.
-
-| Function        | Type                                          |
-| --------------- | --------------------------------------------- |
-| `encodeDocData` | `<T>(data: T) => Uint8Array<ArrayBufferLike>` |
-
-Parameters:
-
-- `data`: - The data to be encoded.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
 
 ### :wrench: Constants
 

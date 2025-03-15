@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {RawDataSchema, RawUserIdSchema, TimestampSchema, VersionSchema} from './core';
+import {RawDataSchema, RawUserIdSchema, TimestampSchema, VersionSchema} from '../core';
 
 /**
  * @see DocDescription

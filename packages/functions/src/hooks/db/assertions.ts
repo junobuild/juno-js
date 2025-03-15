@@ -1,7 +1,7 @@
 import * as z from 'zod';
-import {AssertSetDocContextSchema} from '../hooks/context';
-import {CollectionsConfigSchema} from './collections.config';
-import {SatelliteEnvSchema} from './satellite.env';
+import {AssertSetDocContextSchema} from '../../schemas/db/context';
+import {CollectionsSchema} from '../../schemas/hooks/collections';
+import {SatelliteEnvSchema} from '../../schemas/hooks/satellite.env';
 
 /**
  * A generic schema for defining assertions related to collections.
@@ -9,7 +9,7 @@ import {SatelliteEnvSchema} from './satellite.env';
  * @template T - The type of context passed to the assertions when triggered.
  */
 const OnAssertSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
-  CollectionsConfigSchema.extend({
+  CollectionsSchema.extend({
     /**
      * A function that runs when the assertion is triggered for the specified collections.
      *

@@ -1,6 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import {ZodError} from 'zod';
-import {SetDocStoreParams} from '../../hooks/sdk';
+import {SetDocStoreParams} from '../../schemas/db/sdk';
 import {setDocStore} from '../../sdk/datastore.sdk';
 
 vi.stubGlobal('__juno_satellite_datastore_set_doc_store', vi.fn());

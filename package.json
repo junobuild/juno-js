@@ -14,7 +14,8 @@
     "size": "size-limit --json",
     "update:agent": "./scripts/update-agent",
     "docs": "node scripts/docs.js && prettier --write packages/**/README.md",
-    "test": "vitest"
+    "test": "vitest",
+    "clean": "npm run clean --workspaces --if-present"
   },
   "workspaces": [
     "packages/utils",

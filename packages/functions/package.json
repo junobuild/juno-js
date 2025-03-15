@@ -23,9 +23,9 @@
     "**/*.d.ts.map"
   ],
   "scripts": {
-    "rmdir": "node ../../scripts/rmdir.mjs",
-    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist && cp -R src/*.d.ts dist/",
-    "build": "npm run rmdir && mkdir -p dist && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",
+    "clean": "git ls-files --others --ignored --exclude-standard | grep -v \"LICENSE\" | xargs rm -rf",
+    "ts-declaration": "tsc --emitDeclarationOnly -outDir . && cp -R src/*.d.ts ./",
+    "build": "npm run clean && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },
   "repository": {

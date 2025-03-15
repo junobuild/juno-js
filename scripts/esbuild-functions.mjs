@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import esbuild from 'esbuild';
-import {copyPackageJsonFiles, externalPeerDependencies} from './esbuild-pkg.mjs';
-import {collectEntryPoints, createDistFolder, DIST} from './esbuild-utils.mjs';
+import {externalPeerDependencies} from './esbuild-pkg.mjs';
+import {collectEntryPoints} from './esbuild-utils.mjs';
 
 const build = () => {
   const entryPoints = collectEntryPoints();
@@ -10,7 +10,7 @@ const build = () => {
   esbuild
     .build({
       entryPoints,
-      outdir: DIST,
+      outdir: process.cwd(),
       bundle: true,
       sourcemap: true,
       minify: true,
@@ -33,7 +33,5 @@ const build = () => {
 };
 
 export const buildFunctions = () => {
-  createDistFolder();
-  copyPackageJsonFiles();
   build();
 };

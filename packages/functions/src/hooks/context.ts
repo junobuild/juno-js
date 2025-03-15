@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {RawUserIdSchema} from './core';
+import {CollectionSchema, KeySchema, RawUserIdSchema} from './core';
 import {DocAssertSetSchema, DocUpsertSchema} from './datastore';
 
 /**
@@ -36,12 +36,12 @@ export const DocContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
       /**
        * The name of the collection where the document is stored.
        */
-      collection: z.string(),
+      collection: CollectionSchema,
 
       /**
        * The unique key identifying the document within the collection.
        */
-      key: z.string(),
+      key: KeySchema,
 
       /**
        * The data associated with the document operation.

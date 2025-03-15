@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import {RawPrincipalSchema} from './candid';
 
 /**
  * @see Timestamp
@@ -37,20 +38,6 @@ export const RawDataSchema = z.custom<Uint8Array>((val) => val instanceof Uint8A
  * This is used to store unstructured data in a document.
  */
 export type RawData = z.infer<typeof RawDataSchema>;
-
-/**
- * @see RawPrincipal
- */
-export const RawPrincipalSchema = z.custom<Uint8Array>((val) => val instanceof Uint8Array, {
-  message: 'Expected Uint8Array'
-});
-
-/**
- * Represents a raw principal identifier.
- *
- * Principals are unique identities used in authentication and authorization.
- */
-export type RawPrincipal = z.infer<typeof RawPrincipalSchema>;
 
 /**
  * @see RawUserId

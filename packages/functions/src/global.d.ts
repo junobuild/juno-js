@@ -1,4 +1,4 @@
-import type {RawData, RawUserId} from './schemas/core';
+import type {RawData, RawPrincipal, RawUserId} from './schemas/core';
 import type {SetDoc} from './schemas/db/sdk';
 
 declare global {
@@ -12,5 +12,6 @@ declare global {
     value: Omit<SetDoc, 'key'>
   ): void;
 
+  function __ic_cdk_id(): RawPrincipal;
   function __ic_cdk_print(msg: string): void;
 }

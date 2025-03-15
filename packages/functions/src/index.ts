@@ -7,7 +7,5 @@ export * from './schemas/db/store';
 export * from './schemas/hooks/collections';
 export * from './schemas/hooks/context';
 export * from './schemas/hooks/satellite.env';
-export * from './sdk/datastore.sdk';
-export * from './sdk/serializer.sdk';
 
 import './polyfills/console.polyfill';

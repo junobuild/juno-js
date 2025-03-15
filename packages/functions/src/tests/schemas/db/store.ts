@@ -4,9 +4,9 @@ import {
   DocSchema,
   DocUpsertSchema,
   ProposedDocSchema
-} from '../../hooks/datastore';
+} from '../../../schemas/db/store';
 
-describe('datastore', () => {
+describe('store', () => {
   describe('DocDescriptionSchema', () => {
     it('should validate a valid description', () => {
       expect(() => DocDescriptionSchema.parse('This is a valid description.')).not.toThrow();

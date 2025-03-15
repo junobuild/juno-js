@@ -4,7 +4,7 @@ import {
   RawUserIdSchema,
   TimestampSchema,
   VersionSchema
-} from '../../hooks/core';
+} from '../../schemas/core';
 
 describe('core', () => {
   it('should validate a valid Timestamp', () => {

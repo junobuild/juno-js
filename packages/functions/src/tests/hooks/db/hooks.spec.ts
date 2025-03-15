@@ -5,8 +5,8 @@ import {
   HookSchema,
   OnSetDoc,
   OnSetDocSchema
-} from '../../configs/hooks';
-import type {DocUpsert} from '../../hooks/datastore';
+} from '../../../hooks/db/hooks';
+import type {DocUpsert} from '../../../schemas/db/store';
 
 describe('hook.config', () => {
   const mockOnSetDoc = vi.fn(async () => {});

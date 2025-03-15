@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {SetDocSchema, SetDocStoreParamsSchema} from '../../hooks/sdk';
+import {SetDocSchema, SetDocStoreParamsSchema} from '../../../schemas/db/sdk';
 
 describe('sdk', () => {
   describe('SetDocSchema', () => {

@@ -1,9 +1,9 @@
 import * as z from 'zod';
 
 /**
- * @see CollectionsConfig
+ * @see Collections
  */
-export const CollectionsConfigSchema = z
+export const CollectionsSchema = z
   .object({
     /**
      * An array containing at least one collection name where the hook or assertion will be executed.
@@ -15,4 +15,4 @@ export const CollectionsConfigSchema = z
 /**
  * Defines the collections where a hook or assertion should run.
  */
-export type CollectionsConfig = z.infer<typeof CollectionsConfigSchema>;
+export type Collections = z.infer<typeof CollectionsSchema>;

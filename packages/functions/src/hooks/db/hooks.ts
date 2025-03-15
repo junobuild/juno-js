@@ -1,7 +1,7 @@
 import * as z from 'zod';
-import {OnSetDocContextSchema} from '../hooks/context';
-import {CollectionsConfigSchema} from './collections.config';
-import {SatelliteEnvSchema} from './satellite.env';
+import {OnSetDocContextSchema} from '../../schemas/db/context';
+import {CollectionsSchema} from '../../schemas/hooks/collections';
+import {SatelliteEnvSchema} from '../../schemas/hooks/satellite.env';
 
 /**
  * A generic schema for defining hooks related to collections.
@@ -9,7 +9,7 @@ import {SatelliteEnvSchema} from './satellite.env';
  * @template T - The type of context passed to the hook when triggered.
  */
 const OnHookSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
-  CollectionsConfigSchema.extend({
+  CollectionsSchema.extend({
     /**
      * A function that runs when the hook is triggered for the specified collections.
      *

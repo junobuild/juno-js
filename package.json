@@ -14,7 +14,8 @@
     "size": "size-limit --json",
     "update:agent": "./scripts/update-agent",
     "docs": "node scripts/docs.js && prettier --write packages/**/README.md",
-    "test": "vitest"
+    "test": "vitest",
+    "clean": "npm run clean --workspaces --if-present"
   },
   "workspaces": [
     "packages/utils",
@@ -114,7 +115,7 @@
     },
     {
       "name": "@junobuild/functions",
-      "path": "./packages/functions/dist/index.js",
+      "path": "./packages/functions/index.js",
       "limit": "5 kB",
       "ignore": [
         "@dfinity/utils",

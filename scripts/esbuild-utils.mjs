@@ -1,5 +1,4 @@
-import {existsSync, mkdirSync, writeFileSync} from 'fs';
-import {readFileSync} from 'node:fs';
+import {existsSync, mkdirSync, readdirSync, statSync, writeFileSync} from 'fs';
 import {join} from 'path';
 
 export const DIST = join(process.cwd(), 'dist');
@@ -15,11 +14,16 @@ export const writeEntries = () => {
   writeFileSync(join(DIST, 'index.js'), "export * from './browser/index.js';");
 };
 
-// Skip peer dependencies
-const peerDependencies = (packageJson) => {
-  const json = readFileSync(packageJson, 'utf8');
-  const {peerDependencies} = JSON.parse(json);
-  return peerDependencies ?? {};
+export const collectEntryPoints = () => {
+  return readdirSync(join(process.cwd(), 'src'))
+    .filter(
+      (file) =>
+        !file.includes('test') &&
+        !file.includes('spec') &&
+        !file.includes('mock') &&
+        !file.endsWith('.swp') &&
+        !file.endsWith('.worker.ts') &&
+        statSync(join(process.cwd(), 'src', file)).isFile()
+    )
+    .map((file) => `src/${file}`);
 };
-
-export const workspacePeerDependencies = peerDependencies(join(process.cwd(), 'package.json'));

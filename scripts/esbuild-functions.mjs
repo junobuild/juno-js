@@ -1,14 +1,16 @@
-import esbuild from 'esbuild';
-import {join} from 'path';
-import {createDistFolder, DIST, workspacePeerDependencies, writeEntries} from './esbuild-utils.mjs';
+#!/usr/bin/env node
 
-export const buildFunctions = () => {
-  createDistFolder();
+import esbuild from 'esbuild';
+import {externalPeerDependencies} from './esbuild-pkg.mjs';
+import {collectEntryPoints} from './esbuild-utils.mjs';
+
+const build = () => {
+  const entryPoints = collectEntryPoints();
 
   esbuild
     .build({
-      entryPoints: ['src/index.ts'],
-      outdir: join(DIST, 'browser'),
+      entryPoints,
+      outdir: process.cwd(),
       bundle: true,
       sourcemap: true,
       minify: true,
@@ -25,9 +27,11 @@ export const buildFunctions = () => {
       define: {
         self: 'globalThis'
       },
-      external: [...Object.keys(workspacePeerDependencies)]
+      external: externalPeerDependencies
     })
     .catch(() => process.exit(1));
 };
 
-writeEntries();
+export const buildFunctions = () => {
+  build();
+};

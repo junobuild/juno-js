@@ -11,7 +11,7 @@ global.__juno_satellite_datastore_raw_data_from_text = vi.fn(
   (data: string): RawData => new TextEncoder().encode(data)
 );
 
-describe('datastore.sdk', () => {
+describe('serializer.sdk', () => {
   const inputObject = {key: 'value', value: 5n, user: Principal.anonymous()};
 
   describe('decodeDocData', () => {

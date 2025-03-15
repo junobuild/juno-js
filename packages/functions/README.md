@@ -31,6 +31,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [setDocStore](#gear-setdocstore)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
+- [id](#gear-id)
 
 #### :gear: HookContextSchema
 
@@ -188,6 +189,20 @@ Parameters:
 - `data`: - The data to be encoded.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
+
+#### :gear: id
+
+Retrieves the Satellite's Principal ID.
+
+This function is a JavaScript binding for the Rust function
+[`ic_cdk::id()`](https://docs.rs/ic-cdk/latest/ic_cdk/fn.id.html), which returns
+the Principal of the executing canister.
+
+| Function | Type              |
+| -------- | ----------------- |
+| `id`     | `() => Principal` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/id.ts#L12)
 
 ### :wrench: Constants
 

@@ -63,3 +63,23 @@ export const RawUserIdSchema = RawPrincipalSchema;
  * This is a principal associated with a user.
  */
 export type RawUserId = z.infer<typeof RawUserIdSchema>;
+
+/**
+ * @see Collection
+ */
+export const CollectionSchema = z.string();
+
+/**
+ * A collection name where data are stored.
+ */
+export type Collection = z.infer<typeof CollectionSchema>;
+
+/**
+ * @see Key
+ */
+export const KeySchema = z.string();
+
+/**
+ * A unique key identifier within a collection.
+ */
+export type Key = z.infer<typeof KeySchema>;

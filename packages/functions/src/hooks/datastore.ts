@@ -133,33 +133,3 @@ export const DocAssertSetSchema = z
  * throw an error if their validation fails.
  */
 export type DocAssertSet = z.infer<typeof DocAssertSetSchema>;
-
-/**
- * @see SetDoc
- */
-export const SetDocSchema = z
-  .object({
-    /**
-     * The raw data of the document.
-     */
-    data: RawDataSchema,
-
-    /**
-     * An optional description of the document.
-     */
-    description: DocDescriptionSchema.optional(),
-
-    /**
-     * The expected version number to ensure consistency.
-     * If provided, the operation will fail if the stored version does not match.
-     */
-    version: VersionSchema.optional()
-  })
-  .strict();
-
-/**
- * Represents a request to set or update a document.
- *
- * This is used when submitting new document data.
- */
-export type SetDoc = z.infer<typeof SetDocSchema>;

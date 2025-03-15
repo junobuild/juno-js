@@ -3,8 +3,7 @@ import {
   DocDescriptionSchema,
   DocSchema,
   DocUpsertSchema,
-  ProposedDocSchema,
-  SetDocSchema
+  ProposedDocSchema
 } from '../../hooks/datastore';
 
 describe('datastore', () => {
@@ -164,39 +163,6 @@ describe('datastore', () => {
         extra_field: 'should not be allowed'
       };
       expect(() => DocAssertSetSchema.parse(invalidDoc)).toThrow();
-    });
-  });
-
-  describe('SetDocSchema', () => {
-    const requiredFields = {
-      data: new Uint8Array([1, 2, 3])
-    };
-
-    const validSetDoc = {
-      ...requiredFields,
-      description: 'Set a new document',
-      version: 1n
-    };
-
-    it('should validate a SetDoc with all fields', () => {
-      expect(() => SetDocSchema.parse(validSetDoc)).not.toThrow();
-    });
-
-    it('should validate a SetDoc without optional fields', () => {
-      expect(() => SetDocSchema.parse(requiredFields)).not.toThrow();
-    });
-
-    it('should reject an invalid SetDoc without data', () => {
-      const invalidSetDoc = {description: 'Missing data'};
-      expect(() => SetDocSchema.parse(invalidSetDoc)).toThrow();
-    });
-
-    it('should reject if unknown fields', () => {
-      const invalidDoc = {
-        ...requiredFields,
-        extra_field: 'should not be allowed'
-      };
-      expect(() => SetDocSchema.parse(invalidDoc)).toThrow();
     });
   });
 });

@@ -1,5 +1,6 @@
 import * as z from 'zod';
 import {CollectionsSchema} from '../schemas/collections';
+import {AssertFunctionSchema} from '../schemas/context';
 import {AssertSetDocContextSchema} from '../schemas/db/context';
 import {SatelliteEnvSchema} from '../schemas/satellite.env';
 
@@ -16,7 +17,7 @@ const OnAssertSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
      * @param {T} context - Contains information about the affected document(s).
      * @returns {void} Resolves when the assertion completes.
      */
-    assert: z.function().args(contextSchema).returns(z.void())
+    assert: AssertFunctionSchema<T>(contextSchema)
   }).strict();
 
 /**

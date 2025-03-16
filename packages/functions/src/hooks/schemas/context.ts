@@ -25,3 +25,35 @@ export const HookContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
  * @template T - The type of data associated with the hook.
  */
 export type HookContext<T extends z.ZodTypeAny> = z.infer<ReturnType<typeof HookContextSchema<T>>>;
+
+/**
+ * @see AssertFunction
+ */
+export const AssertFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
+  z.function().args(contextSchema).returns(z.void());
+
+/**
+ * Defines the `assert` function schema for assertions.
+ *
+ * The function takes a context argument and returns `void`.
+ *
+ * @template T - The type of context passed to the function.
+ */
+export type AssertFunction<T extends z.ZodTypeAny> = z.infer<
+  ReturnType<typeof AssertFunctionSchema<T>>
+>;
+
+/**
+ * @see RunFunction
+ */
+export const RunFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
+  z.function().args(contextSchema).returns(z.promise(z.void()));
+
+/**
+ * Defines the `run` function schema for hooks.
+ *
+ * The function takes a context argument and returns a `Promise<void>`.
+ *
+ * @template T - The type of context passed to the function.
+ */
+export type RunFunction<T extends z.ZodTypeAny> = z.infer<ReturnType<typeof RunFunctionSchema<T>>>;

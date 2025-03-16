@@ -1,5 +1,6 @@
 import * as z from 'zod';
 import {CollectionsSchema} from '../schemas/collections';
+import {RunFunctionSchema} from '../schemas/context';
 import {OnSetDocContextSchema} from '../schemas/db/context';
 import {SatelliteEnvSchema} from '../schemas/satellite.env';
 
@@ -16,7 +17,7 @@ const OnHookSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
      * @param {T} context - Contains information about the affected document(s).
      * @returns {Promise<void>} Resolves when the operation completes.
      */
-    run: z.function().args(contextSchema).returns(z.promise(z.void()))
+    run: RunFunctionSchema<T>(contextSchema)
   }).strict();
 
 /**

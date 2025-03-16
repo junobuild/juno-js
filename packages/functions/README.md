@@ -15,6 +15,8 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 ### :toolbox: Functions
 
 - [HookContextSchema](#gear-hookcontextschema)
+- [AssertFunctionSchema](#gear-assertfunctionschema)
+- [RunFunctionSchema](#gear-runfunctionschema)
 - [DocContextSchema](#gear-doccontextschema)
 - [AssertFnSchema](#gear-assertfnschema)
 - [AssertFnOrObjectSchema](#gear-assertfnorobjectschema)
@@ -41,6 +43,22 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L7)
 
+#### :gear: AssertFunctionSchema
+
+| Function               | Type                                                                                            |
+| ---------------------- | ----------------------------------------------------------------------------------------------- |
+| `AssertFunctionSchema` | `<T extends z.ZodTypeAny>(contextSchema: T) => ZodFunction<ZodTuple<[T], ZodUnknown>, ZodVoid>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L32)
+
+#### :gear: RunFunctionSchema
+
+| Function            | Type                                                                                                        |
+| ------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `RunFunctionSchema` | `<T extends z.ZodTypeAny>(contextSchema: T) => ZodFunction<ZodTuple<[T], ZodUnknown>, ZodPromise<ZodVoid>>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L49)
+
 #### :gear: DocContextSchema
 
 | Function           | Type                                                                                                                                                                                                                                                                                                                               |
@@ -55,7 +73,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `AssertFnSchema` | `<T extends z.ZodTypeAny>(assertSchema: T) => ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodUnknown>], ZodUnknown>, T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L43)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L44)
 
 #### :gear: AssertFnOrObjectSchema
 
@@ -63,15 +81,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertFnOrObjectSchema` | `<T extends z.ZodTypeAny>(assertSchema: T) => ZodUnion<[T, ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodUnknown>], ZodUnknown>, T>]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L47)
-
-#### :gear: defineAssert
-
-| Function       | Type                                                                                                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L51)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L48)
 
 #### :gear: defineAssert
 
@@ -97,13 +107,21 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L54)
 
+#### :gear: defineAssert
+
+| Function       | Type                                                                                                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L55)
+
 #### :gear: HookFnSchema
 
 | Function       | Type                                                                                                                  |
 | -------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `HookFnSchema` | `<T extends z.ZodTypeAny>(hookSchema: T) => ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodUnknown>], ZodUnknown>, T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L43)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L44)
 
 #### :gear: HookFnOrObjectSchema
 
@@ -111,15 +129,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `HookFnOrObjectSchema` | `<T extends z.ZodTypeAny>(hookSchema: T) => ZodUnion<[T, ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodUnknown>], ZodUnknown>, T>]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L47)
-
-#### :gear: defineHook
-
-| Function     | Type                                                                                                                                            |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L51)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L48)
 
 #### :gear: defineHook
 
@@ -144,6 +154,14 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L54)
+
+#### :gear: defineHook
+
+| Function     | Type                                                                                                                                            |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L55)
 
 #### :gear: setDocStore
 
@@ -207,10 +225,10 @@ the Principal of the executing canister.
 ### :wrench: Constants
 
 - [CollectionsSchema](#gear-collectionsschema)
+- [RawPrincipalSchema](#gear-rawprincipalschema)
 - [TimestampSchema](#gear-timestampschema)
 - [VersionSchema](#gear-versionschema)
 - [RawDataSchema](#gear-rawdataschema)
-- [RawPrincipalSchema](#gear-rawprincipalschema)
 - [RawUserIdSchema](#gear-rawuseridschema)
 - [CollectionSchema](#gear-collectionschema)
 - [KeySchema](#gear-keyschema)
@@ -237,13 +255,21 @@ the Principal of the executing canister.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L6)
 
+#### :gear: RawPrincipalSchema
+
+| Constant             | Type                                                                            |
+| -------------------- | ------------------------------------------------------------------------------- |
+| `RawPrincipalSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L6)
+
 #### :gear: TimestampSchema
 
 | Constant          | Type        |
 | ----------------- | ----------- |
 | `TimestampSchema` | `ZodBigInt` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L6)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L7)
 
 #### :gear: VersionSchema
 
@@ -251,7 +277,7 @@ the Principal of the executing canister.
 | --------------- | ----------- |
 | `VersionSchema` | `ZodBigInt` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L18)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L19)
 
 #### :gear: RawDataSchema
 
@@ -259,15 +285,7 @@ the Principal of the executing canister.
 | --------------- | ------------------------------------------------------------------------------- |
 | `RawDataSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L30)
-
-#### :gear: RawPrincipalSchema
-
-| Constant             | Type                                                                            |
-| -------------------- | ------------------------------------------------------------------------------- |
-| `RawPrincipalSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L44)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L31)
 
 #### :gear: RawUserIdSchema
 
@@ -275,7 +293,7 @@ the Principal of the executing canister.
 | ----------------- | ------------------------------------------------------------------------------- |
 | `RawUserIdSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L58)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L45)
 
 #### :gear: CollectionSchema
 
@@ -283,7 +301,7 @@ the Principal of the executing canister.
 | ------------------ | ----------- |
 | `CollectionSchema` | `ZodString` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L70)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L57)
 
 #### :gear: KeySchema
 
@@ -291,7 +309,7 @@ the Principal of the executing canister.
 | ----------- | ----------- |
 | `KeySchema` | `ZodString` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L80)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L67)
 
 #### :gear: DocDescriptionSchema
 
@@ -363,7 +381,7 @@ the Principal of the executing canister.
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertSetDocSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { assert: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodVoid>; }>, "strict", ZodTypeAny, { ...; }, {...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L26)
 
 #### :gear: AssertSchema
 
@@ -371,7 +389,7 @@ the Principal of the executing canister.
 | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { assert: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodVoid>; }>, "strict", ZodTypeAny, { ...; }, {...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L36)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L37)
 
 #### :gear: OnSetDocSchema
 
@@ -379,7 +397,7 @@ the Principal of the executing canister.
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnSetDocSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { run: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodPromise<...>>; }>, "strict", ZodTypeAny, { ...;...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L26)
 
 #### :gear: HookSchema
 
@@ -387,7 +405,7 @@ the Principal of the executing canister.
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `HookSchema` | `ZodObject<extendShape<{ collections: ZodArray<ZodString, "many">; }, { run: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>], ZodUnknown>, ZodPromise<...>>; }>, "strict", ZodTypeAny, { ...;...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L36)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L37)
 
 #### :gear: SetDocSchema
 
@@ -408,14 +426,16 @@ the Principal of the executing canister.
 ### :cocktail: Types
 
 - [Collections](#gear-collections)
+- [RawPrincipal](#gear-rawprincipal)
 - [Timestamp](#gear-timestamp)
 - [Version](#gear-version)
 - [RawData](#gear-rawdata)
-- [RawPrincipal](#gear-rawprincipal)
 - [RawUserId](#gear-rawuserid)
 - [Collection](#gear-collection)
 - [Key](#gear-key)
 - [HookContext](#gear-hookcontext)
+- [AssertFunction](#gear-assertfunction)
+- [RunFunction](#gear-runfunction)
 - [DocDescription](#gear-docdescription)
 - [Doc](#gear-doc)
 - [DocUpsert](#gear-docupsert)
@@ -446,6 +466,18 @@ Defines the collections where a hook or assertion should run.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L18)
 
+#### :gear: RawPrincipal
+
+Represents a raw principal identifier.
+
+Principals are unique identities used in authentication and authorization.
+
+| Type           | Type                                 |
+| -------------- | ------------------------------------ |
+| `RawPrincipal` | `z.infer<typeof RawPrincipalSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L15)
+
 #### :gear: Timestamp
 
 Represents a timestamp in nanoseconds since the Unix epoch.
@@ -456,7 +488,7 @@ Used for tracking when events occur, such as document creation and updates.
 | ----------- | --------------------------------- |
 | `Timestamp` | `z.infer<typeof TimestampSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L13)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L14)
 
 #### :gear: Version
 
@@ -468,7 +500,7 @@ This is typically incremented with each update to ensure consistency.
 | --------- | ------------------------------- |
 | `Version` | `z.infer<typeof VersionSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L26)
 
 #### :gear: RawData
 
@@ -480,19 +512,7 @@ This is used to store unstructured data in a document.
 | --------- | ------------------------------- |
 | `RawData` | `z.infer<typeof RawDataSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L39)
-
-#### :gear: RawPrincipal
-
-Represents a raw principal identifier.
-
-Principals are unique identities used in authentication and authorization.
-
-| Type           | Type                                 |
-| -------------- | ------------------------------------ |
-| `RawPrincipal` | `z.infer<typeof RawPrincipalSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L53)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L40)
 
 #### :gear: RawUserId
 
@@ -504,7 +524,7 @@ This is a principal associated with a user.
 | ----------- | --------------------------------- |
 | `RawUserId` | `z.infer<typeof RawUserIdSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L65)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L52)
 
 #### :gear: Collection
 
@@ -514,7 +534,7 @@ A collection name where data are stored.
 | ------------ | ---------------------------------- |
 | `Collection` | `z.infer<typeof CollectionSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L75)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L62)
 
 #### :gear: Key
 
@@ -524,7 +544,7 @@ A unique key identifier within a collection.
 | ----- | --------------------------- |
 | `Key` | `z.infer<typeof KeySchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L85)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L72)
 
 #### :gear: HookContext
 
@@ -535,6 +555,30 @@ Represents the context provided to hooks, containing information about the calle
 | `HookContext` | `z.infer<ReturnType<typeof HookContextSchema<T>>>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L27)
+
+#### :gear: AssertFunction
+
+Defines the `assert` function schema for assertions.
+
+The function takes a context argument and returns `void`.
+
+| Type             | Type                                                    |
+| ---------------- | ------------------------------------------------------- |
+| `AssertFunction` | `z.infer< ReturnType<typeof AssertFunctionSchema<T>> >` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L42)
+
+#### :gear: RunFunction
+
+Defines the `run` function schema for hooks.
+
+The function takes a context argument and returns a `Promise<void>`.
+
+| Type          | Type                                               |
+| ------------- | -------------------------------------------------- |
+| `RunFunction` | `z.infer<ReturnType<typeof RunFunctionSchema<T>>>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L59)
 
 #### :gear: DocDescription
 
@@ -651,7 +695,7 @@ An assertion that runs when a document is created or updated.
 | -------------- | ------------------------------------ |
 | `AssertSetDoc` | `z.infer<typeof AssertSetDocSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L30)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L31)
 
 #### :gear: Assert
 
@@ -661,7 +705,7 @@ All assertions definitions.
 | -------- | ------------------------------ |
 | `Assert` | `z.infer<typeof AssertSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L41)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L42)
 
 #### :gear: AssertFn
 
@@ -669,7 +713,7 @@ All assertions definitions.
 | ---------- | --------------------------------------------------- |
 | `AssertFn` | `(assert: z.infer<typeof SatelliteEnvSchema>) => T` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L45)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L46)
 
 #### :gear: AssertFnOrObject
 
@@ -677,7 +721,7 @@ All assertions definitions.
 | ------------------ | ------------------ |
 | `AssertFnOrObject` | `T or AssertFn<T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L50)
 
 #### :gear: OnSetDoc
 
@@ -687,7 +731,7 @@ A hook that runs when a document is created or updated.
 | ---------- | -------------------------------- |
 | `OnSetDoc` | `z.infer<typeof OnSetDocSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L30)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L31)
 
 #### :gear: Hook
 
@@ -697,7 +741,7 @@ All hooks definitions.
 | ------ | ---------------------------- |
 | `Hook` | `z.infer<typeof HookSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L41)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L42)
 
 #### :gear: HookFn
 
@@ -705,7 +749,7 @@ All hooks definitions.
 | -------- | ------------------------------------------------- |
 | `HookFn` | `(hook: z.infer<typeof SatelliteEnvSchema>) => T` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L45)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L46)
 
 #### :gear: HookFnOrObject
 
@@ -713,7 +757,7 @@ All hooks definitions.
 | ---------------- | ---------------- |
 | `HookFnOrObject` | `T or HookFn<T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L50)
 
 #### :gear: SetDoc
 

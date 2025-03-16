@@ -6,34 +6,60 @@ import {SetDocStoreParams} from '../../sdk/schemas/db';
 vi.stubGlobal('__juno_satellite_datastore_set_doc_store', vi.fn());
 
 describe('db.sdk', () => {
-  const validParams: SetDocStoreParams = {
-    caller: Principal.anonymous().toUint8Array(),
-    collection: 'users',
-    doc: {
-      key: 'user123',
-      data: new Uint8Array([4, 5, 6]),
-      description: 'Test document',
-      version: BigInt(1)
-    }
+  const baseDoc = {
+    key: 'user123',
+    data: new Uint8Array([4, 5, 6]),
+    description: 'Test document',
+    version: BigInt(1)
   };
 
-  it('should call __juno_satellite_datastore_set_doc_store with correct parameters', () => {
-    setDocStore(validParams);
+  const validParamsWithUint8Array: SetDocStoreParams = {
+    caller: Principal.anonymous().toUint8Array(),
+    collection: 'users',
+    doc: baseDoc
+  };
+
+  const validParamsWithPrincipal: SetDocStoreParams = {
+    caller: Principal.anonymous(),
+    collection: 'users',
+    doc: baseDoc
+  };
+
+  it('should call __juno_satellite_datastore_set_doc_store with correct parameters when caller is Uint8Array', () => {
+    setDocStore(validParamsWithUint8Array);
 
     expect(global.__juno_satellite_datastore_set_doc_store).toHaveBeenCalledWith(
-      validParams.caller,
-      validParams.collection,
-      validParams.doc.key,
+      validParamsWithUint8Array.caller,
+      validParamsWithUint8Array.collection,
+      validParamsWithUint8Array.doc.key,
       {
-        data: validParams.doc.data,
-        description: validParams.doc.description,
-        version: validParams.doc.version
+        data: validParamsWithUint8Array.doc.data,
+        description: validParamsWithUint8Array.doc.description,
+        version: validParamsWithUint8Array.doc.version
+      }
+    );
+  });
+
+  it('should call __juno_satellite_datastore_set_doc_store with caller converted to Uint8Array when caller is Principal', () => {
+    setDocStore(validParamsWithPrincipal);
+
+    expect(global.__juno_satellite_datastore_set_doc_store).toHaveBeenCalledWith(
+      (validParamsWithPrincipal.caller as Principal).toUint8Array(),
+      validParamsWithPrincipal.collection,
+      validParamsWithPrincipal.doc.key,
+      {
+        data: validParamsWithPrincipal.doc.data,
+        description: validParamsWithPrincipal.doc.description,
+        version: validParamsWithPrincipal.doc.version
       }
     );
   });
 
   it('should throw ZodError if params are invalid', () => {
-    const invalidParams = {...validParams, collection: 123} as unknown as SetDocStoreParams;
+    const invalidParams = {
+      ...validParamsWithUint8Array,
+      collection: 123
+    } as unknown as SetDocStoreParams;
 
     expect(() => setDocStore(invalidParams)).toThrow(ZodError);
   });
@@ -43,6 +69,8 @@ describe('db.sdk', () => {
       throw new Error('Satellite validation failed');
     });
 
-    expect(() => setDocStore(validParams)).toThrowError('Satellite validation failed');
+    expect(() => setDocStore(validParamsWithUint8Array)).toThrowError(
+      'Satellite validation failed'
+    );
   });
 });

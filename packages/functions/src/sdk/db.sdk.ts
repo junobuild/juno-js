@@ -1,3 +1,4 @@
+import {Principal} from '@dfinity/principal';
 import {SetDocStoreParams, SetDocStoreParamsSchema} from './schemas/db';
 
 /**
@@ -14,9 +15,12 @@ import {SetDocStoreParams, SetDocStoreParamsSchema} from './schemas/db';
 export const setDocStore = (params: SetDocStoreParams) => {
   SetDocStoreParamsSchema.parse(params);
 
-  const {caller, collection, doc} = params;
+  const {caller: providedCaller, collection, doc} = params;
 
   const {key, ...setDoc} = doc;
+
+  const caller =
+    providedCaller instanceof Principal ? providedCaller.toUint8Array() : providedCaller;
 
   __juno_satellite_datastore_set_doc_store(caller, collection, key, setDoc);
 };

@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {RawPrincipalSchema} from './candid';
+import {PrincipalSchema, RawPrincipalSchema} from './candid';
 
 /**
  * @see Timestamp
@@ -50,6 +50,18 @@ export const RawUserIdSchema = RawPrincipalSchema;
  * This is a principal associated with a user.
  */
 export type RawUserId = z.infer<typeof RawUserIdSchema>;
+
+/**
+ * @see UserId
+ */
+export const UserIdSchema = PrincipalSchema;
+
+/**
+ * Represents a user identifier.
+ *
+ * This is a principal associated with a user.
+ */
+export type UserId = z.infer<typeof UserIdSchema>;
 
 /**
  * @see Collection

@@ -46,6 +46,10 @@
   },
   "homepage": "https://juno.build",
   "peerDependencies": {
+    "@dfinity/agent": "^2.3.0",
+    "@dfinity/candid": "^2.3.0",
+    "@dfinity/identity": "^2.3.0",
+    "@dfinity/principal": "^2.3.0",
     "@dfinity/utils": "^2",
     "zod": "^3"
   }

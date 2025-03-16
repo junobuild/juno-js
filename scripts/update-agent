@@ -31,7 +31,7 @@ function install_agent_auth_client_peer() {
 }
 
 PACKAGES=core-standalone
-PACKAGES_PEER=admin,console,storage,core,core-peer,analytics
+PACKAGES_PEER=admin,console,storage,core,core-peer,analytics,functions
 PACKAGES_AUTH_CLIENT=core-standalone
 PACKAGES_AUTH_CLIENT_PEER=core,core-peer
 

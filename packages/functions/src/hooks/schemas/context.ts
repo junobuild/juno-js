@@ -39,9 +39,7 @@ export const AssertFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =
  *
  * @template T - The type of context passed to the function.
  */
-export type AssertFunction<T extends z.ZodTypeAny> = z.infer<
-  ReturnType<typeof AssertFunctionSchema<T>>
->;
+export type AssertFunction<T> = z.infer<ReturnType<typeof AssertFunctionSchema<z.ZodType<T>>>>;
 
 /**
  * @see RunFunction
@@ -56,4 +54,4 @@ export const RunFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
  *
  * @template T - The type of context passed to the function.
  */
-export type RunFunction<T extends z.ZodTypeAny> = z.infer<ReturnType<typeof RunFunctionSchema<T>>>;
+export type RunFunction<T> = z.infer<ReturnType<typeof RunFunctionSchema<z.ZodType<T>>>>;

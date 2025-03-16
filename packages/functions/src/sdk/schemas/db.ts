@@ -4,6 +4,7 @@ import {
   KeySchema,
   RawDataSchema,
   RawUserIdSchema,
+  UserIdSchema,
   VersionSchema
 } from '../../schemas/core';
 import {DocDescriptionSchema} from '../../schemas/db';
@@ -51,7 +52,7 @@ export const SetDocStoreParamsSchema = z
     /**
      * The caller who initiate the document operation.
      */
-    caller: RawUserIdSchema,
+    caller: RawUserIdSchema.or(UserIdSchema),
 
     /**
      * The name of the collection where the document is stored.

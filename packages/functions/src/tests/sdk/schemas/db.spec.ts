@@ -57,8 +57,16 @@ describe('sdk > db', () => {
       }
     };
 
-    it('should validate a SetDocStoreParams with all fields', () => {
+    it('should validate a SetDocStoreParams with all fields (RawUserIdSchema)', () => {
       expect(() => SetDocStoreParamsSchema.parse(validSetDocStoreParams)).not.toThrow();
+    });
+
+    it('should validate a SetDocStoreParams with a Principal caller (UserIdSchema)', () => {
+      const validParamsWithPrincipal = {
+        ...validSetDocStoreParams,
+        caller: Principal.anonymous()
+      };
+      expect(() => SetDocStoreParamsSchema.parse(validParamsWithPrincipal)).not.toThrow();
     });
 
     it('should validate a SetDocStoreParams without optional fields', () => {
@@ -109,6 +117,11 @@ describe('sdk > db', () => {
 
     it('should reject a SetDocStoreParams with an invalid doc type', () => {
       const invalidParams = {...validSetDocStoreParams, doc: 'invalid_doc'};
+      expect(() => SetDocStoreParamsSchema.parse(invalidParams)).toThrow();
+    });
+
+    it('should reject a SetDocStoreParams with a caller that is neither RawUserIdSchema nor UserIdSchema', () => {
+      const invalidParams = {...validSetDocStoreParams, caller: 12345};
       expect(() => SetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
   });

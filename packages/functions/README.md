@@ -33,8 +33,8 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [setDocStore](#gear-setdocstore)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
-- [id](#gear-id)
 - [call](#gear-call)
+- [id](#gear-id)
 
 #### :gear: HookContextSchema
 
@@ -209,6 +209,14 @@ Parameters:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
 
+#### :gear: call
+
+| Function | Type                                                                                                                                                                                                 |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `call`   | `<T>(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args: { values: unknown[]; types: Type<unknown>[]; }; results: { types: Type<unknown>[]; }; }) => Promise<...>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/call.ic-cdk.ts#L5)
+
 #### :gear: id
 
 Retrieves the Satellite's Principal ID.
@@ -222,14 +230,6 @@ the Principal of the executing canister.
 | `id`     | `() => Principal` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/id.ts#L12)
-
-#### :gear: call
-
-| Function | Type                                                                                                                                                    |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `call`   | `(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args: { type: Type<unknown>; value?: unknown; }; }) => Promise<void>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/call.ic-cdk.ts#L5)
 
 ### :wrench: Constants
 
@@ -460,17 +460,17 @@ Requests and responses on the IC are encoded using Candid.
 This schema ensures that arguments are provided with both their value and type
 to allow proper encoding.
 
-| Constant         | Type                                                                                                                                                                   |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CallArgsSchema` | `ZodObject<{ type: ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>; value: ZodUnknown; }, "strip", ZodTypeAny, { type: Type<unknown>; value?: unknown; }, { ...; }>` |
+| Constant         | Type                                                                                                                                                                        |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CallArgsSchema` | `ZodObject<{ types: ZodArray<ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>, "many">; values: ZodArray<ZodUnknown, "many">; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L23)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L24)
 
 #### :gear: CallParamsSchema
 
-| Constant           | Type                                                                                                                                                                                                                    |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; method: ZodString; args: ZodObject<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant           | Type                                                                                                                                                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; method: ZodString; args: ZodObject<...>; results: ZodObject<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L44)
 
@@ -877,7 +877,7 @@ Type representing the parameters required to make a canister call.
 | ------------ | ---------------------------------- |
 | `CallParams` | `z.infer<typeof CallParamsSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L65)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L69)
 
 <!-- TSDOC_END -->
 

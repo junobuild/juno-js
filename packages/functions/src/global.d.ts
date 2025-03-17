@@ -17,6 +17,6 @@ declare global {
   function __ic_cdk_call_raw(
     canisterId: RawPrincipal,
     method: string,
-    args: Uint8Array
-  ): Promise<Uint8Array>;
+    args: Uint8Array<ArrayBuffer>
+  ): Promise<Uint8Array<ArrayBuffer>>;
 }

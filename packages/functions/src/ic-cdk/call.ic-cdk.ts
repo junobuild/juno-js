@@ -2,13 +2,14 @@ import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {CallParams, CallParamsSchema} from './schemas/call';
 
-export const call = async (params: CallParams) => {
+export const call = async <T>(params: CallParams): Promise<T | undefined> => {
   CallParamsSchema.parse(params);
 
   const {
     canisterId: providedCanisterId,
     method,
-    args: {value: argsValue, type: argsType}
+    args: {values: argsValues, types: argsTypes},
+    results: {types: resultsTypes}
   } = params;
 
   const canisterId =
@@ -16,9 +17,15 @@ export const call = async (params: CallParams) => {
       ? providedCanisterId.toUint8Array()
       : providedCanisterId;
 
-  const args = new Uint8Array(IDL.encode([argsType], [argsValue]));
+  const args = new Uint8Array(IDL.encode([...argsTypes], [...argsValues]));
 
-  const result = await __ic_cdk_call_raw(canisterId, method, args);
+  const bytes: Uint8Array<ArrayBuffer> = await __ic_cdk_call_raw(canisterId, method, args);
 
-  // TODO: decode and respond
+  const result = IDL.decode([...resultsTypes], bytes.buffer);
+
+  if (result.length === 0) {
+    return undefined;
+  }
+
+  return result as unknown as T;
 };

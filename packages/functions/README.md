@@ -34,6 +34,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
 - [id](#gear-id)
+- [call](#gear-call)
 
 #### :gear: HookContextSchema
 
@@ -222,6 +223,14 @@ the Principal of the executing canister.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/id.ts#L12)
 
+#### :gear: call
+
+| Function | Type                                                                                                                                                    |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `call`   | `(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args: { type: Type<unknown>; value?: unknown; }; }) => Promise<void>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/call.ic-cdk.ts#L5)
+
 ### :wrench: Constants
 
 - [CollectionsSchema](#gear-collectionsschema)
@@ -248,6 +257,8 @@ the Principal of the executing canister.
 - [HookSchema](#gear-hookschema)
 - [SetDocSchema](#gear-setdocschema)
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
+- [CallArgsSchema](#gear-callargsschema)
+- [CallParamsSchema](#gear-callparamsschema)
 
 #### :gear: CollectionsSchema
 
@@ -441,6 +452,28 @@ the Principal of the executing canister.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L50)
 
+#### :gear: CallArgsSchema
+
+Schema for encoding function call arguments on the Internet Computer.
+
+Requests and responses on the IC are encoded using Candid.
+This schema ensures that arguments are provided with both their value and type
+to allow proper encoding.
+
+| Constant         | Type                                                                                                                                                                   |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CallArgsSchema` | `ZodObject<{ type: ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>; value: ZodUnknown; }, "strip", ZodTypeAny, { type: Type<unknown>; value?: unknown; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L23)
+
+#### :gear: CallParamsSchema
+
+| Constant           | Type                                                                                                                                                                                                                    |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; method: ZodString; args: ZodObject<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L44)
+
 ### :cocktail: Types
 
 - [Collections](#gear-collections)
@@ -475,6 +508,8 @@ the Principal of the executing canister.
 - [HookFnOrObject](#gear-hookfnorobject)
 - [SetDoc](#gear-setdoc)
 - [SetDocStoreParams](#gear-setdocstoreparams)
+- [CallArgs](#gear-callargs)
+- [CallParams](#gear-callparams)
 
 #### :gear: Collections
 
@@ -823,6 +858,26 @@ collection, and key.
 | `SetDocStoreParams` | `z.infer<typeof SetDocStoreParamsSchema>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L75)
+
+#### :gear: CallArgs
+
+Type representing function call arguments on the IC.
+
+| Type       | Type                             |
+| ---------- | -------------------------------- |
+| `CallArgs` | `z.infer<typeof CallArgsSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L39)
+
+#### :gear: CallParams
+
+Type representing the parameters required to make a canister call.
+
+| Type         | Type                               |
+| ------------ | ---------------------------------- |
+| `CallParams` | `z.infer<typeof CallParamsSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L65)
 
 <!-- TSDOC_END -->
 

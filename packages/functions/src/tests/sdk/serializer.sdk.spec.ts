@@ -1,6 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import {jsonReplacer} from '@dfinity/utils';
-import type {RawData} from '../../schemas/core';
+import {RawData} from '../../schemas/db';
 import {decodeDocData, encodeDocData} from '../../sdk/serializer.sdk';
 
 global.__juno_satellite_datastore_raw_data_to_text = vi.fn((data: RawData) =>

@@ -1,4 +1,4 @@
-import {DocDescriptionSchema, DocSchema} from '../../schemas/db';
+import {DocDescriptionSchema, DocSchema, RawDataSchema} from '../../schemas/db';
 
 describe('payload', () => {
   describe('DocDescriptionSchema', () => {
@@ -49,6 +49,17 @@ describe('payload', () => {
         extra_field: 'should not be allowed'
       };
       expect(() => DocSchema.parse(invalidDoc)).toThrow();
+    });
+  });
+
+  describe('RawDataSchema', () => {
+    it('should validate a valid RawData', () => {
+      expect(() => RawDataSchema.parse(new Uint8Array([1, 2, 3]))).not.toThrow();
+    });
+
+    it('should reject an invalid RawData', () => {
+      expect(() => RawDataSchema.parse('not a Uint8Array')).toThrow();
+      expect(() => RawDataSchema.parse([1, 2, 3])).toThrow();
     });
   });
 });

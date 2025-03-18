@@ -6,7 +6,7 @@
 [npm-license]: https://img.shields.io/npm/l/@junobuild/functions
 [npm-license-url]: https://github.com/junobuild/juno-js/blob/main/LICENSE
 
-# Juno Config
+# Juno Functions
 
 JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 

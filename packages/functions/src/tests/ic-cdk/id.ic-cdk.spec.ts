@@ -1,9 +1,9 @@
 import {Principal} from '@dfinity/principal';
-import {id} from '../../ic-cdk/id';
+import {id} from '../../ic-cdk/id.ic-cdk';
 
 vi.stubGlobal('__ic_cdk_id', vi.fn());
 
-describe('id', () => {
+describe('ic-cdk > id', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });

@@ -8,7 +8,7 @@ export const CollectionsSchema = z
     /**
      * An array containing at least one collection name where the hook or assertion will be executed.
      */
-    collections: z.array(z.string()).min(1)
+    collections: z.array(z.string()).min(1).readonly()
   })
   .strict();
 

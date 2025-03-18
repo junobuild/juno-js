@@ -1,7 +1,6 @@
 import {IDL} from '@dfinity/candid';
 import {call} from '../../ic-cdk/call.ic-cdk';
 import {CallParams} from '../../ic-cdk/schemas/call';
-import {CallResponseLengthError} from '../../ic-cdk/types/errors';
 import {mockCanisterId} from '../mocks/ic-cdk.mocks';
 
 vi.stubGlobal(
@@ -18,32 +17,14 @@ describe('ic-cdk > call', () => {
         canisterId: mockCanisterId,
         method: 'greet',
         args: [[IDL.Text, 'Hello']],
-        results: [IDL.Text]
+        result: IDL.Text
       };
 
       const result = await call<string>(params);
       expect(result).toBe('Mock Response');
     });
 
-    it('should throw an error if more than one object is returned', async () => {
-      vi.stubGlobal(
-        '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IDL.Text, IDL.Nat], ['Response1', 42]));
-        })
-      );
-
-      const params: CallParams = {
-        canisterId: mockCanisterId,
-        method: 'multi_response',
-        args: [[IDL.Text, 'Hello']],
-        results: [IDL.Text, IDL.Nat]
-      };
-
-      await expect(call(params)).rejects.toBeInstanceOf(CallResponseLengthError);
-    });
-
-    it('should return undefined if response is empty', async () => {
+    it('should return undefined if response is void', async () => {
       vi.stubGlobal(
         '__ic_cdk_call_raw',
         vi.fn(async () => new Uint8Array(IDL.encode([], [])))
@@ -52,8 +33,7 @@ describe('ic-cdk > call', () => {
       const params: CallParams = {
         canisterId: mockCanisterId,
         method: 'empty_call',
-        args: [],
-        results: []
+        args: []
       };
 
       const result = await call(params);
@@ -83,7 +63,7 @@ describe('ic-cdk > call', () => {
         canisterId: mockCanisterId,
         method: 'fail_call',
         args: [[IDL.Text, 'Hello']],
-        results: [IDL.Text]
+        result: IDL.Text
       };
 
       await expect(call(params)).rejects.toThrow('Canister call failed');

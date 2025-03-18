@@ -216,15 +216,15 @@ Makes an asynchronous call to a canister on the Internet Computer.
 This function encodes the provided arguments using Candid, performs the canister call,
 and decodes the response based on the expected result types.
 
-| Function | Type                                                                                                                                                                            |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `call`   | `<T>(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args: [Type<unknown>, unknown][]; results: Type<unknown>[]; }) => Promise<T or undefined>` |
+| Function | Type                                                                                                                                                               |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `call`   | `<T>(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args: [Type<unknown>, unknown][]; results: Type<unknown>[]; }) => Promise<T>` |
 
 Parameters:
 
 - `params`: - The parameters required for the canister call
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/call.ic-cdk.ts#L18)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/call.ic-cdk.ts#L19)
 
 #### :gear: id
 
@@ -516,6 +516,10 @@ Schema for encoding the call arguments.
 | `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; method: ZodString; args: ZodArray<...>; results: ZodArray<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L58)
+
+### :factory: CallResponseLengthError
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/types/errors.ts#L1)
 
 ### :cocktail: Types
 

@@ -27,7 +27,7 @@ export const call = async <T>(params: CallParams): Promise<T> => {
       ? providedCanisterId.toUint8Array()
       : providedCanisterId;
 
-  const [argsTypes, argsValues] = providedArgs.reduce<[IDLType[], unknown[]]>(
+  const [argsTypes, argsValues] = (providedArgs ?? []).reduce<[IDLType[], unknown[]]>(
     ([argsTypes, argsValues], [type, value]) => [
       [...argsTypes, type],
       [...argsValues, value]

@@ -69,7 +69,7 @@ export const CallParamsSchema = z.object({
   /**
    * The arguments, including types and values, for the canister call.
    */
-  args: CallArgsSchema,
+  args: CallArgsSchema.optional(),
 
   /**
    * The expected result type used for decoding the response.

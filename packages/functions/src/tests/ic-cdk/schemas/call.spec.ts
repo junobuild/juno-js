@@ -69,6 +69,15 @@ describe('ic-cdk > schemas > call', () => {
       expect(() => CallParamsSchema.parse(validParams)).not.toThrow();
     });
 
+    it('should validate a correct CallParams object with args undefined', () => {
+      expect(() => CallParamsSchema.parse({...validParams, args: undefined})).not.toThrow();
+    });
+
+    it('should validate a correct CallParams object without args', () => {
+      const {args: _, ...rest} = validParams;
+      expect(() => CallParamsSchema.parse(rest)).not.toThrow();
+    });
+
     it('should validate a correct CallParams object with canister id as Uint8Array', () => {
       const validCanisterIdParams = {
         ...validParams,

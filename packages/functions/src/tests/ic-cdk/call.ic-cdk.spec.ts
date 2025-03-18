@@ -24,6 +24,17 @@ describe('ic-cdk > call', () => {
       expect(result).toBe('Mock Response');
     });
 
+    it('should successfully call a canister method with undefined args', async () => {
+      const params: CallParams = {
+        canisterId: mockCanisterId,
+        method: 'greet',
+        result: IDL.Text
+      };
+
+      const result = await call<string>(params);
+      expect(result).toBe('Mock Response');
+    });
+
     it('should return undefined if response is void', async () => {
       vi.stubGlobal(
         '__ic_cdk_call_raw',

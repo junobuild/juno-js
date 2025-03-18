@@ -216,15 +216,15 @@ Makes an asynchronous call to a canister on the Internet Computer.
 This function encodes the provided arguments using Candid, performs the canister call,
 and decodes the response based on the expected result types.
 
-| Function | Type                                                                                                                                                               |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `call`   | `<T>(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args: [Type<unknown>, unknown][]; results: Type<unknown>[]; }) => Promise<T>` |
+| Function | Type                                                                                                                                                                            |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `call`   | `<T>(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args: [Type<unknown>, unknown][]; result?: Type<unknown> or undefined; }) => Promise<...>` |
 
 Parameters:
 
 - `params`: - The parameters required for the canister call
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/call.ic-cdk.ts#L19)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/call.ic-cdk.ts#L20)
 
 #### :gear: id
 
@@ -238,14 +238,14 @@ the Principal of the executing canister.
 | -------- | ----------------- |
 | `id`     | `() => Principal` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/id.ts#L12)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/id.ic-cdk.ts#L12)
 
 ### :wrench: Constants
 
 - [CollectionsSchema](#gear-collectionsschema)
+- [Uint8ArraySchema](#gear-uint8arrayschema)
 - [RawPrincipalSchema](#gear-rawprincipalschema)
 - [PrincipalSchema](#gear-principalschema)
-- [Uint8ArraySchema](#gear-uint8arrayschema)
 - [TimestampSchema](#gear-timestampschema)
 - [VersionSchema](#gear-versionschema)
 - [RawUserIdSchema](#gear-rawuseridschema)
@@ -270,7 +270,7 @@ the Principal of the executing canister.
 - [IDLTypeSchema](#gear-idltypeschema)
 - [CallArgSchema](#gear-callargschema)
 - [CallArgsSchema](#gear-callargsschema)
-- [CallResultsSchema](#gear-callresultsschema)
+- [CallResultSchema](#gear-callresultschema)
 - [CallParamsSchema](#gear-callparamsschema)
 
 #### :gear: CollectionsSchema
@@ -281,22 +281,6 @@ the Principal of the executing canister.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L6)
 
-#### :gear: RawPrincipalSchema
-
-| Constant             | Type                                                                            |
-| -------------------- | ------------------------------------------------------------------------------- |
-| `RawPrincipalSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L7)
-
-#### :gear: PrincipalSchema
-
-| Constant          | Type                                        |
-| ----------------- | ------------------------------------------- |
-| `PrincipalSchema` | `ZodType<Principal, ZodTypeDef, Principal>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L19)
-
 #### :gear: Uint8ArraySchema
 
 A schema that validates a value is an Uint8Array.
@@ -305,7 +289,23 @@ A schema that validates a value is an Uint8Array.
 | ------------------ | ------------------------------------------------------------------------------- |
 | `Uint8ArraySchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L31)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L7)
+
+#### :gear: RawPrincipalSchema
+
+| Constant             | Type                                                                            |
+| -------------------- | ------------------------------------------------------------------------------- |
+| `RawPrincipalSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L14)
+
+#### :gear: PrincipalSchema
+
+| Constant          | Type                                        |
+| ----------------- | ------------------------------------------- |
+| `PrincipalSchema` | `ZodType<Principal, ZodTypeDef, Principal>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L24)
 
 #### :gear: TimestampSchema
 
@@ -501,19 +501,19 @@ Schema for encoding the call arguments.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L32)
 
-#### :gear: CallResultsSchema
+#### :gear: CallResultSchema
 
-| Constant            | Type                                                                  |
-| ------------------- | --------------------------------------------------------------------- |
-| `CallResultsSchema` | `ZodArray<ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>, "many">` |
+| Constant           | Type                                                |
+| ------------------ | --------------------------------------------------- |
+| `CallResultSchema` | `ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L48)
 
 #### :gear: CallParamsSchema
 
-| Constant           | Type                                                                                                                                                                                                                                           |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; method: ZodString; args: ZodArray<...>; results: ZodArray<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant           | Type                                                                                                                                                                                                                                             |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; method: ZodString; args: ZodArray<...>; result: ZodOptional<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L58)
 
@@ -558,7 +558,7 @@ Schema for encoding the call arguments.
 - [IDLType](#gear-idltype)
 - [CallArg](#gear-callarg)
 - [CallArgs](#gear-callargs)
-- [CallResults](#gear-callresults)
+- [CallResult](#gear-callresult)
 - [CallParams](#gear-callparams)
 
 #### :gear: Collections
@@ -579,7 +579,7 @@ Represents a raw principal - a Uint8Array representation of a Principal.
 | -------------- | ------------------------------------ |
 | `RawPrincipal` | `z.infer<typeof RawPrincipalSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L14)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L19)
 
 #### :gear: Principal
 
@@ -589,7 +589,7 @@ Represents a principal - i.e. an object instantiated with the class Principal.
 | ----------- | --------------------------------- |
 | `Principal` | `z.infer<typeof PrincipalSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L26)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L31)
 
 #### :gear: Timestamp
 
@@ -945,13 +945,13 @@ The order of arguments is preserved for the function call.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L43)
 
-#### :gear: CallResults
+#### :gear: CallResult
 
-Defines the types used to decode the results of a canister call.
+Defines the type used to decode the result of a canister call.
 
-| Type          | Type                                |
-| ------------- | ----------------------------------- |
-| `CallResults` | `z.infer<typeof CallResultsSchema>` |
+| Type         | Type                               |
+| ------------ | ---------------------------------- |
+| `CallResult` | `z.infer<typeof CallResultSchema>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L53)
 

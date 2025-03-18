@@ -33,6 +33,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [setDocStore](#gear-setdocstore)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
+- [call](#gear-call)
 - [id](#gear-id)
 
 #### :gear: HookContextSchema
@@ -208,6 +209,23 @@ Parameters:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
 
+#### :gear: call
+
+Makes an asynchronous call to a canister on the Internet Computer.
+
+This function encodes the provided arguments using Candid, performs the canister call,
+and decodes the response based on the expected result types.
+
+| Function | Type                                                                                                                                                               |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `call`   | `<T>(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args: [Type<unknown>, unknown][]; results: Type<unknown>[]; }) => Promise<T>` |
+
+Parameters:
+
+- `params`: - The parameters required for the canister call
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/call.ic-cdk.ts#L19)
+
 #### :gear: id
 
 Retrieves the Satellite's Principal ID.
@@ -249,6 +267,11 @@ the Principal of the executing canister.
 - [HookSchema](#gear-hookschema)
 - [SetDocSchema](#gear-setdocschema)
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
+- [IDLTypeSchema](#gear-idltypeschema)
+- [CallArgSchema](#gear-callargschema)
+- [CallArgsSchema](#gear-callargsschema)
+- [CallResultsSchema](#gear-callresultsschema)
+- [CallParamsSchema](#gear-callparamsschema)
 
 #### :gear: CollectionsSchema
 
@@ -452,6 +475,52 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L49)
 
+#### :gear: IDLTypeSchema
+
+| Constant        | Type                                                |
+| --------------- | --------------------------------------------------- |
+| `IDLTypeSchema` | `ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L8)
+
+#### :gear: CallArgSchema
+
+| Constant        | Type                                                                              |
+| --------------- | --------------------------------------------------------------------------------- |
+| `CallArgSchema` | `ZodTuple<[ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>, ZodUnknown], null>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L20)
+
+#### :gear: CallArgsSchema
+
+Schema for encoding the call arguments.
+
+| Constant         | Type                                                                                                |
+| ---------------- | --------------------------------------------------------------------------------------------------- |
+| `CallArgsSchema` | `ZodArray<ZodTuple<[ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>, ZodUnknown], null>, "many">` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L32)
+
+#### :gear: CallResultsSchema
+
+| Constant            | Type                                                                  |
+| ------------------- | --------------------------------------------------------------------- |
+| `CallResultsSchema` | `ZodArray<ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>, "many">` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L48)
+
+#### :gear: CallParamsSchema
+
+| Constant           | Type                                                                                                                                                                                                                                           |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; method: ZodString; args: ZodArray<...>; results: ZodArray<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L58)
+
+### :factory: CallResponseLengthError
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/types/errors.ts#L1)
+
 ### :cocktail: Types
 
 - [Collections](#gear-collections)
@@ -486,6 +555,11 @@ A schema that validates a value is an Uint8Array.
 - [HookFnOrObject](#gear-hookfnorobject)
 - [SetDoc](#gear-setdoc)
 - [SetDocStoreParams](#gear-setdocstoreparams)
+- [IDLType](#gear-idltype)
+- [CallArg](#gear-callarg)
+- [CallArgs](#gear-callargs)
+- [CallResults](#gear-callresults)
+- [CallParams](#gear-callparams)
 
 #### :gear: Collections
 
@@ -834,6 +908,62 @@ collection, and key.
 | `SetDocStoreParams` | `z.infer<typeof SetDocStoreParamsSchema>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L74)
+
+#### :gear: IDLType
+
+Custom validation function to verify if a value is an instance of `IDL.Type` from `@dfinity/candid`.
+
+| Type      | Type                            |
+| --------- | ------------------------------- |
+| `IDLType` | `z.infer<typeof IDLTypeSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L15)
+
+#### :gear: CallArg
+
+A call argument consisting of its IDL type and corresponding value.
+
+| Type      | Type                            |
+| --------- | ------------------------------- |
+| `CallArg` | `z.infer<typeof CallArgSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L25)
+
+#### :gear: CallArgs
+
+Represents the arguments for a canister call on the IC.
+
+Requests and responses on the IC are encoded using Candid.
+This schema ensures that each argument is provided with both its type and value
+for proper encoding.
+
+The order of arguments is preserved for the function call.
+
+| Type       | Type                             |
+| ---------- | -------------------------------- |
+| `CallArgs` | `z.infer<typeof CallArgsSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L43)
+
+#### :gear: CallResults
+
+Defines the types used to decode the results of a canister call.
+
+| Type          | Type                                |
+| ------------- | ----------------------------------- |
+| `CallResults` | `z.infer<typeof CallResultsSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L53)
+
+#### :gear: CallParams
+
+Type representing the parameters required to make a canister call.
+
+| Type         | Type                               |
+| ------------ | ---------------------------------- |
+| `CallParams` | `z.infer<typeof CallParamsSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L83)
 
 <!-- TSDOC_END -->
 

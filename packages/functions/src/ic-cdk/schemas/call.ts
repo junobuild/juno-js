@@ -3,40 +3,54 @@ import * as z from 'zod';
 import {PrincipalSchema, RawPrincipalSchema} from '../../schemas/candid';
 
 /**
- * Custom validation function to check if a value is an instance of `IDL.Type`.
+ * @see IDLType
  */
-const IDLTypeSchema = z.custom<IDL.Type<unknown>>(
-  (val) => val instanceof IDL.Type,
-  {
-    message: 'Invalid IDL.Type'
-  }
-);
-
-/**
- * Schema for encoding function call arguments on the Internet Computer.
- *
- * Requests and responses on the IC are encoded using Candid.
- * This schema ensures that arguments are provided with both their value and type
- * to allow proper encoding.
- *
- * @see CallArgs
- */
-export const CallArgsSchema = z.object({
-  /**
-   * The Candid types definition for the arguments.
-   */
-  types: z.array(IDLTypeSchema),
-
-  /**
-   * The actual argument values.
-   */
-  values: z.array(z.unknown())
+export const IDLTypeSchema = z.custom<IDL.Type<unknown>>((val) => val instanceof IDL.Type, {
+  message: 'Invalid IDL.Type'
 });
 
 /**
- * Type representing function call arguments on the IC.
+ * Custom validation function to verify if a value is an instance of `IDL.Type` from `@dfinity/candid`.
+ */
+export type IDLType = z.infer<typeof IDLTypeSchema>;
+
+/**
+ * @see CallArg
+ */
+export const CallArgSchema = z.tuple([IDLTypeSchema, z.unknown()]);
+
+/**
+ * A call argument consisting of its IDL type and corresponding value.
+ */
+export type CallArg = z.infer<typeof CallArgSchema>;
+
+/**
+ * Schema for encoding the call arguments.
+ *
+ * @see CallArgs
+ */
+export const CallArgsSchema = z.array(CallArgSchema);
+
+/**
+ * Represents the arguments for a canister call on the IC.
+ *
+ * Requests and responses on the IC are encoded using Candid.
+ * This schema ensures that each argument is provided with both its type and value
+ * for proper encoding.
+ *
+ * The order of arguments is preserved for the function call.
  */
 export type CallArgs = z.infer<typeof CallArgsSchema>;
+
+/**
+ * @see CallResults
+ */
+export const CallResultsSchema = z.array(IDLTypeSchema);
+
+/**
+ * Defines the types used to decode the results of a canister call.
+ */
+export type CallResults = z.infer<typeof CallResultsSchema>;
 
 /**
  * @see CallParams
@@ -53,14 +67,14 @@ export const CallParamsSchema = z.object({
   method: z.string().min(1),
 
   /**
-   * The arguments - values and types - for the canister method.
+   * The arguments, including types and values, for the canister call.
    */
   args: CallArgsSchema,
 
   /**
-   * The types of the results to decode the response.
+   * The expected result types used for decoding the response.
    */
-  results: CallArgsSchema.omit({values: true})
+  results: CallResultsSchema
 });
 
 /**

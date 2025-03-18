@@ -1,4 +1,5 @@
-import type {RawData, RawPrincipal, RawUserId} from './schemas/core';
+import {RawData} from './schemas/db';
+import type {RawPrincipal, RawUserId} from './schemas/satellite';
 import type {SetDoc} from './sdk/schemas/db';
 
 declare global {

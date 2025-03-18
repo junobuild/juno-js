@@ -26,20 +26,6 @@ export const VersionSchema = z.bigint();
 export type Version = z.infer<typeof VersionSchema>;
 
 /**
- * @see RawData
- */
-export const RawDataSchema = z.custom<Uint8Array>((val) => val instanceof Uint8Array, {
-  message: 'Expected Uint8Array'
-});
-
-/**
- * Represents raw binary data.
- *
- * This is used to store unstructured data in a document.
- */
-export type RawData = z.infer<typeof RawDataSchema>;
-
-/**
  * @see RawUserId
  */
 export const RawUserIdSchema = RawPrincipalSchema;

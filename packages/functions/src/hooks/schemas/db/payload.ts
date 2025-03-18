@@ -1,6 +1,6 @@
 import * as z from 'zod';
-import {RawDataSchema, VersionSchema} from '../../../schemas/core';
-import {DocDescriptionSchema, DocSchema} from '../../../schemas/db';
+import {DocDescriptionSchema, DocSchema, RawDataSchema} from '../../../schemas/db';
+import {VersionSchema} from '../../../schemas/satellite';
 
 /**
  * @see DocUpsert

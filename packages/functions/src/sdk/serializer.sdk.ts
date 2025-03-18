@@ -1,5 +1,5 @@
 import {jsonReplacer, jsonReviver} from '@dfinity/utils';
-import type {RawData} from '../schemas/core';
+import type {RawData} from '../schemas/db';
 
 /**
  * Decodes the raw data of a document into a JavaScript object.

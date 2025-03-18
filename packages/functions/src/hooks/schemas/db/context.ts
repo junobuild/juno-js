@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {CollectionSchema, KeySchema} from '../../../schemas/core';
+import {CollectionSchema, KeySchema} from '../../../schemas/satellite';
 import {HookContextSchema} from '../context';
 import {DocAssertSetSchema, DocUpsertSchema} from './payload';
 

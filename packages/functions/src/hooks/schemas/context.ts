@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {RawUserIdSchema} from '../../schemas/core';
+import {RawUserIdSchema} from '../../schemas/satellite';
 
 /**
  * @see HookContext

@@ -1,6 +1,7 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {CallParams, CallParamsSchema, IDLType} from './schemas/call';
+import {CallResponseLengthError} from './types/errors';
 
 /**
  * Makes an asynchronous call to a canister on the Internet Computer.
@@ -15,7 +16,7 @@ import {CallParams, CallParamsSchema, IDLType} from './schemas/call';
  * @throws {ZodError} If the provided parameters do not match the expected schema.
  * @throws {Error} If the canister call fails.
  */
-export const call = async <T>(params: CallParams): Promise<T | undefined> => {
+export const call = async <T>(params: CallParams): Promise<T> => {
   CallParamsSchema.parse(params);
 
   const {canisterId: providedCanisterId, method, args: providedArgs, results} = params;
@@ -39,9 +40,10 @@ export const call = async <T>(params: CallParams): Promise<T | undefined> => {
 
   const result = IDL.decode([...results], bytes.buffer);
 
-  if (result.length === 0) {
-    return undefined;
+  if (result.length > 1) {
+    throw new CallResponseLengthError();
   }
 
-  return result as unknown as T;
+  const [response] = result as unknown as [T];
+  return response;
 };

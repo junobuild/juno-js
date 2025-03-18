@@ -1,5 +1,4 @@
 import {IDL} from '@dfinity/candid';
-import {Principal} from '@dfinity/principal';
 import {describe, expect} from 'vitest';
 import {
   CallArgSchema,
@@ -8,7 +7,7 @@ import {
   CallResultsSchema,
   IDLTypeSchema
 } from '../../../ic-cdk/schemas/call';
-import {mockCanisterId} from "../../mocks/ic-cdk.mocks";
+import {mockCanisterId} from '../../mocks/ic-cdk.mocks';
 
 describe('ic-cdk > schemas > call', () => {
   describe('IDLTypeSchema', () => {

@@ -45,12 +45,12 @@ export type AssertFunction<T> = z.infer<ReturnType<typeof AssertFunctionSchema<z
  * @see RunFunction
  */
 export const RunFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
-  z.function().args(contextSchema).returns(z.promise(z.void()));
+  z.function().args(contextSchema).returns(z.promise(z.void()).or(z.void()));
 
 /**
  * Defines the `run` function schema for hooks.
  *
- * The function takes a context argument and returns a `Promise<void>`.
+ * The function takes a context argument and returns either a `Promise<void>` or `void`.
  *
  * @template T - The type of context passed to the function.
  */

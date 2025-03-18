@@ -62,13 +62,22 @@ describe('context', () => {
       field2: z.number()
     });
 
-    const validFunction = async (context: z.infer<typeof MockContextSchema>) => {
+    const validPromiseVoidFunction = async (context: z.infer<typeof MockContextSchema>) => {
       console.log('Function executed with:', context);
     };
 
-    it('should validate a correctly typed function', () => {
+    const validVoidFunction = (context: z.infer<typeof MockContextSchema>) => {
+      console.log('Function executed with:', context);
+    };
+
+    it('should validate a correctly typed function with return promise void', () => {
       const schema = RunFunctionSchema(MockContextSchema);
-      expect(() => schema.parse(validFunction)).not.toThrow();
+      expect(() => schema.parse(validPromiseVoidFunction)).not.toThrow();
+    });
+
+    it('should validate a correctly typed function with return void', () => {
+      const schema = RunFunctionSchema(MockContextSchema);
+      expect(() => schema.parse(validVoidFunction)).not.toThrow();
     });
 
     it('should reject a non-function value', () => {

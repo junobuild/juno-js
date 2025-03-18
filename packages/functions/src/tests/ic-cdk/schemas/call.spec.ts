@@ -4,7 +4,7 @@ import {
   CallArgSchema,
   CallArgsSchema,
   CallParamsSchema,
-  CallResultsSchema,
+  CallResultSchema,
   IDLTypeSchema
 } from '../../../ic-cdk/schemas/call';
 import {mockCanisterId} from '../../mocks/ic-cdk.mocks';
@@ -46,14 +46,14 @@ describe('ic-cdk > schemas > call', () => {
     });
   });
 
-  describe('CallResultsSchema', () => {
-    it('should validate an array of IDL.Types', () => {
-      const validResults = [IDL.Text, IDL.Nat];
-      expect(() => CallResultsSchema.parse(validResults)).not.toThrow();
+  describe('CallResultSchema', () => {
+    it('should validate a result of IDL.Types', () => {
+      const validResult = IDL.Text;
+      expect(() => CallResultSchema.parse(validResult)).not.toThrow();
     });
 
-    it('should reject an array with non-IDL.Type elements', () => {
-      expect(() => CallResultsSchema.parse([IDL.Text, {}])).toThrow();
+    it('should reject a non-IDL.Type element', () => {
+      expect(() => CallResultSchema.parse({})).toThrow();
     });
   });
 
@@ -62,7 +62,7 @@ describe('ic-cdk > schemas > call', () => {
       canisterId: mockCanisterId,
       method: 'greet',
       args: [[IDL.Text, 'Hello']],
-      results: [IDL.Text]
+      result: IDL.Text
     };
 
     it('should validate a correct CallParams object', () => {

@@ -1,5 +1,6 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
+import {toNullable} from '@dfinity/utils';
 import {CallParams, CallParamsSchema, IDLType} from './schemas/call';
 import {CallResponseLengthError} from './types/errors';
 
@@ -19,7 +20,7 @@ import {CallResponseLengthError} from './types/errors';
 export const call = async <T>(params: CallParams): Promise<T> => {
   CallParamsSchema.parse(params);
 
-  const {canisterId: providedCanisterId, method, args: providedArgs, results} = params;
+  const {canisterId: providedCanisterId, method, args: providedArgs, result: resultType} = params;
 
   const canisterId =
     providedCanisterId instanceof Principal
@@ -38,8 +39,9 @@ export const call = async <T>(params: CallParams): Promise<T> => {
 
   const bytes: Uint8Array<ArrayBuffer> = await __ic_cdk_call_raw(canisterId, method, args);
 
-  const result = IDL.decode([...results], bytes.buffer);
+  const result = IDL.decode(toNullable(resultType), bytes.buffer);
 
+  // We have no test covering this use case because decode seems to never return more than one element, as we never specify more than one return type.
   if (result.length > 1) {
     throw new CallResponseLengthError();
   }

@@ -43,14 +43,14 @@ export const CallArgsSchema = z.array(CallArgSchema);
 export type CallArgs = z.infer<typeof CallArgsSchema>;
 
 /**
- * @see CallResults
+ * @see CallResult
  */
-export const CallResultsSchema = z.array(IDLTypeSchema);
+export const CallResultSchema = IDLTypeSchema;
 
 /**
- * Defines the types used to decode the results of a canister call.
+ * Defines the type used to decode the result of a canister call.
  */
-export type CallResults = z.infer<typeof CallResultsSchema>;
+export type CallResult = z.infer<typeof CallResultSchema>;
 
 /**
  * @see CallParams
@@ -72,9 +72,9 @@ export const CallParamsSchema = z.object({
   args: CallArgsSchema,
 
   /**
-   * The expected result types used for decoding the response.
+   * The expected result type used for decoding the response.
    */
-  results: CallResultsSchema
+  result: CallResultSchema.optional()
 });
 
 /**

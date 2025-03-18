@@ -216,9 +216,9 @@ Makes an asynchronous call to a canister on the Internet Computer.
 This function encodes the provided arguments using Candid, performs the canister call,
 and decodes the response based on the expected result types.
 
-| Function | Type                                                                                                                                                                            |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `call`   | `<T>(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args: [Type<unknown>, unknown][]; result?: Type<unknown> or undefined; }) => Promise<...>` |
+| Function | Type                                                                                                                                                                                          |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `call`   | `<T>(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args?: [Type<unknown>, unknown][] or undefined; result?: Type<unknown> or undefined; }) => Promise<...>` |
 
 Parameters:
 
@@ -511,9 +511,9 @@ Schema for encoding the call arguments.
 
 #### :gear: CallParamsSchema
 
-| Constant           | Type                                                                                                                                                                                                                                             |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; method: ZodString; args: ZodArray<...>; result: ZodOptional<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant           | Type                                                                                                                                                                                                                                                |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; method: ZodString; args: ZodOptional<...>; result: ZodOptional<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L58)
 

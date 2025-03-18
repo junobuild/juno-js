@@ -227,14 +227,15 @@ the Principal of the executing canister.
 - [CollectionsSchema](#gear-collectionsschema)
 - [RawPrincipalSchema](#gear-rawprincipalschema)
 - [PrincipalSchema](#gear-principalschema)
+- [Uint8ArraySchema](#gear-uint8arrayschema)
 - [TimestampSchema](#gear-timestampschema)
 - [VersionSchema](#gear-versionschema)
-- [RawDataSchema](#gear-rawdataschema)
 - [RawUserIdSchema](#gear-rawuseridschema)
 - [UserIdSchema](#gear-useridschema)
 - [CollectionSchema](#gear-collectionschema)
 - [KeySchema](#gear-keyschema)
 - [DocDescriptionSchema](#gear-docdescriptionschema)
+- [RawDataSchema](#gear-rawdataschema)
 - [DocSchema](#gear-docschema)
 - [DocUpsertSchema](#gear-docupsertschema)
 - [ProposedDocSchema](#gear-proposeddocschema)
@@ -273,13 +274,23 @@ the Principal of the executing canister.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L19)
 
+#### :gear: Uint8ArraySchema
+
+A schema that validates a value is an Uint8Array.
+
+| Constant           | Type                                                                            |
+| ------------------ | ------------------------------------------------------------------------------- |
+| `Uint8ArraySchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L31)
+
 #### :gear: TimestampSchema
 
 | Constant          | Type        |
 | ----------------- | ----------- |
 | `TimestampSchema` | `ZodBigInt` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L7)
 
 #### :gear: VersionSchema
 
@@ -287,15 +298,7 @@ the Principal of the executing canister.
 | --------------- | ----------- |
 | `VersionSchema` | `ZodBigInt` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L19)
-
-#### :gear: RawDataSchema
-
-| Constant        | Type                                                                            |
-| --------------- | ------------------------------------------------------------------------------- |
-| `RawDataSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L31)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L19)
 
 #### :gear: RawUserIdSchema
 
@@ -303,7 +306,7 @@ the Principal of the executing canister.
 | ----------------- | ------------------------------------------------------------------------------- |
 | `RawUserIdSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L45)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L31)
 
 #### :gear: UserIdSchema
 
@@ -311,7 +314,7 @@ the Principal of the executing canister.
 | -------------- | ------------------------------------------- |
 | `UserIdSchema` | `ZodType<Principal, ZodTypeDef, Principal>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L57)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L43)
 
 #### :gear: CollectionSchema
 
@@ -319,7 +322,7 @@ the Principal of the executing canister.
 | ------------------ | ----------- |
 | `CollectionSchema` | `ZodString` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L69)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L55)
 
 #### :gear: KeySchema
 
@@ -327,7 +330,7 @@ the Principal of the executing canister.
 | ----------- | ----------- |
 | `KeySchema` | `ZodString` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L79)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L65)
 
 #### :gear: DocDescriptionSchema
 
@@ -335,7 +338,15 @@ the Principal of the executing canister.
 | ---------------------- | ----------- |
 | `DocDescriptionSchema` | `ZodString` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L8)
+
+#### :gear: RawDataSchema
+
+| Constant        | Type                                                                            |
+| --------------- | ------------------------------------------------------------------------------- |
+| `RawDataSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L18)
 
 #### :gear: DocSchema
 
@@ -343,7 +354,7 @@ the Principal of the executing canister.
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocSchema` | `ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L17)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L30)
 
 #### :gear: DocUpsertSchema
 
@@ -431,7 +442,7 @@ the Principal of the executing canister.
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocSchema` | `ZodObject<{ key: ZodString; description: ZodOptional<ZodString>; data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L15)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L14)
 
 #### :gear: SetDocStoreParamsSchema
 
@@ -439,7 +450,7 @@ the Principal of the executing canister.
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocStoreParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; doc: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L50)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L49)
 
 ### :cocktail: Types
 
@@ -448,7 +459,6 @@ the Principal of the executing canister.
 - [Principal](#gear-principal)
 - [Timestamp](#gear-timestamp)
 - [Version](#gear-version)
-- [RawData](#gear-rawdata)
 - [RawUserId](#gear-rawuserid)
 - [UserId](#gear-userid)
 - [Collection](#gear-collection)
@@ -457,6 +467,7 @@ the Principal of the executing canister.
 - [AssertFunction](#gear-assertfunction)
 - [RunFunction](#gear-runfunction)
 - [DocDescription](#gear-docdescription)
+- [RawData](#gear-rawdata)
 - [Doc](#gear-doc)
 - [DocUpsert](#gear-docupsert)
 - [ProposedDoc](#gear-proposeddoc)
@@ -516,7 +527,7 @@ Used for tracking when events occur, such as document creation and updates.
 | ----------- | --------------------------------- |
 | `Timestamp` | `z.infer<typeof TimestampSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L14)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L14)
 
 #### :gear: Version
 
@@ -528,19 +539,7 @@ This is typically incremented with each update to ensure consistency.
 | --------- | ------------------------------- |
 | `Version` | `z.infer<typeof VersionSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L26)
-
-#### :gear: RawData
-
-Represents raw binary data.
-
-This is used to store unstructured data in a document.
-
-| Type      | Type                            |
-| --------- | ------------------------------- |
-| `RawData` | `z.infer<typeof RawDataSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L40)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L26)
 
 #### :gear: RawUserId
 
@@ -552,7 +551,7 @@ This is a principal associated with a user.
 | ----------- | --------------------------------- |
 | `RawUserId` | `z.infer<typeof RawUserIdSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L52)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L38)
 
 #### :gear: UserId
 
@@ -564,7 +563,7 @@ This is a principal associated with a user.
 | -------- | ------------------------------ |
 | `UserId` | `z.infer<typeof UserIdSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L64)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L50)
 
 #### :gear: Collection
 
@@ -574,7 +573,7 @@ A collection name where data are stored.
 | ------------ | ---------------------------------- |
 | `Collection` | `z.infer<typeof CollectionSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L74)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L60)
 
 #### :gear: Key
 
@@ -584,7 +583,7 @@ A unique key identifier within a collection.
 | ----- | --------------------------- |
 | `Key` | `z.infer<typeof KeySchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/core.ts#L84)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L70)
 
 #### :gear: HookContext
 
@@ -628,7 +627,19 @@ Represents a document description with a maximum length of 1024 characters.
 | ---------------- | -------------------------------------- |
 | `DocDescription` | `z.infer<typeof DocDescriptionSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L12)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L13)
+
+#### :gear: RawData
+
+Represents raw binary data.
+
+This is used to store structured data in a document.
+
+| Type      | Type                               |
+| --------- | ---------------------------------- |
+| `RawData` | `z.infer<typeof Uint8ArraySchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L25)
 
 #### :gear: Doc
 
@@ -638,7 +649,7 @@ Represents a document stored in a collection.
 | ----- | --------------------------- |
 | `Doc` | `z.infer<typeof DocSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L55)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L68)
 
 #### :gear: DocUpsert
 
@@ -809,7 +820,7 @@ This is used when submitting new document data.
 | -------- | ------------------------------ |
 | `SetDoc` | `z.infer<typeof SetDocSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L45)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L44)
 
 #### :gear: SetDocStoreParams
 
@@ -822,7 +833,7 @@ collection, and key.
 | ------------------- | ----------------------------------------- |
 | `SetDocStoreParams` | `z.infer<typeof SetDocStoreParamsSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L75)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L74)
 
 <!-- TSDOC_END -->
 

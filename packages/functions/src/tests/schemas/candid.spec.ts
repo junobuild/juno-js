@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {PrincipalSchema, RawPrincipalSchema} from '../../schemas/candid';
+import {PrincipalSchema, RawPrincipalSchema, Uint8ArraySchema} from '../../schemas/candid';
 
 describe('candid', () => {
   describe('RawPrincipal', () => {
@@ -24,6 +24,17 @@ describe('candid', () => {
       expect(() => PrincipalSchema.parse('invalid')).toThrow();
       expect(() => PrincipalSchema.parse(123)).toThrow();
       expect(() => PrincipalSchema.parse(Uint8Array.from([1, 2, 3]))).toThrow();
+    });
+  });
+
+  describe('Uint8Array', () => {
+    it('should validate a valid Uint8Array', () => {
+      expect(() => Uint8ArraySchema.parse(new Uint8Array([1, 2, 3]))).not.toThrow();
+    });
+
+    it('should reject an invalid Uint8Array', () => {
+      expect(() => Uint8ArraySchema.parse('not a Uint8Array')).toThrow();
+      expect(() => Uint8ArraySchema.parse([1, 2, 3])).toThrow();
     });
   });
 });

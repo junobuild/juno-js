@@ -1,5 +1,6 @@
 import * as z from 'zod';
-import {RawDataSchema, RawUserIdSchema, TimestampSchema, VersionSchema} from './core';
+import {Uint8ArraySchema} from './candid';
+import {RawUserIdSchema, TimestampSchema, VersionSchema} from './satellite';
 
 /**
  * @see DocDescription
@@ -10,6 +11,18 @@ export const DocDescriptionSchema = z.string().max(1024);
  * Represents a document description with a maximum length of 1024 characters.
  */
 export type DocDescription = z.infer<typeof DocDescriptionSchema>;
+
+/**
+ * @see RawData
+ */
+export const RawDataSchema = Uint8ArraySchema;
+
+/**
+ * Represents raw binary data.
+ *
+ * This is used to store structured data in a document.
+ */
+export type RawData = z.infer<typeof Uint8ArraySchema>;
 
 /**
  * @see Doc

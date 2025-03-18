@@ -1,11 +1,10 @@
 import {Principal} from '@dfinity/principal';
 import {
-  RawDataSchema,
   RawUserIdSchema,
   TimestampSchema,
   UserIdSchema,
   VersionSchema
-} from '../../schemas/core';
+} from '../../schemas/satellite';
 
 describe('core', () => {
   it('should validate a valid Timestamp', () => {
@@ -24,15 +23,6 @@ describe('core', () => {
   it('should reject an invalid Version', () => {
     expect(() => VersionSchema.parse('wrong')).toThrow();
     expect(() => VersionSchema.parse(42)).toThrow();
-  });
-
-  it('should validate a valid RawData', () => {
-    expect(() => RawDataSchema.parse(new Uint8Array([1, 2, 3]))).not.toThrow();
-  });
-
-  it('should reject an invalid RawData', () => {
-    expect(() => RawDataSchema.parse('not a Uint8Array')).toThrow();
-    expect(() => RawDataSchema.parse([1, 2, 3])).toThrow();
   });
 
   it('should validate a valid RawUserId (since it inherits from RawPrincipal)', () => {

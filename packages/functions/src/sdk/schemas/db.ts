@@ -1,13 +1,12 @@
 import * as z from 'zod';
+import {DocDescriptionSchema, RawDataSchema} from '../../schemas/db';
 import {
   CollectionSchema,
   KeySchema,
-  RawDataSchema,
   RawUserIdSchema,
   UserIdSchema,
   VersionSchema
-} from '../../schemas/core';
-import {DocDescriptionSchema} from '../../schemas/db';
+} from '../../schemas/satellite';
 
 /**
  * @see SetDoc

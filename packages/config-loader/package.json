@@ -47,11 +47,9 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
     "@junobuild/config": "*"
-  },
-  "dependencies": {
-    "@babel/core": "^7.25.2",
-    "@babel/plugin-transform-modules-commonjs": "^7.24.8",
-    "@babel/preset-typescript": "^7.24.7"
   }
 }

@@ -30,7 +30,7 @@ export const nodeRequire = <T>({id, extension}: {id: string; extension: string})
       const sourceText = transformFileSync(fileName, {
         presets: [ts.default],
         plugins: [mod.default]
-      }).code;
+      })?.code;
 
       interface NodeModuleWithCompile extends NodeModule {
         _compile(code: string, filename: string): T;
@@ -38,7 +38,7 @@ export const nodeRequire = <T>({id, extension}: {id: string; extension: string})
 
       // we need to coerce because of the requirements for the arguments to
       // this function.
-      (module as NodeModuleWithCompile)._compile(sourceText, fileName);
+      (module as NodeModuleWithCompile)._compile(sourceText ?? '', fileName);
     };
 
     // We override defineConfig because the library is unknown in the module we are trying to load.

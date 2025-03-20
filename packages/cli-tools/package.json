@@ -53,6 +53,9 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
     "@dfinity/utils": "^2",
     "@junobuild/config": "*"
   },
@@ -63,6 +66,7 @@
     "minimatch": "^10.0.1"
   },
   "devDependencies": {
+    "@types/babel__core": "^7.20.5",
     "@types/listr": "^0.14.9",
     "@types/mime-types": "^2.1.4",
     "@types/minimatch": "^5.1.2"

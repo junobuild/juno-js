@@ -17,10 +17,10 @@ export const buildForSputnik = async ({
   const result = await transformAsync(code, {
     presets: [
       ['@babel/preset-typescript'],
-      ['@babel/preset-env', {targets: 'ES2020', modules: false}]
+      ['@babel/preset-env', {targets: {esmodules: true}, modules: false}]
     ],
     plugins: [
-      ['@babel/plugin-proposal-top-level-await', {disallow: true}],
+      ['@babel/plugin-syntax-top-level-await', {disallow: true}],
       ['@babel/plugin-syntax-import-meta', {disallow: true}]
     ],
     filename,

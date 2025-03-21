@@ -569,7 +569,7 @@ Defines the collections where a hook or assertion should run.
 | ------------- | ----------------------------------- |
 | `Collections` | `z.infer<typeof CollectionsSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L18)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L19)
 
 #### :gear: RawPrincipal
 

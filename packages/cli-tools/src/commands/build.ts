@@ -11,10 +11,11 @@ export const buildEsm = async ({
   metafile: Metafile;
   errors: Message[];
   warnings: Message[];
+  version: string;
 }> => {
   await assertEsbuild();
 
-  const {build} = await import('esbuild');
+  const {build, version} = await import('esbuild');
 
   await rm(outfile, {force: true});
 
@@ -37,7 +38,7 @@ export const buildEsm = async ({
     metafile: true
   });
 
-  return {metafile, errors, warnings};
+  return {metafile, errors, warnings, version};
 };
 
 const assertEsbuild = async () => {

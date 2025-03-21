@@ -1,3 +1,5 @@
+import {rm} from 'node:fs/promises';
+
 export const buildEsm = async ({
   infile,
   outfile
@@ -8,6 +10,8 @@ export const buildEsm = async ({
   await assertEsbuild();
 
   const {build} = await import('esbuild');
+
+  await rm(outfile, {force: true});
 
   await build({
     entryPoints: [infile],

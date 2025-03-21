@@ -6,9 +6,10 @@ import * as z from 'zod';
 export const CollectionsSchema = z
   .object({
     /**
-     * An array containing at least one collection name where the hook or assertion will be executed.
+     * An array of collection names where the hook or assertion will run.
+     * If empty, no hooks or assertions are triggered.
      */
-    collections: z.array(z.string()).min(1).readonly()
+    collections: z.array(z.string()).readonly()
   })
   .strict();
 

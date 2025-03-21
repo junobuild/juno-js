@@ -11,9 +11,9 @@ describe('collections', () => {
     expect(() => CollectionsSchema.parse(validConfig)).not.toThrow();
   });
 
-  it('should reject an empty collections array', () => {
+  it('should accept an empty collections array', () => {
     const invalidConfig = {collections: []};
-    expect(() => CollectionsSchema.parse(invalidConfig)).toThrow();
+    expect(() => CollectionsSchema.parse(invalidConfig)).not.toThrow();
   });
 
   it('should reject missing collections field', () => {

@@ -43,9 +43,9 @@ describe('assert.config', () => {
       expect(() => AssertSetDocSchema.parse(mockAssertSetDocConfig)).not.toThrow();
     });
 
-    it('should reject an empty collections array', () => {
+    it('should accept an empty collections array', () => {
       const invalidConfig = {...mockAssertSetDocConfig, collections: []};
-      expect(() => AssertSetDocSchema.parse(invalidConfig)).toThrow();
+      expect(() => AssertSetDocSchema.parse(invalidConfig)).not.toThrow();
     });
 
     it('should reject an invalid assert function', () => {

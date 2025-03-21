@@ -1,23 +1,32 @@
+import type {baseObjectInputType, baseObjectOutputType, ZodObject, ZodTypeAny} from 'zod';
 import * as z from 'zod';
 import {RawUserIdSchema} from '../../schemas/satellite';
 
 /**
  * @see HookContext
  */
-export const HookContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
-  z
-    .object({
-      /**
-       * The user who originally triggered the function that in turn triggered the hook.
-       */
-      caller: RawUserIdSchema,
+export const HookContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
+  const schemaShape = {
+    /**
+     * The user who originally triggered the function that in turn triggered the hook.
+     */
+    caller: RawUserIdSchema,
 
-      /**
-       * The data associated with the hook execution.
-       */
-      data: dataSchema
-    })
-    .strict();
+    /**
+     * The data associated with the hook execution.
+     */
+    data: dataSchema
+  };
+
+  // TODO: workaround for https://github.com/colinhacks/zod/issues/3998
+  return z.object(schemaShape).strict() as ZodObject<
+    typeof schemaShape,
+    'strict',
+    ZodTypeAny,
+    baseObjectOutputType<typeof schemaShape>,
+    baseObjectInputType<typeof schemaShape>
+  >;
+};
 
 /**
  * Represents the context provided to hooks, containing information about the caller and related data.

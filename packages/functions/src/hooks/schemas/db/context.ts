@@ -1,3 +1,4 @@
+import type {baseObjectInputType, baseObjectOutputType, ZodObject, ZodTypeAny} from 'zod';
 import * as z from 'zod';
 import {CollectionSchema, KeySchema} from '../../../schemas/satellite';
 import {HookContextSchema} from '../context';
@@ -6,25 +7,33 @@ import {DocAssertSetSchema, DocUpsertSchema} from './payload';
 /**
  * @see DocContext
  */
-export const DocContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) =>
-  z
-    .object({
-      /**
-       * The name of the collection where the document is stored.
-       */
-      collection: CollectionSchema,
+export const DocContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
+  const schemaShape = {
+    /**
+     * The name of the collection where the document is stored.
+     */
+    collection: CollectionSchema,
 
-      /**
-       * The unique key identifying the document within the collection.
-       */
-      key: KeySchema,
+    /**
+     * The unique key identifying the document within the collection.
+     */
+    key: KeySchema,
 
-      /**
-       * The data associated with the document operation.
-       */
-      data: dataSchema
-    })
-    .strict();
+    /**
+     * The data associated with the document operation.
+     */
+    data: dataSchema
+  };
+
+  // TODO: workaround for https://github.com/colinhacks/zod/issues/3998
+  return z.object(schemaShape).strict() as ZodObject<
+    typeof schemaShape,
+    'strict',
+    ZodTypeAny,
+    baseObjectOutputType<typeof schemaShape>,
+    baseObjectInputType<typeof schemaShape>
+  >;
+};
 
 /**
  * Represents the context of a document operation within a collection.

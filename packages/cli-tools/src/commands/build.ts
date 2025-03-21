@@ -1,3 +1,4 @@
+import type {Message, Metafile} from 'esbuild';
 import {rm} from 'node:fs/promises';
 
 export const buildEsm = async ({
@@ -6,14 +7,18 @@ export const buildEsm = async ({
 }: {
   infile: string;
   outfile: string;
-}): Promise<void> => {
+}): Promise<{
+  metafile: Metafile;
+  errors: Message[];
+  warnings: Message[];
+}> => {
   await assertEsbuild();
 
   const {build} = await import('esbuild');
 
   await rm(outfile, {force: true});
 
-  await build({
+  const {metafile, errors, warnings} = await build({
     entryPoints: [infile],
     outfile,
     bundle: true,
@@ -28,8 +33,11 @@ export const buildEsm = async ({
     },
     define: {
       self: 'globalThis'
-    }
+    },
+    metafile: true
   });
+
+  return {metafile, errors, warnings};
 };
 
 const assertEsbuild = async () => {

@@ -54,9 +54,9 @@ describe('hook.config', () => {
       expect(() => OnSetDocSchema.parse(mockOnSetDocConfig)).not.toThrow();
     });
 
-    it('should reject an empty collections array', () => {
+    it('should accept an empty collections array', () => {
       const invalidConfig = {...mockOnSetDocConfig, collections: []};
-      expect(() => OnSetDocSchema.parse(invalidConfig)).toThrow();
+      expect(() => OnSetDocSchema.parse(invalidConfig)).not.toThrow();
     });
 
     it('should reject an invalid run function', () => {

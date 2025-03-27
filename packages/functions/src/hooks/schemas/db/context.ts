@@ -1,27 +1,23 @@
 import type {baseObjectInputType, baseObjectOutputType, ZodObject, ZodTypeAny} from 'zod';
 import * as z from 'zod';
-import {CollectionSchema, KeySchema} from '../../../schemas/satellite';
-import {HookContextSchema} from '../context';
-import {DocAssertDeleteSchema, DocAssertSetSchema, DocUpsertSchema} from './payload';
+import {type Collection, CollectionSchema, type Key, KeySchema} from '../../../schemas/satellite';
+import {type HookContext, HookContextSchema} from '../context';
+import {
+  type DocAssertDelete,
+  DocAssertDeleteSchema,
+  type DocAssertSet,
+  DocAssertSetSchema,
+  type DocUpsert,
+  DocUpsertSchema
+} from './payload';
 
 /**
  * @see DocContext
  */
 export const DocContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
   const schemaShape = {
-    /**
-     * The name of the collection where the document is stored.
-     */
     collection: CollectionSchema,
-
-    /**
-     * The unique key identifying the document within the collection.
-     */
     key: KeySchema,
-
-    /**
-     * The data associated with the document operation.
-     */
     data: dataSchema
   };
 
@@ -41,8 +37,19 @@ export const DocContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
  * @template T - The type of data associated with the document.
  */
 export interface DocContext<T> {
-  collection: string;
-  key: string;
+  /**
+   * The name of the collection where the document is stored.
+   */
+  collection: Collection;
+
+  /**
+   * The unique key identifying the document within the collection.
+   */
+  key: Key;
+
+  /**
+   * The data associated with the document operation.
+   */
   data: T;
 }
 
@@ -57,7 +64,7 @@ export const OnSetDocContextSchema = HookContextSchema(DocContextSchema(DocUpser
  * This context contains information about the document being created or updated,
  * along with details about the user who triggered the operation.
  */
-export type OnSetDocContext = z.infer<typeof OnSetDocContextSchema>;
+export type OnSetDocContext = HookContext<DocContext<DocUpsert>>;
 
 /**
  * @see OnSetManyDocsContext
@@ -72,7 +79,7 @@ export const OnSetManyDocsContextSchema = HookContextSchema(
  * This context contains information about multiple documents being created or updated
  * in a single operation, along with details about the user who triggered it.
  */
-export type OnSetManyDocsContext = z.infer<typeof OnSetManyDocsContextSchema>;
+export type OnSetManyDocsContext = HookContext<DocContext<DocUpsert>[]>;
 
 /**
  * @see AssertSetDocContext
@@ -85,7 +92,7 @@ export const AssertSetDocContextSchema = HookContextSchema(DocContextSchema(DocA
  * This context contains information about the document being validated before
  * it is created or updated. If validation fails, the developer should throw an error.
  */
-export type AssertSetDocContext = z.infer<typeof AssertSetDocContextSchema>;
+export type AssertSetDocContext = HookContext<DocContext<DocAssertSet>>;
 
 /**
  * @see AssertDeleteDocContext
@@ -100,4 +107,4 @@ export const AssertDeleteDocContextSchema = HookContextSchema(
  * This context contains information about the document being validated before
  * it is deleted. If validation fails, the developer should throw an error.
  */
-export type AssertDeleteDocContext = z.infer<typeof AssertDeleteDocContextSchema>;
+export type AssertDeleteDocContext = HookContext<DocContext<DocAssertDelete>>;

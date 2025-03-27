@@ -1,6 +1,13 @@
 import * as z from 'zod';
 import {Uint8ArraySchema} from './candid';
-import {RawUserIdSchema, TimestampSchema, VersionSchema} from './satellite';
+import {
+  type RawUserId,
+  RawUserIdSchema,
+  type Timestamp,
+  TimestampSchema,
+  type Version,
+  VersionSchema
+} from './satellite';
 
 /**
  * @see DocDescription
@@ -29,35 +36,11 @@ export type RawData = z.infer<typeof Uint8ArraySchema>;
  */
 export const DocSchema = z
   .object({
-    /**
-     * The user who owns this document.
-     */
     owner: RawUserIdSchema,
-
-    /**
-     * The raw data of the document.
-     */
     data: RawDataSchema,
-
-    /**
-     * An optional description of the document.
-     */
     description: DocDescriptionSchema.optional(),
-
-    /**
-     * The timestamp when the document was first created.
-     */
     created_at: TimestampSchema,
-
-    /**
-     * The timestamp when the document was last updated.
-     */
     updated_at: TimestampSchema,
-
-    /**
-     * The version number of the document, used for consistency checks.
-     * If not provided, it's assumed to be the first version.
-     */
     version: VersionSchema.optional()
   })
   .strict();
@@ -65,4 +48,35 @@ export const DocSchema = z
 /**
  * Represents a document stored in a collection.
  */
-export type Doc = z.infer<typeof DocSchema>;
+export interface Doc {
+  /**
+   * The user who owns this document.
+   */
+  owner: RawUserId;
+
+  /**
+   * The raw data of the document.
+   */
+  data: RawData;
+
+  /**
+   * An optional description of the document.
+   */
+  description?: DocDescription;
+
+  /**
+   * The timestamp when the document was first created.
+   */
+  created_at: Timestamp;
+
+  /**
+   * The timestamp when the document was last updated.
+   */
+  updated_at: Timestamp;
+
+  /**
+   * The version number of the document, used for consistency checks.
+   * If not provided, it's assumed to be the first version.
+   */
+  version?: Version;
+}

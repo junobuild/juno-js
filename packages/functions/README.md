@@ -66,7 +66,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocContextSchema` | `<T extends z.ZodTypeAny>(dataSchema: T) => ZodObject<typeof schemaShape, "strict", ZodTypeAny, baseObjectOutputType<typeof schemaShape>, baseObjectInputType<typeof schemaShape>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L10)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L17)
 
 #### :gear: AssertFnSchema
 
@@ -216,9 +216,9 @@ Makes an asynchronous call to a canister on the Internet Computer.
 This function encodes the provided arguments using Candid, performs the canister call,
 and decodes the response based on the expected result types.
 
-| Function | Type                                                                                                                                                                                          |
-| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `call`   | `<T>(params: { canisterId: Uint8Array<ArrayBufferLike> or Principal; method: string; args?: [Type<unknown>, unknown][] or undefined; result?: Type<unknown> or undefined; }) => Promise<...>` |
+| Function | Type                                    |
+| -------- | --------------------------------------- |
+| `call`   | `<T>(params: CallParams) => Promise<T>` |
 
 Parameters:
 
@@ -242,7 +242,6 @@ the Principal of the executing canister.
 
 ### :wrench: Constants
 
-- [CollectionsSchema](#gear-collectionsschema)
 - [Uint8ArraySchema](#gear-uint8arrayschema)
 - [RawPrincipalSchema](#gear-rawprincipalschema)
 - [PrincipalSchema](#gear-principalschema)
@@ -252,6 +251,7 @@ the Principal of the executing canister.
 - [UserIdSchema](#gear-useridschema)
 - [CollectionSchema](#gear-collectionschema)
 - [KeySchema](#gear-keyschema)
+- [CollectionsSchema](#gear-collectionsschema)
 - [DocDescriptionSchema](#gear-docdescriptionschema)
 - [RawDataSchema](#gear-rawdataschema)
 - [DocSchema](#gear-docschema)
@@ -278,14 +278,6 @@ the Principal of the executing canister.
 - [CallArgsSchema](#gear-callargsschema)
 - [CallResultSchema](#gear-callresultschema)
 - [CallParamsSchema](#gear-callparamsschema)
-
-#### :gear: CollectionsSchema
-
-| Constant            | Type                                                                                                                                                                    |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CollectionsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString, "many">>; }, "strict", ZodTypeAny, { collections: readonly string[]; }, { collections: readonly string[]; }>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L6)
 
 #### :gear: Uint8ArraySchema
 
@@ -361,13 +353,21 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L65)
 
+#### :gear: CollectionsSchema
+
+| Constant            | Type                                                                                                                                                                    |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CollectionsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString, "many">>; }, "strict", ZodTypeAny, { collections: readonly string[]; }, { collections: readonly string[]; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L7)
+
 #### :gear: DocDescriptionSchema
 
 | Constant               | Type        |
 | ---------------------- | ----------- |
 | `DocDescriptionSchema` | `ZodString` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L8)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L15)
 
 #### :gear: RawDataSchema
 
@@ -375,7 +375,7 @@ A schema that validates a value is an Uint8Array.
 | --------------- | ------------------------------------------------------------------------------- |
 | `RawDataSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L18)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L25)
 
 #### :gear: DocSchema
 
@@ -383,7 +383,7 @@ A schema that validates a value is an Uint8Array.
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocSchema` | `ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L30)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L37)
 
 #### :gear: DocUpsertSchema
 
@@ -391,7 +391,7 @@ A schema that validates a value is an Uint8Array.
 | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocUpsertSchema` | `ZodObject<{ before: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; after: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L8)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L15)
 
 #### :gear: SetDocSchema
 
@@ -399,7 +399,7 @@ A schema that validates a value is an Uint8Array.
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocSchema` | `ZodObject<{ data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; description: ZodOptional<...>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L33)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L43)
 
 #### :gear: DelDocSchema
 
@@ -407,7 +407,7 @@ A schema that validates a value is an Uint8Array.
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DelDocSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; }, "strict", ZodTypeAny, { version?: bigint or undefined; }, { version?: bigint or undefined; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L61)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L75)
 
 #### :gear: DocAssertSetSchema
 
@@ -415,7 +415,7 @@ A schema that validates a value is an Uint8Array.
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocAssertSetSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; proposed: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L79)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L95)
 
 #### :gear: DocAssertDeleteSchema
 
@@ -423,7 +423,7 @@ A schema that validates a value is an Uint8Array.
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocAssertDeleteSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; proposed: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L106)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L125)
 
 #### :gear: OnSetDocContextSchema
 
@@ -431,7 +431,7 @@ A schema that validates a value is an Uint8Array.
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnSetDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L52)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L59)
 
 #### :gear: OnSetManyDocsContextSchema
 
@@ -439,7 +439,7 @@ A schema that validates a value is an Uint8Array.
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnSetManyDocsContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodArray<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L65)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L72)
 
 #### :gear: AssertSetDocContextSchema
 
@@ -447,7 +447,7 @@ A schema that validates a value is an Uint8Array.
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertSetDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L80)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L87)
 
 #### :gear: AssertDeleteDocContextSchema
 
@@ -455,7 +455,7 @@ A schema that validates a value is an Uint8Array.
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertDeleteDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L93)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L100)
 
 #### :gear: SatelliteEnvSchema
 
@@ -535,7 +535,7 @@ A schema that validates a value is an Uint8Array.
 | --------------- | --------------------------------------------------- |
 | `IDLTypeSchema` | `ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L8)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L9)
 
 #### :gear: CallArgSchema
 
@@ -543,7 +543,7 @@ A schema that validates a value is an Uint8Array.
 | --------------- | --------------------------------------------------------------------------------- |
 | `CallArgSchema` | `ZodTuple<[ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>, ZodUnknown], null>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L20)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L21)
 
 #### :gear: CallArgsSchema
 
@@ -553,7 +553,7 @@ Schema for encoding the call arguments.
 | ---------------- | --------------------------------------------------------------------------------------------------- |
 | `CallArgsSchema` | `ZodArray<ZodTuple<[ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>, ZodUnknown], null>, "many">` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L32)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L33)
 
 #### :gear: CallResultSchema
 
@@ -561,7 +561,7 @@ Schema for encoding the call arguments.
 | ------------------ | --------------------------------------------------- |
 | `CallResultSchema` | `ZodType<Type<unknown>, ZodTypeDef, Type<unknown>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L48)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L49)
 
 #### :gear: CallParamsSchema
 
@@ -569,7 +569,7 @@ Schema for encoding the call arguments.
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; method: ZodString; args: ZodOptional<...>; result: ZodOptional<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L58)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L59)
 
 ### :factory: CallResponseLengthError
 
@@ -577,31 +577,125 @@ Schema for encoding the call arguments.
 
 ### :tropical_drink: Interfaces
 
+- [Collections](#gear-collections)
 - [HookContext](#gear-hookcontext)
+- [Doc](#gear-doc)
+- [DocUpsert](#gear-docupsert)
+- [SetDoc](#gear-setdoc)
+- [DelDoc](#gear-deldoc)
+- [DocAssertSet](#gear-docassertset)
+- [DocAssertDelete](#gear-docassertdelete)
 - [DocContext](#gear-doccontext)
+- [CallParams](#gear-callparams)
+
+#### :gear: Collections
+
+Defines the collections where a hook or assertion should run.
+
+| Property      | Type                | Description |
+| ------------- | ------------------- | ----------- |
+| `collections` | `readonly string[]` |             |
 
 #### :gear: HookContext
 
 Represents the context provided to hooks, containing information about the caller and related data.
 
-| Property | Type                          | Description |
-| -------- | ----------------------------- | ----------- |
-| `caller` | `Uint8Array<ArrayBufferLike>` |             |
-| `data`   | `T`                           |             |
+| Property | Type                          | Description                                                                     |
+| -------- | ----------------------------- | ------------------------------------------------------------------------------- |
+| `caller` | `Uint8Array<ArrayBufferLike>` | The user who originally triggered the function that in turn triggered the hook. |
+| `data`   | `T`                           | The data associated with the hook execution.                                    |
+
+#### :gear: Doc
+
+Represents a document stored in a collection.
+
+| Property      | Type                          | Description                                                                                                             |
+| ------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `owner`       | `Uint8Array<ArrayBufferLike>` | The user who owns this document.                                                                                        |
+| `data`        | `Uint8Array<ArrayBufferLike>` | The raw data of the document.                                                                                           |
+| `description` | `string or undefined`         | An optional description of the document.                                                                                |
+| `created_at`  | `bigint`                      | The timestamp when the document was first created.                                                                      |
+| `updated_at`  | `bigint`                      | The timestamp when the document was last updated.                                                                       |
+| `version`     | `bigint or undefined`         | The version number of the document, used for consistency checks. If not provided, it's assumed to be the first version. |
+
+#### :gear: DocUpsert
+
+Represents a document update operation.
+
+This is used in hooks where a document is either being created or updated.
+
+| Property | Type               | Description                                                                                  |
+| -------- | ------------------ | -------------------------------------------------------------------------------------------- |
+| `before` | `Doc or undefined` | The previous version of the document before the update. Undefined if this is a new document. |
+| `after`  | `Doc`              | The new version of the document after the update.                                            |
+
+#### :gear: SetDoc
+
+Represents the proposed version of a document to be created or updated.
+This can be validated before allowing the operation.
+
+| Property      | Type                          | Description                                        |
+| ------------- | ----------------------------- | -------------------------------------------------- |
+| `data`        | `Uint8Array<ArrayBufferLike>` | The raw data of the document.                      |
+| `description` | `string or undefined`         | An optional description of the document.           |
+| `version`     | `bigint or undefined`         | The expected version number to ensure consistency. |
+
+#### :gear: DelDoc
+
+Represents the proposed version of a document to be deleted.
+This can be validated before allowing the operation.
+
+| Property  | Type                  | Description                                        |
+| --------- | --------------------- | -------------------------------------------------- |
+| `version` | `bigint or undefined` | The expected version number to ensure consistency. |
+
+#### :gear: DocAssertSet
+
+Represents a validation check before setting a document.
+
+The developer can compare the `current` and `proposed` versions and
+throw an error if their validation fails.
+
+| Property   | Type               | Description                                                                                    |
+| ---------- | ------------------ | ---------------------------------------------------------------------------------------------- |
+| `current`  | `Doc or undefined` | The current version of the document before the operation. Undefined if this is a new document. |
+| `proposed` | `SetDoc`           | The proposed version of the document. This can be validated before allowing the operation.     |
+
+#### :gear: DocAssertDelete
+
+Represents a validation check before deleting a document.
+
+The developer can compare the `current` and `proposed` versions and
+throw an error if their validation fails.
+
+| Property   | Type               | Description                                                                                         |
+| ---------- | ------------------ | --------------------------------------------------------------------------------------------------- |
+| `current`  | `Doc or undefined` | The current version of the document before the operation. Undefined if the document does not exist. |
+| `proposed` | `DelDoc`           | The proposed version of the document. This can be validated before allowing the operation.          |
 
 #### :gear: DocContext
 
 Represents the context of a document operation within a collection.
 
-| Property     | Type     | Description |
-| ------------ | -------- | ----------- |
-| `collection` | `string` |             |
-| `key`        | `string` |             |
-| `data`       | `T`      |             |
+| Property     | Type     | Description                                                    |
+| ------------ | -------- | -------------------------------------------------------------- |
+| `collection` | `string` | The name of the collection where the document is stored.       |
+| `key`        | `string` | The unique key identifying the document within the collection. |
+| `data`       | `T`      | The data associated with the document operation.               |
+
+#### :gear: CallParams
+
+Type representing the parameters required to make a canister call.
+
+| Property     | Type                                       | Description                                                       |
+| ------------ | ------------------------------------------ | ----------------------------------------------------------------- |
+| `canisterId` | `Uint8Array<ArrayBufferLike> or Principal` | The target canister's ID.                                         |
+| `method`     | `string`                                   | The name of the method to call. Minimum one character.            |
+| `args`       | `[Type<unknown>, unknown][] or undefined`  | The arguments, including types and values, for the canister call. |
+| `result`     | `Type<unknown> or undefined`               | The expected result type used for decoding the response.          |
 
 ### :cocktail: Types
 
-- [Collections](#gear-collections)
 - [RawPrincipal](#gear-rawprincipal)
 - [Principal](#gear-principal)
 - [Timestamp](#gear-timestamp)
@@ -614,12 +708,6 @@ Represents the context of a document operation within a collection.
 - [RunFunction](#gear-runfunction)
 - [DocDescription](#gear-docdescription)
 - [RawData](#gear-rawdata)
-- [Doc](#gear-doc)
-- [DocUpsert](#gear-docupsert)
-- [SetDoc](#gear-setdoc)
-- [DelDoc](#gear-deldoc)
-- [DocAssertSet](#gear-docassertset)
-- [DocAssertDelete](#gear-docassertdelete)
 - [OnSetDocContext](#gear-onsetdoccontext)
 - [OnSetManyDocsContext](#gear-onsetmanydocscontext)
 - [AssertSetDocContext](#gear-assertsetdoccontext)
@@ -641,17 +729,6 @@ Represents the context of a document operation within a collection.
 - [CallArg](#gear-callarg)
 - [CallArgs](#gear-callargs)
 - [CallResult](#gear-callresult)
-- [CallParams](#gear-callparams)
-
-#### :gear: Collections
-
-Defines the collections where a hook or assertion should run.
-
-| Type          | Type                                |
-| ------------- | ----------------------------------- |
-| `Collections` | `z.infer<typeof CollectionsSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L19)
 
 #### :gear: RawPrincipal
 
@@ -773,7 +850,7 @@ Represents a document description with a maximum length of 1024 characters.
 | ---------------- | -------------------------------------- |
 | `DocDescription` | `z.infer<typeof DocDescriptionSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L13)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L20)
 
 #### :gear: RawData
 
@@ -785,77 +862,7 @@ This is used to store structured data in a document.
 | --------- | ---------------------------------- |
 | `RawData` | `z.infer<typeof Uint8ArraySchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L25)
-
-#### :gear: Doc
-
-Represents a document stored in a collection.
-
-| Type  | Type                        |
-| ----- | --------------------------- |
-| `Doc` | `z.infer<typeof DocSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L68)
-
-#### :gear: DocUpsert
-
-Represents a document update operation.
-
-This is used in hooks where a document is either being created or updated.
-
-| Type        | Type                              |
-| ----------- | --------------------------------- |
-| `DocUpsert` | `z.infer<typeof DocUpsertSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L28)
-
-#### :gear: SetDoc
-
-Represents the proposed version of a document to be created or updated.
-This can be validated before allowing the operation.
-
-| Type     | Type                           |
-| -------- | ------------------------------ |
-| `SetDoc` | `z.infer<typeof SetDocSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L56)
-
-#### :gear: DelDoc
-
-Represents the proposed version of a document to be deleted.
-This can be validated before allowing the operation.
-
-| Type     | Type                           |
-| -------- | ------------------------------ |
-| `DelDoc` | `z.infer<typeof DelDocSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L74)
-
-#### :gear: DocAssertSet
-
-Represents a validation check before setting a document.
-
-The developer can compare the `current` and `proposed` versions and
-throw an error if their validation fails.
-
-| Type           | Type                                 |
-| -------------- | ------------------------------------ |
-| `DocAssertSet` | `z.infer<typeof DocAssertSetSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L101)
-
-#### :gear: DocAssertDelete
-
-Represents a validation check before deleting a document.
-
-The developer can compare the `current` and `proposed` versions and
-throw an error if their validation fails.
-
-| Type              | Type                                    |
-| ----------------- | --------------------------------------- |
-| `DocAssertDelete` | `z.infer<typeof DocAssertDeleteSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L128)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L32)
 
 #### :gear: OnSetDocContext
 
@@ -864,11 +871,11 @@ The context provided to the `onSetDoc` hook.
 This context contains information about the document being created or updated,
 along with details about the user who triggered the operation.
 
-| Type              | Type                                    |
-| ----------------- | --------------------------------------- |
-| `OnSetDocContext` | `z.infer<typeof OnSetDocContextSchema>` |
+| Type              | Type                                 |
+| ----------------- | ------------------------------------ |
+| `OnSetDocContext` | `HookContext<DocContext<DocUpsert>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L60)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L67)
 
 #### :gear: OnSetManyDocsContext
 
@@ -877,11 +884,11 @@ The context provided to the `onSetManyDocs` hook.
 This context contains information about multiple documents being created or updated
 in a single operation, along with details about the user who triggered it.
 
-| Type                   | Type                                         |
-| ---------------------- | -------------------------------------------- |
-| `OnSetManyDocsContext` | `z.infer<typeof OnSetManyDocsContextSchema>` |
+| Type                   | Type                                   |
+| ---------------------- | -------------------------------------- |
+| `OnSetManyDocsContext` | `HookContext<DocContext<DocUpsert>[]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L75)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L82)
 
 #### :gear: AssertSetDocContext
 
@@ -890,11 +897,11 @@ The context provided to the `assertDeleteDoc` hook.
 This context contains information about the document being validated before
 it is created or updated. If validation fails, the developer should throw an error.
 
-| Type                  | Type                                        |
-| --------------------- | ------------------------------------------- |
-| `AssertSetDocContext` | `z.infer<typeof AssertSetDocContextSchema>` |
+| Type                  | Type                                    |
+| --------------------- | --------------------------------------- |
+| `AssertSetDocContext` | `HookContext<DocContext<DocAssertSet>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L88)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L95)
 
 #### :gear: AssertDeleteDocContext
 
@@ -903,11 +910,11 @@ The context provided to the `assertDeleteDoc` hook.
 This context contains information about the document being validated before
 it is deleted. If validation fails, the developer should throw an error.
 
-| Type                     | Type                                           |
-| ------------------------ | ---------------------------------------------- |
-| `AssertDeleteDocContext` | `z.infer<typeof AssertDeleteDocContextSchema>` |
+| Type                     | Type                                       |
+| ------------------------ | ------------------------------------------ |
+| `AssertDeleteDocContext` | `HookContext<DocContext<DocAssertDelete>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L103)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L110)
 
 #### :gear: SatelliteEnv
 
@@ -1049,7 +1056,7 @@ Custom validation function to verify if a value is an instance of `IDL.Type` fro
 | --------- | ------------------------------- |
 | `IDLType` | `z.infer<typeof IDLTypeSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L15)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L16)
 
 #### :gear: CallArg
 
@@ -1059,7 +1066,7 @@ A call argument consisting of its IDL type and corresponding value.
 | --------- | ------------------------------- |
 | `CallArg` | `z.infer<typeof CallArgSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L26)
 
 #### :gear: CallArgs
 
@@ -1075,7 +1082,7 @@ The order of arguments is preserved for the function call.
 | ---------- | -------------------------------- |
 | `CallArgs` | `z.infer<typeof CallArgsSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L43)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L44)
 
 #### :gear: CallResult
 
@@ -1085,17 +1092,7 @@ Defines the type used to decode the result of a canister call.
 | ------------ | ---------------------------------- |
 | `CallResult` | `z.infer<typeof CallResultSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L53)
-
-#### :gear: CallParams
-
-Type representing the parameters required to make a canister call.
-
-| Type         | Type                               |
-| ------------ | ---------------------------------- |
-| `CallParams` | `z.infer<typeof CallParamsSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L83)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L54)
 
 <!-- TSDOC_END -->
 

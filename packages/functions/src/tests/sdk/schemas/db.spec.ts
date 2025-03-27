@@ -1,49 +1,13 @@
 import {Principal} from '@dfinity/principal';
-import {SetDocSchema, SetDocStoreParamsSchema} from '../../../sdk/schemas/db';
+import {SetDocStoreParamsSchema} from '../../../sdk/schemas/db';
 
 describe('sdk > db', () => {
-  describe('SetDocSchema', () => {
-    const requiredFields = {
-      key: 'doc123',
-      data: new Uint8Array([1, 2, 3])
-    };
-
-    const validSetDoc = {
-      ...requiredFields,
-      description: 'Set a new document',
-      version: 1n
-    };
-
-    it('should validate a SetDoc with all fields', () => {
-      expect(() => SetDocSchema.parse(validSetDoc)).not.toThrow();
-    });
-
-    it('should validate a SetDoc without optional fields', () => {
-      expect(() => SetDocSchema.parse(requiredFields)).not.toThrow();
-    });
-
-    it('should reject a SetDoc without key', () => {
-      const {key, ...invalidDoc} = validSetDoc;
-      expect(() => SetDocSchema.parse(invalidDoc)).toThrow();
-    });
-
-    it('should reject an invalid SetDoc without data', () => {
-      const {data, ...invalidDoc} = validSetDoc;
-      expect(() => SetDocSchema.parse(invalidDoc)).toThrow();
-    });
-
-    it('should reject if unknown fields are present', () => {
-      const invalidDoc = {...validSetDoc, extra_field: 'should not be allowed'};
-      expect(() => SetDocSchema.parse(invalidDoc)).toThrow();
-    });
-  });
-
   describe('SetDocStoreParamsSchema', () => {
     const requiredFields = {
       caller: Principal.anonymous().toUint8Array(),
       collection: 'users',
+      key: 'doc123',
       doc: {
-        key: 'doc123',
         data: new Uint8Array([4, 5, 6])
       }
     };
@@ -89,7 +53,7 @@ describe('sdk > db', () => {
     });
 
     it('should reject a SetDocStoreParams if doc is missing key', () => {
-      const {key, ...invalidDoc} = validSetDocStoreParams.doc;
+      const {data, ...invalidDoc} = validSetDocStoreParams.doc;
       const invalidParams = {...validSetDocStoreParams, doc: invalidDoc};
       expect(() => SetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });

@@ -1,13 +1,12 @@
 import * as z from 'zod';
 import {
+  type DelDoc,
+  DelDocSchema,
   type Doc,
-  type DocDescription,
-  DocDescriptionSchema,
   DocSchema,
-  type RawData,
-  RawDataSchema
+  type SetDoc,
+  SetDocSchema
 } from '../../../schemas/db';
-import {type Version, VersionSchema} from '../../../schemas/satellite';
 
 /**
  * @see DocUpsert
@@ -36,59 +35,6 @@ export interface DocUpsert {
    */
   after: Doc;
 }
-
-/**
- * @see SetDoc
- */
-export const SetDocSchema = z
-  .object({
-    data: RawDataSchema,
-    description: DocDescriptionSchema.optional(),
-    version: VersionSchema.optional()
-  })
-  .strict();
-
-/**
- * Represents the proposed version of a document to be created or updated.
- * This can be validated before allowing the operation.
- */
-export interface SetDoc {
-  /**
-   * The raw data of the document.
-   */
-  data: RawData;
-
-  /**
-   * An optional description of the document.
-   */
-  description?: DocDescription;
-
-  /**
-   * The expected version number to ensure consistency.
-   */
-  version?: Version;
-}
-
-/**
- * @see DelDoc
- */
-export const DelDocSchema = z
-  .object({
-    version: VersionSchema.optional()
-  })
-  .strict();
-
-/**
- * Represents the proposed version of a document to be deleted.
- * This can be validated before allowing the operation.
- */
-export interface DelDoc {
-  /**
-   * The expected version number to ensure consistency.
-   */
-  version?: Version;
-}
-
 /**
  * @see DocAssertSet
  */

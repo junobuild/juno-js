@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {type SetDoc, SetDocSchema} from '../../hooks/schemas/db/payload';
+import {type SetDoc, SetDocSchema} from '../../schemas/db';
 import {
   type Collection,
   CollectionSchema,

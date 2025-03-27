@@ -1,9 +1,7 @@
 import {
-  DelDocSchema,
   DocAssertDeleteSchema,
   DocAssertSetSchema,
-  DocUpsertSchema,
-  SetDocSchema
+  DocUpsertSchema
 } from '../../../../hooks/schemas/db/payload';
 
 describe('payload', () => {
@@ -45,39 +43,6 @@ describe('payload', () => {
     });
   });
 
-  describe('SetDocSchema', () => {
-    const requiredFields = {
-      data: new Uint8Array([1, 2, 3])
-    };
-
-    const validSetDoc = {
-      ...requiredFields,
-      description: 'New proposed doc',
-      version: 2n
-    };
-
-    it('should validate a SetDoc with all fields', () => {
-      expect(() => SetDocSchema.parse(validSetDoc)).not.toThrow();
-    });
-
-    it('should validate a SetDoc without optional fields', () => {
-      expect(() => SetDocSchema.parse(requiredFields)).not.toThrow();
-    });
-
-    it('should reject an invalid SetDoc without data', () => {
-      const invalidSetDoc = {description: 'Missing data'};
-      expect(() => SetDocSchema.parse(invalidSetDoc)).toThrow();
-    });
-
-    it('should reject if unknown fields', () => {
-      const invalidDoc = {
-        ...requiredFields,
-        extra_field: 'should not be allowed'
-      };
-      expect(() => SetDocSchema.parse(invalidDoc)).toThrow();
-    });
-  });
-
   describe('DocAssertSetSchema', () => {
     const validDocAssertSet = {
       current: {
@@ -112,33 +77,6 @@ describe('payload', () => {
         extra_field: 'should not be allowed'
       };
       expect(() => DocAssertSetSchema.parse(invalidDoc)).toThrow();
-    });
-  });
-
-  describe('DelDocSchema', () => {
-    const validDelDoc = {
-      version: 5n
-    };
-
-    it('should validate a DelDoc with a version', () => {
-      expect(() => DelDocSchema.parse(validDelDoc)).not.toThrow();
-    });
-
-    it('should validate a DelDoc without a version (optional)', () => {
-      expect(() => DelDocSchema.parse({})).not.toThrow();
-    });
-
-    it('should reject if version is not a bigint', () => {
-      const invalidDelDoc = {version: '5'};
-      expect(() => DelDocSchema.parse(invalidDelDoc)).toThrow();
-    });
-
-    it('should reject if unknown fields are present', () => {
-      const invalidDelDoc = {
-        version: 5n,
-        extra_field: 'not allowed'
-      };
-      expect(() => DelDocSchema.parse(invalidDelDoc)).toThrow();
     });
   });
 

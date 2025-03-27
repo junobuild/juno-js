@@ -50,7 +50,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ---------------------- | ----------------------------------------------------------------------------------------------- |
 | `AssertFunctionSchema` | `<T extends z.ZodTypeAny>(contextSchema: T) => ZodFunction<ZodTuple<[T], ZodUnknown>, ZodVoid>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L41)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L44)
 
 #### :gear: RunFunctionSchema
 
@@ -58,7 +58,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `RunFunctionSchema` | `<T extends z.ZodTypeAny>(contextSchema: T) => ZodFunction<ZodTuple<[T], ZodUnknown>, ZodUnion<[ZodPromise<ZodVoid>, ZodVoid]>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L56)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L59)
 
 #### :gear: DocContextSchema
 
@@ -431,7 +431,7 @@ A schema that validates a value is an Uint8Array.
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnSetDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L48)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L52)
 
 #### :gear: OnSetManyDocsContextSchema
 
@@ -439,7 +439,7 @@ A schema that validates a value is an Uint8Array.
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnSetManyDocsContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodArray<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L61)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L65)
 
 #### :gear: AssertSetDocContextSchema
 
@@ -447,7 +447,7 @@ A schema that validates a value is an Uint8Array.
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertSetDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L76)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L80)
 
 #### :gear: AssertDeleteDocContextSchema
 
@@ -455,7 +455,7 @@ A schema that validates a value is an Uint8Array.
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertDeleteDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L89)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L93)
 
 #### :gear: SatelliteEnvSchema
 
@@ -575,6 +575,30 @@ Schema for encoding the call arguments.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/types/errors.ts#L1)
 
+### :tropical_drink: Interfaces
+
+- [HookContext](#gear-hookcontext)
+- [DocContext](#gear-doccontext)
+
+#### :gear: HookContext
+
+Represents the context provided to hooks, containing information about the caller and related data.
+
+| Property | Type                          | Description |
+| -------- | ----------------------------- | ----------- |
+| `caller` | `Uint8Array<ArrayBufferLike>` |             |
+| `data`   | `T`                           |             |
+
+#### :gear: DocContext
+
+Represents the context of a document operation within a collection.
+
+| Property     | Type     | Description |
+| ------------ | -------- | ----------- |
+| `collection` | `string` |             |
+| `key`        | `string` |             |
+| `data`       | `T`      |             |
+
 ### :cocktail: Types
 
 - [Collections](#gear-collections)
@@ -586,7 +610,6 @@ Schema for encoding the call arguments.
 - [UserId](#gear-userid)
 - [Collection](#gear-collection)
 - [Key](#gear-key)
-- [HookContext](#gear-hookcontext)
 - [AssertFunction](#gear-assertfunction)
 - [RunFunction](#gear-runfunction)
 - [DocDescription](#gear-docdescription)
@@ -597,7 +620,6 @@ Schema for encoding the call arguments.
 - [DelDoc](#gear-deldoc)
 - [DocAssertSet](#gear-docassertset)
 - [DocAssertDelete](#gear-docassertdelete)
-- [DocContext](#gear-doccontext)
 - [OnSetDocContext](#gear-onsetdoccontext)
 - [OnSetManyDocsContext](#gear-onsetmanydocscontext)
 - [AssertSetDocContext](#gear-assertsetdoccontext)
@@ -719,27 +741,17 @@ A unique key identifier within a collection.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L70)
 
-#### :gear: HookContext
-
-Represents the context provided to hooks, containing information about the caller and related data.
-
-| Type          | Type                                               |
-| ------------- | -------------------------------------------------- |
-| `HookContext` | `z.infer<ReturnType<typeof HookContextSchema<T>>>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L36)
-
 #### :gear: AssertFunction
 
 Defines the `assert` function schema for assertions.
 
 The function takes a context argument and returns `void`.
 
-| Type             | Type                                                             |
-| ---------------- | ---------------------------------------------------------------- |
-| `AssertFunction` | `z.infer<ReturnType<typeof AssertFunctionSchema<z.ZodType<T>>>>` |
+| Type             | Type                   |
+| ---------------- | ---------------------- |
+| `AssertFunction` | `(context: T) => void` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L51)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L54)
 
 #### :gear: RunFunction
 
@@ -747,11 +759,11 @@ Defines the `run` function schema for hooks.
 
 The function takes a context argument and returns either a `Promise<void>` or `void`.
 
-| Type          | Type                                                          |
-| ------------- | ------------------------------------------------------------- |
-| `RunFunction` | `z.infer<ReturnType<typeof RunFunctionSchema<z.ZodType<T>>>>` |
+| Type          | Type                                    |
+| ------------- | --------------------------------------- |
+| `RunFunction` | `(context: T) => void or Promise<void>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L66)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L69)
 
 #### :gear: DocDescription
 
@@ -845,16 +857,6 @@ throw an error if their validation fails.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L128)
 
-#### :gear: DocContext
-
-Represents the context of a document operation within a collection.
-
-| Type         | Type                                              |
-| ------------ | ------------------------------------------------- |
-| `DocContext` | `z.infer<ReturnType<typeof DocContextSchema<T>>>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L43)
-
 #### :gear: OnSetDocContext
 
 The context provided to the `onSetDoc` hook.
@@ -866,7 +868,7 @@ along with details about the user who triggered the operation.
 | ----------------- | --------------------------------------- |
 | `OnSetDocContext` | `z.infer<typeof OnSetDocContextSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L56)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L60)
 
 #### :gear: OnSetManyDocsContext
 
@@ -879,7 +881,7 @@ in a single operation, along with details about the user who triggered it.
 | ---------------------- | -------------------------------------------- |
 | `OnSetManyDocsContext` | `z.infer<typeof OnSetManyDocsContextSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L71)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L75)
 
 #### :gear: AssertSetDocContext
 
@@ -892,7 +894,7 @@ it is created or updated. If validation fails, the developer should throw an err
 | --------------------- | ------------------------------------------- |
 | `AssertSetDocContext` | `z.infer<typeof AssertSetDocContextSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L84)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L88)
 
 #### :gear: AssertDeleteDocContext
 
@@ -905,7 +907,7 @@ it is deleted. If validation fails, the developer should throw an error.
 | ------------------------ | ---------------------------------------------- |
 | `AssertDeleteDocContext` | `z.infer<typeof AssertDeleteDocContextSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L99)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L103)
 
 #### :gear: SatelliteEnv
 

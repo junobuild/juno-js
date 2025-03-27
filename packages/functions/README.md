@@ -170,9 +170,9 @@ Stores or updates a document in the datastore.
 
 The data must have been encoded - using encodeDocData - before calling this function.
 
-| Function      | Type                                                                                                                                                                                                                      |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `setDocStore` | `(params: { caller: Uint8Array<ArrayBufferLike> or Principal; collection: string; key: string; doc: { data: Uint8Array<ArrayBufferLike>; description?: string or undefined; version?: bigint or undefined; }; }) => void` |
+| Function      | Type                                  |
+| ------------- | ------------------------------------- |
+| `setDocStore` | `(params: SetDocStoreParams) => void` |
 
 Parameters:
 
@@ -518,7 +518,7 @@ A schema that validates a value is an Uint8Array.
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocStoreParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; doc: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L8)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L17)
 
 #### :gear: IDLTypeSchema
 
@@ -577,6 +577,7 @@ Schema for encoding the call arguments.
 - [DocAssertSet](#gear-docassertset)
 - [DocAssertDelete](#gear-docassertdelete)
 - [DocContext](#gear-doccontext)
+- [SetDocStoreParams](#gear-setdocstoreparams)
 - [CallParams](#gear-callparams)
 
 #### :gear: Collections
@@ -674,6 +675,20 @@ Represents the context of a document operation within a collection.
 | `key`        | `string` | The unique key identifying the document within the collection. |
 | `data`       | `T`      | The data associated with the document operation.               |
 
+#### :gear: SetDocStoreParams
+
+Represents the parameters required to store or update a document.
+
+This includes the document data along with metadata such as the caller,
+collection, and key.
+
+| Property     | Type                                       | Description                                                                         |
+| ------------ | ------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `caller`     | `Uint8Array<ArrayBufferLike> or Principal` | The caller who initiate the document operation.                                     |
+| `collection` | `string`                                   | The name of the collection where the document is stored.                            |
+| `key`        | `string`                                   | The unique key identifying the document within the collection.                      |
+| `doc`        | `SetDoc`                                   | The data, optional description and version required to create or update a document. |
+
 #### :gear: CallParams
 
 Type representing the parameters required to make a canister call.
@@ -714,7 +729,6 @@ Type representing the parameters required to make a canister call.
 - [Hook](#gear-hook)
 - [HookFn](#gear-hookfn)
 - [HookFnOrObject](#gear-hookfnorobject)
-- [SetDocStoreParams](#gear-setdocstoreparams)
 - [IDLType](#gear-idltype)
 - [CallArg](#gear-callarg)
 - [CallArgs](#gear-callargs)
@@ -1012,19 +1026,6 @@ All hooks definitions.
 | `HookFnOrObject` | `T or HookFn<T>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L59)
-
-#### :gear: SetDocStoreParams
-
-Represents the parameters required to store or update a document.
-
-This includes the document data along with metadata such as the caller,
-collection, and key.
-
-| Type                | Type                                      |
-| ------------------- | ----------------------------------------- |
-| `SetDocStoreParams` | `z.infer<typeof SetDocStoreParamsSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L38)
 
 #### :gear: IDLType
 

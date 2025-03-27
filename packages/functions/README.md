@@ -827,7 +827,7 @@ This can be validated before allowing the operation.
 
 | Type     | Type                           |
 | -------- | ------------------------------ |
-| `DelDoc` | `z.infer<typeof SetDocSchema>` |
+| `DelDoc` | `z.infer<typeof DelDocSchema>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L74)
 

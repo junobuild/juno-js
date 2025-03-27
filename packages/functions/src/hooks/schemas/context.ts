@@ -1,6 +1,6 @@
 import type {baseObjectInputType, baseObjectOutputType, ZodObject, ZodTypeAny} from 'zod';
 import * as z from 'zod';
-import {RawUserId, RawUserIdSchema} from '../../schemas/satellite';
+import {type RawUserId, RawUserIdSchema} from '../../schemas/satellite';
 
 /**
  * @see HookContext

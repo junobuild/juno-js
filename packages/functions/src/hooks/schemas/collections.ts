@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {Collection} from '../../schemas/satellite';
+import type {Collection} from '../../schemas/satellite';
 
 /**
  * @see Collections

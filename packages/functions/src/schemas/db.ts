@@ -1,11 +1,11 @@
 import * as z from 'zod';
 import {Uint8ArraySchema} from './candid';
 import {
-  RawUserId,
+  type RawUserId,
   RawUserIdSchema,
-  Timestamp,
+  type Timestamp,
   TimestampSchema,
-  Version,
+  type Version,
   VersionSchema
 } from './satellite';
 

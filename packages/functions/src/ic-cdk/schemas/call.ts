@@ -1,7 +1,7 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import * as z from 'zod';
-import {PrincipalSchema, RawPrincipal, RawPrincipalSchema} from '../../schemas/candid';
+import {PrincipalSchema, type RawPrincipal, RawPrincipalSchema} from '../../schemas/candid';
 
 /**
  * @see IDLType

@@ -1,28 +1,20 @@
 import * as z from 'zod';
 import {
-  Doc,
-  DocDescription,
+  type Doc,
+  type DocDescription,
   DocDescriptionSchema,
   DocSchema,
-  RawData,
+  type RawData,
   RawDataSchema
 } from '../../../schemas/db';
-import {Version, VersionSchema} from '../../../schemas/satellite';
+import {type Version, VersionSchema} from '../../../schemas/satellite';
 
 /**
  * @see DocUpsert
  */
 export const DocUpsertSchema = z
   .object({
-    /**
-     * The previous version of the document before the update.
-     * Undefined if this is a new document.
-     */
     before: DocSchema.optional(),
-
-    /**
-     * The new version of the document after the update.
-     */
     after: DocSchema
   })
   .strict();
@@ -33,7 +25,15 @@ export const DocUpsertSchema = z
  * This is used in hooks where a document is either being created or updated.
  */
 export interface DocUpsert {
+  /**
+   * The previous version of the document before the update.
+   * Undefined if this is a new document.
+   */
   before?: Doc;
+
+  /**
+   * The new version of the document after the update.
+   */
   after: Doc;
 }
 
@@ -42,19 +42,8 @@ export interface DocUpsert {
  */
 export const SetDocSchema = z
   .object({
-    /**
-     * The raw data of the document.
-     */
     data: RawDataSchema,
-
-    /**
-     * An optional description of the document.
-     */
     description: DocDescriptionSchema.optional(),
-
-    /**
-     * The expected version number to ensure consistency.
-     */
     version: VersionSchema.optional()
   })
   .strict();
@@ -64,8 +53,19 @@ export const SetDocSchema = z
  * This can be validated before allowing the operation.
  */
 export interface SetDoc {
+  /**
+   * The raw data of the document.
+   */
   data: RawData;
+
+  /**
+   * An optional description of the document.
+   */
   description?: DocDescription;
+
+  /**
+   * The expected version number to ensure consistency.
+   */
   version?: Version;
 }
 
@@ -74,9 +74,6 @@ export interface SetDoc {
  */
 export const DelDocSchema = z
   .object({
-    /**
-     * The expected version number to ensure consistency.
-     */
     version: VersionSchema.optional()
   })
   .strict();
@@ -86,6 +83,9 @@ export const DelDocSchema = z
  * This can be validated before allowing the operation.
  */
 export interface DelDoc {
+  /**
+   * The expected version number to ensure consistency.
+   */
   version?: Version;
 }
 
@@ -94,16 +94,7 @@ export interface DelDoc {
  */
 export const DocAssertSetSchema = z
   .object({
-    /**
-     * The current version of the document before the operation.
-     * Undefined if this is a new document.
-     */
     current: DocSchema.optional(),
-
-    /**
-     * The proposed version of the document.
-     * This can be validated before allowing the operation.
-     */
     proposed: SetDocSchema
   })
   .strict();
@@ -115,7 +106,16 @@ export const DocAssertSetSchema = z
  * throw an error if their validation fails.
  */
 export interface DocAssertSet {
+  /**
+   * The current version of the document before the operation.
+   * Undefined if this is a new document.
+   */
   current?: Doc;
+
+  /**
+   * The proposed version of the document.
+   * This can be validated before allowing the operation.
+   */
   proposed: SetDoc;
 }
 
@@ -124,16 +124,7 @@ export interface DocAssertSet {
  */
 export const DocAssertDeleteSchema = z
   .object({
-    /**
-     * The current version of the document before the operation.
-     * Undefined if the document does not exist.
-     */
     current: DocSchema.optional(),
-
-    /**
-     * The proposed version of the document.
-     * This can be validated before allowing the operation.
-     */
     proposed: DelDocSchema
   })
   .strict();
@@ -145,6 +136,15 @@ export const DocAssertDeleteSchema = z
  * throw an error if their validation fails.
  */
 export interface DocAssertDelete {
+  /**
+   * The current version of the document before the operation.
+   * Undefined if the document does not exist.
+   */
   current?: Doc;
+
+  /**
+   * The proposed version of the document.
+   * This can be validated before allowing the operation.
+   */
   proposed: DelDoc;
 }

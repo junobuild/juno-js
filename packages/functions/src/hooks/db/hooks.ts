@@ -1,24 +1,35 @@
 import * as z from 'zod';
-import {CollectionsSchema} from '../schemas/collections';
-import {RunFunctionSchema} from '../schemas/context';
-import {OnSetDocContextSchema, OnSetManyDocsContextSchema} from '../schemas/db/context';
+import {type Collections, CollectionsSchema} from '../schemas/collections';
+import {type RunFunction, RunFunctionSchema} from '../schemas/context';
+import {
+  type OnSetDocContext,
+  OnSetDocContextSchema,
+  OnSetManyDocsContextSchema
+} from '../schemas/db/context';
 import {SatelliteEnvSchema} from '../schemas/satellite.env';
+
+/**
+ * @see OnHook
+ */
+const OnHookSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
+  CollectionsSchema.extend({
+    run: RunFunctionSchema<T>(contextSchema)
+  }).strict();
 
 /**
  * A generic schema for defining hooks related to collections.
  *
  * @template T - The type of context passed to the hook when triggered.
  */
-const OnHookSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
-  CollectionsSchema.extend({
-    /**
-     * A function that runs when the hook is triggered for the specified collections.
-     *
-     * @param {T} context - Contains information about the affected document(s).
-     * @returns {Promise<void>} Resolves when the operation completes.
-     */
-    run: RunFunctionSchema<T>(contextSchema)
-  }).strict();
+export type OnHook<T> = Collections & {
+  /**
+   * A function that runs when the hook is triggered for the specified collections.
+   *
+   * @param {T} context - Contains information about the affected document(s).
+   * @returns {Promise<void>} Resolves when the operation completes.
+   */
+  run: RunFunction<T>;
+};
 
 /**
  * @see OnSetDoc
@@ -28,7 +39,7 @@ export const OnSetDocSchema = OnHookSchema(OnSetDocContextSchema);
 /**
  * A hook that runs when a document is created or updated.
  */
-export type OnSetDoc = z.infer<typeof OnSetDocSchema>;
+export type OnSetDoc = OnHook<OnSetDocContext>;
 
 /**
  * @see OnSetManyDocs
@@ -38,7 +49,7 @@ export const OnSetManyDocsSchema = OnHookSchema(OnSetManyDocsContextSchema);
 /**
  * A hook that runs when multiple documents are created or updated.
  */
-export type OnSetManyDocs = z.infer<typeof OnSetManyDocsSchema>;
+export type OnSetManyDocs = OnHook<OnSetDocContext>;
 
 /**
  * @see Hook
@@ -48,7 +59,7 @@ export const HookSchema = z.union([OnSetDocSchema, OnSetManyDocsSchema]);
 /**
  * All hooks definitions.
  */
-export type Hook = z.infer<typeof HookSchema>;
+export type Hook = OnSetDoc | OnSetManyDocs;
 
 export const HookFnSchema = <T extends z.ZodTypeAny>(hookSchema: T) =>
   z.function().args(SatelliteEnvSchema).returns(hookSchema);

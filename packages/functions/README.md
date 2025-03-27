@@ -172,7 +172,7 @@ The data must have been encoded - using encodeDocData - before calling this func
 
 | Function      | Type                                                                                                                                                                                                                      |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `setDocStore` | `(params: { caller: Uint8Array<ArrayBufferLike> or Principal; collection: string; doc: { data: Uint8Array<ArrayBufferLike>; key: string; description?: string or undefined; version?: bigint or undefined; }; }) => void` |
+| `setDocStore` | `(params: { caller: Uint8Array<ArrayBufferLike> or Principal; collection: string; key: string; doc: { data: Uint8Array<ArrayBufferLike>; description?: string or undefined; version?: bigint or undefined; }; }) => void` |
 
 Parameters:
 
@@ -271,7 +271,6 @@ the Principal of the executing canister.
 - [OnSetDocSchema](#gear-onsetdocschema)
 - [OnSetManyDocsSchema](#gear-onsetmanydocsschema)
 - [HookSchema](#gear-hookschema)
-- [SetDocSchema](#gear-setdocschema)
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
 - [IDLTypeSchema](#gear-idltypeschema)
 - [CallArgSchema](#gear-callargschema)
@@ -513,21 +512,13 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L46)
 
-#### :gear: SetDocSchema
-
-| Constant       | Type                                                                                                                                                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SetDocSchema` | `ZodObject<{ key: ZodString; description: ZodOptional<ZodString>; data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L14)
-
 #### :gear: SetDocStoreParamsSchema
 
-| Constant                  | Type                                                                                                                                                                                                                    |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SetDocStoreParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; doc: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                  | Type                                                                                                                                                                                                                                    |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SetDocStoreParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; doc: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L8)
 
 #### :gear: IDLTypeSchema
 
@@ -723,7 +714,6 @@ Type representing the parameters required to make a canister call.
 - [Hook](#gear-hook)
 - [HookFn](#gear-hookfn)
 - [HookFnOrObject](#gear-hookfnorobject)
-- [SetDoc](#gear-setdoc)
 - [SetDocStoreParams](#gear-setdocstoreparams)
 - [IDLType](#gear-idltype)
 - [CallArg](#gear-callarg)
@@ -1023,18 +1013,6 @@ All hooks definitions.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L59)
 
-#### :gear: SetDoc
-
-Represents a request to set or update a document.
-
-This is used when submitting new document data.
-
-| Type     | Type                           |
-| -------- | ------------------------------ |
-| `SetDoc` | `z.infer<typeof SetDocSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L44)
-
 #### :gear: SetDocStoreParams
 
 Represents the parameters required to store or update a document.
@@ -1046,7 +1024,7 @@ collection, and key.
 | ------------------- | ----------------------------------------- |
 | `SetDocStoreParams` | `z.infer<typeof SetDocStoreParamsSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L74)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L38)
 
 #### :gear: IDLType
 

@@ -7,21 +7,25 @@ vi.stubGlobal('__juno_satellite_datastore_set_doc_store', vi.fn());
 
 describe('db.sdk', () => {
   const baseDoc = {
-    key: 'user123',
     data: new Uint8Array([4, 5, 6]),
     description: 'Test document',
     version: BigInt(1)
   };
 
+  const key = 'user123';
+  const collection = 'users';
+
   const validParamsWithUint8Array: SetDocStoreParams = {
     caller: Principal.anonymous().toUint8Array(),
-    collection: 'users',
+    collection,
+    key,
     doc: baseDoc
   };
 
   const validParamsWithPrincipal: SetDocStoreParams = {
     caller: Principal.anonymous(),
-    collection: 'users',
+    collection,
+    key,
     doc: baseDoc
   };
 
@@ -31,7 +35,7 @@ describe('db.sdk', () => {
     expect(global.__juno_satellite_datastore_set_doc_store).toHaveBeenCalledWith(
       validParamsWithUint8Array.caller,
       validParamsWithUint8Array.collection,
-      validParamsWithUint8Array.doc.key,
+      validParamsWithUint8Array.key,
       {
         data: validParamsWithUint8Array.doc.data,
         description: validParamsWithUint8Array.doc.description,
@@ -46,7 +50,7 @@ describe('db.sdk', () => {
     expect(global.__juno_satellite_datastore_set_doc_store).toHaveBeenCalledWith(
       (validParamsWithPrincipal.caller as Principal).toUint8Array(),
       validParamsWithPrincipal.collection,
-      validParamsWithPrincipal.doc.key,
+      validParamsWithPrincipal.key,
       {
         data: validParamsWithPrincipal.doc.data,
         description: validParamsWithPrincipal.doc.description,

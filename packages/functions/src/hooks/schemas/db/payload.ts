@@ -28,9 +28,9 @@ export const DocUpsertSchema = z
 export type DocUpsert = z.infer<typeof DocUpsertSchema>;
 
 /**
- * @see ProposedDoc
+ * @see SetDoc
  */
-export const ProposedDocSchema = z
+export const SetDocSchema = z
   .object({
     /**
      * The raw data of the document.
@@ -50,10 +50,28 @@ export const ProposedDocSchema = z
   .strict();
 
 /**
- * Represents the proposed version of a document.
+ * Represents the proposed version of a document to be created or updated.
  * This can be validated before allowing the operation.
  */
-export type ProposedDoc = z.infer<typeof ProposedDocSchema>;
+export type SetDoc = z.infer<typeof SetDocSchema>;
+
+/**
+ * @see DelDoc
+ */
+export const DelDocSchema = z
+  .object({
+    /**
+     * The expected version number to ensure consistency.
+     */
+    version: VersionSchema.optional()
+  })
+  .strict();
+
+/**
+ * Represents the proposed version of a document to be deleted.
+ * This can be validated before allowing the operation.
+ */
+export type DelDoc = z.infer<typeof SetDocSchema>;
 
 /**
  * @see DocAssertSet
@@ -70,7 +88,7 @@ export const DocAssertSetSchema = z
      * The proposed version of the document.
      * This can be validated before allowing the operation.
      */
-    proposed: ProposedDocSchema
+    proposed: SetDocSchema
   })
   .strict();
 
@@ -81,3 +99,30 @@ export const DocAssertSetSchema = z
  * throw an error if their validation fails.
  */
 export type DocAssertSet = z.infer<typeof DocAssertSetSchema>;
+
+/**
+ * @see DocAssertDelete
+ */
+export const DocAssertDeleteSchema = z
+  .object({
+    /**
+     * The current version of the document before the operation.
+     * Undefined if the document does not exist.
+     */
+    current: DocSchema.optional(),
+
+    /**
+     * The proposed version of the document.
+     * This can be validated before allowing the operation.
+     */
+    proposed: DelDocSchema
+  })
+  .strict();
+
+/**
+ * Represents a validation check before deleting a document.
+ *
+ * The developer can compare the `current` and `proposed` versions and
+ * throw an error if their validation fails.
+ */
+export type DocAssertDelete = z.infer<typeof DocAssertDeleteSchema>;

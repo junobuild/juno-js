@@ -1,7 +1,9 @@
 import {
+  DelDocSchema,
+  DocAssertDeleteSchema,
   DocAssertSetSchema,
   DocUpsertSchema,
-  ProposedDocSchema
+  SetDocSchema
 } from '../../../../hooks/schemas/db/payload';
 
 describe('payload', () => {
@@ -43,28 +45,28 @@ describe('payload', () => {
     });
   });
 
-  describe('ProposedDocSchema', () => {
+  describe('SetDocSchema', () => {
     const requiredFields = {
       data: new Uint8Array([1, 2, 3])
     };
 
-    const validProposedDoc = {
+    const validSetDoc = {
       ...requiredFields,
       description: 'New proposed doc',
       version: 2n
     };
 
-    it('should validate a ProposedDoc with all fields', () => {
-      expect(() => ProposedDocSchema.parse(validProposedDoc)).not.toThrow();
+    it('should validate a SetDoc with all fields', () => {
+      expect(() => SetDocSchema.parse(validSetDoc)).not.toThrow();
     });
 
-    it('should validate a ProposedDoc without optional fields', () => {
-      expect(() => ProposedDocSchema.parse(requiredFields)).not.toThrow();
+    it('should validate a SetDoc without optional fields', () => {
+      expect(() => SetDocSchema.parse(requiredFields)).not.toThrow();
     });
 
-    it('should reject an invalid ProposedDoc without data', () => {
-      const invalidProposedDoc = {description: 'Missing data'};
-      expect(() => ProposedDocSchema.parse(invalidProposedDoc)).toThrow();
+    it('should reject an invalid SetDoc without data', () => {
+      const invalidSetDoc = {description: 'Missing data'};
+      expect(() => SetDocSchema.parse(invalidSetDoc)).toThrow();
     });
 
     it('should reject if unknown fields', () => {
@@ -72,7 +74,7 @@ describe('payload', () => {
         ...requiredFields,
         extra_field: 'should not be allowed'
       };
-      expect(() => ProposedDocSchema.parse(invalidDoc)).toThrow();
+      expect(() => SetDocSchema.parse(invalidDoc)).toThrow();
     });
   });
 
@@ -110,6 +112,92 @@ describe('payload', () => {
         extra_field: 'should not be allowed'
       };
       expect(() => DocAssertSetSchema.parse(invalidDoc)).toThrow();
+    });
+  });
+
+  describe('DelDocSchema', () => {
+    const validDelDoc = {
+      version: 5n
+    };
+
+    it('should validate a DelDoc with a version', () => {
+      expect(() => DelDocSchema.parse(validDelDoc)).not.toThrow();
+    });
+
+    it('should validate a DelDoc without a version (optional)', () => {
+      expect(() => DelDocSchema.parse({})).not.toThrow();
+    });
+
+    it('should reject if version is not a bigint', () => {
+      const invalidDelDoc = {version: '5'};
+      expect(() => DelDocSchema.parse(invalidDelDoc)).toThrow();
+    });
+
+    it('should reject if unknown fields are present', () => {
+      const invalidDelDoc = {
+        version: 5n,
+        extra_field: 'not allowed'
+      };
+      expect(() => DelDocSchema.parse(invalidDelDoc)).toThrow();
+    });
+  });
+
+  describe('DocAssertDeleteSchema', () => {
+    const currentDoc = {
+      owner: new Uint8Array([1, 2, 3]),
+      data: new Uint8Array([4, 5, 6]),
+      created_at: 1700000000000000n,
+      updated_at: 1700000000000001n
+    };
+
+    const proposedDelDoc = {
+      version: 2n
+    };
+
+    it('should validate a valid DocAssertDelete with current and proposed', () => {
+      expect(() =>
+        DocAssertDeleteSchema.parse({
+          current: currentDoc,
+          proposed: proposedDelDoc
+        })
+      ).not.toThrow();
+    });
+
+    it('should validate a DocAssertDelete without current (document does not exist)', () => {
+      expect(() =>
+        DocAssertDeleteSchema.parse({
+          proposed: proposedDelDoc
+        })
+      ).not.toThrow();
+    });
+
+    it('should reject a DocAssertDelete without proposed', () => {
+      expect(() =>
+        DocAssertDeleteSchema.parse({
+          current: currentDoc
+        })
+      ).toThrow();
+    });
+
+    it('should reject if unknown fields are present', () => {
+      expect(() =>
+        DocAssertDeleteSchema.parse({
+          current: currentDoc,
+          proposed: proposedDelDoc,
+          extra_field: 'not allowed'
+        })
+      ).toThrow();
+    });
+
+    it('should reject if proposed.version is not a bigint', () => {
+      expect(() =>
+        DocAssertDeleteSchema.parse({
+          current: currentDoc,
+          proposed: {
+            version: 'invalid'
+          }
+        })
+      ).toThrow();
     });
   });
 });

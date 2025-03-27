@@ -1,6 +1,7 @@
 import {IDL} from '@dfinity/candid';
+import {Principal} from '@dfinity/principal';
 import * as z from 'zod';
-import {PrincipalSchema, RawPrincipalSchema} from '../../schemas/candid';
+import {PrincipalSchema, RawPrincipal, RawPrincipalSchema} from '../../schemas/candid';
 
 /**
  * @see IDLType
@@ -56,28 +57,33 @@ export type CallResult = z.infer<typeof CallResultSchema>;
  * @see CallParams
  */
 export const CallParamsSchema = z.object({
-  /**
-   * The target canister's ID.
-   */
   canisterId: RawPrincipalSchema.or(PrincipalSchema),
-
-  /**
-   * The name of the method to call.
-   */
   method: z.string().min(1),
-
-  /**
-   * The arguments, including types and values, for the canister call.
-   */
   args: CallArgsSchema.optional(),
-
-  /**
-   * The expected result type used for decoding the response.
-   */
   result: CallResultSchema.optional()
 });
 
 /**
  * Type representing the parameters required to make a canister call.
  */
-export type CallParams = z.infer<typeof CallParamsSchema>;
+export interface CallParams {
+  /**
+   * The target canister's ID.
+   */
+  canisterId: RawPrincipal | Principal;
+
+  /**
+   * The name of the method to call. Minimum one character.
+   */
+  method: string;
+
+  /**
+   * The arguments, including types and values, for the canister call.
+   */
+  args?: CallArgs;
+
+  /**
+   * The expected result type used for decoding the response.
+   */
+  result?: CallResult;
+}

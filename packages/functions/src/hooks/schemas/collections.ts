@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import {Collection} from '../../schemas/satellite';
 
 /**
  * @see Collections
@@ -16,4 +17,6 @@ export const CollectionsSchema = z
 /**
  * Defines the collections where a hook or assertion should run.
  */
-export type Collections = z.infer<typeof CollectionsSchema>;
+export interface Collections {
+  collections: readonly Collection[];
+}

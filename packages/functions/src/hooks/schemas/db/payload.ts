@@ -1,6 +1,13 @@
 import * as z from 'zod';
-import {DocDescriptionSchema, DocSchema, RawDataSchema} from '../../../schemas/db';
-import {VersionSchema} from '../../../schemas/satellite';
+import {
+  Doc,
+  DocDescription,
+  DocDescriptionSchema,
+  DocSchema,
+  RawData,
+  RawDataSchema
+} from '../../../schemas/db';
+import {Version, VersionSchema} from '../../../schemas/satellite';
 
 /**
  * @see DocUpsert
@@ -25,7 +32,10 @@ export const DocUpsertSchema = z
  *
  * This is used in hooks where a document is either being created or updated.
  */
-export type DocUpsert = z.infer<typeof DocUpsertSchema>;
+export interface DocUpsert {
+  before?: Doc;
+  after: Doc;
+}
 
 /**
  * @see SetDoc
@@ -53,7 +63,11 @@ export const SetDocSchema = z
  * Represents the proposed version of a document to be created or updated.
  * This can be validated before allowing the operation.
  */
-export type SetDoc = z.infer<typeof SetDocSchema>;
+export interface SetDoc {
+  data: RawData;
+  description?: DocDescription;
+  version?: Version;
+}
 
 /**
  * @see DelDoc
@@ -71,7 +85,9 @@ export const DelDocSchema = z
  * Represents the proposed version of a document to be deleted.
  * This can be validated before allowing the operation.
  */
-export type DelDoc = z.infer<typeof DelDocSchema>;
+export interface DelDoc {
+  version?: Version;
+}
 
 /**
  * @see DocAssertSet
@@ -98,7 +114,10 @@ export const DocAssertSetSchema = z
  * The developer can compare the `current` and `proposed` versions and
  * throw an error if their validation fails.
  */
-export type DocAssertSet = z.infer<typeof DocAssertSetSchema>;
+export interface DocAssertSet {
+  current?: Doc;
+  proposed: SetDoc;
+}
 
 /**
  * @see DocAssertDelete
@@ -125,4 +144,7 @@ export const DocAssertDeleteSchema = z
  * The developer can compare the `current` and `proposed` versions and
  * throw an error if their validation fails.
  */
-export type DocAssertDelete = z.infer<typeof DocAssertDeleteSchema>;
+export interface DocAssertDelete {
+  current?: Doc;
+  proposed: DelDoc;
+}

@@ -1,20 +1,13 @@
 import type {baseObjectInputType, baseObjectOutputType, ZodObject, ZodTypeAny} from 'zod';
 import * as z from 'zod';
-import {RawUserIdSchema} from '../../schemas/satellite';
+import {RawUserId, RawUserIdSchema} from '../../schemas/satellite';
 
 /**
  * @see HookContext
  */
 export const HookContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
   const schemaShape = {
-    /**
-     * The user who originally triggered the function that in turn triggered the hook.
-     */
     caller: RawUserIdSchema,
-
-    /**
-     * The data associated with the hook execution.
-     */
     data: dataSchema
   };
 
@@ -34,7 +27,14 @@ export const HookContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
  * @template T - The type of data associated with the hook.
  */
 export interface HookContext<T> {
-  caller: Uint8Array;
+  /**
+   * The user who originally triggered the function that in turn triggered the hook.
+   */
+  caller: RawUserId;
+
+  /**
+   * The data associated with the hook execution.
+   */
   data: T;
 }
 

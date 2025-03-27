@@ -255,9 +255,9 @@ the Principal of the executing canister.
 - [DocDescriptionSchema](#gear-docdescriptionschema)
 - [RawDataSchema](#gear-rawdataschema)
 - [DocSchema](#gear-docschema)
-- [DocUpsertSchema](#gear-docupsertschema)
 - [SetDocSchema](#gear-setdocschema)
 - [DelDocSchema](#gear-deldocschema)
+- [DocUpsertSchema](#gear-docupsertschema)
 - [DocAssertSetSchema](#gear-docassertsetschema)
 - [DocAssertDeleteSchema](#gear-docassertdeleteschema)
 - [OnSetDocContextSchema](#gear-onsetdoccontextschema)
@@ -384,21 +384,13 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L37)
 
-#### :gear: DocUpsertSchema
-
-| Constant          | Type                                                                                                                                                                                                                                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DocUpsertSchema` | `ZodObject<{ before: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; after: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L15)
-
 #### :gear: SetDocSchema
 
 | Constant       | Type                                                                                                                                                                                                      |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocSchema` | `ZodObject<{ data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; description: ZodOptional<...>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L43)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L87)
 
 #### :gear: DelDocSchema
 
@@ -406,7 +398,15 @@ A schema that validates a value is an Uint8Array.
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DelDocSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; }, "strict", ZodTypeAny, { version?: bigint or undefined; }, { version?: bigint or undefined; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L75)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L119)
+
+#### :gear: DocUpsertSchema
+
+| Constant          | Type                                                                                                                                                                                                                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DocUpsertSchema` | `ZodObject<{ before: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; after: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L14)
 
 #### :gear: DocAssertSetSchema
 
@@ -414,7 +414,7 @@ A schema that validates a value is an Uint8Array.
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocAssertSetSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; proposed: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L95)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L41)
 
 #### :gear: DocAssertDeleteSchema
 
@@ -422,7 +422,7 @@ A schema that validates a value is an Uint8Array.
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocAssertDeleteSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; proposed: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L125)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L71)
 
 #### :gear: OnSetDocContextSchema
 
@@ -571,9 +571,9 @@ Schema for encoding the call arguments.
 - [Collections](#gear-collections)
 - [HookContext](#gear-hookcontext)
 - [Doc](#gear-doc)
-- [DocUpsert](#gear-docupsert)
 - [SetDoc](#gear-setdoc)
 - [DelDoc](#gear-deldoc)
+- [DocUpsert](#gear-docupsert)
 - [DocAssertSet](#gear-docassertset)
 - [DocAssertDelete](#gear-docassertdelete)
 - [DocContext](#gear-doccontext)
@@ -610,17 +610,6 @@ Represents a document stored in a collection.
 | `updated_at`  | `bigint`                      | The timestamp when the document was last updated.                                                                       |
 | `version`     | `bigint or undefined`         | The version number of the document, used for consistency checks. If not provided, it's assumed to be the first version. |
 
-#### :gear: DocUpsert
-
-Represents a document update operation.
-
-This is used in hooks where a document is either being created or updated.
-
-| Property | Type               | Description                                                                                  |
-| -------- | ------------------ | -------------------------------------------------------------------------------------------- |
-| `before` | `Doc or undefined` | The previous version of the document before the update. Undefined if this is a new document. |
-| `after`  | `Doc`              | The new version of the document after the update.                                            |
-
 #### :gear: SetDoc
 
 Represents the proposed version of a document to be created or updated.
@@ -640,6 +629,17 @@ This can be validated before allowing the operation.
 | Property  | Type                  | Description                                        |
 | --------- | --------------------- | -------------------------------------------------- |
 | `version` | `bigint or undefined` | The expected version number to ensure consistency. |
+
+#### :gear: DocUpsert
+
+Represents a document update operation.
+
+This is used in hooks where a document is either being created or updated.
+
+| Property | Type               | Description                                                                                  |
+| -------- | ------------------ | -------------------------------------------------------------------------------------------- |
+| `before` | `Doc or undefined` | The previous version of the document before the update. Undefined if this is a new document. |
+| `after`  | `Doc`              | The new version of the document after the update.                                            |
 
 #### :gear: DocAssertSet
 

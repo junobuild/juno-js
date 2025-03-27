@@ -4,6 +4,7 @@ import {type RunFunction, RunFunctionSchema} from '../schemas/context';
 import {
   type OnSetDocContext,
   OnSetDocContextSchema,
+  OnSetManyDocsContext,
   OnSetManyDocsContextSchema
 } from '../schemas/db/context';
 import {SatelliteEnvSchema} from '../schemas/satellite.env';
@@ -49,7 +50,7 @@ export const OnSetManyDocsSchema = OnHookSchema(OnSetManyDocsContextSchema);
 /**
  * A hook that runs when multiple documents are created or updated.
  */
-export type OnSetManyDocs = OnHook<OnSetDocContext>;
+export type OnSetManyDocs = OnHook<OnSetManyDocsContext>;
 
 /**
  * @see Hook

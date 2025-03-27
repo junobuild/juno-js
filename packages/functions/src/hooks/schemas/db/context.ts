@@ -40,7 +40,11 @@ export const DocContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
  *
  * @template T - The type of data associated with the document.
  */
-export type DocContext<T extends z.ZodTypeAny> = z.infer<ReturnType<typeof DocContextSchema<T>>>;
+export interface DocContext<T> {
+  collection: string;
+  key: string;
+  data: T;
+}
 
 /**
  * @see OnSetDocContext

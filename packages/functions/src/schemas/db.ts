@@ -80,3 +80,55 @@ export interface Doc {
    */
   version?: Version;
 }
+
+/**
+ * @see SetDoc
+ */
+export const SetDocSchema = z
+  .object({
+    data: RawDataSchema,
+    description: DocDescriptionSchema.optional(),
+    version: VersionSchema.optional()
+  })
+  .strict();
+
+/**
+ * Represents the proposed version of a document to be created or updated.
+ * This can be validated before allowing the operation.
+ */
+export interface SetDoc {
+  /**
+   * The raw data of the document.
+   */
+  data: RawData;
+
+  /**
+   * An optional description of the document.
+   */
+  description?: DocDescription;
+
+  /**
+   * The expected version number to ensure consistency.
+   */
+  version?: Version;
+}
+
+/**
+ * @see DelDoc
+ */
+export const DelDocSchema = z
+  .object({
+    version: VersionSchema.optional()
+  })
+  .strict();
+
+/**
+ * Represents the proposed version of a document to be deleted.
+ * This can be validated before allowing the operation.
+ */
+export interface DelDoc {
+  /**
+   * The expected version number to ensure consistency.
+   */
+  version?: Version;
+}

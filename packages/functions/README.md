@@ -74,7 +74,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `AssertFnSchema` | `<T extends z.ZodTypeAny>(assertSchema: T) => ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodUnknown>], ZodUnknown>, T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L44)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L53)
 
 #### :gear: AssertFnOrObjectSchema
 
@@ -82,7 +82,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertFnOrObjectSchema` | `<T extends z.ZodTypeAny>(assertSchema: T) => ZodUnion<[T, ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodUnknown>], ZodUnknown>, T>]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L48)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L57)
 
 #### :gear: defineAssert
 
@@ -90,7 +90,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L52)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L61)
 
 #### :gear: defineAssert
 
@@ -98,7 +98,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L53)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L62)
 
 #### :gear: defineAssert
 
@@ -106,7 +106,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L54)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L63)
 
 #### :gear: defineAssert
 
@@ -114,7 +114,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L55)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L64)
 
 #### :gear: HookFnSchema
 
@@ -256,12 +256,16 @@ the Principal of the executing canister.
 - [RawDataSchema](#gear-rawdataschema)
 - [DocSchema](#gear-docschema)
 - [DocUpsertSchema](#gear-docupsertschema)
-- [ProposedDocSchema](#gear-proposeddocschema)
+- [SetDocSchema](#gear-setdocschema)
+- [DelDocSchema](#gear-deldocschema)
 - [DocAssertSetSchema](#gear-docassertsetschema)
+- [DocAssertDeleteSchema](#gear-docassertdeleteschema)
 - [OnSetDocContextSchema](#gear-onsetdoccontextschema)
 - [AssertSetDocContextSchema](#gear-assertsetdoccontextschema)
+- [AssertDeleteDocContextSchema](#gear-assertdeletedoccontextschema)
 - [SatelliteEnvSchema](#gear-satelliteenvschema)
 - [AssertSetDocSchema](#gear-assertsetdocschema)
+- [AssertDeleteDocSchema](#gear-assertdeletedocschema)
 - [AssertSchema](#gear-assertschema)
 - [OnSetDocSchema](#gear-onsetdocschema)
 - [HookSchema](#gear-hookschema)
@@ -387,13 +391,21 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L8)
 
-#### :gear: ProposedDocSchema
+#### :gear: SetDocSchema
 
-| Constant            | Type                                                                                                                                                                                                      |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ProposedDocSchema` | `ZodObject<{ data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; description: ZodOptional<...>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant       | Type                                                                                                                                                                                                      |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SetDocSchema` | `ZodObject<{ data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; description: ZodOptional<...>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L33)
+
+#### :gear: DelDocSchema
+
+| Constant       | Type                                                                                                                                            |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DelDocSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; }, "strict", ZodTypeAny, { version?: bigint or undefined; }, { version?: bigint or undefined; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L61)
 
 #### :gear: DocAssertSetSchema
 
@@ -401,7 +413,15 @@ A schema that validates a value is an Uint8Array.
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocAssertSetSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; proposed: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L61)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L79)
+
+#### :gear: DocAssertDeleteSchema
+
+| Constant                | Type                                                                                                                                                                                                                                                                                                  |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DocAssertDeleteSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; proposed: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L106)
 
 #### :gear: OnSetDocContextSchema
 
@@ -419,6 +439,14 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L61)
 
+#### :gear: AssertDeleteDocContextSchema
+
+| Constant                       | Type                                                                                                                                                                                                     |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AssertDeleteDocContextSchema` | `ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; data: ZodObject<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L74)
+
 #### :gear: SatelliteEnvSchema
 
 | Constant             | Type                               |
@@ -435,13 +463,21 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L26)
 
+#### :gear: AssertDeleteDocSchema
+
+| Constant                | Type                                                                                                                                                                                                                                                                                                                               |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AssertDeleteDocSchema` | `ZodObject<extendShape<{ collections: ZodReadonly<ZodArray<ZodString, "many">>; }, { assert: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>], ZodUnknown>, Z...` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L36)
+
 #### :gear: AssertSchema
 
 | Constant       | Type                                                                                                                                                                                                                                                                                                                               |
 | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AssertSchema` | `ZodObject<extendShape<{ collections: ZodReadonly<ZodArray<ZodString, "many">>; }, { assert: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>], ZodUnknown>, Z...` |
+| `AssertSchema` | `ZodUnion<[ZodObject<extendShape<{ collections: ZodReadonly<ZodArray<ZodString, "many">>; }, { assert: ZodFunction<ZodTuple<[ZodObject<{ caller: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; data: ZodObject<...>; }, "strict", ZodTypeAny, baseObjectOutputType<...>, baseObjectInputType<...>>], ZodU...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L37)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L46)
 
 #### :gear: OnSetDocSchema
 
@@ -539,13 +575,17 @@ Schema for encoding the call arguments.
 - [RawData](#gear-rawdata)
 - [Doc](#gear-doc)
 - [DocUpsert](#gear-docupsert)
-- [ProposedDoc](#gear-proposeddoc)
+- [SetDoc](#gear-setdoc)
+- [DelDoc](#gear-deldoc)
 - [DocAssertSet](#gear-docassertset)
+- [DocAssertDelete](#gear-docassertdelete)
 - [DocContext](#gear-doccontext)
 - [OnSetDocContext](#gear-onsetdoccontext)
 - [AssertSetDocContext](#gear-assertsetdoccontext)
+- [AssertDeleteDocContext](#gear-assertdeletedoccontext)
 - [SatelliteEnv](#gear-satelliteenv)
 - [AssertSetDoc](#gear-assertsetdoc)
+- [AssertDeleteDoc](#gear-assertdeletedoc)
 - [Assert](#gear-assert)
 - [AssertFn](#gear-assertfn)
 - [AssertFnOrObject](#gear-assertfnorobject)
@@ -737,16 +777,27 @@ This is used in hooks where a document is either being created or updated.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L28)
 
-#### :gear: ProposedDoc
+#### :gear: SetDoc
 
-Represents the proposed version of a document.
+Represents the proposed version of a document to be created or updated.
 This can be validated before allowing the operation.
 
-| Type          | Type                                |
-| ------------- | ----------------------------------- |
-| `ProposedDoc` | `z.infer<typeof ProposedDocSchema>` |
+| Type     | Type                           |
+| -------- | ------------------------------ |
+| `SetDoc` | `z.infer<typeof SetDocSchema>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L56)
+
+#### :gear: DelDoc
+
+Represents the proposed version of a document to be deleted.
+This can be validated before allowing the operation.
+
+| Type     | Type                           |
+| -------- | ------------------------------ |
+| `DelDoc` | `z.infer<typeof SetDocSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L74)
 
 #### :gear: DocAssertSet
 
@@ -759,7 +810,20 @@ throw an error if their validation fails.
 | -------------- | ------------------------------------ |
 | `DocAssertSet` | `z.infer<typeof DocAssertSetSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L83)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L101)
+
+#### :gear: DocAssertDelete
+
+Represents a validation check before deleting a document.
+
+The developer can compare the `current` and `proposed` versions and
+throw an error if their validation fails.
+
+| Type              | Type                                    |
+| ----------------- | --------------------------------------- |
+| `DocAssertDelete` | `z.infer<typeof DocAssertDeleteSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L128)
 
 #### :gear: DocContext
 
@@ -786,7 +850,7 @@ along with details about the user who triggered the operation.
 
 #### :gear: AssertSetDocContext
 
-The context provided to the `assertSetDoc` hook.
+The context provided to the `assertDeleteDoc` hook.
 
 This context contains information about the document being validated before
 it is created or updated. If validation fails, the developer should throw an error.
@@ -796,6 +860,19 @@ it is created or updated. If validation fails, the developer should throw an err
 | `AssertSetDocContext` | `z.infer<typeof AssertSetDocContextSchema>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L69)
+
+#### :gear: AssertDeleteDocContext
+
+The context provided to the `assertDeleteDoc` hook.
+
+This context contains information about the document being validated before
+it is deleted. If validation fails, the developer should throw an error.
+
+| Type                     | Type                                           |
+| ------------------------ | ---------------------------------------------- |
+| `AssertDeleteDocContext` | `z.infer<typeof AssertDeleteDocContextSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L84)
 
 #### :gear: SatelliteEnv
 
@@ -822,6 +899,16 @@ An assertion that runs when a document is created or updated.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L31)
 
+#### :gear: AssertDeleteDoc
+
+An assertion that runs when a document is deleted.
+
+| Type              | Type                                    |
+| ----------------- | --------------------------------------- |
+| `AssertDeleteDoc` | `z.infer<typeof AssertDeleteDocSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L41)
+
 #### :gear: Assert
 
 All assertions definitions.
@@ -830,7 +917,7 @@ All assertions definitions.
 | -------- | ------------------------------ |
 | `Assert` | `z.infer<typeof AssertSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L42)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L51)
 
 #### :gear: AssertFn
 
@@ -838,7 +925,7 @@ All assertions definitions.
 | ---------- | --------------------------------------------------- |
 | `AssertFn` | `(assert: z.infer<typeof SatelliteEnvSchema>) => T` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L46)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L55)
 
 #### :gear: AssertFnOrObject
 
@@ -846,7 +933,7 @@ All assertions definitions.
 | ------------------ | ------------------ |
 | `AssertFnOrObject` | `T or AssertFn<T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L50)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/assertions.ts#L59)
 
 #### :gear: OnSetDoc
 

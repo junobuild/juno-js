@@ -43,7 +43,7 @@ export type AssertDeleteDoc = z.infer<typeof AssertDeleteDocSchema>;
 /**
  * @see Assert
  */
-export const AssertSchema = AssertSetDocSchema.or(AssertDeleteDocSchema);
+export const AssertSchema = z.union([AssertSetDocSchema, AssertDeleteDocSchema]);
 
 /**
  * All assertions definitions.

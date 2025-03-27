@@ -1,7 +1,7 @@
 import * as z from 'zod';
 import {CollectionsSchema} from '../schemas/collections';
 import {RunFunctionSchema} from '../schemas/context';
-import {OnSetDocContextSchema} from '../schemas/db/context';
+import {OnSetDocContextSchema, OnSetManyDocsContextSchema} from '../schemas/db/context';
 import {SatelliteEnvSchema} from '../schemas/satellite.env';
 
 /**
@@ -30,11 +30,20 @@ export const OnSetDocSchema = OnHookSchema(OnSetDocContextSchema);
  */
 export type OnSetDoc = z.infer<typeof OnSetDocSchema>;
 
-// TODO: to be extended
+/**
+ * @see OnSetManyDocs
+ */
+export const OnSetManyDocsSchema = OnHookSchema(OnSetManyDocsContextSchema);
+
+/**
+ * A hook that runs when multiple documents are created or updated.
+ */
+export type OnSetManyDocs = z.infer<typeof OnSetManyDocsSchema>;
+
 /**
  * @see Hook
  */
-export const HookSchema = OnSetDocSchema;
+export const HookSchema = z.union([OnSetDocSchema, OnSetManyDocsSchema]);
 
 /**
  * All hooks definitions.

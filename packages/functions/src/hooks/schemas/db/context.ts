@@ -56,6 +56,21 @@ export const OnSetDocContextSchema = HookContextSchema(DocContextSchema(DocUpser
 export type OnSetDocContext = z.infer<typeof OnSetDocContextSchema>;
 
 /**
+ * @see OnSetManyDocsContext
+ */
+export const OnSetManyDocsContextSchema = HookContextSchema(
+  z.array(DocContextSchema(DocUpsertSchema))
+);
+
+/**
+ * The context provided to the `onSetManyDocs` hook.
+ *
+ * This context contains information about multiple documents being created or updated
+ * in a single operation, along with details about the user who triggered it.
+ */
+export type OnSetManyDocsContext = z.infer<typeof OnSetManyDocsContextSchema>;
+
+/**
  * @see AssertSetDocContext
  */
 export const AssertSetDocContextSchema = HookContextSchema(DocContextSchema(DocAssertSetSchema));

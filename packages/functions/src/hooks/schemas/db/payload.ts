@@ -71,7 +71,7 @@ export const DelDocSchema = z
  * Represents the proposed version of a document to be deleted.
  * This can be validated before allowing the operation.
  */
-export type DelDoc = z.infer<typeof SetDocSchema>;
+export type DelDoc = z.infer<typeof DelDocSchema>;
 
 /**
  * @see DocAssertSet

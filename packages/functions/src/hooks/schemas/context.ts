@@ -33,7 +33,10 @@ export const HookContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
  *
  * @template T - The type of data associated with the hook.
  */
-export type HookContext<T extends z.ZodTypeAny> = z.infer<ReturnType<typeof HookContextSchema<T>>>;
+export interface HookContext<T> {
+  caller: Uint8Array;
+  data: T;
+}
 
 /**
  * @see AssertFunction
@@ -48,7 +51,7 @@ export const AssertFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =
  *
  * @template T - The type of context passed to the function.
  */
-export type AssertFunction<T> = z.infer<ReturnType<typeof AssertFunctionSchema<z.ZodType<T>>>>;
+export type AssertFunction<T> = (context: T) => void;
 
 /**
  * @see RunFunction
@@ -63,4 +66,4 @@ export const RunFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
  *
  * @template T - The type of context passed to the function.
  */
-export type RunFunction<T> = z.infer<ReturnType<typeof RunFunctionSchema<z.ZodType<T>>>>;
+export type RunFunction<T> = (context: T) => void | Promise<void>;

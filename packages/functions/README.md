@@ -624,30 +624,30 @@ Represents a document update operation.
 
 This is used in hooks where a document is either being created or updated.
 
-| Property | Type               | Description |
-| -------- | ------------------ | ----------- |
-| `before` | `Doc or undefined` |             |
-| `after`  | `Doc`              |             |
+| Property | Type               | Description                                                                                  |
+| -------- | ------------------ | -------------------------------------------------------------------------------------------- |
+| `before` | `Doc or undefined` | The previous version of the document before the update. Undefined if this is a new document. |
+| `after`  | `Doc`              | The new version of the document after the update.                                            |
 
 #### :gear: SetDoc
 
 Represents the proposed version of a document to be created or updated.
 This can be validated before allowing the operation.
 
-| Property      | Type                          | Description |
-| ------------- | ----------------------------- | ----------- |
-| `data`        | `Uint8Array<ArrayBufferLike>` |             |
-| `description` | `string or undefined`         |             |
-| `version`     | `bigint or undefined`         |             |
+| Property      | Type                          | Description                                        |
+| ------------- | ----------------------------- | -------------------------------------------------- |
+| `data`        | `Uint8Array<ArrayBufferLike>` | The raw data of the document.                      |
+| `description` | `string or undefined`         | An optional description of the document.           |
+| `version`     | `bigint or undefined`         | The expected version number to ensure consistency. |
 
 #### :gear: DelDoc
 
 Represents the proposed version of a document to be deleted.
 This can be validated before allowing the operation.
 
-| Property  | Type                  | Description |
-| --------- | --------------------- | ----------- |
-| `version` | `bigint or undefined` |             |
+| Property  | Type                  | Description                                        |
+| --------- | --------------------- | -------------------------------------------------- |
+| `version` | `bigint or undefined` | The expected version number to ensure consistency. |
 
 #### :gear: DocAssertSet
 
@@ -656,10 +656,10 @@ Represents a validation check before setting a document.
 The developer can compare the `current` and `proposed` versions and
 throw an error if their validation fails.
 
-| Property   | Type               | Description |
-| ---------- | ------------------ | ----------- |
-| `current`  | `Doc or undefined` |             |
-| `proposed` | `SetDoc`           |             |
+| Property   | Type               | Description                                                                                    |
+| ---------- | ------------------ | ---------------------------------------------------------------------------------------------- |
+| `current`  | `Doc or undefined` | The current version of the document before the operation. Undefined if this is a new document. |
+| `proposed` | `SetDoc`           | The proposed version of the document. This can be validated before allowing the operation.     |
 
 #### :gear: DocAssertDelete
 
@@ -668,10 +668,10 @@ Represents a validation check before deleting a document.
 The developer can compare the `current` and `proposed` versions and
 throw an error if their validation fails.
 
-| Property   | Type               | Description |
-| ---------- | ------------------ | ----------- |
-| `current`  | `Doc or undefined` |             |
-| `proposed` | `DelDoc`           |             |
+| Property   | Type               | Description                                                                                         |
+| ---------- | ------------------ | --------------------------------------------------------------------------------------------------- |
+| `current`  | `Doc or undefined` | The current version of the document before the operation. Undefined if the document does not exist. |
+| `proposed` | `DelDoc`           | The proposed version of the document. This can be validated before allowing the operation.          |
 
 #### :gear: DocContext
 

@@ -1,4 +1,5 @@
 import {
+  AssertDeleteDocSchema,
   AssertFnOrObjectSchema,
   AssertSchema,
   AssertSetDoc,
@@ -59,6 +60,34 @@ describe('assert.config', () => {
     });
   });
 
+  describe('AssertDeleteDocSchema', () => {
+    const mockAssertDeleteDoc = vi.fn();
+
+    const mockAssertDeleteDocConfig = {
+      collections: ['posts', 'logs'],
+      assert: mockAssertDeleteDoc
+    };
+
+    it('should validate a valid AssertDeleteDoc config', () => {
+      expect(() => AssertDeleteDocSchema.parse(mockAssertDeleteDocConfig)).not.toThrow();
+    });
+
+    it('should accept an empty collections array', () => {
+      const validConfig = {...mockAssertDeleteDocConfig, collections: []};
+      expect(() => AssertDeleteDocSchema.parse(validConfig)).not.toThrow();
+    });
+
+    it('should reject if assert is not a function', () => {
+      const invalidConfig = {...mockAssertDeleteDocConfig, assert: 'not-a-function'};
+      expect(() => AssertDeleteDocSchema.parse(invalidConfig)).toThrow();
+    });
+
+    it('should reject unknown fields due to .strict()', () => {
+      const invalidConfig = {...mockAssertDeleteDocConfig, extraField: true};
+      expect(() => AssertDeleteDocSchema.parse(invalidConfig)).toThrow();
+    });
+  });
+
   describe('AssertConfigSchema', () => {
     it('should validate a correct AssertConfig', () => {
       expect(() => AssertSchema.parse(mockAssertSetDocConfig)).not.toThrow();
@@ -86,6 +115,38 @@ describe('assert.config', () => {
     it('should reject an invalid Assert object with unknown fields', () => {
       const invalidObjectAssert = {...mockAssertSetDocConfig, invalidField: 'extra'};
       expect(() => AssertFnOrObjectSchema(AssertSchema).parse(invalidObjectAssert)).toThrow();
+    });
+  });
+
+  describe('AssertSchema', () => {
+    const mockAssertSet = vi.fn();
+    const mockAssertDelete = vi.fn();
+
+    const validSetConfig = {
+      collections: ['users'],
+      assert: mockAssertSet
+    };
+
+    const validDeleteConfig = {
+      collections: ['docs'],
+      assert: mockAssertDelete
+    };
+
+    it('should validate a valid AssertSetDoc config', () => {
+      expect(() => AssertSchema.parse(validSetConfig)).not.toThrow();
+    });
+
+    it('should validate a valid AssertDeleteDoc config', () => {
+      expect(() => AssertSchema.parse(validDeleteConfig)).not.toThrow();
+    });
+
+    it('should reject unknown fields in either config', () => {
+      const invalid = {
+        collections: ['x'],
+        assert: mockAssertSet,
+        extra: 'nope'
+      };
+      expect(() => AssertSchema.parse(invalid)).toThrow();
     });
   });
 });

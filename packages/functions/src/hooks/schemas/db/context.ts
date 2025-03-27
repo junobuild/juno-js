@@ -2,7 +2,7 @@ import type {baseObjectInputType, baseObjectOutputType, ZodObject, ZodTypeAny} f
 import * as z from 'zod';
 import {CollectionSchema, KeySchema} from '../../../schemas/satellite';
 import {HookContextSchema} from '../context';
-import {DocAssertSetSchema, DocUpsertSchema} from './payload';
+import {DocAssertDeleteSchema, DocAssertSetSchema, DocUpsertSchema} from './payload';
 
 /**
  * @see DocContext
@@ -61,9 +61,24 @@ export type OnSetDocContext = z.infer<typeof OnSetDocContextSchema>;
 export const AssertSetDocContextSchema = HookContextSchema(DocContextSchema(DocAssertSetSchema));
 
 /**
- * The context provided to the `assertSetDoc` hook.
+ * The context provided to the `assertDeleteDoc` hook.
  *
  * This context contains information about the document being validated before
  * it is created or updated. If validation fails, the developer should throw an error.
  */
 export type AssertSetDocContext = z.infer<typeof AssertSetDocContextSchema>;
+
+/**
+ * @see AssertDeleteDocContext
+ */
+export const AssertDeleteDocContextSchema = HookContextSchema(
+  DocContextSchema(DocAssertDeleteSchema)
+);
+
+/**
+ * The context provided to the `assertDeleteDoc` hook.
+ *
+ * This context contains information about the document being validated before
+ * it is deleted. If validation fails, the developer should throw an error.
+ */
+export type AssertDeleteDocContext = z.infer<typeof AssertDeleteDocContextSchema>;

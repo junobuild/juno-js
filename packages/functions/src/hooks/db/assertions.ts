@@ -1,7 +1,7 @@
 import * as z from 'zod';
 import {CollectionsSchema} from '../schemas/collections';
 import {AssertFunctionSchema} from '../schemas/context';
-import {AssertSetDocContextSchema} from '../schemas/db/context';
+import {AssertDeleteDocContextSchema, AssertSetDocContextSchema} from '../schemas/db/context';
 import {SatelliteEnvSchema} from '../schemas/satellite.env';
 
 /**
@@ -30,11 +30,20 @@ export const AssertSetDocSchema = OnAssertSchema(AssertSetDocContextSchema);
  */
 export type AssertSetDoc = z.infer<typeof AssertSetDocSchema>;
 
-// TODO: to be extended
+/**
+ * @see AssertDeleteDoc
+ */
+export const AssertDeleteDocSchema = OnAssertSchema(AssertDeleteDocContextSchema);
+
+/**
+ * An assertion that runs when a document is deleted.
+ */
+export type AssertDeleteDoc = z.infer<typeof AssertDeleteDocSchema>;
+
 /**
  * @see Assert
  */
-export const AssertSchema = AssertSetDocSchema;
+export const AssertSchema = AssertSetDocSchema.or(AssertDeleteDocSchema);
 
 /**
  * All assertions definitions.

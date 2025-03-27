@@ -4,7 +4,9 @@ import {
   HookFnOrObjectSchema,
   HookSchema,
   OnSetDoc,
-  OnSetDocSchema
+  OnSetDocSchema,
+  OnSetManyDocs,
+  OnSetManyDocsSchema
 } from '../../../hooks/db/hooks';
 import type {DocUpsert} from '../../../hooks/schemas/db/payload';
 
@@ -67,6 +69,59 @@ describe('hook.config', () => {
     it('should reject unknown fields due to .strict()', () => {
       const invalidConfig = {...mockOnSetDocConfig, extraField: 'not allowed'};
       expect(() => OnSetDocSchema.parse(invalidConfig)).toThrow();
+    });
+  });
+
+  describe('OnSetManyDocsConfigSchema', () => {
+    const mockOnSetManyDocs = vi.fn(async () => {});
+
+    const mockOnSetManyDocsConfig: OnSetManyDocs = {
+      collections: ['products'],
+      run: mockOnSetManyDocs
+    };
+
+    it('should validate a correct OnSetManyDocsConfig', () => {
+      expect(() => OnSetManyDocsSchema.parse(mockOnSetManyDocsConfig)).not.toThrow();
+    });
+
+    it('should accept an empty collections array', () => {
+      const config = {...mockOnSetManyDocsConfig, collections: []};
+      expect(() => OnSetManyDocsSchema.parse(config)).not.toThrow();
+    });
+
+    it('should reject an invalid run function', () => {
+      const invalidConfig = {...mockOnSetManyDocsConfig, run: 'invalid'};
+      expect(() => OnSetManyDocsSchema.parse(invalidConfig)).toThrow();
+    });
+
+    it('should reject unknown fields due to .strict()', () => {
+      const invalidConfig = {...mockOnSetManyDocsConfig, extra: 'nope'};
+      expect(() => OnSetManyDocsSchema.parse(invalidConfig)).toThrow();
+    });
+
+    it('should call onSetManyDocs function when invoked', async () => {
+      const config = OnSetManyDocsSchema.parse(mockOnSetManyDocsConfig);
+
+      await config.run({
+        caller: Principal.anonymous().toUint8Array(),
+        data: [
+          {
+            collection: 'products',
+            key: 'doc-123',
+            data: {
+              before: undefined,
+              after: {
+                owner: new Uint8Array([1, 2, 3]),
+                data: new Uint8Array([4, 5, 6]),
+                created_at: 1700000000000000n,
+                updated_at: 1700000000000001n
+              }
+            }
+          }
+        ]
+      });
+
+      expect(mockOnSetManyDocs).toHaveBeenCalled();
     });
   });
 

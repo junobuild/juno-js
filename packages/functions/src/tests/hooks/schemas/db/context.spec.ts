@@ -3,7 +3,8 @@ import {
   AssertDeleteDocContextSchema,
   AssertSetDocContextSchema,
   DocContextSchema,
-  OnSetDocContextSchema
+  OnSetDocContextSchema,
+  OnSetManyDocsContextSchema
 } from '../../../../hooks/schemas/db/context';
 
 describe('context', () => {
@@ -180,6 +181,85 @@ describe('context', () => {
         extra: 'unexpected'
       };
       expect(() => AssertDeleteDocContextSchema.parse(invalidContext)).toThrow();
+    });
+  });
+
+  describe('OnSetManyDocsContextSchema', () => {
+    const validManyDocsContext = {
+      caller: new Uint8Array([1, 2, 3]),
+      data: [
+        {
+          collection: 'docs',
+          key: 'doc-1',
+          data: {
+            before: undefined,
+            after: {
+              owner: new Uint8Array([4, 5, 6]),
+              data: new Uint8Array([7, 8, 9]),
+              created_at: 1700000000000000n,
+              updated_at: 1700000000000001n
+            }
+          }
+        },
+        {
+          collection: 'docs',
+          key: 'doc-2',
+          data: {
+            before: {
+              owner: new Uint8Array([4, 5, 6]),
+              data: new Uint8Array([7, 8, 9]),
+              created_at: 1700000000000000n,
+              updated_at: 1700000000000001n
+            },
+            after: {
+              owner: new Uint8Array([4, 5, 6]),
+              data: new Uint8Array([7, 8, 9]),
+              created_at: 1700000000000000n,
+              updated_at: 1700000000000010n
+            }
+          }
+        }
+      ]
+    };
+
+    it('should validate a valid OnSetManyDocsContext', () => {
+      expect(() => OnSetManyDocsContextSchema.parse(validManyDocsContext)).not.toThrow();
+    });
+
+    it('should reject if caller is missing', () => {
+      const invalidContext = {
+        data: validManyDocsContext.data
+      };
+      expect(() => OnSetManyDocsContextSchema.parse(invalidContext)).toThrow();
+    });
+
+    it('should reject if data contains an invalid document', () => {
+      const invalidContext = {
+        ...validManyDocsContext,
+        data: [
+          ...validManyDocsContext.data,
+          {
+            collection: 'docs',
+            key: 'doc-invalid',
+            data: {
+              after: {
+                owner: new Uint8Array([4, 5, 6])
+                // missing `data`, `created_at`, `updated_at`
+              }
+            }
+          }
+        ]
+      };
+
+      expect(() => OnSetManyDocsContextSchema.parse(invalidContext)).toThrow();
+    });
+
+    it('should reject if unknown fields are present', () => {
+      const invalidContext = {
+        ...validManyDocsContext,
+        unexpected: 'not allowed'
+      };
+      expect(() => OnSetManyDocsContextSchema.parse(invalidContext)).toThrow();
     });
   });
 });

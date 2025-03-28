@@ -1,13 +1,13 @@
 import * as z from 'zod';
-import {type Collections, CollectionsSchema} from '../schemas/collections';
-import {type AssertFunction, AssertFunctionSchema} from '../schemas/context';
+import {type Collections, CollectionsSchema} from './schemas/collections';
+import {type AssertFunction, AssertFunctionSchema} from './schemas/context';
 import {
   type AssertDeleteDocContext,
   AssertDeleteDocContextSchema,
   type AssertSetDocContext,
   AssertSetDocContextSchema
-} from '../schemas/db/context';
-import {SatelliteEnvSchema} from '../schemas/satellite.env';
+} from './schemas/db/context';
+import {SatelliteEnvSchema} from './schemas/satellite.env';
 
 /**
  * @see OnAssert

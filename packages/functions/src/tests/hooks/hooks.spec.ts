@@ -10,8 +10,8 @@ import {
   OnSetDocSchema,
   OnSetManyDocs,
   OnSetManyDocsSchema
-} from '../../../hooks/db/hooks';
-import type {DocUpsert} from '../../../hooks/schemas/db/payload';
+} from '../../hooks/hooks';
+import type {DocUpsert} from '../../hooks/schemas/db/payload';
 
 describe('hook.config', () => {
   const mockFn = vi.fn(async () => {});

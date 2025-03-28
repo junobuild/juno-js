@@ -5,7 +5,7 @@ import {
   AssertSetDoc,
   AssertSetDocSchema,
   defineAssert
-} from '../../../hooks/db/assertions';
+} from '../../hooks/assertions';
 
 describe('assert.config', () => {
   const mockAssertSetDoc = vi.fn();

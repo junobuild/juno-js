@@ -1,6 +1,5 @@
-import {RawData} from './schemas/db';
+import type {DelDoc, RawData, SetDoc} from './schemas/db';
 import type {Collection, Key, RawPrincipal, RawUserId} from './schemas/satellite';
-import type {SetDoc} from './sdk/schemas/db';
 
 declare global {
   function __juno_satellite_datastore_raw_data_to_text(data: RawData): string;
@@ -11,6 +10,12 @@ declare global {
     collection: Collection,
     key: Key,
     value: SetDoc
+  ): void;
+  function __juno_satellite_datastore_delete_doc_store(
+    caller: RawUserId,
+    collection: Collection,
+    key: Key,
+    value: DelDoc
   ): void;
 
   function __ic_cdk_id(): RawPrincipal;

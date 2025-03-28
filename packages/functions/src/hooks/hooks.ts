@@ -1,6 +1,6 @@
 import * as z from 'zod';
-import {type Collections, CollectionsSchema} from '../schemas/collections';
-import {type RunFunction, RunFunctionSchema} from '../schemas/context';
+import {type Collections, CollectionsSchema} from './schemas/collections';
+import {type RunFunction, RunFunctionSchema} from './schemas/context';
 import {
   type OnDeleteDocContext,
   OnDeleteDocContextSchema,
@@ -12,8 +12,8 @@ import {
   OnSetDocContextSchema,
   type OnSetManyDocsContext,
   OnSetManyDocsContextSchema
-} from '../schemas/db/context';
-import {SatelliteEnvSchema} from '../schemas/satellite.env';
+} from './schemas/db/context';
+import {SatelliteEnvSchema} from './schemas/satellite.env';
 
 /**
  * @see OnHook

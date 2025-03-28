@@ -3,13 +3,17 @@ import {
   defineHook,
   HookFnOrObjectSchema,
   HookSchema,
+  OnDeleteAssetSchema,
   OnDeleteDocSchema,
+  OnDeleteFilteredAssetsSchema,
   OnDeleteFilteredDocsSchema,
+  OnDeleteManyAssetsSchema,
   OnDeleteManyDocsSchema,
   OnSetDoc,
   OnSetDocSchema,
   OnSetManyDocs,
-  OnSetManyDocsSchema
+  OnSetManyDocsSchema,
+  OnUploadAssetSchema
 } from '../../hooks/hooks';
 import type {DocUpsert} from '../../hooks/schemas/db/payload';
 
@@ -32,7 +36,20 @@ describe('hooks', () => {
     }
   };
 
-  describe('OnSetDocConfigSchema', () => {
+  const baseAsset = {
+    key: {
+      name: 'logo.png',
+      full_path: '/images/logo.png',
+      collection: 'assets',
+      owner: new Uint8Array([1, 2, 3])
+    },
+    headers: [],
+    encodings: {},
+    created_at: 1700000000000000n,
+    updated_at: 1700000000000001n
+  };
+
+  describe('OnSetDocSchema', () => {
     it('should validate a correct OnSetDocConfig', () => {
       expect(() => OnSetDocSchema.parse(mockOnSetDocConfig)).not.toThrow();
     });
@@ -53,7 +70,7 @@ describe('hooks', () => {
     });
   });
 
-  describe('OnSetManyDocsConfigSchema', () => {
+  describe('OnSetManyDocsSchema', () => {
     const mockOnSetManyDocs = vi.fn(async () => {});
 
     const mockOnSetManyDocsConfig: OnSetManyDocs = {
@@ -235,14 +252,32 @@ describe('hooks', () => {
     });
   });
 
-  describe('HookConfigSchema', () => {
-    it('should validate a correct HookConfig', () => {
-      expect(() => HookSchema.parse(mockOnSetDocConfig)).not.toThrow();
+  describe('HookSchema', () => {
+    const mockFn = vi.fn();
+
+    const validHookConfigs = [
+      ['OnSetDoc', {collections: ['docs'], run: mockFn}],
+      ['OnSetManyDocs', {collections: ['docs'], run: mockFn}],
+      ['OnDeleteDoc', {collections: ['docs'], run: mockFn}],
+      ['OnDeleteManyDocs', {collections: ['docs'], run: mockFn}],
+      ['OnDeleteFilteredDocs', {collections: ['docs'], run: mockFn}],
+      ['OnUploadAsset', {collections: ['assets'], run: mockFn}],
+      ['OnDeleteAsset', {collections: ['assets'], run: mockFn}],
+      ['OnDeleteManyAssets', {collections: ['assets'], run: mockFn}],
+      ['OnDeleteFilteredAssets', {collections: ['assets'], run: mockFn}]
+    ] as const;
+
+    it.each(validHookConfigs)('should validate %s config', (_, config) => {
+      expect(() => HookSchema.parse(config)).not.toThrow();
     });
 
-    it('should reject an unknown field', () => {
-      const invalidHookConfig = {...mockOnSetDocConfig, invalidField: 'not allowed'};
-      expect(() => HookSchema.parse(invalidHookConfig)).toThrow();
+    const invalidConfigs: [string, unknown][] = [
+      ['unknown field', {collections: ['docs'], run: mockFn, unknown: 'nope'}],
+      ['invalid run type', {collections: ['docs'], run: 'not-a-fn'}]
+    ];
+
+    it.each(invalidConfigs)('should reject config with %s', (_, config) => {
+      expect(() => HookSchema.parse(config)).toThrow();
     });
   });
 
@@ -260,6 +295,83 @@ describe('hooks', () => {
     it('should reject an invalid Hook object with unknown fields', () => {
       const invalidObjectHook = {...mockOnSetDocConfig, invalidField: 'extra'};
       expect(() => HookFnOrObjectSchema(HookSchema).parse(invalidObjectHook)).toThrow();
+    });
+  });
+
+  describe('OnUploadAssetSchema', () => {
+    const config = {collections: ['assets'], run: mockFn};
+
+    it('should validate a correct OnUploadAsset config', () => {
+      expect(() => OnUploadAssetSchema.parse(config)).not.toThrow();
+    });
+
+    it('should call run when executed', async () => {
+      const parsed = OnUploadAssetSchema.parse(config);
+      await parsed.run({
+        caller: Principal.anonymous().toUint8Array(),
+        data: baseAsset
+      });
+      expect(mockFn).toHaveBeenCalled();
+    });
+  });
+
+  describe('OnDeleteAssetSchema', () => {
+    const config = {collections: ['assets'], run: mockFn};
+
+    it('should validate a correct OnDeleteAsset config', () => {
+      expect(() => OnDeleteAssetSchema.parse(config)).not.toThrow();
+    });
+
+    it('should call run when executed with undefined data', async () => {
+      const parsed = OnDeleteAssetSchema.parse(config);
+      await parsed.run({
+        caller: Principal.anonymous().toUint8Array(),
+        data: undefined
+      });
+      expect(mockFn).toHaveBeenCalled();
+    });
+
+    it('should call run when executed with asset data', async () => {
+      const parsed = OnDeleteAssetSchema.parse(config);
+      await parsed.run({
+        caller: Principal.anonymous().toUint8Array(),
+        data: baseAsset
+      });
+      expect(mockFn).toHaveBeenCalled();
+    });
+  });
+
+  describe('OnDeleteManyAssetsSchema', () => {
+    const config = {collections: ['assets'], run: mockFn};
+
+    it('should validate a correct OnDeleteManyAssets config', () => {
+      expect(() => OnDeleteManyAssetsSchema.parse(config)).not.toThrow();
+    });
+
+    it('should call run with a mix of undefined and asset data', async () => {
+      const parsed = OnDeleteManyAssetsSchema.parse(config);
+      await parsed.run({
+        caller: Principal.anonymous().toUint8Array(),
+        data: [undefined, baseAsset]
+      });
+      expect(mockFn).toHaveBeenCalled();
+    });
+  });
+
+  describe('OnDeleteFilteredAssetsSchema', () => {
+    const config = {collections: ['assets'], run: mockFn};
+
+    it('should validate a correct OnDeleteFilteredAssets config', () => {
+      expect(() => OnDeleteFilteredAssetsSchema.parse(config)).not.toThrow();
+    });
+
+    it('should call run with filtered assets', async () => {
+      const parsed = OnDeleteFilteredAssetsSchema.parse(config);
+      await parsed.run({
+        caller: Principal.anonymous().toUint8Array(),
+        data: [baseAsset, undefined]
+      });
+      expect(mockFn).toHaveBeenCalled();
     });
   });
 });

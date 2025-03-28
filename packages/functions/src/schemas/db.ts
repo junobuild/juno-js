@@ -1,6 +1,8 @@
 import * as z from 'zod';
 import {Uint8ArraySchema} from './candid';
 import {
+  Description,
+  DescriptionSchema,
   type RawUserId,
   RawUserIdSchema,
   type Timestamp,
@@ -8,16 +10,6 @@ import {
   type Version,
   VersionSchema
 } from './satellite';
-
-/**
- * @see DocDescription
- */
-export const DocDescriptionSchema = z.string().max(1024);
-
-/**
- * Represents a document description with a maximum length of 1024 characters.
- */
-export type DocDescription = z.infer<typeof DocDescriptionSchema>;
 
 /**
  * @see RawData
@@ -38,7 +30,7 @@ export const DocSchema = z
   .object({
     owner: RawUserIdSchema,
     data: RawDataSchema,
-    description: DocDescriptionSchema.optional(),
+    description: DescriptionSchema.optional(),
     created_at: TimestampSchema,
     updated_at: TimestampSchema,
     version: VersionSchema.optional()
@@ -62,7 +54,7 @@ export interface Doc {
   /**
    * An optional description of the document.
    */
-  description?: DocDescription;
+  description?: Description;
 
   /**
    * The timestamp when the document was first created.
@@ -97,7 +89,7 @@ export type OptionDoc = Doc | undefined;
 export const SetDocSchema = z
   .object({
     data: RawDataSchema,
-    description: DocDescriptionSchema.optional(),
+    description: DescriptionSchema.optional(),
     version: VersionSchema.optional()
   })
   .strict();
@@ -115,7 +107,7 @@ export interface SetDoc {
   /**
    * An optional description of the document.
    */
-  description?: DocDescription;
+  description?: Description;
 
   /**
    * The expected version number to ensure consistency.

@@ -1,6 +1,5 @@
 import {
   DelDocSchema,
-  DocDescriptionSchema,
   DocSchema,
   OptionDocSchema,
   RawDataSchema,
@@ -8,21 +7,6 @@ import {
 } from '../../schemas/db';
 
 describe('payload', () => {
-  describe('DocDescriptionSchema', () => {
-    it('should validate a valid description', () => {
-      expect(() => DocDescriptionSchema.parse('This is a valid description.')).not.toThrow();
-    });
-
-    it('should reject a description exceeding 1024 characters', () => {
-      const longDescription = 'a'.repeat(1025);
-      expect(() => DocDescriptionSchema.parse(longDescription)).toThrow();
-    });
-
-    it('should allow an empty description', () => {
-      expect(() => DocDescriptionSchema.parse('')).not.toThrow();
-    });
-  });
-
   describe('DocSchema', () => {
     const requiredFields = {
       owner: new Uint8Array([1, 2, 3]),

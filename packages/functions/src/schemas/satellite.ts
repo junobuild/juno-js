@@ -68,3 +68,14 @@ export const KeySchema = z.string();
  * A unique key identifier within a collection.
  */
 export type Key = z.infer<typeof KeySchema>;
+
+/**
+ * @see Description
+ */
+export const DescriptionSchema = z.string().max(1024);
+
+/**
+ * Represents a description with a maximum length of 1024 characters.
+ * Used for document and asset fields which can be useful for search purpose.
+ */
+export type Description = z.infer<typeof DescriptionSchema>;

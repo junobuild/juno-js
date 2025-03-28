@@ -1,5 +1,5 @@
 import {RawData} from './schemas/db';
-import type {RawPrincipal, RawUserId} from './schemas/satellite';
+import type {Collection, Key, RawPrincipal, RawUserId} from './schemas/satellite';
 import type {SetDoc} from './sdk/schemas/db';
 
 declare global {
@@ -8,9 +8,9 @@ declare global {
 
   function __juno_satellite_datastore_set_doc_store(
     caller: RawUserId,
-    collection: string,
-    key: string,
-    value: Omit<SetDoc, 'key'>
+    collection: Collection,
+    key: Key,
+    value: SetDoc
   ): void;
 
   function __ic_cdk_id(): RawPrincipal;

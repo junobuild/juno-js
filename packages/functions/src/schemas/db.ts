@@ -82,6 +82,16 @@ export interface Doc {
 }
 
 /**
+ * @see OptionDoc
+ */
+export const OptionDocSchema = DocSchema.optional();
+
+/**
+ * A shorthand for a document that might or not be defined.
+ */
+export type OptionDoc = Doc | undefined;
+
+/**
  * @see SetDoc
  */
 export const SetDocSchema = z

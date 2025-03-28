@@ -2,6 +2,7 @@ import {
   DelDocSchema,
   DocDescriptionSchema,
   DocSchema,
+  OptionDocSchema,
   RawDataSchema,
   SetDocSchema
 } from '../../schemas/db';
@@ -126,6 +127,32 @@ describe('payload', () => {
         extra_field: 'not allowed'
       };
       expect(() => DelDocSchema.parse(invalidDelDoc)).toThrow();
+    });
+  });
+
+  describe('OptionDocSchema', () => {
+    const validDoc = {
+      owner: new Uint8Array([1, 2, 3]),
+      data: new Uint8Array([4, 5, 6]),
+      created_at: 1700000000000000n,
+      updated_at: 1700000000000001n
+    };
+
+    it('should validate a full document', () => {
+      expect(() => OptionDocSchema.parse(validDoc)).not.toThrow();
+    });
+
+    it('should validate undefined (optional)', () => {
+      expect(() => OptionDocSchema.parse(undefined)).not.toThrow();
+    });
+
+    it('should reject if structure is incorrect', () => {
+      const invalidDoc = {
+        owner: new Uint8Array([1, 2, 3]),
+        data: new Uint8Array([4, 5, 6])
+        // missing created_at and updated_at
+      };
+      expect(() => OptionDocSchema.parse(invalidDoc)).toThrow();
     });
   });
 });

@@ -2,9 +2,15 @@ import * as z from 'zod';
 import {type Collections, CollectionsSchema} from '../schemas/collections';
 import {type RunFunction, RunFunctionSchema} from '../schemas/context';
 import {
+  type OnDeleteDocContext,
+  OnDeleteDocContextSchema,
+  type OnDeleteFilteredDocsContext,
+  OnDeleteFilteredDocsContextSchema,
+  type OnDeleteManyDocsContext,
+  OnDeleteManyDocsContextSchema,
   type OnSetDocContext,
   OnSetDocContextSchema,
-  OnSetManyDocsContext,
+  type OnSetManyDocsContext,
   OnSetManyDocsContextSchema
 } from '../schemas/db/context';
 import {SatelliteEnvSchema} from '../schemas/satellite.env';
@@ -53,14 +59,50 @@ export const OnSetManyDocsSchema = OnHookSchema(OnSetManyDocsContextSchema);
 export type OnSetManyDocs = OnHook<OnSetManyDocsContext>;
 
 /**
+ * @see OnDeleteDoc
+ */
+export const OnDeleteDocSchema = OnHookSchema(OnDeleteDocContextSchema);
+
+/**
+ * A hook that runs when a single document is deleted.
+ */
+export type OnDeleteDoc = OnHook<OnDeleteDocContext>;
+
+/**
+ * @see OnDeleteManyDocs
+ */
+export const OnDeleteManyDocsSchema = OnHookSchema(OnDeleteManyDocsContextSchema);
+
+/**
+ * A hook that runs when multiple documents are deleted.
+ */
+export type OnDeleteManyDocs = OnHook<OnDeleteManyDocsContext>;
+
+/**
+ * @see OnDeleteFilteredDocs
+ */
+export const OnDeleteFilteredDocsSchema = OnHookSchema(OnDeleteFilteredDocsContextSchema);
+
+/**
+ * A hook that runs when a filtered set of documents is deleted based on query conditions.
+ */
+export type OnDeleteFilteredDocs = OnHook<OnDeleteFilteredDocsContext>;
+
+/**
  * @see Hook
  */
-export const HookSchema = z.union([OnSetDocSchema, OnSetManyDocsSchema]);
+export const HookSchema = z.union([
+  OnSetDocSchema,
+  OnSetManyDocsSchema,
+  OnDeleteDocContextSchema,
+  OnDeleteManyDocsContextSchema,
+  OnDeleteFilteredDocsContextSchema
+]);
 
 /**
  * All hooks definitions.
  */
-export type Hook = OnSetDoc | OnSetManyDocs;
+export type Hook = OnSetDoc | OnSetManyDocs | OnDeleteDoc | OnDeleteManyDocs | OnDeleteFilteredDocs;
 
 export const HookFnSchema = <T extends z.ZodTypeAny>(hookSchema: T) =>
   z.function().args(SatelliteEnvSchema).returns(hookSchema);

@@ -1,5 +1,6 @@
 import type {baseObjectInputType, baseObjectOutputType, ZodObject, ZodTypeAny} from 'zod';
 import * as z from 'zod';
+import {DocSchema, type OptionDoc} from '../../../schemas/db';
 import {type Collection, CollectionSchema, type Key, KeySchema} from '../../../schemas/satellite';
 import {type HookContext, HookContextSchema} from '../context';
 import {
@@ -80,6 +81,49 @@ export const OnSetManyDocsContextSchema = HookContextSchema(
  * in a single operation, along with details about the user who triggered it.
  */
 export type OnSetManyDocsContext = HookContext<DocContext<DocUpsert>[]>;
+
+/**
+ * @see OnDeleteDocContext
+ */
+export const OnDeleteDocContextSchema = HookContextSchema(DocContextSchema(DocSchema.optional()));
+
+/**
+ * The context provided to the `onDeleteDoc` hook.
+ *
+ * This context contains information about a single document being deleted,
+ * along with details about the user who triggered the operation.
+ */
+export type OnDeleteDocContext = HookContext<DocContext<OptionDoc>>;
+
+/**
+ * @see OnDeleteManyDocsContext
+ */
+export const OnDeleteManyDocsContextSchema = HookContextSchema(
+  z.array(DocContextSchema(DocSchema.optional()))
+);
+
+/**
+ * The context provided to the `onDeleteManyDocs` hook.
+ *
+ * This context contains information about multiple documents being deleted,
+ * along with details about the user who triggered the operation.
+ */
+export type OnDeleteManyDocsContext = HookContext<DocContext<OptionDoc>[]>;
+
+/**
+ * @see OnDeleteFilteredDocsContext
+ */
+export const OnDeleteFilteredDocsContextSchema = HookContextSchema(
+  z.array(DocContextSchema(DocSchema.optional()))
+);
+
+/**
+ * The context provided to the `onDeleteFilteredDocs` hook.
+ *
+ * This context contains information about documents deleted as a result of a filter,
+ * along with details about the user who triggered the operation.
+ */
+export type OnDeleteFilteredDocsContext = HookContext<DocContext<OptionDoc>[]>;
 
 /**
  * @see AssertSetDocContext

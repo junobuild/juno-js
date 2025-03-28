@@ -3,6 +3,9 @@ import {
   AssertDeleteDocContextSchema,
   AssertSetDocContextSchema,
   DocContextSchema,
+  OnDeleteDocContextSchema,
+  OnDeleteFilteredDocsContextSchema,
+  OnDeleteManyDocsContextSchema,
   OnSetDocContextSchema,
   OnSetManyDocsContextSchema
 } from '../../../../hooks/schemas/db/context';
@@ -260,6 +263,131 @@ describe('context', () => {
         unexpected: 'not allowed'
       };
       expect(() => OnSetManyDocsContextSchema.parse(invalidContext)).toThrow();
+    });
+  });
+
+  describe('Delete context schemas', () => {
+    const validDoc = {
+      owner: new Uint8Array([1, 2, 3]),
+      data: new Uint8Array([4, 5, 6]),
+      created_at: 1700000000000000n,
+      updated_at: 1700000000000001n
+    };
+
+    const baseContext = {
+      caller: new Uint8Array([9, 9, 9])
+    };
+
+    describe('OnDeleteDocContextSchema', () => {
+      it('should validate a valid OnDeleteDocContext with a document', () => {
+        const context = {
+          ...baseContext,
+          data: {
+            collection: 'docs',
+            key: 'doc-1',
+            data: validDoc
+          }
+        };
+        expect(() => OnDeleteDocContextSchema.parse(context)).not.toThrow();
+      });
+
+      it('should validate a valid OnDeleteDocContext without a document (undefined)', () => {
+        const context = {
+          ...baseContext,
+          data: {
+            collection: 'docs',
+            key: 'doc-1',
+            data: undefined
+          }
+        };
+        expect(() => OnDeleteDocContextSchema.parse(context)).not.toThrow();
+      });
+
+      it('should reject if data is missing', () => {
+        const context = {
+          ...baseContext
+        };
+        expect(() => OnDeleteDocContextSchema.parse(context)).toThrow();
+      });
+    });
+
+    describe('OnDeleteManyDocsContextSchema', () => {
+      it('should validate a valid OnDeleteManyDocsContext with documents', () => {
+        const context = {
+          ...baseContext,
+          data: [
+            {
+              collection: 'docs',
+              key: 'doc-1',
+              data: validDoc
+            },
+            {
+              collection: 'docs',
+              key: 'doc-2',
+              data: undefined
+            }
+          ]
+        };
+        expect(() => OnDeleteManyDocsContextSchema.parse(context)).not.toThrow();
+      });
+
+      it('should reject if one document is invalid', () => {
+        const context = {
+          ...baseContext,
+          data: [
+            {
+              collection: 'docs',
+              key: 'doc-1',
+              data: validDoc
+            },
+            {
+              collection: 'docs',
+              key: 'doc-2',
+              data: {
+                owner: new Uint8Array([1, 2, 3])
+                // missing data, created_at, updated_at
+              }
+            }
+          ]
+        };
+        expect(() => OnDeleteManyDocsContextSchema.parse(context)).toThrow();
+      });
+    });
+
+    describe('OnDeleteFilteredDocsContextSchema', () => {
+      it('should validate a valid OnDeleteFilteredDocsContext', () => {
+        const context = {
+          ...baseContext,
+          data: [
+            {
+              collection: 'docs',
+              key: 'filtered-doc-1',
+              data: validDoc
+            },
+            {
+              collection: 'docs',
+              key: 'filtered-doc-2',
+              data: undefined
+            }
+          ]
+        };
+        expect(() => OnDeleteFilteredDocsContextSchema.parse(context)).not.toThrow();
+      });
+
+      it('should reject unknown fields', () => {
+        const context = {
+          ...baseContext,
+          data: [
+            {
+              collection: 'docs',
+              key: 'filtered-doc-1',
+              data: validDoc
+            }
+          ],
+          extra: 'not allowed'
+        };
+        expect(() => OnDeleteFilteredDocsContextSchema.parse(context)).toThrow();
+      });
     });
   });
 });

@@ -13,7 +13,7 @@ import {
 } from '../../hooks/hooks';
 import type {DocUpsert} from '../../hooks/schemas/db/payload';
 
-describe('hook.config', () => {
+describe('hooks', () => {
   const mockFn = vi.fn(async () => {});
 
   const mockOnSetDocConfig: OnSetDoc = {

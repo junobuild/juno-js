@@ -7,7 +7,7 @@ import {
   defineAssert
 } from '../../hooks/assertions';
 
-describe('assert.config', () => {
+describe('assertions', () => {
   const mockAssertSetDoc = vi.fn();
 
   const mockAssertSetDocConfig: AssertSetDoc = {

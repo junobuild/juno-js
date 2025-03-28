@@ -1,9 +1,11 @@
 import {
+  AssertDeleteAssetSchema,
   AssertDeleteDocSchema,
   AssertFnOrObjectSchema,
   AssertSchema,
   AssertSetDoc,
   AssertSetDocSchema,
+  AssertUploadAssetSchema,
   defineAssert
 } from '../../hooks/assertions';
 
@@ -121,6 +123,8 @@ describe('assertions', () => {
   describe('AssertSchema', () => {
     const mockAssertSet = vi.fn();
     const mockAssertDelete = vi.fn();
+    const mockAssertUpload = vi.fn();
+    const mockAssertDeleteAsset = vi.fn();
 
     const validSetConfig = {
       collections: ['users'],
@@ -132,12 +136,30 @@ describe('assertions', () => {
       assert: mockAssertDelete
     };
 
+    const validUploadAssetConfig = {
+      collections: ['media'],
+      assert: mockAssertUpload
+    };
+
+    const validDeleteAssetConfig = {
+      collections: ['media'],
+      assert: mockAssertDeleteAsset
+    };
+
     it('should validate a valid AssertSetDoc config', () => {
       expect(() => AssertSchema.parse(validSetConfig)).not.toThrow();
     });
 
     it('should validate a valid AssertDeleteDoc config', () => {
       expect(() => AssertSchema.parse(validDeleteConfig)).not.toThrow();
+    });
+
+    it('should validate a valid AssertUploadAsset config', () => {
+      expect(() => AssertSchema.parse(validUploadAssetConfig)).not.toThrow();
+    });
+
+    it('should validate a valid AssertDeleteAsset config', () => {
+      expect(() => AssertSchema.parse(validDeleteAssetConfig)).not.toThrow();
     });
 
     it('should reject unknown fields in either config', () => {
@@ -147,6 +169,62 @@ describe('assertions', () => {
         extra: 'nope'
       };
       expect(() => AssertSchema.parse(invalid)).toThrow();
+    });
+  });
+
+  describe('AssertUploadAssetSchema', () => {
+    const mockAssertUpload = vi.fn();
+
+    const validUploadConfig = {
+      collections: ['media', 'static'],
+      assert: mockAssertUpload
+    };
+
+    it('should validate a valid AssertUploadAsset config', () => {
+      expect(() => AssertUploadAssetSchema.parse(validUploadConfig)).not.toThrow();
+    });
+
+    it('should accept an empty collections array', () => {
+      const validEmptyCollections = {...validUploadConfig, collections: []};
+      expect(() => AssertUploadAssetSchema.parse(validEmptyCollections)).not.toThrow();
+    });
+
+    it('should reject if assert is not a function', () => {
+      const invalid = {...validUploadConfig, assert: 'not-a-function'};
+      expect(() => AssertUploadAssetSchema.parse(invalid)).toThrow();
+    });
+
+    it('should reject unknown fields', () => {
+      const invalid = {...validUploadConfig, extra: 'not allowed'};
+      expect(() => AssertUploadAssetSchema.parse(invalid)).toThrow();
+    });
+  });
+
+  describe('AssertDeleteAssetSchema', () => {
+    const mockAssertDelete = vi.fn();
+
+    const validDeleteConfig = {
+      collections: ['assets'],
+      assert: mockAssertDelete
+    };
+
+    it('should validate a valid AssertDeleteAsset config', () => {
+      expect(() => AssertDeleteAssetSchema.parse(validDeleteConfig)).not.toThrow();
+    });
+
+    it('should accept an empty collections array', () => {
+      const validEmptyCollections = {...validDeleteConfig, collections: []};
+      expect(() => AssertDeleteAssetSchema.parse(validEmptyCollections)).not.toThrow();
+    });
+
+    it('should reject if assert is not a function', () => {
+      const invalid = {...validDeleteConfig, assert: 123};
+      expect(() => AssertDeleteAssetSchema.parse(invalid)).toThrow();
+    });
+
+    it('should reject unknown fields', () => {
+      const invalid = {...validDeleteConfig, unexpected: true};
+      expect(() => AssertDeleteAssetSchema.parse(invalid)).toThrow();
     });
   });
 });

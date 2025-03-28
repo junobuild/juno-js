@@ -14,6 +14,16 @@ import {
   OnSetManyDocsContextSchema
 } from './schemas/db/context';
 import {SatelliteEnvSchema} from './schemas/satellite.env';
+import {
+  OnDeleteAssetContext,
+  OnDeleteAssetContextSchema,
+  OnDeleteFilteredAssetsContext,
+  OnDeleteFilteredAssetsContextSchema,
+  OnDeleteManyAssetsContext,
+  OnDeleteManyAssetsContextSchema,
+  OnUploadAssetContext,
+  OnUploadAssetContextSchema
+} from './schemas/storage/context';
 
 /**
  * @see OnHook
@@ -89,6 +99,46 @@ export const OnDeleteFilteredDocsSchema = OnHookSchema(OnDeleteFilteredDocsConte
 export type OnDeleteFilteredDocs = OnHook<OnDeleteFilteredDocsContext>;
 
 /**
+ * @see OnUploadAsset
+ */
+export const OnUploadAssetSchema = OnHookSchema(OnUploadAssetContextSchema);
+
+/**
+ * A hook that runs when a single asset is uploaded.
+ */
+export type OnUploadAsset = OnHook<OnUploadAssetContext>;
+
+/**
+ * @see OnDeleteAsset
+ */
+export const OnDeleteAssetSchema = OnHookSchema(OnDeleteAssetContextSchema);
+
+/**
+ * A hook that runs when a single asset is potentially deleted.
+ */
+export type OnDeleteAsset = OnHook<OnDeleteAssetContext>;
+
+/**
+ * @see OnDeleteManyAssets
+ */
+export const OnDeleteManyAssetsSchema = OnHookSchema(OnDeleteManyAssetsContextSchema);
+
+/**
+ * A hook that runs when multiple assets are potentially deleted.
+ */
+export type OnDeleteManyAssets = OnHook<OnDeleteManyAssetsContext>;
+
+/**
+ * @see OnDeleteFilteredAssets
+ */
+export const OnDeleteFilteredAssetsSchema = OnHookSchema(OnDeleteFilteredAssetsContextSchema);
+
+/**
+ * A hook that runs when a filtered set of assets is deleted based on query conditions.
+ */
+export type OnDeleteFilteredAssets = OnHook<OnDeleteFilteredAssetsContext>;
+
+/**
  * @see Hook
  */
 export const HookSchema = z.union([
@@ -96,7 +146,11 @@ export const HookSchema = z.union([
   OnSetManyDocsSchema,
   OnDeleteDocContextSchema,
   OnDeleteManyDocsContextSchema,
-  OnDeleteFilteredDocsContextSchema
+  OnDeleteFilteredDocsContextSchema,
+  OnUploadAssetSchema,
+  OnDeleteAssetSchema,
+  OnDeleteManyAssetsSchema,
+  OnDeleteFilteredAssetsSchema
 ]);
 
 /**

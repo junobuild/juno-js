@@ -267,8 +267,8 @@ the Principal of the executing canister.
 - [UserIdSchema](#gear-useridschema)
 - [CollectionSchema](#gear-collectionschema)
 - [KeySchema](#gear-keyschema)
+- [DescriptionSchema](#gear-descriptionschema)
 - [CollectionsSchema](#gear-collectionsschema)
-- [DocDescriptionSchema](#gear-docdescriptionschema)
 - [RawDataSchema](#gear-rawdataschema)
 - [DocSchema](#gear-docschema)
 - [OptionDocSchema](#gear-optiondocschema)
@@ -376,6 +376,14 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L65)
 
+#### :gear: DescriptionSchema
+
+| Constant            | Type        |
+| ------------------- | ----------- |
+| `DescriptionSchema` | `ZodString` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L75)
+
 #### :gear: CollectionsSchema
 
 | Constant            | Type                                                                                                                                                                    |
@@ -384,21 +392,13 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L7)
 
-#### :gear: DocDescriptionSchema
-
-| Constant               | Type        |
-| ---------------------- | ----------- |
-| `DocDescriptionSchema` | `ZodString` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L15)
-
 #### :gear: RawDataSchema
 
 | Constant        | Type                                                                            |
 | --------------- | ------------------------------------------------------------------------------- |
 | `RawDataSchema` | `ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L17)
 
 #### :gear: DocSchema
 
@@ -406,7 +406,7 @@ A schema that validates a value is an Uint8Array.
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocSchema` | `ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L37)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L29)
 
 #### :gear: OptionDocSchema
 
@@ -414,7 +414,7 @@ A schema that validates a value is an Uint8Array.
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OptionDocSchema` | `ZodOptional<ZodObject<{ owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; ... 4 more ...; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L87)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L79)
 
 #### :gear: SetDocSchema
 
@@ -422,7 +422,7 @@ A schema that validates a value is an Uint8Array.
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocSchema` | `ZodObject<{ data: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>; description: ZodOptional<...>; version: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L97)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L89)
 
 #### :gear: DelDocSchema
 
@@ -430,7 +430,7 @@ A schema that validates a value is an Uint8Array.
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DelDocSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; }, "strict", ZodTypeAny, { version?: bigint or undefined; }, { version?: bigint or undefined; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L129)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L121)
 
 #### :gear: DocUpsertSchema
 
@@ -794,9 +794,9 @@ Type representing the parameters required to make a canister call.
 - [UserId](#gear-userid)
 - [Collection](#gear-collection)
 - [Key](#gear-key)
+- [Description](#gear-description)
 - [AssertFunction](#gear-assertfunction)
 - [RunFunction](#gear-runfunction)
-- [DocDescription](#gear-docdescription)
 - [RawData](#gear-rawdata)
 - [OptionDoc](#gear-optiondoc)
 - [OnSetDocContext](#gear-onsetdoccontext)
@@ -917,6 +917,17 @@ A unique key identifier within a collection.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L70)
 
+#### :gear: Description
+
+Represents a description with a maximum length of 1024 characters.
+Used for document and asset fields which can be useful for search purpose.
+
+| Type          | Type                                |
+| ------------- | ----------------------------------- |
+| `Description` | `z.infer<typeof DescriptionSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L81)
+
 #### :gear: AssertFunction
 
 Defines the `assert` function schema for assertions.
@@ -941,16 +952,6 @@ The function takes a context argument and returns either a `Promise<void>` or `v
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L69)
 
-#### :gear: DocDescription
-
-Represents a document description with a maximum length of 1024 characters.
-
-| Type             | Type                                   |
-| ---------------- | -------------------------------------- |
-| `DocDescription` | `z.infer<typeof DocDescriptionSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L20)
-
 #### :gear: RawData
 
 Represents raw binary data.
@@ -961,7 +962,7 @@ This is used to store structured data in a document.
 | --------- | ---------------------------------- |
 | `RawData` | `z.infer<typeof Uint8ArraySchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L32)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L24)
 
 #### :gear: OptionDoc
 
@@ -971,7 +972,7 @@ A shorthand for a document that might or not be defined.
 | ----------- | ------------------ |
 | `OptionDoc` | `Doc or undefined` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L92)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L84)
 
 #### :gear: OnSetDocContext
 

@@ -31,6 +31,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
 - [setDocStore](#gear-setdocstore)
+- [deleteDocStore](#gear-deletedocstore)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
 - [call](#gear-call)
@@ -179,7 +180,22 @@ Parameters:
 - `params`: - The parameters required to store the document,
   including the caller, collection, key, and document data.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L15)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L20)
+
+#### :gear: deleteDocStore
+
+Delete a document in the datastore.
+
+| Function         | Type                                     |
+| ---------------- | ---------------------------------------- |
+| `deleteDocStore` | `(params: DeleteDocStoreParams) => void` |
+
+Parameters:
+
+- `params`: - The parameters required to delete the document,
+  including the caller, collection, key, and version of the document.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L40)
 
 #### :gear: decodeDocData
 
@@ -279,6 +295,7 @@ the Principal of the executing canister.
 - [OnDeleteFilteredDocsSchema](#gear-ondeletefiltereddocsschema)
 - [HookSchema](#gear-hookschema)
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
+- [DeleteDocStoreParamsSchema](#gear-deletedocstoreparamsschema)
 - [IDLTypeSchema](#gear-idltypeschema)
 - [CallArgSchema](#gear-callargschema)
 - [CallArgsSchema](#gear-callargsschema)
@@ -577,11 +594,19 @@ A schema that validates a value is an Uint8Array.
 
 #### :gear: SetDocStoreParamsSchema
 
-| Constant                  | Type                                                                                                                                                                                                                                    |
-| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SetDocStoreParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; doc: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                  | Type                                                                                                                                                                                                                                      |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SetDocStoreParamsSchema` | `ZodObject<extendShape<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; }, { ...; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L17)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L46)
+
+#### :gear: DeleteDocStoreParamsSchema
+
+| Constant                     | Type                                                                                                                                                                                                                                      |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DeleteDocStoreParamsSchema` | `ZodObject<extendShape<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; }, { ...; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L66)
 
 #### :gear: IDLTypeSchema
 
@@ -640,7 +665,7 @@ Schema for encoding the call arguments.
 - [DocAssertSet](#gear-docassertset)
 - [DocAssertDelete](#gear-docassertdelete)
 - [DocContext](#gear-doccontext)
-- [SetDocStoreParams](#gear-setdocstoreparams)
+- [DocStoreParams](#gear-docstoreparams)
 - [CallParams](#gear-callparams)
 
 #### :gear: Collections
@@ -738,19 +763,15 @@ Represents the context of a document operation within a collection.
 | `key`        | `string` | The unique key identifying the document within the collection. |
 | `data`       | `T`      | The data associated with the document operation.               |
 
-#### :gear: SetDocStoreParams
+#### :gear: DocStoreParams
 
-Represents the parameters required to store or update a document.
+Represents the base parameters required to access the datastore and modify a document.
 
-This includes the document data along with metadata such as the caller,
-collection, and key.
-
-| Property     | Type                                       | Description                                                                         |
-| ------------ | ------------------------------------------ | ----------------------------------------------------------------------------------- |
-| `caller`     | `Uint8Array<ArrayBufferLike> or Principal` | The caller who initiate the document operation.                                     |
-| `collection` | `string`                                   | The name of the collection where the document is stored.                            |
-| `key`        | `string`                                   | The unique key identifying the document within the collection.                      |
-| `doc`        | `SetDoc`                                   | The data, optional description and version required to create or update a document. |
+| Property     | Type                                       | Description                                                    |
+| ------------ | ------------------------------------------ | -------------------------------------------------------------- |
+| `caller`     | `Uint8Array<ArrayBufferLike> or Principal` | The caller who initiate the document operation.                |
+| `collection` | `string`                                   | The name of the collection where the document is stored.       |
+| `key`        | `string`                                   | The unique key identifying the document within the collection. |
 
 #### :gear: CallParams
 
@@ -801,6 +822,8 @@ Type representing the parameters required to make a canister call.
 - [Hook](#gear-hook)
 - [HookFn](#gear-hookfn)
 - [HookFnOrObject](#gear-hookfnorobject)
+- [SetDocStoreParams](#gear-setdocstoreparams)
+- [DeleteDocStoreParams](#gear-deletedocstoreparams)
 - [IDLType](#gear-idltype)
 - [CallArg](#gear-callarg)
 - [CallArgs](#gear-callargs)
@@ -1197,6 +1220,32 @@ All hooks definitions.
 | `HookFnOrObject` | `T or HookFn<T>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/db/hooks.ts#L113)
+
+#### :gear: SetDocStoreParams
+
+Represents the parameters required to store or update a document.
+
+This includes the document data along with metadata such as the caller,
+collection, and key.
+
+| Type                | Type                                                                                                                               |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `SetDocStoreParams` | `DocStoreParams and { /** * The data, optional description and version required to create or update a document. */ doc: SetDoc; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L56)
+
+#### :gear: DeleteDocStoreParams
+
+Represents the parameters required to delete a document.
+
+This includes the document version along with metadata such as the caller,
+collection, and key.
+
+| Type                   | Type                                                                                      |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| `DeleteDocStoreParams` | `DocStoreParams and { /** * The version required to delete a document. */ doc: DelDoc; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L76)
 
 #### :gear: IDLType
 

@@ -8,6 +8,12 @@ import {
   AssertSetDocContextSchema
 } from './schemas/db/context';
 import {SatelliteEnvSchema} from './schemas/satellite.env';
+import {
+  type AssertDeleteAssetContext,
+  AssertDeleteAssetContextSchema,
+  type AssertUploadAssetContext,
+  AssertUploadAssetContextSchema
+} from './schemas/storage/context';
 
 /**
  * @see OnAssert
@@ -53,9 +59,34 @@ export const AssertDeleteDocSchema = OnAssertSchema(AssertDeleteDocContextSchema
 export type AssertDeleteDoc = OnAssert<AssertDeleteDocContext>;
 
 /**
+ * @see AssertUploadAsset
+ */
+export const AssertUploadAssetSchema = OnAssertSchema(AssertUploadAssetContextSchema);
+
+/**
+ * An assertion that runs before an asset is uploaded.
+ */
+export type AssertUploadAsset = OnAssert<AssertUploadAssetContext>;
+
+/**
+ * @see AssertDeleteAsset
+ */
+export const AssertDeleteAssetSchema = OnAssertSchema(AssertDeleteAssetContextSchema);
+
+/**
+ * An assertion that runs before an asset is deleted.
+ */
+export type AssertDeleteAsset = OnAssert<AssertDeleteAssetContext>;
+
+/**
  * @see Assert
  */
-export const AssertSchema = z.union([AssertSetDocSchema, AssertDeleteDocSchema]);
+export const AssertSchema = z.union([
+  AssertSetDocSchema,
+  AssertDeleteDocSchema,
+  AssertUploadAssetSchema,
+  AssertDeleteAssetSchema
+]);
 
 /**
  * All assertions definitions.

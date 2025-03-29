@@ -91,7 +91,7 @@ export const AssertSchema = z.union([
 /**
  * All assertions definitions.
  */
-export type Assert = AssertSetDoc | AssertDeleteDoc;
+export type Assert = AssertSetDoc | AssertDeleteDoc | AssertUploadAsset | AssertDeleteAsset;
 
 export const AssertFnSchema = <T extends z.ZodTypeAny>(assertSchema: T) =>
   z.function().args(SatelliteEnvSchema).returns(assertSchema);

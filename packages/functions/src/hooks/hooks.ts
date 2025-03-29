@@ -156,7 +156,16 @@ export const HookSchema = z.union([
 /**
  * All hooks definitions.
  */
-export type Hook = OnSetDoc | OnSetManyDocs | OnDeleteDoc | OnDeleteManyDocs | OnDeleteFilteredDocs;
+export type Hook =
+  | OnSetDoc
+  | OnSetManyDocs
+  | OnDeleteDoc
+  | OnDeleteManyDocs
+  | OnDeleteFilteredDocs
+  | OnUploadAsset
+  | OnDeleteAsset
+  | OnDeleteManyAssets
+  | OnDeleteFilteredAssets;
 
 export const HookFnSchema = <T extends z.ZodTypeAny>(hookSchema: T) =>
   z.function().args(SatelliteEnvSchema).returns(hookSchema);

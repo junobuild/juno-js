@@ -1,9 +1,11 @@
+import {Principal} from '@dfinity/principal';
 import {
   Controller,
   ControllerRecordSchema,
   ControllerSchema,
   ControllersSchema
 } from '../../../sdk/schemas/controllers';
+import {mockRawUserId, mockUserIdText} from '../../mocks/controllers.mocks';
 
 describe('controllers', () => {
   describe('ControllerSchema', () => {
@@ -43,7 +45,7 @@ describe('controllers', () => {
     });
 
     it('accepts missing expires_at (optional)', () => {
-      const {expires_at, ...withoutExpires} = validController;
+      const {expires_at: _, ...withoutExpires} = validController;
       const result = ControllerSchema.parse(withoutExpires);
       expect(result.expires_at).toBeUndefined();
     });
@@ -60,7 +62,7 @@ describe('controllers', () => {
 
   describe('ControllerRecordSchema', () => {
     const validRecord = [
-      'aaaaa-aa', // example raw principal
+      mockRawUserId,
       {
         metadata: [['team', 'ops']],
         created_at: BigInt(1711900000000),
@@ -71,14 +73,14 @@ describe('controllers', () => {
 
     it('parses a valid record tuple', () => {
       const result = ControllerRecordSchema.parse(validRecord);
-      expect(result[0]).toBe('aaaaa-aa');
+      expect(result[0]).toBe(mockRawUserId);
       expect(result[1].scope).toBe('write');
     });
 
     it('fails if not a tuple', () => {
       expect(() =>
         ControllerRecordSchema.parse({
-          principal: 'aaaaa-aa',
+          principal: mockUserIdText,
           controller: validRecord[1]
         })
       ).toThrow();
@@ -86,9 +88,12 @@ describe('controllers', () => {
   });
 
   describe('ControllersSchema', () => {
+    const principal = Principal.fromText('aaaaa-aa');
+    const rawUserId = principal.toUint8Array();
+
     const validControllers = [
       [
-        'aaaaa-aa',
+        mockRawUserId,
         {
           metadata: [['x', 'y']],
           created_at: BigInt(1),
@@ -97,7 +102,7 @@ describe('controllers', () => {
         }
       ],
       [
-        'bbbbb-bb',
+        rawUserId,
         {
           metadata: [['k', 'v']],
           created_at: BigInt(3),
@@ -111,14 +116,14 @@ describe('controllers', () => {
     it('parses a valid array of controller records', () => {
       const result = ControllersSchema.parse(validControllers);
       expect(result.length).toBe(2);
-      expect(result[1][0]).toBe('bbbbb-bb');
+      expect(result[1][0]).toBe(rawUserId);
     });
 
     it('fails if any record is invalid', () => {
       const invalidControllers = [...validControllers];
       const controller = invalidControllers[1][1] as Controller;
 
-      invalidControllers[1] = ['bbbbb-bb', {...controller, scope: 'godmode'}];
+      invalidControllers[1] = [rawUserId, {...controller, scope: 'godmode'}];
 
       expect(() => ControllersSchema.parse(invalidControllers)).toThrow();
     });

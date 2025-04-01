@@ -1,4 +1,3 @@
-import {Principal} from '@dfinity/principal';
 import {
   getAdminControllers,
   getControllers,
@@ -6,15 +5,12 @@ import {
   isController
 } from '../../sdk/controllers.sdk';
 import {ControllerCheckParams, Controllers} from '../../sdk/schemas/controllers';
+import {mockRawUserId, mockUserIdPrincipal} from '../mocks/controllers.mocks';
 
 describe('controllers.sdk', () => {
-  const mockPrincipalText = 'xlmdg-vkosz-ceopx-7wtgu-g3xmd-koiyc-awqaq-7modz-zf6r6-364rh-oqe';
-  const principal = Principal.fromText(mockPrincipalText);
-  const rawUserId = principal.toUint8Array();
-
   const validControllers: Controllers = [
     [
-      rawUserId,
+      mockRawUserId,
       {
         metadata: [['name', 'test']],
         created_at: BigInt(1),
@@ -48,7 +44,7 @@ describe('controllers.sdk', () => {
   describe('isAdminController', () => {
     it('returns true when caller is a Principal', () => {
       const params: ControllerCheckParams = {
-        caller: principal,
+        caller: mockUserIdPrincipal,
         controllers: validControllers
       };
 
@@ -58,7 +54,7 @@ describe('controllers.sdk', () => {
 
     it('returns true when caller is a RawUserId (Uint8Array)', () => {
       const params: ControllerCheckParams = {
-        caller: rawUserId,
+        caller: mockRawUserId,
         controllers: validControllers
       };
 
@@ -70,7 +66,7 @@ describe('controllers.sdk', () => {
   describe('isController', () => {
     it('returns false when caller is not a controller', () => {
       const params: ControllerCheckParams = {
-        caller: principal,
+        caller: mockUserIdPrincipal,
         controllers: validControllers
       };
 

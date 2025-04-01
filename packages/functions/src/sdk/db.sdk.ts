@@ -1,10 +1,10 @@
-import {Principal} from '@dfinity/principal';
 import {
   DeleteDocStoreParams,
   DeleteDocStoreParamsSchema,
   SetDocStoreParams,
   SetDocStoreParamsSchema
 } from './schemas/db';
+import {normalizeCaller} from './utils/caller.utils';
 
 /**
  * Stores or updates a document in the datastore.
@@ -22,8 +22,7 @@ export const setDocStore = (params: SetDocStoreParams) => {
 
   const {caller: providedCaller, collection, key, doc} = params;
 
-  const caller =
-    providedCaller instanceof Principal ? providedCaller.toUint8Array() : providedCaller;
+  const caller = normalizeCaller(providedCaller);
 
   __juno_satellite_datastore_set_doc_store(caller, collection, key, doc);
 };
@@ -42,8 +41,7 @@ export const deleteDocStore = (params: DeleteDocStoreParams) => {
 
   const {caller: providedCaller, collection, key, doc} = params;
 
-  const caller =
-    providedCaller instanceof Principal ? providedCaller.toUint8Array() : providedCaller;
+  const caller = normalizeCaller(providedCaller);
 
   __juno_satellite_datastore_delete_doc_store(caller, collection, key, doc);
 };

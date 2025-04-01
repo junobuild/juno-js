@@ -1,9 +1,9 @@
-import {Principal} from '@dfinity/principal';
 import {
   ControllerCheckParams,
   ControllerCheckParamsSchema,
   Controllers
 } from './schemas/controllers';
+import {normalizeCaller} from './utils/caller.utils';
 
 /**
  * Gets the list of admin controllers from the Satellite.
@@ -39,9 +39,7 @@ export const isAdminController = (params: ControllerCheckParams): boolean => {
 
   const {caller: providedCaller, controllers} = params;
 
-  // TODO: create a util
-  const caller =
-    providedCaller instanceof Principal ? providedCaller.toUint8Array() : providedCaller;
+  const caller = normalizeCaller(providedCaller);
 
   return __juno_satellite_datastore_is_admin_controller(caller, controllers);
 };
@@ -61,8 +59,7 @@ export const isController = (params: ControllerCheckParams): boolean => {
 
   const {caller: providedCaller, controllers} = params;
 
-  const caller =
-    providedCaller instanceof Principal ? providedCaller.toUint8Array() : providedCaller;
+  const caller = normalizeCaller(providedCaller);
 
   return __juno_satellite_datastore_is_controller(caller, controllers);
 };

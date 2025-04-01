@@ -30,6 +30,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
+- [normalizeCaller](#gear-normalizecaller)
 - [getAdminControllers](#gear-getadmincontrollers)
 - [getControllers](#gear-getcontrollers)
 - [isAdminController](#gear-isadmincontroller)
@@ -169,6 +170,21 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L181)
 
+#### :gear: normalizeCaller
+
+Normalizes a user ID into a raw `Uint8Array` representation.
+
+| Function          | Type                                                                                |
+| ----------------- | ----------------------------------------------------------------------------------- |
+| `normalizeCaller` | `(caller: Uint8Array<ArrayBufferLike> or Principal) => Uint8Array<ArrayBufferLike>` |
+
+Parameters:
+
+- `caller`: - The caller identity, either a raw `Uint8Array`
+  or a `Principal` instance.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/utils/caller.utils.ts#L12)
+
 #### :gear: getAdminControllers
 
 Gets the list of admin controllers from the Satellite.
@@ -217,7 +233,7 @@ Parameters:
 - `params`: - The parameters including the caller identity
   and the list of controllers to verify against.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L59)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L57)
 
 #### :gear: setDocStore
 
@@ -249,7 +265,7 @@ Parameters:
 - `params`: - The parameters required to delete the document,
   including the caller, collection, key, and version of the document.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L40)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L39)
 
 #### :gear: decodeDocData
 

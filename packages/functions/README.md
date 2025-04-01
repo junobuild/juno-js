@@ -30,6 +30,10 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
+- [getAdminControllers](#gear-getadmincontrollers)
+- [getControllers](#gear-getcontrollers)
+- [isAdminController](#gear-isadmincontroller)
+- [isController](#gear-iscontroller)
 - [setDocStore](#gear-setdocstore)
 - [deleteDocStore](#gear-deletedocstore)
 - [decodeDocData](#gear-decodedocdata)
@@ -123,7 +127,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `HookFnSchema` | `<T extends z.ZodTypeAny>(hookSchema: T) => ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodUnknown>], ZodUnknown>, T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L161)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L170)
 
 #### :gear: HookFnOrObjectSchema
 
@@ -131,7 +135,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `HookFnOrObjectSchema` | `<T extends z.ZodTypeAny>(hookSchema: T) => ZodUnion<[T, ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodUnknown>], ZodUnknown>, T>]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L165)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L174)
 
 #### :gear: defineHook
 
@@ -139,7 +143,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L169)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L178)
 
 #### :gear: defineHook
 
@@ -147,7 +151,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L170)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L179)
 
 #### :gear: defineHook
 
@@ -155,7 +159,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L171)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L180)
 
 #### :gear: defineHook
 
@@ -163,7 +167,57 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L172)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L181)
+
+#### :gear: getAdminControllers
+
+Gets the list of admin controllers from the Satellite.
+
+| Function              | Type                                                                                                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getAdminControllers` | `() => [Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin"; expires_at?: bigint or undefined; }][]` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L15)
+
+#### :gear: getControllers
+
+Gets the list of controllers from the Satellite.
+
+| Function         | Type                                                                                                                                                                            |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getControllers` | `() => [Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin"; expires_at?: bigint or undefined; }][]` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L25)
+
+#### :gear: isAdminController
+
+Checks if the given caller is an admin among the provided controllers.
+
+| Function            | Type                                         |
+| ------------------- | -------------------------------------------- |
+| `isAdminController` | `(params: ControllerCheckParams) => boolean` |
+
+Parameters:
+
+- `params`: - The parameters including the caller identity
+  and the list of controllers to verify against.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L37)
+
+#### :gear: isController
+
+Checks if the given caller exists among the provided controllers.
+
+| Function       | Type                                         |
+| -------------- | -------------------------------------------- |
+| `isController` | `(params: ControllerCheckParams) => boolean` |
+
+Parameters:
+
+- `params`: - The parameters including the caller identity
+  and the list of controllers to verify against.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L59)
 
 #### :gear: setDocStore
 
@@ -310,6 +364,12 @@ the Principal of the executing canister.
 - [OnDeleteManyAssetsSchema](#gear-ondeletemanyassetsschema)
 - [OnDeleteFilteredAssetsSchema](#gear-ondeletefilteredassetsschema)
 - [HookSchema](#gear-hookschema)
+- [ControllerScopeSchema](#gear-controllerscopeschema)
+- [MetadataSchema](#gear-metadataschema)
+- [ControllerSchema](#gear-controllerschema)
+- [ControllerRecordSchema](#gear-controllerrecordschema)
+- [ControllersSchema](#gear-controllersschema)
+- [ControllerCheckParamsSchema](#gear-controllercheckparamsschema)
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
 - [DeleteDocStoreParamsSchema](#gear-deletedocstoreparamsschema)
 - [IDLTypeSchema](#gear-idltypeschema)
@@ -736,6 +796,54 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L144)
 
+#### :gear: ControllerScopeSchema
+
+| Constant                | Type                          |
+| ----------------------- | ----------------------------- |
+| `ControllerScopeSchema` | `ZodEnum<["write", "admin"]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L15)
+
+#### :gear: MetadataSchema
+
+| Constant         | Type                                     |
+| ---------------- | ---------------------------------------- |
+| `MetadataSchema` | `ZodTuple<[ZodString, ZodString], null>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L25)
+
+#### :gear: ControllerSchema
+
+| Constant           | Type                                                                                                                                                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ControllerSchema` | `ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>, "many">; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L35)
+
+#### :gear: ControllerRecordSchema
+
+| Constant                 | Type                                                                                                              |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `ControllerRecordSchema` | `ZodTuple<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodObject<...>], null>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L79)
+
+#### :gear: ControllersSchema
+
+| Constant            | Type                                                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `ControllersSchema` | `ZodArray<ZodTuple<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodObject<...>], null>, "many">` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L89)
+
+#### :gear: ControllerCheckParamsSchema
+
+| Constant                      | Type                                                                                                                                                                                                   |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ControllerCheckParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; controllers: ZodArray<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
+
 #### :gear: SetDocStoreParamsSchema
 
 | Constant                  | Type                                                                                                                                                                                                                                      |
@@ -815,6 +923,8 @@ Schema for encoding the call arguments.
 - [Batch](#gear-batch)
 - [CommitBatch](#gear-commitbatch)
 - [AssetAssertUpload](#gear-assetassertupload)
+- [Controller](#gear-controller)
+- [ControllerCheckParams](#gear-controllercheckparams)
 - [DocStoreParams](#gear-docstoreparams)
 - [CallParams](#gear-callparams)
 
@@ -981,6 +1091,27 @@ Represents a validation context before uploading an asset.
 | `batch`        | `Batch`              | The batch metadata being uploaded.                |
 | `commit_batch` | `CommitBatch`        | The commit data describing headers and chunk ids. |
 
+#### :gear: Controller
+
+Represents a controller with access scope and associated metadata.
+
+| Property     | Type                  | Description                                                                                        |
+| ------------ | --------------------- | -------------------------------------------------------------------------------------------------- |
+| `metadata`   | `[string, string][]`  | A list of key-value metadata pairs associated with the controller.                                 |
+| `created_at` | `bigint`              | The timestamp when the controller was created.                                                     |
+| `updated_at` | `bigint`              | The timestamp when the controller was last updated.                                                |
+| `expires_at` | `bigint or undefined` | Optional expiration timestamp for the controller. 👉 It's a placeholder for future implementation. |
+| `scope`      | `"write" or "admin"`  | The scope assigned to the controller.                                                              |
+
+#### :gear: ControllerCheckParams
+
+Represents the parameters required to perform controller checks.
+
+| Property      | Type                                                                                                                                                                      | Description                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `caller`      | `Uint8Array<ArrayBufferLike> or Principal`                                                                                                                                | The identity of the caller to verify against the controller list. |
+| `controllers` | `[Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin"; expires_at?: bigint or undefined; }][]` | The list of controllers to check against.                         |
+
 #### :gear: DocStoreParams
 
 Represents the base parameters required to access the datastore and modify a document.
@@ -1060,6 +1191,10 @@ Type representing the parameters required to make a canister call.
 - [Hook](#gear-hook)
 - [HookFn](#gear-hookfn)
 - [HookFnOrObject](#gear-hookfnorobject)
+- [ControllerScope](#gear-controllerscope)
+- [Metadata](#gear-metadata)
+- [ControllerRecord](#gear-controllerrecord)
+- [Controllers](#gear-controllers)
 - [SetDocStoreParams](#gear-setdocstoreparams)
 - [DeleteDocStoreParams](#gear-deletedocstoreparams)
 - [IDLType](#gear-idltype)
@@ -1526,9 +1661,9 @@ An assertion that runs before an asset is deleted.
 
 All assertions definitions.
 
-| Type     | Type                              |
-| -------- | --------------------------------- |
-| `Assert` | `AssertSetDoc or AssertDeleteDoc` |
+| Type     | Type                                                                        |
+| -------- | --------------------------------------------------------------------------- |
+| `Assert` | `AssertSetDoc or AssertDeleteDoc or AssertUploadAsset or AssertDeleteAsset` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L94)
 
@@ -1652,9 +1787,9 @@ A hook that runs when a filtered set of assets is deleted based on query conditi
 
 All hooks definitions.
 
-| Type   | Type                                                                                   |
-| ------ | -------------------------------------------------------------------------------------- |
-| `Hook` | `OnSetDoc or OnSetManyDocs or OnDeleteDoc or OnDeleteManyDocs or OnDeleteFilteredDocs` |
+| Type   | Type |
+| ------ | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Hook` | `    | OnSetDoc or OnSetManyDocs or OnDeleteDoc or OnDeleteManyDocs or OnDeleteFilteredDocs or OnUploadAsset or OnDeleteAsset or OnDeleteManyAssets or OnDeleteFilteredAssets` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L159)
 
@@ -1664,7 +1799,7 @@ All hooks definitions.
 | -------- | ------------------------------------------------- |
 | `HookFn` | `(hook: z.infer<typeof SatelliteEnvSchema>) => T` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L163)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L172)
 
 #### :gear: HookFnOrObject
 
@@ -1672,7 +1807,47 @@ All hooks definitions.
 | ---------------- | ---------------- |
 | `HookFnOrObject` | `T or HookFn<T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L167)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L176)
+
+#### :gear: ControllerScope
+
+Represents the permission scope of a controller.
+
+| Type              | Type                                    |
+| ----------------- | --------------------------------------- |
+| `ControllerScope` | `z.infer<typeof ControllerScopeSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L20)
+
+#### :gear: Metadata
+
+Represents a single metadata entry as a key-value tuple.
+
+| Type       | Type                             |
+| ---------- | -------------------------------- |
+| `Metadata` | `z.infer<typeof MetadataSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L30)
+
+#### :gear: ControllerRecord
+
+Represents a tuple containing the principal ID and associated controller data.
+
+| Type               | Type                                     |
+| ------------------ | ---------------------------------------- |
+| `ControllerRecord` | `z.infer<typeof ControllerRecordSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L84)
+
+#### :gear: Controllers
+
+Represents a list of controllers.
+
+| Type          | Type                                |
+| ------------- | ----------------------------------- |
+| `Controllers` | `z.infer<typeof ControllersSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L94)
 
 #### :gear: SetDocStoreParams
 

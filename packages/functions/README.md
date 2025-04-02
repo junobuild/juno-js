@@ -1033,11 +1033,11 @@ throw an error if their validation fails.
 
 Represents the context of a document operation within a collection.
 
-| Property     | Type     | Description                                                    |
-| ------------ | -------- | -------------------------------------------------------------- |
-| `collection` | `string` | The name of the collection where the document is stored.       |
-| `key`        | `string` | The unique key identifying the document within the collection. |
-| `data`       | `T`      | The data associated with the document operation.               |
+| Property     | Type     | Description                                                   |
+| ------------ | -------- | ------------------------------------------------------------- |
+| `collection` | `string` | The name of the collection where the document is stored.      |
+| `key`        | `string` | The key identifying the document within the collection. |
+| `data`       | `T`      | The data associated with the document operation.              |
 
 #### :gear: AssetKey
 
@@ -1132,11 +1132,11 @@ Represents the parameters required to perform controller checks.
 
 Represents the base parameters required to access the datastore and modify a document.
 
-| Property     | Type                                       | Description                                                    |
-| ------------ | ------------------------------------------ | -------------------------------------------------------------- |
-| `caller`     | `Uint8Array<ArrayBufferLike> or Principal` | The caller who initiate the document operation.                |
-| `collection` | `string`                                   | The name of the collection where the document is stored.       |
-| `key`        | `string`                                   | The unique key identifying the document within the collection. |
+| Property     | Type                                       | Description                                                   |
+| ------------ | ------------------------------------------ | ------------------------------------------------------------- |
+| `caller`     | `Uint8Array<ArrayBufferLike> or Principal` | The caller who initiate the document operation.               |
+| `collection` | `string`                                   | The name of the collection where the document is stored.      |
+| `key`        | `string`                                   | The key identifying the document within the collection. |
 
 #### :gear: CallParams
 
@@ -1298,7 +1298,7 @@ A collection name where data are stored.
 
 #### :gear: Key
 
-A unique key identifier within a collection.
+A key identifier within a collection.
 
 | Type  | Type                        |
 | ----- | --------------------------- |

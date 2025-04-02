@@ -65,7 +65,7 @@ export type Collection = z.infer<typeof CollectionSchema>;
 export const KeySchema = z.string();
 
 /**
- * A unique key identifier within a collection.
+ * A key identifier within a collection.
  */
 export type Key = z.infer<typeof KeySchema>;
 

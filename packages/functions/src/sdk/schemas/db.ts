@@ -35,7 +35,7 @@ export interface DocStoreParams {
   collection: Collection;
 
   /**
-   * The unique key identifying the document within the collection.
+   * The key identifying the document within the collection.
    */
   key: Key;
 }

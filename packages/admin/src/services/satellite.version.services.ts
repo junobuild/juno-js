@@ -35,7 +35,7 @@ export const satelliteBuildType = async ({
 }): Promise<BuildType | undefined> => {
   const status = await canisterMetadata({...rest, canisterId: satelliteId, path: 'juno:build'});
 
-  return nonNullish(status) && ['stock', 'extended'].includes(status as string)
+  return nonNullish(status) && ['stock', 'extended', 'sputnik'].includes(status as string)
     ? (status as BuildType)
     : undefined;
 };

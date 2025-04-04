@@ -16,7 +16,7 @@ const analyticsPromises = analyticsDeclarations.map((d) =>
 );
 await Promise.all(analyticsPromises);
 
-const coreDeclarations = ['satellite', 'deprecated'];
+const coreDeclarations = ['satellite', 'deprecated', 'sputnik'];
 const corePromises = coreDeclarations.map((d) =>
   cp(join(src, d), join('./packages/core/declarations/', d), {recursive: true})
 );

@@ -16,13 +16,13 @@ const analyticsPromises = analyticsDeclarations.map((d) =>
 );
 await Promise.all(analyticsPromises);
 
-const coreDeclarations = ['satellite', 'deprecated'];
+const coreDeclarations = ['satellite', 'deprecated', 'sputnik'];
 const corePromises = coreDeclarations.map((d) =>
   cp(join(src, d), join('./packages/core/declarations/', d), {recursive: true})
 );
 await Promise.all(corePromises);
 
-const storageDeclarations = ['satellite', 'console', 'deprecated'];
+const storageDeclarations = ['satellite', 'console'];
 const storagePromises = storageDeclarations.map((d) =>
   cp(join(src, d), join('./packages/storage/declarations/', d), {recursive: true})
 );

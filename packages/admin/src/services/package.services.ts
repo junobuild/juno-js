@@ -1,6 +1,7 @@
 import {Principal} from '@dfinity/principal';
 import {isNullish} from '@dfinity/utils';
 import {type JunoPackage, JunoPackageSchema} from '@junobuild/config';
+import * as z from 'zod';
 import {canisterMetadata} from '../api/ic.api';
 import {ActorParameters} from '../types/actor.types';
 
@@ -25,5 +26,29 @@ export const getJunoPackage = async ({
     return undefined;
   }
 
-  return JunoPackageSchema.parse(status);
+  if (typeof status !== 'string') {
+    throw new Error('Unexpected metadata type to parse public custom section juno:package');
+  }
+
+  // https://stackoverflow.com/a/75881231/5404186
+  // https://github.com/colinhacks/zod/discussions/2215#discussioncomment-5356286
+  const createPackageFromJson = (content: string): JunoPackage => {
+    return z
+      .string()
+      .transform((str, ctx) => {
+        try {
+          return JSON.parse(str);
+        } catch (error) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Invalid JSON'
+          });
+          return z.never;
+        }
+      })
+      .pipe(JunoPackageSchema)
+      .parse(content);
+  };
+
+  return createPackageFromJson(status);
 };

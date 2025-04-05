@@ -4,6 +4,17 @@ import {type JunoPackage, JunoPackageSchema} from '@junobuild/config';
 import {canisterMetadata} from '../api/ic.api';
 import {ActorParameters} from '../types/actor.types';
 
+/**
+ * Get the `juno:package` metadata from the public custom section of a given module.
+ *
+ * @param {Object} params - The parameters to fetch the metadata.
+ * @param {Principal | string} params.moduleId - The canister ID (as a `Principal` or string) from which to retrieve the metadata.
+ * @param {ActorParameters} params - Additional actor parameters required for the call.
+ *
+ * @returns {Promise<JunoPackage | undefined>} A promise that resolves to the parsed `JunoPackage` metadata, or `undefined` if not found.
+ *
+ * @throws {ZodError} If the metadata exists but does not conform to the expected `JunoPackage` schema.
+ */
 export const getJunoPackage = async ({
   moduleId,
   ...rest
@@ -14,11 +25,5 @@ export const getJunoPackage = async ({
     return undefined;
   }
 
-  const {success, data} = JunoPackageSchema.safeParse(status);
-
-  if (!success) {
-    return undefined;
-  }
-
-  return data;
+  return JunoPackageSchema.parse(status);
 };

@@ -61,7 +61,8 @@
         "@dfinity/principal",
         "@dfinity/utils",
         "@junobuild/config",
-        "semver"
+        "semver",
+        "zod"
       ]
     },
     {
@@ -147,7 +148,10 @@
     {
       "name": "@junobuild/config",
       "path": "./packages/config/dist/index.js",
-      "limit": "30 B"
+      "limit": "30 B",
+      "ignore": [
+        "zod"
+      ]
     },
     {
       "name": "@junobuild/console",

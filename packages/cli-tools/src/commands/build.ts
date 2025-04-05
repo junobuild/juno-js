@@ -3,10 +3,12 @@ import {rm} from 'node:fs/promises';
 
 export const buildEsm = async ({
   infile,
-  outfile
+  outfile,
+  banner
 }: {
   infile: string;
   outfile: string;
+  banner?: {[type: string]: string};
 }): Promise<{
   metafile: Metafile;
   errors: Message[];
@@ -35,7 +37,8 @@ export const buildEsm = async ({
     define: {
       self: 'globalThis'
     },
-    metafile: true
+    metafile: true,
+    banner
   });
 
   return {metafile, errors, warnings, version};

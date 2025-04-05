@@ -7,6 +7,7 @@ export * from './services/orbiter.controllers.services';
 export * from './services/orbiter.memory.services';
 export * from './services/orbiter.upgrade.services';
 export * from './services/orbiter.version.services';
+export * from './services/package.services';
 export * from './services/releases.services';
 export * from './services/satellite.assets.services';
 export * from './services/satellite.config.services';

@@ -148,7 +148,7 @@ export const canisterMetadata = async ({
   path,
   ...rest
 }: ActorParameters & {
-  canisterId: string | undefined;
+  canisterId: Principal | string | undefined;
   path: string;
 }): Promise<CanisterStatus.Status | undefined> => {
   assertNonNullish(canisterId, 'A canister ID must be provided to request its status.');
@@ -156,7 +156,7 @@ export const canisterMetadata = async ({
   const agent = await useOrInitAgent(rest);
 
   const result = await CanisterStatus.request({
-    canisterId: Principal.from(canisterId),
+    canisterId: canisterId instanceof Principal ? canisterId : Principal.fromText(canisterId),
     agent,
     paths: [
       {

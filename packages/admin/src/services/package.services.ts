@@ -32,8 +32,8 @@ export const getJunoPackage = async ({
 
   // https://stackoverflow.com/a/75881231/5404186
   // https://github.com/colinhacks/zod/discussions/2215#discussioncomment-5356286
-  const createPackageFromJson = (content: string): JunoPackage => {
-    return z
+  const createPackageFromJson = (content: string): JunoPackage =>
+    z
       .string()
       .transform((str, ctx) => {
         try {
@@ -48,7 +48,6 @@ export const getJunoPackage = async ({
       })
       .pipe(JunoPackageSchema)
       .parse(content);
-  };
 
   return createPackageFromJson(status);
 };

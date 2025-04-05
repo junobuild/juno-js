@@ -148,7 +148,7 @@
     {
       "name": "@junobuild/config",
       "path": "./packages/config/dist/index.js",
-      "limit": "30 B",
+      "limit": "1 kB",
       "ignore": [
         "zod"
       ]

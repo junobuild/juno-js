@@ -39,5 +39,8 @@
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"
   },
-  "homepage": "https://juno.build"
+  "homepage": "https://juno.build",
+  "peerDependencies": {
+    "zod": "^3"
+  }
 }

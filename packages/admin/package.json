@@ -57,6 +57,7 @@
     "@dfinity/principal": "^2.3.0",
     "@dfinity/utils": "^2",
     "@junobuild/config": "*",
-    "semver": "7.*"
+    "semver": "7.*",
+    "zod": "^3"
   }
 }

@@ -35,10 +35,11 @@ export const getJunoPackage = async ({
   const createPackageFromJson = (content: string): JunoPackage =>
     z
       .string()
+      // eslint-disable-next-line local-rules/prefer-object-params
       .transform((str, ctx) => {
         try {
           return JSON.parse(str);
-        } catch (error) {
+        } catch (_err: unknown) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: 'Invalid JSON'

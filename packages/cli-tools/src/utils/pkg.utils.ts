@@ -8,11 +8,12 @@ export const readPackageJson = async ({
 }): Promise<PackageJson> => {
   const packageJson = await readFile(packageJsonPath, 'utf-8');
 
-  const {dependencies, version, juno} = JSON.parse(packageJson) as PackageJson;
+  const {dependencies, version, juno, name} = JSON.parse(packageJson) as PackageJson;
 
   return {
-    dependencies,
+    name,
     version,
+    dependencies,
     juno
   };
 };

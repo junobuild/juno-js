@@ -93,24 +93,3 @@ export const getJunoPackageDependencies = async (
   const pkg = await getJunoPackage(params);
   return pkg?.dependencies;
 };
-
-/**
- * Finds a specific dependency entry by its ID from the `juno:package` metadata.
- *
- * @param {Object} params - The parameters to fetch and search within the dependencies.
- * @param {string} params.dependencyId - The ID of the dependency to find (e.g., `@junobuild/satellite`).
- * @param {Principal | string} params.moduleId - The canister ID (as a `Principal` or string).
- * @param {ActorParameters} params - Additional actor parameters required for the metadata call.
- *
- * @returns {Promise<[string, string] | undefined>} A promise that resolves to the `[dependencyId, version]` tuple if found, or `undefined` otherwise.
- *
- * @throws {ZodError} If the metadata exists but does not conform to the expected `JunoPackage` schema.
- */
-export const findJunoPackageDependency = async ({
-  dependencyId,
-  ...params
-}: GetJunoPackageParams & {dependencyId: string}): Promise<[string, string] | undefined> => {
-  const dependencies = await getJunoPackageDependencies(params);
-
-  return Object.entries(dependencies ?? {}).find(([key, _]) => key === dependencyId);
-};

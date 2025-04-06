@@ -6,6 +6,15 @@ import {canisterMetadata} from '../api/ic.api';
 import {ActorParameters} from '../types/actor.types';
 
 /**
+ * Parameters required to retrieve a `juno:package` metadata section.
+ *
+ * @typedef {Object} GetJunoPackageParams
+ * @property {Principal | string} moduleId - The ID of the canister module (as a Principal or string).
+ * @property {ActorParameters} [ActorParameters] - Additional actor parameters for making the canister call.
+ */
+export type GetJunoPackageParams = {moduleId: Principal | string} & ActorParameters;
+
+/**
  * Get the `juno:package` metadata from the public custom section of a given module.
  *
  * @param {Object} params - The parameters to fetch the metadata.
@@ -19,7 +28,7 @@ import {ActorParameters} from '../types/actor.types';
 export const getJunoPackage = async ({
   moduleId,
   ...rest
-}: {moduleId: Principal | string} & ActorParameters): Promise<JunoPackage | undefined> => {
+}: GetJunoPackageParams): Promise<JunoPackage | undefined> => {
   const status = await canisterMetadata({...rest, canisterId: moduleId, path: 'juno:package'});
 
   if (isNullish(status)) {
@@ -51,4 +60,20 @@ export const getJunoPackage = async ({
       .parse(content);
 
   return createPackageFromJson(status);
+};
+
+/**
+ * Retrieves only the `version` field from the `juno:package` metadata.
+ *
+ * @param {GetJunoPackageParams} params - The parameters to fetch the package version.
+ *
+ * @returns {Promise<string | undefined>} A promise that resolves to the version string or `undefined` if not found.
+ *
+ * @throws {ZodError} If the metadata exists but does not conform to the expected `JunoPackage` schema.
+ */
+export const getJunoPackageVersion = async (
+  params: GetJunoPackageParams
+): Promise<JunoPackage['version'] | undefined> => {
+  const pkg = await getJunoPackage(params);
+  return pkg?.version;
 };

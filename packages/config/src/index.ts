@@ -16,6 +16,7 @@ export type * from './types/juno.env';
 export type * from './types/juno.package';
 export type * from './types/utility.types';
 
+export * from './constants/juno.package.constants';
 export * from './schema/juno.package.schema';
 
 /// Export and expose functions for developers' configuration

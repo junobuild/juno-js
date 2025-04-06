@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {RawUserId, UserId} from '../../schemas/satellite';
+import type {RawUserId, UserId} from '../../schemas/satellite';
 
 /**
  * Normalizes a user ID into a raw `Uint8Array` representation.

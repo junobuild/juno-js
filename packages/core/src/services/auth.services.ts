@@ -1,5 +1,5 @@
 import type {Identity} from '@dfinity/agent';
-import {AuthClient, ERROR_USER_INTERRUPT} from '@dfinity/auth-client';
+import {type AuthClient, ERROR_USER_INTERRUPT} from '@dfinity/auth-client';
 import {isNullish} from '@dfinity/utils';
 import {
   ALLOW_PIN_AUTHENTICATION,

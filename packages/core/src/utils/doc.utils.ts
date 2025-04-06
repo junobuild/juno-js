@@ -2,7 +2,7 @@ import {fromNullable, toNullable} from '@dfinity/utils';
 import {fromArray, toArray} from '@junobuild/utils';
 import type {DelDoc, Doc as DocApi, SetDoc} from '../../declarations/satellite/satellite.did';
 import type {Doc} from '../types/doc.types';
-import {ExcludeDate} from '../types/utility.types';
+import type {ExcludeDate} from '../types/utility.types';
 
 export const toSetDoc = async <D>(doc: Doc<D>): Promise<SetDoc> => {
   const {data, version, description} = doc;

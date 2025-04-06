@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import type {Principal} from '@dfinity/principal';
 import type {Controller, SetControllersArgs} from '../../declarations/satellite/satellite.did';
 import {
   listControllers,

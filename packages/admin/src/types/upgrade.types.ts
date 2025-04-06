@@ -1,6 +1,6 @@
 import type {canister_install_mode} from '@dfinity/ic-management';
-import {Principal} from '@dfinity/principal';
-import {ActorParameters} from './actor.types';
+import type {Principal} from '@dfinity/principal';
+import type {ActorParameters} from './actor.types';
 
 export enum UpgradeCodeProgressStep {
   AssertingExistingCode,

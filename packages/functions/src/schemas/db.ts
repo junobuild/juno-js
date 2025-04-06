@@ -1,7 +1,7 @@
 import * as z from 'zod';
 import {Uint8ArraySchema} from './candid';
 import {
-  Description,
+  type Description,
   DescriptionSchema,
   type RawUserId,
   RawUserIdSchema,

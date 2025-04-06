@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {Asset, AssetSchema} from '../../../schemas/storage';
+import {type Asset, AssetSchema} from '../../../schemas/storage';
 import {HookContextSchema, type HookContext} from '../context';
 import {AssetAssertUploadSchema, type AssetAssertUpload} from './payload';
 

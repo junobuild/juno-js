@@ -3,7 +3,7 @@ import {listControllers} from '../api/orbiter.api';
 import {INSTALL_MODE_RESET, INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';
 import type {OrbiterParameters} from '../types/actor.types';
-import {UpgradeCodeParams} from '../types/upgrade.types';
+import type {UpgradeCodeParams} from '../types/upgrade.types';
 import {encodeIDLControllers} from '../utils/idl.utils';
 
 /**

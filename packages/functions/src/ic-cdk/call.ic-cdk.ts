@@ -1,7 +1,7 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {toNullable} from '@dfinity/utils';
-import {CallParams, CallParamsSchema, IDLType} from './schemas/call';
+import {type CallParams, type IDLType, CallParamsSchema} from './schemas/call';
 import {CallResponseLengthError} from './types/errors';
 
 /**

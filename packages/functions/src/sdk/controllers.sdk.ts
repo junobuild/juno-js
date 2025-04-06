@@ -1,7 +1,8 @@
 import {
-  ControllerCheckParams,
-  ControllerCheckParamsSchema,
-  Controllers
+  type ControllerCheckParams,
+  type Controllers
+,
+  ControllerCheckParamsSchema
 } from './schemas/controllers';
 import {normalizeCaller} from './utils/caller.utils';
 

@@ -8,7 +8,7 @@ import {
 } from '../api/ic.api';
 import {SIMPLE_INSTALL_MAX_WASM_SIZE} from '../constants/upgrade.constants';
 import {UpgradeCodeUnchangedError} from '../errors/upgrade.errors';
-import {UpgradeCodeParams, UpgradeCodeProgressStep} from '../types/upgrade.types';
+import {type UpgradeCodeParams, UpgradeCodeProgressStep} from '../types/upgrade.types';
 import {uint8ArraySha256} from '../utils/crypto.utils';
 import {upgradeChunkedCode} from './upgrade.chunks.handlers';
 import {upgradeSingleChunkCode} from './upgrade.single.handlers';

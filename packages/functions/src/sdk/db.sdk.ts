@@ -1,7 +1,7 @@
 import {
-  DeleteDocStoreParams,
+  type DeleteDocStoreParams,
+  type SetDocStoreParams,
   DeleteDocStoreParamsSchema,
-  SetDocStoreParams,
   SetDocStoreParamsSchema
 } from './schemas/db';
 import {normalizeCaller} from './utils/caller.utils';

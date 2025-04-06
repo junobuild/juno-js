@@ -3,7 +3,7 @@ import type {DelDoc, SetDoc} from '../../declarations/satellite/satellite.did';
 import type {Doc} from '../types/doc.types';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
-import {ExcludeDate} from '../types/utility.types';
+import type {ExcludeDate} from '../types/utility.types';
 import {mapData} from '../utils/data.utils';
 import {fromDoc, toDelDoc, toSetDoc} from '../utils/doc.utils';
 import {toListParams} from '../utils/list.utils';

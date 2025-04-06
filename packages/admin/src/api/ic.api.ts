@@ -2,11 +2,11 @@ import {CanisterStatus} from '@dfinity/agent';
 import {
   type chunk_hash,
   type InstallChunkedCodeParams,
+  type InstallCodeParams,
+  type list_canister_snapshots_result,
+  type snapshot_id,
   type UploadChunkParams,
-  ICManagementCanister,
-  InstallCodeParams,
-  list_canister_snapshots_result,
-  snapshot_id
+  ICManagementCanister
 } from '@dfinity/ic-management';
 import type {take_canister_snapshot_result} from '@dfinity/ic-management/dist/candid/ic-management';
 import type {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';

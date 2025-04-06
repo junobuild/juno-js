@@ -1,9 +1,9 @@
-import {Principal} from '@dfinity/principal';
+import type {Principal} from '@dfinity/principal';
 import {isNullish} from '@dfinity/utils';
 import {type JunoPackage, JunoPackageSchema} from '@junobuild/config';
 import * as z from 'zod';
 import {canisterMetadata} from '../api/ic.api';
-import {ActorParameters} from '../types/actor.types';
+import type {ActorParameters} from '../types/actor.types';
 
 /**
  * Parameters required to retrieve a `juno:package` metadata section.

@@ -1,5 +1,5 @@
 import {nonNullish} from '@dfinity/utils';
-import {SpawnOptions} from 'child_process';
+import type {SpawnOptions} from 'child_process';
 import {stat} from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';

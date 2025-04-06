@@ -15,13 +15,13 @@ import {
 } from './schemas/db/context';
 import {SatelliteEnvSchema} from './schemas/satellite.env';
 import {
-  OnDeleteAssetContext,
+  type OnDeleteAssetContext,
   OnDeleteAssetContextSchema,
-  OnDeleteFilteredAssetsContext,
+  type OnDeleteFilteredAssetsContext,
   OnDeleteFilteredAssetsContextSchema,
-  OnDeleteManyAssetsContext,
+  type OnDeleteManyAssetsContext,
   OnDeleteManyAssetsContextSchema,
-  OnUploadAssetContext,
+  type OnUploadAssetContext,
   OnUploadAssetContextSchema
 } from './schemas/storage/context';
 

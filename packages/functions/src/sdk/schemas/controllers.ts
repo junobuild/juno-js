@@ -1,11 +1,11 @@
 import * as z from 'zod';
 import {RawPrincipalSchema} from '../../schemas/candid';
 import {
-  RawUserId,
+  type RawUserId,
+  type Timestamp,
+  type UserId,
   RawUserIdSchema,
-  Timestamp,
   TimestampSchema,
-  UserId,
   UserIdSchema
 } from '../../schemas/satellite';
 

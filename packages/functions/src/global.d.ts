@@ -1,6 +1,6 @@
 import type {DelDoc, RawData, SetDoc} from './schemas/db';
 import type {Collection, Key, RawPrincipal, RawUserId} from './schemas/satellite';
-import {Controllers} from './sdk/schemas/controllers';
+import type {Controllers} from './sdk/schemas/controllers';
 
 declare global {
   function __juno_satellite_datastore_raw_data_to_text(data: RawData): string;

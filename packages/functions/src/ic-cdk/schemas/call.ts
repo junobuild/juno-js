@@ -1,5 +1,5 @@
 import {IDL} from '@dfinity/candid';
-import {Principal} from '@dfinity/principal';
+import type {Principal} from '@dfinity/principal';
 import * as z from 'zod';
 import {PrincipalSchema, type RawPrincipal, RawPrincipalSchema} from '../../schemas/candid';
 

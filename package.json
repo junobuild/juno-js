@@ -39,14 +39,14 @@
     "@size-limit/esbuild": "^11.2.0",
     "@size-limit/preset-small-lib": "^11.2.0",
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.13.10",
-    "esbuild": "^0.25.1",
+    "@types/node": "^22.14.0",
+    "esbuild": "^0.25.2",
     "jsdom": "^26.0.0",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",
     "tsdoc-markdown": "^1.2.0",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.9"
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
   },
   "size-limit": [
     {

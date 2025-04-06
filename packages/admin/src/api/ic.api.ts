@@ -155,6 +155,11 @@ export const canisterMetadata = async ({
 
   const agent = await useOrInitAgent(rest);
 
+  // TODO: Workaround for agent-js. Disable console.warn.
+  // See https://github.com/dfinity/agent-js/issues/843
+  const hideAgentJsConsoleWarn = globalThis.console.warn;
+  globalThis.console.warn = (): null => null;
+
   const result = await CanisterStatus.request({
     canisterId: canisterId instanceof Principal ? canisterId : Principal.fromText(canisterId),
     agent,
@@ -167,6 +172,9 @@ export const canisterMetadata = async ({
       }
     ]
   });
+
+  // Redo console.warn
+  globalThis.console.warn = hideAgentJsConsoleWarn;
 
   return result.get(path);
 };

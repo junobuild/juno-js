@@ -118,18 +118,6 @@ export const version = async ({satellite}: {satellite: SatelliteParameters}): Pr
 };
 
 /**
- * @deprecated - Replaced in Satellite > v0.0.22 with public custom section juno:package
- */
-export const buildVersion = async ({
-  satellite
-}: {
-  satellite: SatelliteParameters;
-}): Promise<string> => {
-  const {build_version} = await getDeprecatedSatelliteVersionActor(satellite);
-  return build_version();
-};
-
-/**
  * @deprecated TODO: for backwards compatibility - to be removed
  */
 export const listDeprecatedControllers = async ({

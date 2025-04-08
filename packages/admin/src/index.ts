@@ -1,4 +1,5 @@
 export * from './errors/upgrade.errors';
+export * from './errors/version.errors';
 export * from './services/mission-control.controllers.services';
 export * from './services/mission-control.upgrade.services';
 export * from './services/mission-control.version.services';

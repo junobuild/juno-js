@@ -11,7 +11,6 @@ import {
 import type {take_canister_snapshot_result} from '@dfinity/ic-management/dist/candid/ic-management';
 import type {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
 import {Principal} from '@dfinity/principal';
-import {assertNonNullish} from '@dfinity/utils';
 import type {ActorParameters} from '../types/actor.types';
 import {useOrInitAgent} from '../utils/actor.utils';
 
@@ -148,11 +147,9 @@ export const canisterMetadata = async ({
   path,
   ...rest
 }: ActorParameters & {
-  canisterId: Principal | string | undefined;
+  canisterId: Principal | string;
   path: string;
 }): Promise<CanisterStatus.Status | undefined> => {
-  assertNonNullish(canisterId, 'A canister ID must be provided to request its status.');
-
   const agent = await useOrInitAgent(rest);
 
   // TODO: Workaround for agent-js. Disable console.warn.

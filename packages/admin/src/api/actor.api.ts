@@ -1,13 +1,12 @@
 import type {IDL} from '@dfinity/candid';
 import {isNullish} from '@dfinity/utils';
+import type {_SERVICE as DeprecatedMissionControlVersionActor} from '../../declarations/mission_control/mission_control-deprecated-version.did';
 import type {_SERVICE as MissionControlActor} from '../../declarations/mission_control/mission_control.did';
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactoryMissionControl} from '../../declarations/mission_control/mission_control.factory.did.js';
+import type {_SERVICE as DeprecatedOrbiterVersionActor} from '../../declarations/orbiter/orbiter-deprecated-version.did';
 import type {_SERVICE as OrbiterActor} from '../../declarations/orbiter/orbiter.did';
 // eslint-disable-next-line import/no-relative-parent-imports
-import type {_SERVICE as DeprecatedOrbiterVersionActor} from '../../declarations/orbiter/orbiter-deprecated-version.did';
-// eslint-disable-next-line import/no-relative-parent-imports
-import type {_SERVICE as DeprecatedMissionControlVersionActor} from '../../declarations/mission_control/mission_control-deprecated-version.did';
 import {idlFactory as idlFactoryOrbiter} from '../../declarations/orbiter/orbiter.factory.did.js';
 import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
 import type {_SERVICE as DeprecatedSatelliteVersionActor} from '../../declarations/satellite/satellite-deprecated-version.did';
@@ -19,7 +18,6 @@ import {idlFactory as idlDeprecatedFactorySatelliteVersion} from '../../declarat
 import {idlFactory as idlDeprecatedFactoryOrbiterVersion} from '../../declarations/orbiter/orbiter-deprecated-version.factory.did.js';
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlDeprecatedFactoryMissionControlVersion} from '../../declarations/mission_control/mission_control-deprecated-version.factory.did.js';
-// eslint-disable-next-line import/no-relative-parent-imports
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlDeprecatedFactorySatellite} from '../../declarations/satellite/satellite-deprecated.factory.did.js';

@@ -1,6 +1,5 @@
 import type {Principal} from '@dfinity/principal';
 import {toNullable} from '@dfinity/utils';
-import type {_SERVICE as DeprecatedSatelliteVersionActor} from '../../declarations/satellite/satellite-deprecated-version.did';
 import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
 import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
 import type {
@@ -19,7 +18,8 @@ import type {
 import type {SatelliteParameters} from '../types/actor.types';
 import {
   getDeprecatedSatelliteActor,
-  getDeprecatedSatelliteNoScopeActor, getDeprecatedSatelliteVersionActor,
+  getDeprecatedSatelliteNoScopeActor,
+  getDeprecatedSatelliteVersionActor,
   getSatelliteActor
 } from './actor.api';
 

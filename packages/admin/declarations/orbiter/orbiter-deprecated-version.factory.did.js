@@ -203,29 +203,45 @@ export const idlFactory = ({IDL}) => {
     ),
     del_satellite_config: IDL.Func([IDL.Principal, DelSatelliteConfig], [], []),
     deposit_cycles: IDL.Func([DepositCyclesArgs], [], []),
-    get_page_views: IDL.Func([GetAnalytics], [IDL.Vec(IDL.Tuple(AnalyticKey, PageView))], []),
-    get_page_views_analytics_clients: IDL.Func([GetAnalytics], [AnalyticsClientsPageViews], []),
-    get_page_views_analytics_metrics: IDL.Func([GetAnalytics], [AnalyticsMetricsPageViews], []),
-    get_page_views_analytics_top_10: IDL.Func([GetAnalytics], [AnalyticsTop10PageViews], []),
+    get_page_views: IDL.Func(
+      [GetAnalytics],
+      [IDL.Vec(IDL.Tuple(AnalyticKey, PageView))],
+      ['query']
+    ),
+    get_page_views_analytics_clients: IDL.Func(
+      [GetAnalytics],
+      [AnalyticsClientsPageViews],
+      ['query']
+    ),
+    get_page_views_analytics_metrics: IDL.Func(
+      [GetAnalytics],
+      [AnalyticsMetricsPageViews],
+      ['query']
+    ),
+    get_page_views_analytics_top_10: IDL.Func([GetAnalytics], [AnalyticsTop10PageViews], ['query']),
     get_performance_metrics: IDL.Func(
       [GetAnalytics],
       [IDL.Vec(IDL.Tuple(AnalyticKey, PerformanceMetric))],
-      []
+      ['query']
     ),
     get_performance_metrics_analytics_web_vitals: IDL.Func(
       [GetAnalytics],
       [AnalyticsWebVitalsPerformanceMetrics],
-      []
+      ['query']
     ),
-    get_track_events: IDL.Func([GetAnalytics], [IDL.Vec(IDL.Tuple(AnalyticKey, TrackEvent))], []),
-    get_track_events_analytics: IDL.Func([GetAnalytics], [AnalyticsTrackEvents], []),
-    list_controllers: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))], []),
+    get_track_events: IDL.Func(
+      [GetAnalytics],
+      [IDL.Vec(IDL.Tuple(AnalyticKey, TrackEvent))],
+      ['query']
+    ),
+    get_track_events_analytics: IDL.Func([GetAnalytics], [AnalyticsTrackEvents], ['query']),
+    list_controllers: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))], ['query']),
     list_satellite_configs: IDL.Func(
       [],
       [IDL.Vec(IDL.Tuple(IDL.Principal, OrbiterSatelliteConfig))],
-      []
+      ['query']
     ),
-    memory_size: IDL.Func([], [MemorySize], []),
+    memory_size: IDL.Func([], [MemorySize], ['query']),
     set_controllers: IDL.Func(
       [SetControllersArgs],
       [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))],
@@ -245,7 +261,8 @@ export const idlFactory = ({IDL}) => {
       []
     ),
     set_track_event: IDL.Func([AnalyticKey, SetTrackEvent], [Result_3], []),
-    set_track_events: IDL.Func([IDL.Vec(IDL.Tuple(AnalyticKey, SetTrackEvent))], [Result_1], [])
+    set_track_events: IDL.Func([IDL.Vec(IDL.Tuple(AnalyticKey, SetTrackEvent))], [Result_1], []),
+    version: IDL.Func([], [IDL.Text], ['query'])
   });
 };
 // @ts-ignore

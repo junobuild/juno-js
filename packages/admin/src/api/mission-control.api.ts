@@ -5,15 +5,18 @@ import type {
   SetController
 } from '../../declarations/mission_control/mission_control.did';
 import type {MissionControlParameters} from '../types/actor.types';
-import {getMissionControlActor} from './actor.api';
+import {getDeprecatedMissionControlVersionActor, getMissionControlActor} from './actor.api';
 
+/**
+ * @deprecated - Replaced in Mission Control > v0.0.14 with public custom section juno:package
+ */
 export const version = async ({
   missionControl
 }: {
   missionControl: MissionControlParameters;
 }): Promise<string> => {
-  const actor: MissionControlActor = await getMissionControlActor(missionControl);
-  return actor.version();
+  const {version} = await getDeprecatedMissionControlVersionActor(missionControl);
+  return version();
 };
 
 export const getUser = async ({

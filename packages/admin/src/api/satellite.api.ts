@@ -19,6 +19,7 @@ import type {SatelliteParameters} from '../types/actor.types';
 import {
   getDeprecatedSatelliteActor,
   getDeprecatedSatelliteNoScopeActor,
+  getDeprecatedSatelliteVersionActor,
   getSatelliteActor
 } from './actor.api';
 
@@ -108,21 +109,29 @@ export const setRule = async ({
   return set_rule(type, collection, rule);
 };
 
+/**
+ * @deprecated - Replaced in Satellite > v0.0.22 with public custom section juno:package
+ */
 export const version = async ({satellite}: {satellite: SatelliteParameters}): Promise<string> => {
-  const {version} = await getSatelliteActor(satellite);
+  const {version} = await getDeprecatedSatelliteVersionActor(satellite);
   return version();
 };
 
+/**
+ * @deprecated - Replaced in Satellite > v0.0.22 with public custom section juno:package
+ */
 export const buildVersion = async ({
   satellite
 }: {
   satellite: SatelliteParameters;
 }): Promise<string> => {
-  const {build_version} = await getSatelliteActor(satellite);
+  const {build_version} = await getDeprecatedSatelliteVersionActor(satellite);
   return build_version();
 };
 
-// TODO: for backwards compatibility - to be removed
+/**
+ * @deprecated TODO: for backwards compatibility - to be removed
+ */
 export const listDeprecatedControllers = async ({
   satellite
 }: {
@@ -132,7 +141,9 @@ export const listDeprecatedControllers = async ({
   return actor.list_controllers();
 };
 
-// TODO: for backwards compatibility - to be removed
+/**
+ * @deprecated TODO: for backwards compatibility - to be removed
+ */
 export const listDeprecatedNoScopeControllers = async ({
   satellite
 }: {

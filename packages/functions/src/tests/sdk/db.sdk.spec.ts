@@ -1,7 +1,12 @@
 import {Principal} from '@dfinity/principal';
 import {ZodError} from 'zod';
-import {deleteDocStore, getDocStore, setDocStore} from '../../sdk/db.sdk';
-import {DeleteDocStoreParams, DocStoreParams, SetDocStoreParams} from '../../sdk/schemas/db';
+import {deleteDocStore, getDocStore, listDocsStore, setDocStore} from '../../sdk/db.sdk';
+import {
+  DeleteDocStoreParams,
+  DocStoreParams,
+  ListDocStoreParams,
+  SetDocStoreParams
+} from '../../sdk/schemas/db';
 
 const mockSetDocResult = {
   key: 'mock-key',
@@ -39,6 +44,31 @@ vi.stubGlobal(
 );
 
 vi.stubGlobal('__juno_satellite_datastore_get_doc_store', vi.fn());
+
+const mockListResult = {
+  items: [
+    [
+      'doc1',
+      {
+        owner: new Uint8Array([1, 2, 3]),
+        data: new Uint8Array([10, 20, 30]),
+        created_at: 1700000000000000n,
+        updated_at: 1700000000000001n,
+        description: 'Test doc',
+        version: 1n
+      }
+    ]
+  ],
+  items_length: 1n,
+  items_page: 1n,
+  matches_length: 1n,
+  matches_pages: 1n
+};
+
+vi.stubGlobal(
+  '__juno_satellite_datastore_list_docs_store',
+  vi.fn(() => mockListResult)
+);
 
 describe('db.sdk', () => {
   const key = 'user123';
@@ -260,6 +290,62 @@ describe('db.sdk', () => {
       });
 
       expect(() => getDocStore(baseParamsWithUint8Array)).toThrowError('Datastore failure');
+    });
+  });
+
+  describe('listDocsStore', () => {
+    const collection = 'notes';
+
+    const baseParamsWithUint8Array: ListDocStoreParams = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection,
+      params: {}
+    };
+
+    const baseParamsWithPrincipal: ListDocStoreParams = {
+      caller: Principal.anonymous(),
+      collection,
+      params: {}
+    };
+
+    it('should call __juno_satellite_datastore_list_docs_store with correct parameters (Uint8Array)', () => {
+      const result = listDocsStore(baseParamsWithUint8Array);
+
+      expect(global.__juno_satellite_datastore_list_docs_store).toHaveBeenCalledWith(
+        baseParamsWithUint8Array.caller,
+        collection,
+        {}
+      );
+      expect(result).toEqual(mockListResult);
+    });
+
+    it('should call __juno_satellite_datastore_list_docs_store with caller converted to Uint8Array (Principal)', () => {
+      const result = listDocsStore(baseParamsWithPrincipal);
+
+      expect(global.__juno_satellite_datastore_list_docs_store).toHaveBeenCalledWith(
+        (baseParamsWithPrincipal.caller as Principal).toUint8Array(),
+        collection,
+        {}
+      );
+      expect(result).toEqual(mockListResult);
+    });
+
+    it('should throw ZodError if input is invalid', () => {
+      const invalidParams = {
+        caller: 1234,
+        collection,
+        params: {}
+      } as unknown as ListDocStoreParams;
+
+      expect(() => listDocsStore(invalidParams)).toThrow(ZodError);
+    });
+
+    it('should throw if Satellite throws an error', () => {
+      vi.mocked(global.__juno_satellite_datastore_list_docs_store).mockImplementation(() => {
+        throw new Error('Unexpected Satellite error');
+      });
+
+      expect(() => listDocsStore(baseParamsWithUint8Array)).toThrow('Unexpected Satellite error');
     });
   });
 });

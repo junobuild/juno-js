@@ -1,6 +1,7 @@
 import type {DocContext} from './hooks/schemas/db/context';
 import type {DocUpsert} from './hooks/schemas/db/payload';
-import type {DelDoc, OptionDoc, RawData, SetDoc} from './schemas/db';
+import type {DelDoc, Doc, OptionDoc, RawData, SetDoc} from './schemas/db';
+import type {ListParams, ListResults} from './schemas/list';
 import type {Collection, Key, RawPrincipal, RawUserId} from './schemas/satellite';
 import type {Controllers} from './sdk/schemas/controllers';
 
@@ -36,6 +37,11 @@ declare global {
     collection: Collection,
     key: Key
   ): OptionDoc;
+  function __juno_satellite_datastore_list_docs_store(
+    caller: RawUserId,
+    collection: Collection,
+    params: ListParams
+  ): ListResults<Doc>;
 
   function __ic_cdk_id(): RawPrincipal;
   function __ic_cdk_print(msg: string): void;

@@ -1,7 +1,56 @@
 import {Principal} from '@dfinity/principal';
-import {DeleteDocStoreParamsSchema, SetDocStoreParamsSchema} from '../../../sdk/schemas/db';
+import {
+  DeleteDocStoreParamsSchema,
+  DocStoreParamsSchema,
+  SetDocStoreParamsSchema
+} from '../../../sdk/schemas/db';
 
 describe('sdk > db', () => {
+  describe('DocStoreParamsSchema', () => {
+    const baseParams = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection: 'test-collection',
+      key: 'test-key'
+    };
+
+    it('should validate valid params with RawUserIdSchema', () => {
+      expect(() => DocStoreParamsSchema.parse(baseParams)).not.toThrow();
+    });
+
+    it('should validate valid params with Principal (UserIdSchema)', () => {
+      const withPrincipal = {
+        ...baseParams,
+        caller: Principal.anonymous()
+      };
+      expect(() => DocStoreParamsSchema.parse(withPrincipal)).not.toThrow();
+    });
+
+    it('should reject params missing caller', () => {
+      const {caller, ...invalidParams} = baseParams;
+      expect(() => DocStoreParamsSchema.parse(invalidParams)).toThrow();
+    });
+
+    it('should reject params missing collection', () => {
+      const {collection, ...invalidParams} = baseParams;
+      expect(() => DocStoreParamsSchema.parse(invalidParams)).toThrow();
+    });
+
+    it('should reject params missing key', () => {
+      const {key, ...invalidParams} = baseParams;
+      expect(() => DocStoreParamsSchema.parse(invalidParams)).toThrow();
+    });
+
+    it('should reject params with invalid caller type', () => {
+      const invalidParams = {...baseParams, caller: 42};
+      expect(() => DocStoreParamsSchema.parse(invalidParams)).toThrow();
+    });
+
+    it('should reject params with unknown fields', () => {
+      const invalidParams = {...baseParams, extra: 'not allowed'};
+      expect(() => DocStoreParamsSchema.parse(invalidParams)).toThrow();
+    });
+  });
+
   describe('SetDocStoreParamsSchema', () => {
     const requiredFields = {
       caller: Principal.anonymous().toUint8Array(),

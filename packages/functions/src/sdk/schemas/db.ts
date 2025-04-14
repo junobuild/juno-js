@@ -14,11 +14,13 @@ import {
 /**
  * @see DocStoreParams
  */
-const DocStoreParamsSchema = z.object({
-  caller: RawUserIdSchema.or(UserIdSchema),
-  collection: CollectionSchema,
-  key: KeySchema
-});
+export const DocStoreParamsSchema = z
+  .object({
+    caller: RawUserIdSchema.or(UserIdSchema),
+    collection: CollectionSchema,
+    key: KeySchema
+  })
+  .strict();
 
 /**
  * Represents the base parameters required to access the datastore and modify a document.

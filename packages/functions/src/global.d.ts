@@ -1,4 +1,4 @@
-import type {DelDoc, RawData, SetDoc} from './schemas/db';
+import type {DelDoc, OptionDoc, RawData, SetDoc} from './schemas/db';
 import type {Collection, Key, RawPrincipal, RawUserId} from './schemas/satellite';
 import type {Controllers} from './sdk/schemas/controllers';
 
@@ -29,6 +29,11 @@ declare global {
     key: Key,
     value: DelDoc
   ): void;
+  function __juno_satellite_datastore_get_doc_store(
+    caller: RawUserId,
+    collection: Collection,
+    key: Key
+  ): OptionDoc;
 
   function __ic_cdk_id(): RawPrincipal;
   function __ic_cdk_print(msg: string): void;

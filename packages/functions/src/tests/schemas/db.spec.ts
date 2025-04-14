@@ -6,7 +6,7 @@ import {
   SetDocSchema
 } from '../../schemas/db';
 
-describe('payload', () => {
+describe('db', () => {
   describe('DocSchema', () => {
     const requiredFields = {
       owner: new Uint8Array([1, 2, 3]),

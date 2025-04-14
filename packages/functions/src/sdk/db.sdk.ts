@@ -1,7 +1,10 @@
+import type {OptionDoc} from '../schemas/db';
 import {
+  type DocStoreParams,
   type DeleteDocStoreParams,
   type SetDocStoreParams,
   DeleteDocStoreParamsSchema,
+  DocStoreParamsSchema,
   SetDocStoreParamsSchema
 } from './schemas/db';
 import {normalizeCaller} from './utils/caller.utils';
@@ -44,4 +47,24 @@ export const deleteDocStore = (params: DeleteDocStoreParams) => {
   const caller = normalizeCaller(providedCaller);
 
   __juno_satellite_datastore_delete_doc_store(caller, collection, key, doc);
+};
+
+/**
+ * Retrieve a document from the datastore.
+ *
+ * @param {DocStoreParams} params - The parameters required to get the document.
+ *
+ * @returns {OptionDoc} The document if found, or undefined if not.
+ *
+ * @throws {z.ZodError} If the provided parameters do not match the expected schema.
+ * @throws {Error} If the Satellite fails while retrieving the document.
+ */
+export const getDocStore = (params: DocStoreParams): OptionDoc => {
+  DocStoreParamsSchema.parse(params);
+
+  const {caller: providedCaller, collection, key} = params;
+
+  const caller = normalizeCaller(providedCaller);
+
+  return __juno_satellite_datastore_get_doc_store(caller, collection, key);
 };

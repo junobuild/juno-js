@@ -37,6 +37,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [isController](#gear-iscontroller)
 - [setDocStore](#gear-setdocstore)
 - [deleteDocStore](#gear-deletedocstore)
+- [getDocStore](#gear-getdocstore)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
 - [call](#gear-call)
@@ -250,7 +251,7 @@ Parameters:
 - `params`: - The parameters required to store the document,
   including the caller, collection, key, and document data.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L20)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L23)
 
 #### :gear: deleteDocStore
 
@@ -265,7 +266,21 @@ Parameters:
 - `params`: - The parameters required to delete the document,
   including the caller, collection, key, and version of the document.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L39)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L42)
+
+#### :gear: getDocStore
+
+Retrieve a document from the datastore.
+
+| Function      | Type                                    |
+| ------------- | --------------------------------------- |
+| `getDocStore` | `(params: DocStoreParams) => OptionDoc` |
+
+Parameters:
+
+- `params`: - The parameters required to get the document.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L62)
 
 #### :gear: decodeDocData
 
@@ -386,6 +401,7 @@ the Principal of the executing canister.
 - [ControllerRecordSchema](#gear-controllerrecordschema)
 - [ControllersSchema](#gear-controllersschema)
 - [ControllerCheckParamsSchema](#gear-controllercheckparamsschema)
+- [DocStoreParamsSchema](#gear-docstoreparamsschema)
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
 - [DeleteDocStoreParamsSchema](#gear-deletedocstoreparamsschema)
 - [IDLTypeSchema](#gear-idltypeschema)
@@ -860,13 +876,21 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
 
+#### :gear: DocStoreParamsSchema
+
+| Constant               | Type                                                                                                                                                                                                               |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DocStoreParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L17)
+
 #### :gear: SetDocStoreParamsSchema
 
 | Constant                  | Type                                                                                                                                                                                                                                      |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocStoreParamsSchema` | `ZodObject<extendShape<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; }, { ...; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L46)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L48)
 
 #### :gear: DeleteDocStoreParamsSchema
 
@@ -874,7 +898,7 @@ A schema that validates a value is an Uint8Array.
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DeleteDocStoreParamsSchema` | `ZodObject<extendShape<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; }, { ...; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L66)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L68)
 
 #### :gear: IDLTypeSchema
 
@@ -1876,7 +1900,7 @@ collection, and key.
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocStoreParams` | `DocStoreParams and { /** * The data, optional description and version required to create or update a document. */ doc: SetDoc; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L56)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L58)
 
 #### :gear: DeleteDocStoreParams
 
@@ -1889,7 +1913,7 @@ collection, and key.
 | ---------------------- | ----------------------------------------------------------------------------------------- |
 | `DeleteDocStoreParams` | `DocStoreParams and { /** * The version required to delete a document. */ doc: DelDoc; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L76)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L78)
 
 #### :gear: IDLType
 

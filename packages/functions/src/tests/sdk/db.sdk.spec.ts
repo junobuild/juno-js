@@ -1,10 +1,11 @@
 import {Principal} from '@dfinity/principal';
 import {ZodError} from 'zod';
-import {deleteDocStore, setDocStore} from '../../sdk/db.sdk';
-import {DeleteDocStoreParams, SetDocStoreParams} from '../../sdk/schemas/db';
+import {deleteDocStore, getDocStore, setDocStore} from '../../sdk/db.sdk';
+import {DeleteDocStoreParams, DocStoreParams, SetDocStoreParams} from '../../sdk/schemas/db';
 
 vi.stubGlobal('__juno_satellite_datastore_set_doc_store', vi.fn());
 vi.stubGlobal('__juno_satellite_datastore_delete_doc_store', vi.fn());
+vi.stubGlobal('__juno_satellite_datastore_get_doc_store', vi.fn());
 
 describe('db.sdk', () => {
   const key = 'user123';
@@ -143,6 +144,79 @@ describe('db.sdk', () => {
       expect(() => deleteDocStore(validParamsWithUint8Array)).toThrowError(
         'Satellite validation failed'
       );
+    });
+  });
+
+  describe('getDocStore', () => {
+    const baseParamsWithUint8Array: DocStoreParams = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection,
+      key
+    };
+
+    const baseParamsWithPrincipal: DocStoreParams = {
+      caller: Principal.anonymous(),
+      collection,
+      key
+    };
+
+    const doc = {
+      data: new Uint8Array([1, 2, 3]),
+      description: 'A sample doc',
+      version: BigInt(1)
+    };
+
+    it('should call __juno_satellite_datastore_get_doc_store with correct parameters when caller is Uint8Array', () => {
+      vi.mocked(global.__juno_satellite_datastore_get_doc_store).mockReturnValue(doc);
+
+      const result = getDocStore(baseParamsWithUint8Array);
+
+      expect(global.__juno_satellite_datastore_get_doc_store).toHaveBeenCalledWith(
+        baseParamsWithUint8Array.caller,
+        baseParamsWithUint8Array.collection,
+        baseParamsWithUint8Array.key
+      );
+
+      expect(result).toEqual(doc);
+    });
+
+    it('should call __juno_satellite_datastore_get_doc_store with caller converted to Uint8Array when caller is Principal', () => {
+      vi.mocked(global.__juno_satellite_datastore_get_doc_store).mockReturnValue(doc);
+
+      const result = getDocStore(baseParamsWithPrincipal);
+
+      expect(global.__juno_satellite_datastore_get_doc_store).toHaveBeenCalledWith(
+        (baseParamsWithPrincipal.caller as Principal).toUint8Array(),
+        baseParamsWithPrincipal.collection,
+        baseParamsWithPrincipal.key
+      );
+
+      expect(result).toEqual(doc);
+    });
+
+    it('should return undefined if no document is found', () => {
+      vi.mocked(global.__juno_satellite_datastore_get_doc_store).mockReturnValue(undefined);
+
+      const result = getDocStore(baseParamsWithPrincipal);
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw ZodError if params are invalid', () => {
+      const invalidParams = {
+        ...baseParamsWithUint8Array,
+        collection: 123
+      } as unknown as DocStoreParams;
+
+      expect(() => getDocStore(invalidParams)).toThrow(ZodError);
+    });
+
+    it('should throw an error if the Satellite retrieval fails', () => {
+      vi.mocked(global.__juno_satellite_datastore_get_doc_store).mockImplementation(() => {
+        throw new Error('Datastore failure');
+      });
+
+      expect(() => getDocStore(baseParamsWithUint8Array)).toThrowError('Datastore failure');
     });
   });
 });

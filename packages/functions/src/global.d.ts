@@ -1,3 +1,5 @@
+import type {DocContext} from './hooks/schemas/db/context';
+import type {DocUpsert} from './hooks/schemas/db/payload';
 import type {DelDoc, OptionDoc, RawData, SetDoc} from './schemas/db';
 import type {Collection, Key, RawPrincipal, RawUserId} from './schemas/satellite';
 import type {Controllers} from './sdk/schemas/controllers';
@@ -22,13 +24,13 @@ declare global {
     collection: Collection,
     key: Key,
     value: SetDoc
-  ): void;
+  ): DocContext<DocUpsert>;
   function __juno_satellite_datastore_delete_doc_store(
     caller: RawUserId,
     collection: Collection,
     key: Key,
     value: DelDoc
-  ): void;
+  ): DocContext<OptionDoc>;
   function __juno_satellite_datastore_get_doc_store(
     caller: RawUserId,
     collection: Collection,

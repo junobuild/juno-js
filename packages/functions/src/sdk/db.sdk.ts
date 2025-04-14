@@ -1,3 +1,5 @@
+import type {DocContext} from '../hooks/schemas/db/context';
+import type {DocUpsert} from '../hooks/schemas/db/payload';
 import type {OptionDoc} from '../schemas/db';
 import {
   type DeleteDocStoreParams,
@@ -17,36 +19,42 @@ import {normalizeCaller} from './utils/caller.utils';
  * @param {SetDocStoreParams} params - The parameters required to store the document,
  * including the caller, collection, key, and document data.
  *
+ * @returns {DocContext<DocUpsert>} The context of the stored or updated document,
+ * including its key, collection, and both the previous and current versions of the document.
+ *
  * @throws {z.ZodError} If the provided parameters do not match the expected schema.
- * @throws {Error} If the Satellite fails at validating the submitted document before storing it.
+ * @throws {Error} If the Satellite fails to validate or store the document.
  */
-export const setDocStore = (params: SetDocStoreParams) => {
+export const setDocStore = (params: SetDocStoreParams): DocContext<DocUpsert> => {
   SetDocStoreParamsSchema.parse(params);
 
   const {caller: providedCaller, collection, key, doc} = params;
 
   const caller = normalizeCaller(providedCaller);
 
-  __juno_satellite_datastore_set_doc_store(caller, collection, key, doc);
+  return __juno_satellite_datastore_set_doc_store(caller, collection, key, doc);
 };
 
 /**
- * Delete a document in the datastore.
+ * Deletes a document from the datastore.
  *
  * @param {DeleteDocStoreParams} params - The parameters required to delete the document,
- * including the caller, collection, key, and version of the document.
+ * including the caller, collection, key, and the expected version of the document.
+ *
+ * @returns {DocContext<OptionDoc>} The context of the deleted document,
+ * including its key, collection, and optionally the previous document data if it existed.
  *
  * @throws {z.ZodError} If the provided parameters do not match the expected schema.
- * @throws {Error} If the Satellite fails at validating the submitted request before deleting it.
+ * @throws {Error} If the Satellite fails to validate the request or the document cannot be deleted.
  */
-export const deleteDocStore = (params: DeleteDocStoreParams) => {
+export const deleteDocStore = (params: DeleteDocStoreParams): DocContext<OptionDoc> => {
   DeleteDocStoreParamsSchema.parse(params);
 
   const {caller: providedCaller, collection, key, doc} = params;
 
   const caller = normalizeCaller(providedCaller);
 
-  __juno_satellite_datastore_delete_doc_store(caller, collection, key, doc);
+  return __juno_satellite_datastore_delete_doc_store(caller, collection, key, doc);
 };
 
 /**

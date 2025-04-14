@@ -3,8 +3,41 @@ import {ZodError} from 'zod';
 import {deleteDocStore, getDocStore, setDocStore} from '../../sdk/db.sdk';
 import {DeleteDocStoreParams, DocStoreParams, SetDocStoreParams} from '../../sdk/schemas/db';
 
-vi.stubGlobal('__juno_satellite_datastore_set_doc_store', vi.fn());
-vi.stubGlobal('__juno_satellite_datastore_delete_doc_store', vi.fn());
+const mockSetDocResult = {
+  key: 'mock-key',
+  collection: 'mock-collection',
+  data: {
+    before: undefined,
+    after: {
+      data: new Uint8Array([1, 2, 3]),
+      description: 'mock-doc',
+      version: BigInt(1)
+    }
+  }
+};
+
+vi.stubGlobal(
+  '__juno_satellite_datastore_set_doc_store',
+  vi.fn(() => mockSetDocResult)
+);
+
+const mockDeleteDocResult = {
+  key: 'mock-key',
+  collection: 'mock-collection',
+  data: {
+    data: {
+      data: new Uint8Array([1, 2, 3]),
+      description: 'mock-deleted-doc',
+      version: BigInt(1)
+    }
+  }
+};
+
+vi.stubGlobal(
+  '__juno_satellite_datastore_delete_doc_store',
+  vi.fn(() => mockDeleteDocResult)
+);
+
 vi.stubGlobal('__juno_satellite_datastore_get_doc_store', vi.fn());
 
 describe('db.sdk', () => {
@@ -71,6 +104,11 @@ describe('db.sdk', () => {
       expect(() => setDocStore(invalidParams)).toThrow(ZodError);
     });
 
+    it('should return the DocContext from the Satellite', () => {
+      const result = setDocStore(validParamsWithUint8Array);
+      expect(result).toEqual(mockSetDocResult);
+    });
+
     it('should throw an error if the Satellite validation fails', () => {
       vi.mocked(global.__juno_satellite_datastore_set_doc_store).mockImplementation(() => {
         throw new Error('Satellite validation failed');
@@ -134,6 +172,11 @@ describe('db.sdk', () => {
       } as unknown as DeleteDocStoreParams;
 
       expect(() => deleteDocStore(invalidParams)).toThrow(ZodError);
+    });
+
+    it('should return the DocContext from the Satellite', () => {
+      const result = deleteDocStore(validParamsWithUint8Array);
+      expect(result).toEqual(mockDeleteDocResult);
     });
 
     it('should throw an error if the Satellite validation fails', () => {

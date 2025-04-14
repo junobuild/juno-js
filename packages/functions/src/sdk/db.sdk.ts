@@ -1,7 +1,7 @@
 import type {OptionDoc} from '../schemas/db';
 import {
-  type DocStoreParams,
   type DeleteDocStoreParams,
+  type DocStoreParams,
   type SetDocStoreParams,
   DeleteDocStoreParamsSchema,
   DocStoreParamsSchema,

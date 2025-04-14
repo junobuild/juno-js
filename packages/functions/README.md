@@ -242,31 +242,31 @@ Stores or updates a document in the datastore.
 
 The data must have been encoded - using encodeDocData - before calling this function.
 
-| Function      | Type                                  |
-| ------------- | ------------------------------------- |
-| `setDocStore` | `(params: SetDocStoreParams) => void` |
+| Function      | Type                                                   |
+| ------------- | ------------------------------------------------------ |
+| `setDocStore` | `(params: SetDocStoreParams) => DocContext<DocUpsert>` |
 
 Parameters:
 
 - `params`: - The parameters required to store the document,
   including the caller, collection, key, and document data.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L23)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L28)
 
 #### :gear: deleteDocStore
 
-Delete a document in the datastore.
+Deletes a document from the datastore.
 
-| Function         | Type                                     |
-| ---------------- | ---------------------------------------- |
-| `deleteDocStore` | `(params: DeleteDocStoreParams) => void` |
+| Function         | Type                                                      |
+| ---------------- | --------------------------------------------------------- |
+| `deleteDocStore` | `(params: DeleteDocStoreParams) => DocContext<OptionDoc>` |
 
 Parameters:
 
 - `params`: - The parameters required to delete the document,
-  including the caller, collection, key, and version of the document.
+  including the caller, collection, key, and the expected version of the document.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L42)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L50)
 
 #### :gear: getDocStore
 
@@ -280,7 +280,7 @@ Parameters:
 
 - `params`: - The parameters required to get the document.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L62)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L70)
 
 #### :gear: decodeDocData
 

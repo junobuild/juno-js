@@ -40,6 +40,8 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [deleteDocStore](#gear-deletedocstore)
 - [getDocStore](#gear-getdocstore)
 - [listDocsStore](#gear-listdocsstore)
+- [countCollectionDocsStore](#gear-countcollectiondocsstore)
+- [countDocsStore](#gear-countdocsstore)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
 - [call](#gear-call)
@@ -263,7 +265,7 @@ Parameters:
 - `params`: - The parameters required to store the document,
   including the caller, collection, key, and document data.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L31)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L35)
 
 #### :gear: deleteDocStore
 
@@ -278,7 +280,7 @@ Parameters:
 - `params`: - The parameters required to delete the document,
   including the caller, collection, key, and the expected version of the document.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L53)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L57)
 
 #### :gear: getDocStore
 
@@ -292,14 +294,11 @@ Parameters:
 
 - `params`: - The parameters required to get the document.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L73)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L77)
 
 #### :gear: listDocsStore
 
 Lists documents from the datastore using optional filtering, pagination, and ordering parameters.
-
-This function validates the input against the `ListDocStoreParamsSchema`, normalizes the caller identity,
-and delegates the listing operation to the Satellite implementation.
 
 | Function        | Type                                               |
 | --------------- | -------------------------------------------------- |
@@ -308,11 +307,36 @@ and delegates the listing operation to the Satellite implementation.
 Parameters:
 
 - `params`: - The parameters required to perform the list operation.
-- `params.caller`: - The identity of the caller requesting the list.
-- `params.collection`: - The name of the collection to query.
-- `params.params`: - Optional filtering, ordering, and pagination parameters.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L99)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L97)
+
+#### :gear: countCollectionDocsStore
+
+Counts the number of documents in a specific collection.
+
+| Function                   | Type                                                 |
+| -------------------------- | ---------------------------------------------------- |
+| `countCollectionDocsStore` | `(params: CountCollectionDocsStoreParams) => bigint` |
+
+Parameters:
+
+- `params`: - The parameters required to count documents in the collection.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L117)
+
+#### :gear: countDocsStore
+
+Counts the number of documents in a collection matching specific filters and owned by a specific caller.
+
+| Function         | Type                                     |
+| ---------------- | ---------------------------------------- |
+| `countDocsStore` | `(params: ListDocStoreParams) => bigint` |
+
+Parameters:
+
+- `params`: - The parameters required to perform the filtered count.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L135)
 
 #### :gear: decodeDocData
 
@@ -443,6 +467,8 @@ the Principal of the executing canister.
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
 - [DeleteDocStoreParamsSchema](#gear-deletedocstoreparamsschema)
 - [ListDocStoreParamsSchema](#gear-listdocstoreparamsschema)
+- [CountCollectionDocsStoreParamsSchema](#gear-countcollectiondocsstoreparamsschema)
+- [CountDocsStoreParamsSchema](#gear-countdocsstoreparamsschema)
 - [IDLTypeSchema](#gear-idltypeschema)
 - [CallArgSchema](#gear-callargschema)
 - [CallArgsSchema](#gear-callargsschema)
@@ -995,6 +1021,22 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L89)
 
+#### :gear: CountCollectionDocsStoreParamsSchema
+
+| Constant                               | Type                                                                                                            |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `CountCollectionDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; }, "strict", ZodTypeAny, { collection: string; }, { collection: string; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L120)
+
+#### :gear: CountDocsStoreParamsSchema
+
+| Constant                     | Type                                                                                                                                                                                                                       |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CountDocsStoreParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; params: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L139)
+
 #### :gear: IDLTypeSchema
 
 | Constant        | Type                                                |
@@ -1067,6 +1109,7 @@ Schema for encoding the call arguments.
 - [ListResults](#gear-listresults)
 - [DocStoreParams](#gear-docstoreparams)
 - [ListDocStoreParams](#gear-listdocstoreparams)
+- [CountCollectionDocsStoreParams](#gear-countcollectiondocsstoreparams)
 - [CallParams](#gear-callparams)
 
 #### :gear: Collections
@@ -1325,6 +1368,14 @@ The parameters required to list documents from the datastore.
 | `collection` | `string`                                   | The name of the collection to query.                      |
 | `params`     | `ListParams`                               | Optional filtering, ordering, and pagination parameters.  |
 
+#### :gear: CountCollectionDocsStoreParams
+
+The parameters required to count documents of a collection from the datastore.
+
+| Property     | Type     | Description                          |
+| ------------ | -------- | ------------------------------------ |
+| `collection` | `string` | The name of the collection to query. |
+
 #### :gear: CallParams
 
 Type representing the parameters required to make a canister call.
@@ -1402,6 +1453,7 @@ Type representing the parameters required to make a canister call.
 - [ListOrderField](#gear-listorderfield)
 - [SetDocStoreParams](#gear-setdocstoreparams)
 - [DeleteDocStoreParams](#gear-deletedocstoreparams)
+- [CountDocsStoreParams](#gear-countdocsstoreparams)
 - [IDLType](#gear-idltype)
 - [CallArg](#gear-callarg)
 - [CallArgs](#gear-callargs)
@@ -2099,6 +2151,16 @@ collection, and key.
 | `DeleteDocStoreParams` | `DocStoreParams and { /** * The version required to delete a document. */ doc: DelDoc; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L79)
+
+#### :gear: CountDocsStoreParams
+
+The parameters required to count documents from the datastore.
+
+| Type                   | Type                 |
+| ---------------------- | -------------------- |
+| `CountDocsStoreParams` | `ListDocStoreParams` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L144)
 
 #### :gear: IDLType
 

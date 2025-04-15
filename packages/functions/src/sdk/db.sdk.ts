@@ -13,8 +13,8 @@ import {
   DeleteDocStoreParamsSchema,
   type DeleteFilteredDocsStoreParams,
   DeleteFilteredDocsStoreParamsSchema,
-  type DocStoreParams,
-  DocStoreParamsSchema,
+  type GetDocStoreParams,
+  GetDocStoreParamsSchema,
   type ListDocsStoreParams,
   ListDocsStoreParamsSchema,
   type SetDocStoreParams,
@@ -71,15 +71,15 @@ export const deleteDocStore = (params: DeleteDocStoreParams): DocContext<OptionD
 /**
  * Retrieve a document from the datastore.
  *
- * @param {DocStoreParams} params - The parameters required to get the document.
+ * @param {GetDocStoreParams} params - The parameters required to get the document.
  *
  * @returns {OptionDoc} The document if found, or undefined if not.
  *
  * @throws {z.ZodError} If the provided parameters do not match the expected schema.
  * @throws {Error} If the Satellite fails while retrieving the document.
  */
-export const getDocStore = (params: DocStoreParams): OptionDoc => {
-  DocStoreParamsSchema.parse(params);
+export const getDocStore = (params: GetDocStoreParams): OptionDoc => {
+  GetDocStoreParamsSchema.parse(params);
 
   const {caller: providedCaller, collection, key} = params;
 

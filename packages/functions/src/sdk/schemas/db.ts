@@ -15,9 +15,9 @@ import {
 } from './params';
 
 /**
- * @see DocStoreParams
+ * @see GetDocStoreParams
  */
-export const DocStoreParamsSchema = CollectionParamsSchema.extend({
+export const GetDocStoreParamsSchema = CollectionParamsSchema.extend({
   caller: RawUserIdSchema.or(UserIdSchema),
   key: KeySchema
 }).strict();
@@ -25,7 +25,7 @@ export const DocStoreParamsSchema = CollectionParamsSchema.extend({
 /**
  * Represents the base parameters required to access the datastore and modify a document.
  */
-export type DocStoreParams = CollectionParams & {
+export type GetDocStoreParams = CollectionParams & {
   /**
    * The caller who initiate the document operation.
    */
@@ -40,7 +40,7 @@ export type DocStoreParams = CollectionParams & {
 /**
  * @see SetDocStoreParams
  */
-export const SetDocStoreParamsSchema = DocStoreParamsSchema.extend({
+export const SetDocStoreParamsSchema = GetDocStoreParamsSchema.extend({
   doc: SetDocSchema
 }).strict();
 
@@ -50,7 +50,7 @@ export const SetDocStoreParamsSchema = DocStoreParamsSchema.extend({
  * This includes the document data along with metadata such as the caller,
  * collection, and key.
  */
-export type SetDocStoreParams = DocStoreParams & {
+export type SetDocStoreParams = GetDocStoreParams & {
   /**
    * The data, optional description and version required to create or update a document.
    */
@@ -60,7 +60,7 @@ export type SetDocStoreParams = DocStoreParams & {
 /**
  * @see DeleteDocStoreParams
  */
-export const DeleteDocStoreParamsSchema = DocStoreParamsSchema.extend({
+export const DeleteDocStoreParamsSchema = GetDocStoreParamsSchema.extend({
   doc: DelDocSchema
 }).strict();
 
@@ -70,7 +70,7 @@ export const DeleteDocStoreParamsSchema = DocStoreParamsSchema.extend({
  * This includes the document version along with metadata such as the caller,
  * collection, and key.
  */
-export type DeleteDocStoreParams = DocStoreParams & {
+export type DeleteDocStoreParams = GetDocStoreParams & {
   /**
    * The version required to delete a document.
    */

@@ -2,12 +2,12 @@ import {Principal} from '@dfinity/principal';
 import {
   CountDocsStoreParamsSchema,
   DeleteDocStoreParamsSchema,
-  DocStoreParamsSchema,
+  GetDocStoreParamsSchema,
   SetDocStoreParamsSchema
 } from '../../../sdk/schemas/db';
 
 describe('sdk > db', () => {
-  describe('DocStoreParamsSchema', () => {
+  describe('GetDocStoreParamsSchema', () => {
     const baseParams = {
       caller: Principal.anonymous().toUint8Array(),
       collection: 'test-collection',
@@ -15,7 +15,7 @@ describe('sdk > db', () => {
     };
 
     it('should validate valid params with RawUserIdSchema', () => {
-      expect(() => DocStoreParamsSchema.parse(baseParams)).not.toThrow();
+      expect(() => GetDocStoreParamsSchema.parse(baseParams)).not.toThrow();
     });
 
     it('should validate valid params with Principal (UserIdSchema)', () => {
@@ -23,32 +23,32 @@ describe('sdk > db', () => {
         ...baseParams,
         caller: Principal.anonymous()
       };
-      expect(() => DocStoreParamsSchema.parse(withPrincipal)).not.toThrow();
+      expect(() => GetDocStoreParamsSchema.parse(withPrincipal)).not.toThrow();
     });
 
     it('should reject params missing caller', () => {
       const {caller, ...invalidParams} = baseParams;
-      expect(() => DocStoreParamsSchema.parse(invalidParams)).toThrow();
+      expect(() => GetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
 
     it('should reject params missing collection', () => {
       const {collection, ...invalidParams} = baseParams;
-      expect(() => DocStoreParamsSchema.parse(invalidParams)).toThrow();
+      expect(() => GetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
 
     it('should reject params missing key', () => {
       const {key, ...invalidParams} = baseParams;
-      expect(() => DocStoreParamsSchema.parse(invalidParams)).toThrow();
+      expect(() => GetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
 
     it('should reject params with invalid caller type', () => {
       const invalidParams = {...baseParams, caller: 42};
-      expect(() => DocStoreParamsSchema.parse(invalidParams)).toThrow();
+      expect(() => GetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
 
     it('should reject params with unknown fields', () => {
       const invalidParams = {...baseParams, extra: 'not allowed'};
-      expect(() => DocStoreParamsSchema.parse(invalidParams)).toThrow();
+      expect(() => GetDocStoreParamsSchema.parse(invalidParams)).toThrow();
     });
   });
 

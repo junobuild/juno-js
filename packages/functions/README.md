@@ -35,9 +35,11 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [getControllers](#gear-getcontrollers)
 - [isAdminController](#gear-isadmincontroller)
 - [isController](#gear-iscontroller)
+- [createListResultsSchema](#gear-createlistresultsschema)
 - [setDocStore](#gear-setdocstore)
 - [deleteDocStore](#gear-deletedocstore)
 - [getDocStore](#gear-getdocstore)
+- [listDocsStore](#gear-listdocsstore)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
 - [call](#gear-call)
@@ -236,6 +238,16 @@ Parameters:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L57)
 
+#### :gear: createListResultsSchema
+
+Represents a list result.
+
+| Function                  | Type                                                                                                                                                                                                                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createListResultsSchema` | `<T extends z.ZodTypeAny>(itemData: T) => ZodObject<{ items: ZodArray<ZodTuple<[ZodString, T], null>, "many">; items_length: ZodBigInt; items_page: ZodOptional<...>; matches_length: ZodBigInt; matches_pages: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L128)
+
 #### :gear: setDocStore
 
 Stores or updates a document in the datastore.
@@ -251,7 +263,7 @@ Parameters:
 - `params`: - The parameters required to store the document,
   including the caller, collection, key, and document data.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L28)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L31)
 
 #### :gear: deleteDocStore
 
@@ -266,7 +278,7 @@ Parameters:
 - `params`: - The parameters required to delete the document,
   including the caller, collection, key, and the expected version of the document.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L50)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L53)
 
 #### :gear: getDocStore
 
@@ -280,7 +292,27 @@ Parameters:
 
 - `params`: - The parameters required to get the document.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L70)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L73)
+
+#### :gear: listDocsStore
+
+Lists documents from the datastore using optional filtering, pagination, and ordering parameters.
+
+This function validates the input against the `ListDocStoreParamsSchema`, normalizes the caller identity,
+and delegates the listing operation to the Satellite implementation.
+
+| Function        | Type                                               |
+| --------------- | -------------------------------------------------- |
+| `listDocsStore` | `(params: ListDocStoreParams) => ListResults<Doc>` |
+
+Parameters:
+
+- `params`: - The parameters required to perform the list operation.
+- `params.caller`: - The identity of the caller requesting the list.
+- `params.collection`: - The name of the collection to query.
+- `params.params`: - Optional filtering, ordering, and pagination parameters.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L99)
 
 #### :gear: decodeDocData
 
@@ -401,9 +433,16 @@ the Principal of the executing canister.
 - [ControllerRecordSchema](#gear-controllerrecordschema)
 - [ControllersSchema](#gear-controllersschema)
 - [ControllerCheckParamsSchema](#gear-controllercheckparamsschema)
+- [TimestampMatcherSchema](#gear-timestampmatcherschema)
+- [ListMatcherSchema](#gear-listmatcherschema)
+- [ListPaginateSchema](#gear-listpaginateschema)
+- [ListOrderFieldSchema](#gear-listorderfieldschema)
+- [ListOrderSchema](#gear-listorderschema)
+- [ListParamsSchema](#gear-listparamsschema)
 - [DocStoreParamsSchema](#gear-docstoreparamsschema)
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
 - [DeleteDocStoreParamsSchema](#gear-deletedocstoreparamsschema)
+- [ListDocStoreParamsSchema](#gear-listdocstoreparamsschema)
 - [IDLTypeSchema](#gear-idltypeschema)
 - [CallArgSchema](#gear-callargschema)
 - [CallArgsSchema](#gear-callargsschema)
@@ -876,13 +915,61 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
 
+#### :gear: TimestampMatcherSchema
+
+| Constant                 | Type                                                                                                                                                                                                                          |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TimestampMatcherSchema` | `ZodUnion<[ZodObject<{ equal: ZodBigInt; }, "strip", ZodTypeAny, { equal: bigint; }, { equal: bigint; }>, ZodObject<{ greater_than: ZodBigInt; }, "strip", ZodTypeAny, { ...; }, { ...; }>, ZodObject<...>, ZodObject<...>]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L16)
+
+#### :gear: ListMatcherSchema
+
+| Constant            | Type                                                                                                                                                                                                                                                                                                                       |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListMatcherSchema` | `ZodObject<{ key: ZodOptional<ZodString>; description: ZodOptional<ZodString>; created_at: ZodOptional<ZodUnion<[ZodObject<{ equal: ZodBigInt; }, "strip", ZodTypeAny, { ...; }, { ...; }>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>>; updated_at: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L35)
+
+#### :gear: ListPaginateSchema
+
+| Constant             | Type                                                                                                                                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListPaginateSchema` | `ZodObject<{ start_after: ZodOptional<ZodString>; limit: ZodOptional<ZodBigInt>; }, "strict", ZodTypeAny, { start_after?: string or undefined; limit?: bigint or undefined; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L57)
+
+#### :gear: ListOrderFieldSchema
+
+| Constant               | Type                                            |
+| ---------------------- | ----------------------------------------------- |
+| `ListOrderFieldSchema` | `ZodEnum<["keys", "created_at", "updated_at"]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L75)
+
+#### :gear: ListOrderSchema
+
+| Constant          | Type                                                                                                                                                                                        |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListOrderSchema` | `ZodObject<{ desc: ZodBoolean; field: ZodEnum<["keys", "created_at", "updated_at"]>; }, "strict", ZodTypeAny, { desc: boolean; field: "keys" or "created_at" or "updated_at"; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L85)
+
+#### :gear: ListParamsSchema
+
+| Constant           | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListParamsSchema` | `ZodObject<{ matcher: ZodOptional<ZodObject<{ key: ZodOptional<ZodString>; description: ZodOptional<ZodString>; created_at: ZodOptional<ZodUnion<[ZodObject<{ equal: ZodBigInt; }, "strip", ZodTypeAny, { ...; }, { ...; }>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>>; updated_at: ZodOptional<...>; }, "strict", Zod...` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L103)
+
 #### :gear: DocStoreParamsSchema
 
 | Constant               | Type                                                                                                                                                                                                               |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `DocStoreParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L17)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L18)
 
 #### :gear: SetDocStoreParamsSchema
 
@@ -890,7 +977,7 @@ A schema that validates a value is an Uint8Array.
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocStoreParamsSchema` | `ZodObject<extendShape<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; }, { ...; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L48)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L49)
 
 #### :gear: DeleteDocStoreParamsSchema
 
@@ -898,7 +985,15 @@ A schema that validates a value is an Uint8Array.
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DeleteDocStoreParamsSchema` | `ZodObject<extendShape<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; key: ZodString; }, { ...; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L68)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L69)
+
+#### :gear: ListDocStoreParamsSchema
+
+| Constant                   | Type                                                                                                                                                                                                                       |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListDocStoreParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; collection: ZodString; params: ZodObject<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L89)
 
 #### :gear: IDLTypeSchema
 
@@ -965,7 +1060,13 @@ Schema for encoding the call arguments.
 - [AssetAssertUpload](#gear-assetassertupload)
 - [Controller](#gear-controller)
 - [ControllerCheckParams](#gear-controllercheckparams)
+- [ListMatcher](#gear-listmatcher)
+- [ListPaginate](#gear-listpaginate)
+- [ListOrder](#gear-listorder)
+- [ListParams](#gear-listparams)
+- [ListResults](#gear-listresults)
 - [DocStoreParams](#gear-docstoreparams)
+- [ListDocStoreParams](#gear-listdocstoreparams)
 - [CallParams](#gear-callparams)
 
 #### :gear: Collections
@@ -1152,6 +1253,58 @@ Represents the parameters required to perform controller checks.
 | `caller`      | `Uint8Array<ArrayBufferLike> or Principal`                                                                                                                                | The identity of the caller to verify against the controller list. |
 | `controllers` | `[Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin"; expires_at?: bigint or undefined; }][]` | The list of controllers to check against.                         |
 
+#### :gear: ListMatcher
+
+Matcher used to filter list results.
+
+| Property      | Type                            | Description |
+| ------------- | ------------------------------- | ----------- |
+| `key`         | `string or undefined`           |             |
+| `description` | `string or undefined`           |             |
+| `created_at`  | `TimestampMatcher or undefined` |             |
+| `updated_at`  | `TimestampMatcher or undefined` |             |
+
+#### :gear: ListPaginate
+
+Optional pagination controls for listing.
+
+| Property      | Type                  | Description |
+| ------------- | --------------------- | ----------- |
+| `start_after` | `string or undefined` |             |
+| `limit`       | `bigint or undefined` |             |
+
+#### :gear: ListOrder
+
+Ordering strategy for listing documents.
+
+| Property | Type             | Description |
+| -------- | ---------------- | ----------- |
+| `desc`   | `boolean`        |             |
+| `field`  | `ListOrderField` |             |
+
+#### :gear: ListParams
+
+Full set of listing parameters.
+
+| Property   | Type                                       | Description |
+| ---------- | ------------------------------------------ | ----------- |
+| `matcher`  | `ListMatcher or undefined`                 |             |
+| `paginate` | `ListPaginate or undefined`                |             |
+| `order`    | `ListOrder or undefined`                   |             |
+| `owner`    | `Uint8Array<ArrayBufferLike> or undefined` |             |
+
+#### :gear: ListResults
+
+List results, parameterized by type of returned item.
+
+| Property         | Type                  | Description |
+| ---------------- | --------------------- | ----------- |
+| `items`          | `[string, T][]`       |             |
+| `items_length`   | `bigint`              |             |
+| `items_page`     | `bigint or undefined` |             |
+| `matches_length` | `bigint`              |             |
+| `matches_pages`  | `bigint or undefined` |             |
+
 #### :gear: DocStoreParams
 
 Represents the base parameters required to access the datastore and modify a document.
@@ -1161,6 +1314,16 @@ Represents the base parameters required to access the datastore and modify a doc
 | `caller`     | `Uint8Array<ArrayBufferLike> or Principal` | The caller who initiate the document operation.          |
 | `collection` | `string`                                   | The name of the collection where the document is stored. |
 | `key`        | `string`                                   | The key identifying the document within the collection.  |
+
+#### :gear: ListDocStoreParams
+
+The parameters required to list documents from the datastore.
+
+| Property     | Type                                       | Description                                               |
+| ------------ | ------------------------------------------ | --------------------------------------------------------- |
+| `caller`     | `Uint8Array<ArrayBufferLike> or Principal` | The identity of the caller requesting the list operation. |
+| `collection` | `string`                                   | The name of the collection to query.                      |
+| `params`     | `ListParams`                               | Optional filtering, ordering, and pagination parameters.  |
 
 #### :gear: CallParams
 
@@ -1235,6 +1398,8 @@ Type representing the parameters required to make a canister call.
 - [Metadata](#gear-metadata)
 - [ControllerRecord](#gear-controllerrecord)
 - [Controllers](#gear-controllers)
+- [TimestampMatcher](#gear-timestampmatcher)
+- [ListOrderField](#gear-listorderfield)
 - [SetDocStoreParams](#gear-setdocstoreparams)
 - [DeleteDocStoreParams](#gear-deletedocstoreparams)
 - [IDLType](#gear-idltype)
@@ -1889,6 +2054,26 @@ Represents a list of controllers.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L94)
 
+#### :gear: TimestampMatcher
+
+TimestampMatcher matches a timestamp field using a specific strategy.
+
+| Type               | Type |
+| ------------------ | ---- | --------------------------------------------------------------------------------------------------------------- |
+| `TimestampMatcher` | `    | {equal: Timestamp} or {greater_than: Timestamp} or {less_than: Timestamp} or {between: [Timestamp, Timestamp]}` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L26)
+
+#### :gear: ListOrderField
+
+Enum representing possible fields to order by.
+
+| Type             | Type                                     |
+| ---------------- | ---------------------------------------- |
+| `ListOrderField` | `'keys' or 'updated_at' or 'created_at'` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L80)
+
 #### :gear: SetDocStoreParams
 
 Represents the parameters required to store or update a document.
@@ -1900,7 +2085,7 @@ collection, and key.
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocStoreParams` | `DocStoreParams and { /** * The data, optional description and version required to create or update a document. */ doc: SetDoc; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L58)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L59)
 
 #### :gear: DeleteDocStoreParams
 
@@ -1913,7 +2098,7 @@ collection, and key.
 | ---------------------- | ----------------------------------------------------------------------------------------- |
 | `DeleteDocStoreParams` | `DocStoreParams and { /** * The version required to delete a document. */ doc: DelDoc; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L78)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L79)
 
 #### :gear: IDLType
 

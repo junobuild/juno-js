@@ -1,12 +1,15 @@
 import type {DocContext} from '../hooks/schemas/db/context';
 import type {DocUpsert} from '../hooks/schemas/db/payload';
-import type {OptionDoc} from '../schemas/db';
+import type {Doc, OptionDoc} from '../schemas/db';
+import type {ListResults} from '../schemas/list';
 import {
   type DeleteDocStoreParams,
   type DocStoreParams,
+  type ListDocStoreParams,
   type SetDocStoreParams,
   DeleteDocStoreParamsSchema,
   DocStoreParamsSchema,
+  ListDocStoreParamsSchema,
   SetDocStoreParamsSchema
 } from './schemas/db';
 import {normalizeCaller} from './utils/caller.utils';
@@ -75,4 +78,30 @@ export const getDocStore = (params: DocStoreParams): OptionDoc => {
   const caller = normalizeCaller(providedCaller);
 
   return __juno_satellite_datastore_get_doc_store(caller, collection, key);
+};
+
+/**
+ * Lists documents from the datastore using optional filtering, pagination, and ordering parameters.
+ *
+ * This function validates the input against the `ListDocStoreParamsSchema`, normalizes the caller identity,
+ * and delegates the listing operation to the Satellite implementation.
+ *
+ * @param {ListDocStoreParams} params - The parameters required to perform the list operation.
+ * @param {RawUserId | UserId} params.caller - The identity of the caller requesting the list.
+ * @param {Collection} params.collection - The name of the collection to query.
+ * @param {ListParams} params.params - Optional filtering, ordering, and pagination parameters.
+ *
+ * @returns {ListResults<Doc>} A list result containing matching documents and pagination metadata.
+ *
+ * @throws {z.ZodError} If the input parameters do not conform to the schema.
+ * @throws {Error} If the Satellite fails while performing the listing operation.
+ */
+export const listDocsStore = (params: ListDocStoreParams): ListResults<Doc> => {
+  ListDocStoreParamsSchema.parse(params);
+
+  const {caller: providedCaller, collection, params: listParams} = params;
+
+  const caller = normalizeCaller(providedCaller);
+
+  return __juno_satellite_datastore_list_docs_store(caller, collection, listParams);
 };

@@ -1,5 +1,6 @@
 import * as z from 'zod';
 import {type DelDoc, DelDocSchema, type SetDoc, SetDocSchema} from '../../schemas/db';
+import {type ListParams, ListParamsSchema} from '../../schemas/list';
 import {
   type Collection,
   CollectionSchema,
@@ -81,3 +82,34 @@ export type DeleteDocStoreParams = DocStoreParams & {
    */
   doc: DelDoc;
 };
+
+/**
+ * @see ListDocStoreParams
+ */
+export const ListDocStoreParamsSchema = z
+  .object({
+    caller: RawUserIdSchema.or(UserIdSchema),
+    collection: CollectionSchema,
+    params: ListParamsSchema
+  })
+  .strict();
+
+/**
+ * The parameters required to list documents from the datastore.
+ */
+export interface ListDocStoreParams {
+  /**
+   * The identity of the caller requesting the list operation.
+   */
+  caller: RawUserId | UserId;
+
+  /**
+   * The name of the collection to query.
+   */
+  collection: Collection;
+
+  /**
+   * Optional filtering, ordering, and pagination parameters.
+   */
+  params: ListParams;
+}

@@ -3,7 +3,9 @@ import {ZodError} from 'zod';
 import {
   countCollectionDocsStore,
   countDocsStore,
+  deleteDocsStore,
   deleteDocStore,
+  deleteFilteredDocsStore,
   getDocStore,
   listDocsStore,
   setDocStore
@@ -11,7 +13,9 @@ import {
 import {
   CountCollectionDocsStoreParams,
   CountDocsStoreParams,
+  DeleteDocsStoreParams,
   DeleteDocStoreParams,
+  DeleteFilteredDocsStoreParams,
   DocStoreParams,
   ListDocStoreParams,
   SetDocStoreParams
@@ -88,6 +92,27 @@ vi.stubGlobal(
 vi.stubGlobal(
   '__juno_satellite_datastore_count_docs_store',
   vi.fn(() => mockCount)
+);
+
+vi.stubGlobal('__juno_satellite_datastore_delete_docs_store', vi.fn());
+
+const mockDeleteFilteredDocsResult = [
+  {
+    key: 'mock-key',
+    collection: 'mock-collection',
+    data: {
+      data: {
+        data: new Uint8Array([1, 2, 3]),
+        description: 'mock-deleted-doc',
+        version: BigInt(1)
+      }
+    }
+  }
+];
+
+vi.stubGlobal(
+  '__juno_satellite_datastore_delete_filtered_docs_store',
+  vi.fn(() => mockDeleteFilteredDocsResult)
 );
 
 describe('db.sdk', () => {
@@ -454,6 +479,96 @@ describe('db.sdk', () => {
 
       expect(() => countDocsStore(baseParamsWithUint8Array)).toThrow(
         'Satellite filtered count error'
+      );
+    });
+  });
+
+  describe('deleteDocsStore', () => {
+    const validParams: DeleteDocsStoreParams = {
+      collection
+    };
+
+    it('should call __juno_satellite_datastore_delete_docs_store with correct parameters', () => {
+      deleteDocsStore(validParams);
+
+      expect(global.__juno_satellite_datastore_delete_docs_store).toHaveBeenCalledWith(
+        validParams.collection
+      );
+    });
+
+    it('should throw ZodError if params are invalid', () => {
+      const invalidParams = {
+        collection: 123
+      } as unknown as DeleteDocsStoreParams;
+
+      expect(() => deleteDocsStore(invalidParams)).toThrow(ZodError);
+    });
+
+    it('should throw an error if the Satellite operation fails', () => {
+      vi.mocked(global.__juno_satellite_datastore_delete_docs_store).mockImplementation(() => {
+        throw new Error('Satellite bulk delete error');
+      });
+
+      expect(() => deleteDocsStore(validParams)).toThrow('Satellite bulk delete error');
+    });
+  });
+
+  describe('deleteFilteredDocsStore', () => {
+    const baseParamsWithUint8Array: DeleteFilteredDocsStoreParams = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection,
+      params: {}
+    };
+
+    const baseParamsWithPrincipal: DeleteFilteredDocsStoreParams = {
+      caller: Principal.anonymous(),
+      collection,
+      params: {}
+    };
+
+    it('should call __juno_satellite_datastore_delete_filtered_docs_store with correct parameters (Uint8Array)', () => {
+      const result = deleteFilteredDocsStore(baseParamsWithUint8Array);
+
+      expect(global.__juno_satellite_datastore_delete_filtered_docs_store).toHaveBeenCalledWith(
+        baseParamsWithUint8Array.caller,
+        baseParamsWithUint8Array.collection,
+        baseParamsWithUint8Array.params
+      );
+
+      expect(result).toEqual(mockDeleteFilteredDocsResult);
+    });
+
+    it('should call __juno_satellite_datastore_delete_filtered_docs_store with caller converted to Uint8Array (Principal)', () => {
+      const result = deleteFilteredDocsStore(baseParamsWithPrincipal);
+
+      expect(global.__juno_satellite_datastore_delete_filtered_docs_store).toHaveBeenCalledWith(
+        (baseParamsWithPrincipal.caller as Principal).toUint8Array(),
+        baseParamsWithPrincipal.collection,
+        baseParamsWithPrincipal.params
+      );
+
+      expect(result).toEqual(mockDeleteFilteredDocsResult);
+    });
+
+    it('should throw ZodError if input is invalid', () => {
+      const invalidParams = {
+        caller: 1234,
+        collection,
+        params: {}
+      } as unknown as DeleteFilteredDocsStoreParams;
+
+      expect(() => deleteFilteredDocsStore(invalidParams)).toThrow(ZodError);
+    });
+
+    it('should throw if Satellite throws an error', () => {
+      vi.mocked(global.__juno_satellite_datastore_delete_filtered_docs_store).mockImplementation(
+        () => {
+          throw new Error('Satellite filtered delete error');
+        }
+      );
+
+      expect(() => deleteFilteredDocsStore(baseParamsWithUint8Array)).toThrow(
+        'Satellite filtered delete error'
       );
     });
   });

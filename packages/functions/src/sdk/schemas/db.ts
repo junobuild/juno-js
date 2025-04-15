@@ -136,3 +136,23 @@ export const CountDocsStoreParamsSchema = ListDocStoreParamsSchema;
  * The parameters required to count documents from the datastore.
  */
 export type CountDocsStoreParams = ListDocStoreParams;
+
+/**
+ * @see DeleteDocsStoreParams
+ */
+export const DeleteDocsStoreParamsSchema = CollectionParamsSchema;
+
+/**
+ * The parameters required to delete the documents from a of the datastore.
+ */
+export type DeleteDocsStoreParams = CollectionParams;
+
+/**
+ * @see DeleteFilteredDocsParams
+ */
+export const DeleteFilteredDocsStoreParamsSchema = ListDocStoreParamsSchema;
+
+/**
+ * The parameters required to delete documents from the datastore.
+ */
+export type DeleteFilteredDocsStoreParams = ListDocStoreParams;

@@ -88,16 +88,6 @@ export const CountCollectionDocsStoreParamsSchema = CollectionParamsSchema;
 export type CountCollectionDocsStoreParams = CollectionParams;
 
 /**
- * @see ListDocsStoreParams
- */
-export const ListDocsStoreParamsSchema = ListStoreParamsSchema;
-
-/**
- * The parameters required to list documents from the datastore.
- */
-export type ListDocsStoreParams = ListStoreParams;
-
-/**
  * @see CountDocsStoreParams
  */
 export const CountDocsStoreParamsSchema = ListStoreParamsSchema;
@@ -106,6 +96,16 @@ export const CountDocsStoreParamsSchema = ListStoreParamsSchema;
  * The parameters required to count documents from the datastore.
  */
 export type CountDocsStoreParams = ListStoreParams;
+
+/**
+ * @see ListDocsStoreParams
+ */
+export const ListDocsStoreParamsSchema = ListStoreParamsSchema;
+
+/**
+ * The parameters required to list documents from the datastore.
+ */
+export type ListDocsStoreParams = ListStoreParams;
 
 /**
  * @see DeleteDocsStoreParams

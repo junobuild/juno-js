@@ -1,5 +1,5 @@
 import {
-  CountAssetsStoreParams,
+  type CountAssetsStoreParams,
   CountAssetsStoreParamsSchema,
   type CountCollectionAssetsStoreParams,
   CountCollectionAssetsStoreParamsSchema

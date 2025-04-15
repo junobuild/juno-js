@@ -1,4 +1,9 @@
-import {CollectionParams, CollectionParamsSchema, ListStoreParams, ListStoreParamsSchema} from "./params";
+import {
+  type CollectionParams,
+  type ListStoreParams,
+  CollectionParamsSchema,
+  ListStoreParamsSchema
+} from './params';
 
 /**
  * @see CountCollectionAssetsStoreParams

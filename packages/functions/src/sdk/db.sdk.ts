@@ -4,20 +4,20 @@ import type {Doc, OptionDoc} from '../schemas/db';
 import type {ListResults} from '../schemas/list';
 import {
   type CountCollectionDocsStoreParams,
-  type CountDocsStoreParams,
-  type DeleteDocsStoreParams,
-  type DeleteDocStoreParams,
-  type DeleteFilteredDocsStoreParams,
-  type DocStoreParams,
-  type ListDocStoreParams,
-  type SetDocStoreParams,
   CountCollectionDocsStoreParamsSchema,
+  type CountDocsStoreParams,
   CountDocsStoreParamsSchema,
+  type DeleteDocsStoreParams,
   DeleteDocsStoreParamsSchema,
+  type DeleteDocStoreParams,
   DeleteDocStoreParamsSchema,
+  type DeleteFilteredDocsStoreParams,
   DeleteFilteredDocsStoreParamsSchema,
+  type DocStoreParams,
   DocStoreParamsSchema,
-  ListDocStoreParamsSchema,
+  type ListDocsStoreParams,
+  ListDocsStoreParamsSchema,
+  type SetDocStoreParams,
   SetDocStoreParamsSchema
 } from './schemas/db';
 import {normalizeCaller} from './utils/caller.utils';
@@ -91,15 +91,15 @@ export const getDocStore = (params: DocStoreParams): OptionDoc => {
 /**
  * Lists documents from the datastore using optional filtering, pagination, and ordering parameters.
  *
- * @param {ListDocStoreParams} params - The parameters required to perform the list operation.
+ * @param {ListStoreParams} params - The parameters required to perform the list operation.
  *
  * @returns {ListResults<Doc>} A list result containing matching documents and pagination metadata.
  *
  * @throws {z.ZodError} If the input parameters do not conform to the schema.
  * @throws {Error} If the Satellite fails while performing the listing operation.
  */
-export const listDocsStore = (params: ListDocStoreParams): ListResults<Doc> => {
-  ListDocStoreParamsSchema.parse(params);
+export const listDocsStore = (params: ListDocsStoreParams): ListResults<Doc> => {
+  ListDocsStoreParamsSchema.parse(params);
 
   const {caller: providedCaller, collection, params: listParams} = params;
 

@@ -17,7 +17,7 @@ import {
   DeleteDocStoreParams,
   DeleteFilteredDocsStoreParams,
   DocStoreParams,
-  ListDocStoreParams,
+  ListDocsStoreParams,
   SetDocStoreParams
 } from '../../sdk/schemas/db';
 
@@ -341,13 +341,13 @@ describe('db.sdk', () => {
   describe('listDocsStore', () => {
     const collection = 'notes';
 
-    const baseParamsWithUint8Array: ListDocStoreParams = {
+    const baseParamsWithUint8Array: ListDocsStoreParams = {
       caller: Principal.anonymous().toUint8Array(),
       collection,
       params: {}
     };
 
-    const baseParamsWithPrincipal: ListDocStoreParams = {
+    const baseParamsWithPrincipal: ListDocsStoreParams = {
       caller: Principal.anonymous(),
       collection,
       params: {}
@@ -380,7 +380,7 @@ describe('db.sdk', () => {
         caller: 1234,
         collection,
         params: {}
-      } as unknown as ListDocStoreParams;
+      } as unknown as ListDocsStoreParams;
 
       expect(() => listDocsStore(invalidParams)).toThrow(ZodError);
     });

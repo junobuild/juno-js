@@ -30,12 +30,12 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
+- [createListResultsSchema](#gear-createlistresultsschema)
 - [normalizeCaller](#gear-normalizecaller)
 - [getAdminControllers](#gear-getadmincontrollers)
 - [getControllers](#gear-getcontrollers)
 - [isAdminController](#gear-isadmincontroller)
 - [isController](#gear-iscontroller)
-- [createListResultsSchema](#gear-createlistresultsschema)
 - [setDocStore](#gear-setdocstore)
 - [deleteDocStore](#gear-deletedocstore)
 - [getDocStore](#gear-getdocstore)
@@ -44,6 +44,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [countDocsStore](#gear-countdocsstore)
 - [deleteDocsStore](#gear-deletedocsstore)
 - [deleteFilteredDocsStore](#gear-deletefiltereddocsstore)
+- [random](#gear-random)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
 - [call](#gear-call)
@@ -177,6 +178,16 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L181)
 
+#### :gear: createListResultsSchema
+
+Represents a list result.
+
+| Function                  | Type                                                                                                                                                                                                                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createListResultsSchema` | `<T extends z.ZodTypeAny>(itemData: T) => ZodObject<{ items: ZodArray<ZodTuple<[ZodString, T], null>, "many">; items_length: ZodBigInt; items_page: ZodOptional<...>; matches_length: ZodBigInt; matches_pages: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L128)
+
 #### :gear: normalizeCaller
 
 Normalizes a user ID into a raw `Uint8Array` representation.
@@ -241,16 +252,6 @@ Parameters:
   and the list of controllers to verify against.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L57)
-
-#### :gear: createListResultsSchema
-
-Represents a list result.
-
-| Function                  | Type                                                                                                                                                                                                                                                                            |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `createListResultsSchema` | `<T extends z.ZodTypeAny>(itemData: T) => ZodObject<{ items: ZodArray<ZodTuple<[ZodString, T], null>, "many">; items_length: ZodBigInt; items_page: ZodOptional<...>; matches_length: ZodBigInt; matches_pages: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L128)
 
 #### :gear: setDocStore
 
@@ -368,6 +369,19 @@ Parameters:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L175)
 
+#### :gear: random
+
+Generates a pseudo-random number using the Satellite's internal RNG.
+
+⚠️ This function is not suitable for use cases requiring cryptographically secure or perfectly unpredictable randomness,
+such as lotteries or gambling dApps.
+
+| Function | Type           |
+| -------- | -------------- |
+| `random` | `() => number` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/random.sdk.ts#L11)
+
 #### :gear: decodeDocData
 
 Decodes the raw data of a document into a JavaScript object.
@@ -481,18 +495,18 @@ the Principal of the executing canister.
 - [OnDeleteManyAssetsSchema](#gear-ondeletemanyassetsschema)
 - [OnDeleteFilteredAssetsSchema](#gear-ondeletefilteredassetsschema)
 - [HookSchema](#gear-hookschema)
-- [ControllerScopeSchema](#gear-controllerscopeschema)
-- [MetadataSchema](#gear-metadataschema)
-- [ControllerSchema](#gear-controllerschema)
-- [ControllerRecordSchema](#gear-controllerrecordschema)
-- [ControllersSchema](#gear-controllersschema)
-- [ControllerCheckParamsSchema](#gear-controllercheckparamsschema)
 - [TimestampMatcherSchema](#gear-timestampmatcherschema)
 - [ListMatcherSchema](#gear-listmatcherschema)
 - [ListPaginateSchema](#gear-listpaginateschema)
 - [ListOrderFieldSchema](#gear-listorderfieldschema)
 - [ListOrderSchema](#gear-listorderschema)
 - [ListParamsSchema](#gear-listparamsschema)
+- [ControllerScopeSchema](#gear-controllerscopeschema)
+- [MetadataSchema](#gear-metadataschema)
+- [ControllerSchema](#gear-controllerschema)
+- [ControllerRecordSchema](#gear-controllerrecordschema)
+- [ControllersSchema](#gear-controllersschema)
+- [ControllerCheckParamsSchema](#gear-controllercheckparamsschema)
 - [CollectionParamsSchema](#gear-collectionparamsschema)
 - [DocStoreParamsSchema](#gear-docstoreparamsschema)
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
@@ -926,54 +940,6 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L144)
 
-#### :gear: ControllerScopeSchema
-
-| Constant                | Type                          |
-| ----------------------- | ----------------------------- |
-| `ControllerScopeSchema` | `ZodEnum<["write", "admin"]>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L15)
-
-#### :gear: MetadataSchema
-
-| Constant         | Type                                     |
-| ---------------- | ---------------------------------------- |
-| `MetadataSchema` | `ZodTuple<[ZodString, ZodString], null>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L25)
-
-#### :gear: ControllerSchema
-
-| Constant           | Type                                                                                                                                                                                                                            |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllerSchema` | `ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>, "many">; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L35)
-
-#### :gear: ControllerRecordSchema
-
-| Constant                 | Type                                                                                                              |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| `ControllerRecordSchema` | `ZodTuple<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodObject<...>], null>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L79)
-
-#### :gear: ControllersSchema
-
-| Constant            | Type                                                                                                                                |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllersSchema` | `ZodArray<ZodTuple<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodObject<...>], null>, "many">` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L89)
-
-#### :gear: ControllerCheckParamsSchema
-
-| Constant                      | Type                                                                                                                                                                                                   |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ControllerCheckParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; controllers: ZodArray<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
-
 #### :gear: TimestampMatcherSchema
 
 | Constant                 | Type                                                                                                                                                                                                                          |
@@ -1021,6 +987,54 @@ A schema that validates a value is an Uint8Array.
 | `ListParamsSchema` | `ZodObject<{ matcher: ZodOptional<ZodObject<{ key: ZodOptional<ZodString>; description: ZodOptional<ZodString>; created_at: ZodOptional<ZodUnion<[ZodObject<{ equal: ZodBigInt; }, "strip", ZodTypeAny, { ...; }, { ...; }>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>>; updated_at: ZodOptional<...>; }, "strict", Zod...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L103)
+
+#### :gear: ControllerScopeSchema
+
+| Constant                | Type                          |
+| ----------------------- | ----------------------------- |
+| `ControllerScopeSchema` | `ZodEnum<["write", "admin"]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L15)
+
+#### :gear: MetadataSchema
+
+| Constant         | Type                                     |
+| ---------------- | ---------------------------------------- |
+| `MetadataSchema` | `ZodTuple<[ZodString, ZodString], null>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L25)
+
+#### :gear: ControllerSchema
+
+| Constant           | Type                                                                                                                                                                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ControllerSchema` | `ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>, "many">; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L35)
+
+#### :gear: ControllerRecordSchema
+
+| Constant                 | Type                                                                                                              |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `ControllerRecordSchema` | `ZodTuple<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodObject<...>], null>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L79)
+
+#### :gear: ControllersSchema
+
+| Constant            | Type                                                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `ControllersSchema` | `ZodArray<ZodTuple<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodObject<...>], null>, "many">` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L89)
+
+#### :gear: ControllerCheckParamsSchema
+
+| Constant                      | Type                                                                                                                                                                                                   |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ControllerCheckParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; controllers: ZodArray<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
 
 #### :gear: CollectionParamsSchema
 
@@ -1157,13 +1171,13 @@ Schema for encoding the call arguments.
 - [Batch](#gear-batch)
 - [CommitBatch](#gear-commitbatch)
 - [AssetAssertUpload](#gear-assetassertupload)
-- [Controller](#gear-controller)
-- [ControllerCheckParams](#gear-controllercheckparams)
 - [ListMatcher](#gear-listmatcher)
 - [ListPaginate](#gear-listpaginate)
 - [ListOrder](#gear-listorder)
 - [ListParams](#gear-listparams)
 - [ListResults](#gear-listresults)
+- [Controller](#gear-controller)
+- [ControllerCheckParams](#gear-controllercheckparams)
 - [CollectionParams](#gear-collectionparams)
 - [CallParams](#gear-callparams)
 
@@ -1330,27 +1344,6 @@ Represents a validation context before uploading an asset.
 | `batch`        | `Batch`              | The batch metadata being uploaded.                |
 | `commit_batch` | `CommitBatch`        | The commit data describing headers and chunk ids. |
 
-#### :gear: Controller
-
-Represents a controller with access scope and associated metadata.
-
-| Property     | Type                  | Description                                                                                        |
-| ------------ | --------------------- | -------------------------------------------------------------------------------------------------- |
-| `metadata`   | `[string, string][]`  | A list of key-value metadata pairs associated with the controller.                                 |
-| `created_at` | `bigint`              | The timestamp when the controller was created.                                                     |
-| `updated_at` | `bigint`              | The timestamp when the controller was last updated.                                                |
-| `expires_at` | `bigint or undefined` | Optional expiration timestamp for the controller. 👉 It's a placeholder for future implementation. |
-| `scope`      | `"write" or "admin"`  | The scope assigned to the controller.                                                              |
-
-#### :gear: ControllerCheckParams
-
-Represents the parameters required to perform controller checks.
-
-| Property      | Type                                                                                                                                                                      | Description                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `caller`      | `Uint8Array<ArrayBufferLike> or Principal`                                                                                                                                | The identity of the caller to verify against the controller list. |
-| `controllers` | `[Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin"; expires_at?: bigint or undefined; }][]` | The list of controllers to check against.                         |
-
 #### :gear: ListMatcher
 
 Matcher used to filter list results.
@@ -1402,6 +1395,27 @@ List results, parameterized by type of returned item.
 | `items_page`     | `bigint or undefined` |             |
 | `matches_length` | `bigint`              |             |
 | `matches_pages`  | `bigint or undefined` |             |
+
+#### :gear: Controller
+
+Represents a controller with access scope and associated metadata.
+
+| Property     | Type                  | Description                                                                                        |
+| ------------ | --------------------- | -------------------------------------------------------------------------------------------------- |
+| `metadata`   | `[string, string][]`  | A list of key-value metadata pairs associated with the controller.                                 |
+| `created_at` | `bigint`              | The timestamp when the controller was created.                                                     |
+| `updated_at` | `bigint`              | The timestamp when the controller was last updated.                                                |
+| `expires_at` | `bigint or undefined` | Optional expiration timestamp for the controller. 👉 It's a placeholder for future implementation. |
+| `scope`      | `"write" or "admin"`  | The scope assigned to the controller.                                                              |
+
+#### :gear: ControllerCheckParams
+
+Represents the parameters required to perform controller checks.
+
+| Property      | Type                                                                                                                                                                      | Description                                                       |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `caller`      | `Uint8Array<ArrayBufferLike> or Principal`                                                                                                                                | The identity of the caller to verify against the controller list. |
+| `controllers` | `[Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin"; expires_at?: bigint or undefined; }][]` | The list of controllers to check against.                         |
 
 #### :gear: CollectionParams
 
@@ -1480,12 +1494,12 @@ Type representing the parameters required to make a canister call.
 - [Hook](#gear-hook)
 - [HookFn](#gear-hookfn)
 - [HookFnOrObject](#gear-hookfnorobject)
+- [TimestampMatcher](#gear-timestampmatcher)
+- [ListOrderField](#gear-listorderfield)
 - [ControllerScope](#gear-controllerscope)
 - [Metadata](#gear-metadata)
 - [ControllerRecord](#gear-controllerrecord)
 - [Controllers](#gear-controllers)
-- [TimestampMatcher](#gear-timestampmatcher)
-- [ListOrderField](#gear-listorderfield)
 - [DocStoreParams](#gear-docstoreparams)
 - [SetDocStoreParams](#gear-setdocstoreparams)
 - [DeleteDocStoreParams](#gear-deletedocstoreparams)
@@ -2106,6 +2120,26 @@ All hooks definitions.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L176)
 
+#### :gear: TimestampMatcher
+
+TimestampMatcher matches a timestamp field using a specific strategy.
+
+| Type               | Type |
+| ------------------ | ---- | --------------------------------------------------------------------------------------------------------------- |
+| `TimestampMatcher` | `    | {equal: Timestamp} or {greater_than: Timestamp} or {less_than: Timestamp} or {between: [Timestamp, Timestamp]}` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L26)
+
+#### :gear: ListOrderField
+
+Enum representing possible fields to order by.
+
+| Type             | Type                                     |
+| ---------------- | ---------------------------------------- |
+| `ListOrderField` | `'keys' or 'updated_at' or 'created_at'` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L80)
+
 #### :gear: ControllerScope
 
 Represents the permission scope of a controller.
@@ -2145,26 +2179,6 @@ Represents a list of controllers.
 | `Controllers` | `z.infer<typeof ControllersSchema>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L94)
-
-#### :gear: TimestampMatcher
-
-TimestampMatcher matches a timestamp field using a specific strategy.
-
-| Type               | Type |
-| ------------------ | ---- | --------------------------------------------------------------------------------------------------------------- |
-| `TimestampMatcher` | `    | {equal: Timestamp} or {greater_than: Timestamp} or {less_than: Timestamp} or {between: [Timestamp, Timestamp]}` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L26)
-
-#### :gear: ListOrderField
-
-Enum representing possible fields to order by.
-
-| Type             | Type                                     |
-| ---------------- | ---------------------------------------- |
-| `ListOrderField` | `'keys' or 'updated_at' or 'created_at'` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L80)
 
 #### :gear: DocStoreParams
 

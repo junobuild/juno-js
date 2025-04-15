@@ -14,3 +14,4 @@ export * from './schemas/satellite';
 export * from './schemas/storage';
 
 import './polyfills/console.polyfill';
+import './polyfills/random.polyfill';

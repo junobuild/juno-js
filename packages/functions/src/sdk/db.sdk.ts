@@ -3,6 +3,8 @@ import type {DocUpsert} from '../hooks/schemas/db/payload';
 import type {Doc, OptionDoc} from '../schemas/db';
 import type {ListResults} from '../schemas/list';
 import {
+  type DeleteDocsStoreParams,
+  type DeleteFilteredDocsStoreParams,
   type CountCollectionDocsStoreParams,
   type CountDocsStoreParams,
   type DeleteDocStoreParams,
@@ -11,7 +13,9 @@ import {
   type SetDocStoreParams,
   CountCollectionDocsStoreParamsSchema,
   CountDocsStoreParamsSchema,
+  DeleteDocsStoreParamsSchema,
   DeleteDocStoreParamsSchema,
+  DeleteFilteredDocsStoreParamsSchema,
   DocStoreParamsSchema,
   ListDocStoreParamsSchema,
   SetDocStoreParamsSchema
@@ -140,4 +144,42 @@ export const countDocsStore = (params: CountDocsStoreParams): bigint => {
   const caller = normalizeCaller(providedCaller);
 
   return __juno_satellite_datastore_count_docs_store(caller, collection, listParams);
+};
+
+/**
+ * Delete documents in a specific collection of the Datastore.
+ *
+ * @param {DeleteDocsStoreParams} params - The parameters required to delete documents in the collection.
+ *
+ * @throws {z.ZodError} If the input parameters do not conform to the schema.
+ * @throws {Error} If the Satellite fails while performing the count operation.
+ */
+export const deleteDocsStore = (params: DeleteDocsStoreParams): void => {
+  DeleteDocsStoreParamsSchema.parse(params);
+
+  const {collection} = params;
+
+  __juno_satellite_datastore_delete_docs_store(collection);
+};
+
+/**
+ * Delete documents in a collection matching specific filters and owned by a specific caller.
+ *
+ * @param {DeleteFilteredDocsStoreParams} params - The parameters required to perform the filtered deletion.
+ *
+ * @returns {bigint} The context resulting of the deletion of documents that match the provided filters.
+ *
+ * @throws {z.ZodError} If the input parameters do not conform to the schema.
+ * @throws {Error} If the Satellite fails while performing the count operation.
+ */
+export const deleteFilteredDocsStore = (
+  params: DeleteFilteredDocsStoreParams
+): DocContext<OptionDoc>[] => {
+  DeleteFilteredDocsStoreParamsSchema.parse(params);
+
+  const {caller: providedCaller, collection, params: listParams} = params;
+
+  const caller = normalizeCaller(providedCaller);
+
+  return __juno_satellite_datastore_delete_filtered_docs_store(caller, collection, listParams);
 };

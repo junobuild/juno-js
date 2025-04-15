@@ -24,7 +24,7 @@ declare global {
   function __juno_satellite_datastore_count_docs_store(
     caller: RawUserId,
     collection: Collection,
-    params: ListParams
+    filter: ListParams
   ): bigint;
   function __juno_satellite_datastore_set_doc_store(
     caller: RawUserId,
@@ -38,6 +38,12 @@ declare global {
     key: Key,
     value: DelDoc
   ): DocContext<OptionDoc>;
+  function __juno_satellite_datastore_delete_docs_store(collection: Collection): void;
+  function __juno_satellite_datastore_delete_filtered_docs_store(
+    caller: RawUserId,
+    collection: Collection,
+    filter: ListParams
+  ): DocContext<OptionDoc>[];
   function __juno_satellite_datastore_get_doc_store(
     caller: RawUserId,
     collection: Collection,

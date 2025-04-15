@@ -52,6 +52,13 @@ declare global {
     params: ListParams
   ): ListResults<Doc>;
 
+  function __juno_satellite_storage_count_collection_assets_store(collection: Collection): bigint;
+  function __juno_satellite_storage_count_assets_store(
+      caller: RawUserId,
+      collection: Collection,
+      filter: ListParams
+  ): bigint;
+
   function __juno_satellite_random(): number;
 
   function __ic_cdk_id(): RawPrincipal;

@@ -221,7 +221,7 @@ Gets the list of controllers from the Satellite.
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `getControllers` | `() => [Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin"; expires_at?: bigint or undefined; }][]` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L24)
 
 #### :gear: isAdminController
 
@@ -236,7 +236,7 @@ Parameters:
 - `params`: - The parameters including the caller identity
   and the list of controllers to verify against.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L37)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L36)
 
 #### :gear: isController
 
@@ -251,7 +251,7 @@ Parameters:
 - `params`: - The parameters including the caller identity
   and the list of controllers to verify against.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L57)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L56)
 
 #### :gear: setDocStore
 

@@ -9,16 +9,13 @@ declare global {
   function __juno_satellite_datastore_raw_data_to_text(data: RawData): string;
   function __juno_satellite_datastore_raw_data_from_text(data: string): RawData;
 
-  function __juno_satellite_datastore_get_admin_controllers(): Controllers;
-  function __juno_satellite_datastore_get_controllers(): Controllers;
-  function __juno_satellite_datastore_is_admin_controller(
+  function __juno_satellite_get_admin_controllers(): Controllers;
+  function __juno_satellite_get_controllers(): Controllers;
+  function __juno_satellite_is_admin_controller(
     caller: RawUserId,
     controllers: Controllers
   ): boolean;
-  function __juno_satellite_datastore_is_controller(
-    caller: RawUserId,
-    controllers: Controllers
-  ): boolean;
+  function __juno_satellite_is_controller(caller: RawUserId, controllers: Controllers): boolean;
 
   function __juno_satellite_datastore_count_collection_docs_store(collection: Collection): bigint;
   function __juno_satellite_datastore_count_docs_store(

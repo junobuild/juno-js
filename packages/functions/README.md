@@ -46,6 +46,8 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [deleteFilteredDocsStore](#gear-deletefiltereddocsstore)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
+- [countCollectionAssetsStore](#gear-countcollectionassetsstore)
+- [countAssetsStore](#gear-countassetsstore)
 - [call](#gear-call)
 - [id](#gear-id)
 
@@ -288,9 +290,9 @@ Parameters:
 
 Retrieve a document from the datastore.
 
-| Function      | Type                                    |
-| ------------- | --------------------------------------- |
-| `getDocStore` | `(params: DocStoreParams) => OptionDoc` |
+| Function      | Type                                       |
+| ------------- | ------------------------------------------ |
+| `getDocStore` | `(params: GetDocStoreParams) => OptionDoc` |
 
 Parameters:
 
@@ -396,6 +398,34 @@ Parameters:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
 
+#### :gear: countCollectionAssetsStore
+
+Counts the number of assets in a specific collection.
+
+| Function                     | Type                                   |
+| ---------------------------- | -------------------------------------- |
+| `countCollectionAssetsStore` | `(params: CollectionParams) => bigint` |
+
+Parameters:
+
+- `params`: - The parameters required to count assets in the collection.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L19)
+
+#### :gear: countAssetsStore
+
+Counts the number of assets in a collection matching specific filters and owned by a specific caller.
+
+| Function           | Type                                  |
+| ------------------ | ------------------------------------- |
+| `countAssetsStore` | `(params: ListStoreParams) => bigint` |
+
+Parameters:
+
+- `params`: - The parameters required to perform the filtered count.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L37)
+
 #### :gear: call
 
 Makes an asynchronous call to a canister on the Internet Computer.
@@ -495,14 +525,16 @@ the Principal of the executing canister.
 - [ControllerCheckParamsSchema](#gear-controllercheckparamsschema)
 - [CollectionParamsSchema](#gear-collectionparamsschema)
 - [ListStoreParamsSchema](#gear-liststoreparamsschema)
-- [DocStoreParamsSchema](#gear-docstoreparamsschema)
+- [GetDocStoreParamsSchema](#gear-getdocstoreparamsschema)
 - [SetDocStoreParamsSchema](#gear-setdocstoreparamsschema)
 - [DeleteDocStoreParamsSchema](#gear-deletedocstoreparamsschema)
 - [CountCollectionDocsStoreParamsSchema](#gear-countcollectiondocsstoreparamsschema)
-- [ListDocsStoreParamsSchema](#gear-listdocsstoreparamsschema)
 - [CountDocsStoreParamsSchema](#gear-countdocsstoreparamsschema)
+- [ListDocsStoreParamsSchema](#gear-listdocsstoreparamsschema)
 - [DeleteDocsStoreParamsSchema](#gear-deletedocsstoreparamsschema)
 - [DeleteFilteredDocsStoreParamsSchema](#gear-deletefiltereddocsstoreparamsschema)
+- [CountCollectionAssetsStoreParamsSchema](#gear-countcollectionassetsstoreparamsschema)
+- [CountAssetsStoreParamsSchema](#gear-countassetsstoreparamsschema)
 - [IDLTypeSchema](#gear-idltypeschema)
 - [CallArgSchema](#gear-callargschema)
 - [CallArgsSchema](#gear-callargsschema)
@@ -1039,11 +1071,11 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/params.ts#L34)
 
-#### :gear: DocStoreParamsSchema
+#### :gear: GetDocStoreParamsSchema
 
-| Constant               | Type                                                                                                                                                                                                                                 |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `DocStoreParamsSchema` | `ZodObject<extendShape<{ collection: ZodString; }, { caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; key: ZodString; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                  | Type                                                                                                                                                                                                                                 |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GetDocStoreParamsSchema` | `ZodObject<extendShape<{ collection: ZodString; }, { caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; key: ZodString; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L20)
 
@@ -1071,19 +1103,19 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L83)
 
-#### :gear: ListDocsStoreParamsSchema
-
-| Constant                    | Type                                                                                                                                                                                                                                         |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ListDocsStoreParamsSchema` | `ZodObject<extendShape<{ collection: ZodString; }, { caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; params: ZodObject<...>; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L93)
-
 #### :gear: CountDocsStoreParamsSchema
 
 | Constant                     | Type                                                                                                                                                                                                                                         |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CountDocsStoreParamsSchema` | `ZodObject<extendShape<{ collection: ZodString; }, { caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; params: ZodObject<...>; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L93)
+
+#### :gear: ListDocsStoreParamsSchema
+
+| Constant                    | Type                                                                                                                                                                                                                                         |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListDocsStoreParamsSchema` | `ZodObject<extendShape<{ collection: ZodString; }, { caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; params: ZodObject<...>; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L103)
 
@@ -1102,6 +1134,22 @@ A schema that validates a value is an Uint8Array.
 | `DeleteFilteredDocsStoreParamsSchema` | `ZodObject<extendShape<{ collection: ZodString; }, { caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; params: ZodObject<...>; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L123)
+
+#### :gear: CountCollectionAssetsStoreParamsSchema
+
+| Constant                                 | Type                                                                                                            |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `CountCollectionAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; }, "strict", ZodTypeAny, { collection: string; }, { collection: string; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L11)
+
+#### :gear: CountAssetsStoreParamsSchema
+
+| Constant                       | Type                                                                                                                                                                                                                                         |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CountAssetsStoreParamsSchema` | `ZodObject<extendShape<{ collection: ZodString; }, { caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; params: ZodObject<...>; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L21)
 
 #### :gear: IDLTypeSchema
 
@@ -1496,14 +1544,16 @@ Type representing the parameters required to make a canister call.
 - [ControllerRecord](#gear-controllerrecord)
 - [Controllers](#gear-controllers)
 - [ListStoreParams](#gear-liststoreparams)
-- [DocStoreParams](#gear-docstoreparams)
+- [GetDocStoreParams](#gear-getdocstoreparams)
 - [SetDocStoreParams](#gear-setdocstoreparams)
 - [DeleteDocStoreParams](#gear-deletedocstoreparams)
 - [CountCollectionDocsStoreParams](#gear-countcollectiondocsstoreparams)
-- [ListDocsStoreParams](#gear-listdocsstoreparams)
 - [CountDocsStoreParams](#gear-countdocsstoreparams)
+- [ListDocsStoreParams](#gear-listdocsstoreparams)
 - [DeleteDocsStoreParams](#gear-deletedocsstoreparams)
 - [DeleteFilteredDocsStoreParams](#gear-deletefiltereddocsstoreparams)
+- [CountCollectionAssetsStoreParams](#gear-countcollectionassetsstoreparams)
+- [CountAssetsStoreParams](#gear-countassetsstoreparams)
 - [IDLType](#gear-idltype)
 - [CallArg](#gear-callarg)
 - [CallArgs](#gear-callargs)
@@ -2186,13 +2236,13 @@ The parameters required to list documents from the datastore respectively assets
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/params.ts#L42)
 
-#### :gear: DocStoreParams
+#### :gear: GetDocStoreParams
 
 Represents the base parameters required to access the datastore and modify a document.
 
-| Type             | Type                                                                                                                                                                                         |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DocStoreParams` | `CollectionParams and { /** * The caller who initiate the document operation. */ caller: RawUserId or UserId;  /** * The key identifying the document within the collection. */ key: Key; }` |
+| Type                | Type                                                                                                                                                                                         |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GetDocStoreParams` | `CollectionParams and { /** * The caller who initiate the document operation. */ caller: RawUserId or UserId;  /** * The key identifying the document within the collection. */ key: Key; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L28)
 
@@ -2203,9 +2253,9 @@ Represents the parameters required to store or update a document.
 This includes the document data along with metadata such as the caller,
 collection, and key.
 
-| Type                | Type                                                                                                                               |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `SetDocStoreParams` | `DocStoreParams and { /** * The data, optional description and version required to create or update a document. */ doc: SetDoc; }` |
+| Type                | Type                                                                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `SetDocStoreParams` | `GetDocStoreParams and { /** * The data, optional description and version required to create or update a document. */ doc: SetDoc; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L53)
 
@@ -2216,9 +2266,9 @@ Represents the parameters required to delete a document.
 This includes the document version along with metadata such as the caller,
 collection, and key.
 
-| Type                   | Type                                                                                      |
-| ---------------------- | ----------------------------------------------------------------------------------------- |
-| `DeleteDocStoreParams` | `DocStoreParams and { /** * The version required to delete a document. */ doc: DelDoc; }` |
+| Type                   | Type                                                                                         |
+| ---------------------- | -------------------------------------------------------------------------------------------- |
+| `DeleteDocStoreParams` | `GetDocStoreParams and { /** * The version required to delete a document. */ doc: DelDoc; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L73)
 
@@ -2232,16 +2282,6 @@ The parameters required to count documents from the datastore.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L88)
 
-#### :gear: ListDocsStoreParams
-
-The parameters required to list documents from the datastore.
-
-| Type                  | Type              |
-| --------------------- | ----------------- |
-| `ListDocsStoreParams` | `ListStoreParams` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L98)
-
 #### :gear: CountDocsStoreParams
 
 The parameters required to count documents from the datastore.
@@ -2249,6 +2289,16 @@ The parameters required to count documents from the datastore.
 | Type                   | Type              |
 | ---------------------- | ----------------- |
 | `CountDocsStoreParams` | `ListStoreParams` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L98)
+
+#### :gear: ListDocsStoreParams
+
+The parameters required to list documents from the datastore.
+
+| Type                  | Type              |
+| --------------------- | ----------------- |
+| `ListDocsStoreParams` | `ListStoreParams` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L108)
 
@@ -2271,6 +2321,26 @@ The parameters required to delete documents from the datastore.
 | `DeleteFilteredDocsStoreParams` | `ListStoreParams` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L128)
+
+#### :gear: CountCollectionAssetsStoreParams
+
+The parameters required to count documents from the storage.
+
+| Type                               | Type               |
+| ---------------------------------- | ------------------ |
+| `CountCollectionAssetsStoreParams` | `CollectionParams` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L16)
+
+#### :gear: CountAssetsStoreParams
+
+The parameters required to count documents from the storage.
+
+| Type                     | Type              |
+| ------------------------ | ----------------- |
+| `CountAssetsStoreParams` | `ListStoreParams` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L26)
 
 #### :gear: IDLType
 

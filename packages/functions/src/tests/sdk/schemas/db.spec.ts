@@ -1,5 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import {
+  CountCollectionDocsStoreParamsSchema,
   CountDocsStoreParamsSchema,
   DeleteDocStoreParamsSchema,
   GetDocStoreParamsSchema,
@@ -232,6 +233,37 @@ describe('sdk > db', () => {
 
     it('should reject if required fields are missing', () => {
       expect(() => CountDocsStoreParamsSchema.parse({})).toThrow();
+    });
+  });
+
+  describe('CountCollectionDocsStoreParamsSchema (alias for CollectionParamsSchema)', () => {
+    it('should validate with valid collection name', () => {
+      expect(() =>
+        CountCollectionDocsStoreParamsSchema.parse({
+          collection: 'my-collection'
+        })
+      ).not.toThrow();
+    });
+
+    it('should reject if collection is missing', () => {
+      expect(() => CountCollectionDocsStoreParamsSchema.parse({})).toThrow();
+    });
+
+    it('should reject if collection has wrong type', () => {
+      expect(() =>
+        CountCollectionDocsStoreParamsSchema.parse({
+          collection: 123
+        })
+      ).toThrow();
+    });
+
+    it('should reject unknown fields', () => {
+      expect(() =>
+        CountCollectionDocsStoreParamsSchema.parse({
+          collection: 'my-collection',
+          extra: 'nope'
+        })
+      ).toThrow();
     });
   });
 });

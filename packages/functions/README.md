@@ -1141,7 +1141,7 @@ A schema that validates a value is an Uint8Array.
 | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `CountCollectionAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; }, "strict", ZodTypeAny, { collection: string; }, { collection: string; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L6)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L11)
 
 #### :gear: CountAssetsStoreParamsSchema
 
@@ -1149,7 +1149,7 @@ A schema that validates a value is an Uint8Array.
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CountAssetsStoreParamsSchema` | `ZodObject<extendShape<{ collection: ZodString; }, { caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; params: ZodObject<...>; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L16)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L21)
 
 #### :gear: IDLTypeSchema
 
@@ -2330,7 +2330,7 @@ The parameters required to count documents from the storage.
 | ---------------------------------- | ------------------ |
 | `CountCollectionAssetsStoreParams` | `CollectionParams` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L11)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L16)
 
 #### :gear: CountAssetsStoreParams
 
@@ -2340,7 +2340,7 @@ The parameters required to count documents from the storage.
 | ------------------------ | ----------------- |
 | `CountAssetsStoreParams` | `ListStoreParams` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L21)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L26)
 
 #### :gear: IDLType
 

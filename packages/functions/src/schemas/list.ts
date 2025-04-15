@@ -14,20 +14,20 @@ import {
  * @see TimestampMatcher
  */
 export const TimestampMatcherSchema = z.union([
-  z.object({Equal: TimestampSchema}),
-  z.object({GreaterThan: TimestampSchema}),
-  z.object({LessThan: TimestampSchema}),
-  z.object({Between: z.tuple([TimestampSchema, TimestampSchema])})
+  z.object({equal: TimestampSchema}),
+  z.object({greater_than: TimestampSchema}),
+  z.object({less_than: TimestampSchema}),
+  z.object({between: z.tuple([TimestampSchema, TimestampSchema])})
 ]);
 
 /**
  * TimestampMatcher matches a timestamp field using a specific strategy.
  */
 export type TimestampMatcher =
-  | {Equal: Timestamp}
-  | {GreaterThan: Timestamp}
-  | {LessThan: Timestamp}
-  | {Between: [Timestamp, Timestamp]};
+  | {equal: Timestamp}
+  | {greater_than: Timestamp}
+  | {less_than: Timestamp}
+  | {between: [Timestamp, Timestamp]};
 
 /**
  * @see ListMatcher
@@ -72,12 +72,12 @@ export interface ListPaginate {
 /**
  * @see ListOrderField
  */
-export const ListOrderFieldSchema = z.enum(['Keys', 'CreatedAt', 'UpdatedAt']);
+export const ListOrderFieldSchema = z.enum(['keys', 'created_at', 'updated_at']);
 
 /**
  * Enum representing possible fields to order by.
  */
-export type ListOrderField = 'Keys' | 'CreatedAt' | 'UpdatedAt';
+export type ListOrderField = 'keys' | 'updated_at' | 'created_at';
 
 /**
  * @see ListOrder

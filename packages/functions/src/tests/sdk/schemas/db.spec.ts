@@ -226,7 +226,7 @@ describe('sdk > db', () => {
       matcher: {
         key: 'user123',
         description: 'match this',
-        created_at: {GreaterThan: 1700000000000000n}
+        created_at: {greater_than: 1700000000000000n}
       },
       paginate: {
         start_after: 'user123',
@@ -234,7 +234,7 @@ describe('sdk > db', () => {
       },
       order: {
         desc: true,
-        field: 'CreatedAt'
+        field: 'created_at'
       },
       owner: Principal.anonymous().toUint8Array()
     };
@@ -246,7 +246,7 @@ describe('sdk > db', () => {
         params: {
           matcher: {},
           paginate: {limit: 10n},
-          order: {desc: true, field: 'Keys'}
+          order: {desc: true, field: 'keys'}
         }
       };
 

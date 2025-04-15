@@ -15,8 +15,8 @@ describe('list', () => {
         ListMatcherSchema.parse({
           key: 'some-key',
           description: 'desc',
-          created_at: {GreaterThan: 1700000000000000n},
-          updated_at: {LessThan: 1800000000000000n}
+          created_at: {greater_than: 1700000000000000n},
+          updated_at: {less_than: 1800000000000000n}
         })
       ).not.toThrow();
     });
@@ -51,7 +51,7 @@ describe('list', () => {
 
   describe('ListOrderFieldSchema', () => {
     it('should validate all valid enum values', () => {
-      ['Keys', 'CreatedAt', 'UpdatedAt'].forEach((field) => {
+      ['keys', 'created_at', 'updated_at'].forEach((field) => {
         expect(() => ListOrderFieldSchema.parse(field)).not.toThrow();
       });
     });
@@ -66,7 +66,7 @@ describe('list', () => {
       expect(() =>
         ListOrderSchema.parse({
           desc: true,
-          field: 'UpdatedAt'
+          field: 'updated_at'
         })
       ).not.toThrow();
     });
@@ -84,7 +84,7 @@ describe('list', () => {
           },
           order: {
             desc: true,
-            field: 'CreatedAt'
+            field: 'created_at'
           },
           owner: new Uint8Array([1, 2, 3])
         })

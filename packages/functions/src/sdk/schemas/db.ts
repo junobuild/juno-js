@@ -113,3 +113,32 @@ export interface ListDocStoreParams {
    */
   params: ListParams;
 }
+
+/**
+ * @see CountCollectionDocsStoreParams
+ */
+export const CountCollectionDocsStoreParamsSchema = z
+  .object({
+    collection: CollectionSchema
+  })
+  .strict();
+
+/**
+ * The parameters required to count documents of a collection from the datastore.
+ */
+export interface CountCollectionDocsStoreParams {
+  /**
+   * The name of the collection to query.
+   */
+  collection: Collection;
+}
+
+/**
+ * @see ListDocStoreParams
+ */
+export const CountDocsStoreParamsSchema = ListDocStoreParamsSchema;
+
+/**
+ * The parameters required to count documents from the datastore.
+ */
+export type CountDocsStoreParams = ListDocStoreParams;

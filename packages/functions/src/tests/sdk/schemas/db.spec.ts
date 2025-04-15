@@ -1,6 +1,8 @@
 import {Principal} from '@dfinity/principal';
 import {ListParams} from '../../../schemas/list';
 import {
+  CountCollectionDocsStoreParamsSchema,
+  CountDocsStoreParamsSchema,
   DeleteDocStoreParamsSchema,
   DocStoreParamsSchema,
   ListDocStoreParamsSchema,
@@ -290,6 +292,57 @@ describe('sdk > db', () => {
     it('should reject if extra unknown fields are present', () => {
       const invalid = {...baseParams, extra: 'nope'};
       expect(() => ListDocStoreParamsSchema.parse(invalid)).toThrow();
+    });
+  });
+
+  describe('CountCollectionDocsStoreParamsSchema', () => {
+    it('should validate with a correct collection name', () => {
+      expect(() =>
+        CountCollectionDocsStoreParamsSchema.parse({
+          collection: 'valid-collection'
+        })
+      ).not.toThrow();
+    });
+
+    it('should reject if collection is missing', () => {
+      expect(() => CountCollectionDocsStoreParamsSchema.parse({})).toThrow();
+    });
+
+    it('should reject if collection is of wrong type', () => {
+      expect(() =>
+        CountCollectionDocsStoreParamsSchema.parse({
+          collection: 123
+        })
+      ).toThrow();
+    });
+
+    it('should reject if unknown fields are present', () => {
+      expect(() =>
+        CountCollectionDocsStoreParamsSchema.parse({
+          collection: 'valid-collection',
+          extra: 'nope'
+        })
+      ).toThrow();
+    });
+  });
+
+  describe('CountDocsStoreParamsSchema (alias for ListDocStoreParamsSchema)', () => {
+    it('should validate with full valid ListParams structure', () => {
+      expect(() =>
+        CountDocsStoreParamsSchema.parse({
+          caller: Principal.anonymous(),
+          collection: 'my-collection',
+          params: {
+            matcher: {key: 'abc'},
+            paginate: {limit: 5n},
+            order: {desc: false, field: 'updated_at'}
+          }
+        })
+      ).not.toThrow();
+    });
+
+    it('should reject if required fields are missing', () => {
+      expect(() => CountDocsStoreParamsSchema.parse({})).toThrow();
     });
   });
 });

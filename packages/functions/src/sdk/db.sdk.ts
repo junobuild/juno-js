@@ -3,10 +3,14 @@ import type {DocUpsert} from '../hooks/schemas/db/payload';
 import type {Doc, OptionDoc} from '../schemas/db';
 import type {ListResults} from '../schemas/list';
 import {
+  type CountCollectionDocsStoreParams,
+  type CountDocsStoreParams,
   type DeleteDocStoreParams,
   type DocStoreParams,
   type ListDocStoreParams,
   type SetDocStoreParams,
+  CountCollectionDocsStoreParamsSchema,
+  CountDocsStoreParamsSchema,
   DeleteDocStoreParamsSchema,
   DocStoreParamsSchema,
   ListDocStoreParamsSchema,
@@ -83,13 +87,7 @@ export const getDocStore = (params: DocStoreParams): OptionDoc => {
 /**
  * Lists documents from the datastore using optional filtering, pagination, and ordering parameters.
  *
- * This function validates the input against the `ListDocStoreParamsSchema`, normalizes the caller identity,
- * and delegates the listing operation to the Satellite implementation.
- *
  * @param {ListDocStoreParams} params - The parameters required to perform the list operation.
- * @param {RawUserId | UserId} params.caller - The identity of the caller requesting the list.
- * @param {Collection} params.collection - The name of the collection to query.
- * @param {ListParams} params.params - Optional filtering, ordering, and pagination parameters.
  *
  * @returns {ListResults<Doc>} A list result containing matching documents and pagination metadata.
  *
@@ -104,4 +102,42 @@ export const listDocsStore = (params: ListDocStoreParams): ListResults<Doc> => {
   const caller = normalizeCaller(providedCaller);
 
   return __juno_satellite_datastore_list_docs_store(caller, collection, listParams);
+};
+
+/**
+ * Counts the number of documents in a specific collection.
+ *
+ * @param {CountCollectionDocsStoreParams} params - The parameters required to count documents in the collection.
+ *
+ * @returns {bigint} The total number of documents in the specified collection.
+ *
+ * @throws {z.ZodError} If the input parameters do not conform to the schema.
+ * @throws {Error} If the Satellite fails while performing the count operation.
+ */
+export const countCollectionDocsStore = (params: CountCollectionDocsStoreParams): bigint => {
+  CountCollectionDocsStoreParamsSchema.parse(params);
+
+  const {collection} = params;
+
+  return __juno_satellite_datastore_count_collection_docs_store(collection);
+};
+
+/**
+ * Counts the number of documents in a collection matching specific filters and owned by a specific caller.
+ *
+ * @param {CountDocsStoreParams} params - The parameters required to perform the filtered count.
+ *
+ * @returns {bigint} The number of documents that match the provided filters.
+ *
+ * @throws {z.ZodError} If the input parameters do not conform to the schema.
+ * @throws {Error} If the Satellite fails while performing the count operation.
+ */
+export const countDocsStore = (params: CountDocsStoreParams): bigint => {
+  CountDocsStoreParamsSchema.parse(params);
+
+  const {caller: providedCaller, collection, params: listParams} = params;
+
+  const caller = normalizeCaller(providedCaller);
+
+  return __juno_satellite_datastore_count_docs_store(caller, collection, listParams);
 };

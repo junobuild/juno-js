@@ -1,7 +1,16 @@
 import {Principal} from '@dfinity/principal';
 import {ZodError} from 'zod';
-import {deleteDocStore, getDocStore, listDocsStore, setDocStore} from '../../sdk/db.sdk';
 import {
+  countCollectionDocsStore,
+  countDocsStore,
+  deleteDocStore,
+  getDocStore,
+  listDocsStore,
+  setDocStore
+} from '../../sdk/db.sdk';
+import {
+  CountCollectionDocsStoreParams,
+  CountDocsStoreParams,
   DeleteDocStoreParams,
   DocStoreParams,
   ListDocStoreParams,
@@ -68,6 +77,17 @@ const mockListResult = {
 vi.stubGlobal(
   '__juno_satellite_datastore_list_docs_store',
   vi.fn(() => mockListResult)
+);
+
+const mockCount = 42n;
+
+vi.stubGlobal(
+  '__juno_satellite_datastore_count_collection_docs_store',
+  vi.fn(() => mockCount)
+);
+vi.stubGlobal(
+  '__juno_satellite_datastore_count_docs_store',
+  vi.fn(() => mockCount)
 );
 
 describe('db.sdk', () => {
@@ -346,6 +366,95 @@ describe('db.sdk', () => {
       });
 
       expect(() => listDocsStore(baseParamsWithUint8Array)).toThrow('Unexpected Satellite error');
+    });
+  });
+
+  describe('countCollectionDocsStore', () => {
+    const validParams: CountCollectionDocsStoreParams = {
+      collection
+    };
+
+    it('should call __juno_satellite_datastore_count_collection_docs_store with correct params', () => {
+      const result = countCollectionDocsStore(validParams);
+
+      expect(global.__juno_satellite_datastore_count_collection_docs_store).toHaveBeenCalledWith(
+        validParams.collection
+      );
+      expect(result).toBe(mockCount);
+    });
+
+    it('should throw ZodError if params are invalid', () => {
+      const invalid = {
+        collection: 123
+      } as unknown as CountCollectionDocsStoreParams;
+
+      expect(() => countCollectionDocsStore(invalid)).toThrow(ZodError);
+    });
+
+    it('should throw if Satellite throws', () => {
+      vi.mocked(global.__juno_satellite_datastore_count_collection_docs_store).mockImplementation(
+        () => {
+          throw new Error('Satellite count failure');
+        }
+      );
+
+      expect(() => countCollectionDocsStore(validParams)).toThrow('Satellite count failure');
+    });
+  });
+
+  describe('countDocsStore', () => {
+    const baseParamsWithUint8Array: CountDocsStoreParams = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection,
+      params: {}
+    };
+
+    const baseParamsWithPrincipal: CountDocsStoreParams = {
+      caller: Principal.anonymous(),
+      collection,
+      params: {}
+    };
+
+    it('should call __juno_satellite_datastore_count_docs_store with correct params (Uint8Array)', () => {
+      const result = countDocsStore(baseParamsWithUint8Array);
+
+      expect(global.__juno_satellite_datastore_count_docs_store).toHaveBeenCalledWith(
+        baseParamsWithUint8Array.caller,
+        collection,
+        {}
+      );
+      expect(result).toBe(mockCount);
+    });
+
+    it('should call __juno_satellite_datastore_count_docs_store with caller converted to Uint8Array (Principal)', () => {
+      const result = countDocsStore(baseParamsWithPrincipal);
+
+      expect(global.__juno_satellite_datastore_count_docs_store).toHaveBeenCalledWith(
+        (baseParamsWithPrincipal.caller as Principal).toUint8Array(),
+        collection,
+        {}
+      );
+      expect(result).toBe(mockCount);
+    });
+
+    it('should throw ZodError if input is invalid', () => {
+      const invalidParams = {
+        caller: 42,
+        collection,
+        params: {}
+      } as unknown as CountDocsStoreParams;
+
+      expect(() => countDocsStore(invalidParams)).toThrow(ZodError);
+    });
+
+    it('should throw if Satellite throws', () => {
+      vi.mocked(global.__juno_satellite_datastore_count_docs_store).mockImplementation(() => {
+        throw new Error('Satellite filtered count error');
+      });
+
+      expect(() => countDocsStore(baseParamsWithUint8Array)).toThrow(
+        'Satellite filtered count error'
+      );
     });
   });
 });

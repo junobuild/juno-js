@@ -20,6 +20,12 @@ declare global {
     controllers: Controllers
   ): boolean;
 
+  function __juno_satellite_datastore_count_collection_docs_store(collection: Collection): bigint;
+  function __juno_satellite_datastore_count_docs_store(
+    caller: RawUserId,
+    collection: Collection,
+    params: ListParams
+  ): bigint;
   function __juno_satellite_datastore_set_doc_store(
     caller: RawUserId,
     collection: Collection,

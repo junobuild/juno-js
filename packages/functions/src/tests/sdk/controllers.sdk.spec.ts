@@ -21,10 +21,10 @@ describe('controllers.sdk', () => {
   ];
 
   beforeEach(() => {
-    globalThis.__juno_satellite_datastore_get_admin_controllers = vi.fn(() => validControllers);
-    globalThis.__juno_satellite_datastore_get_controllers = vi.fn(() => validControllers);
-    globalThis.__juno_satellite_datastore_is_admin_controller = vi.fn(() => true);
-    globalThis.__juno_satellite_datastore_is_controller = vi.fn(() => false);
+    globalThis.__juno_satellite_get_admin_controllers = vi.fn(() => validControllers);
+    globalThis.__juno_satellite_get_controllers = vi.fn(() => validControllers);
+    globalThis.__juno_satellite_is_admin_controller = vi.fn(() => true);
+    globalThis.__juno_satellite_is_controller = vi.fn(() => false);
   });
 
   describe('getAdminControllers', () => {

@@ -12,8 +12,7 @@ import {normalizeCaller} from './utils/caller.utils';
  *
  * @throws {z.ZodError} If the returned value does not match the expected schema.
  */
-export const getAdminControllers = (): Controllers =>
-  __juno_satellite_datastore_get_admin_controllers();
+export const getAdminControllers = (): Controllers => __juno_satellite_get_admin_controllers();
 
 /**
  * Gets the list of controllers from the Satellite.
@@ -22,7 +21,7 @@ export const getAdminControllers = (): Controllers =>
  *
  * @throws {z.ZodError} If the returned value does not match the expected schema.
  */
-export const getControllers = (): Controllers => __juno_satellite_datastore_get_controllers();
+export const getControllers = (): Controllers => __juno_satellite_get_controllers();
 
 /**
  * Checks if the given caller is an admin among the provided controllers.
@@ -41,7 +40,7 @@ export const isAdminController = (params: ControllerCheckParams): boolean => {
 
   const caller = normalizeCaller(providedCaller);
 
-  return __juno_satellite_datastore_is_admin_controller(caller, controllers);
+  return __juno_satellite_is_admin_controller(caller, controllers);
 };
 
 /**
@@ -61,5 +60,5 @@ export const isController = (params: ControllerCheckParams): boolean => {
 
   const caller = normalizeCaller(providedCaller);
 
-  return __juno_satellite_datastore_is_controller(caller, controllers);
+  return __juno_satellite_is_controller(caller, controllers);
 };

@@ -44,7 +44,6 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [countDocsStore](#gear-countdocsstore)
 - [deleteDocsStore](#gear-deletedocsstore)
 - [deleteFilteredDocsStore](#gear-deletefiltereddocsstore)
-- [random](#gear-random)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
 - [call](#gear-call)
@@ -368,19 +367,6 @@ Parameters:
 - `params`: - The parameters required to perform the filtered deletion.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L175)
-
-#### :gear: random
-
-Generates a pseudo-random number using the Satellite's internal RNG.
-
-⚠️ This function is not suitable for use cases requiring cryptographically secure or perfectly unpredictable randomness,
-such as lotteries or gambling dApps.
-
-| Function | Type           |
-| -------- | -------------- |
-| `random` | `() => number` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/random.sdk.ts#L11)
 
 #### :gear: decodeDocData
 

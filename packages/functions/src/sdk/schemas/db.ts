@@ -1,9 +1,5 @@
-import * as z from 'zod';
 import {type DelDoc, DelDocSchema, type SetDoc, SetDocSchema} from '../../schemas/db';
-import {type ListParams, ListParamsSchema} from '../../schemas/list';
 import {
-  type Collection,
-  CollectionSchema,
   type Key,
   KeySchema,
   type RawUserId,
@@ -11,25 +7,12 @@ import {
   type UserId,
   UserIdSchema
 } from '../../schemas/satellite';
-
-/**
- * @see CollectionParams
- */
-export const CollectionParamsSchema = z
-  .object({
-    collection: CollectionSchema
-  })
-  .strict();
-
-/**
- * The parameters required to scope an operation to a collection.
- */
-export interface CollectionParams {
-  /**
-   * The name of the collection to target.
-   */
-  collection: Collection;
-}
+import {
+  type CollectionParams,
+  CollectionParamsSchema,
+  type ListStoreParams,
+  ListStoreParamsSchema
+} from './params';
 
 /**
  * @see DocStoreParams
@@ -95,29 +78,6 @@ export type DeleteDocStoreParams = DocStoreParams & {
 };
 
 /**
- * @see ListDocStoreParams
- */
-export const ListDocStoreParamsSchema = CollectionParamsSchema.extend({
-  caller: RawUserIdSchema.or(UserIdSchema),
-  params: ListParamsSchema
-}).strict();
-
-/**
- * The parameters required to list documents from the datastore.
- */
-export type ListDocStoreParams = CollectionParams & {
-  /**
-   * The identity of the caller requesting the list operation.
-   */
-  caller: RawUserId | UserId;
-
-  /**
-   * Optional filtering, ordering, and pagination parameters.
-   */
-  params: ListParams;
-};
-
-/**
  * @see CountCollectionDocsStoreParams
  */
 export const CountCollectionDocsStoreParamsSchema = CollectionParamsSchema;
@@ -128,14 +88,24 @@ export const CountCollectionDocsStoreParamsSchema = CollectionParamsSchema;
 export type CountCollectionDocsStoreParams = CollectionParams;
 
 /**
+ * @see ListDocsStoreParams
+ */
+export const ListDocsStoreParamsSchema = ListStoreParamsSchema;
+
+/**
+ * The parameters required to list documents from the datastore.
+ */
+export type ListDocsStoreParams = ListStoreParams;
+
+/**
  * @see CountDocsStoreParams
  */
-export const CountDocsStoreParamsSchema = ListDocStoreParamsSchema;
+export const CountDocsStoreParamsSchema = ListStoreParamsSchema;
 
 /**
  * The parameters required to count documents from the datastore.
  */
-export type CountDocsStoreParams = ListDocStoreParams;
+export type CountDocsStoreParams = ListStoreParams;
 
 /**
  * @see DeleteDocsStoreParams
@@ -150,9 +120,9 @@ export type DeleteDocsStoreParams = CollectionParams;
 /**
  * @see DeleteFilteredDocsParams
  */
-export const DeleteFilteredDocsStoreParamsSchema = ListDocStoreParamsSchema;
+export const DeleteFilteredDocsStoreParamsSchema = ListStoreParamsSchema;
 
 /**
  * The parameters required to delete documents from the datastore.
  */
-export type DeleteFilteredDocsStoreParams = ListDocStoreParams;
+export type DeleteFilteredDocsStoreParams = ListStoreParams;

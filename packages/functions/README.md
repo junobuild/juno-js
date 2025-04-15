@@ -917,9 +917,9 @@ A schema that validates a value is an Uint8Array.
 
 #### :gear: TimestampMatcherSchema
 
-| Constant                 | Type                                                                                                                                                                                                                         |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TimestampMatcherSchema` | `ZodUnion<[ZodObject<{ Equal: ZodBigInt; }, "strip", ZodTypeAny, { Equal: bigint; }, { Equal: bigint; }>, ZodObject<{ GreaterThan: ZodBigInt; }, "strip", ZodTypeAny, { ...; }, { ...; }>, ZodObject<...>, ZodObject<...>]>` |
+| Constant                 | Type                                                                                                                                                                                                                          |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TimestampMatcherSchema` | `ZodUnion<[ZodObject<{ equal: ZodBigInt; }, "strip", ZodTypeAny, { equal: bigint; }, { equal: bigint; }>, ZodObject<{ greater_than: ZodBigInt; }, "strip", ZodTypeAny, { ...; }, { ...; }>, ZodObject<...>, ZodObject<...>]>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L16)
 
@@ -927,7 +927,7 @@ A schema that validates a value is an Uint8Array.
 
 | Constant            | Type                                                                                                                                                                                                                                                                                                                       |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ListMatcherSchema` | `ZodObject<{ key: ZodOptional<ZodString>; description: ZodOptional<ZodString>; created_at: ZodOptional<ZodUnion<[ZodObject<{ Equal: ZodBigInt; }, "strip", ZodTypeAny, { ...; }, { ...; }>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>>; updated_at: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| `ListMatcherSchema` | `ZodObject<{ key: ZodOptional<ZodString>; description: ZodOptional<ZodString>; created_at: ZodOptional<ZodUnion<[ZodObject<{ equal: ZodBigInt; }, "strip", ZodTypeAny, { ...; }, { ...; }>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>>; updated_at: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L35)
 
@@ -941,17 +941,17 @@ A schema that validates a value is an Uint8Array.
 
 #### :gear: ListOrderFieldSchema
 
-| Constant               | Type                                          |
-| ---------------------- | --------------------------------------------- |
-| `ListOrderFieldSchema` | `ZodEnum<["Keys", "CreatedAt", "UpdatedAt"]>` |
+| Constant               | Type                                            |
+| ---------------------- | ----------------------------------------------- |
+| `ListOrderFieldSchema` | `ZodEnum<["keys", "created_at", "updated_at"]>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L75)
 
 #### :gear: ListOrderSchema
 
-| Constant          | Type                                                                                                                                                                                    |
-| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ListOrderSchema` | `ZodObject<{ desc: ZodBoolean; field: ZodEnum<["Keys", "CreatedAt", "UpdatedAt"]>; }, "strict", ZodTypeAny, { desc: boolean; field: "Keys" or "CreatedAt" or "UpdatedAt"; }, { ...; }>` |
+| Constant          | Type                                                                                                                                                                                        |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListOrderSchema` | `ZodObject<{ desc: ZodBoolean; field: ZodEnum<["keys", "created_at", "updated_at"]>; }, "strict", ZodTypeAny, { desc: boolean; field: "keys" or "created_at" or "updated_at"; }, { ...; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L85)
 
@@ -959,7 +959,7 @@ A schema that validates a value is an Uint8Array.
 
 | Constant           | Type                                                                                                                                                                                                                                                                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ListParamsSchema` | `ZodObject<{ matcher: ZodOptional<ZodObject<{ key: ZodOptional<ZodString>; description: ZodOptional<ZodString>; created_at: ZodOptional<ZodUnion<[ZodObject<{ Equal: ZodBigInt; }, "strip", ZodTypeAny, { ...; }, { ...; }>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>>; updated_at: ZodOptional<...>; }, "strict", Zod...` |
+| `ListParamsSchema` | `ZodObject<{ matcher: ZodOptional<ZodObject<{ key: ZodOptional<ZodString>; description: ZodOptional<ZodString>; created_at: ZodOptional<ZodUnion<[ZodObject<{ equal: ZodBigInt; }, "strip", ZodTypeAny, { ...; }, { ...; }>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>>; updated_at: ZodOptional<...>; }, "strict", Zod...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L103)
 
@@ -2059,8 +2059,8 @@ Represents a list of controllers.
 TimestampMatcher matches a timestamp field using a specific strategy.
 
 | Type               | Type |
-| ------------------ | ---- | ------------------------------------------------------------------------------------------------------------- |
-| `TimestampMatcher` | `    | {Equal: Timestamp} or {GreaterThan: Timestamp} or {LessThan: Timestamp} or {Between: [Timestamp, Timestamp]}` |
+| ------------------ | ---- | --------------------------------------------------------------------------------------------------------------- |
+| `TimestampMatcher` | `    | {equal: Timestamp} or {greater_than: Timestamp} or {less_than: Timestamp} or {between: [Timestamp, Timestamp]}` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L26)
 
@@ -2068,9 +2068,9 @@ TimestampMatcher matches a timestamp field using a specific strategy.
 
 Enum representing possible fields to order by.
 
-| Type             | Type                                   |
-| ---------------- | -------------------------------------- |
-| `ListOrderField` | `'Keys' or 'CreatedAt' or 'UpdatedAt'` |
+| Type             | Type                                     |
+| ---------------- | ---------------------------------------- |
+| `ListOrderField` | `'keys' or 'updated_at' or 'created_at'` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L80)
 

@@ -13,35 +13,46 @@ import {
 } from '../../schemas/satellite';
 
 /**
- * @see DocStoreParams
+ * @see CollectionParams
  */
-export const DocStoreParamsSchema = z
+export const CollectionParamsSchema = z
   .object({
-    caller: RawUserIdSchema.or(UserIdSchema),
-    collection: CollectionSchema,
-    key: KeySchema
+    collection: CollectionSchema
   })
   .strict();
 
 /**
+ * The parameters required to scope an operation to a collection.
+ */
+export interface CollectionParams {
+  /**
+   * The name of the collection to target.
+   */
+  collection: Collection;
+}
+
+/**
+ * @see DocStoreParams
+ */
+export const DocStoreParamsSchema = CollectionParamsSchema.extend({
+  caller: RawUserIdSchema.or(UserIdSchema),
+  key: KeySchema
+}).strict();
+
+/**
  * Represents the base parameters required to access the datastore and modify a document.
  */
-export interface DocStoreParams {
+export type DocStoreParams = CollectionParams & {
   /**
    * The caller who initiate the document operation.
    */
   caller: RawUserId | UserId;
 
   /**
-   * The name of the collection where the document is stored.
-   */
-  collection: Collection;
-
-  /**
    * The key identifying the document within the collection.
    */
   key: Key;
-}
+};
 
 /**
  * @see SetDocStoreParams
@@ -86,55 +97,38 @@ export type DeleteDocStoreParams = DocStoreParams & {
 /**
  * @see ListDocStoreParams
  */
-export const ListDocStoreParamsSchema = z
-  .object({
-    caller: RawUserIdSchema.or(UserIdSchema),
-    collection: CollectionSchema,
-    params: ListParamsSchema
-  })
-  .strict();
+export const ListDocStoreParamsSchema = CollectionParamsSchema.extend({
+  caller: RawUserIdSchema.or(UserIdSchema),
+  params: ListParamsSchema
+}).strict();
 
 /**
  * The parameters required to list documents from the datastore.
  */
-export interface ListDocStoreParams {
+export type ListDocStoreParams = CollectionParams & {
   /**
    * The identity of the caller requesting the list operation.
    */
   caller: RawUserId | UserId;
 
   /**
-   * The name of the collection to query.
-   */
-  collection: Collection;
-
-  /**
    * Optional filtering, ordering, and pagination parameters.
    */
   params: ListParams;
-}
+};
 
 /**
  * @see CountCollectionDocsStoreParams
  */
-export const CountCollectionDocsStoreParamsSchema = z
-  .object({
-    collection: CollectionSchema
-  })
-  .strict();
+export const CountCollectionDocsStoreParamsSchema = CollectionParamsSchema;
 
 /**
- * The parameters required to count documents of a collection from the datastore.
+ * The parameters required to count documents from the datastore.
  */
-export interface CountCollectionDocsStoreParams {
-  /**
-   * The name of the collection to query.
-   */
-  collection: Collection;
-}
+export type CountCollectionDocsStoreParams = CollectionParams;
 
 /**
- * @see ListDocStoreParams
+ * @see CountDocsStoreParams
  */
 export const CountDocsStoreParamsSchema = ListDocStoreParamsSchema;
 

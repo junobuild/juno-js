@@ -9,6 +9,7 @@ export * from './hooks/schemas/storage/context';
 export * from './hooks/schemas/storage/payload';
 export * from './schemas/candid';
 export * from './schemas/db';
+export * from './schemas/list';
 export * from './schemas/satellite';
 export * from './schemas/storage';
 

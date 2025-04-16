@@ -1,7 +1,12 @@
 import {Principal} from '@dfinity/principal';
+import {ZodError} from 'zod';
 import {
   CountAssetsStoreParamsSchema,
   CountCollectionAssetsStoreParamsSchema,
+  DeleteAssetsStoreParamsSchema,
+  DeleteAssetStoreParamsSchema,
+  DeleteFilteredAssetsStoreParamsSchema,
+  GetAssetStoreParamsSchema,
   SetAssetHandlerParams,
   SetAssetHandlerParamsSchema
 } from '../../../sdk/schemas/storage';
@@ -97,6 +102,85 @@ describe('sdk > storage', () => {
     it('should reject unknown fields', () => {
       const invalid = {...validParams, unexpected: 'oops'};
       expect(() => SetAssetHandlerParamsSchema.parse(invalid)).toThrow();
+    });
+  });
+
+  describe('GetAssetStoreParamsSchema', () => {
+    const valid = {
+      caller: Principal.anonymous(),
+      collection: 'my-collection',
+      full_path: '/assets/banner.jpg'
+    };
+
+    it('should validate correct GetAssetStoreParams', () => {
+      expect(() => GetAssetStoreParamsSchema.parse(valid)).not.toThrow();
+    });
+
+    it('should throw if missing required fields', () => {
+      expect(() => GetAssetStoreParamsSchema.parse({})).toThrow(ZodError);
+    });
+
+    it('should throw if full_path is not a string', () => {
+      const invalid = {...valid, full_path: 123 as any};
+      expect(() => GetAssetStoreParamsSchema.parse(invalid)).toThrow(ZodError);
+    });
+  });
+
+  describe('DeleteAssetsStoreParamsSchema (alias for CollectionParamsSchema)', () => {
+    it('should validate correct params', () => {
+      expect(() =>
+        DeleteAssetsStoreParamsSchema.parse({
+          collection: 'my-collection'
+        })
+      ).not.toThrow();
+    });
+
+    it('should throw on unknown fields', () => {
+      expect(() =>
+        DeleteAssetsStoreParamsSchema.parse({
+          collection: 'my-collection',
+          extra: true
+        })
+      ).toThrow(ZodError);
+    });
+  });
+
+  describe('DeleteFilteredAssetsStoreParamsSchema (alias for ListStoreParamsSchema)', () => {
+    it('should validate minimal valid filter', () => {
+      expect(() =>
+        DeleteFilteredAssetsStoreParamsSchema.parse({
+          caller: Principal.anonymous(),
+          collection: 'media',
+          params: {}
+        })
+      ).not.toThrow();
+    });
+
+    it('should throw if caller is invalid type', () => {
+      expect(() =>
+        DeleteFilteredAssetsStoreParamsSchema.parse({
+          caller: 123,
+          collection: 'media',
+          params: {}
+        })
+      ).toThrow(ZodError);
+    });
+  });
+
+  describe('DeleteAssetStoreParamsSchema (alias for GetAssetStoreParamsSchema)', () => {
+    const valid = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection: 'images',
+      full_path: '/images/sample.jpg'
+    };
+
+    it('should validate valid delete single asset params', () => {
+      expect(() => DeleteAssetStoreParamsSchema.parse(valid)).not.toThrow();
+    });
+
+    it('should throw if collection is missing', () => {
+      const {collection, ...rest} = valid as any;
+      expect(() => DeleteAssetStoreParamsSchema.parse(rest)).toThrow();
     });
   });
 });

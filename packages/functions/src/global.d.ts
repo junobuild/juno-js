@@ -3,7 +3,7 @@ import type {DocUpsert} from './hooks/schemas/db/payload';
 import type {DelDoc, Doc, OptionDoc, RawData, SetDoc} from './schemas/db';
 import type {ListParams, ListResults} from './schemas/list';
 import type {Collection, Key, RawPrincipal, RawUserId} from './schemas/satellite';
-import type {AssetKey, Blob, HeaderFields} from './schemas/storage';
+import type {AssetKey, Blob, FullPath, HeaderFields, OptionAsset} from './schemas/storage';
 import type {Controllers} from './sdk/schemas/controllers';
 
 declare global {
@@ -66,6 +66,17 @@ declare global {
     content: Blob,
     headers: HeaderFields
   ): void;
+  function __juno_satellite_storage_delete_asset_store(
+    caller: RawUserId,
+    collection: Collection,
+    full_path: FullPath
+  ): OptionAsset;
+  function __juno_satellite_storage_delete_assets_store(collection: Collection): void;
+  function __juno_satellite_storage_delete_filtered_assets_store(
+    caller: RawUserId,
+    collection: Collection,
+    filter: ListParams
+  ): OptionAsset[];
 
   function __ic_cdk_id(): RawPrincipal;
   function __ic_cdk_print(msg: string): void;

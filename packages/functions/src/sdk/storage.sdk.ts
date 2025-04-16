@@ -1,8 +1,10 @@
 import {
+  type SetAssetHandlerParams,
   type CountAssetsStoreParams,
   CountAssetsStoreParamsSchema,
   type CountCollectionAssetsStoreParams,
-  CountCollectionAssetsStoreParamsSchema
+  CountCollectionAssetsStoreParamsSchema,
+  SetAssetHandlerParamsSchema
 } from './schemas/storage';
 import {normalizeCaller} from './utils/caller.utils';
 
@@ -42,4 +44,20 @@ export const countAssetsStore = (params: CountAssetsStoreParams): bigint => {
   const caller = normalizeCaller(providedCaller);
 
   return __juno_satellite_storage_count_assets_store(caller, collection, listParams);
+};
+
+/**
+ * Sets or updates an asset in the storage.
+ *
+ * @param {SetAssetHandlerParams} params - The parameters required to set or update an asset.
+ *
+ * @throws {z.ZodError} If the input parameters do not conform to the schema.
+ * @throws {Error} If the Satellite fails while performing the operation.
+ */
+export const setAssetHandler = (params: SetAssetHandlerParams): void => {
+  SetAssetHandlerParamsSchema.parse(params);
+
+  const {key, content, headers} = params;
+
+  __juno_satellite_storage_set_asset_handler(key, content, headers);
 };

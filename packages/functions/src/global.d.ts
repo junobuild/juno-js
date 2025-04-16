@@ -3,6 +3,7 @@ import type {DocUpsert} from './hooks/schemas/db/payload';
 import type {DelDoc, Doc, OptionDoc, RawData, SetDoc} from './schemas/db';
 import type {ListParams, ListResults} from './schemas/list';
 import type {Collection, Key, RawPrincipal, RawUserId} from './schemas/satellite';
+import type {AssetKey, Blob, HeaderFields} from './schemas/storage';
 import type {Controllers} from './sdk/schemas/controllers';
 
 declare global {
@@ -60,6 +61,11 @@ declare global {
     collection: Collection,
     filter: ListParams
   ): bigint;
+  function __juno_satellite_storage_set_asset_handler(
+    key: AssetKey,
+    content: Blob,
+    headers: HeaderFields
+  ): void;
 
   function __ic_cdk_id(): RawPrincipal;
   function __ic_cdk_print(msg: string): void;

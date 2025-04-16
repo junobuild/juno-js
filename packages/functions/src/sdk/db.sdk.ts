@@ -167,7 +167,7 @@ export const deleteDocsStore = (params: DeleteDocsStoreParams): void => {
  *
  * @param {DeleteFilteredDocsStoreParams} params - The parameters required to perform the filtered deletion.
  *
- * @returns {bigint} The context resulting of the deletion of documents that match the provided filters.
+ * @returns {DocContext<OptionDoc>[]} The context resulting of the deletion of documents that match the provided filters.
  *
  * @throws {z.ZodError} If the input parameters do not conform to the schema.
  * @throws {Error} If the Satellite fails while performing the count operation.

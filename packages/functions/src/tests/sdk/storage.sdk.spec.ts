@@ -1,7 +1,11 @@
 import {Principal} from '@dfinity/principal';
 import {ZodError} from 'zod';
-import {CountAssetsStoreParams, CountCollectionAssetsStoreParams} from '../../sdk/schemas/storage';
-import {countAssetsStore, countCollectionAssetsStore} from '../../sdk/storage.sdk';
+import {
+  CountAssetsStoreParams,
+  CountCollectionAssetsStoreParams,
+  SetAssetHandlerParams
+} from '../../sdk/schemas/storage';
+import {countAssetsStore, countCollectionAssetsStore, setAssetHandler} from '../../sdk/storage.sdk';
 
 const mockCount = 669n;
 
@@ -13,6 +17,10 @@ vi.stubGlobal(
   '__juno_satellite_storage_count_assets_store',
   vi.fn(() => mockCount)
 );
+
+const mockSetHandler = vi.fn();
+
+vi.stubGlobal('__juno_satellite_storage_set_asset_handler', mockSetHandler);
 
 describe('storage.sdk', () => {
   const collection = 'images';
@@ -103,6 +111,47 @@ describe('storage.sdk', () => {
       expect(() => countAssetsStore(baseParamsWithUint8Array)).toThrow(
         'Satellite filtered count error'
       );
+    });
+  });
+
+  describe('setAssetHandler', () => {
+    const baseParams: SetAssetHandlerParams = {
+      key: {
+        name: 'logo.png',
+        full_path: '/images/logo.png',
+        collection,
+        owner: new Uint8Array([0, 1, 2])
+      },
+      content: new Uint8Array([4, 5, 6]),
+      headers: [['Content-Type', 'image/png']]
+    };
+
+    it('should call __juno_satellite_storage_set_asset_handler with correct params', () => {
+      setAssetHandler(baseParams);
+
+      expect(global.__juno_satellite_storage_set_asset_handler).toHaveBeenCalledWith(
+        baseParams.key,
+        baseParams.content,
+        baseParams.headers
+      );
+    });
+
+    it('should throw ZodError if params are invalid', () => {
+      const invalid = {
+        key: {},
+        content: 'not-bytes',
+        headers: 'invalid'
+      } as unknown as SetAssetHandlerParams;
+
+      expect(() => setAssetHandler(invalid)).toThrow(ZodError);
+    });
+
+    it('should throw if Satellite throws', () => {
+      mockSetHandler.mockImplementation(() => {
+        throw new Error('set failed');
+      });
+
+      expect(() => setAssetHandler(baseParams)).toThrow('set failed');
     });
   });
 });

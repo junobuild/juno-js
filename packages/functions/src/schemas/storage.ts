@@ -24,9 +24,19 @@ const HeaderFieldSchema = z.tuple([z.string(), z.string()]);
 export type HeaderField = [string, string];
 
 /**
+ * @see HeaderFields
+ */
+export const HeaderFieldsSchema = z.array(HeaderFieldSchema);
+
+/**
+ * Represents a list of HTTP headers.
+ */
+export type HeaderFields = HeaderField[];
+
+/**
  * @see Blob
  */
-const BlobSchema = Uint8ArraySchema;
+export const BlobSchema = Uint8ArraySchema;
 
 /**
  * Binary content used in asset encoding.
@@ -58,14 +68,16 @@ export type Hash = Uint8Array;
 /**
  * @see AssetKey
  */
-const AssetKeySchema = z.object({
-  name: z.string(),
-  full_path: z.string(),
-  token: z.string().optional(),
-  collection: CollectionSchema,
-  owner: RawUserIdSchema,
-  description: DescriptionSchema.optional()
-});
+export const AssetKeySchema = z
+  .object({
+    name: z.string(),
+    full_path: z.string(),
+    token: z.string().optional(),
+    collection: CollectionSchema,
+    owner: RawUserIdSchema,
+    description: DescriptionSchema.optional()
+  })
+  .strict();
 
 /**
  * Metadata identifying an asset within a collection and the storage system.
@@ -144,7 +156,7 @@ export interface AssetEncoding {
 export const AssetSchema = z
   .object({
     key: AssetKeySchema,
-    headers: z.array(HeaderFieldSchema),
+    headers: HeaderFieldsSchema,
     encodings: z.record(AssetEncodingSchema),
     created_at: TimestampSchema,
     updated_at: TimestampSchema,
@@ -270,7 +282,7 @@ export type BatchId = bigint;
 export const CommitBatchSchema = z
   .object({
     batch_id: BatchIdSchema,
-    headers: z.array(HeaderFieldSchema),
+    headers: HeaderFieldsSchema,
     chunk_ids: z.array(ChunkIdSchema)
   })
   .strict();

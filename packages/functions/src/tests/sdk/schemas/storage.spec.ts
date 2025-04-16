@@ -1,7 +1,9 @@
 import {Principal} from '@dfinity/principal';
 import {
   CountAssetsStoreParamsSchema,
-  CountCollectionAssetsStoreParamsSchema
+  CountCollectionAssetsStoreParamsSchema,
+  SetAssetHandlerParams,
+  SetAssetHandlerParamsSchema
 } from '../../../sdk/schemas/storage';
 
 describe('sdk > storage', () => {
@@ -53,6 +55,48 @@ describe('sdk > storage', () => {
           extra: 'nope'
         })
       ).toThrow();
+    });
+  });
+
+  describe('SetAssetHandlerParamsSchema', () => {
+    const validParams: SetAssetHandlerParams = {
+      key: {
+        name: 'image.jpg',
+        full_path: '/images/image.jpg',
+        collection: 'media',
+        owner: new Uint8Array([1, 2, 3]),
+        token: 'token-abc',
+        description: 'Sample image'
+      },
+      content: new Uint8Array([255, 216, 255]),
+      headers: [
+        ['Content-Type', 'image/jpeg'],
+        ['Cache-Control', 'max-age=3600']
+      ]
+    };
+
+    it('should validate valid SetAssetHandlerParams', () => {
+      expect(() => SetAssetHandlerParamsSchema.parse(validParams)).not.toThrow();
+    });
+
+    it('should reject if key is missing', () => {
+      const {key, ...rest} = validParams as any;
+      expect(() => SetAssetHandlerParamsSchema.parse(rest)).toThrow();
+    });
+
+    it('should reject if content is not Uint8Array', () => {
+      const invalid = {...validParams, content: [1, 2, 3] as any};
+      expect(() => SetAssetHandlerParamsSchema.parse(invalid)).toThrow();
+    });
+
+    it('should reject if headers is not an array of tuples', () => {
+      const invalid = {...validParams, headers: ['invalid'] as any};
+      expect(() => SetAssetHandlerParamsSchema.parse(invalid)).toThrow();
+    });
+
+    it('should reject unknown fields', () => {
+      const invalid = {...validParams, unexpected: 'oops'};
+      expect(() => SetAssetHandlerParamsSchema.parse(invalid)).toThrow();
     });
   });
 });

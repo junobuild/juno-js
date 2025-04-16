@@ -113,7 +113,7 @@ export type ListDocsStoreParams = ListStoreParams;
 export const DeleteDocsStoreParamsSchema = CollectionParamsSchema;
 
 /**
- * The parameters required to delete the documents from a of the datastore.
+ * The parameters required to delete the documents from a collection of the datastore.
  */
 export type DeleteDocsStoreParams = CollectionParams;
 

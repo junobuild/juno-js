@@ -2377,7 +2377,7 @@ The parameters required to list documents from the datastore.
 
 #### :gear: DeleteDocsStoreParams
 
-The parameters required to delete the documents from a of the datastore.
+The parameters required to delete the documents from a collection of the datastore.
 
 | Type                    | Type               |
 | ----------------------- | ------------------ |

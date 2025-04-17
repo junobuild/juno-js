@@ -15,7 +15,7 @@ describe('ic-cdk > time', () => {
 
     const result = time();
 
-    expect(result).toBeInstanceOf(BigInt);
+    expect(result).toBeTypeOf('bigint');
     expect(result).toEqual(now);
   });
 });

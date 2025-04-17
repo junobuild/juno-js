@@ -306,3 +306,26 @@ export interface CommitBatch {
    */
   chunk_ids: ChunkId[];
 }
+
+/**
+ * @see FullPath
+ */
+export const FullPathSchema = z.string();
+
+/**
+ * Represents the relative path of an asset in storage.
+ * For assets that are not part of the frontend app, the collection must be included at the root of the path.
+ *
+ * Example: `/images/a-sun-above-the-mountains.png`
+ */
+export type FullPath = string;
+
+/**
+ * @see OptionAsset
+ */
+export const OptionAssetSchema = AssetSchema.optional();
+
+/**
+ * A shorthand for an asset that might or not be defined.
+ */
+export type OptionAsset = Asset | undefined;

@@ -4,31 +4,33 @@ import {
   BatchSchema,
   BlobSchema,
   CommitBatchSchema,
-  HeaderFieldsSchema
+  FullPathSchema,
+  HeaderFieldsSchema,
+  OptionAssetSchema
 } from '../../schemas/storage';
 
 describe('storage', () => {
-  describe('AssetSchema', () => {
-    const baseAsset = {
-      key: {
-        name: 'logo.png',
-        full_path: '/images/logo.png',
-        collection: 'media',
-        owner: new Uint8Array([1, 2, 3])
-      },
-      headers: [['Content-Type', 'image/png']],
-      encodings: {
-        identity: {
-          modified: 1700000000000000n,
-          content_chunks: [new Uint8Array([4, 5, 6])],
-          total_length: 3n,
-          sha256: new Uint8Array(32)
-        }
-      },
-      created_at: 1700000000000000n,
-      updated_at: 1700000000000001n
-    };
+  const baseAsset = {
+    key: {
+      name: 'logo.png',
+      full_path: '/images/logo.png',
+      collection: 'media',
+      owner: new Uint8Array([1, 2, 3])
+    },
+    headers: [['Content-Type', 'image/png']],
+    encodings: {
+      identity: {
+        modified: 1700000000000000n,
+        content_chunks: [new Uint8Array([4, 5, 6])],
+        total_length: 3n,
+        sha256: new Uint8Array(32)
+      }
+    },
+    created_at: 1700000000000000n,
+    updated_at: 1700000000000001n
+  };
 
+  describe('AssetSchema', () => {
     it('should validate a complete Asset', () => {
       expect(() => AssetSchema.parse(baseAsset)).not.toThrow();
     });
@@ -175,6 +177,46 @@ describe('storage', () => {
     it('should reject if owner is not a Uint8Array', () => {
       const invalid = {...baseKey, owner: 'not-bytes'};
       expect(() => AssetKeySchema.parse(invalid)).toThrow();
+    });
+  });
+
+  describe('FullPathSchema', () => {
+    it('should validate a correct full path', () => {
+      const valid = '/images/sample.png';
+      expect(() => FullPathSchema.parse(valid)).not.toThrow();
+    });
+
+    it('should reject a non-string value', () => {
+      const invalid = 123;
+      expect(() => FullPathSchema.parse(invalid)).toThrow();
+    });
+
+    it('should accept nested paths', () => {
+      const nested = '/static/assets/icons/logo.svg';
+      expect(() => FullPathSchema.parse(nested)).not.toThrow();
+    });
+  });
+
+  describe('sdk > storage > OptionAssetSchema', () => {
+    it('should validate a valid Asset object', () => {
+      expect(() => OptionAssetSchema.parse(baseAsset)).not.toThrow();
+    });
+
+    it('should validate undefined', () => {
+      expect(() => OptionAssetSchema.parse(undefined)).not.toThrow();
+    });
+
+    it('should reject invalid asset data', () => {
+      const invalid = {
+        ...baseAsset,
+        headers: ['not-a-tuple']
+      } as unknown;
+
+      expect(() => OptionAssetSchema.parse(invalid)).toThrow();
+    });
+
+    it('should reject null (not treated as optional by Zod)', () => {
+      expect(() => OptionAssetSchema.parse(null)).toThrow();
     });
   });
 });

@@ -6,6 +6,8 @@ import {
   DeleteAssetsStoreParams,
   DeleteAssetStoreParams,
   DeleteFilteredAssetsStoreParams,
+  GetAssetStoreParams,
+  ListAssetsStoreParams,
   SetAssetHandlerParams
 } from '../../sdk/schemas/storage';
 import {
@@ -14,6 +16,8 @@ import {
   deleteAssetsStore,
   deleteAssetStore,
   deleteFilteredAssetsStore,
+  getAssetStore,
+  listAssetsStore,
   setAssetHandler
 } from '../../sdk/storage.sdk';
 
@@ -59,6 +63,48 @@ vi.stubGlobal('__juno_satellite_storage_delete_assets_store', mockDeleteAssetsHa
 vi.stubGlobal(
   '__juno_satellite_storage_delete_filtered_assets_store',
   mockDeleteFilteredAssetsHandler
+);
+
+const mockAsset = {
+  key: {
+    name: 'logo.png',
+    full_path,
+    collection,
+    owner: new Uint8Array([0, 1, 2])
+  },
+  headers: [],
+  encodings: {},
+  created_at: 1n,
+  updated_at: 2n
+};
+
+const mockListAssets = {
+  items: [
+    [
+      'logo.png',
+      {
+        owner: new Uint8Array([0, 1, 2]),
+        data: new Uint8Array([1, 2, 3]),
+        created_at: 1n,
+        updated_at: 2n,
+        description: 'logo',
+        version: 1n
+      }
+    ]
+  ],
+  items_length: 1n,
+  matches_length: 1n,
+  items_page: 1n,
+  matches_pages: 1n
+};
+
+vi.stubGlobal(
+  '__juno_satellite_storage_get_asset_store',
+  vi.fn(() => mockAsset)
+);
+vi.stubGlobal(
+  '__juno_satellite_storage_list_assets_store',
+  vi.fn(() => mockListAssets)
 );
 
 describe('storage.sdk', () => {
@@ -323,6 +369,110 @@ describe('storage.sdk', () => {
       expect(() => deleteFilteredAssetsStore(baseParamsWithUint8Array)).toThrow(
         'filtered delete failed'
       );
+    });
+  });
+
+  describe('getAssetStore', () => {
+    const paramsWithUint8Array: GetAssetStoreParams = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection,
+      full_path
+    };
+
+    const paramsWithPrincipal: GetAssetStoreParams = {
+      caller: Principal.anonymous(),
+      collection,
+      full_path
+    };
+
+    it('should call with correct params (Uint8Array)', () => {
+      const result = getAssetStore(paramsWithUint8Array);
+      expect(global.__juno_satellite_storage_get_asset_store).toHaveBeenCalledWith(
+        paramsWithUint8Array.caller,
+        collection,
+        full_path
+      );
+      expect(result).toBe(mockAsset);
+    });
+
+    it('should convert Principal to Uint8Array and call correctly', () => {
+      const result = getAssetStore(paramsWithPrincipal);
+      expect(global.__juno_satellite_storage_get_asset_store).toHaveBeenCalledWith(
+        (paramsWithPrincipal.caller as Principal).toUint8Array(),
+        collection,
+        full_path
+      );
+      expect(result).toBe(mockAsset);
+    });
+
+    it('should throw ZodError for invalid input', () => {
+      const invalid = {
+        caller: 42,
+        collection,
+        full_path
+      } as unknown as GetAssetStoreParams;
+
+      expect(() => getAssetStore(invalid)).toThrow(ZodError);
+    });
+
+    it('should throw if Satellite fails', () => {
+      vi.mocked(global.__juno_satellite_storage_get_asset_store).mockImplementationOnce(() => {
+        throw new Error('failed to get');
+      });
+
+      expect(() => getAssetStore(paramsWithUint8Array)).toThrow('failed to get');
+    });
+  });
+
+  describe('listAssetsStore', () => {
+    const paramsWithUint8Array: ListAssetsStoreParams = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection,
+      params: {}
+    };
+
+    const paramsWithPrincipal: ListAssetsStoreParams = {
+      caller: Principal.anonymous(),
+      collection,
+      params: {}
+    };
+
+    it('should call with correct params (Uint8Array)', () => {
+      const result = listAssetsStore(paramsWithUint8Array);
+      expect(global.__juno_satellite_storage_list_assets_store).toHaveBeenCalledWith(
+        paramsWithUint8Array.caller,
+        collection,
+        {}
+      );
+      expect(result).toBe(mockListAssets);
+    });
+
+    it('should convert Principal to Uint8Array and call correctly', () => {
+      const result = listAssetsStore(paramsWithPrincipal);
+      expect(global.__juno_satellite_storage_list_assets_store).toHaveBeenCalledWith(
+        (paramsWithPrincipal.caller as Principal).toUint8Array(),
+        collection,
+        {}
+      );
+      expect(result).toBe(mockListAssets);
+    });
+
+    it('should throw ZodError for invalid input', () => {
+      const invalid = {
+        caller: 42,
+        collection,
+        params: {}
+      } as unknown as ListAssetsStoreParams;
+
+      expect(() => listAssetsStore(invalid)).toThrow(ZodError);
+    });
+
+    it('should throw if Satellite fails', () => {
+      vi.mocked(global.__juno_satellite_storage_list_assets_store).mockImplementationOnce(() => {
+        throw new Error('list failed');
+      });
+
+      expect(() => listAssetsStore(paramsWithUint8Array)).toThrow('list failed');
     });
   });
 });

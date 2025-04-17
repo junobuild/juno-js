@@ -151,6 +151,16 @@ export interface AssetEncoding {
 }
 
 /**
+ * @see AssetEncodingNoContent
+ */
+const AssetEncodingNoContentSchema = AssetEncodingSchema.omit({content_chunks: true}).strict();
+
+/**
+ * Represents a specific encoding of an asset, such as "gzip" or "identity" (no compression), without the chunks.
+ */
+export type AssetEncodingNoContent = Omit<AssetEncoding, 'content_chunks'>;
+
+/**
  * @see Asset
  */
 export const AssetSchema = z
@@ -198,6 +208,22 @@ export interface Asset {
    */
   version?: Version;
 }
+
+/**
+ * @see AssetNoContent
+ */
+export const AssetNoContentSchema = AssetSchema.omit({encodings: true})
+  .extend({
+    encodings: z.record(AssetEncodingNoContentSchema)
+  })
+  .strict();
+
+/**
+ * A stored asset including its metadata, encodings without chunks, and timestamps.
+ */
+export type AssetNoContent = Omit<Asset, 'encodings'> & {
+  encodings: Record<string, AssetEncodingNoContent>;
+};
 
 /**
  * @see EncodingType

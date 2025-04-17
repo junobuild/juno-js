@@ -1,3 +1,5 @@
+import {Principal} from '@dfinity/principal';
+import {ZodError} from 'zod';
 import {
   DelDocSchema,
   DocSchema,
@@ -5,6 +7,7 @@ import {
   RawDataSchema,
   SetDocSchema
 } from '../../schemas/db';
+import {ListDocsStoreParamsSchema} from '../../sdk/schemas/db';
 
 describe('db', () => {
   describe('DocSchema', () => {
@@ -137,6 +140,54 @@ describe('db', () => {
         // missing created_at and updated_at
       };
       expect(() => OptionDocSchema.parse(invalidDoc)).toThrow();
+    });
+  });
+
+  describe('ListDocsStoreParamsSchema', () => {
+    const collection = 'users';
+
+    const validWithUint8Array = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection,
+      params: {
+        paginate: {
+          limit: 5n
+        }
+      }
+    };
+
+    const validWithPrincipal = {
+      caller: Principal.anonymous(),
+      collection,
+      params: {
+        matcher: {
+          description: 'test'
+        }
+      }
+    };
+
+    it('should validate with caller as Uint8Array', () => {
+      expect(() => ListDocsStoreParamsSchema.parse(validWithUint8Array)).not.toThrow();
+    });
+
+    it('should validate with caller as Principal', () => {
+      expect(() => ListDocsStoreParamsSchema.parse(validWithPrincipal)).not.toThrow();
+    });
+
+    it('should reject if collection is missing', () => {
+      expect(() =>
+        ListDocsStoreParamsSchema.parse({
+          caller: Principal.anonymous()
+        })
+      ).toThrow(ZodError);
+    });
+
+    it('should reject unknown fields', () => {
+      const invalid = {
+        ...validWithPrincipal,
+        unexpected: 'nope'
+      };
+      expect(() => ListDocsStoreParamsSchema.parse(invalid)).toThrow(ZodError);
     });
   });
 });

@@ -1,4 +1,5 @@
-import type {OptionAsset} from '../schemas/storage';
+import type {ListResults} from '../schemas/list';
+import type {AssetNoContent, OptionAsset} from '../schemas/storage';
 import {
   type CountAssetsStoreParams,
   CountAssetsStoreParamsSchema,
@@ -10,6 +11,10 @@ import {
   DeleteAssetStoreParamsSchema,
   type DeleteFilteredAssetsStoreParams,
   DeleteFilteredAssetsStoreParamsSchema,
+  type GetAssetStoreParams,
+  GetAssetStoreParamsSchema,
+  type ListAssetsStoreParams,
+  ListAssetsStoreParamsSchema,
   type SetAssetHandlerParams,
   SetAssetHandlerParamsSchema
 } from './schemas/storage';
@@ -125,4 +130,44 @@ export const deleteFilteredAssetsStore = (
   const caller = normalizeCaller(providedCaller);
 
   return __juno_satellite_storage_delete_filtered_assets_store(caller, collection, listParams);
+};
+
+/**
+ * Retrieve an asset from the storage.
+ *
+ * @param {GetAssetStoreParams} params - The parameters required to get the asset.
+ *
+ * @returns {OptionAsset} The asset if found, or undefined if not.
+ *
+ * @throws {z.ZodError} If the provided parameters do not match the expected schema.
+ * @throws {Error} If the Satellite fails while retrieving the document.
+ */
+export const getAssetStore = (params: GetAssetStoreParams): OptionAsset => {
+  GetAssetStoreParamsSchema.parse(params);
+
+  const {caller: providedCaller, collection, full_path} = params;
+
+  const caller = normalizeCaller(providedCaller);
+
+  return __juno_satellite_storage_get_asset_store(caller, collection, full_path);
+};
+
+/**
+ * Lists assets (without content) from the storage using optional filtering, pagination, and ordering parameters.
+ *
+ * @param {ListStoreParams} params - The parameters required to perform the list operation.
+ *
+ * @returns {ListResults<AssetNoContent>} A list result containing matching assets and pagination metadata.
+ *
+ * @throws {z.ZodError} If the input parameters do not conform to the schema.
+ * @throws {Error} If the Satellite fails while performing the listing operation.
+ */
+export const listAssetsStore = (params: ListAssetsStoreParams): ListResults<AssetNoContent> => {
+  ListAssetsStoreParamsSchema.parse(params);
+
+  const {caller: providedCaller, collection, params: listParams} = params;
+
+  const caller = normalizeCaller(providedCaller);
+
+  return __juno_satellite_storage_list_assets_store(caller, collection, listParams);
 };

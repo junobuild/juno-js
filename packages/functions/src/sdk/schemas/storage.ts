@@ -120,3 +120,13 @@ export const DeleteAssetStoreParamsSchema = GetAssetStoreParamsSchema;
  * Represents the parameters required to delete an asset.
  */
 export type DeleteAssetStoreParams = GetAssetStoreParams;
+
+/**
+ * @see ListAssetsStoreParams
+ */
+export const ListAssetsStoreParamsSchema = ListStoreParamsSchema;
+
+/**
+ * The parameters required to list documents from the datastore.
+ */
+export type ListAssetsStoreParams = ListStoreParams;

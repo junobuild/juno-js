@@ -1,5 +1,8 @@
+import {Principal} from '@dfinity/principal';
+import {ZodError} from 'zod';
 import {
   AssetKeySchema,
+  AssetNoContentSchema,
   AssetSchema,
   BatchSchema,
   BlobSchema,
@@ -8,6 +11,7 @@ import {
   HeaderFieldsSchema,
   OptionAssetSchema
 } from '../../schemas/storage';
+import {ListAssetsStoreParamsSchema} from '../../sdk/schemas/storage';
 
 describe('storage', () => {
   const baseAsset = {
@@ -217,6 +221,117 @@ describe('storage', () => {
 
     it('should reject null (not treated as optional by Zod)', () => {
       expect(() => OptionAssetSchema.parse(null)).toThrow();
+    });
+  });
+
+  describe('AssetNoContentSchema', () => {
+    const validAsset = {
+      key: {
+        name: 'logo.png',
+        full_path: '/images/logo.png',
+        collection: 'media',
+        owner: new Uint8Array([1, 2, 3])
+      },
+      headers: [['Content-Type', 'image/png']],
+      encodings: {
+        identity: {
+          modified: 1700000000000000n,
+          total_length: 123n,
+          sha256: new Uint8Array(32)
+        }
+      },
+      created_at: 1700000000000000n,
+      updated_at: 1700000000000001n
+    };
+
+    it('should validate a valid AssetNoContent object', () => {
+      expect(() => AssetNoContentSchema.parse(validAsset)).not.toThrow();
+    });
+
+    it('should reject if encodings contain content_chunks', () => {
+      const invalid = {
+        ...validAsset,
+        encodings: {
+          identity: {
+            ...validAsset.encodings.identity,
+            content_chunks: [new Uint8Array([1, 2, 3])]
+          }
+        }
+      };
+      expect(() => AssetNoContentSchema.parse(invalid)).toThrow();
+    });
+
+    it('should reject if encodings field is missing', () => {
+      const {encodings, ...rest} = validAsset;
+      expect(() => AssetNoContentSchema.parse(rest)).toThrow();
+    });
+
+    it('should reject if key is invalid', () => {
+      const invalid = {
+        ...validAsset,
+        key: {
+          name: 'logo.png',
+          full_path: '/images/logo.png',
+          collection: 'media',
+          owner: 'not-a-uint8array'
+        }
+      };
+      expect(() => AssetNoContentSchema.parse(invalid)).toThrow();
+    });
+
+    it('should reject unknown fields at the root', () => {
+      const invalid = {...validAsset, extra: 'nope'};
+      expect(() => AssetNoContentSchema.parse(invalid)).toThrow();
+    });
+  });
+
+  describe('ListAssetsStoreParamsSchema', () => {
+    const collection = 'media';
+
+    const baseParamsWithUint8Array = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection,
+      params: {
+        paginate: {
+          limit: 10n
+        }
+      }
+    };
+
+    const baseParamsWithPrincipal = {
+      caller: Principal.anonymous(),
+      collection,
+      params: {
+        order: {
+          desc: true,
+          field: 'updated_at'
+        }
+      }
+    };
+
+    it('should validate with caller as Uint8Array', () => {
+      expect(() => ListAssetsStoreParamsSchema.parse(baseParamsWithUint8Array)).not.toThrow();
+    });
+
+    it('should validate with caller as Principal', () => {
+      expect(() => ListAssetsStoreParamsSchema.parse(baseParamsWithPrincipal)).not.toThrow();
+    });
+
+    it('should reject if collection is missing', () => {
+      expect(() =>
+        ListAssetsStoreParamsSchema.parse({
+          caller: Principal.anonymous(),
+          params: {}
+        })
+      ).toThrow(ZodError);
+    });
+
+    it('should reject unknown fields', () => {
+      const invalid = {
+        ...baseParamsWithPrincipal,
+        unexpected: 'nope'
+      };
+      expect(() => ListAssetsStoreParamsSchema.parse(invalid)).toThrow(ZodError);
     });
   });
 });

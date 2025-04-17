@@ -1,6 +1,7 @@
 import {Principal} from '@dfinity/principal';
 import {ZodError} from 'zod';
 import {
+  AssetEncodingSchema,
   AssetKeySchema,
   AssetNoContentSchema,
   AssetSchema,
@@ -332,6 +333,57 @@ describe('storage', () => {
         unexpected: 'nope'
       };
       expect(() => ListAssetsStoreParamsSchema.parse(invalid)).toThrow(ZodError);
+    });
+  });
+
+  describe('AssetEncodingSchema', () => {
+    const validEncoding = {
+      modified: 1700000000000000n,
+      content_chunks: [new Uint8Array([1, 2, 3])],
+      total_length: 1024n,
+      sha256: new Uint8Array(32) // 32 zero bytes
+    };
+
+    it('should validate a correct asset encoding', () => {
+      expect(() => AssetEncodingSchema.parse(validEncoding)).not.toThrow();
+    });
+
+    it('should reject if sha256 is not 32 bytes', () => {
+      const invalidSha256 = {
+        ...validEncoding,
+        sha256: new Uint8Array(31)
+      };
+
+      expect(() => AssetEncodingSchema.parse(invalidSha256)).toThrow(
+        /Hash must be a Uint8Array of length 32/
+      );
+    });
+
+    it('should reject if content_chunks is not an array of Uint8Array', () => {
+      const invalidChunks = {
+        ...validEncoding,
+        content_chunks: ['not-a-uint8array']
+      };
+
+      expect(() => AssetEncodingSchema.parse(invalidChunks)).toThrow();
+    });
+
+    it('should reject if modified is not a bigint', () => {
+      const invalidModified = {
+        ...validEncoding,
+        modified: 'not-a-bigint'
+      };
+
+      expect(() => AssetEncodingSchema.parse(invalidModified)).toThrow();
+    });
+
+    it('should reject if total_length is not a bigint', () => {
+      const invalidTotalLength = {
+        ...validEncoding,
+        total_length: 1024
+      };
+
+      expect(() => AssetEncodingSchema.parse(invalidTotalLength)).toThrow();
     });
   });
 });

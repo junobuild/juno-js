@@ -4,6 +4,7 @@ import type {DelDoc, Doc, OptionDoc, RawData, SetDoc} from './schemas/db';
 import type {ListParams, ListResults} from './schemas/list';
 import type {Collection, Key, RawPrincipal, RawUserId} from './schemas/satellite';
 import type {
+  AssetEncoding,
   AssetKey,
   AssetNoContent,
   Blob,
@@ -11,6 +12,7 @@ import type {
   HeaderFields,
   OptionAsset
 } from './schemas/storage';
+import type {Memory} from './sdk/schemas/collections';
 import type {Controllers} from './sdk/schemas/controllers';
 
 declare global {
@@ -94,6 +96,11 @@ declare global {
     collection: Collection,
     params: ListParams
   ): ListResults<AssetNoContent>;
+  function __juno_satellite_storage_get_content_chunks_store(
+    encoding: AssetEncoding,
+    chunk_index: bigint,
+    memory: Memory
+  ): Blob | undefined;
 
   function __ic_cdk_id(): RawPrincipal;
   function __ic_cdk_print(msg: string): void;

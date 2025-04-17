@@ -1,6 +1,7 @@
 import type {ListResults} from '../schemas/list';
-import type {AssetNoContent, OptionAsset} from '../schemas/storage';
+import type {AssetNoContent, Blob, OptionAsset} from '../schemas/storage';
 import {
+  type GetContentChunksStoreParams,
   type CountAssetsStoreParams,
   CountAssetsStoreParamsSchema,
   type CountCollectionAssetsStoreParams,
@@ -13,6 +14,7 @@ import {
   DeleteFilteredAssetsStoreParamsSchema,
   type GetAssetStoreParams,
   GetAssetStoreParamsSchema,
+  GetContentChunksStoreParamsSchema,
   type ListAssetsStoreParams,
   ListAssetsStoreParamsSchema,
   type SetAssetHandlerParams,
@@ -170,4 +172,24 @@ export const listAssetsStore = (params: ListAssetsStoreParams): ListResults<Asse
   const caller = normalizeCaller(providedCaller);
 
   return __juno_satellite_storage_list_assets_store(caller, collection, listParams);
+};
+
+/**
+ * Retrieves content chunks of an asset.
+ *
+ * This function fetches a content chunk of a given asset encoding using the specified parameters.
+ *
+ * @param {GetContentChunksStoreParams} params - The parameters including encoding, chunk index, and memory type.
+ *
+ * @returns {Blob | undefined} The content chunk if found, or `undefined` if not.
+ *
+ * @throws {z.ZodError} If the input parameters do not conform to the schema.
+ * @throws {Error} If the Satellite throws an internal error during retrieval.
+ */
+export const getContentChunksStore = (params: GetContentChunksStoreParams): Blob | undefined => {
+  GetContentChunksStoreParamsSchema.parse(params);
+
+  const {encoding, chunk_index, memory} = params;
+
+  return __juno_satellite_storage_get_content_chunks_store(encoding, chunk_index, memory);
 };

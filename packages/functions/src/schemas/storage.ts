@@ -118,7 +118,7 @@ export interface AssetKey {
 /**
  * @see AssetEncoding
  */
-const AssetEncodingSchema = z.object({
+export const AssetEncodingSchema = z.object({
   modified: TimestampSchema,
   content_chunks: z.array(BlobOrKeySchema),
   total_length: z.bigint(),

@@ -1,15 +1,18 @@
 import * as z from 'zod';
 import {type RawUserId, type UserId, RawUserIdSchema, UserIdSchema} from '../../schemas/satellite';
 import {
+  type AssetEncoding,
   type AssetKey,
   type Blob,
   type FullPath,
   type HeaderFields,
+  AssetEncodingSchema,
   AssetKeySchema,
   BlobSchema,
   FullPathSchema,
   HeaderFieldsSchema
 } from '../../schemas/storage';
+import {type Memory, MemorySchema} from './collections';
 import {
   type CollectionParams,
   type ListStoreParams,
@@ -130,3 +133,34 @@ export const ListAssetsStoreParamsSchema = ListStoreParamsSchema;
  * The parameters required to list documents from the datastore.
  */
 export type ListAssetsStoreParams = ListStoreParams;
+
+/**
+ * @see GetContentChunksStoreParams
+ */
+export const GetContentChunksStoreParamsSchema = z
+  .object({
+    encoding: AssetEncodingSchema,
+    chunk_index: z.bigint(),
+    memory: MemorySchema
+  })
+  .strict();
+
+/**
+ * The parameters required to retrieve a specific chunk from an asset.
+ */
+export interface GetContentChunksStoreParams {
+  /**
+   * The encoding of the chunks.
+   */
+  encoding: AssetEncoding;
+
+  /**
+   * The index of the chunk to retrieve.
+   */
+  chunk_index: bigint;
+
+  /**
+   * The memory type to retrieve the chunk from.
+   */
+  memory: Memory;
+}

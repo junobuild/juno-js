@@ -52,6 +52,8 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [deleteAssetStore](#gear-deleteassetstore)
 - [deleteAssetsStore](#gear-deleteassetsstore)
 - [deleteFilteredAssetsStore](#gear-deletefilteredassetsstore)
+- [getAssetStore](#gear-getassetstore)
+- [listAssetsStore](#gear-listassetsstore)
 - [call](#gear-call)
 - [id](#gear-id)
 
@@ -414,7 +416,7 @@ Parameters:
 
 - `params`: - The parameters required to count assets in the collection.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L28)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L33)
 
 #### :gear: countAssetsStore
 
@@ -428,7 +430,7 @@ Parameters:
 
 - `params`: - The parameters required to perform the filtered count.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L46)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L51)
 
 #### :gear: setAssetHandler
 
@@ -442,7 +444,7 @@ Parameters:
 
 - `params`: - The parameters required to set or update an asset.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L64)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L69)
 
 #### :gear: deleteAssetStore
 
@@ -456,7 +458,7 @@ Parameters:
 
 - `params`: - The parameters required to delete the asset.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L82)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L87)
 
 #### :gear: deleteAssetsStore
 
@@ -470,7 +472,7 @@ Parameters:
 
 - `params`: - The parameters required to delete assets in the collection.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L100)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L105)
 
 #### :gear: deleteFilteredAssetsStore
 
@@ -484,7 +486,35 @@ Parameters:
 
 - `params`: - The parameters required to perform the filtered deletion.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L118)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L123)
+
+#### :gear: getAssetStore
+
+Retrieve an asset from the storage.
+
+| Function        | Type                                           |
+| --------------- | ---------------------------------------------- |
+| `getAssetStore` | `(params: GetAssetStoreParams) => OptionAsset` |
+
+Parameters:
+
+- `params`: - The parameters required to get the asset.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L145)
+
+#### :gear: listAssetsStore
+
+Lists assets (without content) from the storage using optional filtering, pagination, and ordering parameters.
+
+| Function          | Type                                                       |
+| ----------------- | ---------------------------------------------------------- |
+| `listAssetsStore` | `(params: ListStoreParams) => ListResults<AssetNoContent>` |
+
+Parameters:
+
+- `params`: - The parameters required to perform the list operation.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L165)
 
 #### :gear: call
 
@@ -550,6 +580,7 @@ the Principal of the executing canister.
 - [BlobSchema](#gear-blobschema)
 - [AssetKeySchema](#gear-assetkeyschema)
 - [AssetSchema](#gear-assetschema)
+- [AssetNoContentSchema](#gear-assetnocontentschema)
 - [BatchSchema](#gear-batchschema)
 - [CommitBatchSchema](#gear-commitbatchschema)
 - [FullPathSchema](#gear-fullpathschema)
@@ -605,6 +636,7 @@ the Principal of the executing canister.
 - [DeleteAssetsStoreParamsSchema](#gear-deleteassetsstoreparamsschema)
 - [DeleteFilteredAssetsStoreParamsSchema](#gear-deletefilteredassetsstoreparamsschema)
 - [DeleteAssetStoreParamsSchema](#gear-deleteassetstoreparamsschema)
+- [ListAssetsStoreParamsSchema](#gear-listassetsstoreparamsschema)
 - [IDLTypeSchema](#gear-idltypeschema)
 - [CallArgSchema](#gear-callargschema)
 - [CallArgsSchema](#gear-callargsschema)
@@ -859,7 +891,15 @@ A schema that validates a value is an Uint8Array.
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssetSchema` | `ZodObject<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; description: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>; ... 4 more ...; version: ZodOptional<...>; }...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L156)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L166)
+
+#### :gear: AssetNoContentSchema
+
+| Constant               | Type                                                                                                                                                                                                                                                                                                                               |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AssetNoContentSchema` | `ZodObject<extendShape<Omit<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; description: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>; ... 4 more ...; version: Zo...` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L215)
 
 #### :gear: BatchSchema
 
@@ -867,7 +907,7 @@ A schema that validates a value is an Uint8Array.
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `BatchSchema` | `ZodObject<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; description: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>; reference_id: ZodOptional<...>; expires_at: ...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L225)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L251)
 
 #### :gear: CommitBatchSchema
 
@@ -875,7 +915,7 @@ A schema that validates a value is an Uint8Array.
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `CommitBatchSchema` | `ZodObject<{ batch_id: ZodBigInt; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>, "many">; chunk_ids: ZodArray<ZodBigInt, "many">; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L282)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L308)
 
 #### :gear: FullPathSchema
 
@@ -883,7 +923,7 @@ A schema that validates a value is an Uint8Array.
 | ---------------- | ----------- |
 | `FullPathSchema` | `ZodString` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L313)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L339)
 
 #### :gear: OptionAssetSchema
 
@@ -891,7 +931,7 @@ A schema that validates a value is an Uint8Array.
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OptionAssetSchema` | `ZodOptional<ZodObject<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; description: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>; ... 4 more ...; version: ZodOpti...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L326)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L352)
 
 #### :gear: AssetAssertUploadSchema
 
@@ -1301,6 +1341,14 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L117)
 
+#### :gear: ListAssetsStoreParamsSchema
+
+| Constant                      | Type                                                                                                                                                                                                                                         |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListAssetsStoreParamsSchema` | `ZodObject<extendShape<{ collection: ZodString; }, { caller: ZodUnion<[ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, ZodType<...>]>; params: ZodObject<...>; }>, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L127)
+
 #### :gear: IDLTypeSchema
 
 | Constant        | Type                                                |
@@ -1668,6 +1716,8 @@ Type representing the parameters required to make a canister call.
 - [Blob](#gear-blob)
 - [BlobOrKey](#gear-bloborkey)
 - [Hash](#gear-hash)
+- [AssetEncodingNoContent](#gear-assetencodingnocontent)
+- [AssetNoContent](#gear-assetnocontent)
 - [EncodingType](#gear-encodingtype)
 - [ReferenceId](#gear-referenceid)
 - [ChunkId](#gear-chunkid)
@@ -1722,6 +1772,7 @@ Type representing the parameters required to make a canister call.
 - [DeleteAssetsStoreParams](#gear-deleteassetsstoreparams)
 - [DeleteFilteredAssetsStoreParams](#gear-deletefilteredassetsstoreparams)
 - [DeleteAssetStoreParams](#gear-deleteassetstoreparams)
+- [ListAssetsStoreParams](#gear-listassetsstoreparams)
 - [IDLType](#gear-idltype)
 - [CallArg](#gear-callarg)
 - [CallArgs](#gear-callargs)
@@ -2028,6 +2079,26 @@ Represents a SHA-256 hash as a 32-byte binary value.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L66)
 
+#### :gear: AssetEncodingNoContent
+
+Represents a specific encoding of an asset, such as "gzip" or "identity" (no compression), without the chunks.
+
+| Type                     | Type                                    |
+| ------------------------ | --------------------------------------- |
+| `AssetEncodingNoContent` | `Omit<AssetEncoding, 'content_chunks'>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L161)
+
+#### :gear: AssetNoContent
+
+A stored asset including its metadata, encodings without chunks, and timestamps.
+
+| Type             | Type                                                                                  |
+| ---------------- | ------------------------------------------------------------------------------------- |
+| `AssetNoContent` | `Omit<Asset, 'encodings'> and { encodings: Record<string, AssetEncodingNoContent>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L224)
+
 #### :gear: EncodingType
 
 A string identifier representing a specific encoding format (e.g., "gzip", "identity").
@@ -2036,7 +2107,7 @@ A string identifier representing a specific encoding format (e.g., "gzip", "iden
 | -------------- | ---- |
 | `EncodingType` |      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L210)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L236)
 
 #### :gear: ReferenceId
 
@@ -2046,7 +2117,7 @@ A unique reference identifier for batches.
 | ------------- | ---- |
 | `ReferenceId` |      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L220)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L246)
 
 #### :gear: ChunkId
 
@@ -2056,7 +2127,7 @@ A unique identifier representing a single chunk of data.
 | --------- | ---- |
 | `ChunkId` |      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L267)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L293)
 
 #### :gear: BatchId
 
@@ -2066,7 +2137,7 @@ A unique identifier representing a batch of upload.
 | --------- | ---- |
 | `BatchId` |      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L277)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L303)
 
 #### :gear: FullPath
 
@@ -2079,7 +2150,7 @@ Example: `/images/a-sun-above-the-mountains.png`
 | ---------- | ---- |
 | `FullPath` |      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L321)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L347)
 
 #### :gear: OptionAsset
 
@@ -2089,7 +2160,7 @@ A shorthand for an asset that might or not be defined.
 | ------------- | -------------------- |
 | `OptionAsset` | `Asset or undefined` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L331)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L357)
 
 #### :gear: OnUploadAssetContext
 
@@ -2582,6 +2653,16 @@ Represents the parameters required to delete an asset.
 | `DeleteAssetStoreParams` | `GetAssetStoreParams` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L122)
+
+#### :gear: ListAssetsStoreParams
+
+The parameters required to list documents from the datastore.
+
+| Type                    | Type              |
+| ----------------------- | ----------------- |
+| `ListAssetsStoreParams` | `ListStoreParams` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L132)
 
 #### :gear: IDLType
 

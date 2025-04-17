@@ -96,6 +96,7 @@ declare global {
   ): ListResults<AssetNoContent>;
 
   function __ic_cdk_id(): RawPrincipal;
+  function __ic_cdk_time(): bigint;
   function __ic_cdk_print(msg: string): void;
   function __ic_cdk_call_raw(
     canisterId: RawPrincipal,

@@ -1,7 +1,6 @@
 import type {ListResults} from '../schemas/list';
 import type {AssetNoContent, Blob, OptionAsset} from '../schemas/storage';
 import {
-  type GetContentChunksStoreParams,
   type CountAssetsStoreParams,
   CountAssetsStoreParamsSchema,
   type CountCollectionAssetsStoreParams,
@@ -14,6 +13,7 @@ import {
   DeleteFilteredAssetsStoreParamsSchema,
   type GetAssetStoreParams,
   GetAssetStoreParamsSchema,
+  type GetContentChunksStoreParams,
   GetContentChunksStoreParamsSchema,
   type ListAssetsStoreParams,
   ListAssetsStoreParamsSchema,

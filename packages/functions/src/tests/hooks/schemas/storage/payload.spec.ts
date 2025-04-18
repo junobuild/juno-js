@@ -12,14 +12,17 @@ describe('payload', () => {
         description: 'Asset description'
       },
       headers: [['Content-Type', 'image/png']],
-      encodings: {
-        identity: {
-          modified: 1700000000000000n,
-          content_chunks: [new Uint8Array([1, 2, 3])],
-          total_length: 3n,
-          sha256: new Uint8Array(32)
-        }
-      },
+      encodings: [
+        [
+          'identity',
+          {
+            modified: 1700000000000000n,
+            content_chunks: [new Uint8Array([1, 2, 3])],
+            total_length: 3n,
+            sha256: new Uint8Array(32)
+          }
+        ]
+      ],
       created_at: 1700000000000000n,
       updated_at: 1700000000000001n
     };

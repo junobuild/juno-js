@@ -594,6 +594,7 @@ the system time publicly exposed and verified part of the IC state tree
 - [HeaderFieldsSchema](#gear-headerfieldsschema)
 - [BlobSchema](#gear-blobschema)
 - [AssetKeySchema](#gear-assetkeyschema)
+- [AssetEncodingSchema](#gear-assetencodingschema)
 - [AssetSchema](#gear-assetschema)
 - [AssetNoContentSchema](#gear-assetnocontentschema)
 - [BatchSchema](#gear-batchschema)
@@ -900,13 +901,21 @@ A schema that validates a value is an Uint8Array.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L71)
 
+#### :gear: AssetEncodingSchema
+
+| Constant              | Type                                                                                                                                                                                                                                              |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AssetEncodingSchema` | `ZodObject<{ modified: ZodBigInt; content_chunks: ZodArray<ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<ArrayBufferLike>>, "many">; total_length: ZodBigInt; sha256: ZodEffects<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L121)
+
 #### :gear: AssetSchema
 
 | Constant      | Type                                                                                                                                                                                                                                                                                                                               |
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssetSchema` | `ZodObject<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; description: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>; ... 4 more ...; version: ZodOptional<...>; }...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L166)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L176)
 
 #### :gear: AssetNoContentSchema
 
@@ -914,7 +923,7 @@ A schema that validates a value is an Uint8Array.
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssetNoContentSchema` | `ZodObject<extendShape<Omit<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodType<Uint8Array<ArrayBufferLike>, ZodTypeDef, Uint8Array<...>>; description: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>; ... 4 more ...; version: Zo...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L215)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L225)
 
 #### :gear: BatchSchema
 
@@ -1561,25 +1570,25 @@ Represents a specific encoding of an asset, such as "gzip" or "identity" (no com
 
 A stored asset including its metadata, encodings, and timestamps.
 
-| Property     | Type                            | Description                                                                                    |
-| ------------ | ------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `key`        | `AssetKey`                      | Metadata about the asset's identity and ownership.                                             |
-| `headers`    | `HeaderField[]`                 | Optional HTTP headers associated with the asset.                                               |
-| `encodings`  | `Record<string, AssetEncoding>` | A mapping from encoding types (e.g., "identity", "gzip") to the corresponding encoded version. |
-| `created_at` | `bigint`                        | Timestamp when the asset was created.                                                          |
-| `updated_at` | `bigint`                        | Timestamp when the asset was last updated.                                                     |
-| `version`    | `bigint or undefined`           | Optional version number of the asset.                                                          |
+| Property     | Type                              | Description                                                                                    |
+| ------------ | --------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `key`        | `AssetKey`                        | Metadata about the asset's identity and ownership.                                             |
+| `headers`    | `HeaderField[]`                   | Optional HTTP headers associated with the asset.                                               |
+| `encodings`  | `[EncodingType, AssetEncoding][]` | A mapping from encoding types (e.g., "identity", "gzip") to the corresponding encoded version. |
+| `created_at` | `bigint`                          | Timestamp when the asset was created.                                                          |
+| `updated_at` | `bigint`                          | Timestamp when the asset was last updated.                                                     |
+| `version`    | `bigint or undefined`             | Optional version number of the asset.                                                          |
 
 #### :gear: Batch
 
 Represents a batch of chunks to be uploaded and committed to an asset.
 
-| Property        | Type                  | Description                                       |
-| --------------- | --------------------- | ------------------------------------------------- |
-| `key`           | `AssetKey`            | The metadata key for the asset being uploaded.    |
-| `reference_id`  | `bigint or undefined` | Optional reference ID for tracking or validation. |
-| `expires_at`    | `bigint`              | Timestamp when this batch expires.                |
-| `encoding_type` | `string or undefined` | Optional encoding format (e.g., "gzip").          |
+| Property        | Type                        | Description                                       |
+| --------------- | --------------------------- | ------------------------------------------------- |
+| `key`           | `AssetKey`                  | The metadata key for the asset being uploaded.    |
+| `reference_id`  | `bigint or undefined`       | Optional reference ID for tracking or validation. |
+| `expires_at`    | `bigint`                    | Timestamp when this batch expires.                |
+| `encoding_type` | `EncodingType or undefined` | Optional encoding format (e.g., "gzip").          |
 
 #### :gear: CommitBatch
 
@@ -1732,8 +1741,8 @@ Type representing the parameters required to make a canister call.
 - [BlobOrKey](#gear-bloborkey)
 - [Hash](#gear-hash)
 - [AssetEncodingNoContent](#gear-assetencodingnocontent)
-- [AssetNoContent](#gear-assetnocontent)
 - [EncodingType](#gear-encodingtype)
+- [AssetNoContent](#gear-assetnocontent)
 - [ReferenceId](#gear-referenceid)
 - [ChunkId](#gear-chunkid)
 - [BatchId](#gear-batchid)
@@ -2104,25 +2113,25 @@ Represents a specific encoding of an asset, such as "gzip" or "identity" (no com
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L161)
 
-#### :gear: AssetNoContent
-
-A stored asset including its metadata, encodings without chunks, and timestamps.
-
-| Type             | Type                                                                                  |
-| ---------------- | ------------------------------------------------------------------------------------- |
-| `AssetNoContent` | `Omit<Asset, 'encodings'> and { encodings: Record<string, AssetEncodingNoContent>; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L224)
-
 #### :gear: EncodingType
 
 A string identifier representing a specific encoding format (e.g., "gzip", "identity").
 
-| Type           | Type |
-| -------------- | ---- |
-| `EncodingType` |      |
+| Type           | Type                                                      |
+| -------------- | --------------------------------------------------------- |
+| `EncodingType` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L236)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L171)
+
+#### :gear: AssetNoContent
+
+A stored asset including its metadata, encodings without chunks, and timestamps.
+
+| Type             | Type                                                                                    |
+| ---------------- | --------------------------------------------------------------------------------------- |
+| `AssetNoContent` | `Omit<Asset, 'encodings'> and { encodings: [EncodingType, AssetEncodingNoContent][]; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L234)
 
 #### :gear: ReferenceId
 

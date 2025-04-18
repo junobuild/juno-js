@@ -7,6 +7,7 @@ import {
   DeleteAssetStoreParamsSchema,
   DeleteFilteredAssetsStoreParamsSchema,
   GetAssetStoreParamsSchema,
+  GetContentChunksStoreParamsSchema,
   SetAssetHandlerParams,
   SetAssetHandlerParamsSchema
 } from '../../../sdk/schemas/storage';
@@ -181,6 +182,66 @@ describe('sdk > storage', () => {
     it('should throw if collection is missing', () => {
       const {collection, ...rest} = valid as any;
       expect(() => DeleteAssetStoreParamsSchema.parse(rest)).toThrow();
+    });
+  });
+
+  describe('GetContentChunksStoreParamsSchema', () => {
+    const validParams = {
+      encoding: {
+        modified: 1700000000000n,
+        content_chunks: [new Uint8Array([1, 2, 3])],
+        total_length: 123456n,
+        sha256: new Uint8Array(32) // valid 32-byte hash
+      },
+      chunk_index: 0n,
+      memory: 'heap'
+    };
+
+    it('should pass with valid data', () => {
+      const result = GetContentChunksStoreParamsSchema.parse(validParams);
+      expect(result).toEqual(validParams);
+    });
+
+    it('should fail with invalid sha256 length', () => {
+      const invalid = {
+        ...validParams,
+        encoding: {
+          ...validParams.encoding,
+          sha256: new Uint8Array(31) // too short
+        }
+      };
+
+      expect(() => GetContentChunksStoreParamsSchema.parse(invalid)).toThrow();
+    });
+
+    it('should fail if chunk_index is not a bigint', () => {
+      const invalid = {
+        ...validParams,
+        chunk_index: 1 // number instead of bigint
+      };
+
+      expect(() => GetContentChunksStoreParamsSchema.parse(invalid)).toThrow();
+    });
+
+    it('should fail if memory is not "heap" or "stable"', () => {
+      const invalid = {
+        ...validParams,
+        memory: 'foo' // invalid memory option
+      };
+
+      expect(() => GetContentChunksStoreParamsSchema.parse(invalid)).toThrow();
+    });
+
+    it('should fail if content_chunks is not an array of Uint8Array', () => {
+      const invalid = {
+        ...validParams,
+        encoding: {
+          ...validParams.encoding,
+          content_chunks: ['not-a-bytes-array']
+        }
+      };
+
+      expect(() => GetContentChunksStoreParamsSchema.parse(invalid)).toThrow();
     });
   });
 });

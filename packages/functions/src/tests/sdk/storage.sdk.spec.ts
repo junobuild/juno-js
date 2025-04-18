@@ -7,6 +7,7 @@ import {
   DeleteAssetStoreParams,
   DeleteFilteredAssetsStoreParams,
   GetAssetStoreParams,
+  GetContentChunksStoreParams,
   ListAssetsStoreParams,
   SetAssetHandlerParams
 } from '../../sdk/schemas/storage';
@@ -17,6 +18,7 @@ import {
   deleteAssetStore,
   deleteFilteredAssetsStore,
   getAssetStore,
+  getContentChunksStore,
   listAssetsStore,
   setAssetHandler
 } from '../../sdk/storage.sdk';
@@ -105,6 +107,13 @@ vi.stubGlobal(
 vi.stubGlobal(
   '__juno_satellite_storage_list_assets_store',
   vi.fn(() => mockListAssets)
+);
+
+const mockChunk = new Uint8Array([1, 2, 3, 4]);
+
+vi.stubGlobal(
+  '__juno_satellite_storage_get_content_chunks_store',
+  vi.fn(() => mockChunk)
 );
 
 describe('storage.sdk', () => {
@@ -473,6 +482,65 @@ describe('storage.sdk', () => {
       });
 
       expect(() => listAssetsStore(paramsWithUint8Array)).toThrow('list failed');
+    });
+  });
+
+  describe('getContentChunksStore', () => {
+    const encoding = {
+      modified: 1710000000000n,
+      content_chunks: [new Uint8Array([0])],
+      total_length: 4n,
+      sha256: new Uint8Array(32)
+    };
+
+    const validParams: GetContentChunksStoreParams = {
+      encoding,
+      chunk_index: 0n,
+      memory: 'heap'
+    };
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('should call __juno_satellite_storage_get_content_chunks_store with correct params', () => {
+      const result = getContentChunksStore(validParams);
+
+      expect(global.__juno_satellite_storage_get_content_chunks_store).toHaveBeenCalledWith(
+        encoding,
+        0n,
+        'heap'
+      );
+      expect(result).toEqual(mockChunk);
+    });
+
+    it('should return undefined if global call returns undefined', () => {
+      vi.mocked(global.__juno_satellite_storage_get_content_chunks_store).mockReturnValueOnce(
+        undefined
+      );
+
+      const result = getContentChunksStore(validParams);
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw ZodError for invalid schema', () => {
+      const invalidParams = {
+        encoding: {},
+        chunk_index: 'not-a-bigint',
+        memory: 'invalid'
+      } as unknown as GetContentChunksStoreParams;
+
+      expect(() => getContentChunksStore(invalidParams)).toThrow(ZodError);
+    });
+
+    it('should throw if global call throws', () => {
+      vi.mocked(global.__juno_satellite_storage_get_content_chunks_store).mockImplementationOnce(
+        () => {
+          throw new Error('internal satellite failure');
+        }
+      );
+
+      expect(() => getContentChunksStore(validParams)).toThrow('internal satellite failure');
     });
   });
 });

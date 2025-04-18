@@ -118,7 +118,7 @@ export interface AssetKey {
 /**
  * @see AssetEncoding
  */
-const AssetEncodingSchema = z.object({
+export const AssetEncodingSchema = z.object({
   modified: TimestampSchema,
   content_chunks: z.array(BlobOrKeySchema),
   total_length: z.bigint(),
@@ -161,13 +161,23 @@ const AssetEncodingNoContentSchema = AssetEncodingSchema.omit({content_chunks: t
 export type AssetEncodingNoContent = Omit<AssetEncoding, 'content_chunks'>;
 
 /**
+ * @see EncodingType
+ */
+const EncodingTypeSchema = z.enum(['identity', 'gzip', 'compress', 'deflate', 'br']);
+
+/**
+ * A string identifier representing a specific encoding format (e.g., "gzip", "identity").
+ */
+export type EncodingType = 'identity' | 'gzip' | 'compress' | 'deflate' | 'br';
+
+/**
  * @see Asset
  */
 export const AssetSchema = z
   .object({
     key: AssetKeySchema,
     headers: HeaderFieldsSchema,
-    encodings: z.record(AssetEncodingSchema),
+    encodings: z.array(z.tuple([EncodingTypeSchema, AssetEncodingSchema])),
     created_at: TimestampSchema,
     updated_at: TimestampSchema,
     version: VersionSchema.optional()
@@ -191,7 +201,7 @@ export interface Asset {
   /**
    * A mapping from encoding types (e.g., "identity", "gzip") to the corresponding encoded version.
    */
-  encodings: Record<string, AssetEncoding>;
+  encodings: [EncodingType, AssetEncoding][];
 
   /**
    * Timestamp when the asset was created.
@@ -214,7 +224,7 @@ export interface Asset {
  */
 export const AssetNoContentSchema = AssetSchema.omit({encodings: true})
   .extend({
-    encodings: z.record(AssetEncodingNoContentSchema)
+    encodings: z.array(z.tuple([EncodingTypeSchema, AssetEncodingNoContentSchema]))
   })
   .strict();
 
@@ -222,18 +232,8 @@ export const AssetNoContentSchema = AssetSchema.omit({encodings: true})
  * A stored asset including its metadata, encodings without chunks, and timestamps.
  */
 export type AssetNoContent = Omit<Asset, 'encodings'> & {
-  encodings: Record<string, AssetEncodingNoContent>;
+  encodings: [EncodingType, AssetEncodingNoContent][];
 };
-
-/**
- * @see EncodingType
- */
-const EncodingTypeSchema = z.string();
-
-/**
- * A string identifier representing a specific encoding format (e.g., "gzip", "identity").
- */
-export type EncodingType = string;
 
 /**
  * @see ReferenceId

@@ -44,7 +44,7 @@ describe('hooks', () => {
       owner: new Uint8Array([1, 2, 3])
     },
     headers: [],
-    encodings: {},
+    encodings: [],
     created_at: 1700000000000000n,
     updated_at: 1700000000000001n
   };

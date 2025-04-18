@@ -1,8 +1,10 @@
 import {Principal} from '@dfinity/principal';
 import {ZodError} from 'zod';
 import {
+  type Asset,
   AssetEncodingSchema,
   AssetKeySchema,
+  type AssetNoContent,
   AssetNoContentSchema,
   AssetSchema,
   BatchSchema,
@@ -15,7 +17,7 @@ import {
 import {ListAssetsStoreParamsSchema} from '../../sdk/schemas/storage';
 
 describe('storage', () => {
-  const baseAsset = {
+  const baseAsset: Asset = {
     key: {
       name: 'logo.png',
       full_path: '/images/logo.png',
@@ -23,14 +25,17 @@ describe('storage', () => {
       owner: new Uint8Array([1, 2, 3])
     },
     headers: [['Content-Type', 'image/png']],
-    encodings: {
-      identity: {
-        modified: 1700000000000000n,
-        content_chunks: [new Uint8Array([4, 5, 6])],
-        total_length: 3n,
-        sha256: new Uint8Array(32)
-      }
-    },
+    encodings: [
+      [
+        'identity',
+        {
+          modified: 1700000000000000n,
+          content_chunks: [new Uint8Array([4, 5, 6])],
+          total_length: 3n,
+          sha256: new Uint8Array(32)
+        }
+      ]
+    ],
     created_at: 1700000000000000n,
     updated_at: 1700000000000001n
   };
@@ -42,7 +47,7 @@ describe('storage', () => {
 
     it('should reject an asset with invalid sha256 length', () => {
       const invalidAsset = structuredClone(baseAsset);
-      invalidAsset.encodings.identity.sha256 = new Uint8Array(16);
+      invalidAsset.encodings[0][1].sha256 = new Uint8Array(16);
       expect(() => AssetSchema.parse(invalidAsset)).toThrow();
     });
 
@@ -226,7 +231,7 @@ describe('storage', () => {
   });
 
   describe('AssetNoContentSchema', () => {
-    const validAsset = {
+    const validAsset: AssetNoContent = {
       key: {
         name: 'logo.png',
         full_path: '/images/logo.png',
@@ -234,13 +239,16 @@ describe('storage', () => {
         owner: new Uint8Array([1, 2, 3])
       },
       headers: [['Content-Type', 'image/png']],
-      encodings: {
-        identity: {
-          modified: 1700000000000000n,
-          total_length: 123n,
-          sha256: new Uint8Array(32)
-        }
-      },
+      encodings: [
+        [
+          'identity',
+          {
+            modified: 1700000000000000n,
+            total_length: 123n,
+            sha256: new Uint8Array(32)
+          }
+        ]
+      ],
       created_at: 1700000000000000n,
       updated_at: 1700000000000001n
     };
@@ -252,12 +260,15 @@ describe('storage', () => {
     it('should reject if encodings contain content_chunks', () => {
       const invalid = {
         ...validAsset,
-        encodings: {
-          identity: {
-            ...validAsset.encodings.identity,
-            content_chunks: [new Uint8Array([1, 2, 3])]
-          }
-        }
+        encodings: [
+          [
+            'identity',
+            {
+              ...validAsset.encodings[0][1],
+              content_chunks: [new Uint8Array([1, 2, 3])]
+            }
+          ]
+        ]
       };
       expect(() => AssetNoContentSchema.parse(invalid)).toThrow();
     });

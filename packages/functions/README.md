@@ -57,6 +57,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [getContentChunksStore](#gear-getcontentchunksstore)
 - [call](#gear-call)
 - [id](#gear-id)
+- [time](#gear-time)
 
 #### :gear: HookContextSchema
 
@@ -563,6 +564,20 @@ the Principal of the executing canister.
 | `id`     | `() => Principal` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/id.ic-cdk.ts#L12)
+
+#### :gear: time
+
+Gets current timestamp, in nanoseconds since the epoch (1970-01-01)
+
+This function is a JavaScript binding for the Rust function
+[`ic_cdk::time()`](https://docs.rs/ic-cdk/latest/ic_cdk/api/fn.time.html), which returns
+the system time publicly exposed and verified part of the IC state tree
+
+| Function | Type           |
+| -------- | -------------- |
+| `time`   | `() => bigint` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/time.ic-cdk.ts#L10)
 
 ### :wrench: Constants
 

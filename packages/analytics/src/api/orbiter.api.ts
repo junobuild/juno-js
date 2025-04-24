@@ -19,7 +19,7 @@ export class ApiError extends Error {
 }
 
 export class OrbiterApi {
-  #apiUrl: string;
+  readonly #apiUrl: string;
 
   constructor({container, satelliteId}: Environment) {
     const localActor = nonNullish(container) && container !== false;

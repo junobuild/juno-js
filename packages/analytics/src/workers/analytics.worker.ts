@@ -1,8 +1,7 @@
 import {Principal} from '@dfinity/principal';
-import {assertNonNullish, debounce, isNullish, nonNullish} from '@dfinity/utils';
+import {assertNonNullish, debounce, fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import {isbot} from 'isbot';
-import type {AnalyticKey, Result_1, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
-import {getOrbiterActor} from '../api/actor.api';
+import {OrbiterApi} from '../api/orbiter.api';
 import {
   delPageViews,
   delPerformanceMetrics,
@@ -11,6 +10,15 @@ import {
   getPerformanceMetrics,
   getTrackEvents
 } from '../services/idb.services';
+import type {
+  NavigationTypePayload,
+  PerformanceMetricNamePayload,
+  SetPageViewRequest,
+  SetPerformanceRequest,
+  SetTrackEventPayload,
+  SetTrackEventRequest
+} from '../types/api.payload';
+import type {ApiResponse} from '../types/api.response';
 import type {Environment, EnvironmentActor} from '../types/env';
 import type {IdbKey, IdbTrackEvent} from '../types/idb';
 import type {PostMessage, PostMessageInitEnvData} from '../types/post-message';
@@ -42,6 +50,7 @@ const SATELLITE_ID_UNDEFINED_MSG = 'Analytics worker not initialized. Did you se
 const ORBITER_ID_UNDEFINED_MSG = 'Analytics worker not initialized. Did you set `orbiterId`?';
 
 let env: Environment | undefined;
+let api: OrbiterApi | undefined;
 
 const init = (environment: PostMessageInitEnvData) => {
   const {orbiterId, satelliteId} = environment;
@@ -50,6 +59,8 @@ const init = (environment: PostMessageInitEnvData) => {
   assertNonNullish(satelliteId, SATELLITE_ID_UNDEFINED_MSG);
 
   env = environment;
+
+  api = new OrbiterApi(environment);
 };
 
 let timer: NodeJS.Timeout | undefined = undefined;
@@ -91,6 +102,10 @@ const syncPageViews = async () => {
     return;
   }
 
+  if (isApiNotInitialized(api)) {
+    return;
+  }
+
   // One batch at a time to avoid to process multiple times the same entries
   if (syncViewsInProgress) {
     return;
@@ -106,14 +121,20 @@ const syncPageViews = async () => {
   syncViewsInProgress = true;
 
   try {
-    const actor = await getOrbiterActor(env);
-
-    const results = await actor.set_page_views(
-      entries.map(([key, {collected_at, ...entry}]) => [
-        ids({key: key as IdbKey, collected_at}),
-        {...entry, ...satelliteId(env as EnvironmentActor)}
-      ])
+    const requests = entries.map<SetPageViewRequest>(
+      ([key, {collected_at, updated_at: _, referrer, version, user_agent, ...entry}]) => ({
+        key: {key: key as IdbKey, collected_at},
+        page_view: {
+          referrer: fromNullable(referrer),
+          version: fromNullable(version),
+          user_agent: fromNullable(user_agent),
+          ...entry,
+          ...satelliteId(env as EnvironmentActor)
+        }
+      })
     );
+
+    const results = await api.postPageViews({requests});
 
     await delPageViews(entries.map(([key, _]) => key));
 
@@ -134,6 +155,10 @@ const syncTrackEvents = async () => {
     return;
   }
 
+  if (isApiNotInitialized(api)) {
+    return;
+  }
+
   // One batch at a time to avoid to process multiple times the same entries
   if (syncEventsInProgress) {
     return;
@@ -149,23 +174,27 @@ const syncTrackEvents = async () => {
   syncEventsInProgress = true;
 
   try {
-    const actor = await getOrbiterActor(env);
-
     const toTrackEvent = ({
       metadata,
+      updated_at: _,
+      version,
+      user_agent,
+
       ...rest
-    }: Omit<IdbTrackEvent, 'collected_at'>): SetTrackEvent => ({
-      metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
+    }: Omit<IdbTrackEvent, 'collected_at'>): SetTrackEventPayload => ({
+      metadata,
+      version: fromNullable(version),
+      user_agent: fromNullable(user_agent),
       ...rest,
       ...satelliteId(env as EnvironmentActor)
     });
 
-    const results = await actor.set_track_events(
-      entries.map(([key, {collected_at, ...entry}]) => [
-        ids({key: key as IdbKey, collected_at}),
-        toTrackEvent(entry)
-      ])
-    );
+    const requests = entries.map<SetTrackEventRequest>(([key, {collected_at, ...entry}]) => ({
+      key: {key: key as IdbKey, collected_at},
+      track_event: toTrackEvent(entry)
+    }));
+
+    const results = await api.postTrackEvents({requests});
 
     await delTrackEvents(entries.map(([key, _]) => key));
 
@@ -190,6 +219,10 @@ const syncPerformanceMetrics = async () => {
     return;
   }
 
+  if (isApiNotInitialized(api)) {
+    return;
+  }
+
   // One batch at a time to avoid to process multiple times the same entries
   if (syncMetricsInProgress) {
     return;
@@ -205,14 +238,42 @@ const syncPerformanceMetrics = async () => {
   syncMetricsInProgress = true;
 
   try {
-    const actor = await getOrbiterActor(env);
-
-    const results = await actor.set_performance_metrics(
-      entries.map(([key, {collected_at, ...entry}]) => [
-        ids({key: key as IdbKey, collected_at}),
-        {...entry, ...satelliteId(env as EnvironmentActor)}
-      ])
+    const requests = entries.map<SetPerformanceRequest>(
+      ([
+        key,
+        {
+          collected_at,
+          metric_name,
+          version,
+          user_agent,
+          data: {
+            WebVitalsMetric: {navigation_type, ...webVitalsMetric}
+          },
+          ...entry
+        }
+      ]) => ({
+        key: {key: key as IdbKey, collected_at},
+        performance_metric: {
+          version: fromNullable(version),
+          user_agent: fromNullable(user_agent),
+          metric_name: Object.keys(metric_name)[0] as PerformanceMetricNamePayload,
+          data: {
+            WebVitalsMetric: {
+              ...webVitalsMetric,
+              ...(nonNullish(fromNullable(navigation_type)) && {
+                navigation_type: Object.keys(
+                  fromNullable(navigation_type) ?? {}
+                )[0] as NavigationTypePayload
+              })
+            }
+          },
+          ...entry,
+          ...satelliteId(env as EnvironmentActor)
+        }
+      })
     );
+
+    const results = await api.postPerformanceMetrics({requests});
 
     await delPerformanceMetrics(entries.map(([key, _]) => key));
 
@@ -254,11 +315,6 @@ const trackPageEvent = () => {
 
 // Utilities
 
-const ids = ({key, collected_at}: {key: IdbKey; collected_at: bigint}): AnalyticKey => ({
-  collected_at,
-  key
-});
-
 const satelliteId = (env: EnvironmentActor): {satellite_id: Principal} => ({
   satellite_id: Principal.fromText(env.satelliteId)
 });
@@ -279,10 +335,17 @@ const isEnvInitialized = (
 ): env is NonNullable<EnvironmentActor> =>
   env !== undefined && env !== null && nonNullish(env.orbiterId) && nonNullish(env.satelliteId);
 
-const consoleWarn = (results: Result_1) => {
-  if ('Ok' in results) {
+ 
+const isApiNotInitialized = (api: OrbiterApi | undefined): api is undefined => isNullish(api);
+
+const consoleWarn = (results: ApiResponse<null>) => {
+  if ('ok' in results) {
     return;
   }
 
-  results.Err.forEach(([key, error]) => console.warn(`${error} [Key: ${key.key}]`));
+  const {
+    err: {code, message}
+  } = results;
+
+  console.warn(`[Code: ${code}] ${message}`);
 };

@@ -40,4 +40,10 @@ export interface OrbiterIds {
   ids: Record<JunoConfigMode, string>;
 }
 
-export type OrbiterConfig = Either<OrbiterId, OrbiterIds>;
+/**
+ * Represents the configuration for an orbiter (analytics).
+ *
+ * @typedef {Either<OrbiterId, OrbiterIds>} OrbiterConfig
+ * @property {OrbiterId | OrbiterIds} OrbiterId or SateOrbiterIdslliteIds - Defines a unique Orbiter or a collection of Orbiters.
+ */
+export type OrbiterConfig = Either<OrbiterId, OrbiterId>;

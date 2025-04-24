@@ -1,7 +1,7 @@
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish, debounce, fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import {isbot} from 'isbot';
-import {OrbiterApi} from '../api/orbiter.api';
+import {ApiError, OrbiterApi} from '../api/orbiter.api';
 import {
   delPageViews,
   delPerformanceMetrics,
@@ -18,7 +18,6 @@ import type {
   SetTrackEventPayload,
   SetTrackEventRequest
 } from '../types/api.payload';
-import type {ApiResponse} from '../types/api.response';
 import type {Environment, EnvironmentActor} from '../types/env';
 import type {IdbKey, IdbTrackEvent} from '../types/idb';
 import type {PostMessage, PostMessageInitEnvData} from '../types/post-message';
@@ -134,15 +133,11 @@ const syncPageViews = async () => {
       })
     );
 
-    const results = await api.postPageViews({requests});
+    await api.postPageViews({requests});
 
     await delPageViews(entries.map(([key, _]) => key));
-
-    consoleWarn(results);
   } catch (err: unknown) {
-    // The canister does not trap so, if we land here there was a network issue or so.
-    // So we keep the entries to try to transmit those next time.
-    console.error(err);
+    onError(err);
   }
 
   syncViewsInProgress = false;
@@ -194,15 +189,11 @@ const syncTrackEvents = async () => {
       track_event: toTrackEvent(entry)
     }));
 
-    const results = await api.postTrackEvents({requests});
+    await api.postTrackEvents({requests});
 
     await delTrackEvents(entries.map(([key, _]) => key));
-
-    consoleWarn(results);
   } catch (err: unknown) {
-    // The canister does not trap so, if we land here there was a network issue or so.
-    // So we keep the entries to try to transmit those next time.
-    console.error(err);
+    onError(err);
   }
 
   syncEventsInProgress = false;
@@ -273,15 +264,11 @@ const syncPerformanceMetrics = async () => {
       })
     );
 
-    const results = await api.postPerformanceMetrics({requests});
+    await api.postPerformanceMetrics({requests});
 
     await delPerformanceMetrics(entries.map(([key, _]) => key));
-
-    consoleWarn(results);
   } catch (err: unknown) {
-    // The canister does not trap so, if we land here there was a network issue or so.
-    // So we keep the entries to try to transmit those next time.
-    console.error(err);
+    onError(err);
   }
 
   syncMetricsInProgress = false;
@@ -337,14 +324,13 @@ const isEnvInitialized = (
 
 const isApiNotInitialized = (api: OrbiterApi | undefined): api is undefined => isNullish(api);
 
-const consoleWarn = (results: ApiResponse<null>) => {
-  if ('ok' in results) {
+const onError = (err: unknown) => {
+  if (err instanceof ApiError) {
+    console.warn(err.message);
     return;
   }
 
-  const {
-    err: {code, message}
-  } = results;
-
-  console.warn(`[Code: ${code}] ${message}`);
+  // The canister does not trap so, if we land here there was a network issue or so.
+  // So we keep the entries to try to transmit those next time.
+  console.error(err);
 };

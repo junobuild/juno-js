@@ -5,12 +5,18 @@ import type {
   SetPerformanceRequest,
   SetTrackEventRequest
 } from '../types/api.payload';
-import type {ApiResponse} from '../types/api.response';
 import type {Environment} from '../types/env';
 
 type ApiPath = '/views' | '/events' | '/metrics';
 
-export class ApiError extends Error {}
+export class ApiError extends Error {
+  constructor(
+    private readonly status: number,
+    private readonly statusText: string
+  ) {
+    super(`[${status}] Orbiter Error: ${statusText}`);
+  }
+}
 
 export class OrbiterApi {
   #apiUrl: string;
@@ -33,7 +39,7 @@ export class OrbiterApi {
     requests: payload
   }: {
     requests: SetPageViewRequest[];
-  }): Promise<ApiResponse<null>> =>
+  }): Promise<null> =>
     await this.post<SetPageViewRequest[], null>({
       path: '/views',
       payload
@@ -43,7 +49,7 @@ export class OrbiterApi {
     requests: payload
   }: {
     requests: SetTrackEventRequest[];
-  }): Promise<ApiResponse<null>> =>
+  }): Promise<null> =>
     await this.post<SetTrackEventRequest[], null>({
       path: '/events',
       payload
@@ -53,13 +59,13 @@ export class OrbiterApi {
     requests: payload
   }: {
     requests: SetPerformanceRequest[];
-  }): Promise<ApiResponse<null>> =>
+  }): Promise<null> =>
     await this.post<SetPerformanceRequest[], null>({
       path: '/metrics',
       payload
     });
 
-  post = async <T, R>({path, payload}: {path: ApiPath; payload: T}): Promise<ApiResponse<R>> => {
+  post = async <T, R>({path, payload}: {path: ApiPath; payload: T}): Promise<R> => {
     const response = await fetch(`${this.#apiUrl}${path}`, {
       method: 'POST',
       headers: {
@@ -69,8 +75,7 @@ export class OrbiterApi {
     });
 
     if (!response.ok) {
-      const text = await response.text();
-      throw new ApiError(text);
+      throw new ApiError(response.status, response.statusText);
     }
 
     return await response.json();

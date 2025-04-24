@@ -252,10 +252,10 @@ changes, typically through CLI commands (e.g., `juno config`).
 
 Represents the overall configuration for Juno.
 
-| Property    | Type                         | Description                                                           |
-| ----------- | ---------------------------- | --------------------------------------------------------------------- |
-| `satellite` | `SatelliteConfig`            | The configuration for the satellite. type: {SatelliteConfig}          |
-| `orbiter`   | `OrbiterConfig or undefined` | The optional configuration for the orbiter. type: {OrbiterId}optional |
+| Property    | Type              | Description                                                           |
+| ----------- | ----------------- | --------------------------------------------------------------------- |
+| `satellite` | `SatelliteConfig` | The configuration for the satellite. type: {SatelliteConfig}          |
+| `orbiter`   | `undefined`       | The optional configuration for the orbiter. type: {OrbiterId}optional |
 
 #### :gear: SatelliteDevCollections
 
@@ -317,11 +317,11 @@ Represents the development configuration for Juno.
 
 #### :gear: OrbiterConfig
 
-| Type            | Type                            |
-| --------------- | ------------------------------- |
-| `OrbiterConfig` | `Either<OrbiterId, OrbiterIds>` |
+| Type            | Type                           |
+| --------------- | ------------------------------ |
+| `OrbiterConfig` | `Either<OrbiterId, OrbiterId>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L43)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L49)
 
 #### :gear: ModuleLogVisibility
 

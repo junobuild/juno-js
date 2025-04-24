@@ -1,5 +1,5 @@
 import {jsonReplacer, nonNullish} from '@dfinity/utils';
-import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
+import {DOCKER_CONTAINER_WEB_URL} from '../constants/container.constants';
 import type {
   SetPageViewRequest,
   SetPerformanceRequest,
@@ -21,25 +21,17 @@ export class ApiError extends Error {
 export class OrbiterApi {
   readonly #apiUrl: string;
 
-  constructor({container, satelliteId}: Environment) {
+  constructor({container, orbiterId}: Environment) {
     const localActor = nonNullish(container) && container !== false;
 
-    const hostDomain = localActor
-      ? container === true
-        ? DOCKER_CONTAINER_URL
-        : container
-      : 'https://icp0.io';
+    const hostDomain = localActor ? DOCKER_CONTAINER_WEB_URL : 'https://icp0.io';
 
     const {protocol, host} = new URL(hostDomain);
 
-    this.#apiUrl = `${protocol}//${satelliteId}.${host}`;
+    this.#apiUrl = `${protocol}//${orbiterId}.${host}`;
   }
 
-  postPageViews = async ({
-    requests: payload
-  }: {
-    requests: SetPageViewRequest[];
-  }): Promise<null> =>
+  postPageViews = async ({requests: payload}: {requests: SetPageViewRequest[]}): Promise<null> =>
     await this.post<SetPageViewRequest[], null>({
       path: '/views',
       payload

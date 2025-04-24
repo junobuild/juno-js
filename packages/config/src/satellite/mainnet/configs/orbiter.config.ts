@@ -44,6 +44,6 @@ export interface OrbiterIds {
  * Represents the configuration for an orbiter (analytics).
  *
  * @typedef {Either<OrbiterId, OrbiterIds>} OrbiterConfig
- * @property {OrbiterId | OrbiterIds} OrbiterId or SateOrbiterIdslliteIds - Defines a unique Orbiter or a collection of Orbiters.
+ * @property {OrbiterId | OrbiterIds} OrbiterId or OrbiterIds - Defines a unique Orbiter or a collection of Orbiters.
  */
-export type OrbiterConfig = Either<OrbiterId, OrbiterId>;
+export type OrbiterConfig = Either<OrbiterId, OrbiterIds>;

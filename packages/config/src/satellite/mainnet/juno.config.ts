@@ -14,7 +14,7 @@ export interface JunoConfig {
 
   /**
    * The optional configuration for the orbiter.
-   * @type {OrbiterId}
+   * @type {OrbiterConfig}
    * @optional
    */
   orbiter?: OrbiterConfig;

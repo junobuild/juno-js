@@ -32,7 +32,7 @@ export class OrbiterApi {
 
     const {protocol, host} = new URL(hostDomain);
 
-    this.#apiUrl = `${protocol}://${satelliteId}.${host}`;
+    this.#apiUrl = `${protocol}//${satelliteId}.${host}`;
   }
 
   postPageViews = async ({

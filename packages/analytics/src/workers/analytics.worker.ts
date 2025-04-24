@@ -335,7 +335,6 @@ const isEnvInitialized = (
 ): env is NonNullable<EnvironmentActor> =>
   env !== undefined && env !== null && nonNullish(env.orbiterId) && nonNullish(env.satelliteId);
 
- 
 const isApiNotInitialized = (api: OrbiterApi | undefined): api is undefined => isNullish(api);
 
 const consoleWarn = (results: ApiResponse<null>) => {

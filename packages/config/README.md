@@ -252,10 +252,10 @@ changes, typically through CLI commands (e.g., `juno config`).
 
 Represents the overall configuration for Juno.
 
-| Property    | Type              | Description                                                           |
-| ----------- | ----------------- | --------------------------------------------------------------------- |
-| `satellite` | `SatelliteConfig` | The configuration for the satellite. type: {SatelliteConfig}          |
-| `orbiter`   | `undefined`       | The optional configuration for the orbiter. type: {OrbiterId}optional |
+| Property    | Type              | Description                                                               |
+| ----------- | ----------------- | ------------------------------------------------------------------------- |
+| `satellite` | `SatelliteConfig` | The configuration for the satellite. type: {SatelliteConfig}              |
+| `orbiter`   | `undefined`       | The optional configuration for the orbiter. type: {OrbiterConfig}optional |
 
 #### :gear: SatelliteDevCollections
 

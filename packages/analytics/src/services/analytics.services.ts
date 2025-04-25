@@ -1,11 +1,12 @@
-import {assertNonNullish, nonNullish} from '@dfinity/utils';
-import {isBrowser} from '@junobuild/utils';
 import {nanoid} from 'nanoid';
 import type {Environment, EnvironmentWorker} from '../types/env';
 import type {IdbPageView} from '../types/idb';
 import type {PostMessageInitEnvData} from '../types/post-message';
 import type {TrackEvent} from '../types/track';
 import {timestamp, userAgent} from '../utils/analytics.utils';
+import {assertNonNullish} from '../utils/dfinity/asserts.utils';
+import {nonNullish} from '../utils/dfinity/nullish.utils';
+import {isBrowser} from '../utils/env.utils';
 import {warningWorkerNotInitialized} from '../utils/log.utils';
 import {startPerformance} from './performance.services';
 

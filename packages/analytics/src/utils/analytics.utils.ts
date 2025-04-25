@@ -1,5 +1,5 @@
-import {nonNullish} from '@dfinity/utils';
 import {nowInBigIntNanoSeconds} from './date.utils';
+import {nonNullish} from './dfinity/nullish.utils';
 
 export const timestamp = (): {
   collected_at: bigint;

@@ -1,4 +1,3 @@
-import {nonNullish} from '@dfinity/utils';
 import {nanoid} from 'nanoid';
 import type {Metric} from 'web-vitals';
 import type {
@@ -8,6 +7,7 @@ import type {
 } from '../types/api.payload';
 import type {IdbPerformanceMetric} from '../types/idb';
 import {timestamp, userAgent} from '../utils/analytics.utils';
+import {nonNullish} from '../utils/dfinity/nullish.utils';
 
 type SessionMetric = Omit<Metric, 'navigationType'> &
   Partial<Pick<Metric, 'navigationType'>> & {sessionId: string};

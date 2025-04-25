@@ -1,4 +1,3 @@
-import {assertNonNullish} from '@dfinity/utils';
 import {
   initTrackPageViews,
   initTrackPerformance,
@@ -8,6 +7,7 @@ import {
   stopTracking
 } from './services/analytics.services';
 import type {Environment, UserEnvironment} from './types/env';
+import {assertNonNullish} from './utils/dfinity/asserts.utils';
 import {envContainer, envOrbiterId, envSatelliteId} from './utils/window.env.utils';
 
 export {trackEvent, trackPageView} from './services/analytics.services';

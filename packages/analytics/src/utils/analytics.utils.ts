@@ -1,17 +1,14 @@
-import {toNullable} from '@dfinity/utils';
+import {nonNullish} from '@dfinity/utils';
 import {nowInBigIntNanoSeconds} from './date.utils';
 
 export const timestamp = (): {
   collected_at: bigint;
-  updated_at: [] | [bigint];
-  version: [] | [bigint];
+  version?: bigint;
 } => ({
-  collected_at: nowInBigIntNanoSeconds(),
-  updated_at: [],
-  version: []
+  collected_at: nowInBigIntNanoSeconds()
 });
 
-export const userAgent = (): {user_agent: [] | [string]} => {
+export const userAgent = (): {user_agent?: string} => {
   const {userAgent} = navigator;
-  return {user_agent: toNullable(userAgent)};
+  return nonNullish(userAgent) ? {user_agent: userAgent} : {};
 };

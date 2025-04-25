@@ -1,4 +1,4 @@
-import {assertNonNullish, debounce, fromNullable, isNullish, nonNullish} from '@dfinity/utils';
+import {assertNonNullish, debounce, isNullish, nonNullish} from '@dfinity/utils';
 import {isbot} from 'isbot';
 import {ApiError, OrbiterApi} from '../api/orbiter.api';
 import {
@@ -10,19 +10,16 @@ import {
   getTrackEvents
 } from '../services/idb.services';
 import {
-  type NavigationTypePayload,
-  type PerformanceMetricNamePayload,
   type SatelliteIdText,
   type SetPageViewsRequest,
   type SetPageViewsRequestEntry,
   type SetPerformanceMetricRequestEntry,
   type SetPerformanceMetricsRequest,
-  type SetTrackEventPayload,
   type SetTrackEventRequestEntry,
   type SetTrackEventsRequest
 } from '../types/api.payload';
 import type {Environment, EnvironmentActor} from '../types/env';
-import type {IdbKey, IdbTrackEvent} from '../types/idb';
+import type {IdbKey} from '../types/idb';
 import type {PostMessage, PostMessageInitEnvData} from '../types/post-message';
 
 onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
@@ -125,17 +122,10 @@ const syncPageViews = async () => {
   try {
     const request: SetPageViewsRequest = {
       ...satelliteId(env as EnvironmentActor),
-      page_views: entries.map<SetPageViewsRequestEntry>(
-        ([key, {collected_at, updated_at: _, referrer, version, user_agent, ...entry}]) => ({
-          key: {key: key as IdbKey, collected_at},
-          page_view: {
-            referrer: fromNullable(referrer),
-            version: fromNullable(version),
-            user_agent: fromNullable(user_agent),
-            ...entry
-          }
-        })
-      )
+      page_views: entries.map<SetPageViewsRequestEntry>(([key, {collected_at, ...page_view}]) => ({
+        key: {key: key as IdbKey, collected_at},
+        page_view
+      }))
     };
 
     await api.postPageViews({request});
@@ -174,34 +164,14 @@ const syncTrackEvents = async () => {
   syncEventsInProgress = true;
 
   try {
-    const toTrackEvent = ({
-      metadata: idbMetadata,
-      updated_at: _,
-      version,
-      user_agent,
-      ...rest
-    }: Omit<IdbTrackEvent, 'collected_at'>): SetTrackEventPayload => {
-      const metadata = nonNullish(idbMetadata)
-        ? Object.entries(idbMetadata).reduce<Record<string, string>>(
-            (acc, [key, value]) => ({...acc, [`${key}`]: value}),
-            {}
-          )
-        : undefined;
-
-      return {
-        ...(nonNullish(metadata) && {metadata}),
-        version: fromNullable(version),
-        user_agent: fromNullable(user_agent),
-        ...rest
-      };
-    };
-
     const request: SetTrackEventsRequest = {
       ...satelliteId(env as EnvironmentActor),
-      track_events: entries.map<SetTrackEventRequestEntry>(([key, {collected_at, ...entry}]) => ({
-        key: {key: key as IdbKey, collected_at},
-        track_event: toTrackEvent(entry)
-      }))
+      track_events: entries.map<SetTrackEventRequestEntry>(
+        ([key, {collected_at, ...track_event}]) => ({
+          key: {key: key as IdbKey, collected_at},
+          track_event
+        })
+      )
     };
 
     await api.postTrackEvents({request});
@@ -247,36 +217,9 @@ const syncPerformanceMetrics = async () => {
     const request: SetPerformanceMetricsRequest = {
       ...satelliteId(env as EnvironmentActor),
       performance_metrics: entries.map<SetPerformanceMetricRequestEntry>(
-        ([
-          key,
-          {
-            collected_at,
-            metric_name,
-            version,
-            user_agent,
-            data: {
-              WebVitalsMetric: {navigation_type, ...webVitalsMetric}
-            },
-            ...entry
-          }
-        ]) => ({
+        ([key, {collected_at, ...performance_metric}]) => ({
           key: {key: key as IdbKey, collected_at},
-          performance_metric: {
-            version: fromNullable(version),
-            user_agent: fromNullable(user_agent),
-            metric_name: Object.keys(metric_name)[0] as PerformanceMetricNamePayload,
-            data: {
-              WebVitalsMetric: {
-                ...webVitalsMetric,
-                ...(nonNullish(fromNullable(navigation_type)) && {
-                  navigation_type: Object.keys(
-                    fromNullable(navigation_type) ?? {}
-                  )[0] as NavigationTypePayload
-                })
-              }
-            },
-            ...entry
-          }
+          performance_metric
         })
       )
     };

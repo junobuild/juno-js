@@ -1,11 +1,11 @@
-import {toNullable} from '@dfinity/utils';
+import {nonNullish} from '@dfinity/utils';
 import {nanoid} from 'nanoid';
 import type {Metric} from 'web-vitals';
 import type {
-  NavigationType,
-  PerformanceMetricName,
-  WebVitalsMetric
-} from '../../declarations/orbiter/orbiter.did';
+  NavigationTypePayload,
+  PerformanceMetricNamePayload,
+  WebVitalsMetricPayload
+} from '../types/api.payload';
 import type {IdbPerformanceMetric} from '../types/idb';
 import {timestamp, userAgent} from '../utils/analytics.utils';
 
@@ -55,18 +55,14 @@ const mapPerformanceMetric = ({
   id,
   navigationType
 }: SessionMetric): IdbPerformanceMetric | 'deprecated' | 'unknown' => {
-  const mapMetricName = (): PerformanceMetricName | 'deprecated' | 'unknown' => {
+  const mapMetricName = (): PerformanceMetricNamePayload | 'deprecated' | 'unknown' => {
     switch (metricName) {
       case 'CLS':
-        return {CLS: null};
       case 'FCP':
-        return {FCP: null};
       case 'INP':
-        return {INP: null};
       case 'LCP':
-        return {LCP: null};
       case 'TTFB':
-        return {TTFB: null};
+        return metricName;
       case 'FID':
         return 'deprecated';
       default:
@@ -80,37 +76,37 @@ const mapPerformanceMetric = ({
     return metric_name;
   }
 
-  const mapNavigationType = (): NavigationType | undefined => {
+  const mapNavigationType = (): NavigationTypePayload | undefined => {
     switch (navigationType) {
       case 'navigate':
-        return {Navigate: null};
+        return 'Navigate';
       case 'restore':
-        return {Restore: null};
+        return 'Restore';
       case 'reload':
-        return {Reload: null};
+        return 'Reload';
       case 'back-forward':
-        return {BackForward: null};
+        return 'BackForward';
       case 'back-forward-cache':
-        return {BackForwardCache: null};
+        return 'BackForwardCache';
       case 'prerender':
-        return {Prerender: null};
+        return 'Prerender';
       default:
         return undefined;
     }
   };
 
-  const data: WebVitalsMetric = {
+  const navigation_type = mapNavigationType();
+
+  const data: WebVitalsMetricPayload = {
     value,
     delta,
     id,
-    navigation_type: toNullable(mapNavigationType())
+    ...(nonNullish(navigation_type) && {navigation_type})
   };
 
   const {
     location: {href}
   } = document;
-
-  const {updated_at: _, ...timestampRest} = timestamp();
 
   const metric: IdbPerformanceMetric = {
     href,
@@ -120,7 +116,7 @@ const mapPerformanceMetric = ({
       WebVitalsMetric: data
     },
     ...userAgent(),
-    ...timestampRest
+    ...timestamp()
   };
 
   return metric;

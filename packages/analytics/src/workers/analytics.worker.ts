@@ -179,7 +179,6 @@ const syncTrackEvents = async () => {
       updated_at: _,
       version,
       user_agent,
-
       ...rest
     }: Omit<IdbTrackEvent, 'collected_at'>): SetTrackEventPayload => ({
       metadata,

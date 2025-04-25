@@ -13,6 +13,7 @@ const JSON_KEY_BIGINT = '__bigint__';
  * @param {unknown} value - The value to transform before stringification.
  * @returns {unknown} The transformed value if it matches a known type, otherwise the original value.
  */
+// eslint-disable-next-line local-rules/prefer-object-params
 export const jsonReplacer = (_key: string, value: unknown): unknown => {
   if (typeof value === 'bigint') {
     return {[JSON_KEY_BIGINT]: `${value}`};
@@ -33,6 +34,7 @@ export const jsonReplacer = (_key: string, value: unknown): unknown => {
  * @param {unknown} value - The parsed value to transform.
  * @returns {unknown} The reconstructed value if it matches a known type, otherwise the original value.
  */
+// eslint-disable-next-line local-rules/prefer-object-params
 export const jsonReviver = (_key: string, value: unknown): unknown => {
   const mapValue = <T>(key: string): T => (value as Record<string, T>)[key];
 

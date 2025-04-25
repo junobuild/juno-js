@@ -9,7 +9,7 @@
  * @param {number} [timeout=300] - The debounce delay in milliseconds. Defaults to 300ms if not provided or invalid.
  * @returns {(args: unknown[]) => void} A debounced version of the original function.
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line local-rules/prefer-object-params, @typescript-eslint/no-unsafe-function-type
 export const debounce = (func: Function, timeout?: number) => {
   let timer: NodeJS.Timer | undefined;
 

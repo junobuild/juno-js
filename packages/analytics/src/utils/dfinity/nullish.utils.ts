@@ -33,5 +33,4 @@ export const notEmptyString = (value: Option<string>): value is string =>
  * @param {string | undefined | null} value - The value to check.
  * @returns {value is undefined | null | ""} Type predicate indicating if the value is null, undefined, or an empty string.
  */
-export const isEmptyString = (value: Option<string>): value is Option<''> =>
-  !notEmptyString(value);
+export const isEmptyString = (value: Option<string>): value is Option<''> => !notEmptyString(value);

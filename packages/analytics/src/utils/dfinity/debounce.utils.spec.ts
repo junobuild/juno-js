@@ -1,19 +1,19 @@
 import {debounce} from './debounce.utils';
 
 describe('debounce-utils', () => {
-  let callback: jest.Mock;
+  let callback: ReturnType<typeof vi.fn>;
 
-  beforeAll(() => jest.spyOn(console, 'error').mockImplementation(() => undefined));
+  beforeAll(() => vi.spyOn(console, 'error').mockImplementation(() => undefined));
 
-  afterAll(() => jest.resetAllMocks());
+  afterAll(() => vi.resetAllMocks());
 
   beforeEach(() => {
-    jest.useFakeTimers();
-    jest.spyOn(global, 'setTimeout');
-    callback = jest.fn();
+    vi.useFakeTimers();
+    vi.spyOn(global, 'setTimeout');
+    callback = vi.fn();
   });
 
-  afterEach(() => jest.useRealTimers());
+  afterEach(() => vi.useRealTimers());
 
   it('should debounce function with timeout', () => {
     const testDebounce = debounce(callback, 100);
@@ -26,7 +26,7 @@ describe('debounce-utils', () => {
     expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 100);
     expect(callback).not.toBeCalled();
 
-    jest.runAllTimers();
+    vi.runAllTimers();
 
     expect(callback).toHaveBeenCalledTimes(1);
   });
@@ -36,21 +36,21 @@ describe('debounce-utils', () => {
 
     expect(callback).not.toBeCalled();
 
-    jest.runAllTimers();
+    vi.runAllTimers();
 
     expect(callback).toBeCalled();
     expect(callback).toHaveBeenCalledTimes(1);
   });
 
   it('should debounce multiple functions call', () => {
-    const anotherCallback = jest.fn();
+    const anotherCallback = vi.fn();
 
     const test = debounce(anotherCallback);
     test();
     test();
     test();
 
-    jest.runAllTimers();
+    vi.runAllTimers();
 
     expect(anotherCallback).toBeCalled();
     expect(anotherCallback).toHaveBeenCalledTimes(1);

@@ -1,5 +1,5 @@
 import {OrbiterApi} from '../api/orbiter.api';
-import {
+import type {
   SatelliteIdText,
   SetPageViewsRequest,
   SetPageViewsRequestEntry,

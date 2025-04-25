@@ -1,5 +1,5 @@
 import {nanoid} from 'nanoid';
-import {SetPageViewPayload, SetPerformanceMetricRequestEntry} from '../types/api.payload';
+import type {SetPageViewPayload, SetPerformanceMetricRequestEntry} from '../types/api.payload';
 import type {Environment} from '../types/env';
 import type {TrackEvent} from '../types/track';
 import {timestamp, userAgent} from '../utils/analytics.utils';

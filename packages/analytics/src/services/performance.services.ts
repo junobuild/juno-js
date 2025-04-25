@@ -1,11 +1,12 @@
 import {nanoid} from 'nanoid';
 import type {Metric} from 'web-vitals';
 import {
-  NavigationTypePayload,
-  PerformanceMetricNamePayload,
-  type SetPerformanceMetricPayload,
-  SetPerformanceMetricRequestEntry,
-  WebVitalsMetricPayload
+  type NavigationTypePayload,
+  type PerformanceMetricNamePayload,
+  type SetPerformanceMetricRequestEntry,
+  type WebVitalsMetricPayload
+,
+  type SetPerformanceMetricPayload
 } from '../types/api.payload';
 import {timestamp, userAgent} from '../utils/analytics.utils';
 import {nonNullish} from '../utils/dfinity/nullish.utils';

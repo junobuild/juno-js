@@ -10,12 +10,6 @@ const adminPromises = adminDeclarations.map((d) =>
 );
 await Promise.all(adminPromises);
 
-const analyticsDeclarations = ['orbiter'];
-const analyticsPromises = analyticsDeclarations.map((d) =>
-  cp(join(src, d), join('./packages/analytics/declarations/', d), {recursive: true})
-);
-await Promise.all(analyticsPromises);
-
 const coreDeclarations = ['satellite', 'deprecated', 'sputnik'];
 const corePromises = coreDeclarations.map((d) =>
   cp(join(src, d), join('./packages/core/declarations/', d), {recursive: true})

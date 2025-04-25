@@ -3,6 +3,11 @@ import {default as config} from '@dfinity/eslint-config-oisy-wallet';
 export default [
   ...config,
   {
+    rules: {
+      'local-rules/use-option-type-wrapper': ['off']
+    }
+  },
+  {
     ignores: [
       '**/dist/',
       '**/declarations/',

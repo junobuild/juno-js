@@ -16,9 +16,9 @@ import {
   type SetPageViewsRequest,
   type SetPageViewsRequestEntry,
   type SetPerformanceMetricRequestEntry,
+  type SetPerformanceMetricsRequest,
   type SetTrackEventPayload,
   type SetTrackEventRequestEntry,
-  type SetPerformanceMetricsRequest,
   type SetTrackEventsRequest
 } from '../types/api.payload';
 import type {Environment, EnvironmentActor} from '../types/env';

@@ -93,7 +93,7 @@ export const setPageView = async () => {
 
   warningOrbiterServicesNotInitialized(orbiterServices);
 
-  orbiterServices?.setPageView({
+  await orbiterServices?.setPageView({
     key: {
       key: nanoid(),
       ...timestamp()
@@ -146,7 +146,7 @@ export const trackEvent = async (data: TrackEvent): Promise<void> => {
 
   warningOrbiterServicesNotInitialized(orbiterServices);
 
-  orbiterServices?.setTrackEvent({
+  await orbiterServices?.setTrackEvent({
     key: {
       key: nanoid(),
       ...timestamp()

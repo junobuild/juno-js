@@ -6,6 +6,6 @@
  */
 export interface SetControllerParams {
   controllerId: string;
-   
+
   profile: string | null | undefined;
 }

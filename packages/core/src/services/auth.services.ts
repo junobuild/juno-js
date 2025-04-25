@@ -14,7 +14,6 @@ import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/e
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser} from './user.services';
 
- 
 let authClient: AuthClient | undefined | null;
 
 export const initAuth = async (provider?: Provider) => {

@@ -274,7 +274,6 @@ const isBot = (): boolean => {
 };
 
 const isEnvInitialized = (
-   
   env: EnvironmentActor | undefined | null
 ): env is NonNullable<EnvironmentActor> =>
   env !== undefined && env !== null && nonNullish(env.orbiterId) && nonNullish(env.satelliteId);

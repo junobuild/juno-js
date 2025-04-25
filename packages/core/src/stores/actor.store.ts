@@ -16,7 +16,6 @@ type ActorRecord = Record<string, ActorMethod>;
 export class ActorStore {
   private static instance: ActorStore;
 
-   
   #actors: Record<string, ActorSubclass<ActorRecord>> | undefined | null = undefined;
 
   private constructor() {}

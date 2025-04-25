@@ -27,7 +27,6 @@ export class EnvStore extends Store<Environment | undefined> {
     return this.env;
   }
 
-   
   override subscribe(callback: (data: Environment | null | undefined) => void): () => void {
     const unsubscribe: () => void = super.subscribe(callback);
 

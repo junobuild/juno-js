@@ -11,7 +11,6 @@ export const mapSetControllerParams = ({
   controller: toSetController(profile)
 });
 
- 
 const toSetController = (profile: string | null | undefined): SetController => ({
   metadata: nonNullish(profile) && profile !== '' ? [['profile', profile]] : [],
   expires_at: toNullable<bigint>(undefined),

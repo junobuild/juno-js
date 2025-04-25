@@ -175,17 +175,26 @@ const syncTrackEvents = async () => {
 
   try {
     const toTrackEvent = ({
-      metadata,
+      metadata: idbMetadata,
       updated_at: _,
       version,
       user_agent,
       ...rest
-    }: Omit<IdbTrackEvent, 'collected_at'>): SetTrackEventPayload => ({
-      metadata,
-      version: fromNullable(version),
-      user_agent: fromNullable(user_agent),
-      ...rest
-    });
+    }: Omit<IdbTrackEvent, 'collected_at'>): SetTrackEventPayload => {
+      const metadata = nonNullish(idbMetadata)
+        ? Object.entries(idbMetadata).reduce<Record<string, string>>(
+            (acc, [key, value]) => ({...acc, [`${key}`]: value}),
+            {}
+          )
+        : undefined;
+
+      return {
+        ...(nonNullish(metadata) && {metadata}),
+        version: fromNullable(version),
+        user_agent: fromNullable(user_agent),
+        ...rest
+      };
+    };
 
     const request: SetTrackEventsRequest = {
       ...satelliteId(env as EnvironmentActor),

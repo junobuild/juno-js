@@ -5,7 +5,7 @@
  * @param {T | undefined | null} argument - The argument to check.
  * @returns {argument is undefined | null} `true` if the argument is null or undefined; otherwise, `false`.
  */
-export const isNullish = <T>(argument: Option<T>): argument is undefined | null =>
+export const isNullish = <T>(argument: T | undefined | null): argument is undefined | null =>
   argument === null || argument === undefined;
 
 /**
@@ -15,7 +15,7 @@ export const isNullish = <T>(argument: Option<T>): argument is undefined | null 
  * @param {T | undefined | null} argument - The argument to check.
  * @returns {argument is NonNullable<T>} `true` if the argument is not null or undefined; otherwise, `false`.
  */
-export const nonNullish = <T>(argument: Option<T>): argument is NonNullable<T> =>
+export const nonNullish = <T>(argument: T | undefined | null): argument is NonNullable<T> =>
   !isNullish(argument);
 
 /**
@@ -24,7 +24,7 @@ export const nonNullish = <T>(argument: Option<T>): argument is NonNullable<T> =
  * @param {string | undefined | null} value - The value to check.
  * @returns {boolean} `true` if the value is not null, not undefined, and not an empty string; otherwise, `false`.
  */
-export const notEmptyString = (value: Option<string>): value is string =>
+export const notEmptyString = (value: string | undefined | null): value is string =>
   nonNullish(value) && value !== '';
 
 /**
@@ -33,4 +33,5 @@ export const notEmptyString = (value: Option<string>): value is string =>
  * @param {string | undefined | null} value - The value to check.
  * @returns {value is undefined | null | ""} Type predicate indicating if the value is null, undefined, or an empty string.
  */
-export const isEmptyString = (value: Option<string>): value is Option<''> => !notEmptyString(value);
+export const isEmptyString = (value: string | undefined | null): value is undefined | null | '' =>
+  !notEmptyString(value);

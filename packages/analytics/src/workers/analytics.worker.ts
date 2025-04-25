@@ -1,4 +1,3 @@
-import {Principal} from '@dfinity/principal';
 import {assertNonNullish, debounce, fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import {isbot} from 'isbot';
 import {ApiError, OrbiterApi} from '../api/orbiter.api';
@@ -13,6 +12,7 @@ import {
 import type {
   NavigationTypePayload,
   PerformanceMetricNamePayload,
+  SatelliteIdText,
   SetPageViewRequest,
   SetPerformanceRequest,
   SetTrackEventPayload,
@@ -122,13 +122,13 @@ const syncPageViews = async () => {
   try {
     const requests = entries.map<SetPageViewRequest>(
       ([key, {collected_at, updated_at: _, referrer, version, user_agent, ...entry}]) => ({
+        ...satelliteId(env as EnvironmentActor),
         key: {key: key as IdbKey, collected_at},
         page_view: {
           referrer: fromNullable(referrer),
           version: fromNullable(version),
           user_agent: fromNullable(user_agent),
-          ...entry,
-          ...satelliteId(env as EnvironmentActor)
+          ...entry
         }
       })
     );
@@ -180,11 +180,11 @@ const syncTrackEvents = async () => {
       metadata,
       version: fromNullable(version),
       user_agent: fromNullable(user_agent),
-      ...rest,
-      ...satelliteId(env as EnvironmentActor)
+      ...rest
     });
 
     const requests = entries.map<SetTrackEventRequest>(([key, {collected_at, ...entry}]) => ({
+      ...satelliteId(env as EnvironmentActor),
       key: {key: key as IdbKey, collected_at},
       track_event: toTrackEvent(entry)
     }));
@@ -243,6 +243,7 @@ const syncPerformanceMetrics = async () => {
           ...entry
         }
       ]) => ({
+        ...satelliteId(env as EnvironmentActor),
         key: {key: key as IdbKey, collected_at},
         performance_metric: {
           version: fromNullable(version),
@@ -258,8 +259,7 @@ const syncPerformanceMetrics = async () => {
               })
             }
           },
-          ...entry,
-          ...satelliteId(env as EnvironmentActor)
+          ...entry
         }
       })
     );
@@ -302,8 +302,8 @@ const trackPageEvent = () => {
 
 // Utilities
 
-const satelliteId = (env: EnvironmentActor): {satellite_id: Principal} => ({
-  satellite_id: Principal.fromText(env.satelliteId)
+const satelliteId = (env: EnvironmentActor): {satellite_id: SatelliteIdText} => ({
+  satellite_id: env.satelliteId
 });
 
 const isBot = (): boolean => {

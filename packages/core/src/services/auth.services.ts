@@ -14,7 +14,7 @@ import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/e
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser} from './user.services';
 
-// eslint-disable-next-line local-rules/use-option-type-wrapper
+ 
 let authClient: AuthClient | undefined | null;
 
 export const initAuth = async (provider?: Provider) => {

@@ -53,7 +53,9 @@ Configuration options for [Juno] CLI.
 
 ### :tropical_drink: Interfaces
 
-- [OrbiterConfig](#gear-orbiterconfig)
+- [JunoConfigEnv](#gear-junoconfigenv)
+- [OrbiterId](#gear-orbiterid)
+- [OrbiterIds](#gear-orbiterids)
 - [ModuleSettings](#gear-modulesettings)
 - [MaxMemorySizeConfig](#gear-maxmemorysizeconfig)
 - [StorageConfigHeader](#gear-storageconfigheader)
@@ -61,7 +63,6 @@ Configuration options for [Juno] CLI.
 - [StorageConfigRedirect](#gear-storageconfigredirect)
 - [StorageConfig](#gear-storageconfig)
 - [CliConfig](#gear-cliconfig)
-- [JunoConfigEnv](#gear-junoconfigenv)
 - [SatelliteAssertions](#gear-satelliteassertions)
 - [AuthenticationConfigInternetIdentity](#gear-authenticationconfiginternetidentity)
 - [AuthenticationConfig](#gear-authenticationconfig)
@@ -75,7 +76,15 @@ Configuration options for [Juno] CLI.
 - [SatelliteDevConfig](#gear-satellitedevconfig)
 - [JunoDevConfig](#gear-junodevconfig)
 
-#### :gear: OrbiterConfig
+#### :gear: JunoConfigEnv
+
+Represents the environment configuration for Juno.
+
+| Property | Type     | Description                                                |
+| -------- | -------- | ---------------------------------------------------------- |
+| `mode`   | `string` | The mode of the Juno configuration. type: {JunoConfigMode} |
+
+#### :gear: OrbiterId
 
 Represents the configuration for an orbiter.
 
@@ -83,6 +92,14 @@ Represents the configuration for an orbiter.
 | ----------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `id`        | `string`              | The identifier of the orbiter used in the dApp. type: {string}                                                                   |
 | `orbiterId` | `string or undefined` | The deprecated identifier of the orbiter. deprecated: `orbiterId` will be removed in the future. Use `id` instead.type: {string} |
+
+#### :gear: OrbiterIds
+
+Represents a mapping of orbiter identitifiers to different configurations based on the mode of the application.
+
+| Property | Type                     | Description                                                                                                                                                                                                                                                                                                                                            |
+| -------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ids`    | `Record<string, string>` | A mapping of orbiter identifiers (IDs) to different configurations based on the mode of the application. This allows the application to use different orbiter IDs, such as production, development, etc. Example: { "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "development": "gl6nx-5maaa-aaaaa-qaaqq-cai" } type: {Record<JunoConfigMode, string>} |
 
 #### :gear: ModuleSettings
 
@@ -163,14 +180,6 @@ Configures the hosting behavior of the Storage.
 | `encoding`   | `[string, ENCODING_TYPE][] or undefined` | Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension: - `.Z` for compress, - `.gz` for gzip, - `.br` for brotli, - `.zlib` for deflate, - anything else defaults to `identity`. The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types. type: {Array<[string, ENCODING_TYPE]>}optional |
 | `predeploy`  | `string[] or undefined`                  | Defines a list of scripts or commands to be run before the deployment process begins. This can be useful for tasks such as compiling assets, running tests, or building production-ready files. Example: `json { "predeploy": ["npm run build", "npm run lint"] } ` type: {string[]}optional                                                                                                   |
 | `postdeploy` | `string[] or undefined`                  | Defines a list of scripts or commands to be run after the deployment process completes. This can be used for tasks such as notifications, cleanup, or sending confirmation messages to services or team members. Example: `json { "postdeploy": ["./scripts/notify-admins.sh", "echo 'Deployment complete'"] } ` type: {string[]}optional                                                      |
-
-#### :gear: JunoConfigEnv
-
-Represents the environment configuration for Juno.
-
-| Property | Type     | Description                                                |
-| -------- | -------- | ---------------------------------------------------------- |
-| `mode`   | `string` | The mode of the Juno configuration. type: {JunoConfigMode} |
 
 #### :gear: SatelliteAssertions
 
@@ -286,16 +295,33 @@ Represents the development configuration for Juno.
 
 ### :cocktail: Types
 
+- [JunoConfigMode](#gear-junoconfigmode)
+- [OrbiterConfig](#gear-orbiterconfig)
 - [ModuleLogVisibility](#gear-modulelogvisibility)
 - [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
 - [ENCODING_TYPE](#gear-encoding_type)
-- [JunoConfigMode](#gear-junoconfigmode)
 - [SatelliteConfig](#gear-satelliteconfig)
 - [SatelliteDevDataStoreCollection](#gear-satellitedevdatastorecollection)
 - [SatelliteDevDbCollection](#gear-satellitedevdbcollection)
 - [SatelliteDevStorageCollection](#gear-satellitedevstoragecollection)
 - [JunoDevConfigFn](#gear-junodevconfigfn)
 - [JunoDevConfigFnOrObject](#gear-junodevconfigfnorobject)
+
+#### :gear: JunoConfigMode
+
+| Type             | Type                     |
+| ---------------- | ------------------------ |
+| `JunoConfigMode` | `'production' or string` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L5)
+
+#### :gear: OrbiterConfig
+
+| Type            | Type                            |
+| --------------- | ------------------------------- |
+| `OrbiterConfig` | `Either<OrbiterId, OrbiterIds>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L49)
 
 #### :gear: ModuleLogVisibility
 
@@ -320,14 +346,6 @@ Represents the development configuration for Juno.
 | `ENCODING_TYPE` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L5)
-
-#### :gear: JunoConfigMode
-
-| Type             | Type                     |
-| ---------------- | ------------------------ |
-| `JunoConfigMode` | `'production' or string` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L5)
 
 #### :gear: SatelliteConfig
 

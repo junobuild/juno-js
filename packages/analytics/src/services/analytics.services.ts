@@ -1,13 +1,17 @@
 import {nanoid} from 'nanoid';
+import {SetPageViewPayload, SetPerformanceMetricRequestEntry} from '../types/api.payload';
 import type {Environment, EnvironmentWorker} from '../types/env';
-import type {IdbPageView} from '../types/idb';
 import type {PostMessageInitEnvData} from '../types/post-message';
 import type {TrackEvent} from '../types/track';
 import {timestamp, userAgent} from '../utils/analytics.utils';
 import {assertNonNullish} from '../utils/dfinity/asserts.utils';
 import {nonNullish} from '../utils/dfinity/nullish.utils';
 import {isBrowser} from '../utils/env.utils';
-import {warningWorkerNotInitialized} from '../utils/log.utils';
+import {
+  warningOrbiterServicesNotInitialized,
+  warningWorkerNotInitialized
+} from '../utils/log.utils';
+import {OrbiterServices} from './orbiter.services';
 import {startPerformance} from './performance.services';
 
 const initSessionId = (): string | undefined => {
@@ -21,6 +25,18 @@ const initSessionId = (): string | undefined => {
 };
 
 const sessionId = initSessionId();
+
+let orbiterServices: OrbiterServices | undefined | null;
+
+export const initOrbiterServices = (env: Environment): {cleanup: () => void} => {
+  orbiterServices = new OrbiterServices(env);
+
+  return {
+    cleanup() {
+      orbiterServices = null;
+    }
+  };
+};
 
 let worker: Worker | undefined;
 
@@ -88,7 +104,7 @@ export const setPageView = async () => {
   const {innerWidth, innerHeight} = window;
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 
-  const data: IdbPageView = {
+  const page_view: SetPageViewPayload = {
     title,
     href,
     ...(nonNullish(referrer) && referrer !== '' && {referrer}),
@@ -98,14 +114,17 @@ export const setPageView = async () => {
     },
     time_zone: timeZone,
     session_id: sessionId,
-    ...userAgent(),
-    ...timestamp()
+    ...userAgent()
   };
 
-  const idb = await import('./idb.services');
-  await idb.setPageView({
-    key: nanoid(),
-    view: data
+  warningOrbiterServicesNotInitialized(orbiterServices);
+
+  orbiterServices?.setPageView({
+    key: {
+      key: nanoid(),
+      ...timestamp()
+    },
+    page_view
   });
 };
 
@@ -120,7 +139,15 @@ export const initTrackPerformance = async ({options}: Environment) => {
 
   assertNonNullish(sessionId, SESSION_ID_UNDEFINED_MSG);
 
-  await startPerformance(sessionId);
+  warningOrbiterServicesNotInitialized(orbiterServices);
+
+  const postPerformanceMetric = async (entry: SetPerformanceMetricRequestEntry) => {
+    warningOrbiterServicesNotInitialized(orbiterServices);
+
+    await orbiterServices?.setPerformanceMetric(entry);
+  };
+
+  await startPerformance({sessionId, postPerformanceMetric});
 };
 
 /**
@@ -146,13 +173,18 @@ export const trackEvent = async (data: TrackEvent): Promise<void> => {
   }
 
   assertNonNullish(sessionId, SESSION_ID_UNDEFINED_MSG);
-  warningWorkerNotInitialized(worker);
 
-  const idb = await import('./idb.services');
-  await idb.setTrackEvent({
-    key: nanoid(),
-    track: {...data, session_id: sessionId, ...userAgent(), ...timestamp()}
+  warningOrbiterServicesNotInitialized(orbiterServices);
+
+  orbiterServices?.setTrackEvent({
+    key: {
+      key: nanoid(),
+      ...timestamp()
+    },
+    track_event: {...data, session_id: sessionId, ...userAgent(), ...timestamp()}
   });
+
+  warningWorkerNotInitialized(worker);
 
   worker?.postMessage({msg: 'junoTrackEvent'});
 };

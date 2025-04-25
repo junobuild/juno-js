@@ -9,14 +9,17 @@ import {
   getPerformanceMetrics,
   getTrackEvents
 } from '../services/idb.services';
-import type {
-  NavigationTypePayload,
-  PerformanceMetricNamePayload,
-  SatelliteIdText,
-  SetPageViewRequest,
-  SetPerformanceRequest,
-  SetTrackEventPayload,
-  SetTrackEventRequest
+import {
+  type NavigationTypePayload,
+  type PerformanceMetricNamePayload,
+  type SatelliteIdText,
+  type SetPageViewsRequest,
+  type SetPageViewsRequestEntry,
+  type SetPerformanceMetricRequestEntry,
+  type SetTrackEventPayload,
+  type SetTrackEventRequestEntry,
+  type SetPerformanceMetricsRequest,
+  type SetTrackEventsRequest
 } from '../types/api.payload';
 import type {Environment, EnvironmentActor} from '../types/env';
 import type {IdbKey, IdbTrackEvent} from '../types/idb';
@@ -120,20 +123,22 @@ const syncPageViews = async () => {
   syncViewsInProgress = true;
 
   try {
-    const requests = entries.map<SetPageViewRequest>(
-      ([key, {collected_at, updated_at: _, referrer, version, user_agent, ...entry}]) => ({
-        ...satelliteId(env as EnvironmentActor),
-        key: {key: key as IdbKey, collected_at},
-        page_view: {
-          referrer: fromNullable(referrer),
-          version: fromNullable(version),
-          user_agent: fromNullable(user_agent),
-          ...entry
-        }
-      })
-    );
+    const request: SetPageViewsRequest = {
+      ...satelliteId(env as EnvironmentActor),
+      page_views: entries.map<SetPageViewsRequestEntry>(
+        ([key, {collected_at, updated_at: _, referrer, version, user_agent, ...entry}]) => ({
+          key: {key: key as IdbKey, collected_at},
+          page_view: {
+            referrer: fromNullable(referrer),
+            version: fromNullable(version),
+            user_agent: fromNullable(user_agent),
+            ...entry
+          }
+        })
+      )
+    };
 
-    await api.postPageViews({requests});
+    await api.postPageViews({request});
 
     await delPageViews(entries.map(([key, _]) => key));
   } catch (err: unknown) {
@@ -183,13 +188,15 @@ const syncTrackEvents = async () => {
       ...rest
     });
 
-    const requests = entries.map<SetTrackEventRequest>(([key, {collected_at, ...entry}]) => ({
+    const request: SetTrackEventsRequest = {
       ...satelliteId(env as EnvironmentActor),
-      key: {key: key as IdbKey, collected_at},
-      track_event: toTrackEvent(entry)
-    }));
+      track_events: entries.map<SetTrackEventRequestEntry>(([key, {collected_at, ...entry}]) => ({
+        key: {key: key as IdbKey, collected_at},
+        track_event: toTrackEvent(entry)
+      }))
+    };
 
-    await api.postTrackEvents({requests});
+    await api.postTrackEvents({request});
 
     await delTrackEvents(entries.map(([key, _]) => key));
   } catch (err: unknown) {
@@ -229,42 +236,44 @@ const syncPerformanceMetrics = async () => {
   syncMetricsInProgress = true;
 
   try {
-    const requests = entries.map<SetPerformanceRequest>(
-      ([
-        key,
-        {
-          collected_at,
-          metric_name,
-          version,
-          user_agent,
-          data: {
-            WebVitalsMetric: {navigation_type, ...webVitalsMetric}
-          },
-          ...entry
-        }
-      ]) => ({
-        ...satelliteId(env as EnvironmentActor),
-        key: {key: key as IdbKey, collected_at},
-        performance_metric: {
-          version: fromNullable(version),
-          user_agent: fromNullable(user_agent),
-          metric_name: Object.keys(metric_name)[0] as PerformanceMetricNamePayload,
-          data: {
-            WebVitalsMetric: {
-              ...webVitalsMetric,
-              ...(nonNullish(fromNullable(navigation_type)) && {
-                navigation_type: Object.keys(
-                  fromNullable(navigation_type) ?? {}
-                )[0] as NavigationTypePayload
-              })
-            }
-          },
-          ...entry
-        }
-      })
-    );
+    const request: SetPerformanceMetricsRequest = {
+      ...satelliteId(env as EnvironmentActor),
+      performance_metrics: entries.map<SetPerformanceMetricRequestEntry>(
+        ([
+          key,
+          {
+            collected_at,
+            metric_name,
+            version,
+            user_agent,
+            data: {
+              WebVitalsMetric: {navigation_type, ...webVitalsMetric}
+            },
+            ...entry
+          }
+        ]) => ({
+          key: {key: key as IdbKey, collected_at},
+          performance_metric: {
+            version: fromNullable(version),
+            user_agent: fromNullable(user_agent),
+            metric_name: Object.keys(metric_name)[0] as PerformanceMetricNamePayload,
+            data: {
+              WebVitalsMetric: {
+                ...webVitalsMetric,
+                ...(nonNullish(fromNullable(navigation_type)) && {
+                  navigation_type: Object.keys(
+                    fromNullable(navigation_type) ?? {}
+                  )[0] as NavigationTypePayload
+                })
+              }
+            },
+            ...entry
+          }
+        })
+      )
+    };
 
-    await api.postPerformanceMetrics({requests});
+    await api.postPerformanceMetrics({request});
 
     await delPerformanceMetrics(entries.map(([key, _]) => key));
   } catch (err: unknown) {

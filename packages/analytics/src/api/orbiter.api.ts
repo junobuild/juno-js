@@ -1,9 +1,9 @@
 import {jsonReplacer, nonNullish} from '@dfinity/utils';
 import {DOCKER_CONTAINER_WEB_URL} from '../constants/container.constants';
 import type {
-  SetPageViewRequest,
-  SetPerformanceRequest,
-  SetTrackEventRequest
+  SetPageViewsRequest,
+  SetPerformanceMetricsRequest,
+  SetTrackEventsRequest
 } from '../types/api.payload';
 import type {Environment} from '../types/env';
 
@@ -31,28 +31,24 @@ export class OrbiterApi {
     this.#apiUrl = `${protocol}//${orbiterId}.${host}`;
   }
 
-  postPageViews = async ({requests: payload}: {requests: SetPageViewRequest[]}): Promise<null> =>
-    await this.post<SetPageViewRequest[], null>({
+  postPageViews = async ({request: payload}: {request: SetPageViewsRequest}): Promise<null> =>
+    await this.post<SetPageViewsRequest, null>({
       path: '/views',
       payload
     });
 
-  postTrackEvents = async ({
-    requests: payload
-  }: {
-    requests: SetTrackEventRequest[];
-  }): Promise<null> =>
-    await this.post<SetTrackEventRequest[], null>({
+  postTrackEvents = async ({request: payload}: {request: SetTrackEventsRequest}): Promise<null> =>
+    await this.post<SetTrackEventsRequest, null>({
       path: '/events',
       payload
     });
 
   postPerformanceMetrics = async ({
-    requests: payload
+    request: payload
   }: {
-    requests: SetPerformanceRequest[];
+    request: SetPerformanceMetricsRequest;
   }): Promise<null> =>
-    await this.post<SetPerformanceRequest[], null>({
+    await this.post<SetPerformanceMetricsRequest, null>({
       path: '/metrics',
       payload
     });

@@ -90,17 +90,17 @@ export type NavigationTypePayload =
   | 'Prerender'
   | 'Restore';
 
-export interface SetPerformanceRequestEntry {
+export interface SetPerformanceMetricRequestEntry {
   key: AnalyticKey;
   performance_metric: SetPerformanceMetricPayload;
 }
 
-export type SetPerformanceRequest = {
+export type SetPerformanceMetricRequest = {
   satellite_id: SatelliteIdText;
-} & SetPerformanceRequestEntry;
+} & SetPerformanceMetricRequestEntry;
 
-export type SetPerformancesRequest = Pick<SetPageViewRequest, 'satellite_id'> & {
-  performance_metrics: SetPerformanceRequestEntry[];
+export type SetPerformanceMetricsRequest = Pick<SetPageViewRequest, 'satellite_id'> & {
+  performance_metrics: SetPerformanceMetricRequestEntry[];
 };
 
 export interface SetPerformanceMetricPayload {

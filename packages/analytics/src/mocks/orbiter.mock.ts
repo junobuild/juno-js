@@ -1,10 +1,12 @@
 import {nanoid} from 'nanoid';
 import type {
-  SetPageViewPayload, SetPageViewsRequest,
+  SetPageViewPayload,
+  SetPageViewsRequest,
   SetPerformanceMetricPayload,
   SetPerformanceMetricsRequest,
-  SetTrackEventPayload, SetTrackEventsRequest
-} from '../types/api.payload';
+  SetTrackEventPayload,
+  SetTrackEventsRequest
+} from '../types/orbiter';
 
 const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 
@@ -28,7 +30,7 @@ export const pageViewsRequestsMock: SetPageViewsRequest = {
   satellite_id: satelliteIdMock,
   page_views: [
     {
-      key: { key: nanoid(), collected_at: 1230n },
+      key: {key: nanoid(), collected_at: 1230n},
       page_view: pageViewPayloadMock
     }
   ]
@@ -48,7 +50,7 @@ export const trackEventsRequestMock: SetTrackEventsRequest = {
   satellite_id: satelliteIdMock,
   track_events: [
     {
-      key: { key: nanoid(), collected_at: 1230n },
+      key: {key: nanoid(), collected_at: 1230n},
       track_event: trackEventPayloadMock
     }
   ]
@@ -73,7 +75,7 @@ export const performanceMetricsRequestMock: SetPerformanceMetricsRequest = {
   satellite_id: satelliteIdMock,
   performance_metrics: [
     {
-      key: { key: nanoid(), collected_at: 1230n },
+      key: {key: nanoid(), collected_at: 1230n},
       performance_metric: performanceMetricPayloadMock
     }
   ]

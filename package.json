@@ -133,11 +133,6 @@
       "limit": "10 kB"
     },
     {
-      "name": "@junobuild/analytics-worker",
-      "path": "./packages/analytics/dist/workers/analytics.worker.js",
-      "limit": "85 kB"
-    },
-    {
       "name": "@junobuild/config",
       "path": "./packages/config/dist/index.js",
       "limit": "1 kB",

@@ -1,13 +1,13 @@
 import {nanoid} from 'nanoid';
-import type {Environment, EnvironmentWorker} from '../types/env';
-import type {IdbPageView} from '../types/idb';
-import type {PostMessageInitEnvData} from '../types/post-message';
+import type {SetPageViewPayload, SetPerformanceMetricRequestEntry} from '../types/api.payload';
+import type {Environment} from '../types/env';
 import type {TrackEvent} from '../types/track';
 import {timestamp, userAgent} from '../utils/analytics.utils';
 import {assertNonNullish} from '../utils/dfinity/asserts.utils';
 import {nonNullish} from '../utils/dfinity/nullish.utils';
 import {isBrowser} from '../utils/env.utils';
-import {warningWorkerNotInitialized} from '../utils/log.utils';
+import {warningOrbiterServicesNotInitialized} from '../utils/log.utils';
+import {OrbiterServices} from './orbiter.services';
 import {startPerformance} from './performance.services';
 
 const initSessionId = (): string | undefined => {
@@ -22,24 +22,14 @@ const initSessionId = (): string | undefined => {
 
 const sessionId = initSessionId();
 
-let worker: Worker | undefined;
+let orbiterServices: OrbiterServices | undefined | null;
 
-export const initWorker = (env: Environment): {cleanup: () => void} => {
-  const {path}: EnvironmentWorker = env.worker ?? {};
-  const workerUrl = path ?? './workers/analytics.worker.js';
-
-  worker = new Worker(workerUrl);
-
-  const consoleWarn = () =>
-    console.warn('Unable to connect to the analytics web worker. Have you deployed it?');
-
-  worker?.addEventListener('error', consoleWarn, false);
-
-  initWorkerEnvironment(env);
+export const initOrbiterServices = (env: Environment): {cleanup: () => void} => {
+  orbiterServices = new OrbiterServices(env);
 
   return {
     cleanup() {
-      worker?.removeEventListener('error', consoleWarn, false);
+      orbiterServices = null;
     }
   };
 };
@@ -88,7 +78,7 @@ export const setPageView = async () => {
   const {innerWidth, innerHeight} = window;
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 
-  const data: IdbPageView = {
+  const page_view: SetPageViewPayload = {
     title,
     href,
     ...(nonNullish(referrer) && referrer !== '' && {referrer}),
@@ -98,14 +88,17 @@ export const setPageView = async () => {
     },
     time_zone: timeZone,
     session_id: sessionId,
-    ...userAgent(),
-    ...timestamp()
+    ...userAgent()
   };
 
-  const idb = await import('./idb.services');
-  await idb.setPageView({
-    key: nanoid(),
-    view: data
+  warningOrbiterServicesNotInitialized(orbiterServices);
+
+  await orbiterServices?.setPageView({
+    key: {
+      key: nanoid(),
+      ...timestamp()
+    },
+    page_view
   });
 };
 
@@ -120,7 +113,15 @@ export const initTrackPerformance = async ({options}: Environment) => {
 
   assertNonNullish(sessionId, SESSION_ID_UNDEFINED_MSG);
 
-  await startPerformance(sessionId);
+  warningOrbiterServicesNotInitialized(orbiterServices);
+
+  const postPerformanceMetric = async (entry: SetPerformanceMetricRequestEntry) => {
+    warningOrbiterServicesNotInitialized(orbiterServices);
+
+    await orbiterServices?.setPerformanceMetric(entry);
+  };
+
+  await startPerformance({sessionId, postPerformanceMetric});
 };
 
 /**
@@ -128,11 +129,7 @@ export const initTrackPerformance = async ({options}: Environment) => {
  * @returns {Promise<void>} A promise that resolves when the page view is tracked.
  */
 export const trackPageView = async (): Promise<void> => {
-  warningWorkerNotInitialized(worker);
-
   await setPageView();
-
-  worker?.postMessage({msg: 'junoTrackPageView'});
 };
 
 /**
@@ -146,31 +143,14 @@ export const trackEvent = async (data: TrackEvent): Promise<void> => {
   }
 
   assertNonNullish(sessionId, SESSION_ID_UNDEFINED_MSG);
-  warningWorkerNotInitialized(worker);
 
-  const idb = await import('./idb.services');
-  await idb.setTrackEvent({
-    key: nanoid(),
-    track: {...data, session_id: sessionId, ...userAgent(), ...timestamp()}
+  warningOrbiterServicesNotInitialized(orbiterServices);
+
+  await orbiterServices?.setTrackEvent({
+    key: {
+      key: nanoid(),
+      ...timestamp()
+    },
+    track_event: {...data, session_id: sessionId, ...userAgent(), ...timestamp()}
   });
-
-  worker?.postMessage({msg: 'junoTrackEvent'});
-};
-
-export const initWorkerEnvironment = (env: PostMessageInitEnvData) => {
-  warningWorkerNotInitialized(worker);
-
-  worker?.postMessage({msg: 'junoInitEnvironment', data: env});
-};
-
-export const startTracking = () => {
-  warningWorkerNotInitialized(worker);
-
-  worker?.postMessage({msg: 'junoStartTrackTimer'});
-};
-
-export const stopTracking = () => {
-  warningWorkerNotInitialized(worker);
-
-  worker?.postMessage({msg: 'junoStopTracker'});
 };

@@ -1,10 +1,8 @@
 import {
+  initOrbiterServices,
   initTrackPageViews,
   initTrackPerformance,
-  initWorker,
-  setPageView,
-  startTracking,
-  stopTracking
+  setPageView
 } from './services/analytics.services';
 import type {Environment, UserEnvironment} from './types/env';
 import {assertNonNullish} from './utils/dfinity/asserts.utils';
@@ -45,23 +43,19 @@ const parseEnv = (userEnv?: UserEnvironment): Environment => {
  * @returns {Promise<() => void>} A promise that resolves to a cleanup function that stops tracking and cleans up resources.
  */
 export const initOrbiter = async (userEnv?: UserEnvironment): Promise<() => void> => {
-  // Save first page as soon as possible
-  await setPageView();
-
   const env = parseEnv(userEnv);
 
-  const {cleanup: workerCleanup} = initWorker(env);
+  const {cleanup: orbiterServicesCleanup} = initOrbiterServices(env);
+
+  // Save first page as soon as possible
+  await setPageView();
 
   const {cleanup: pushHistoryCleanup} = initTrackPageViews();
 
   await initTrackPerformance(env);
 
-  // Starting tracking will instantly sync the first page and the data from previous sessions that have not been synced yet
-  startTracking();
-
   return () => {
-    stopTracking();
-    workerCleanup();
+    orbiterServicesCleanup();
     pushHistoryCleanup();
   };
 };

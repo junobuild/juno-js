@@ -1,23 +1,35 @@
 import {nanoid} from 'nanoid';
 import type {Metric} from 'web-vitals';
-import type {
-  NavigationTypePayload,
-  PerformanceMetricNamePayload,
-  WebVitalsMetricPayload
+import {
+  type NavigationTypePayload,
+  type PerformanceMetricNamePayload,
+  type SetPerformanceMetricPayload,
+  type SetPerformanceMetricRequestEntry,
+  type WebVitalsMetricPayload
 } from '../types/api.payload';
-import type {IdbPerformanceMetric} from '../types/idb';
 import {timestamp, userAgent} from '../utils/analytics.utils';
 import {nonNullish} from '../utils/dfinity/nullish.utils';
 
 type SessionMetric = Omit<Metric, 'navigationType'> &
   Partial<Pick<Metric, 'navigationType'>> & {sessionId: string};
 
-export const startPerformance = async (sessionId: string) => {
+type PostPerformanceMetric = (entry: SetPerformanceMetricRequestEntry) => Promise<void>;
+
+export const startPerformance = async ({
+  sessionId,
+  postPerformanceMetric
+}: {
+  sessionId: string;
+  postPerformanceMetric: PostPerformanceMetric;
+}) => {
   const {onCLS, onFCP, onINP, onLCP, onTTFB} = await import('web-vitals');
 
   const setMetric = (metric: Metric) => {
     (async () => {
-      await setPerformanceMetric({...metric, sessionId});
+      await setPerformanceMetric({
+        metric: {...metric, sessionId},
+        postPerformanceMetric
+      });
     })();
   };
 
@@ -28,7 +40,13 @@ export const startPerformance = async (sessionId: string) => {
   onTTFB(setMetric);
 };
 
-const setPerformanceMetric = async (metric: SessionMetric) => {
+const setPerformanceMetric = async ({
+  metric,
+  postPerformanceMetric
+}: {
+  metric: SessionMetric;
+  postPerformanceMetric: PostPerformanceMetric;
+}) => {
   const data = mapPerformanceMetric(metric);
 
   if (data === 'unknown') {
@@ -40,10 +58,12 @@ const setPerformanceMetric = async (metric: SessionMetric) => {
     return;
   }
 
-  const idb = await import('./idb.services');
-  await idb.setPerformanceMetric({
-    key: nanoid(),
-    view: data
+  await postPerformanceMetric({
+    key: {
+      key: nanoid(),
+      ...timestamp()
+    },
+    performance_metric: data
   });
 };
 
@@ -54,7 +74,7 @@ const mapPerformanceMetric = ({
   delta,
   id,
   navigationType
-}: SessionMetric): IdbPerformanceMetric | 'deprecated' | 'unknown' => {
+}: SessionMetric): SetPerformanceMetricPayload | 'deprecated' | 'unknown' => {
   const mapMetricName = (): PerformanceMetricNamePayload | 'deprecated' | 'unknown' => {
     switch (metricName) {
       case 'CLS':
@@ -108,15 +128,14 @@ const mapPerformanceMetric = ({
     location: {href}
   } = document;
 
-  const metric: IdbPerformanceMetric = {
+  const metric: SetPerformanceMetricPayload = {
     href,
     metric_name,
     session_id: sessionId,
     data: {
       WebVitalsMetric: data
     },
-    ...userAgent(),
-    ...timestamp()
+    ...userAgent()
   };
 
   return metric;

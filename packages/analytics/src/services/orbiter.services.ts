@@ -7,7 +7,7 @@ import type {
   SetPerformanceMetricsRequest,
   SetTrackEventRequestEntry,
   SetTrackEventsRequest
-} from '../types/api.payload';
+} from '../types/orbiter';
 import type {Environment} from '../types/env';
 
 export class OrbiterServices {

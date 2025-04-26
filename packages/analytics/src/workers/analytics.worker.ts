@@ -1,8 +1,6 @@
-import {Principal} from '@dfinity/principal';
-import {assertNonNullish, debounce, isNullish, nonNullish} from '@dfinity/utils';
+import {assertNonNullish, debounce, fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import {isbot} from 'isbot';
-import type {AnalyticKey, Result_1, SetTrackEvent} from '../../declarations/orbiter/orbiter.did';
-import {getOrbiterActor} from '../api/actor.api';
+import {ApiError, OrbiterApi} from '../api/orbiter.api';
 import {
   delPageViews,
   delPerformanceMetrics,
@@ -11,6 +9,18 @@ import {
   getPerformanceMetrics,
   getTrackEvents
 } from '../services/idb.services';
+import {
+  type NavigationTypePayload,
+  type PerformanceMetricNamePayload,
+  type SatelliteIdText,
+  type SetPageViewsRequest,
+  type SetPageViewsRequestEntry,
+  type SetPerformanceMetricRequestEntry,
+  type SetPerformanceMetricsRequest,
+  type SetTrackEventPayload,
+  type SetTrackEventRequestEntry,
+  type SetTrackEventsRequest
+} from '../types/api.payload';
 import type {Environment, EnvironmentActor} from '../types/env';
 import type {IdbKey, IdbTrackEvent} from '../types/idb';
 import type {PostMessage, PostMessageInitEnvData} from '../types/post-message';
@@ -42,6 +52,7 @@ const SATELLITE_ID_UNDEFINED_MSG = 'Analytics worker not initialized. Did you se
 const ORBITER_ID_UNDEFINED_MSG = 'Analytics worker not initialized. Did you set `orbiterId`?';
 
 let env: Environment | undefined;
+let api: OrbiterApi | undefined;
 
 const init = (environment: PostMessageInitEnvData) => {
   const {orbiterId, satelliteId} = environment;
@@ -50,6 +61,8 @@ const init = (environment: PostMessageInitEnvData) => {
   assertNonNullish(satelliteId, SATELLITE_ID_UNDEFINED_MSG);
 
   env = environment;
+
+  api = new OrbiterApi(environment);
 };
 
 let timer: NodeJS.Timeout | undefined = undefined;
@@ -91,6 +104,10 @@ const syncPageViews = async () => {
     return;
   }
 
+  if (isApiNotInitialized(api)) {
+    return;
+  }
+
   // One batch at a time to avoid to process multiple times the same entries
   if (syncViewsInProgress) {
     return;
@@ -106,22 +123,26 @@ const syncPageViews = async () => {
   syncViewsInProgress = true;
 
   try {
-    const actor = await getOrbiterActor(env);
+    const request: SetPageViewsRequest = {
+      ...satelliteId(env as EnvironmentActor),
+      page_views: entries.map<SetPageViewsRequestEntry>(
+        ([key, {collected_at, updated_at: _, referrer, version, user_agent, ...entry}]) => ({
+          key: {key: key as IdbKey, collected_at},
+          page_view: {
+            referrer: fromNullable(referrer),
+            version: fromNullable(version),
+            user_agent: fromNullable(user_agent),
+            ...entry
+          }
+        })
+      )
+    };
 
-    const results = await actor.set_page_views(
-      entries.map(([key, {collected_at, ...entry}]) => [
-        ids({key: key as IdbKey, collected_at}),
-        {...entry, ...satelliteId(env as EnvironmentActor)}
-      ])
-    );
+    await api.postPageViews({request});
 
     await delPageViews(entries.map(([key, _]) => key));
-
-    consoleWarn(results);
   } catch (err: unknown) {
-    // The canister does not trap so, if we land here there was a network issue or so.
-    // So we keep the entries to try to transmit those next time.
-    console.error(err);
+    onError(err);
   }
 
   syncViewsInProgress = false;
@@ -131,6 +152,10 @@ const debounceSyncPageViews = debounce(async () => await syncPageViews(), 100);
 
 const syncTrackEvents = async () => {
   if (!isEnvInitialized(env)) {
+    return;
+  }
+
+  if (isApiNotInitialized(api)) {
     return;
   }
 
@@ -149,31 +174,41 @@ const syncTrackEvents = async () => {
   syncEventsInProgress = true;
 
   try {
-    const actor = await getOrbiterActor(env);
-
     const toTrackEvent = ({
-      metadata,
+      metadata: idbMetadata,
+      updated_at: _,
+      version,
+      user_agent,
       ...rest
-    }: Omit<IdbTrackEvent, 'collected_at'>): SetTrackEvent => ({
-      metadata: isNullish(metadata) ? [] : [Object.entries(metadata ?? {})],
-      ...rest,
-      ...satelliteId(env as EnvironmentActor)
-    });
+    }: Omit<IdbTrackEvent, 'collected_at'>): SetTrackEventPayload => {
+      const metadata = nonNullish(idbMetadata)
+        ? Object.entries(idbMetadata).reduce<Record<string, string>>(
+            (acc, [key, value]) => ({...acc, [`${key}`]: value}),
+            {}
+          )
+        : undefined;
 
-    const results = await actor.set_track_events(
-      entries.map(([key, {collected_at, ...entry}]) => [
-        ids({key: key as IdbKey, collected_at}),
-        toTrackEvent(entry)
-      ])
-    );
+      return {
+        ...(nonNullish(metadata) && {metadata}),
+        version: fromNullable(version),
+        user_agent: fromNullable(user_agent),
+        ...rest
+      };
+    };
+
+    const request: SetTrackEventsRequest = {
+      ...satelliteId(env as EnvironmentActor),
+      track_events: entries.map<SetTrackEventRequestEntry>(([key, {collected_at, ...entry}]) => ({
+        key: {key: key as IdbKey, collected_at},
+        track_event: toTrackEvent(entry)
+      }))
+    };
+
+    await api.postTrackEvents({request});
 
     await delTrackEvents(entries.map(([key, _]) => key));
-
-    consoleWarn(results);
   } catch (err: unknown) {
-    // The canister does not trap so, if we land here there was a network issue or so.
-    // So we keep the entries to try to transmit those next time.
-    console.error(err);
+    onError(err);
   }
 
   syncEventsInProgress = false;
@@ -187,6 +222,10 @@ const syncPerformanceMetrics = async () => {
   }
 
   if (env?.options?.performance === false) {
+    return;
+  }
+
+  if (isApiNotInitialized(api)) {
     return;
   }
 
@@ -205,22 +244,48 @@ const syncPerformanceMetrics = async () => {
   syncMetricsInProgress = true;
 
   try {
-    const actor = await getOrbiterActor(env);
+    const request: SetPerformanceMetricsRequest = {
+      ...satelliteId(env as EnvironmentActor),
+      performance_metrics: entries.map<SetPerformanceMetricRequestEntry>(
+        ([
+          key,
+          {
+            collected_at,
+            metric_name,
+            version,
+            user_agent,
+            data: {
+              WebVitalsMetric: {navigation_type, ...webVitalsMetric}
+            },
+            ...entry
+          }
+        ]) => ({
+          key: {key: key as IdbKey, collected_at},
+          performance_metric: {
+            version: fromNullable(version),
+            user_agent: fromNullable(user_agent),
+            metric_name: Object.keys(metric_name)[0] as PerformanceMetricNamePayload,
+            data: {
+              WebVitalsMetric: {
+                ...webVitalsMetric,
+                ...(nonNullish(fromNullable(navigation_type)) && {
+                  navigation_type: Object.keys(
+                    fromNullable(navigation_type) ?? {}
+                  )[0] as NavigationTypePayload
+                })
+              }
+            },
+            ...entry
+          }
+        })
+      )
+    };
 
-    const results = await actor.set_performance_metrics(
-      entries.map(([key, {collected_at, ...entry}]) => [
-        ids({key: key as IdbKey, collected_at}),
-        {...entry, ...satelliteId(env as EnvironmentActor)}
-      ])
-    );
+    await api.postPerformanceMetrics({request});
 
     await delPerformanceMetrics(entries.map(([key, _]) => key));
-
-    consoleWarn(results);
   } catch (err: unknown) {
-    // The canister does not trap so, if we land here there was a network issue or so.
-    // So we keep the entries to try to transmit those next time.
-    console.error(err);
+    onError(err);
   }
 
   syncMetricsInProgress = false;
@@ -254,13 +319,8 @@ const trackPageEvent = () => {
 
 // Utilities
 
-const ids = ({key, collected_at}: {key: IdbKey; collected_at: bigint}): AnalyticKey => ({
-  collected_at,
-  key
-});
-
-const satelliteId = (env: EnvironmentActor): {satellite_id: Principal} => ({
-  satellite_id: Principal.fromText(env.satelliteId)
+const satelliteId = (env: EnvironmentActor): {satellite_id: SatelliteIdText} => ({
+  satellite_id: env.satelliteId
 });
 
 const isBot = (): boolean => {
@@ -278,10 +338,15 @@ const isEnvInitialized = (
 ): env is NonNullable<EnvironmentActor> =>
   env !== undefined && env !== null && nonNullish(env.orbiterId) && nonNullish(env.satelliteId);
 
-const consoleWarn = (results: Result_1) => {
-  if ('Ok' in results) {
+const isApiNotInitialized = (api: OrbiterApi | undefined): api is undefined => isNullish(api);
+
+const onError = (err: unknown) => {
+  if (err instanceof ApiError) {
+    console.warn(err.message);
     return;
   }
 
-  results.Err.forEach(([key, error]) => console.warn(`${error} [Key: ${key.key}]`));
+  // The canister does not trap so, if we land here there was a network issue or so.
+  // So we keep the entries to try to transmit those next time.
+  console.error(err);
 };

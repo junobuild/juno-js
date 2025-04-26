@@ -8,7 +8,12 @@ import type {Environment, UserEnvironment} from './types/env';
 import {assertNonNullish} from './utils/dfinity/asserts.utils';
 import {envContainer, envOrbiterId, envSatelliteId} from './utils/window.env.utils';
 
-export {trackEvent, trackEventAsync, trackPageView, trackPageViewAsync} from './services/analytics.services';
+export {
+  trackEvent,
+  trackEventAsync,
+  trackPageView,
+  trackPageViewAsync
+} from './services/analytics.services';
 export type * from './types/env';
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {

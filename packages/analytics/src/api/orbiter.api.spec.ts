@@ -8,7 +8,6 @@ import {
 import {Environment} from '../types/env';
 import {jsonReplacer} from '../utils/dfinity/json.utils';
 import {ApiError, OrbiterApi} from './orbiter.api';
-import {DOCKER_CONTAINER_WEB_URL} from '../constants/container.constants';
 
 vi.mock('../src/constants/container.constants', () => ({
   DOCKER_CONTAINER_WEB_URL: 'http://localhost:5973'
@@ -29,9 +28,9 @@ describe('OrbiterApi', () => {
   describe.each([
     {container: false, apiUrl: `https://${orbiterId}.icp0.io`},
     {apiUrl: `https://${orbiterId}.icp0.io`},
-    {container: true, apiUrl: DOCKER_CONTAINER_WEB_URL},
-    {container: 'http://test.com', apiUrl: 'http://test.com'}
-  ])('API with container', ({container, apiUrl}) => {
+    {container: true, apiUrl: `http://${orbiterId}.localhost:5987`},
+    {container: 'http://localhost:6666', apiUrl: `http://${orbiterId}.localhost:6666`}
+  ])('OrbiterApi with container=%p', ({container, apiUrl}) => {
     beforeEach(() => {
       api = new OrbiterApi({container, orbiterId} as Environment);
     });

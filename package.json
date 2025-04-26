@@ -130,7 +130,7 @@
     {
       "name": "@junobuild/analytics",
       "path": "./packages/analytics/dist/index.js",
-      "limit": "10 kB"
+      "limit": "5 kB"
     },
     {
       "name": "@junobuild/config",

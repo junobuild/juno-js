@@ -13,6 +13,7 @@ import {envContainer, envOrbiterId, envSatelliteId} from './utils/window.env.uti
 export {trackEvent, trackPageView} from './services/analytics.services';
 export type * from './types/env';
 
+
 const parseEnv = (userEnv?: UserEnvironment): Environment => {
   const satelliteId = userEnv?.satelliteId ?? envSatelliteId();
 

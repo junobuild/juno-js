@@ -8,7 +8,12 @@ import type {Environment, UserEnvironment} from './types/env';
 import {assertNonNullish} from './utils/dfinity/asserts.utils';
 import {envContainer, envOrbiterId, envSatelliteId} from './utils/window.env.utils';
 
-export {trackEvent, trackPageView} from './services/analytics.services';
+export {
+  trackEvent,
+  trackEventAsync,
+  trackPageView,
+  trackPageViewAsync
+} from './services/analytics.services';
 export type * from './types/env';
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {
@@ -39,20 +44,27 @@ const parseEnv = (userEnv?: UserEnvironment): Environment => {
 
 /**
  * Initializes the Juno Analytics.
+ *
+ * Although this function is synchronous, it triggers asynchronous tracking of the initial page view
+ * and, optionally, the initialization of web vitals, without awaiting their completion.
+ * This design ensures better performance and avoids blocking your application's boot time.
+ *
  * @param {UserEnvironment} [userEnv] - The optional user environment configuration. If no environment is provided, the variables injected by the Vite or NextJS plugins will be used.
- * @returns {Promise<() => void>} A promise that resolves to a cleanup function that stops tracking and cleans up resources.
+ * @returns {() => void} A cleanup function that removes hooks (such as navigation tracking) added for analytics.
  */
-export const initOrbiter = async (userEnv?: UserEnvironment): Promise<() => void> => {
+export const initOrbiter = (userEnv?: UserEnvironment): (() => void) => {
   const env = parseEnv(userEnv);
 
   const {cleanup: orbiterServicesCleanup} = initOrbiterServices(env);
 
-  // Save first page as soon as possible
-  await setPageView();
+  // Save first page as soon as possible.
+  // We do not await on purpose to not block the application's boot.
+  setPageView();
 
   const {cleanup: pushHistoryCleanup} = initTrackPageViews();
 
-  await initTrackPerformance(env);
+  // We do not await on purpose to not block the application's boot.
+  initTrackPerformance(env);
 
   return () => {
     orbiterServicesCleanup();

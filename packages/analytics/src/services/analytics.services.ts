@@ -35,7 +35,7 @@ export const initOrbiterServices = (env: Environment): {cleanup: () => void} => 
 };
 
 export const initTrackPageViews = (): {cleanup: () => void} => {
-  const trackPages = async () => await trackPageView();
+  const trackPages = async () => await trackPageViewAsync();
 
   let pushStateProxy: typeof history.pushState | null = new Proxy(history.pushState, {
     // eslint-disable-next-line local-rules/prefer-object-params
@@ -126,10 +126,32 @@ export const initTrackPerformance = async ({options}: Environment) => {
 
 /**
  * Tracks a page view in Juno Analytics.
+ *
+ * This function does not return a promise, as it triggers the tracking request without awaiting its completion.
+ * It is designed for fire-and-forget usage to avoid blocking application flow.
+ */
+export const trackPageView = () => {
+  setPageView();
+};
+
+/**
+ * Tracks a page view in Juno Analytics.
  * @returns {Promise<void>} A promise that resolves when the page view is tracked.
  */
-export const trackPageView = async (): Promise<void> => {
+export const trackPageViewAsync = async (): Promise<void> => {
   await setPageView();
+};
+
+/**
+ * Tracks a custom event in Juno Analytics.
+ *
+ * This function does not return a promise, as it triggers the tracking request without awaiting its completion.
+ * It is designed for fire-and-forget usage to avoid blocking application flow.
+ *
+ * @param {TrackEvent} data - The event details.
+ */
+export const trackEvent = (data: TrackEvent) => {
+  trackEventAsync(data);
 };
 
 /**
@@ -137,7 +159,7 @@ export const trackPageView = async (): Promise<void> => {
  * @param {TrackEvent} data - The event details.
  * @returns {Promise<void>} A promise that resolves when the event is tracked.
  */
-export const trackEvent = async (data: TrackEvent): Promise<void> => {
+export const trackEventAsync = async (data: TrackEvent): Promise<void> => {
   if (!isBrowser()) {
     return;
   }

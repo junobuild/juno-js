@@ -131,7 +131,7 @@ export const initTrackPerformance = async ({options}: Environment) => {
  * It is designed for fire-and-forget usage to avoid blocking application flow.
  */
 export const trackPageView = () => {
-  setPageView();
+  trackPageViewAsync();
 };
 
 /**

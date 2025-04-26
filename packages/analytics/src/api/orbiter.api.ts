@@ -25,7 +25,11 @@ export class OrbiterApi {
   constructor({container, orbiterId}: Environment) {
     const localActor = nonNullish(container) && container !== false;
 
-    const hostDomain = localActor ? DOCKER_CONTAINER_WEB_URL : 'https://icp0.io';
+    const hostDomain = localActor
+      ? container === true
+        ? DOCKER_CONTAINER_WEB_URL
+        : container
+      : 'https://icp0.io';
 
     const {protocol, host} = new URL(hostDomain);
 

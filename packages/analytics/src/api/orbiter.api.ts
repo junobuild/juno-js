@@ -1,4 +1,3 @@
-import {jsonReplacer, nonNullish} from '@dfinity/utils';
 import {DOCKER_CONTAINER_WEB_URL} from '../constants/container.constants';
 import type {
   SetPageViewsRequest,
@@ -6,6 +5,8 @@ import type {
   SetTrackEventsRequest
 } from '../types/api.payload';
 import type {Environment} from '../types/env';
+import {jsonReplacer} from '../utils/dfinity/json.utils';
+import {nonNullish} from '../utils/dfinity/nullish.utils';
 
 type ApiPath = '/views' | '/events' | '/metrics';
 

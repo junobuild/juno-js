@@ -1,4 +1,3 @@
-import {assertNonNullish, debounce, isNullish, nonNullish} from '@dfinity/utils';
 import {isbot} from 'isbot';
 import {ApiError, OrbiterApi} from '../api/orbiter.api';
 import {
@@ -21,6 +20,9 @@ import {
 import type {Environment, EnvironmentActor} from '../types/env';
 import type {IdbKey} from '../types/idb';
 import type {PostMessage, PostMessageInitEnvData} from '../types/post-message';
+import {assertNonNullish} from '../utils/dfinity/asserts.utils';
+import {debounce} from '../utils/dfinity/debounce.utils';
+import {isNullish, nonNullish} from '../utils/dfinity/nullish.utils';
 
 onmessage = async ({data: dataMsg}: MessageEvent<PostMessage>) => {
   const {msg, data} = dataMsg;

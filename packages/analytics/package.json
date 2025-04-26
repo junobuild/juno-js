@@ -58,13 +58,5 @@
     "isbot": "^5.1.25",
     "nanoid": "^5.1.5",
     "web-vitals": "^4.2.4"
-  },
-  "peerDependencies": {
-    "@dfinity/agent": "^2.3.0",
-    "@dfinity/candid": "^2.3.0",
-    "@dfinity/identity": "^2.3.0",
-    "@dfinity/principal": "^2.3.0",
-    "@dfinity/utils": "^2",
-    "@junobuild/utils": "*"
   }
 }

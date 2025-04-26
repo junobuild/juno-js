@@ -6,7 +6,7 @@ import {
   type SetPerformanceMetricPayload,
   type SetPerformanceMetricRequestEntry,
   type WebVitalsMetricPayload
-} from '../types/api.payload';
+} from '../types/orbiter';
 import {timestamp, userAgent} from '../utils/analytics.utils';
 import {nonNullish} from '../utils/dfinity/nullish.utils';
 

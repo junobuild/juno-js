@@ -14,17 +14,17 @@ export interface PageViewDevice {
 // Page views
 // ---------------------------------------------------------
 
-export interface SetPageViewsRequestEntry {
+export interface SetPageViewRequestEntry {
   key: AnalyticKey;
   page_view: SetPageViewPayload;
 }
 
 export type SetPageViewRequest = {
   satellite_id: SatelliteIdText;
-} & SetPageViewsRequestEntry;
+} & SetPageViewRequestEntry;
 
 export type SetPageViewsRequest = Pick<SetPageViewRequest, 'satellite_id'> & {
-  page_views: SetPageViewsRequestEntry[];
+  page_views: SetPageViewRequestEntry[];
 };
 
 export interface SetPageViewPayload {

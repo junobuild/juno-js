@@ -1,3 +1,3 @@
-import type {SetTrackEventPayload} from './api.payload';
+import type {SetTrackEventPayload} from './orbiter';
 
 export type TrackEvent = Pick<SetTrackEventPayload, 'name' | 'metadata'>;

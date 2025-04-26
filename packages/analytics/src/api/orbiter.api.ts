@@ -57,6 +57,7 @@ export class OrbiterApi {
   post = async <T, R>({path, payload}: {path: ApiPath; payload: T}): Promise<R> => {
     const response = await fetch(`${this.#apiUrl}${path}`, {
       method: 'POST',
+      keepalive: true,
       headers: {
         'Content-Type': 'application/json'
       },

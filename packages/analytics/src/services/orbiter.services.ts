@@ -1,14 +1,14 @@
 import {OrbiterApi} from '../api/orbiter.api';
+import type {Environment} from '../types/env';
 import type {
   SatelliteIdText,
-  SetPageViewsRequest,
   SetPageViewRequestEntry,
+  SetPageViewsRequest,
   SetPerformanceMetricRequestEntry,
   SetPerformanceMetricsRequest,
   SetTrackEventRequestEntry,
   SetTrackEventsRequest
 } from '../types/orbiter';
-import type {Environment} from '../types/env';
 
 export class OrbiterServices {
   readonly #env: Environment;

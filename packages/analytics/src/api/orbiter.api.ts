@@ -1,10 +1,10 @@
 import {DOCKER_CONTAINER_WEB_URL} from '../constants/container.constants';
+import type {Environment} from '../types/env';
 import type {
   SetPageViewsRequest,
   SetPerformanceMetricsRequest,
   SetTrackEventsRequest
 } from '../types/orbiter';
-import type {Environment} from '../types/env';
 import {jsonReplacer} from '../utils/dfinity/json.utils';
 import {nonNullish} from '../utils/dfinity/nullish.utils';
 

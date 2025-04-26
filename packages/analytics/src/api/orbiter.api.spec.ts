@@ -1,6 +1,7 @@
 import type {Mock} from 'vitest';
 import {
   okResponseMock,
+  orbiterIdMock,
   pageViewsRequestsMock,
   performanceMetricsRequestMock,
   trackEventsRequestMock
@@ -13,8 +14,7 @@ vi.mock('../src/constants/container.constants', () => ({
   DOCKER_CONTAINER_WEB_URL: 'http://localhost:5973'
 }));
 
-describe('OrbiterApi', () => {
-  const orbiterId = 'ot5tb-nqaaa-aaaal-ac2sa-cai';
+describe('orbiter.api', () => {
   let api: OrbiterApi;
 
   beforeEach(() => {
@@ -26,13 +26,13 @@ describe('OrbiterApi', () => {
   });
 
   describe.each([
-    {container: false, apiUrl: `https://${orbiterId}.icp0.io`},
-    {apiUrl: `https://${orbiterId}.icp0.io`},
-    {container: true, apiUrl: `http://${orbiterId}.localhost:5987`},
-    {container: 'http://localhost:6666', apiUrl: `http://${orbiterId}.localhost:6666`}
+    {container: false, apiUrl: `https://${orbiterIdMock}.icp0.io`},
+    {apiUrl: `https://${orbiterIdMock}.icp0.io`},
+    {container: true, apiUrl: `http://${orbiterIdMock}.localhost:5987`},
+    {container: 'http://localhost:6666', apiUrl: `http://${orbiterIdMock}.localhost:6666`}
   ])('OrbiterApi with container=%p', ({container, apiUrl}) => {
     beforeEach(() => {
-      api = new OrbiterApi({container, orbiterId} as Environment);
+      api = new OrbiterApi({container, orbiterId: orbiterIdMock} as Environment);
     });
 
     describe('Communication', () => {

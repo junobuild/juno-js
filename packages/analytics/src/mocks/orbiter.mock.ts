@@ -13,6 +13,7 @@ const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 const sessionId = nanoid();
 
 export const satelliteIdMock = 'ck4tp-3iaaa-aaaal-ab7da-cai';
+export const orbiterIdMock = 'ot5tb-nqaaa-aaaal-ac2sa-cai';
 
 export const pageViewPayloadMock: SetPageViewPayload = {
   href: 'https://test.com',

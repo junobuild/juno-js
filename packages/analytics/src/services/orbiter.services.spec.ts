@@ -1,10 +1,11 @@
 import type {Mock} from 'vitest';
-import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {ApiError} from '../api/orbiter.api';
 import {
   okResponseMock,
+  orbiterIdMock,
   pageViewsRequestsMock,
   performanceMetricsRequestMock,
+  satelliteIdMock,
   trackEventsRequestMock
 } from '../mocks/orbiter.mock';
 import {Environment} from '../types/env';
@@ -15,9 +16,7 @@ vi.mock('../src/constants/container.constants', () => ({
   DOCKER_CONTAINER_WEB_URL: 'http://localhost:5973'
 }));
 
-describe('OrbiterServices', () => {
-  const orbiterId = 'ot5tb-nqaaa-aaaal-ac2sa-cai';
-  const satelliteId = 'satellite-xxx';
+describe('orbiter.services', () => {
   let services: OrbiterServices;
 
   beforeEach(() => {
@@ -29,13 +28,17 @@ describe('OrbiterServices', () => {
   });
 
   describe.each([
-    {container: false, apiUrl: `https://${orbiterId}.icp0.io`},
-    {apiUrl: `https://${orbiterId}.icp0.io`},
-    {container: true, apiUrl: `http://${orbiterId}.localhost:5987`},
-    {container: 'http://localhost:6666', apiUrl: `http://${orbiterId}.localhost:6666`}
+    {container: false, apiUrl: `https://${orbiterIdMock}.icp0.io`},
+    {apiUrl: `https://${orbiterIdMock}.icp0.io`},
+    {container: true, apiUrl: `http://${orbiterIdMock}.localhost:5987`},
+    {container: 'http://localhost:6666', apiUrl: `http://${orbiterIdMock}.localhost:6666`}
   ])('OrbiterApi with container=%p', ({container, apiUrl}) => {
     beforeEach(() => {
-      services = new OrbiterServices({container, orbiterId, satelliteId} as Environment);
+      services = new OrbiterServices({
+        container,
+        orbiterId: orbiterIdMock,
+        satelliteId: satelliteIdMock
+      } as Environment);
     });
 
     describe('Success', () => {
@@ -56,7 +59,7 @@ describe('OrbiterServices', () => {
           },
           body: JSON.stringify(
             {
-              satellite_id: satelliteId,
+              satellite_id: satelliteIdMock,
               page_views: [entry]
             },
             jsonReplacer
@@ -81,7 +84,7 @@ describe('OrbiterServices', () => {
           },
           body: JSON.stringify(
             {
-              satellite_id: satelliteId,
+              satellite_id: satelliteIdMock,
               track_events: [entry]
             },
             jsonReplacer
@@ -106,7 +109,7 @@ describe('OrbiterServices', () => {
           },
           body: JSON.stringify(
             {
-              satellite_id: satelliteId,
+              satellite_id: satelliteIdMock,
               performance_metrics: [entry]
             },
             jsonReplacer

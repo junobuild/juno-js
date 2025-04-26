@@ -2,7 +2,7 @@ import {OrbiterApi} from '../api/orbiter.api';
 import type {
   SatelliteIdText,
   SetPageViewsRequest,
-  SetPageViewsRequestEntry,
+  SetPageViewRequestEntry,
   SetPerformanceMetricRequestEntry,
   SetPerformanceMetricsRequest,
   SetTrackEventRequestEntry,
@@ -19,7 +19,7 @@ export class OrbiterServices {
     this.#api = new OrbiterApi(env);
   }
 
-  setPageView = async (entry: SetPageViewsRequestEntry): Promise<null> => {
+  setPageView = async (entry: SetPageViewRequestEntry): Promise<null> => {
     const request: SetPageViewsRequest = {
       ...this.satelliteId(),
       page_views: [entry]

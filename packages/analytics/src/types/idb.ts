@@ -1,19 +1,19 @@
 import type {
-  SetPageView,
-  SetPerformanceMetric,
-  SetTrackEvent
-} from '../../declarations/orbiter/orbiter.did';
+  SetPageViewPayload,
+  SetPerformanceMetricPayload,
+  SetTrackEventPayload
+} from './api.payload';
 import type {TrackEvent} from './track';
 
 export type IdbKey = string;
 
-export type IdbPageView = Omit<SetPageView, 'satellite_id'> & {collected_at: bigint};
+export type IdbPageView = SetPageViewPayload & {collected_at: bigint};
 
 export type IdbTrackEvent = TrackEvent &
-  Pick<SetTrackEvent, 'user_agent' | 'updated_at' | 'version' | 'session_id'> & {
+  Pick<SetTrackEventPayload, 'user_agent' | 'version' | 'session_id'> & {
     collected_at: bigint;
   };
 
-export type IdbPerformanceMetric = Omit<SetPerformanceMetric, 'satellite_id'> & {
+export type IdbPerformanceMetric = SetPerformanceMetricPayload & {
   collected_at: bigint;
 };

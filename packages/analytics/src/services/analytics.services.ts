@@ -1,4 +1,4 @@
-import {assertNonNullish, nonNullish, toNullable} from '@dfinity/utils';
+import {assertNonNullish, nonNullish} from '@dfinity/utils';
 import {isBrowser} from '@junobuild/utils';
 import {nanoid} from 'nanoid';
 import type {Environment, EnvironmentWorker} from '../types/env';
@@ -90,7 +90,7 @@ export const setPageView = async () => {
   const data: IdbPageView = {
     title,
     href,
-    referrer: toNullable(nonNullish(referrer) && referrer !== '' ? referrer : undefined),
+    ...(nonNullish(referrer) && referrer !== '' && {referrer}),
     device: {
       inner_width: innerWidth,
       inner_height: innerHeight

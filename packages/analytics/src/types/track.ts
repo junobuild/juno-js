@@ -1,4 +1,3 @@
-export interface TrackEvent {
-  name: string;
-  metadata?: Record<string, string>;
-}
+import type {SetTrackEventPayload} from './api.payload';
+
+export type TrackEvent = Pick<SetTrackEventPayload, 'name' | 'metadata'>;

@@ -1,6 +1,14 @@
-import type {AnalyticKey, PageViewDevice} from '../../declarations/orbiter/orbiter.did';
-
 export type SatelliteIdText = string;
+
+export interface AnalyticKey {
+  key: string;
+  collected_at: bigint;
+}
+
+export interface PageViewDevice {
+  inner_height: number;
+  inner_width: number;
+}
 
 // ---------------------------------------------------------
 // Page views

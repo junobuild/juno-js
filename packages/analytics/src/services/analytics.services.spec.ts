@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {Mock, MockInstance} from 'vitest';
+import {type Mock, MockInstance} from 'vitest';
 import {orbiterIdMock, satelliteIdMock} from '../mocks/orbiter.mock';
 import * as analyticServices from './analytics.services';
 import {startPerformance} from './performance.services';

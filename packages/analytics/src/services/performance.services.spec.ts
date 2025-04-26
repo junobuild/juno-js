@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {beforeEach, describe, expect, it, Mock, vi} from 'vitest';
+import type {Mock} from 'vitest';
 import {startPerformance} from './performance.services';
 
 vi.mock('web-vitals', () => ({

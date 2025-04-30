@@ -56,7 +56,10 @@
   "dependencies": {
     "isbot": "^5.1.25",
     "nanoid": "^5.1.5",
-    "ua-parser-js": "^2.0.3",
+    "ua-parser-js": "^1.0.40",
     "web-vitals": "^4.2.4"
+  },
+  "devDependencies": {
+    "@types/ua-parser-js": "^0.7.39"
   }
 }

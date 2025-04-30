@@ -1,5 +1,5 @@
 import {UAParser} from 'ua-parser-js';
-import {PageViewClient} from '../types/orbiter';
+import type {PageViewClient} from '../types/orbiter';
 import {nowInBigIntNanoSeconds} from './date.utils';
 import {isNullish, nonNullish} from './dfinity/nullish.utils';
 

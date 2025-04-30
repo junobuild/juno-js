@@ -1,14 +1,17 @@
 import {nanoid} from 'nanoid';
-import type {Environment} from '../types/env';
+import {Environment, EnvironmentOptions} from '../types/env';
 import type {SetPageViewPayload, SetPerformanceMetricRequestEntry} from '../types/orbiter';
 import type {TrackEvent} from '../types/track';
-import {timestamp, userAgent, userClient} from '../utils/analytics.utils';
+import {timestamp, userAgent} from '../utils/analytics.utils';
 import {assertNonNullish} from '../utils/dfinity/asserts.utils';
 import {nonNullish} from '../utils/dfinity/nullish.utils';
 import {isBrowser} from '../utils/env.utils';
 import {warningOrbiterServicesNotInitialized} from '../utils/log.utils';
 import {OrbiterServices} from './orbiter.services';
 import {startPerformance} from './performance.services';
+import {parseUserAgent} from './user-agent.services';
+
+type SetPageViewParams = Pick<EnvironmentOptions, 'userAgentParser'>;
 
 const initSessionId = (): string | undefined => {
   // I faced this issue when I used the library in Docusaurus which does not implement the crypto API when server-side rendering.
@@ -34,8 +37,8 @@ export const initOrbiterServices = (env: Environment): {cleanup: () => void} => 
   };
 };
 
-export const initTrackPageViews = (): {cleanup: () => void} => {
-  const trackPages = async () => await trackPageViewAsync();
+export const initTrackPageViews = (params: SetPageViewParams = {}): {cleanup: () => void} => {
+  const trackPages = async () => await trackPageViewAsync(params);
 
   let pushStateProxy: typeof history.pushState | null = new Proxy(history.pushState, {
     // eslint-disable-next-line local-rules/prefer-object-params
@@ -63,7 +66,7 @@ export const initTrackPageViews = (): {cleanup: () => void} => {
 
 const SESSION_ID_UNDEFINED_MSG = 'No session ID initialized.';
 
-export const setPageView = async () => {
+export const setPageView = async ({userAgentParser}: SetPageViewParams = {}) => {
   if (!isBrowser()) {
     return;
   }
@@ -79,7 +82,7 @@ export const setPageView = async () => {
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 
   const {user_agent} = userAgent();
-  const client = userClient(user_agent);
+  const client = userAgentParser === false ? undefined : await parseUserAgent(user_agent);
 
   const page_view: SetPageViewPayload = {
     title,
@@ -142,10 +145,11 @@ export const trackPageView = () => {
 
 /**
  * Tracks a page view in Juno Analytics.
+ * @param {Pick<EnvironmentOptions, 'userAgentParser'>} [params] Optional user agent parser config.
  * @returns {Promise<void>} A promise that resolves when the page view is tracked.
  */
-export const trackPageViewAsync = async (): Promise<void> => {
-  await setPageView();
+export const trackPageViewAsync = async (params: SetPageViewParams = {}): Promise<void> => {
+  await setPageView(params);
 };
 
 /**

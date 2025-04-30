@@ -58,9 +58,9 @@ export const initOrbiter = (userEnv?: UserEnvironment): (() => void) => {
 
   // Save first page as soon as possible.
   // We do not await on purpose to not block the application's boot.
-  setPageView();
+  setPageView(env.options);
 
-  const {cleanup: pushHistoryCleanup} = initTrackPageViews();
+  const {cleanup: pushHistoryCleanup} = initTrackPageViews(env.options);
 
   // We do not await on purpose to not block the application's boot.
   initTrackPerformance(env);

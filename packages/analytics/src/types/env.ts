@@ -9,6 +9,16 @@ export interface EnvironmentOptions {
    * @type {boolean}
    */
   performance?: boolean;
+
+  /**
+   * Enable or disable parsing the user agent string to extract device and browser information.
+   * Disabling this can slightly reduce bundle size and improve load performance,
+   * especially if you don't need detailed user agent analytics.
+   *
+   * @default true By default, parsing is enabled.
+   * @type {boolean}
+   */
+  userAgentParser?: boolean;
 }
 
 /**

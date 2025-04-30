@@ -111,7 +111,7 @@ describe('analytics.services', () => {
       });
 
       await analyticServices.setPageView();
-      const [[url, options]] = (fetch as Mock).mock.calls;
+      const [[_, options]] = (fetch as Mock).mock.calls;
       const body = JSON.parse(options.body, jsonReviver);
 
       const {page_view} = body.page_views[0];

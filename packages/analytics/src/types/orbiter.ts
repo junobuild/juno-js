@@ -8,6 +8,8 @@ export interface AnalyticKey {
 export interface PageViewDevice {
   inner_height: number;
   inner_width: number;
+  screen_height?: number;
+  screen_width?: number;
 }
 
 export interface PageViewClient {

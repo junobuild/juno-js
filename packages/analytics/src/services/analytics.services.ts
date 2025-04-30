@@ -75,7 +75,7 @@ export const setPageView = async () => {
     location: {href},
     referrer
   } = document;
-  const {innerWidth, innerHeight} = window;
+  const {innerWidth, innerHeight, screen: windowScreen} = window;
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 
   const {user_agent} = userAgent();
@@ -87,7 +87,9 @@ export const setPageView = async () => {
     ...(nonNullish(referrer) && referrer !== '' && {referrer}),
     device: {
       inner_width: innerWidth,
-      inner_height: innerHeight
+      inner_height: innerHeight,
+      screen_width: windowScreen?.availWidth,
+      screen_height: windowScreen?.availHeight
     },
     time_zone: timeZone,
     session_id: sessionId,

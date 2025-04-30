@@ -4,6 +4,7 @@
 
 import {type Mock, MockInstance} from 'vitest';
 import {orbiterIdMock, satelliteIdMock} from '../mocks/orbiter.mock';
+import {jsonReviver} from '../utils/dfinity/json.utils';
 import * as analyticServices from './analytics.services';
 import {startPerformance} from './performance.services';
 
@@ -96,6 +97,31 @@ describe('analytics.services', () => {
       expect(fetch).toHaveBeenCalled();
     });
 
+    it('should call setPageView with expected sizes', async () => {
+      Object.defineProperty(window, 'screen', {
+        value: {
+          width: 1920,
+          height: 1080,
+          availWidth: 1920,
+          availHeight: 1040,
+          colorDepth: 24,
+          pixelDepth: 24
+        },
+        writable: true
+      });
+
+      await analyticServices.setPageView();
+      const [[_, options]] = (fetch as Mock).mock.calls;
+      const body = JSON.parse(options.body, jsonReviver);
+
+      const {page_view} = body.page_views[0];
+
+      expect(page_view.device.inner_width).toEqual(1024);
+      expect(page_view.device.inner_height).toEqual(768);
+      expect(page_view.device.screen_width).toEqual(1920);
+      expect(page_view.device.screen_height).toEqual(1040);
+    });
+
     it('should include parsed client info in page view', async () => {
       Object.defineProperty(window.navigator, 'userAgent', {
         value:
@@ -105,7 +131,7 @@ describe('analytics.services', () => {
 
       await analyticServices.setPageView();
       const [[url, options]] = (fetch as Mock).mock.calls;
-      const body = JSON.parse(options.body);
+      const body = JSON.parse(options.body, jsonReviver);
 
       expect(url).toMatch(/\/views$/);
       expect(body.page_views[0].page_view.client).toEqual({

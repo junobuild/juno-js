@@ -19,7 +19,9 @@ export const pageViewPayloadMock: SetPageViewPayload = {
   href: 'https://test.com',
   device: {
     inner_height: 300,
-    inner_width: 600
+    inner_width: 600,
+    screen_width: 1424,
+    screen_height: 919
   },
   session_id: sessionId,
   title: 'Test',

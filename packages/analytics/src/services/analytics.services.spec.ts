@@ -7,6 +7,14 @@ import {orbiterIdMock, satelliteIdMock} from '../mocks/orbiter.mock';
 import * as analyticServices from './analytics.services';
 import {startPerformance} from './performance.services';
 
+vi.mock('web-vitals', () => ({
+  onCLS: vi.fn(),
+  onFCP: vi.fn(),
+  onINP: vi.fn(),
+  onLCP: vi.fn(),
+  onTTFB: vi.fn()
+}));
+
 vi.mock('../utils/env.utils', () => ({
   isBrowser: vi.fn(() => true)
 }));
@@ -86,6 +94,25 @@ describe('analytics.services', () => {
     it('should call setPageView correctly', async () => {
       await analyticServices.setPageView();
       expect(fetch).toHaveBeenCalled();
+    });
+
+    it('should include parsed client info in page view', async () => {
+      Object.defineProperty(window.navigator, 'userAgent', {
+        value:
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15A372 Safari/604.1',
+        configurable: true
+      });
+
+      await analyticServices.setPageView();
+      const [[url, options]] = (fetch as Mock).mock.calls;
+      const body = JSON.parse(options.body);
+
+      expect(url).toMatch(/\/views$/);
+      expect(body.page_views[0].page_view.client).toEqual({
+        browser: 'Mobile Safari',
+        os: 'iOS',
+        device: 'mobile'
+      });
     });
   });
 

@@ -2,7 +2,7 @@ import {nanoid} from 'nanoid';
 import type {Environment} from '../types/env';
 import type {SetPageViewPayload, SetPerformanceMetricRequestEntry} from '../types/orbiter';
 import type {TrackEvent} from '../types/track';
-import {timestamp, userAgent} from '../utils/analytics.utils';
+import {timestamp, userAgent, userClient} from '../utils/analytics.utils';
 import {assertNonNullish} from '../utils/dfinity/asserts.utils';
 import {nonNullish} from '../utils/dfinity/nullish.utils';
 import {isBrowser} from '../utils/env.utils';
@@ -78,6 +78,9 @@ export const setPageView = async () => {
   const {innerWidth, innerHeight} = window;
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 
+  const {user_agent} = userAgent();
+  const client = userClient(user_agent);
+
   const page_view: SetPageViewPayload = {
     title,
     href,
@@ -88,7 +91,8 @@ export const setPageView = async () => {
     },
     time_zone: timeZone,
     session_id: sessionId,
-    ...userAgent()
+    user_agent,
+    ...(nonNullish(client) && {client})
   };
 
   warningOrbiterServicesNotInitialized(orbiterServices);

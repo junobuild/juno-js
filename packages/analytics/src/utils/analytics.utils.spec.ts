@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {timestamp, userAgent} from './analytics.utils';
+import {timestamp, userAgent, userClient} from './analytics.utils';
 
 describe('analytics.utils', () => {
   describe('timestamp', () => {
@@ -46,6 +46,35 @@ describe('analytics.utils', () => {
 
       const result = userAgent();
       expect(result).toEqual({});
+    });
+  });
+
+  describe('userClient', () => {
+    it('should parse browser, os, and device from user agent', () => {
+      const ua =
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) ' +
+        'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15A372 Safari/604.1';
+
+      const result = userClient(ua);
+
+      expect(result).toEqual({
+        browser: 'Mobile Safari',
+        os: 'iOS',
+        device: 'mobile'
+      });
+    });
+
+    it('should return undefined if browser and os are not detected', () => {
+      const ua = 'UNKNOWN-AGENT';
+
+      const result = userClient(ua);
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should handle missing user agent (undefined)', () => {
+      const result = userClient(undefined);
+      expect(result).toBeUndefined();
     });
   });
 });

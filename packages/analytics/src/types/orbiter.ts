@@ -10,6 +10,12 @@ export interface PageViewDevice {
   inner_width: number;
 }
 
+export interface PageViewClient {
+  browser: string;
+  os: string;
+  device?: string;
+}
+
 // ---------------------------------------------------------
 // Page views
 // ---------------------------------------------------------
@@ -36,6 +42,7 @@ export interface SetPageViewPayload {
   device: PageViewDevice;
   version?: bigint;
   user_agent?: string;
+  client?: PageViewClient;
 }
 
 export type PageViewPayload = SetPageViewPayload & {

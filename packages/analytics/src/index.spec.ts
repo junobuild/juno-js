@@ -113,7 +113,19 @@ describe('initOrbiter', () => {
   });
 
   describe('user-agent parser', () => {
-    it('should not use ua parser ', async () => {
+    it('should not use ua parser by default', async () => {
+      const spyParse = vi.spyOn(userAgentServices, 'parseUserAgent');
+
+      const spy = vi.spyOn(global, 'fetch');
+
+      initOrbiter();
+
+      await vi.waitFor(() => expect(spy).toHaveBeenCalled());
+
+      expect(spyParse).not.toHaveBeenCalled();
+    });
+
+    it('should not use ua parser when set to false', async () => {
       const spyParse = vi.spyOn(userAgentServices, 'parseUserAgent');
 
       const spy = vi.spyOn(global, 'fetch');
@@ -129,14 +141,14 @@ describe('initOrbiter', () => {
       expect(spyParse).not.toHaveBeenCalled();
     });
 
-    it('should use user-agent parser', async () => {
+    it('should use user-agent parser when explicitly set to true', async () => {
       const spyParse = vi.spyOn(userAgentServices, 'parseUserAgent');
 
       const spy = vi.spyOn(global, 'fetch');
 
       initOrbiter({
         options: {
-          performance: true
+          userAgentParser: true
         }
       });
 

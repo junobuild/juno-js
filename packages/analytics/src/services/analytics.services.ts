@@ -82,7 +82,7 @@ export const setPageView = async ({userAgentParser}: SetPageViewParams = {}) => 
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 
   const {user_agent} = userAgent();
-  const client = userAgentParser === false ? undefined : await parseUserAgent(user_agent);
+  const client = userAgentParser === true ? await parseUserAgent(user_agent) : undefined;
 
   const page_view: SetPageViewPayload = {
     title,

@@ -37,7 +37,6 @@ const parseEnv = (userEnv?: UserEnvironment): Environment => {
     orbiterId,
     satelliteId,
     container,
-    worker: userEnv?.worker,
     options: userEnv?.options
   };
 };

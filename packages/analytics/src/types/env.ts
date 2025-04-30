@@ -30,7 +30,6 @@ export interface EnvironmentActor {
  * @property {string} orbiterId - The ID of the orbiter.
  * @property {string} satelliteId - The ID of the satellite.
  * @property {boolean | string} [container] - Specifies whether the actor is running in a container or provides the container URL.
- * @property {EnvironmentWorker} [worker] - The configuration of the environment worker.
  * @property {EnvironmentOptions} [options] - The options of the analytics environment.
  */
 export type Environment = EnvironmentActor & {
@@ -41,7 +40,6 @@ export type Environment = EnvironmentActor & {
  * Represents the user environment configuration.
  * @typedef {Object} UserEnvironment
  * @property {boolean | string} [container] - Specifies whether the actor is running in a container or provides the container URL.
- * @property {EnvironmentWorker} [worker] - The configuration of the environment worker.
  * @property {string} [orbiterId] - The ID of the orbiter.
  * @property {string} [satelliteId] - The ID of the satellite.
  */

@@ -13,7 +13,7 @@ export interface PageViewDevice {
 export interface PageViewClient {
   browser: string;
   os: string;
-  device: string;
+  device?: string;
 }
 
 // ---------------------------------------------------------

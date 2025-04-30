@@ -19,13 +19,13 @@ export const userClient = (user_agent: string | undefined): PageViewClient | und
   const parser = new UAParser(user_agent);
   const {browser, os, device} = parser.getResult();
 
-  if (isNullish(browser.name) || isNullish(os.name) || isNullish(device.type)) {
+  if (isNullish(browser.name) || isNullish(os.name)) {
     return undefined;
   }
 
   return {
     browser: browser.name,
     os: os.name,
-    device: device.type
+    device: device?.type
   };
 };

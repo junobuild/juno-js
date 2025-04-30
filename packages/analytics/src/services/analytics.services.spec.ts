@@ -7,6 +7,14 @@ import {orbiterIdMock, satelliteIdMock} from '../mocks/orbiter.mock';
 import * as analyticServices from './analytics.services';
 import {startPerformance} from './performance.services';
 
+vi.mock('web-vitals', () => ({
+  onCLS: vi.fn(),
+  onFCP: vi.fn(),
+  onINP: vi.fn(),
+  onLCP: vi.fn(),
+  onTTFB: vi.fn()
+}));
+
 vi.mock('../utils/env.utils', () => ({
   isBrowser: vi.fn(() => true)
 }));

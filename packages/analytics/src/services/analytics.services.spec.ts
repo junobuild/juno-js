@@ -87,6 +87,25 @@ describe('analytics.services', () => {
       await analyticServices.setPageView();
       expect(fetch).toHaveBeenCalled();
     });
+
+    it('should include parsed client info in page view', async () => {
+      Object.defineProperty(window.navigator, 'userAgent', {
+        value:
+          'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15A372 Safari/604.1',
+        configurable: true
+      });
+
+      await analyticServices.setPageView();
+      const [[url, options]] = (fetch as Mock).mock.calls;
+      const body = JSON.parse(options.body);
+
+      expect(url).toMatch(/\/views$/);
+      expect(body.page_views[0].page_view.client).toEqual({
+        browser: 'Mobile Safari',
+        os: 'iOS',
+        device: 'mobile'
+      });
+    });
   });
 
   describe('initTrackPerformance', () => {

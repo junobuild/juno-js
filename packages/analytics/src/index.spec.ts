@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 
-import {type Mock, MockInstance} from 'vitest';
 import {initOrbiter} from './index';
 import * as performanceServices from './services/performance.services';
+import * as userAgentServices from './services/user-agent.services';
 
 vi.mock('./utils/window.env.utils', () => ({
   envSatelliteId: vi.fn(() => 'satellite-from-env'),
@@ -13,14 +13,13 @@ vi.mock('./utils/window.env.utils', () => ({
 }));
 
 describe('initOrbiter', () => {
-  let spy: MockInstance;
-
   beforeEach(() => {
-    vi.stubGlobal('fetch', vi.fn());
-
-    spy = (fetch as unknown as Mock).mockResolvedValueOnce(
-      new Response(JSON.stringify({ok: true}), {status: 200})
-    );
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ok: true})
+      })
+    ) as unknown as typeof fetch;
   });
 
   afterEach(() => {
@@ -34,6 +33,8 @@ describe('initOrbiter', () => {
   });
 
   it('should set page view', async () => {
+    const spy = vi.spyOn(global, 'fetch');
+
     initOrbiter();
 
     await vi.waitFor(() => expect(spy).toHaveBeenCalled());
@@ -85,27 +86,63 @@ describe('initOrbiter', () => {
     });
   });
 
-  it('should not start performance metrics', async () => {
-    const spyStart = vi.spyOn(performanceServices, 'startPerformance');
+  describe('performance', () => {
+    it('should not start performance metrics', async () => {
+      const spyStart = vi.spyOn(performanceServices, 'startPerformance');
 
-    initOrbiter({
-      options: {
-        performance: false
-      }
+      initOrbiter({
+        options: {
+          performance: false
+        }
+      });
+
+      await vi.waitFor(() => expect(spyStart).not.toHaveBeenCalled());
     });
 
-    await vi.waitFor(() => expect(spyStart).not.toHaveBeenCalled());
+    it('should start performance metrics', async () => {
+      const spyStart = vi.spyOn(performanceServices, 'startPerformance');
+
+      initOrbiter({
+        options: {
+          performance: true
+        }
+      });
+
+      await vi.waitFor(() => expect(spyStart).toHaveBeenCalled());
+    });
   });
 
-  it('should start performance metrics', async () => {
-    const spyStart = vi.spyOn(performanceServices, 'startPerformance');
+  describe('user-agent parser', () => {
+    it('should not use ua parser ', async () => {
+      const spyParse = vi.spyOn(userAgentServices, 'parseUserAgent');
 
-    initOrbiter({
-      options: {
-        performance: true
-      }
+      const spy = vi.spyOn(global, 'fetch');
+
+      initOrbiter({
+        options: {
+          userAgentParser: false
+        }
+      });
+
+      await vi.waitFor(() => expect(spy).toHaveBeenCalled());
+
+      expect(spyParse).not.toHaveBeenCalled();
     });
 
-    await vi.waitFor(() => expect(spyStart).toHaveBeenCalled());
+    it('should use user-agent parser', async () => {
+      const spyParse = vi.spyOn(userAgentServices, 'parseUserAgent');
+
+      const spy = vi.spyOn(global, 'fetch');
+
+      initOrbiter({
+        options: {
+          performance: true
+        }
+      });
+
+      await vi.waitFor(() => expect(spy).toHaveBeenCalled());
+
+      expect(spyParse).toHaveBeenCalled();
+    });
   });
 });

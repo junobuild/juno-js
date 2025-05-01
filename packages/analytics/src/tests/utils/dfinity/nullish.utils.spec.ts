@@ -1,4 +1,9 @@
-import {isEmptyString, isNullish, nonNullish, notEmptyString} from './nullish.utils';
+import {
+  isEmptyString,
+  isNullish,
+  nonNullish,
+  notEmptyString
+} from '../../../utils/dfinity/nullish.utils';
 
 describe('nullish-utils', () => {
   describe('isNullish', () => {

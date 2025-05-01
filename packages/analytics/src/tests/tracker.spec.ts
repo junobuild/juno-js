@@ -3,10 +3,10 @@
  */
 
 import type {Mock, MockInstance} from 'vitest';
+import {PerformanceServices} from '../services/performance.services';
+import * as trackerHelpers from '../tracker';
+import {jsonReviver} from '../utils/dfinity/json.utils';
 import {orbiterIdMock, satelliteIdMock} from './mocks/orbiter.mock';
-import {PerformanceServices} from './services/performance.services';
-import * as trackerHelpers from './tracker';
-import {jsonReviver} from './utils/dfinity/json.utils';
 
 vi.mock('web-vitals', () => ({
   onCLS: vi.fn(),

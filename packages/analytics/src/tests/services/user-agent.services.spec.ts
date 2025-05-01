@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {UserAgentServices} from './user-agent.services';
+import {UserAgentServices} from '../../services/user-agent.services';
 
 describe('user-agent.services', () => {
   const {parseUserAgent} = new UserAgentServices();

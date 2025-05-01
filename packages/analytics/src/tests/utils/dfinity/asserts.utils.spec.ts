@@ -4,7 +4,7 @@ import {
   assertPercentageNumber,
   InvalidPercentageError,
   NullishError
-} from './asserts.utils';
+} from '../../../utils/dfinity/asserts.utils';
 
 describe('asserts-utils', () => {
   describe('assertNonNullish', () => {

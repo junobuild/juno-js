@@ -1,4 +1,4 @@
-import {isBrowser} from './env.utils';
+import {isBrowser} from '../../utils/env.utils';
 
 describe('env.utils', () => {
   afterAll(() => {

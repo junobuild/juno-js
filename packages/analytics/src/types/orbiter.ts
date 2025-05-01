@@ -5,14 +5,14 @@ export interface AnalyticKey {
   collected_at: bigint;
 }
 
-export interface PageViewDevice {
+export interface PageViewDevicePayload {
   inner_height: number;
   inner_width: number;
   screen_height?: number;
   screen_width?: number;
 }
 
-export interface PageViewClient {
+export interface PageViewClientPayload {
   browser: string;
   os: string;
   device?: string;
@@ -41,10 +41,10 @@ export interface SetPageViewPayload {
   time_zone: string;
   session_id: string;
   href: string;
-  device: PageViewDevice;
+  device: PageViewDevicePayload;
   version?: bigint;
   user_agent?: string;
-  client?: PageViewClient;
+  client?: PageViewClientPayload;
 }
 
 export type PageViewPayload = SetPageViewPayload & {

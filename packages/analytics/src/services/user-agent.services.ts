@@ -1,8 +1,8 @@
-import type {PageViewClient} from '../types/orbiter';
+import type {PageViewClientPayload} from '../types/orbiter';
 import {isNullish} from '../utils/dfinity/nullish.utils';
 
 export class UserAgentServices {
-  async parseUserAgent(user_agent: string | undefined): Promise<PageViewClient | undefined> {
+  async parseUserAgent(user_agent: string | undefined): Promise<PageViewClientPayload | undefined> {
     // In CI test, parsing undefined agent returns WebKit on linux
     if (isNullish(user_agent)) {
       return undefined;

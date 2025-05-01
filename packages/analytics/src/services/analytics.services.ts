@@ -38,7 +38,7 @@ export const initServices = (env: Environment): {cleanup: () => void} => {
   services = {
     orbiter: new OrbiterServices(env),
     userAgent: env.options?.userAgentParser === true ? new UserAgentServices() : null,
-    performance: env.options?.performance === false ? null : new PerformanceServices()
+    performance: env.options?.performance === true ? new PerformanceServices() : null
   };
 
   return {

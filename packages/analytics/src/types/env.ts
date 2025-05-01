@@ -5,7 +5,7 @@
 export interface EnvironmentOptions {
   /**
    * Enable or disable tracking performances with Web Vitals.
-   * @default true By default, the performance tracking is enabled.
+   * @default false By default, the performance tracking is disabled.
    * @type {boolean}
    */
   performance?: boolean;

@@ -3,7 +3,7 @@
  */
 
 import type {Mock} from 'vitest';
-import {startPerformance} from './performance.services';
+import {PerformanceServices} from './performance.services';
 
 vi.mock('web-vitals', () => ({
   onCLS: vi.fn(),
@@ -14,6 +14,8 @@ vi.mock('web-vitals', () => ({
 }));
 
 describe('performance.services', () => {
+  const {startPerformance} = new PerformanceServices();
+
   describe('startPerformance', () => {
     const sessionId = 'session-id-mock';
     const postPerformanceMetric = vi.fn();

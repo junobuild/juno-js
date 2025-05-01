@@ -3,7 +3,7 @@
  */
 
 import {initOrbiter} from './index';
-import * as performanceServices from './services/performance.services';
+import {PerformanceServices} from './services/performance.services';
 import {UserAgentServices} from './services/user-agent.services';
 
 vi.mock('./utils/window.env.utils', () => ({
@@ -88,7 +88,7 @@ describe('initOrbiter', () => {
 
   describe('performance', () => {
     it('should not start performance metrics', async () => {
-      const spyStart = vi.spyOn(performanceServices, 'startPerformance');
+      const spyStart = vi.spyOn(PerformanceServices.prototype, 'startPerformance');
 
       initOrbiter({
         options: {
@@ -100,7 +100,7 @@ describe('initOrbiter', () => {
     });
 
     it('should start performance metrics', async () => {
-      const spyStart = vi.spyOn(performanceServices, 'startPerformance');
+      const spyStart = vi.spyOn(PerformanceServices.prototype, 'startPerformance');
 
       initOrbiter({
         options: {

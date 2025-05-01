@@ -1,8 +1,8 @@
 import {
   initServices,
   initTrackPageViews,
-  initTrackPerformance,
-  setPageView
+  setPageView,
+  startTrackPerformance
 } from './services/analytics.services';
 import type {Environment, UserEnvironment} from './types/env';
 import {assertNonNullish} from './utils/dfinity/asserts.utils';
@@ -63,7 +63,7 @@ export const initOrbiter = (userEnv?: UserEnvironment): (() => void) => {
   const {cleanup: pushHistoryCleanup} = initTrackPageViews();
 
   // We do not await on purpose to not block the application's boot.
-  initTrackPerformance(env);
+  startTrackPerformance();
 
   return () => {
     analyticsServicesCleanup();

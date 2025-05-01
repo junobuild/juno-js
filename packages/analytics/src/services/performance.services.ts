@@ -15,128 +15,130 @@ type SessionMetric = Omit<Metric, 'navigationType'> &
 
 type PostPerformanceMetric = (entry: SetPerformanceMetricRequestEntry) => Promise<void>;
 
-export const startPerformance = async ({
-  sessionId,
-  postPerformanceMetric
-}: {
-  sessionId: string;
-  postPerformanceMetric: PostPerformanceMetric;
-}) => {
-  const {onCLS, onFCP, onINP, onLCP, onTTFB} = await import('web-vitals');
+export class PerformanceServices {
+  async startPerformance({
+    sessionId,
+    postPerformanceMetric
+  }: {
+    sessionId: string;
+    postPerformanceMetric: PostPerformanceMetric;
+  }) {
+    const {onCLS, onFCP, onINP, onLCP, onTTFB} = await import('web-vitals');
 
-  const setMetric = (metric: Metric) => {
-    (async () => {
-      await setPerformanceMetric({
-        metric: {...metric, sessionId},
-        postPerformanceMetric
-      });
-    })();
-  };
+    const setMetric = (metric: Metric) => {
+      (async () => {
+        await PerformanceServices.setPerformanceMetric({
+          metric: {...metric, sessionId},
+          postPerformanceMetric
+        });
+      })();
+    };
 
-  onCLS(setMetric);
-  onFCP(setMetric);
-  onINP(setMetric);
-  onLCP(setMetric);
-  onTTFB(setMetric);
-};
-
-const setPerformanceMetric = async ({
-  metric,
-  postPerformanceMetric
-}: {
-  metric: SessionMetric;
-  postPerformanceMetric: PostPerformanceMetric;
-}) => {
-  const data = mapPerformanceMetric(metric);
-
-  if (data === 'unknown') {
-    console.warn('Performance metric ignored. Unknown metric name.', metric);
-    return;
+    onCLS(setMetric);
+    onFCP(setMetric);
+    onINP(setMetric);
+    onLCP(setMetric);
+    onTTFB(setMetric);
   }
 
-  if (data === 'deprecated') {
-    return;
-  }
+  private static setPerformanceMetric = async ({
+    metric,
+    postPerformanceMetric
+  }: {
+    metric: SessionMetric;
+    postPerformanceMetric: PostPerformanceMetric;
+  }) => {
+    const data = PerformanceServices.mapPerformanceMetric(metric);
 
-  await postPerformanceMetric({
-    key: {
-      key: nanoid(),
-      ...timestamp()
-    },
-    performance_metric: data
-  });
-};
-
-const mapPerformanceMetric = ({
-  sessionId,
-  name: metricName,
-  value,
-  delta,
-  id,
-  navigationType
-}: SessionMetric): SetPerformanceMetricPayload | 'deprecated' | 'unknown' => {
-  const mapMetricName = (): PerformanceMetricNamePayload | 'deprecated' | 'unknown' => {
-    switch (metricName) {
-      case 'CLS':
-      case 'FCP':
-      case 'INP':
-      case 'LCP':
-      case 'TTFB':
-        return metricName;
-      case 'FID':
-        return 'deprecated';
-      default:
-        return 'unknown';
+    if (data === 'unknown') {
+      console.warn('Performance metric ignored. Unknown metric name.', metric);
+      return;
     }
-  };
 
-  const metric_name = mapMetricName();
-
-  if (metric_name === 'unknown' || metric_name === 'deprecated') {
-    return metric_name;
-  }
-
-  const mapNavigationType = (): NavigationTypePayload | undefined => {
-    switch (navigationType) {
-      case 'navigate':
-        return 'Navigate';
-      case 'restore':
-        return 'Restore';
-      case 'reload':
-        return 'Reload';
-      case 'back-forward':
-        return 'BackForward';
-      case 'back-forward-cache':
-        return 'BackForwardCache';
-      case 'prerender':
-        return 'Prerender';
-      default:
-        return undefined;
+    if (data === 'deprecated') {
+      return;
     }
+
+    await postPerformanceMetric({
+      key: {
+        key: nanoid(),
+        ...timestamp()
+      },
+      performance_metric: data
+    });
   };
 
-  const navigation_type = mapNavigationType();
-
-  const data: WebVitalsMetricPayload = {
+  private static mapPerformanceMetric({
+    sessionId,
+    name: metricName,
     value,
     delta,
     id,
-    ...(nonNullish(navigation_type) && {navigation_type})
-  };
+    navigationType
+  }: SessionMetric): SetPerformanceMetricPayload | 'deprecated' | 'unknown' {
+    const mapMetricName = (): PerformanceMetricNamePayload | 'deprecated' | 'unknown' => {
+      switch (metricName) {
+        case 'CLS':
+        case 'FCP':
+        case 'INP':
+        case 'LCP':
+        case 'TTFB':
+          return metricName;
+        case 'FID':
+          return 'deprecated';
+        default:
+          return 'unknown';
+      }
+    };
 
-  const {
-    location: {href}
-  } = document;
+    const metric_name = mapMetricName();
 
-  const metric: SetPerformanceMetricPayload = {
-    href,
-    metric_name,
-    session_id: sessionId,
-    data: {
-      WebVitalsMetric: data
-    },
-    ...userAgent()
-  };
+    if (metric_name === 'unknown' || metric_name === 'deprecated') {
+      return metric_name;
+    }
 
-  return metric;
-};
+    const mapNavigationType = (): NavigationTypePayload | undefined => {
+      switch (navigationType) {
+        case 'navigate':
+          return 'Navigate';
+        case 'restore':
+          return 'Restore';
+        case 'reload':
+          return 'Reload';
+        case 'back-forward':
+          return 'BackForward';
+        case 'back-forward-cache':
+          return 'BackForwardCache';
+        case 'prerender':
+          return 'Prerender';
+        default:
+          return undefined;
+      }
+    };
+
+    const navigation_type = mapNavigationType();
+
+    const data: WebVitalsMetricPayload = {
+      value,
+      delta,
+      id,
+      ...(nonNullish(navigation_type) && {navigation_type})
+    };
+
+    const {
+      location: {href}
+    } = document;
+
+    const metric: SetPerformanceMetricPayload = {
+      href,
+      metric_name,
+      session_id: sessionId,
+      data: {
+        WebVitalsMetric: data
+      },
+      ...userAgent()
+    };
+
+    return metric;
+  }
+}

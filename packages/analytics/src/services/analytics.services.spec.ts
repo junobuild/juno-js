@@ -6,7 +6,7 @@ import {type Mock, MockInstance} from 'vitest';
 import {orbiterIdMock, satelliteIdMock} from '../mocks/orbiter.mock';
 import {jsonReviver} from '../utils/dfinity/json.utils';
 import * as analyticServices from './analytics.services';
-import {startPerformance} from './performance.services';
+import {PerformanceServices} from './performance.services';
 
 vi.mock('web-vitals', () => ({
   onCLS: vi.fn(),
@@ -18,10 +18,6 @@ vi.mock('web-vitals', () => ({
 
 vi.mock('../utils/env.utils', () => ({
   isBrowser: vi.fn(() => true)
-}));
-
-vi.mock('./performance.services', () => ({
-  startPerformance: vi.fn()
 }));
 
 vi.mock('../src/constants/container.constants', () => ({
@@ -162,19 +158,34 @@ describe('analytics.services', () => {
     });
   });
 
-  describe('initTrackPerformance', () => {
-    beforeEach(() => {
+  describe('startTrackPerformance', () => {
+    afterAll(() => {
       analyticServices.initServices(env);
     });
 
     it('should call startPerformance if enabled', async () => {
-      await analyticServices.initTrackPerformance({options: {}, ...env});
-      expect(startPerformance).toHaveBeenCalled();
+      analyticServices.initServices(env);
+
+      const spyStart = vi.spyOn(PerformanceServices.prototype, 'startPerformance');
+
+      await analyticServices.startTrackPerformance();
+
+      expect(spyStart).toHaveBeenCalled();
     });
 
     it('should not call startPerformance if disabled', async () => {
-      await analyticServices.initTrackPerformance({options: {performance: false}, ...env});
-      expect(startPerformance).not.toHaveBeenCalled();
+      analyticServices.initServices({
+        ...env,
+        options: {
+          performance: false
+        }
+      });
+
+      const spyStart = vi.spyOn(PerformanceServices.prototype, 'startPerformance');
+
+      await analyticServices.startTrackPerformance();
+
+      expect(spyStart).not.toHaveBeenCalled();
     });
   });
 

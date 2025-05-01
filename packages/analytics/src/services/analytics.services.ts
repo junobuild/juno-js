@@ -4,11 +4,11 @@ import type {SetPageViewPayload, SetPerformanceMetricRequestEntry} from '../type
 import type {TrackEvent} from '../types/track';
 import {timestamp, userAgent} from '../utils/analytics.utils';
 import {assertNonNullish} from '../utils/dfinity/asserts.utils';
-import {nonNullish} from '../utils/dfinity/nullish.utils';
+import {isNullish, nonNullish} from '../utils/dfinity/nullish.utils';
 import {isBrowser} from '../utils/env.utils';
 import {warningOrbiterServicesNotInitialized} from '../utils/log.utils';
 import {OrbiterServices} from './orbiter.services';
-import {startPerformance} from './performance.services';
+import {PerformanceServices} from './performance.services';
 import {UserAgentServices} from './user-agent.services';
 
 const initSessionId = (): string | undefined => {
@@ -29,6 +29,7 @@ interface Services {
    * Developer opt-in feature.
    */
   userAgent: UserAgentServices | null;
+  performance: PerformanceServices | null;
 }
 
 let services: Services | undefined | null;
@@ -36,7 +37,8 @@ let services: Services | undefined | null;
 export const initServices = (env: Environment): {cleanup: () => void} => {
   services = {
     orbiter: new OrbiterServices(env),
-    userAgent: env.options?.userAgentParser === true ? new UserAgentServices() : null
+    userAgent: env.options?.userAgentParser === true ? new UserAgentServices() : null,
+    performance: env.options?.performance === false ? null : new PerformanceServices()
   };
 
   return {
@@ -122,12 +124,12 @@ export const setPageView = async () => {
   });
 };
 
-export const initTrackPerformance = async ({options}: Environment) => {
+export const startTrackPerformance = async () => {
   if (!isBrowser()) {
     return;
   }
 
-  if (options?.performance === false) {
+  if (isNullish(services?.performance)) {
     return;
   }
 
@@ -141,7 +143,7 @@ export const initTrackPerformance = async ({options}: Environment) => {
     await services?.orbiter?.setPerformanceMetric(entry);
   };
 
-  await startPerformance({sessionId, postPerformanceMetric});
+  await services.performance.startPerformance({sessionId, postPerformanceMetric});
 };
 
 /**

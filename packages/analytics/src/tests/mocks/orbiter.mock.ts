@@ -6,7 +6,7 @@ import type {
   SetPerformanceMetricsRequest,
   SetTrackEventPayload,
   SetTrackEventsRequest
-} from '../types/orbiter';
+} from '../../types/orbiter';
 
 const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 

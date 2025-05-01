@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {timestamp, userAgent} from './analytics.utils';
+import {timestamp, userAgent} from '../../utils/analytics.utils';
 
 describe('analytics.utils', () => {
   describe('timestamp', () => {

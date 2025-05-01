@@ -3,7 +3,7 @@
  */
 
 import type {Mock} from 'vitest';
-import {PerformanceServices} from './performance.services';
+import {PerformanceServices} from '../../services/performance.services';
 
 vi.mock('web-vitals', () => ({
   onCLS: vi.fn(),

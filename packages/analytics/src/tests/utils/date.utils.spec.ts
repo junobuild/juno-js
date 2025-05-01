@@ -1,4 +1,4 @@
-import {nowInBigIntNanoSeconds} from './date.utils';
+import {nowInBigIntNanoSeconds} from '../../utils/date.utils';
 
 describe('date.utils', () => {
   describe('nowInBigIntNanoSeconds', () => {

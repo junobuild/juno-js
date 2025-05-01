@@ -1,5 +1,8 @@
 import type {Mock} from 'vitest';
-import {ApiError} from '../api/orbiter.api';
+import {ApiError} from '../../api/orbiter.api';
+import {OrbiterServices} from '../../services/orbiter.services';
+import {Environment} from '../../types/env';
+import {jsonReplacer} from '../../utils/dfinity/json.utils';
 import {
   okResponseMock,
   orbiterIdMock,
@@ -8,9 +11,6 @@ import {
   satelliteIdMock,
   trackEventsRequestMock
 } from '../mocks/orbiter.mock';
-import {Environment} from '../types/env';
-import {jsonReplacer} from '../utils/dfinity/json.utils';
-import {OrbiterServices} from './orbiter.services';
 
 vi.mock('../src/constants/container.constants', () => ({
   DOCKER_CONTAINER_WEB_URL: 'http://localhost:5973'

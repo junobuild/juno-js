@@ -1,4 +1,4 @@
-import {envContainer, envOrbiterId, envSatelliteId} from './window.env.utils';
+import {envContainer, envOrbiterId, envSatelliteId} from '../../utils/window.env.utils';
 
 describe('window.env.utils', () => {
   const originalEnv = process.env;

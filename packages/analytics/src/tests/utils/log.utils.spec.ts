@@ -1,4 +1,4 @@
-import {warningOrbiterServicesNotInitialized} from './log.utils';
+import {warningOrbiterServicesNotInitialized} from '../../utils/log.utils';
 
 describe('log.utils', () => {
   const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});

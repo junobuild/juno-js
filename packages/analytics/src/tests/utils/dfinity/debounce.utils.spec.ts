@@ -1,4 +1,4 @@
-import {debounce} from './debounce.utils';
+import {debounce} from '../../../utils/dfinity/debounce.utils';
 
 describe('debounce-utils', () => {
   let callback: ReturnType<typeof vi.fn>;

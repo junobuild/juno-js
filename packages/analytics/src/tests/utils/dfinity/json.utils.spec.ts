@@ -1,4 +1,4 @@
-import {jsonReplacer, jsonReviver} from './json.utils';
+import {jsonReplacer, jsonReviver} from '../../../utils/dfinity/json.utils';
 
 describe('json-utils', () => {
   describe('stringify', () => {

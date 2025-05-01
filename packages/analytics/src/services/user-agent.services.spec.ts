@@ -2,9 +2,11 @@
  * @vitest-environment jsdom
  */
 
-import {parseUserAgent} from './user-agent.services';
+import {UserAgentServices} from './user-agent.services';
 
 describe('user-agent.services', () => {
+  const {parseUserAgent} = new UserAgentServices();
+
   describe('parseUserAgent', () => {
     it('should return parsed client info for a known user agent', async () => {
       const ua =

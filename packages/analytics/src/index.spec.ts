@@ -4,7 +4,7 @@
 
 import {initOrbiter} from './index';
 import * as performanceServices from './services/performance.services';
-import * as userAgentServices from './services/user-agent.services';
+import {UserAgentServices} from './services/user-agent.services';
 
 vi.mock('./utils/window.env.utils', () => ({
   envSatelliteId: vi.fn(() => 'satellite-from-env'),
@@ -114,7 +114,7 @@ describe('initOrbiter', () => {
 
   describe('user-agent parser', () => {
     it('should not use ua parser by default', async () => {
-      const spyParse = vi.spyOn(userAgentServices, 'parseUserAgent');
+      const spyParse = vi.spyOn(UserAgentServices.prototype, 'parseUserAgent');
 
       const spy = vi.spyOn(global, 'fetch');
 
@@ -126,7 +126,7 @@ describe('initOrbiter', () => {
     });
 
     it('should not use ua parser when set to false', async () => {
-      const spyParse = vi.spyOn(userAgentServices, 'parseUserAgent');
+      const spyParse = vi.spyOn(UserAgentServices.prototype, 'parseUserAgent');
 
       const spy = vi.spyOn(global, 'fetch');
 
@@ -142,7 +142,7 @@ describe('initOrbiter', () => {
     });
 
     it('should use user-agent parser when explicitly set to true', async () => {
-      const spyParse = vi.spyOn(userAgentServices, 'parseUserAgent');
+      const spyParse = vi.spyOn(UserAgentServices.prototype, 'parseUserAgent');
 
       const spy = vi.spyOn(global, 'fetch');
 

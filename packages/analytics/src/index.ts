@@ -1,5 +1,5 @@
 import {
-  initOrbiterServices,
+  initServices,
   initTrackPageViews,
   initTrackPerformance,
   setPageView
@@ -54,19 +54,19 @@ const parseEnv = (userEnv?: UserEnvironment): Environment => {
 export const initOrbiter = (userEnv?: UserEnvironment): (() => void) => {
   const env = parseEnv(userEnv);
 
-  const {cleanup: orbiterServicesCleanup} = initOrbiterServices(env);
+  const {cleanup: analyticsServicesCleanup} = initServices(env);
 
   // Save first page as soon as possible.
   // We do not await on purpose to not block the application's boot.
-  setPageView(env.options);
+  setPageView();
 
-  const {cleanup: pushHistoryCleanup} = initTrackPageViews(env.options);
+  const {cleanup: pushHistoryCleanup} = initTrackPageViews();
 
   // We do not await on purpose to not block the application's boot.
   initTrackPerformance(env);
 
   return () => {
-    orbiterServicesCleanup();
+    analyticsServicesCleanup();
     pushHistoryCleanup();
   };
 };

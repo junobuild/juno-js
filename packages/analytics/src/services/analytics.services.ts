@@ -1,5 +1,5 @@
 import {nanoid} from 'nanoid';
-import type {Environment, EnvironmentOptions} from '../types/env';
+import type {Environment} from '../types/env';
 import type {SetPageViewPayload, SetPerformanceMetricRequestEntry} from '../types/orbiter';
 import type {TrackEvent} from '../types/track';
 import {timestamp, userAgent} from '../utils/analytics.utils';
@@ -9,9 +9,7 @@ import {isBrowser} from '../utils/env.utils';
 import {warningOrbiterServicesNotInitialized} from '../utils/log.utils';
 import {OrbiterServices} from './orbiter.services';
 import {startPerformance} from './performance.services';
-import {parseUserAgent} from './user-agent.services';
-
-type SetPageViewParams = Pick<EnvironmentOptions, 'userAgentParser'>;
+import {UserAgentServices} from './user-agent.services';
 
 const initSessionId = (): string | undefined => {
   // I faced this issue when I used the library in Docusaurus which does not implement the crypto API when server-side rendering.
@@ -25,20 +23,31 @@ const initSessionId = (): string | undefined => {
 
 const sessionId = initSessionId();
 
-let orbiterServices: OrbiterServices | undefined | null;
+interface Services {
+  orbiter: OrbiterServices;
+  /**
+   * Developer opt-in feature.
+   */
+  userAgent: UserAgentServices | null;
+}
 
-export const initOrbiterServices = (env: Environment): {cleanup: () => void} => {
-  orbiterServices = new OrbiterServices(env);
+let services: Services | undefined | null;
+
+export const initServices = (env: Environment): {cleanup: () => void} => {
+  services = {
+    orbiter: new OrbiterServices(env),
+    userAgent: env.options?.userAgentParser === true ? new UserAgentServices() : null
+  };
 
   return {
     cleanup() {
-      orbiterServices = null;
+      services = null;
     }
   };
 };
 
-export const initTrackPageViews = (params: SetPageViewParams = {}): {cleanup: () => void} => {
-  const trackPages = async () => await trackPageViewAsync(params);
+export const initTrackPageViews = (): {cleanup: () => void} => {
+  const trackPages = async () => await trackPageViewAsync();
 
   let pushStateProxy: typeof history.pushState | null = new Proxy(history.pushState, {
     // eslint-disable-next-line local-rules/prefer-object-params
@@ -66,7 +75,7 @@ export const initTrackPageViews = (params: SetPageViewParams = {}): {cleanup: ()
 
 const SESSION_ID_UNDEFINED_MSG = 'No session ID initialized.';
 
-export const setPageView = async ({userAgentParser}: SetPageViewParams = {}) => {
+export const setPageView = async () => {
   if (!isBrowser()) {
     return;
   }
@@ -82,7 +91,9 @@ export const setPageView = async ({userAgentParser}: SetPageViewParams = {}) => 
   const {timeZone} = Intl.DateTimeFormat().resolvedOptions();
 
   const {user_agent} = userAgent();
-  const client = userAgentParser === true ? await parseUserAgent(user_agent) : undefined;
+  const client = nonNullish(services?.userAgent)
+    ? await services?.userAgent.parseUserAgent(user_agent)
+    : undefined;
 
   const page_view: SetPageViewPayload = {
     title,
@@ -100,9 +111,9 @@ export const setPageView = async ({userAgentParser}: SetPageViewParams = {}) => 
     ...(nonNullish(client) && {client})
   };
 
-  warningOrbiterServicesNotInitialized(orbiterServices);
+  warningOrbiterServicesNotInitialized(services);
 
-  await orbiterServices?.setPageView({
+  await services?.orbiter?.setPageView({
     key: {
       key: nanoid(),
       ...timestamp()
@@ -122,12 +133,12 @@ export const initTrackPerformance = async ({options}: Environment) => {
 
   assertNonNullish(sessionId, SESSION_ID_UNDEFINED_MSG);
 
-  warningOrbiterServicesNotInitialized(orbiterServices);
+  warningOrbiterServicesNotInitialized(services);
 
   const postPerformanceMetric = async (entry: SetPerformanceMetricRequestEntry) => {
-    warningOrbiterServicesNotInitialized(orbiterServices);
+    warningOrbiterServicesNotInitialized(services);
 
-    await orbiterServices?.setPerformanceMetric(entry);
+    await services?.orbiter?.setPerformanceMetric(entry);
   };
 
   await startPerformance({sessionId, postPerformanceMetric});
@@ -145,11 +156,10 @@ export const trackPageView = () => {
 
 /**
  * Tracks a page view in Juno Analytics.
- * @param {Pick<EnvironmentOptions, 'userAgentParser'>} [params] Optional user agent parser config.
  * @returns {Promise<void>} A promise that resolves when the page view is tracked.
  */
-export const trackPageViewAsync = async (params: SetPageViewParams = {}): Promise<void> => {
-  await setPageView(params);
+export const trackPageViewAsync = async (): Promise<void> => {
+  await setPageView();
 };
 
 /**
@@ -176,9 +186,9 @@ export const trackEventAsync = async (data: TrackEvent): Promise<void> => {
 
   assertNonNullish(sessionId, SESSION_ID_UNDEFINED_MSG);
 
-  warningOrbiterServicesNotInitialized(orbiterServices);
+  warningOrbiterServicesNotInitialized(services);
 
-  await orbiterServices?.setTrackEvent({
+  await services?.orbiter?.setTrackEvent({
     key: {
       key: nanoid(),
       ...timestamp()

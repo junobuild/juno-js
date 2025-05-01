@@ -6,7 +6,7 @@ import {initOrbiter} from '../index';
 import {PerformanceServices} from '../services/performance.services';
 import {UserAgentServices} from '../services/user-agent.services';
 
-vi.mock('./utils/window.env.utils', () => ({
+vi.mock('../utils/window.env.utils', () => ({
   envSatelliteId: vi.fn(() => 'satellite-from-env'),
   envOrbiterId: vi.fn(() => 'orbiter-from-env'),
   envContainer: vi.fn(() => undefined)

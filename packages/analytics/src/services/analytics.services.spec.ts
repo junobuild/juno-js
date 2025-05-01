@@ -164,7 +164,12 @@ describe('analytics.services', () => {
     });
 
     it('should call startPerformance if enabled', async () => {
-      analyticServices.initServices(env);
+      analyticServices.initServices({
+        ...env,
+        options: {
+          performance: true
+        }
+      });
 
       const spyStart = vi.spyOn(PerformanceServices.prototype, 'startPerformance');
 
@@ -180,6 +185,16 @@ describe('analytics.services', () => {
           performance: false
         }
       });
+
+      const spyStart = vi.spyOn(PerformanceServices.prototype, 'startPerformance');
+
+      await analyticServices.startTrackPerformance();
+
+      expect(spyStart).not.toHaveBeenCalled();
+    });
+
+    it('should not call startPerformance by default', async () => {
+      analyticServices.initServices(env);
 
       const spyStart = vi.spyOn(PerformanceServices.prototype, 'startPerformance');
 

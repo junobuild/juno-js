@@ -1,19 +1,9 @@
-import {
-  initServices,
-  initTrackPageViews,
-  setPageView,
-  startTrackPerformance
-} from './services/analytics.services';
+import {initServices, initTrackPageViews, setPageView, startTrackPerformance} from './tracker';
 import type {Environment, UserEnvironment} from './types/env';
 import {assertNonNullish} from './utils/dfinity/asserts.utils';
 import {envContainer, envOrbiterId, envSatelliteId} from './utils/window.env.utils';
 
-export {
-  trackEvent,
-  trackEventAsync,
-  trackPageView,
-  trackPageViewAsync
-} from './services/analytics.services';
+export {trackEvent, trackEventAsync, trackPageView, trackPageViewAsync} from './tracker';
 export type * from './types/env';
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {

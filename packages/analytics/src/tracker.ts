@@ -1,15 +1,15 @@
 import {nanoid} from 'nanoid';
-import type {Environment} from '../types/env';
-import type {SetPageViewPayload, SetPerformanceMetricRequestEntry} from '../types/orbiter';
-import type {TrackEvent} from '../types/track';
-import {timestamp, userAgent} from '../utils/analytics.utils';
-import {assertNonNullish} from '../utils/dfinity/asserts.utils';
-import {isNullish, nonNullish} from '../utils/dfinity/nullish.utils';
-import {isBrowser} from '../utils/env.utils';
-import {warningOrbiterServicesNotInitialized} from '../utils/log.utils';
-import {OrbiterServices} from './orbiter.services';
-import {PerformanceServices} from './performance.services';
-import {UserAgentServices} from './user-agent.services';
+import {OrbiterServices} from './services/orbiter.services';
+import {PerformanceServices} from './services/performance.services';
+import {UserAgentServices} from './services/user-agent.services';
+import type {Environment} from './types/env';
+import type {SetPageViewPayload, SetPerformanceMetricRequestEntry} from './types/orbiter';
+import type {TrackEvent} from './types/track';
+import {timestamp, userAgent} from './utils/analytics.utils';
+import {assertNonNullish} from './utils/dfinity/asserts.utils';
+import {isNullish, nonNullish} from './utils/dfinity/nullish.utils';
+import {isBrowser} from './utils/env.utils';
+import {warningOrbiterServicesNotInitialized} from './utils/log.utils';
 
 const initSessionId = (): string | undefined => {
   // I faced this issue when I used the library in Docusaurus which does not implement the crypto API when server-side rendering.

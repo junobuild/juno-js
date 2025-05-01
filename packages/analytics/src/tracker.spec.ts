@@ -2,11 +2,11 @@
  * @vitest-environment jsdom
  */
 
-import {type Mock, MockInstance} from 'vitest';
-import {orbiterIdMock, satelliteIdMock} from '../mocks/orbiter.mock';
-import {jsonReviver} from '../utils/dfinity/json.utils';
-import * as analyticServices from './analytics.services';
-import {PerformanceServices} from './performance.services';
+import type {Mock, MockInstance} from 'vitest';
+import {orbiterIdMock, satelliteIdMock} from './mocks/orbiter.mock';
+import {PerformanceServices} from './services/performance.services';
+import * as trackerHelpers from './tracker';
+import {jsonReviver} from './utils/dfinity/json.utils';
 
 vi.mock('web-vitals', () => ({
   onCLS: vi.fn(),
@@ -24,7 +24,7 @@ vi.mock('../src/constants/container.constants', () => ({
   DOCKER_CONTAINER_WEB_URL: 'http://localhost:5973'
 }));
 
-describe('analytics.services', () => {
+describe('tracker.helpers', () => {
   let spy: MockInstance;
 
   const env = {orbiterId: orbiterIdMock, satelliteId: satelliteIdMock, container: false};
@@ -43,7 +43,7 @@ describe('analytics.services', () => {
 
   describe('initOrbiterServices', () => {
     it('should initialize orbiter services', () => {
-      const {cleanup} = analyticServices.initServices(env);
+      const {cleanup} = trackerHelpers.initServices(env);
       expect(typeof cleanup).toBe('function');
       cleanup();
     });
@@ -51,18 +51,18 @@ describe('analytics.services', () => {
 
   describe('trackers', () => {
     beforeEach(() => {
-      analyticServices.initServices(env);
+      trackerHelpers.initServices(env);
     });
 
     describe('trackPageView', () => {
       it('should fire trackPageView', async () => {
-        analyticServices.trackPageView();
+        trackerHelpers.trackPageView();
 
         await vi.waitFor(() => expect(spy).toHaveBeenCalled());
       });
 
       it('should fire trackPageViewAsync', async () => {
-        await expect(analyticServices.trackPageViewAsync()).resolves.toBeUndefined();
+        await expect(trackerHelpers.trackPageViewAsync()).resolves.toBeUndefined();
         expect(fetch).toHaveBeenCalled();
       });
     });
@@ -71,13 +71,13 @@ describe('analytics.services', () => {
       const data = {name: 'test'};
 
       it('should fire trackPageView', async () => {
-        analyticServices.trackEvent(data);
+        trackerHelpers.trackEvent(data);
 
         await vi.waitFor(() => expect(spy).toHaveBeenCalled());
       });
 
       it('should fire trackPageViewAsync', async () => {
-        await expect(analyticServices.trackEventAsync(data)).resolves.toBeUndefined();
+        await expect(trackerHelpers.trackEventAsync(data)).resolves.toBeUndefined();
         expect(fetch).toHaveBeenCalled();
       });
     });
@@ -85,11 +85,11 @@ describe('analytics.services', () => {
 
   describe('setPageView', () => {
     beforeEach(() => {
-      analyticServices.initServices(env);
+      trackerHelpers.initServices(env);
     });
 
     it('should call setPageView correctly', async () => {
-      await analyticServices.setPageView();
+      await trackerHelpers.setPageView();
       expect(fetch).toHaveBeenCalled();
     });
 
@@ -106,7 +106,7 @@ describe('analytics.services', () => {
         writable: true
       });
 
-      await analyticServices.setPageView();
+      await trackerHelpers.setPageView();
       const [[_, options]] = (fetch as Mock).mock.calls;
       const body = JSON.parse(options.body, jsonReviver);
 
@@ -128,7 +128,7 @@ describe('analytics.services', () => {
       });
 
       it('should not include parsed client info in page view', async () => {
-        await analyticServices.setPageView();
+        await trackerHelpers.setPageView();
         const [[url, options]] = (fetch as Mock).mock.calls;
         const body = JSON.parse(options.body, jsonReviver);
 
@@ -137,14 +137,14 @@ describe('analytics.services', () => {
       });
 
       it('should include parsed client info in page view if env is set', async () => {
-        analyticServices.initServices({
+        trackerHelpers.initServices({
           ...env,
           options: {
             userAgentParser: true
           }
         });
 
-        await analyticServices.setPageView();
+        await trackerHelpers.setPageView();
         const [[url, options]] = (fetch as Mock).mock.calls;
         const body = JSON.parse(options.body, jsonReviver);
 
@@ -160,11 +160,11 @@ describe('analytics.services', () => {
 
   describe('startTrackPerformance', () => {
     afterAll(() => {
-      analyticServices.initServices(env);
+      trackerHelpers.initServices(env);
     });
 
     it('should call startPerformance if enabled', async () => {
-      analyticServices.initServices({
+      trackerHelpers.initServices({
         ...env,
         options: {
           performance: true
@@ -173,13 +173,13 @@ describe('analytics.services', () => {
 
       const spyStart = vi.spyOn(PerformanceServices.prototype, 'startPerformance');
 
-      await analyticServices.startTrackPerformance();
+      await trackerHelpers.startTrackPerformance();
 
       expect(spyStart).toHaveBeenCalled();
     });
 
     it('should not call startPerformance if disabled', async () => {
-      analyticServices.initServices({
+      trackerHelpers.initServices({
         ...env,
         options: {
           performance: false
@@ -188,17 +188,17 @@ describe('analytics.services', () => {
 
       const spyStart = vi.spyOn(PerformanceServices.prototype, 'startPerformance');
 
-      await analyticServices.startTrackPerformance();
+      await trackerHelpers.startTrackPerformance();
 
       expect(spyStart).not.toHaveBeenCalled();
     });
 
     it('should not call startPerformance by default', async () => {
-      analyticServices.initServices(env);
+      trackerHelpers.initServices(env);
 
       const spyStart = vi.spyOn(PerformanceServices.prototype, 'startPerformance');
 
-      await analyticServices.startTrackPerformance();
+      await trackerHelpers.startTrackPerformance();
 
       expect(spyStart).not.toHaveBeenCalled();
     });
@@ -207,7 +207,7 @@ describe('analytics.services', () => {
   describe('initTrackPageViews', () => {
     it('should proxy pushState and listen to popstate', () => {
       const addSpy = vi.spyOn(window, 'addEventListener');
-      const {cleanup} = analyticServices.initTrackPageViews();
+      const {cleanup} = trackerHelpers.initTrackPageViews();
       expect(addSpy).toHaveBeenCalledWith('popstate', expect.any(Function), {passive: true});
       cleanup();
     });

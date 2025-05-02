@@ -15,11 +15,14 @@ export interface AnalyticsBrowsersPageViews {
 }
 export interface AnalyticsClientsPageViews {
   browsers: AnalyticsBrowsersPageViews;
+  operating_systems: [] | [AnalyticsOperatingSystemsPageViews];
   devices: AnalyticsDevicesPageViews;
 }
 export interface AnalyticsDevicesPageViews {
   desktop: number;
+  laptop: [] | [number];
   others: number;
+  tablet: [] | [number];
   mobile: number;
 }
 export interface AnalyticsMetricsPageViews {
@@ -30,9 +33,18 @@ export interface AnalyticsMetricsPageViews {
   unique_page_views: bigint;
   unique_sessions: bigint;
 }
+export interface AnalyticsOperatingSystemsPageViews {
+  ios: number;
+  macos: number;
+  others: number;
+  linux: number;
+  android: number;
+  windows: number;
+}
 export interface AnalyticsTop10PageViews {
   referrers: Array<[string, number]>;
   pages: Array<[string, number]>;
+  time_zones: [] | [Array<[string, number]>];
 }
 export interface AnalyticsTrackEvents {
   total: Array<[string, number]>;
@@ -76,6 +88,19 @@ export interface GetAnalytics {
   from: [] | [bigint];
   satellite_id: [] | [Principal];
 }
+export interface HttpRequest {
+  url: string;
+  method: string;
+  body: Uint8Array | number[];
+  headers: Array<[string, string]>;
+  certificate_version: [] | [number];
+}
+export interface HttpResponse {
+  body: Uint8Array | number[];
+  headers: Array<[string, string]>;
+  upgrade: [] | [boolean];
+  status_code: number;
+}
 export interface MemorySize {
   stable: bigint;
   heap: bigint;
@@ -90,6 +115,7 @@ export type NavigationType =
 export interface OrbiterSatelliteConfig {
   updated_at: bigint;
   features: [] | [OrbiterSatelliteFeatures];
+  restricted_origin: [] | [string];
   created_at: bigint;
   version: [] | [bigint];
 }
@@ -99,6 +125,7 @@ export interface OrbiterSatelliteFeatures {
   page_views: boolean;
 }
 export interface PageView {
+  client: [] | [PageViewClient];
   title: string;
   updated_at: bigint;
   referrer: [] | [string];
@@ -111,8 +138,15 @@ export interface PageView {
   version: [] | [bigint];
   user_agent: [] | [string];
 }
+export interface PageViewClient {
+  os: string;
+  device: [] | [string];
+  browser: string;
+}
 export interface PageViewDevice {
   inner_height: number;
+  screen_height: [] | [number];
+  screen_width: [] | [number];
   inner_width: number;
 }
 export type PerformanceData = {WebVitalsMetric: WebVitalsMetric};
@@ -146,6 +180,7 @@ export interface SetControllersArgs {
   controllers: Array<Principal>;
 }
 export interface SetPageView {
+  client: [] | [PageViewClient];
   title: string;
   updated_at: [] | [bigint];
   referrer: [] | [string];
@@ -168,6 +203,7 @@ export interface SetPerformanceMetric {
 }
 export interface SetSatelliteConfig {
   features: [] | [OrbiterSatelliteFeatures];
+  restricted_origin: [] | [string];
   version: [] | [bigint];
 }
 export interface SetTrackEvent {
@@ -209,6 +245,8 @@ export interface _SERVICE {
   >;
   get_track_events: ActorMethod<[GetAnalytics], Array<[AnalyticKey, TrackEvent]>>;
   get_track_events_analytics: ActorMethod<[GetAnalytics], AnalyticsTrackEvents>;
+  http_request: ActorMethod<[HttpRequest], HttpResponse>;
+  http_request_update: ActorMethod<[HttpRequest], HttpResponse>;
   list_controllers: ActorMethod<[], Array<[Principal, Controller]>>;
   list_satellite_configs: ActorMethod<[], Array<[Principal, OrbiterSatelliteConfig]>>;
   memory_size: ActorMethod<[], MemorySize>;

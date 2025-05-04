@@ -8,9 +8,9 @@ export class UserAgentServices {
       return undefined;
     }
 
-    const {UAParser} = await import('ua-parser-js');
+    const UAParser = await import('ua-parser-js');
 
-    const parser = new UAParser(user_agent);
+    const parser = new UAParser.default(user_agent);
     const {browser, os, device} = parser.getResult();
 
     if (isNullish(browser.name) || isNullish(os.name)) {

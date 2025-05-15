@@ -39,7 +39,7 @@ export const JUNO_STORAGE_ERROR_ASSET_NOT_FOUND = 'juno.storage.error.asset_not_
 export const JUNO_STORAGE_ERROR_CANNOT_READ_ASSET = 'juno.storage.error.cannot_read_asset';
 
 export const JUNO_COLLECTIONS_ERROR_MODIFY_RESERVED_COLLECTION =
-  'juno.collections.error.modify_reserved';
+  'juno.collections.error.modify_reserved_collection';
 export const JUNO_COLLECTIONS_ERROR_RESERVED_NAME = 'juno.collections.error.reserved_name';
 export const JUNO_COLLECTIONS_ERROR_RESERVED_COLLECTION =
   'juno.collections.error.reserved_collection';

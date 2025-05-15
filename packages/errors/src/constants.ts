@@ -12,6 +12,18 @@ export const JUNO_STORAGE_ERROR_CANNOT_COMMIT_BATCH = 'juno.storage.error.cannot
 export const JUNO_STORAGE_ERROR_ASSET_NOT_FOUND = 'juno.storage.error.asset_not_found';
 export const JUNO_STORAGE_ERROR_CANNOT_READ_ASSET = 'juno.storage.error.cannot_read_asset';
 
+export const JUNO_COLLECTIONS_ERROR_MODIFY_RESERVED_COLLECTION =
+  'juno.collections.error.modify_reserved';
+export const JUNO_COLLECTIONS_ERROR_RESERVED_NAME = 'juno.collections.error.reserved_name';
+export const JUNO_COLLECTIONS_ERROR_RESERVED_COLLECTION =
+  'juno.collections.error.reserved_collection';
+export const JUNO_COLLECTIONS_ERROR_RATE_CONFIG_ENABLED =
+  'juno.collections.error.rate_config_enabled';
+export const JUNO_COLLECTIONS_ERROR_DELETE_PREFIX_RESERVED =
+  'juno.collections.error.prefix_deletion';
+export const JUNO_COLLECTIONS_ERROR_COLLECTION_NOT_EMPTY = 'juno.collections.error.not_empty';
+export const JUNO_COLLECTIONS_ERROR_COLLECTION_NOT_FOUND = 'juno.collections.error.not_found';
+
 export const JUNO_AUTH_ERROR_NOT_ADMIN_CONTROLLER = 'juno.auth.error.not_admin_controller';
 export const JUNO_AUTH_ERROR_INVALID_ORIGIN = 'juno.auth.error.invalid_origin';
 export const JUNO_AUTH_ERROR_NOT_CONTROLLER = 'juno.auth.error.not_controller';

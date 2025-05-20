@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {describe, Mock, MockInstance} from 'vitest';
+import type {Mock, MockInstance} from 'vitest';
 import {PerformanceServices} from '../services/performance.services';
 import * as trackerHelpers from '../tracker';
 import {jsonReviver} from '../utils/dfinity/json.utils';

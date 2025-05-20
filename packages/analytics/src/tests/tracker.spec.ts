@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import type {Mock, MockInstance} from 'vitest';
+import {describe, Mock, MockInstance} from 'vitest';
 import {PerformanceServices} from '../services/performance.services';
 import * as trackerHelpers from '../tracker';
 import {jsonReviver} from '../utils/dfinity/json.utils';
@@ -118,33 +118,60 @@ describe('tracker.helpers', () => {
       expect(page_view.device.screen_height).toEqual(1040);
     });
 
-    it('should call setPageView with expected campaign info', async () => {
-      const originalHref = window.location.href;
+    describe('Campaign', () => {
+      it('should call setPageView with clean href', async () => {
+        const {
+          location: {href: originalHref, search, pathname}
+        } = window;
 
-      window.history.replaceState(
-        {},
-        '',
-        '/?utm_source=twitter&utm_medium=social&utm_campaign=test&utm_term=abc&utm_content=hero'
-      );
+        window.history.replaceState(
+          {},
+          '',
+          '/some/page?utm_source=x&utm_medium=y&utm_campaign=z&utm_term=a&utm_content=b'
+        );
 
-      await trackerHelpers.setPageView();
-      const [[_, options]] = (fetch as Mock).mock.calls;
-      const body = JSON.parse(options.body, jsonReviver);
+        await trackerHelpers.setPageView();
 
-      const {
-        page_view: {campaign}
-      } = body.page_views[0];
+        const [[_, options]] = (fetch as Mock).mock.calls;
+        const body = JSON.parse(options.body, jsonReviver);
 
-      expect(campaign).toEqual({
-        utm_source: 'twitter',
-        utm_medium: 'social',
-        utm_campaign: 'test',
-        utm_term: 'abc',
-        utm_content: 'hero'
+        const {
+          page_view: {href}
+        } = body.page_views[0];
+
+        expect(href).toBe(`${originalHref}some/page`);
+
+        window.history.replaceState({}, '', pathname + search);
       });
 
-      const {pathname, search} = new URL(originalHref);
-      window.history.replaceState({}, '', pathname + search);
+      it('should call setPageView with expected campaign info', async () => {
+        const originalHref = window.location.href;
+
+        window.history.replaceState(
+          {},
+          '',
+          '/?utm_source=twitter&utm_medium=social&utm_campaign=test&utm_term=abc&utm_content=hero'
+        );
+
+        await trackerHelpers.setPageView();
+        const [[_, options]] = (fetch as Mock).mock.calls;
+        const body = JSON.parse(options.body, jsonReviver);
+
+        const {
+          page_view: {campaign}
+        } = body.page_views[0];
+
+        expect(campaign).toEqual({
+          utm_source: 'twitter',
+          utm_medium: 'social',
+          utm_campaign: 'test',
+          utm_term: 'abc',
+          utm_content: 'hero'
+        });
+
+        const {pathname, search} = new URL(originalHref);
+        window.history.replaceState({}, '', pathname + search);
+      });
     });
 
     describe('UA parser', () => {

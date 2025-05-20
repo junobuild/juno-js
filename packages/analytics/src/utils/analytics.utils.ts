@@ -11,7 +11,7 @@ export const userAgent = (): Pick<SetPageViewPayload, 'user_agent'> => {
   return nonNullish(userAgent) ? {user_agent: userAgent} : {};
 };
 
-export const campaign = (): Pick<SetPageViewPayload, 'campaign'> => {
+export const campaign = (): {withCampaign: boolean} & Pick<SetPageViewPayload, 'campaign'> => {
   const {
     location: {search}
   } = document;
@@ -21,7 +21,7 @@ export const campaign = (): Pick<SetPageViewPayload, 'campaign'> => {
   const utm_source = searchParams.get('utm_source');
 
   if (isNullish(utm_source) || isEmptyString(utm_source)) {
-    return {};
+    return {withCampaign: false};
   }
 
   const utm_medium = searchParams.get('utm_medium');
@@ -30,6 +30,7 @@ export const campaign = (): Pick<SetPageViewPayload, 'campaign'> => {
   const utm_content = searchParams.get('utm_content');
 
   return {
+    withCampaign: true,
     campaign: {
       utm_source,
       ...(notEmptyString(utm_medium) && {utm_medium}),

@@ -97,9 +97,31 @@ export const setPageView = async () => {
     ? await services?.userAgent.parseUserAgent(user_agent)
     : undefined;
 
+  const {withCampaign, campaign: campaignData} = campaign();
+
+  // Not gracious but the goal is to manipulate strictly only when needed for performance reasons.
+  const cleanHref = (): string => {
+    if (!withCampaign) {
+      return href;
+    }
+
+    const url = URL.parse(href);
+
+    // Unlikely to happen
+    if (isNullish(url)) {
+      return href;
+    }
+
+    Object.keys(campaignData ?? {}).forEach((key) =>
+      url.searchParams.delete(key)
+    );
+
+    return url.href;
+  };
+
   const page_view: SetPageViewPayload = {
     title,
-    href,
+    href: cleanHref(),
     ...(nonNullish(referrer) && referrer !== '' && {referrer}),
     device: {
       inner_width: innerWidth,
@@ -111,7 +133,7 @@ export const setPageView = async () => {
     session_id: sessionId,
     user_agent,
     ...(nonNullish(client) && {client}),
-    ...campaign()
+    ...(nonNullish(campaignData) && {campaign: campaignData})
   };
 
   warningOrbiterServicesNotInitialized(services);

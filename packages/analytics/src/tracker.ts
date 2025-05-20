@@ -112,9 +112,7 @@ export const setPageView = async () => {
       return href;
     }
 
-    Object.keys(campaignData ?? {}).forEach((key) =>
-      url.searchParams.delete(key)
-    );
+    Object.keys(campaignData ?? {}).forEach((key) => url.searchParams.delete(key));
 
     return url.href;
   };

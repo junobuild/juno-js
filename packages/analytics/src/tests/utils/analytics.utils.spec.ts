@@ -68,25 +68,27 @@ describe('analytics.utils', () => {
       window.history.replaceState({}, '', originalWindowLocation);
     });
 
-    it('should return empty object if utm_source is missing', () => {
+    it('should return withCampaign: false if utm_source is missing', () => {
       mockSearchParams('?utm_medium=social&utm_campaign=test-campaign');
-      expect(campaign()).toEqual({});
+      expect(campaign()).toEqual({withCampaign: false});
     });
 
-    it('should return campaign with only utm_source', () => {
+    it('should return withCampaign: true and only utm_source', () => {
       mockSearchParams('?utm_source=twitter');
       expect(campaign()).toEqual({
+        withCampaign: true,
         campaign: {
           utm_source: 'twitter'
         }
       });
     });
 
-    it('should return campaign with all UTM parameters', () => {
+    it('should return withCampaign: true and all UTM parameters', () => {
       mockSearchParams(
         '?utm_source=twitter&utm_medium=social&utm_campaign=test-campaign&utm_term=abc&utm_content=xyz'
       );
       expect(campaign()).toEqual({
+        withCampaign: true,
         campaign: {
           utm_source: 'twitter',
           utm_medium: 'social',
@@ -100,6 +102,7 @@ describe('analytics.utils', () => {
     it('should exclude empty strings in optional fields', () => {
       mockSearchParams('?utm_source=twitter&utm_medium=&utm_term=123');
       expect(campaign()).toEqual({
+        withCampaign: true,
         campaign: {
           utm_source: 'twitter',
           utm_term: '123'
@@ -107,14 +110,14 @@ describe('analytics.utils', () => {
       });
     });
 
-    it('should return empty object if search is empty string', () => {
+    it('should return withCampaign: false if search is empty string', () => {
       mockSearchParams('');
-      expect(campaign()).toEqual({});
+      expect(campaign()).toEqual({withCampaign: false});
     });
 
-    it('should return empty object if search is undefined', () => {
+    it('should return withCampaign: false if search is undefined', () => {
       mockSearchParams(undefined);
-      expect(campaign()).toEqual({});
+      expect(campaign()).toEqual({withCampaign: false});
     });
   });
 });

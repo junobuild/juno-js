@@ -5,7 +5,7 @@ import {UserAgentServices} from './services/user-agent.services';
 import type {Environment} from './types/env';
 import type {SetPageViewPayload, SetPerformanceMetricRequestEntry} from './types/orbiter';
 import type {TrackEvent} from './types/track';
-import {timestamp, userAgent} from './utils/analytics.utils';
+import {campaign, timestamp, userAgent} from './utils/analytics.utils';
 import {assertNonNullish} from './utils/dfinity/asserts.utils';
 import {isNullish, nonNullish} from './utils/dfinity/nullish.utils';
 import {isBrowser} from './utils/env.utils';
@@ -110,7 +110,8 @@ export const setPageView = async () => {
     time_zone: timeZone,
     session_id: sessionId,
     user_agent,
-    ...(nonNullish(client) && {client})
+    ...(nonNullish(client) && {client}),
+    ...campaign()
   };
 
   warningOrbiterServicesNotInitialized(services);

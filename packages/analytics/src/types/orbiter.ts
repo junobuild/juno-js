@@ -12,6 +12,14 @@ export interface PageViewDevicePayload {
   screen_width?: number;
 }
 
+export interface SetPageViewCampaignPayload {
+  utm_source: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_term?: string;
+  utm_content?: string;
+}
+
 export interface PageViewClientPayload {
   browser: string;
   os: string;
@@ -45,6 +53,7 @@ export interface SetPageViewPayload {
   version?: bigint;
   user_agent?: string;
   client?: PageViewClientPayload;
+  campaign?: SetPageViewCampaignPayload;
 }
 
 export type PageViewPayload = SetPageViewPayload & {

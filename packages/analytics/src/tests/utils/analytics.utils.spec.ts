@@ -2,7 +2,8 @@
  * @vitest-environment jsdom
  */
 
-import {timestamp, userAgent} from '../../utils/analytics.utils';
+import {beforeEach} from 'vitest';
+import {campaign, timestamp, userAgent} from '../../utils/analytics.utils';
 
 describe('analytics.utils', () => {
   describe('timestamp', () => {
@@ -46,6 +47,74 @@ describe('analytics.utils', () => {
 
       const result = userAgent();
       expect(result).toEqual({});
+    });
+  });
+
+  describe('campaign', () => {
+    const mockSearchParams = (search: string | undefined) => {
+      window.history.replaceState({}, '', `/${search ?? ''}`);
+    };
+
+    let originalWindowLocation: string;
+
+    beforeAll(() => {
+      const {
+        location: {pathname, search}
+      } = window;
+      originalWindowLocation = `${pathname}${search}`;
+    });
+
+    afterAll(() => {
+      window.history.replaceState({}, '', originalWindowLocation);
+    });
+
+    it('should return empty object if utm_source is missing', () => {
+      mockSearchParams('?utm_medium=social&utm_campaign=test-campaign');
+      expect(campaign()).toEqual({});
+    });
+
+    it('should return campaign with only utm_source', () => {
+      mockSearchParams('?utm_source=twitter');
+      expect(campaign()).toEqual({
+        campaign: {
+          utm_source: 'twitter'
+        }
+      });
+    });
+
+    it('should return campaign with all UTM parameters', () => {
+      mockSearchParams(
+        '?utm_source=twitter&utm_medium=social&utm_campaign=test-campaign&utm_term=abc&utm_content=xyz'
+      );
+      expect(campaign()).toEqual({
+        campaign: {
+          utm_source: 'twitter',
+          utm_medium: 'social',
+          utm_campaign: 'test-campaign',
+          utm_term: 'abc',
+          utm_content: 'xyz'
+        }
+      });
+    });
+
+    it('should exclude empty strings in optional fields', () => {
+      mockSearchParams('?utm_source=twitter&utm_medium=&utm_term=123');
+      expect(campaign()).toEqual({
+        campaign: {
+          utm_source: 'twitter',
+          utm_term: '123'
+        }
+      });
+    });
+
+    it('should return empty object if search is empty string', () => {
+      mockSearchParams('');
+      expect(campaign()).toEqual({});
+    });
+
+    it('should return empty object if search is undefined', () => {
+      mockSearchParams(undefined);
+      expect(campaign()).toEqual({});
     });
   });
 });

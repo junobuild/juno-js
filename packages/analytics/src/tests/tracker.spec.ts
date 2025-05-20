@@ -118,6 +118,35 @@ describe('tracker.helpers', () => {
       expect(page_view.device.screen_height).toEqual(1040);
     });
 
+    it('should call setPageView with expected campaign info', async () => {
+      const originalHref = window.location.href;
+
+      window.history.replaceState(
+        {},
+        '',
+        '/?utm_source=twitter&utm_medium=social&utm_campaign=test&utm_term=abc&utm_content=hero'
+      );
+
+      await trackerHelpers.setPageView();
+      const [[_, options]] = (fetch as Mock).mock.calls;
+      const body = JSON.parse(options.body, jsonReviver);
+
+      const {
+        page_view: {campaign}
+      } = body.page_views[0];
+
+      expect(campaign).toEqual({
+        utm_source: 'twitter',
+        utm_medium: 'social',
+        utm_campaign: 'test',
+        utm_term: 'abc',
+        utm_content: 'hero'
+      });
+
+      const {pathname, search} = new URL(originalHref);
+      window.history.replaceState({}, '', pathname + search);
+    });
+
     describe('UA parser', () => {
       beforeEach(() => {
         Object.defineProperty(window.navigator, 'userAgent', {

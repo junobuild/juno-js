@@ -6,6 +6,11 @@ import type {
   InitUploadResult as ConsoleInitUploadResult
 } from '../../declarations/console/console.did';
 import type {
+  _SERVICE as MissionControlActor,
+  InitAssetKey as MissionControlInitAssetKey,
+  InitUploadResult as MissionControlInitUploadResult
+} from '../../declarations/mission_control/mission_control.did';
+import type {
   _SERVICE as SatelliteActor,
   InitAssetKey as SatelliteInitAssetKey,
   InitUploadResult as SatelliteInitUploadResult
@@ -15,16 +20,20 @@ import type {ENCODING_TYPE, Storage} from '../types/storage.types';
 export type UploadAsset = Required<Omit<Storage, 'token' | 'encoding' | 'description'>> &
   Pick<Storage, 'token' | 'encoding' | 'description'>;
 
+export type UploadAssetActor = SatelliteActor | ConsoleActor | MissionControlActor;
+
 export const uploadAsset = async ({
   asset: {data, filename, collection, headers, token, fullPath, encoding, description},
   actor,
   init_asset_upload
 }: {
   asset: UploadAsset;
-  actor: SatelliteActor | ConsoleActor;
+  actor: UploadAssetActor;
   init_asset_upload: (
-    initAssetKey: SatelliteInitAssetKey | ConsoleInitAssetKey
-  ) => Promise<SatelliteInitUploadResult | ConsoleInitUploadResult>;
+    initAssetKey: SatelliteInitAssetKey | ConsoleInitAssetKey | MissionControlInitAssetKey
+  ) => Promise<
+    SatelliteInitUploadResult | ConsoleInitUploadResult | MissionControlInitUploadResult
+  >;
 }): Promise<void> => {
   const {batch_id: batchId} = await init_asset_upload({
     collection,
@@ -99,7 +108,7 @@ interface UploadChunkResult {
 interface UploadChunkParams {
   batchId: bigint;
   chunk: Blob;
-  actor: SatelliteActor | ConsoleActor;
+  actor: UploadAssetActor;
   orderId: bigint;
 }
 

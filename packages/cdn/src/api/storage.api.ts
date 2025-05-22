@@ -1,18 +1,18 @@
 import {uploadAsset as uploadAssetStorage, type UploadAsset} from '@junobuild/storage';
-import type {InitAssetKey, InitUploadResult} from '../../declarations/console/console.did';
-import type {ConsoleParameters} from '../types/actor.types';
-import {getConsoleActor} from './actor.api';
+import type {CdnParameters} from '../types/actor.params';
+import type {InitAssetKey, InitUploadResult} from '../types/cdn';
+import {getCdnActor} from './_actor.api';
 
 export const uploadAsset = async ({
-  console,
+  cdn,
   proposalId,
   asset
 }: {
   asset: UploadAsset;
-  console: ConsoleParameters;
+  cdn: CdnParameters;
   proposalId: bigint;
 }): Promise<void> => {
-  const actor = await getConsoleActor(console);
+  const actor = await getCdnActor(cdn);
 
   const init_asset_upload = async (initAssetKey: InitAssetKey): Promise<InitUploadResult> =>
     await actor.init_asset_upload(initAssetKey, proposalId);

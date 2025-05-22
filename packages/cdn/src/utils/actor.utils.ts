@@ -6,8 +6,9 @@ import {
   type ActorSubclass
 } from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
+import type {Principal} from '@dfinity/principal';
 import {nonNullish} from '@dfinity/utils';
-import type {ActorParameters} from '../types/actor.types';
+import type {ActorParameters} from '../types/actor.params';
 
 export const createActor = async <T = Record<string, ActorMethod>>({
   canisterId,
@@ -16,7 +17,7 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   ...rest
 }: {
   idlFactory: IDL.InterfaceFactory;
-  canisterId: string;
+  canisterId: string | Principal;
   config?: Pick<ActorConfig, 'callTransform' | 'queryTransform'>;
 } & ActorParameters): Promise<ActorSubclass<T>> => {
   const agent = await useOrInitAgent(rest);
@@ -29,7 +30,7 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   });
 };
 
-export const useOrInitAgent = async ({agent, ...rest}: ActorParameters): Promise<HttpAgent> =>
+const useOrInitAgent = async ({agent, ...rest}: ActorParameters): Promise<HttpAgent> =>
   agent ?? (await initAgent(rest));
 
 const initAgent = async ({

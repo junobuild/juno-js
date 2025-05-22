@@ -1,36 +1,36 @@
-import type {CommitProposal, Proposal, ProposalType} from '../../declarations/console/console.did';
-import type {ConsoleParameters} from '../types/actor.types';
-import {getConsoleActor} from './actor.api';
+import type {CdnParameters} from '../types/actor.params';
+import type {CommitProposal, Proposal, ProposalType} from '../types/cdn';
+import {getCdnActor} from './_actor.api';
 
 export const initProposal = async ({
-  console,
+  cdn,
   proposalType
 }: {
-  console: ConsoleParameters;
   proposalType: ProposalType;
+  cdn: CdnParameters;
 }): Promise<[bigint, Proposal]> => {
-  const {init_proposal} = await getConsoleActor(console);
+  const {init_proposal} = await getCdnActor(cdn);
   return init_proposal(proposalType);
 };
 
 export const submitProposal = async ({
-  console,
+  cdn,
   proposalId
 }: {
-  console: ConsoleParameters;
+  cdn: CdnParameters;
   proposalId: bigint;
 }): Promise<[bigint, Proposal]> => {
-  const {submit_proposal} = await getConsoleActor(console);
+  const {submit_proposal} = await getCdnActor(cdn);
   return submit_proposal(proposalId);
 };
 
 export const commitProposal = async ({
-  console,
+  cdn,
   commitProposal
 }: {
-  console: ConsoleParameters;
+  cdn: CdnParameters;
   commitProposal: CommitProposal;
 }): Promise<void> => {
-  const {commit_proposal} = await getConsoleActor(console);
+  const {commit_proposal} = await getCdnActor(cdn);
   await commit_proposal(commitProposal);
 };

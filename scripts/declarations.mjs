@@ -22,6 +22,12 @@ const storagePromises = storageDeclarations.map((d) =>
 );
 await Promise.all(storagePromises);
 
+const cdnDeclarations = ['console', 'mission_control'];
+const cdnPromises = cdnDeclarations.map((d) =>
+  cp(join(src, d), join('./packages/cdn/declarations/', d), {recursive: true})
+);
+await Promise.all(cdnPromises);
+
 const consoleDeclarations = ['console'];
 const consolePromises = consoleDeclarations.map((d) =>
   cp(join(src, d), join('./packages/console/declarations/', d), {recursive: true})

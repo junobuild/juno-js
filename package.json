@@ -30,6 +30,7 @@
     "packages/cli-tools",
     "packages/did-tools",
     "packages/config-loader",
+    "packages/cdn",
     "packages/console",
     "packages/functions"
   ],
@@ -138,6 +139,21 @@
       "limit": "1 kB",
       "ignore": [
         "zod"
+      ]
+    },
+    {
+      "name": "@junobuild/cdn",
+      "path": "./packages/cdn/dist/index.js",
+      "limit": "5 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/identity",
+        "@dfinity/principal",
+        "@dfinity/utils",
+        "@junobuild/config",
+        "@junobuild/storage",
+        "semver"
       ]
     },
     {

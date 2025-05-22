@@ -1,4 +1,5 @@
 import type {HttpAgent, Identity} from '@dfinity/agent';
+import type {Principal} from '@dfinity/principal';
 
 /**
  * Represents the parameters for an actor.
@@ -33,7 +34,27 @@ export interface ConsoleParameters extends ActorParameters {
   /**
    * The unique identifier for the Console.
    * @type {string}
-   * @optional
    */
-  consoleId?: string;
+  consoleId: string | Principal;
 }
+
+/**
+ * Represents the parameters for a Mission Control actor.
+ * @interface
+ * @extends {ActorParameters}
+ */
+export interface MissionControlParameters extends ActorParameters {
+  /**
+   * The unique identifier for the Mission Control.
+   * @type {string}
+   */
+  missionControlId: string | Principal;
+}
+
+/**
+ * Represents initialization parameters for either a Console or Mission Control actor.
+ * Use discriminated unions to pass the correct parameters depending on the CDN to target.
+ */
+export type CdnParameters =
+  | {console: ConsoleParameters}
+  | {missionControl: MissionControlParameters};

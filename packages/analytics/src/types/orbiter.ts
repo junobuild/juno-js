@@ -97,9 +97,9 @@ export type TrackEventPayload = Omit<SetTrackEventPayload, 'user_agent'> & {
 
 export type PerformanceMetricNamePayload = 'CLS' | 'FCP' | 'INP' | 'LCP' | 'TTFB';
 
-export type PerformanceDataPayload = {
+export interface PerformanceDataPayload {
   WebVitalsMetric: WebVitalsMetricPayload;
-};
+}
 
 export interface WebVitalsMetricPayload {
   value: number;

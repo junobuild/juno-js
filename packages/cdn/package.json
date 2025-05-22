@@ -1,0 +1,61 @@
+{
+  "name": "@junobuild/cdn",
+  "version": "0.1.0",
+  "description": "A toolkit for working with modules that implement Juno's CDN functionality",
+  "author": "David Dal Busco (https://daviddalbusco.com)",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/node/index.mjs",
+  "module": "./dist/browser/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/browser/index.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/node/index.mjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "rmdir": "node ../../scripts/rmdir.mjs",
+    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
+    "build": "npm run rmdir && mkdir -p dist && cp -R declarations dist && node esbuild.mjs && npm run ts-declaration",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junobuild/juno-js.git",
+    "directory": "packages/cdn"
+  },
+  "bugs": {
+    "url": "https://github.com/junobuild/juno-js"
+  },
+  "keywords": [
+    "cdn",
+    "content-delivery",
+    "developer-tools",
+    "cloud-toolkit",
+    "serverless",
+    "infrastructure"
+  ],
+  "homepage": "https://juno.build",
+  "peerDependencies": {
+    "@dfinity/agent": "^2.3.0",
+    "@dfinity/candid": "^2.3.0",
+    "@dfinity/identity": "^2.3.0",
+    "@dfinity/principal": "^2.3.0",
+    "@dfinity/utils": "^2",
+    "@junobuild/config": "*",
+    "@junobuild/storage": "*",
+    "semver": "7.*"
+  }
+}

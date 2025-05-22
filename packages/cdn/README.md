@@ -8,7 +8,7 @@
 
 # Juno JavaScript CDN Toolkit
 
-A toolkit for working with modules that implement [Juno]'s CDN functionality.  
+A toolkit for working with modules that implement [Juno]'s CDN functionality.
 
 ## License
 

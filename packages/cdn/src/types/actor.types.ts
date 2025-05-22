@@ -12,13 +12,6 @@ export interface ActorParameters {
   identity: Identity;
 
   /**
-   * A custom fetch function to use for network requests. Useful in NodeJS context.
-   * @type {typeof fetch}
-   * @optional
-   */
-  fetch?: typeof fetch;
-
-  /**
    * Specifies whether the actor is calling the local development Docker container or provides the container URL.
    * @type {boolean | string}
    * @optional

@@ -18,12 +18,6 @@ export interface Console {
   consoleId?: string;
 
   /**
-   * A custom fetch function to use for network requests.
-   * @type {typeof fetch}
-   */
-  fetch?: typeof fetch;
-
-  /**
    * Specifies whether the console is running in a container or provides the container URL. i.e. URL to Docker local development.
    * @type {boolean | string}
    */

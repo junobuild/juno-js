@@ -9,7 +9,7 @@ import {AgentStore} from './agent.store';
 type ActorParams = {
   idlFactory: IDL.InterfaceFactory;
 } & Required<Pick<Satellite, 'satelliteId' | 'identity'>> &
-  Pick<Satellite, 'fetch' | 'container'>;
+  Pick<Satellite, 'container'>;
 
 type ActorRecord = Record<string, ActorMethod>;
 

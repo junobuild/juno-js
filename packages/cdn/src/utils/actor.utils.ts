@@ -29,11 +29,7 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   });
 };
 
-export const initAgent = async ({
-  identity,
-  fetch,
-  container
-}: ActorParameters): Promise<HttpAgent> => {
+export const initAgent = async ({identity, container}: ActorParameters): Promise<HttpAgent> => {
   const localActor = nonNullish(container) && container !== false;
 
   const host = localActor
@@ -46,7 +42,6 @@ export const initAgent = async ({
     identity,
     host,
     retryTimes: 10,
-    shouldFetchRootKey: localActor,
-    ...(nonNullish(fetch) && {fetch})
+    shouldFetchRootKey: localActor
   });
 };

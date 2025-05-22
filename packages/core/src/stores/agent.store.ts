@@ -3,7 +3,7 @@ import {isNullish, nonNullish} from '@dfinity/utils';
 import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
 import type {Satellite} from '../types/satellite.types';
 
-type AgentParams = Required<Pick<Satellite, 'identity'>> & Pick<Satellite, 'fetch' | 'container'>;
+type AgentParams = Required<Pick<Satellite, 'identity'>> & Pick<Satellite, 'container'>;
 
 export class AgentStore {
   private static instance: AgentStore;
@@ -40,7 +40,7 @@ export class AgentStore {
     this.#agents = null;
   }
 
-  private async createAgent({identity, fetch, container}: AgentParams): Promise<HttpAgent> {
+  private async createAgent({identity, container}: AgentParams): Promise<HttpAgent> {
     const localActor = nonNullish(container) && container !== false;
 
     const host = localActor
@@ -54,8 +54,7 @@ export class AgentStore {
     return await HttpAgent.create({
       identity,
       shouldFetchRootKey,
-      host,
-      ...(fetch && {fetch})
+      host
     });
   }
 }

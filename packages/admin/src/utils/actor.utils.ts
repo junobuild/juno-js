@@ -34,7 +34,6 @@ export const useOrInitAgent = async ({agent, ...rest}: ActorParameters): Promise
 
 const initAgent = async ({
   identity,
-  fetch,
   container
 }: Omit<ActorParameters, 'agent'>): Promise<HttpAgent> => {
   const localActor = nonNullish(container) && container !== false;
@@ -49,7 +48,6 @@ const initAgent = async ({
     identity,
     host,
     retryTimes: 10,
-    ...(nonNullish(fetch) && {fetch}),
     shouldFetchRootKey: localActor
   });
 };

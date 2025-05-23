@@ -10,6 +10,12 @@ export default [
     }
   },
   {
+    files: ['packages/cli-tools/**/*'],
+    rules: {
+      'no-console': 'off'
+    }
+  },
+  {
     ignores: [
       '**/dist/',
       '**/declarations/',

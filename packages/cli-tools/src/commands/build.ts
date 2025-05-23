@@ -1,6 +1,29 @@
 import type {Message, Metafile} from 'esbuild';
 import {rm} from 'node:fs/promises';
 
+/**
+ * Builds an ECMAScript module (ESM) bundle for browser use using `esbuild`.
+ *
+ * This function:
+ * - Ensures `esbuild` is available.
+ * - Deletes the existing output file if it exists.
+ * - Builds the input file with optimizations: minification, tree-shaking, etc.
+ * - Returns the esbuild `metafile`, version, and any build errors or warnings.
+ *
+ * @param {Object} options - Build configuration.
+ * @param {string} options.infile - The path to the input file to be bundled.
+ * @param {string} options.outfile - The path where the output bundle should be written.
+ * @param {Object<string, string>} [options.banner] - Optional banner to prepend to the generated file.
+ *
+ * @returns {Promise<{
+ *   metafile: Metafile,
+ *   errors: Message[],
+ *   warnings: Message[],
+ *   version: string
+ * }>} An object containing the esbuild metafile, build errors/warnings, and the version of esbuild used.
+ *
+ * @throws Will exit the process if `esbuild` is not installed.
+ */
 export const buildEsm = async ({
   infile,
   outfile,

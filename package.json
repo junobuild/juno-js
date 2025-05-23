@@ -22,6 +22,7 @@
     "packages/errors",
     "packages/config",
     "packages/storage",
+    "packages/cdn",
     "packages/core",
     "packages/admin",
     "packages/analytics",
@@ -30,7 +31,6 @@
     "packages/cli-tools",
     "packages/did-tools",
     "packages/config-loader",
-    "packages/cdn",
     "packages/functions"
   ],
   "devDependencies": {

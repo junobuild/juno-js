@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/storage",
-  "version": "0.1.9",
+  "version": "0.2.0",
   "description": "A library for interfacing with Juno's Storage features.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

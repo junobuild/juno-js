@@ -34,3 +34,14 @@ export const commitProposal = async ({
   const {commit_proposal} = await getCdnActor(cdn);
   await commit_proposal(commitProposal);
 };
+
+export const deleteProposalAssets = async ({
+  cdn,
+  proposalIds
+}: {
+  cdn: CdnParameters;
+  proposalIds: bigint[];
+}): Promise<void> => {
+  const {delete_proposal_assets} = await getCdnActor(cdn);
+  await delete_proposal_assets({proposal_ids: proposalIds});
+};

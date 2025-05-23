@@ -2,6 +2,7 @@ import type * as CdnConsole from '../../declarations/console/console.did';
 import type * as CdnMissionControl from '../../declarations/mission_control/mission_control.did';
 
 export type CommitProposal = CdnConsole.CommitProposal | CdnMissionControl.CommitProposal;
+
 export type Proposal = CdnConsole.Proposal | CdnMissionControl.Proposal;
 export type ProposalStatus = CdnConsole.ProposalStatus | CdnMissionControl.ProposalStatus;
 export type ProposalType = CdnConsole.ProposalType | CdnMissionControl.ProposalType;

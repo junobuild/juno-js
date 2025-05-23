@@ -1,5 +1,5 @@
 import type {CdnParameters} from '../types/actor.params';
-import type {CommitProposal, Proposal, ProposalType} from '../types/cdn';
+import type {CommitProposal, Proposal, ProposalId, ProposalType} from '../types/cdn';
 import {getCdnActor} from './_actor.api';
 
 export const initProposal = async ({
@@ -8,7 +8,7 @@ export const initProposal = async ({
 }: {
   proposalType: ProposalType;
   cdn: CdnParameters;
-}): Promise<[bigint, Proposal]> => {
+}): Promise<[ProposalId, Proposal]> => {
   const {init_proposal} = await getCdnActor(cdn);
   return init_proposal(proposalType);
 };
@@ -18,8 +18,8 @@ export const submitProposal = async ({
   proposalId
 }: {
   cdn: CdnParameters;
-  proposalId: bigint;
-}): Promise<[bigint, Proposal]> => {
+  proposalId: ProposalId;
+}): Promise<[ProposalId, Proposal]> => {
   const {submit_proposal} = await getCdnActor(cdn);
   return submit_proposal(proposalId);
 };
@@ -40,7 +40,7 @@ export const deleteProposalAssets = async ({
   proposalIds
 }: {
   cdn: CdnParameters;
-  proposalIds: bigint[];
+  proposalIds: ProposalId[];
 }): Promise<void> => {
   const {delete_proposal_assets} = await getCdnActor(cdn);
   await delete_proposal_assets({proposal_ids: proposalIds});

@@ -3,6 +3,7 @@ import {
   type UploadAsset
 } from '@junobuild/storage';
 import type {CdnParameters} from '../types/actor.params';
+import type {ProposalId} from '../types/cdn';
 import {getCdnActor} from './_actor.api';
 
 export const uploadAssetWithProposal = async ({
@@ -12,7 +13,7 @@ export const uploadAssetWithProposal = async ({
 }: {
   asset: UploadAsset;
   cdn: CdnParameters;
-  proposalId: bigint;
+  proposalId: ProposalId;
 }): Promise<void> => {
   const actor = await getCdnActor(cdn);
 

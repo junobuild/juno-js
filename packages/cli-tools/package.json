@@ -54,6 +54,7 @@
   "homepage": "https://juno.build",
   "peerDependencies": {
     "@dfinity/utils": "^2",
+    "@junobuild/cdn": "^0.1.0",
     "@junobuild/config": "*",
     "esbuild": "^0.25.1"
   },

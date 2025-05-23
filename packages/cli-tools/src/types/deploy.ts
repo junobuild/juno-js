@@ -37,3 +37,7 @@ export interface UploadFileStorage {
 }
 
 export type UploadFile = (params: UploadFileStorage) => Promise<void>;
+
+export type DeployResult =
+  | {result: 'deployed'; files: Pick<FileDetails, 'file'>[]}
+  | {result: 'skipped'};

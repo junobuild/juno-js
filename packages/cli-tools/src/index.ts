@@ -1,5 +1,6 @@
 export * from './commands/build';
 export * from './commands/deploy';
+export * from './commands/proposals';
 export * from './constants/deploy.constants';
 export type * from './types/deploy';
 export type * from './types/pkg';

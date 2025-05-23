@@ -29,7 +29,6 @@ export const deploy = async ({
   const {files: sourceFiles, sourceAbsolutePath} = await prepareDeploy(rest);
 
   if (sourceFiles.length === 0) {
-    // eslint-disable-next-line no-console
     console.log('No new files to upload.');
 
     return {sourceFiles, sourceAbsolutePath};
@@ -43,7 +42,6 @@ export const deploy = async ({
     uploadFile
   });
 
-  // eslint-disable-next-line no-console
   console.log(`\n🚀 Deploy complete!`);
 
   return {sourceFiles, sourceAbsolutePath};

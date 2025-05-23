@@ -47,7 +47,6 @@ export const spawn = async ({
         return;
       }
 
-      // eslint-disable-next-line no-console
       console.log(`${data}`);
     });
     process.stderr.on('data', (data) => {

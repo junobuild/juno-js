@@ -13,10 +13,6 @@ export const JUNO_STORAGE_ERROR_ASSET_NOT_FOUND = 'juno.storage.error.asset_not_
 export const JUNO_STORAGE_ERROR_CANNOT_READ_ASSET = 'juno.storage.error.cannot_read_asset';
 export const JUNO_STORAGE_ERROR_UPLOAD_PATH_COLLECTION_PREFIX =
   'juno.storage.error.upload_path_collection_prefix';
-export const JUNO_STORAGE_ERROR_CANNOT_INSERT_ASSET_UNKNOWN_REFERENCE_ID =
-  'juno.storage.error.cannot_insert_asset_unknown_reference_id';
-export const JUNO_STORAGE_ERROR_CANNOT_GET_ASSET_UNKNOWN_REFERENCE_ID =
-  'juno.storage.error.cannot_get_asset_unknown_reference_id';
 
 export const JUNO_AUTH_ERROR_NOT_ADMIN_CONTROLLER = 'juno.auth.error.not_admin_controller';
 export const JUNO_AUTH_ERROR_INVALID_ORIGIN = 'juno.auth.error.invalid_origin';

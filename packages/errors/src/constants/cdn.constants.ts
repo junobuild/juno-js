@@ -26,3 +26,6 @@ export const JUNO_CDN_STORAGE_ERROR_CANNOT_GET_ASSET_UNKNOWN_REFERENCE_ID =
   'juno.cdn.storage.error.cannot_get_asset_unknown_reference_id';
 
 export const JUNO_CDN_STORAGE_ERROR_NO_PROPOSAL_FOUND = 'juno.cdn.storage.error.no_proposal_found';
+
+export const JUNO_CDN_STORAGE_ERROR_INVALID_RELEASES_PATH =
+  'juno.cdn.storage.error.invalid_releases_path';

@@ -23,3 +23,5 @@ export const JUNO_ERROR_CMC_CALL_CREATE_CANISTER_FAILED =
   'juno.error.cmc.call_create_canister_failed';
 export const JUNO_ERROR_CMC_CREATE_CANISTER_FAILED = 'juno.error.cmc.create_canister_failed';
 export const JUNO_ERROR_CMC_INSTALL_CODE_FAILED = 'juno.error.cmc.install_code_failed';
+
+export const JUNO_ERROR_INVALID_REGEX = 'juno.error.invalid_regex';

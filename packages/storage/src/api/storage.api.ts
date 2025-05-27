@@ -18,7 +18,7 @@ export type UploadAsset = Required<Omit<Storage, 'token' | 'encoding' | 'descrip
   Pick<Storage, 'token' | 'encoding' | 'description'>;
 
 export type UploadAssetActor = SatelliteActor;
-export type UploadAssetWithProposalActor = ConsoleActor;
+export type UploadAssetWithProposalActor = ConsoleActor | SatelliteActor;
 
 type InitAssetKey = SatelliteInitAssetKey | ConsoleInitAssetKey;
 type UploadChunk = SatelliteUploadChunk | ConsoleUploadChunk;

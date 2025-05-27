@@ -39,22 +39,20 @@ export interface ConsoleParameters extends ActorParameters {
 }
 
 /**
- * Represents the parameters for a Mission Control actor.
+ * Represents the parameters for a Satellite actor.
  * @interface
  * @extends {ActorParameters}
  */
-export interface MissionControlParameters extends ActorParameters {
+export interface SatelliteParameters extends ActorParameters {
   /**
-   * The unique identifier for the Mission Control.
+   * The unique identifier for the Satellite.
    * @type {string}
    */
-  missionControlId: string | Principal;
+  satelliteId: string | Principal;
 }
 
 /**
- * Represents initialization parameters for either a Console or Mission Control actor.
+ * Represents initialization parameters for either a Console or Satellite actor.
  * Use discriminated unions to pass the correct parameters depending on the CDN to target.
  */
-export type CdnParameters =
-  | {console: ConsoleParameters}
-  | {missionControl: MissionControlParameters};
+export type CdnParameters = {console: ConsoleParameters} | {satellite: SatelliteParameters};

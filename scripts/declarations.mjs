@@ -16,13 +16,13 @@ const corePromises = coreDeclarations.map((d) =>
 );
 await Promise.all(corePromises);
 
-const storageDeclarations = ['satellite', 'console', 'mission_control'];
+const storageDeclarations = ['satellite', 'console'];
 const storagePromises = storageDeclarations.map((d) =>
   cp(join(src, d), join('./packages/storage/declarations/', d), {recursive: true})
 );
 await Promise.all(storagePromises);
 
-const cdnDeclarations = ['console', 'mission_control'];
+const cdnDeclarations = ['console', 'satellite'];
 const cdnPromises = cdnDeclarations.map((d) =>
   cp(join(src, d), join('./packages/cdn/declarations/', d), {recursive: true})
 );

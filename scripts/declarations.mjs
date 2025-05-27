@@ -16,7 +16,7 @@ const corePromises = coreDeclarations.map((d) =>
 );
 await Promise.all(corePromises);
 
-const storageDeclarations = ['satellite', 'console', 'mission_control'];
+const storageDeclarations = ['satellite', 'console'];
 const storagePromises = storageDeclarations.map((d) =>
   cp(join(src, d), join('./packages/storage/declarations/', d), {recursive: true})
 );

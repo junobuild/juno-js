@@ -7,12 +7,6 @@ import type {
   UploadChunk as ConsoleUploadChunk
 } from '../../declarations/console/console.did';
 import type {
-  _SERVICE as MissionControlActor,
-  CommitBatch as MissionControlCommitBatch,
-  InitAssetKey as MissionControlInitAssetKey,
-  UploadChunk as MissionControlUploadChunk
-} from '../../declarations/mission_control/mission_control.did';
-import type {
   _SERVICE as SatelliteActor,
   CommitBatch as SatelliteCommitBatch,
   InitAssetKey as SatelliteInitAssetKey,
@@ -24,11 +18,11 @@ export type UploadAsset = Required<Omit<Storage, 'token' | 'encoding' | 'descrip
   Pick<Storage, 'token' | 'encoding' | 'description'>;
 
 export type UploadAssetActor = SatelliteActor;
-export type UploadAssetWithProposalActor = ConsoleActor | MissionControlActor;
+export type UploadAssetWithProposalActor = ConsoleActor;
 
-type InitAssetKey = SatelliteInitAssetKey | MissionControlInitAssetKey | ConsoleInitAssetKey;
-type UploadChunk = SatelliteUploadChunk | MissionControlUploadChunk | ConsoleUploadChunk;
-type CommitBatch = SatelliteCommitBatch | MissionControlCommitBatch | ConsoleCommitBatch;
+type InitAssetKey = SatelliteInitAssetKey | ConsoleInitAssetKey;
+type UploadChunk = SatelliteUploadChunk | ConsoleUploadChunk;
+type CommitBatch = SatelliteCommitBatch | ConsoleCommitBatch;
 
 export const uploadAsset = async ({
   asset: {data, headers, ...restAsset},

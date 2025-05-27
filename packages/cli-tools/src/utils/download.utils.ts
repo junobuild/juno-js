@@ -4,8 +4,12 @@ import {get, type RequestOptions} from 'https';
 export const downloadFromURL = async (url: string | RequestOptions): Promise<Buffer> =>
   await new Promise((resolve, reject) => {
     get(url, async (res) => {
-      if (nonNullish(res.statusCode) && [301, 302].includes(res.statusCode)) {
-        await downloadFromURL(res.headers.location!).then(resolve, reject);
+      if (
+        nonNullish(res.statusCode) &&
+        nonNullish(res.headers.location) &&
+        [301, 302].includes(res.statusCode)
+      ) {
+        await downloadFromURL(res.headers.location).then(resolve, reject);
       }
 
       const data: Uint8Array[] = [];

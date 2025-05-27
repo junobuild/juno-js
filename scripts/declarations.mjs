@@ -22,7 +22,7 @@ const storagePromises = storageDeclarations.map((d) =>
 );
 await Promise.all(storagePromises);
 
-const cdnDeclarations = ['console', 'mission_control'];
+const cdnDeclarations = ['console', 'satellite'];
 const cdnPromises = cdnDeclarations.map((d) =>
   cp(join(src, d), join('./packages/cdn/declarations/', d), {recursive: true})
 );

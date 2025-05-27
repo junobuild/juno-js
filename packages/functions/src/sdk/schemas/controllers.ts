@@ -12,7 +12,7 @@ import {
 /**
  * @see ControllerScopeSchema
  */
-export const ControllerScopeSchema = z.enum(['write', 'admin']);
+export const ControllerScopeSchema = z.enum(['write', 'admin', 'automation']);
 
 /**
  * Represents the permission scope of a controller.

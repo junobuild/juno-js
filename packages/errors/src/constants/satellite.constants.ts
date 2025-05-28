@@ -8,6 +8,8 @@ export const JUNO_DATASTORE_ERROR_CANNOT_READ = 'juno.datastore.error.cannot_rea
 
 export const JUNO_STORAGE_ERROR_UPLOAD_NOT_ALLOWED = 'juno.storage.error.upload_not_allowed';
 export const JUNO_STORAGE_ERROR_SET_NOT_ALLOWED = 'juno.storage.error.set_not_allowed';
+export const JUNO_STORAGE_ERROR_CANNOT_COMMIT_INVALID_COLLECTION =
+  'juno.storage.error.cannot_commit_invalid_collection';
 export const JUNO_STORAGE_ERROR_CANNOT_COMMIT_BATCH = 'juno.storage.error.cannot_commit_batch';
 export const JUNO_STORAGE_ERROR_ASSET_NOT_FOUND = 'juno.storage.error.asset_not_found';
 export const JUNO_STORAGE_ERROR_CANNOT_READ_ASSET = 'juno.storage.error.cannot_read_asset';

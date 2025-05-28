@@ -17,7 +17,7 @@ export const JUNO_STORAGE_ERROR_RESERVED_ASSET = 'juno.storage.error.reserved_as
 
 export const JUNO_AUTH_ERROR_NOT_ADMIN_CONTROLLER = 'juno.auth.error.not_admin_controller';
 export const JUNO_AUTH_ERROR_INVALID_ORIGIN = 'juno.auth.error.invalid_origin';
-export const JUNO_AUTH_ERROR_NOT_CONTROLLER = 'juno.auth.error.not_controller';
+export const JUNO_AUTH_ERROR_NOT_WRITE_CONTROLLER = 'juno.auth.error.not_write_controller';
 
 export const JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE = 'juno.datastore.error.user.cannot_update';
 export const JUNO_DATASTORE_ERROR_USER_INVALID_DATA = 'juno.datastore.error.user.invalid_data';

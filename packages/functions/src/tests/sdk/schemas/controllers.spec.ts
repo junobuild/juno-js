@@ -90,6 +90,7 @@ describe('controllers', () => {
   describe('ControllersSchema', () => {
     const principal = Principal.fromText('aaaaa-aa');
     const rawUserId = principal.toUint8Array();
+    const rawAnonymousId = Principal.anonymous().toUint8Array();
 
     const validControllers = [
       [
@@ -110,13 +111,25 @@ describe('controllers', () => {
           expires_at: BigInt(5),
           scope: 'admin'
         }
+      ],
+      [
+        rawAnonymousId,
+        {
+          metadata: [],
+          created_at: BigInt(6),
+          updated_at: BigInt(7),
+          expires_at: BigInt(8),
+          scope: 'submit'
+        }
       ]
     ];
 
     it('parses a valid array of controller records', () => {
       const result = ControllersSchema.parse(validControllers);
-      expect(result.length).toBe(2);
+      expect(result.length).toBe(3);
+      expect(result[0][0]).toBe(mockRawUserId);
       expect(result[1][0]).toBe(rawUserId);
+      expect(result[2][0]).toBe(rawAnonymousId);
     });
 
     it('fails if any record is invalid', () => {

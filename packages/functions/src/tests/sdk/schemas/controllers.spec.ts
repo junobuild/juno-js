@@ -119,7 +119,7 @@ describe('controllers', () => {
           created_at: BigInt(6),
           updated_at: BigInt(7),
           expires_at: BigInt(8),
-          scope: 'automation'
+          scope: 'submit'
         }
       ]
     ];

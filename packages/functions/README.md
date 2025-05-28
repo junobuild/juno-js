@@ -216,9 +216,9 @@ Parameters:
 
 Gets the list of admin controllers from the Satellite.
 
-| Function              | Type                                                                                                                                                                            |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getAdminControllers` | `() => [Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin"; expires_at?: bigint or undefined; }][]` |
+| Function              | Type                                                                                                                                                                                            |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getAdminControllers` | `() => [Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin" or "automation"; expires_at?: bigint or undefined; }][]` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L15)
 
@@ -226,9 +226,9 @@ Gets the list of admin controllers from the Satellite.
 
 Gets the list of controllers from the Satellite.
 
-| Function         | Type                                                                                                                                                                            |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getControllers` | `() => [Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin"; expires_at?: bigint or undefined; }][]` |
+| Function         | Type                                                                                                                                                                                            |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getControllers` | `() => [Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin" or "automation"; expires_at?: bigint or undefined; }][]` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L24)
 
@@ -1202,9 +1202,9 @@ A schema that validates a value is an Uint8Array.
 
 #### :gear: ControllerScopeSchema
 
-| Constant                | Type                          |
-| ----------------------- | ----------------------------- |
-| `ControllerScopeSchema` | `ZodEnum<["write", "admin"]>` |
+| Constant                | Type                                        |
+| ----------------------- | ------------------------------------------- |
+| `ControllerScopeSchema` | `ZodEnum<["write", "admin", "automation"]>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L15)
 
@@ -1702,22 +1702,22 @@ List results, parameterized by type of returned item.
 
 Represents a controller with access scope and associated metadata.
 
-| Property     | Type                  | Description                                                                                        |
-| ------------ | --------------------- | -------------------------------------------------------------------------------------------------- |
-| `metadata`   | `[string, string][]`  | A list of key-value metadata pairs associated with the controller.                                 |
-| `created_at` | `bigint`              | The timestamp when the controller was created.                                                     |
-| `updated_at` | `bigint`              | The timestamp when the controller was last updated.                                                |
-| `expires_at` | `bigint or undefined` | Optional expiration timestamp for the controller. 👉 It's a placeholder for future implementation. |
-| `scope`      | `"write" or "admin"`  | The scope assigned to the controller.                                                              |
+| Property     | Type                                 | Description                                                                                        |
+| ------------ | ------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| `metadata`   | `[string, string][]`                 | A list of key-value metadata pairs associated with the controller.                                 |
+| `created_at` | `bigint`                             | The timestamp when the controller was created.                                                     |
+| `updated_at` | `bigint`                             | The timestamp when the controller was last updated.                                                |
+| `expires_at` | `bigint or undefined`                | Optional expiration timestamp for the controller. 👉 It's a placeholder for future implementation. |
+| `scope`      | `"write" or "admin" or "automation"` | The scope assigned to the controller.                                                              |
 
 #### :gear: ControllerCheckParams
 
 Represents the parameters required to perform controller checks.
 
-| Property      | Type                                                                                                                                                                      | Description                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `caller`      | `Uint8Array<ArrayBufferLike> or Principal`                                                                                                                                | The identity of the caller to verify against the controller list. |
-| `controllers` | `[Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin"; expires_at?: bigint or undefined; }][]` | The list of controllers to check against.                         |
+| Property      | Type                                                                                                                                                                                      | Description                                                       |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `caller`      | `Uint8Array<ArrayBufferLike> or Principal`                                                                                                                                                | The identity of the caller to verify against the controller list. |
+| `controllers` | `[Uint8Array<ArrayBufferLike>, { created_at: bigint; updated_at: bigint; metadata: [string, string][]; scope: "write" or "admin" or "automation"; expires_at?: bigint or undefined; }][]` | The list of controllers to check against.                         |
 
 #### :gear: CollectionParams
 

@@ -2,9 +2,14 @@ export const JUNO_CDN_PROPOSALS_ERROR_CANNOT_SUBMIT = 'juno.cdn.proposals.error.
 export const JUNO_CDN_PROPOSALS_ERROR_CANNOT_SUBMIT_INVALID_STATUS =
   'juno.cdn.proposals.error.cannot_submit_invalid_status';
 
+export const JUNO_CDN_PROPOSALS_ERROR_CANNOT_REJECT = 'juno.cdn.proposals.error.cannot_reject';
+export const JUNO_CDN_PROPOSALS_ERROR_CANNOT_REJECT_INVALID_STATUS =
+  'juno.cdn.proposals.error.cannot_reject_invalid_status';
+
 export const JUNO_CDN_PROPOSALS_ERROR_CANNOT_COMMIT = 'juno.cdn.proposals.error.cannot_commit';
 export const JUNO_CDN_PROPOSALS_ERROR_CANNOT_COMMIT_INVALID_STATUS =
   'juno.cdn.proposals.error.cannot_commit_invalid_status';
+
 export const JUNO_CDN_PROPOSALS_ERROR_INVALID_HASH = 'juno.cdn.proposals.error.invalid_hash';
 
 export const JUNO_CDN_PROPOSALS_ERROR_UNKNOWN_TYPE = 'juno.cdn.proposals.error.unknown_type';

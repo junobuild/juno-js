@@ -74,7 +74,7 @@ export const deployWithProposal = async ({
   }
 
   await commitProposal({
-    commitProposal: {
+    proposal: {
       proposal_id: proposalId,
       sha256
     },

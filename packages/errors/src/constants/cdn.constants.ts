@@ -20,6 +20,10 @@ export const JUNO_CDN_PROPOSALS_ERROR_CANNOT_DELETE_ASSETS =
 export const JUNO_CDN_PROPOSALS_ERROR_CANNOT_DELETE_ASSETS_INVALID_STATUS =
   'juno.cdn.proposals.error.cannot_delete_assets_invalid_status';
 
+export const JUNO_CDN_PROPOSALS_ERROR_NEXT_ID_CONVERT = 'juno.cdn.proposals.error.next_id_convert';
+export const JUNO_CDN_PROPOSALS_ERROR_NEXT_ID_OVERFLOW =
+  'juno.cdn.proposals.error.next_id_overflow';
+
 export const JUNO_CDN_STORAGE_ERROR_CANNOT_INSERT_ASSET_UNKNOWN_REFERENCE_ID =
   'juno.cdn.storage.error.cannot_insert_asset_unknown_reference_id';
 export const JUNO_CDN_STORAGE_ERROR_CANNOT_GET_ASSET_UNKNOWN_REFERENCE_ID =

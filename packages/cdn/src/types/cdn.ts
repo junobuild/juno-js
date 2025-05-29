@@ -2,6 +2,7 @@ import type * as CdnConsole from '../../declarations/console/console.did';
 import type * as CdnSatellite from '../../declarations/satellite/satellite.did';
 
 export type CommitProposal = CdnConsole.CommitProposal | CdnSatellite.CommitProposal;
+export type RejectProposal = CommitProposal;
 
 export type ProposalId = bigint;
 

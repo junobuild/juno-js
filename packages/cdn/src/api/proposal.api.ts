@@ -1,6 +1,15 @@
-import type {ListProposalResults, ListProposalsParams} from '../../declarations/console/console.did';
+import type {
+  ListProposalResults,
+  ListProposalsParams
+} from '../../declarations/console/console.did';
 import type {CdnParameters} from '../types/actor.params';
-import type {CommitProposal, Proposal, ProposalId, ProposalType, RejectProposal} from '../types/cdn';
+import type {
+  CommitProposal,
+  Proposal,
+  ProposalId,
+  ProposalType,
+  RejectProposal
+} from '../types/cdn';
 import {getCdnActor} from './_actor.api';
 
 export const initProposal = async ({

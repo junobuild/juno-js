@@ -66,5 +66,5 @@ export const proposeChanges = async ({
     cdn
   });
 
-  console.log(`🎯 Change ${proposalId} committed.`);
+  console.log(`🎯 Change ${proposalId} applied.`);
 };

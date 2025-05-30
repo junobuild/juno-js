@@ -1,8 +1,17 @@
+import {toNullable} from '@dfinity/utils';
 import type {CliConfig} from '@junobuild/config';
 import {executeHooks} from '../services/deploy.hook.services';
-import {prepareDeploy} from '../services/deploy.prepare.services';
+import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
 import {upload} from '../services/deploy.upload.services';
-import type {DeployResult, ListAssets, UploadFile} from '../types/deploy';
+import {proposeChanges} from '../services/proposals.services';
+import type {
+  DeployParams,
+  DeployResult,
+  FileDetails,
+  ListAssets,
+  UploadFile
+} from '../types/deploy';
+import type {ProposeChangesParams} from '../types/proposal';
 
 /**
  * Executes all configured pre-deploy hooks defined in the Juno configuration.
@@ -53,18 +62,90 @@ export const postDeploy = async ({config: {postdeploy}}: {config: CliConfig}) =>
  *   - `skipped` if no files were found.
  *   - `deployed` and a list of uploaded files if the deploy succeeded.
  */
-export const deploy = async ({
-  assertMemory,
-  uploadFile,
-  ...rest
+export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<DeployResult> => {
+  const result = await prepareDeploy(rest);
+
+  if (result.result === 'skipped') {
+    return {result: 'skipped'};
+  }
+
+  const {files, sourceAbsolutePath} = result;
+
+  await upload({
+    files,
+    sourceAbsolutePath,
+    uploadFile
+  });
+
+  console.log(`\n🚀 Deploy complete!`);
+
+  return {result: 'deployed', files};
+};
+
+/**
+ * Prepares and uploads assets as part of a proposal-based workflow.
+ *
+ * This function:
+ * 1. Prepares the list of files to be uploaded.
+ * 2. If no files are found (i.e. nothing to upload), the process is skipped.
+ * 3. If files exist, uploads them a proposal flow.
+ * 4. Optionally commits - apply - the proposal if `autoCommit` is `true`.
+ *
+ * @param {Object} options - The deployment and proposal options.
+ * @param {DeployParams} options.deploy - Deployment-related parameters (file system, memory check, upload function).
+ * @param {Object} options.proposal - Proposal-related options.
+ * @param {CdnParameters} options.proposal.cdn - Parameters for interacting with the CDN and governance.
+ * @param {boolean} options.proposal.autoCommit - If `true`, automatically commits the proposal after submission.
+ * @param {boolean} [options.proposal.clearAssets] - Whether to clear existing assets before upload (optional).
+ *
+ * @returns {Promise<DeployResult>} The result of the deployment process:
+ *   - `{result: 'skipped'}` if no files were found for upload.
+ *   - `{result: 'deployed', files}` if the upload and proposal succeeded.
+ */
+export const deployWithProposal = async ({
+  deploy: {uploadFile, ...rest},
+  proposal: {clearAssets, ...proposalRest}
 }: {
-  config: CliConfig;
-  listAssets: ListAssets;
-  assertSourceDirExists?: (source: string) => void;
-  assertMemory: () => Promise<void>;
-  uploadFile: UploadFile;
+  deploy: DeployParams;
+  proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {clearAssets?: boolean};
 }): Promise<DeployResult> => {
-  const {files: sourceFiles, sourceAbsolutePath} = await prepareDeploy(rest);
+  const result = await prepareDeploy(rest);
+
+  if (result.result === 'skipped') {
+    return {result: 'skipped'};
+  }
+
+  const {files, sourceAbsolutePath} = result;
+
+  const executeChanges = async () =>
+    upload({
+      files,
+      sourceAbsolutePath,
+      uploadFile
+    });
+
+  await proposeChanges({
+    ...proposalRest,
+    proposalType: {
+      AssetsUpgrade: {
+        clear_existing_assets: toNullable(clearAssets)
+      }
+    },
+    executeChanges
+  });
+
+  console.log(`\n🚀 Deploy complete!`);
+
+  return {result: 'deployed', files};
+};
+
+const prepareDeploy = async ({
+  assertMemory,
+  ...rest
+}: Omit<DeployParams, 'uploadFile'>): Promise<
+  {result: 'skipped'} | {result: 'to-deploy'; files: FileDetails[]; sourceAbsolutePath: string}
+> => {
+  const {files: sourceFiles, sourceAbsolutePath} = await prepareDeployServices(rest);
 
   if (sourceFiles.length === 0) {
     console.log('⚠️ No files detected. Upload skipped.');
@@ -74,13 +155,9 @@ export const deploy = async ({
 
   await assertMemory?.();
 
-  await upload({
+  return {
+    result: 'to-deploy',
     files: sourceFiles,
-    sourceAbsolutePath,
-    uploadFile
-  });
-
-  console.log(`\n🚀 Deploy complete!`);
-
-  return {result: 'deployed', files: sourceFiles};
+    sourceAbsolutePath
+  };
 };

@@ -1,4 +1,4 @@
-import type {ENCODING_TYPE} from '@junobuild/config';
+import type {CliConfig, ENCODING_TYPE} from '@junobuild/config';
 import type {Blob} from 'buffer';
 
 export type MimeType = string;
@@ -41,3 +41,11 @@ export type UploadFile = (params: UploadFileStorage) => Promise<void>;
 export type DeployResult =
   | {result: 'deployed'; files: Pick<FileDetails, 'file'>[]}
   | {result: 'skipped'};
+
+export interface DeployParams {
+  config: CliConfig;
+  listAssets: ListAssets;
+  assertSourceDirExists?: (source: string) => void;
+  assertMemory: () => Promise<void>;
+  uploadFile: UploadFile;
+}

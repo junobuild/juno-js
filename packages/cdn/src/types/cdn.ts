@@ -16,5 +16,7 @@ export type SegmentsDeploymentOptions =
   | CdnConsole.SegmentsDeploymentOptions
   | CdnSatellite.SegmentsDeploymentOptions;
 
+export type ProposalKey = CdnConsole.ProposalKey | CdnSatellite.ProposalKey;
+
 export type InitAssetKey = CdnConsole.InitAssetKey | CdnSatellite.InitAssetKey;
 export type InitUploadResult = CdnConsole.InitUploadResult | CdnSatellite.InitUploadResult;

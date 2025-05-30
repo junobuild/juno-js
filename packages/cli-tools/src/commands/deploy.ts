@@ -4,13 +4,7 @@ import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
 import {upload} from '../services/deploy.upload.services';
 import {proposeChanges} from '../services/proposals.services';
-import type {
-  DeployParams,
-  DeployResult,
-  FileDetails,
-  ListAssets,
-  UploadFile
-} from '../types/deploy';
+import type {DeployParams, DeployResult, FileDetails} from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
 
 /**
@@ -117,7 +111,7 @@ export const deployWithProposal = async ({
 
   const {files, sourceAbsolutePath} = result;
 
-  const executeChanges = async () =>
+  const executeChanges = (): Promise<void> =>
     upload({
       files,
       sourceAbsolutePath,

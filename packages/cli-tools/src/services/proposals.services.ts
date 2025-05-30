@@ -1,11 +1,5 @@
 import {fromNullable, isNullish, uint8ArrayToHexString} from '@dfinity/utils';
-import {
-  type CdnParameters,
-  commitProposal,
-  initProposal,
-  type ProposalType,
-  submitProposal
-} from '@junobuild/cdn';
+import {commitProposal, initProposal, submitProposal} from '@junobuild/cdn';
 import type {ProposeChangesParams} from '../types/proposal';
 
 /**

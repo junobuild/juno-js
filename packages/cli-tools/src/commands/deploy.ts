@@ -4,7 +4,7 @@ import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
 import {upload} from '../services/deploy.upload.services';
 import {proposeChanges} from '../services/proposals.services';
-import type {DeployParams, DeployResult, FileDetails} from '../types/deploy';
+import type {DeployParams, DeployResult, DeployResultWithProposal, FileDetails} from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
 
 /**
@@ -92,17 +92,17 @@ export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<Deplo
  * @param {boolean} options.proposal.autoCommit - If `true`, automatically commits the proposal after submission.
  * @param {boolean} [options.proposal.clearAssets] - Whether to clear existing assets before upload (optional).
  *
- * @returns {Promise<DeployResult>} The result of the deployment process:
+ * @returns {Promise<DeployResultWithProposal>} The result of the deployment process:
  *   - `{result: 'skipped'}` if no files were found for upload.
  *   - `{result: 'deployed', files}` if the upload and proposal succeeded.
  */
 export const deployWithProposal = async ({
   deploy: {uploadFile, ...rest},
-  proposal: {clearAssets, ...proposalRest}
+  proposal: {clearAssets, autoCommit, ...proposalRest}
 }: {
   deploy: DeployParams;
   proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {clearAssets?: boolean};
-}): Promise<DeployResult> => {
+}): Promise<DeployResultWithProposal> => {
   const result = await prepareDeploy(rest);
 
   if (result.result === 'skipped') {
@@ -120,6 +120,7 @@ export const deployWithProposal = async ({
 
   await proposeChanges({
     ...proposalRest,
+    autoCommit,
     proposalType: {
       AssetsUpgrade: {
         clear_existing_assets: toNullable(clearAssets)
@@ -127,6 +128,10 @@ export const deployWithProposal = async ({
     },
     executeChanges
   });
+
+  if (!autoCommit) {
+    return {result: 'submitted', files};
+  }
 
   console.log(`\n🚀 Deploy complete!`);
 

@@ -42,6 +42,13 @@ export type DeployResult =
   | {result: 'deployed'; files: Pick<FileDetails, 'file'>[]}
   | {result: 'skipped'};
 
+export type DeployResultWithProposal =
+  | DeployResult
+  | {
+      result: 'submitted';
+      files: Pick<FileDetails, 'file'>[];
+    };
+
 export interface DeployParams {
   config: CliConfig;
   listAssets: ListAssets;

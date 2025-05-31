@@ -161,7 +161,7 @@ const prepareDeploy = async ({
   const {files: sourceFiles, sourceAbsolutePath} = await prepareDeployServices(rest);
 
   if (sourceFiles.length === 0) {
-    console.log('⚠️ No files detected. Upload skipped.');
+    console.log('⚠️  No file changes detected. Upload skipped.');
 
     return {result: 'skipped'};
   }

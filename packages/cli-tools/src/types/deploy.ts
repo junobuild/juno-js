@@ -37,6 +37,9 @@ export interface UploadFileStorage {
 }
 
 export type UploadFile = (params: UploadFileStorage) => Promise<void>;
+export type UploadFileWithProposal = (
+  params: UploadFileStorage & {proposalId: bigint}
+) => Promise<void>;
 
 export type DeployResult =
   | {result: 'deployed'; files: Pick<FileDetails, 'file'>[]}
@@ -49,10 +52,10 @@ export type DeployResultWithProposal =
       files: Pick<FileDetails, 'file'>[];
     };
 
-export interface DeployParams {
+export interface DeployParams<T = UploadFile> {
   config: CliConfig;
   listAssets: ListAssets;
   assertSourceDirExists?: (source: string) => void;
   assertMemory: () => Promise<void>;
-  uploadFile: UploadFile;
+  uploadFile: T;
 }

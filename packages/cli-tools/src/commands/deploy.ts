@@ -4,7 +4,14 @@ import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
 import {upload} from '../services/deploy.upload.services';
 import {proposeChanges} from '../services/proposals.services';
-import type {DeployParams, DeployResult, DeployResultWithProposal, FileDetails} from '../types/deploy';
+import type {
+  DeployParams,
+  DeployResult,
+  DeployResultWithProposal,
+  FileDetails,
+  UploadFileStorage,
+  UploadFileWithProposal
+} from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
 
 /**
@@ -100,7 +107,7 @@ export const deployWithProposal = async ({
   deploy: {uploadFile, ...rest},
   proposal: {clearAssets, autoCommit, ...proposalRest}
 }: {
-  deploy: DeployParams;
+  deploy: DeployParams<UploadFileWithProposal>;
   proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {clearAssets?: boolean};
 }): Promise<DeployResultWithProposal> => {
   const result = await prepareDeploy(rest);
@@ -111,12 +118,19 @@ export const deployWithProposal = async ({
 
   const {files, sourceAbsolutePath} = result;
 
-  const executeChanges = (): Promise<void> =>
-    upload({
+  const executeChanges = async (proposalId: bigint): Promise<void> => {
+    const uploadWithProposalId = (params: UploadFileStorage) =>
+      uploadFile({
+        ...params,
+        proposalId
+      });
+
+    await upload({
       files,
       sourceAbsolutePath,
-      uploadFile
+      uploadFile: uploadWithProposalId
     });
+  };
 
   await proposeChanges({
     ...proposalRest,

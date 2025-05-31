@@ -12,19 +12,25 @@ import {
   DEPLOY_DEFAULT_IGNORE,
   DEPLOY_DEFAULT_SOURCE
 } from '../constants/deploy.constants';
-import type {Asset, FileDetails, FileExtension, ListAssets} from '../types/deploy';
+import type {
+  Asset,
+  FileDetails,
+  FileExtension,
+  ListAssets,
+  PrepareDeployOptions
+} from '../types/deploy';
 import {gzipFiles} from '../utils/compress.utils';
 import {fullPath, listSourceFiles} from '../utils/deploy.utils';
 
 export const prepareDeploy = async ({
   config,
   listAssets,
-  assertSourceDirExists
+  assertSourceDirExists,
+  includeAllFiles
 }: {
   config: CliConfig;
   listAssets: ListAssets;
-  assertSourceDirExists?: (source: string) => void;
-}): Promise<{
+} & PrepareDeployOptions): Promise<{
   files: FileDetails[];
   sourceAbsolutePath: string;
 }> => {
@@ -44,7 +50,8 @@ export const prepareDeploy = async ({
     ignore,
     encoding,
     gzip,
-    listAssets
+    listAssets,
+    includeAllFiles
   });
 
   return {
@@ -112,12 +119,12 @@ const listFiles = async ({
   ignore,
   encoding,
   gzip,
-  listAssets
+  listAssets,
+  includeAllFiles
 }: {
   sourceAbsolutePath: string;
-} & {listAssets: ListAssets} & Required<Pick<CliConfig, 'ignore' | 'encoding' | 'gzip'>>): Promise<
-  FileDetails[]
-> => {
+} & {listAssets: ListAssets} & Pick<PrepareDeployOptions, 'includeAllFiles'> &
+  Required<Pick<CliConfig, 'ignore' | 'encoding' | 'gzip'>>): Promise<FileDetails[]> => {
   const sourceFiles = listSourceFiles({sourceAbsolutePath, ignore});
   const compressedFiles = await gzipFiles({sourceFiles, gzip});
 
@@ -190,6 +197,11 @@ const listFiles = async ({
   };
 
   const encodingFiles: FileDetails[] = await Promise.all(files.map(mapFiles));
+
+  // juno deploy with proposals using clear
+  if (includeAllFiles === true) {
+    return encodingFiles;
+  }
 
   return await filterFilesToUpload({
     files: encodingFiles,

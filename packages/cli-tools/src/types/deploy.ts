@@ -52,10 +52,14 @@ export type DeployResultWithProposal =
       files: Pick<FileDetails, 'file'>[];
     };
 
-export interface DeployParams<T = UploadFile> {
+export interface PrepareDeployOptions {
+  assertSourceDirExists?: (source: string) => void;
+  includeAllFiles?: boolean;
+}
+
+export type DeployParams<T = UploadFile> = PrepareDeployOptions & {
   config: CliConfig;
   listAssets: ListAssets;
-  assertSourceDirExists?: (source: string) => void;
   assertMemory: () => Promise<void>;
   uploadFile: T;
-}
+};

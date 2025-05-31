@@ -36,10 +36,10 @@ export interface UploadFileStorage {
   description?: string;
 }
 
+export type UploadFileStorageWithProposal = UploadFileStorage & {proposalId: bigint};
+
 export type UploadFile = (params: UploadFileStorage) => Promise<void>;
-export type UploadFileWithProposal = (
-  params: UploadFileStorage & {proposalId: bigint}
-) => Promise<void>;
+export type UploadFileWithProposal = (params: UploadFileStorageWithProposal) => Promise<void>;
 
 export type DeployResult =
   | {result: 'deployed'; files: Pick<FileDetails, 'file'>[]}

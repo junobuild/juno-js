@@ -21,8 +21,8 @@ import type {ProposeChangesParams} from '../types/proposal';
  *   Receives the generated proposal ID as input.
  * @param {boolean} options.autoCommit - If `true`, the function will also commit the change after submission.
  *
- * @returns {Promise<void>} Resolves once the deployment and optional commit are complete.
- * Exits the process early if no changes were detected.
+ * @returns {Promise<{proposalId: bigint}>} Resolves once the deployment and optional commit are complete.
+ * Returns the proposal ID that was created.
  *
  * @throws {Error} If the SHA256 hash returned from `submitProposal` is `null` or `undefined`.
  */
@@ -31,7 +31,7 @@ export const proposeChanges = async ({
   cdn,
   executeChanges,
   autoCommit
-}: ProposeChangesParams) => {
+}: ProposeChangesParams): Promise<{proposalId: bigint}> => {
   const [proposalId, _] = await initProposal({proposalType, cdn});
 
   await executeChanges(proposalId);
@@ -55,7 +55,7 @@ export const proposeChanges = async ({
   console.log('🔒 ', uint8ArrayToHexString(sha256));
 
   if (!autoCommit) {
-    return;
+    return {proposalId};
   }
 
   await commitProposal({
@@ -67,4 +67,6 @@ export const proposeChanges = async ({
   });
 
   console.log(`🎯 Change ${proposalId} applied.`);
+
+  return {proposalId};
 };

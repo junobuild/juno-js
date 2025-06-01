@@ -46,10 +46,12 @@ export type DeployResult =
   | {result: 'skipped'};
 
 export type DeployResultWithProposal =
-  | DeployResult
+  | {result: 'deployed'; files: Pick<FileDetails, 'file'>[]; proposalId: bigint}
+  | {result: 'skipped'}
   | {
       result: 'submitted';
       files: Pick<FileDetails, 'file'>[];
+      proposalId: bigint;
     };
 
 export interface PrepareDeployOptions {

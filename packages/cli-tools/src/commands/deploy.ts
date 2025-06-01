@@ -101,7 +101,8 @@ export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<Deplo
  *
  * @returns {Promise<DeployResultWithProposal>} The result of the deployment process:
  *   - `{result: 'skipped'}` if no files were found for upload.
- *   - `{result: 'deployed', files}` if the upload and proposal succeeded.
+ *   - `{result: 'submitted', files, proposalId}` if the upload and proposal submission succeeded.
+ *   - `{result: 'deployed', files, proposalId}` if the upload and proposal was applied automatically committed.
  */
 export const deployWithProposal = async ({
   deploy: {uploadFile, ...rest},
@@ -132,7 +133,7 @@ export const deployWithProposal = async ({
     });
   };
 
-  await proposeChanges({
+  const {proposalId} = await proposeChanges({
     ...proposalRest,
     autoCommit,
     proposalType: {
@@ -144,12 +145,12 @@ export const deployWithProposal = async ({
   });
 
   if (!autoCommit) {
-    return {result: 'submitted', files};
+    return {result: 'submitted', files, proposalId};
   }
 
   console.log(`\n🚀 Deploy complete!`);
 
-  return {result: 'deployed', files};
+  return {result: 'deployed', files, proposalId};
 };
 
 const prepareDeploy = async ({

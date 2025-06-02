@@ -1,18 +1,21 @@
 import {toNullable} from '@dfinity/utils';
 import type {CliConfig} from '@junobuild/config';
+import {COLLECTION_DAPP} from '../constants/deploy.constants';
 import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
-import {upload} from '../services/deploy.upload.services';
-import {proposeChanges} from '../services/proposals.services';
+import {deployAndProposeChanges} from '../services/deploy.proposal.services';
+import {uploadFiles} from '../services/upload.services';
 import type {
   DeployParams,
   DeployResult,
   DeployResultWithProposal,
+  FileAndPaths,
   FileDetails,
-  UploadFileStorage,
+  FilePaths,
   UploadFileWithProposal
 } from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
+import {fullPath} from '../utils/deploy.utils';
 
 /**
  * Executes all configured pre-deploy hooks defined in the Juno configuration.
@@ -64,21 +67,23 @@ export const postDeploy = async ({config: {postdeploy}}: {config: CliConfig}) =>
  *   - `deployed` and a list of uploaded files if the deploy succeeded.
  */
 export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<DeployResult> => {
-  const result = await prepareDeploy(rest);
+  const prepareResult = await prepareDeploy(rest);
 
-  if (result.result === 'skipped') {
+  if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
   }
 
-  const {files, sourceAbsolutePath} = result;
+  const sourceFiles = prepareSourceFiles(prepareResult);
 
-  await upload({
-    files,
-    sourceAbsolutePath,
-    uploadFile
+  await uploadFiles({
+    files: sourceFiles,
+    uploadFile,
+    collection: COLLECTION_DAPP
   });
 
   console.log(`\n🚀 Deploy complete!`);
+
+  const {files} = prepareResult;
 
   return {result: 'deployed', files};
 };
@@ -106,51 +111,36 @@ export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<Deplo
  */
 export const deployWithProposal = async ({
   deploy: {uploadFile, ...rest},
-  proposal: {clearAssets, autoCommit, ...proposalRest}
+  proposal: {clearAssets, ...restProposal}
 }: {
   deploy: DeployParams<UploadFileWithProposal>;
   proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {clearAssets?: boolean};
 }): Promise<DeployResultWithProposal> => {
-  const result = await prepareDeploy(rest);
+  const prepareResult = await prepareDeploy(rest);
 
-  if (result.result === 'skipped') {
+  if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
   }
 
-  const {files, sourceAbsolutePath} = result;
+  const sourceFiles = prepareSourceFiles(prepareResult);
 
-  const executeChanges = async (proposalId: bigint): Promise<void> => {
-    const uploadWithProposalId = (params: UploadFileStorage) =>
-      uploadFile({
-        ...params,
-        proposalId
-      });
-
-    await upload({
-      files,
-      sourceAbsolutePath,
-      uploadFile: uploadWithProposalId
-    });
-  };
-
-  const {proposalId} = await proposeChanges({
-    ...proposalRest,
-    autoCommit,
-    proposalType: {
-      AssetsUpgrade: {
-        clear_existing_assets: toNullable(clearAssets)
+  const result = await deployAndProposeChanges({
+    deploy: {uploadFile, files: sourceFiles, collection: COLLECTION_DAPP},
+    proposal: {
+      ...restProposal,
+      proposalType: {
+        AssetsUpgrade: {
+          clear_existing_assets: toNullable(clearAssets)
+        }
       }
-    },
-    executeChanges
+    }
   });
 
-  if (!autoCommit) {
-    return {result: 'submitted', files, proposalId};
+  if (result.result === 'deployed') {
+    console.log(`\n🚀 Deploy complete!`);
   }
 
-  console.log(`\n🚀 Deploy complete!`);
-
-  return {result: 'deployed', files, proposalId};
+  return result;
 };
 
 const prepareDeploy = async ({
@@ -174,4 +164,23 @@ const prepareDeploy = async ({
     files: sourceFiles,
     sourceAbsolutePath
   };
+};
+
+const prepareSourceFiles = ({
+  files,
+  sourceAbsolutePath
+}: {
+  files: FileDetails[];
+  sourceAbsolutePath: string;
+}): FileAndPaths[] => {
+  const filePaths = (file: FileDetails): FilePaths => {
+    const filePath = file.alternateFile ?? file.file;
+
+    return {
+      fullPath: fullPath({file: filePath, sourceAbsolutePath}),
+      filePath
+    };
+  };
+
+  return files.map((file) => ({file, paths: filePaths(file)}));
 };

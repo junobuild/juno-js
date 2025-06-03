@@ -1,4 +1,4 @@
-import {isNullish, nonNullish} from '@dfinity/utils';
+import {isNullish, nonNullish, notEmptyString} from '@dfinity/utils';
 import {Blob} from 'buffer';
 import Listr from 'listr';
 import {readFile} from 'node:fs/promises';
@@ -90,12 +90,17 @@ const uploadFileToStorage = async ({
   file,
   fullPath,
   collection,
-  filePath
+  filePath,
+  token,
+  description
 }: {
   file: FileDetails;
   uploadFile: UploadFile;
   filePath: string;
-} & Pick<UploadFileStorage, 'fullPath' | 'collection'>): Promise<void> => {
+} & Pick<
+  UploadFileStorage,
+  'fullPath' | 'collection' | 'token' | 'description'
+>): Promise<void> => {
   await uploadFile({
     filename: basename(filePath),
     fullPath,
@@ -105,6 +110,7 @@ const uploadFileToStorage = async ({
       ...(file.mime === undefined ? [] : ([['Content-Type', file.mime]] as Array<[string, string]>))
     ],
     encoding: file.encoding,
-    ...(nonNullish(file.token) && {token: file.token})
+    ...(nonNullish(token) && notEmptyString(token) && {token}),
+    ...(nonNullish(description) && notEmptyString(description) && {description})
   });
 };

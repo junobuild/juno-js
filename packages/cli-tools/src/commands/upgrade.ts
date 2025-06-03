@@ -61,7 +61,7 @@ export const deploySatelliteWasmWithProposal = async ({
   });
 
   if (result.result === 'deployed') {
-    console.log(`\n🚀 Satellite WASM deployed to CDN!`);
+    console.log(`\n📡 Satellite WASM deployed to CDN.`);
   }
 
   return result;

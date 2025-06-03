@@ -73,17 +73,18 @@ export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<Deplo
     return {result: 'skipped'};
   }
 
-  const sourceFiles = prepareSourceFiles(prepareResult);
+  const {files, sourceAbsolutePath} = prepareResult;
+
+  const sourceFiles = prepareSourceFiles({files, sourceAbsolutePath});
 
   await uploadFiles({
     files: sourceFiles,
     uploadFile,
+    sourceAbsolutePath,
     collection: COLLECTION_DAPP
   });
 
   console.log(`\n🚀 Deploy complete!`);
-
-  const {files} = prepareResult;
 
   return {result: 'deployed', files};
 };
@@ -122,10 +123,12 @@ export const deployWithProposal = async ({
     return {result: 'skipped'};
   }
 
+  const {sourceAbsolutePath} = prepareResult;
+
   const sourceFiles = prepareSourceFiles(prepareResult);
 
   const result = await deployAndProposeChanges({
-    deploy: {uploadFile, files: sourceFiles, collection: COLLECTION_DAPP},
+    deploy: {uploadFile, files: sourceFiles, sourceAbsolutePath, collection: COLLECTION_DAPP},
     proposal: {
       ...restProposal,
       proposalType: {

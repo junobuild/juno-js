@@ -2,7 +2,7 @@ import {isNullish, nonNullish} from '@dfinity/utils';
 import {Blob} from 'buffer';
 import Listr from 'listr';
 import {readFile} from 'node:fs/promises';
-import {basename} from 'node:path';
+import {basename, relative} from 'node:path';
 import {
   type COLLECTION_CDN,
   type COLLECTION_DAPP,
@@ -13,10 +13,12 @@ import type {FileAndPaths, FileDetails, UploadFile, UploadFileStorage} from '../
 export const uploadFiles = async ({
   files: sourceFiles,
   uploadFile,
+  sourceAbsolutePath,
   collection
 }: {
   files: FileAndPaths[];
   uploadFile: UploadFile;
+  sourceAbsolutePath: string;
   collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN;
 }) => {
   const upload = async ({file, paths}: FileAndPaths): Promise<void> => {
@@ -30,15 +32,18 @@ export const uploadFiles = async ({
 
   await batchUploadFiles({
     files: sourceFiles,
+    sourceAbsolutePath,
     upload
   });
 };
 
 const batchUploadFiles = async ({
   files: sourceFiles,
+  sourceAbsolutePath,
   upload
 }: {
   files: FileAndPaths[];
+  sourceAbsolutePath: string;
   upload: (params: FileAndPaths) => Promise<void>;
 }) => {
   const uploadFiles = async (groupFiles: FileAndPaths[]) => {
@@ -48,7 +53,7 @@ const batchUploadFiles = async ({
 
       const tasks = new Listr<void>(
         files.map(({file, paths}) => ({
-          title: `Uploading ${paths.fullPath}`,
+          title: `Uploading ${relative(sourceAbsolutePath, file.file)}`,
           task: async () => await upload({file, paths})
         })),
         {concurrent: true}

@@ -11,11 +11,12 @@ import {proposeChanges} from './proposals.services';
 import {uploadFiles} from './upload.services';
 
 export const deployAndProposeChanges = async ({
-  deploy: {uploadFile, files, collection},
+  deploy: {uploadFile, files, sourceAbsolutePath, collection},
   proposal: {proposalType, autoCommit, ...proposalRest}
 }: {
   deploy: Pick<DeployParams<UploadFileWithProposal>, 'uploadFile'> & {
     files: FileAndPaths[];
+    sourceAbsolutePath: string;
     collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN;
   };
   proposal: Omit<ProposeChangesParams, 'executeChanges'>;
@@ -29,6 +30,7 @@ export const deployAndProposeChanges = async ({
 
     await uploadFiles({
       files,
+      sourceAbsolutePath,
       collection,
       uploadFile: uploadWithProposalId
     });

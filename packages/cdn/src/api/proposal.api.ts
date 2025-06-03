@@ -82,3 +82,14 @@ export const listProposals = async ({
   const {list_proposals} = await getCdnActor(cdn);
   return list_proposals(filter);
 };
+
+export const getProposal = async ({
+  cdn,
+  proposalId
+}: {
+  cdn: CdnParameters;
+  proposalId: ProposalId;
+}): Promise<[] | [Proposal]> => {
+  const {get_proposal} = await getCdnActor(cdn);
+  return get_proposal(proposalId);
+};

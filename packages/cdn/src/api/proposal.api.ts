@@ -25,13 +25,13 @@ export const initProposal = async ({
 
 export const submitProposal = async ({
   cdn,
-  proposalId
+  proposal_id
 }: {
   cdn: CdnParameters;
-  proposalId: ProposalId;
+  proposal_id: ProposalId;
 }): Promise<[ProposalId, Proposal]> => {
   const {submit_proposal} = await getCdnActor(cdn);
-  return submit_proposal(proposalId);
+  return submit_proposal(proposal_id);
 };
 
 export const rejectProposal = async ({
@@ -58,13 +58,13 @@ export const commitProposal = async ({
 
 export const deleteProposalAssets = async ({
   cdn,
-  proposalIds
+  proposal_ids
 }: {
   cdn: CdnParameters;
-  proposalIds: ProposalId[];
+  proposal_ids: ProposalId[];
 }): Promise<void> => {
   const {delete_proposal_assets} = await getCdnActor(cdn);
-  await delete_proposal_assets({proposal_ids: proposalIds});
+  await delete_proposal_assets({proposal_ids});
 };
 
 export const countProposals = async ({cdn}: {cdn: CdnParameters}): Promise<bigint> => {
@@ -85,11 +85,11 @@ export const listProposals = async ({
 
 export const getProposal = async ({
   cdn,
-  proposalId
+  proposal_id
 }: {
   cdn: CdnParameters;
-  proposalId: ProposalId;
+  proposal_id: ProposalId;
 }): Promise<[] | [Proposal]> => {
   const {get_proposal} = await getCdnActor(cdn);
-  return get_proposal(proposalId);
+  return get_proposal(proposal_id);
 };

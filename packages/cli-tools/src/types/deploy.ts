@@ -5,7 +5,7 @@ export type MimeType = string;
 
 export type FileExtension = string;
 
-export type FileDetails = Pick<UploadFileStorage, 'token'> & {
+export type FileDetails = Pick<UploadFileStorage, 'token' | 'description'> & {
   file: string;
   // e.g. for index.js.gz -> index.js
   alternateFile?: string;

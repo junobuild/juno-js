@@ -5,4 +5,4 @@ export type DeploySatelliteWasmParams = Pick<
   'assertMemory' | 'uploadFile'
 > &
   FilePaths &
-  Pick<FileDetails, 'token'> & {sourceAbsolutePath: string};
+  Pick<FileDetails, 'token' | 'description'> & {sourceAbsolutePath: string};

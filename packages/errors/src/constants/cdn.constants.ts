@@ -39,5 +39,11 @@ export const JUNO_CDN_STORAGE_ERROR_NO_PROPOSAL_FOUND = 'juno.cdn.storage.error.
 export const JUNO_CDN_STORAGE_ERROR_INVALID_RELEASES_PATH =
   'juno.cdn.storage.error.invalid_releases_path';
 
+export const JUNO_CDN_STORAGE_ERROR_MISSING_RELEASES_DESCRIPTION =
+  'juno.cdn.storage.error.missing_releases_description';
+
+export const JUNO_CDN_STORAGE_ERROR_INVALID_RELEASES_DESCRIPTION =
+  'juno.cdn.storage.error.invalid_releases_description';
+
 export const JUNO_CDN_STORAGE_ERROR_INVALID_COLLECTION =
   'juno.cdn.storage.error.invalid_collection';

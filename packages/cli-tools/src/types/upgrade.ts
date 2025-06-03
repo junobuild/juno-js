@@ -1,8 +1,7 @@
-import type {DeployParams, FileDetails, FilePaths, UploadFileWithProposal} from './deploy';
+import type {DeployParams, FilePaths, UploadFileWithProposal} from './deploy';
 
 export type DeploySatelliteWasmParams = Pick<
   DeployParams<UploadFileWithProposal>,
   'assertMemory' | 'uploadFile'
 > &
-  FilePaths &
-  Pick<FileDetails, 'token' | 'description'> & {sourceAbsolutePath: string};
+  FilePaths & {sourceAbsolutePath: string};

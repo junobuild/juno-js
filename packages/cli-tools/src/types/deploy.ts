@@ -5,13 +5,13 @@ export type MimeType = string;
 
 export type FileExtension = string;
 
-export type FileDetails = Pick<UploadFileStorage, 'token' | 'description'> & {
+export interface FileDetails {
   file: string;
   // e.g. for index.js.gz -> index.js
   alternateFile?: string;
   encoding?: ENCODING_TYPE;
   mime?: MimeType;
-};
+}
 
 export type FilePaths = Required<Pick<UploadFileStorage, 'fullPath'>> & {
   filePath: string;

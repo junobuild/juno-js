@@ -25,7 +25,7 @@ import type {DeploySatelliteWasmParams} from '../types/upgrade';
  * - `{ result: 'deployed', files, proposalId }` – Upload succeeded and proposal was auto-committed.
  */
 export const deploySatelliteWasmWithProposal = async ({
-  deploy: {assertMemory, filePath, fullPath, token, description, ...restDeploy},
+  deploy: {assertMemory, filePath, fullPath, ...restDeploy},
   proposal: {version, ...restProposal}
 }: {
   deploy: DeploySatelliteWasmParams;
@@ -36,9 +36,7 @@ export const deploySatelliteWasmWithProposal = async ({
   const sourceFiles: FileAndPaths[] = [
     {
       file: {
-        file: filePath,
-        token,
-        description
+        file: filePath
       },
       paths: {
         filePath,

@@ -90,12 +90,17 @@ const uploadFileToStorage = async ({
   file,
   fullPath,
   collection,
-  filePath
+  filePath,
+  token,
+  description
 }: {
   file: FileDetails;
   uploadFile: UploadFile;
   filePath: string;
-} & Pick<UploadFileStorage, 'fullPath' | 'collection'>): Promise<void> => {
+} & Pick<
+  UploadFileStorage,
+  'fullPath' | 'collection' | 'token' | 'description'
+>): Promise<void> => {
   await uploadFile({
     filename: basename(filePath),
     fullPath,
@@ -105,8 +110,7 @@ const uploadFileToStorage = async ({
       ...(file.mime === undefined ? [] : ([['Content-Type', file.mime]] as Array<[string, string]>))
     ],
     encoding: file.encoding,
-    ...(nonNullish(file.token) && notEmptyString(file.token) && {token: file.token}),
-    ...(nonNullish(file.description) &&
-      notEmptyString(file.description) && {description: file.description})
+    ...(nonNullish(token) && notEmptyString(token) && {token}),
+    ...(nonNullish(description) && notEmptyString(description) && {description})
   });
 };

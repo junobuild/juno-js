@@ -38,7 +38,7 @@ export const proposeChanges = async ({
 
   const [__, {sha256: proposalSha256, status}] = await submitProposal({
     cdn,
-    proposalId
+    proposal_id: proposalId
   });
 
   const sha256 = fromNullable(proposalSha256);

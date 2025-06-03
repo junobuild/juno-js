@@ -19,3 +19,8 @@ export const fileExists = async (path: string): Promise<boolean> => {
     throw err;
   }
 };
+
+export const fileSizeInBytes = (path: string): number => {
+  const {size} = lstatSync(path);
+  return size;
+};

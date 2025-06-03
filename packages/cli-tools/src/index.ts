@@ -12,4 +12,5 @@ export * from './utils/compress.utils';
 export * from './utils/download.utils';
 export * from './utils/fs.utils';
 export * from './utils/pkg.utils';
+export * from './utils/format.utils';
 export * from './utils/prompt.utils';

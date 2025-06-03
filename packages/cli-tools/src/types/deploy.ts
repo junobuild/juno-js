@@ -5,12 +5,21 @@ export type MimeType = string;
 
 export type FileExtension = string;
 
-export interface FileDetails {
+export type FileDetails = Pick<UploadFileStorage, 'token'> & {
   file: string;
   // e.g. for index.js.gz -> index.js
   alternateFile?: string;
   encoding?: ENCODING_TYPE;
   mime?: MimeType;
+};
+
+export type FilePaths = Required<Pick<UploadFileStorage, 'fullPath'>> & {
+  filePath: string;
+};
+
+export interface FileAndPaths {
+  file: FileDetails;
+  paths: FilePaths;
 }
 
 // TODO: we duplicate the types currently to not reference @junobuild/core

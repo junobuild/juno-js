@@ -9,6 +9,8 @@ import {
   UPLOAD_BATCH_SIZE
 } from '../constants/deploy.constants';
 import type {FileAndPaths, FileDetails, UploadFile, UploadFileStorage} from '../types/deploy';
+import {formatBytes} from '../utils/format.utils';
+import {fileSizeInBytes} from '../utils/fs.utils';
 
 export const uploadFiles = async ({
   files: sourceFiles,
@@ -35,6 +37,20 @@ export const uploadFiles = async ({
     sourceAbsolutePath,
     upload
   });
+
+  logSuccess({files: sourceFiles});
+};
+
+const logSuccess = ({files}: {files: FileAndPaths[]}) => {
+  const {count, size} = files.reduce(
+    ({count, size}, {paths}) => ({
+      count: count + 1,
+      size: size + fileSizeInBytes(paths.filePath)
+    }),
+    {count: 0, size: 0}
+  );
+
+  console.log(`\n✔ ${count} files uploaded (total: ${formatBytes(size)})`);
 };
 
 const batchUploadFiles = async ({

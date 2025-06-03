@@ -44,8 +44,8 @@ export const proposeChanges = async ({
   const sha256 = fromNullable(proposalSha256);
 
   console.log('\nChange submitted.\n');
-  console.log('🆔 ', proposalId);
-  console.log('⏳ ', status);
+  console.log('🆔 ', Number(proposalId));
+  console.log('⏳ ', Object.keys(status)[0] ?? status);
 
   if (isNullish(sha256)) {
     console.log('❌ Hash undefined. This is unexpected.');
@@ -66,7 +66,7 @@ export const proposeChanges = async ({
     cdn
   });
 
-  console.log(`🎯 Change ${proposalId} applied.`);
+  console.log(`🎯 Change #${proposalId} applied.`);
 
   return {proposalId};
 };

@@ -1,4 +1,4 @@
-import type {COLLECTION_CDN, COLLECTION_DAPP} from '../constants/deploy.constants';
+import type {COLLECTION_CDN_RELEASES, COLLECTION_DAPP} from '../constants/deploy.constants';
 import type {
   DeployParams,
   DeployResultWithProposal,
@@ -17,7 +17,7 @@ export const deployAndProposeChanges = async ({
   deploy: Pick<DeployParams<UploadFileWithProposal>, 'uploadFile'> & {
     files: FileAndPaths[];
     sourceAbsolutePath: string;
-    collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN;
+    collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
   };
   proposal: Omit<ProposeChangesParams, 'executeChanges'>;
 }): Promise<DeployResultWithProposal> => {

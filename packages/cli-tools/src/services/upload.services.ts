@@ -4,7 +4,7 @@ import Listr from 'listr';
 import {readFile} from 'node:fs/promises';
 import {basename, relative} from 'node:path';
 import {
-  type COLLECTION_CDN,
+  type COLLECTION_CDN_RELEASES,
   type COLLECTION_DAPP,
   UPLOAD_BATCH_SIZE
 } from '../constants/deploy.constants';
@@ -21,7 +21,7 @@ export const uploadFiles = async ({
   files: FileAndPaths[];
   uploadFile: UploadFile;
   sourceAbsolutePath: string;
-  collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN;
+  collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
 }) => {
   const upload = async ({file, paths}: FileAndPaths): Promise<void> => {
     await uploadFileToStorage({

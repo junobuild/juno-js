@@ -1,6 +1,6 @@
 import type {DeployParams, FilePaths, UploadFileWithProposal} from './deploy';
 
-export type DeploySatelliteWasmParams = Pick<
+export type PublishSatelliteWasmParams = Pick<
   DeployParams<UploadFileWithProposal>,
   'assertMemory' | 'uploadFile'
 > &

@@ -3,7 +3,7 @@ import {COLLECTION_CDN} from '../constants/deploy.constants';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';
 import type {DeployResultWithProposal, FileAndPaths} from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
-import type {DeploySatelliteWasmParams} from '../types/upgrade';
+import type {PublishSatelliteWasmParams} from '../types/publish';
 
 /**
  * Uploads a Satellite WASM file to the CDN as part of a proposal-based deployment.
@@ -13,7 +13,7 @@ import type {DeploySatelliteWasmParams} from '../types/upgrade';
  * Optionally, the proposal can be auto-committed if `autoCommit` is true.
  *
  * @param {Object} options - The deployment and proposal configuration.
- * @param {DeploySatelliteWasmParams} options.deploy - Deployment parameters including the upload function, memory assertion, and file paths.
+ * @param {PublishSatelliteWasmParams} options.deploy - Deployment parameters including the upload function, memory assertion, and file paths.
  * @param {Object} options.proposal - Proposal options.
  * @param {CdnParameters} options.proposal.cdn - CDN and governance configuration.
  * @param {boolean} options.proposal.autoCommit - If `true`, the proposal is automatically committed after submission.
@@ -24,11 +24,11 @@ import type {DeploySatelliteWasmParams} from '../types/upgrade';
  * - `{ result: 'submitted', files, proposalId }` – Upload and proposal submission succeeded.
  * - `{ result: 'deployed', files, proposalId }` – Upload succeeded and proposal was auto-committed.
  */
-export const deploySatelliteWasmWithProposal = async ({
-  deploy: {assertMemory, filePath, fullPath, ...restDeploy},
+export const publishSatelliteWasmWithProposal = async ({
+  publish: {assertMemory, filePath, fullPath, ...restDeploy},
   proposal: {version, ...restProposal}
 }: {
-  deploy: DeploySatelliteWasmParams;
+  publish: PublishSatelliteWasmParams;
   proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {version: string};
 }): Promise<DeployResultWithProposal> => {
   await assertMemory?.();
@@ -60,7 +60,7 @@ export const deploySatelliteWasmWithProposal = async ({
   });
 
   if (result.result === 'deployed') {
-    console.log(`\n📡 Satellite WASM deployed to CDN.`);
+    console.log(`\n📡 Satellite WASM published to CDN.`);
   }
 
   return result;

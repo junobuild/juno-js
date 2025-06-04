@@ -1,5 +1,5 @@
 import {toNullable} from '@dfinity/utils';
-import {COLLECTION_CDN} from '../constants/deploy.constants';
+import {COLLECTION_CDN_RELEASES} from '../constants/deploy.constants';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';
 import type {DeployResultWithProposal, FileAndPaths} from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
@@ -46,7 +46,7 @@ export const publishSatelliteWasmWithProposal = async ({
   ];
 
   const result = await deployAndProposeChanges({
-    deploy: {...restDeploy, files: sourceFiles, collection: COLLECTION_CDN},
+    deploy: {...restDeploy, files: sourceFiles, collection: COLLECTION_CDN_RELEASES},
     proposal: {
       ...restProposal,
       proposalType: {

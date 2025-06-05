@@ -9,3 +9,4 @@ export const JUNO_COLLECTIONS_ERROR_DELETE_PREFIX_RESERVED =
   'juno.collections.error.prefix_deletion';
 export const JUNO_COLLECTIONS_ERROR_COLLECTION_NOT_EMPTY = 'juno.collections.error.not_empty';
 export const JUNO_COLLECTIONS_ERROR_COLLECTION_NOT_FOUND = 'juno.collections.error.not_found';
+export const JUNO_COLLECTIONS_ERROR_PREFIX_RESERVED = 'juno.collections.error.prefix_reserved';

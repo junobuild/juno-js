@@ -5,14 +5,25 @@ export enum ApplyProposalProgressStep {
   TakingSnapshot,
   CommittingProposal,
   ClearingProposalAssets,
-  CleaningUp
+  PostApply
 }
 
-export type ApplyProposalProgressState = 'in_progress' | 'success' | 'error';
+export enum RejectProposalProgressStep {
+  RejectingProposal,
+  ClearingProposalAssets,
+  PostReject
+}
+
+export type ProposalProgressState = 'in_progress' | 'success' | 'error';
 
 export interface ApplyProposalProgress {
   step: ApplyProposalProgressStep;
-  state: ApplyProposalProgressState;
+  state: ProposalProgressState;
+}
+
+export interface RejectProposalProgress {
+  step: RejectProposalProgressStep;
+  state: ProposalProgressState;
 }
 
 export interface ApplyProposalParams {
@@ -20,6 +31,14 @@ export interface ApplyProposalParams {
   proposal: CommitProposal;
   takeSnapshot?: boolean;
   clearProposalAssets?: boolean;
-  cleanUp?: () => Promise<void>;
+  postApply?: () => Promise<void>;
   onProgress?: (progress: ApplyProposalProgress) => void;
 }
+
+export type RejectProposalParams = Omit<
+  ApplyProposalParams,
+  'postApply' | 'takeSnapshot' | 'onProgress'
+> & {
+  postReject?: () => Promise<void>;
+  onProgress?: (progress: RejectProposalProgress) => void;
+};

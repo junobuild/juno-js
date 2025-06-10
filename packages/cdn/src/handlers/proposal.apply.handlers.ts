@@ -3,13 +3,13 @@ import {createSnapshot} from '../api/ic.api';
 import {commitProposal, deleteProposalAssets} from '../api/proposal.api';
 import {type ApplyProposalParams, ApplyProposalProgressStep} from '../types/proposal.params';
 
-export const applyProposal = async ({
+export const executeApplyProposal = async ({
   takeSnapshot = false,
   clearProposalAssets = false,
   onProgress,
   cdn,
   proposal,
-  cleanUp
+  postApply
 }: ApplyProposalParams) => {
   try {
     // 1. We take a snapshot - if the dev opted-in
@@ -27,9 +27,9 @@ export const applyProposal = async ({
         : Promise.resolve();
     await execute({fn: clear, onProgress, step: ApplyProposalProgressStep.ClearingProposalAssets});
   } finally {
-    // 4. If provided, the clean-up runs in any case
-    const clean = async () => (nonNullish(cleanUp) ? await cleanUp() : Promise.resolve());
-    await execute({fn: clean, onProgress, step: ApplyProposalProgressStep.CleaningUp});
+    // 4. If provided, the post apply runs in any case
+    const job = async () => (nonNullish(postApply) ? await postApply() : Promise.resolve());
+    await execute({fn: job, onProgress, step: ApplyProposalProgressStep.PostApply});
   }
 };
 

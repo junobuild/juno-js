@@ -34,7 +34,7 @@ export const JUNO_CDN_STORAGE_ERROR_CANNOT_INSERT_ASSET_UNKNOWN_REFERENCE_ID =
 export const JUNO_CDN_STORAGE_ERROR_CANNOT_GET_ASSET_UNKNOWN_REFERENCE_ID =
   'juno.cdn.storage.error.cannot_get_asset_unknown_reference_id';
 export const JUNO_CDN_STORAGE_ERROR_CANNOT_INSERT_ASSET_ENCODING_UNKNOWN_REFERENCE_ID =
-  "juno.cdn.storage.error.cannot_insert_asset_encoding_unknown_reference_id";
+  'juno.cdn.storage.error.cannot_insert_asset_encoding_unknown_reference_id';
 
 export const JUNO_CDN_STORAGE_ERROR_NO_PROPOSAL_FOUND = 'juno.cdn.storage.error.no_proposal_found';
 

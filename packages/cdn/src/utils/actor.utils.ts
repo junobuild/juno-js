@@ -30,7 +30,7 @@ export const createActor = async <T = Record<string, ActorMethod>>({
   });
 };
 
-const useOrInitAgent = async ({agent, ...rest}: ActorParameters): Promise<HttpAgent> =>
+export const useOrInitAgent = async ({agent, ...rest}: ActorParameters): Promise<HttpAgent> =>
   agent ?? (await initAgent(rest));
 
 const initAgent = async ({

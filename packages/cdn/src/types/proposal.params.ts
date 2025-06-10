@@ -3,7 +3,9 @@ import type {CommitProposal} from './cdn';
 
 export enum ApplyProposalProgressStep {
   TakingSnapshot,
-  CommittingProposal
+  CommittingProposal,
+  ClearingProposalAssets,
+  CleaningUp
 }
 
 export type ApplyProposalProgressState = 'in_progress' | 'success' | 'error';
@@ -17,5 +19,7 @@ export interface ApplyProposalParams {
   cdn: CdnParameters;
   proposal: CommitProposal;
   takeSnapshot?: boolean;
+  clearProposalAssets?: boolean;
+  cleanUp?: () => Promise<void>;
   onProgress?: (progress: ApplyProposalProgress) => void;
 }

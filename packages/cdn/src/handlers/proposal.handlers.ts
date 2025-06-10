@@ -1,20 +1,36 @@
+import {nonNullish} from '@dfinity/utils';
 import {createSnapshot} from '../api/ic.api';
-import {commitProposal} from '../api/proposal.api';
+import {commitProposal, deleteProposalAssets} from '../api/proposal.api';
 import {type ApplyProposalParams, ApplyProposalProgressStep} from '../types/proposal.params';
 
 export const applyProposal = async ({
   takeSnapshot = false,
+  clearProposalAssets = false,
   onProgress,
   cdn,
-  ...rest
+  proposal,
+  cleanUp
 }: ApplyProposalParams) => {
-  // 1. We take a snapshot - if the dev opted-in
-  const snapshot = async () => (takeSnapshot ? await createSnapshot({cdn}) : Promise.resolve());
-  await execute({fn: snapshot, onProgress, step: ApplyProposalProgressStep.TakingSnapshot});
+  try {
+    // 1. We take a snapshot - if the dev opted-in
+    const snapshot = async () => (takeSnapshot ? await createSnapshot({cdn}) : Promise.resolve());
+    await execute({fn: snapshot, onProgress, step: ApplyProposalProgressStep.TakingSnapshot});
 
-  // 2. Commit the proposal
-  const commit = async () => await commitProposal({cdn, ...rest});
-  await execute({fn: commit, onProgress, step: ApplyProposalProgressStep.CommittingProposal});
+    // 2. Commit the proposal
+    const commit = async () => await commitProposal({cdn, proposal});
+    await execute({fn: commit, onProgress, step: ApplyProposalProgressStep.CommittingProposal});
+
+    // 3. Clear proposal assets if required
+    const clear = async () =>
+      clearProposalAssets
+        ? await deleteProposalAssets({cdn, proposal_ids: [proposal.proposal_id]})
+        : Promise.resolve();
+    await execute({fn: clear, onProgress, step: ApplyProposalProgressStep.ClearingProposalAssets});
+  } finally {
+    // 4. If provided, the clean-up runs in any case
+    const clean = async () => (nonNullish(cleanUp) ? await cleanUp() : Promise.resolve());
+    await execute({fn: clean, onProgress, step: ApplyProposalProgressStep.CleaningUp});
+  }
 };
 
 const execute = async ({

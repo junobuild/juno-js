@@ -1,8 +1,7 @@
 import {
-  type take_canister_snapshot_result
-,
   type list_canister_snapshots_result,
   type snapshot_id,
+  type take_canister_snapshot_result,
   ICManagementCanister
 } from '@dfinity/ic-management';
 import {Principal} from '@dfinity/principal';

@@ -7,8 +7,8 @@ import {
   uploadChunk as uploadChunkApi
 } from '../api/ic.api';
 import {INSTALL_MAX_CHUNK_SIZE} from '../constants/upgrade.constants';
+import {blobSha256, uint8ArraySha256} from '../helpers/crypto.helpers';
 import type {UpgradeCodeParams} from '../types/upgrade.types';
-import {blobSha256, uint8ArraySha256} from '../utils/crypto.utils';
 
 interface UploadChunkOrderId {
   orderId: number;

@@ -27,3 +27,4 @@ export type * from './types/releases.types';
 export * from './types/upgrade.types';
 export * from './utils/crypto.utils';
 export * from './utils/package.utils';
+export * from './utils/wasm.utils';

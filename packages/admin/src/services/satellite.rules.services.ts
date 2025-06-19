@@ -1,28 +1,36 @@
 import type {Rule, RulesType} from '@junobuild/config';
 import {listRules as listRulesApi, setRule as setRuleApi} from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor.types';
-import {mapRule, mapRuleType, mapSetRule} from '../utils/rule.utils';
+import type {ListRulesMatcher, ListRulesResults} from '../types/list.types';
+import {mapRule, mapRulesFilter, mapRuleType, mapSetRule} from '../utils/rule.utils';
 
 /**
  * Lists the rules for a satellite.
  * @param {Object} params - The parameters for listing the rules.
  * @param {RulesType} params.type - The type of rules to list.
+ * @param {ListRulesMatcher} params.filter - The optional filter for the query.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
- * @returns {Promise<Rule[]>} A promise that resolves to an array of rules.
+ * @returns {Promise<ListRulesResults>} A promise that resolves to the resolved rules.
  */
 export const listRules = async ({
   type,
-  satellite
+  satellite,
+  filter
 }: {
   type: RulesType;
+  filter?: ListRulesMatcher;
   satellite: SatelliteParameters;
-}): Promise<Rule[]> => {
-  const rules = await listRulesApi({
+}): Promise<ListRulesResults> => {
+  const {items, ...rest} = await listRulesApi({
     satellite,
-    type: mapRuleType(type)
+    type: mapRuleType(type),
+    filter: mapRulesFilter(filter)
   });
 
-  return rules.map((rule) => mapRule(rule));
+  return {
+    ...rest,
+    items: items.map((rule) => mapRule(rule))
+  };
 };
 
 /**

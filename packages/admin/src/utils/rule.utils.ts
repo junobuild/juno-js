@@ -1,7 +1,8 @@
-import {fromNullable, nonNullish, toNullable} from '@dfinity/utils';
+import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
 import type {MemoryText, PermissionText, Rule, RulesType} from '@junobuild/config';
 import type {
   CollectionType as CollectionTypeApi,
+  ListRulesParams as ListRulesParamsApi,
   Memory,
   Permission,
   Rule as RuleApi,
@@ -18,9 +19,18 @@ import {
   PermissionPublic,
   StorageRulesType
 } from '../constants/rules.constants';
+import type {ListRulesMatcher} from '../types/list.types';
 
 export const mapRuleType = (type: RulesType): CollectionTypeApi =>
   type === 'storage' ? StorageRulesType : DbRulesType;
+
+export const mapRulesFilter = (filter?: ListRulesMatcher): ListRulesParamsApi => ({
+  matcher: isNullish(filter)
+    ? toNullable()
+    : toNullable({
+        include_system: filter.include_system
+      })
+});
 
 export const mapSetRule = ({
   read,

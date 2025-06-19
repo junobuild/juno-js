@@ -8,6 +8,8 @@ import type {
   Controller,
   CustomDomain,
   DbConfig,
+  ListRulesParams,
+  ListRulesResults,
   MemorySize,
   Rule,
   _SERVICE as SatelliteActor,
@@ -85,13 +87,15 @@ export const getAuthConfig = async ({
 
 export const listRules = async ({
   satellite,
-  type
+  type,
+  filter
 }: {
   satellite: SatelliteParameters;
   type: CollectionType;
-}): Promise<[string, Rule][]> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
-  return actor.list_rules(type);
+  filter: ListRulesParams;
+}): Promise<ListRulesResults> => {
+  const {list_rules} = await getSatelliteActor(satellite);
+  return list_rules(type, filter);
 };
 
 export const setRule = async ({

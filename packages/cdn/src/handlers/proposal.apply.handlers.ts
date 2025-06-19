@@ -23,7 +23,7 @@ export const executeApplyProposal = async ({
     // 3. Clear proposal assets if required
     const clear = async () =>
       clearProposalAssets
-        ? await deleteProposalAssets({cdn, proposal_ids: [proposal.proposal_id]})
+        ? await deleteProposalAssets({cdn, proposalIds: [proposal.proposal_id]})
         : Promise.resolve();
     await execute({fn: clear, onProgress, step: ApplyProposalProgressStep.ClearingProposalAssets});
   } finally {

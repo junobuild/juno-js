@@ -1,3 +1,10 @@
+import * as z from 'zod/v4';
+
+/**
+ * @see ModuleLogVisibility
+ */
+export const ModuleLogVisibilitySchema = z.enum(['controllers', 'public']);
+
 /**
  * Specifies who can see the logs of the module.
  *
@@ -7,6 +14,18 @@
  * @typedef {'controllers' | 'public'} ModuleLogVisibility
  */
 export type ModuleLogVisibility = 'controllers' | 'public';
+
+/**
+ * @see ModuleSettings
+ */
+export const ModuleSettingsSchema = z.strictObject({
+  freezingThreshold: z.bigint().optional(),
+  reservedCyclesLimit: z.bigint().optional(),
+  logVisibility: ModuleLogVisibilitySchema.optional(),
+  heapMemoryLimit: z.bigint().optional(),
+  memoryAllocation: z.bigint().optional(),
+  computeAllocation: z.bigint().optional()
+});
 
 /**
  * Settings for a module - Satellite, Mission Control or Orbiter.

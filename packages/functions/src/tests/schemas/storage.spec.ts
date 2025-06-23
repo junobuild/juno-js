@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {ZodError} from 'zod';
+import {ZodError} from 'zod/v4';
 import {
   type Asset,
   AssetEncodingSchema,

@@ -93,12 +93,15 @@ export const AssertSchema = z.union([
  */
 export type Assert = AssertSetDoc | AssertDeleteDoc | AssertUploadAsset | AssertDeleteAsset;
 
-export const AssertFnSchema = <T extends z.ZodTypeAny>(assertSchema: T) =>
-  z.function().args(SatelliteEnvSchema).returns(assertSchema);
+export const AssertFnSchema = <T extends z.ZodType>(assertSchema: T) =>
+  z.function({
+    input: z.tuple([SatelliteEnvSchema]),
+    output: assertSchema
+  });
 export type AssertFn<T extends Assert> = (assert: z.infer<typeof SatelliteEnvSchema>) => T;
 
-export const AssertFnOrObjectSchema = <T extends z.ZodTypeAny>(assertSchema: T) =>
-  z.union([assertSchema, AssertFnSchema(assertSchema)]);
+export const AssertFnOrObjectSchema = <T extends z.ZodType>(assertSchema: T) =>
+  z.union([assertSchema, AssertFnSchema(assertSchema)] as const);
 export type AssertFnOrObject<T extends Assert> = T | AssertFn<T>;
 
 export function defineAssert<T extends Assert>(assert: T): T;

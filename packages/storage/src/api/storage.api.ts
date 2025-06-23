@@ -12,7 +12,7 @@ import type {
   InitAssetKey as SatelliteInitAssetKey,
   UploadChunk as SatelliteUploadChunk
 } from '../../declarations/satellite/satellite.did';
-import type {ENCODING_TYPE, Storage} from '../types/storage.types';
+import type {EncodingType, Storage} from '../types/storage.types';
 
 export type UploadAsset = Required<Omit<Storage, 'token' | 'encoding' | 'description'>> &
   Pick<Storage, 'token' | 'encoding' | 'description'>;
@@ -86,7 +86,7 @@ const mapInitAssetUploadParams = ({
   full_path: fullPath,
   name: filename,
   token: toNullable<string>(token),
-  encoding_type: toNullable<ENCODING_TYPE>(encoding),
+  encoding_type: toNullable<EncodingType>(encoding),
   description: toNullable(description)
 });
 

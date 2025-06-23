@@ -8,6 +8,7 @@ const configInputFiles = [
   './packages/config/src/satellite/mainnet/configs/authentication.config.ts',
   './packages/config/src/satellite/mainnet/configs/orbiter.config.ts',
   './packages/config/src/satellite/mainnet/configs/datastore.config.ts',
+  './packages/config/src/satellite/mainnet/configs/emulator.config.ts',
   './packages/config/src/shared/feature.config.ts',
   './packages/config/src/shared/storage.config.ts',
   './packages/config/src/satellite/mainnet/configs/satellite.config.ts',

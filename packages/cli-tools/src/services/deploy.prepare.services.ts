@@ -1,5 +1,5 @@
 import {isNullish, nonNullish} from '@dfinity/utils';
-import type {CliConfig, ENCODING_TYPE} from '@junobuild/config';
+import type {CliConfig, EncodingType} from '@junobuild/config';
 import crypto from 'crypto';
 import {fileTypeFromFile} from 'file-type';
 import mime from 'mime-types';
@@ -137,7 +137,7 @@ const listFiles = async ({
   }: {
     file: string;
     ext: FileExtension | undefined;
-  }): ENCODING_TYPE | undefined => {
+  }): EncodingType | undefined => {
     const customEncoding = encoding.find(([pattern, _]) => minimatch(file, pattern));
 
     if (nonNullish(customEncoding)) {
@@ -169,7 +169,7 @@ const listFiles = async ({
     encodingType
   }: {
     file: string;
-    encodingType: ENCODING_TYPE | undefined;
+    encodingType: EncodingType | undefined;
   }): string | undefined => {
     if (isNullish(encodingType)) {
       return undefined;

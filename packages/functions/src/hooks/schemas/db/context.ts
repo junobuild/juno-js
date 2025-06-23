@@ -1,5 +1,4 @@
-import type {baseObjectInputType, baseObjectOutputType, ZodObject, ZodTypeAny} from 'zod';
-import * as z from 'zod';
+import * as z from 'zod/v4';
 import {DocSchema, type OptionDoc} from '../../../schemas/db';
 import {type Collection, CollectionSchema, type Key, KeySchema} from '../../../schemas/satellite';
 import {type HookContext, HookContextSchema} from '../context';
@@ -22,14 +21,7 @@ export const DocContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
     data: dataSchema
   };
 
-  // TODO: workaround for https://github.com/colinhacks/zod/issues/3998
-  return z.object(schemaShape).strict() as ZodObject<
-    typeof schemaShape,
-    'strict',
-    ZodTypeAny,
-    baseObjectOutputType<typeof schemaShape>,
-    baseObjectInputType<typeof schemaShape>
-  >;
+  return z.object(schemaShape).strict();
 };
 
 /**

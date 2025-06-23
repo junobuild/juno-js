@@ -1,5 +1,14 @@
-import type {JunoConfigMode} from '../../../types/juno.env';
+import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
+import * as z from 'zod/v4';
+import {type JunoConfigMode, JunoConfigModeSchema} from '../../../types/juno.env';
 import type {Either} from '../../../types/utility.types';
+
+/**
+ * @see OrbiterId
+ */
+export const OrbiterIdSchema = z.object({
+  id: PrincipalTextSchema
+});
 
 /**
  * Represents the configuration for an orbiter.
@@ -10,15 +19,15 @@ export interface OrbiterId {
    * The identifier of the orbiter used in the dApp.
    * @type {string}
    */
-  id: string;
-
-  /**
-   * The deprecated identifier of the orbiter.
-   * @deprecated `orbiterId` will be removed in the future. Use `id` instead.
-   * @type {string}
-   */
-  orbiterId?: string;
+  id: PrincipalText;
 }
+
+/**
+ * @see OrbiterIds
+ */
+export const OrbiterIdsSchema = z.object({
+  ids: z.record(JunoConfigModeSchema, PrincipalTextSchema)
+});
 
 /**
  * Represents a mapping of orbiter identitifiers to different configurations based on the mode of the application.
@@ -37,8 +46,13 @@ export interface OrbiterIds {
    * }
    * @type {Record<JunoConfigMode, string>}
    */
-  ids: Record<JunoConfigMode, string>;
+  ids: Record<JunoConfigMode, PrincipalText>;
 }
+
+/**
+ * @see OrbiterConfig
+ */
+export const OrbiterConfigSchema = z.union([OrbiterIdSchema.strict(), OrbiterIdsSchema.strict()]);
 
 /**
  * Represents the configuration for an orbiter (analytics).

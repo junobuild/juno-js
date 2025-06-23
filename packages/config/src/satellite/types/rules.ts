@@ -1,8 +1,20 @@
+import * as z from 'zod/v4';
+
+/**
+ * @see PermissionText
+ */
+export const PermissionTextSchema = z.enum(['public', 'private', 'managed', 'controllers']);
+
 /**
  * Represents the permission levels for read and write access.
  * @typedef {'public' | 'private' | 'managed' | 'controllers'} PermissionText
  */
 export type PermissionText = 'public' | 'private' | 'managed' | 'controllers';
+
+/**
+ * @see MemoryText
+ */
+export const MemoryTextSchema = z.enum(['heap', 'stable']);
 
 /**
  * Represents the memory types.
@@ -11,10 +23,33 @@ export type PermissionText = 'public' | 'private' | 'managed' | 'controllers';
 export type MemoryText = 'heap' | 'stable';
 
 /**
+ * @see RulesType
+ */
+export const RulesTypeSchema = z.enum(['db', 'storage']);
+
+/**
  * Represents the types of rules.
  * @typedef {'db' | 'storage'} RulesType
  */
 export type RulesType = 'db' | 'storage';
+
+/**
+ * @see Rule
+ */
+export const RuleSchema = z.strictObject({
+  collection: z.string(),
+  read: PermissionTextSchema,
+  write: PermissionTextSchema,
+  memory: MemoryTextSchema,
+  createdAt: z.bigint().optional(),
+  updatedAt: z.bigint().optional(),
+  version: z.bigint().optional(),
+  maxSize: z.number().optional(),
+  maxChangesPerUser: z.number().optional(),
+  maxCapacity: z.number().optional(),
+  mutablePermissions: z.boolean(),
+  maxTokens: z.number().optional()
+});
 
 /**
  * Represents a rule configuration for a collection.

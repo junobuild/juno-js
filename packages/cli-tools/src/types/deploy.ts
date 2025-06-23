@@ -1,4 +1,4 @@
-import type {CliConfig, ENCODING_TYPE} from '@junobuild/config';
+import type {CliConfig, EncodingType} from '@junobuild/config';
 import type {Blob} from 'buffer';
 
 export type MimeType = string;
@@ -9,7 +9,7 @@ export interface FileDetails {
   file: string;
   // e.g. for index.js.gz -> index.js
   alternateFile?: string;
-  encoding?: ENCODING_TYPE;
+  encoding?: EncodingType;
   mime?: MimeType;
 }
 
@@ -29,7 +29,7 @@ export interface AssetEncoding {
 
 export interface Asset {
   fullPath: string;
-  encodings: Record<ENCODING_TYPE, AssetEncoding>;
+  encodings: Record<EncodingType, AssetEncoding>;
 }
 
 export type ListAssets = ({startAfter}: {startAfter?: string}) => Promise<Asset[]>;
@@ -41,7 +41,7 @@ export interface UploadFileStorage {
   fullPath?: string;
   headers?: [string, string][];
   token?: string;
-  encoding?: ENCODING_TYPE;
+  encoding?: EncodingType;
   description?: string;
 }
 

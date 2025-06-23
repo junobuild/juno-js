@@ -51,6 +51,101 @@ Configuration options for [Juno] CLI.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L10)
 
+### :wrench: Constants
+
+- [JunoConfigModeSchema](#gear-junoconfigmodeschema)
+- [JunoConfigEnvSchema](#gear-junoconfigenvschema)
+- [MaxMemorySizeConfigSchema](#gear-maxmemorysizeconfigschema)
+- [StorageConfigSourceGlobSchema](#gear-storageconfigsourceglobschema)
+- [StorageConfigHeaderSchema](#gear-storageconfigheaderschema)
+- [StorageConfigRewriteSchema](#gear-storageconfigrewriteschema)
+- [StorageConfigRedirectSchema](#gear-storageconfigredirectschema)
+- [StorageConfigSchema](#gear-storageconfigschema)
+- [EncodingTypeSchema](#gear-encodingtypeschema)
+- [CliConfigSchema](#gear-cliconfigschema)
+
+#### :gear: JunoConfigModeSchema
+
+| Constant               | Type                                                       |
+| ---------------------- | ---------------------------------------------------------- |
+| `JunoConfigModeSchema` | `ZodUnion<readonly [ZodLiteral<"production">, ZodString]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L6)
+
+#### :gear: JunoConfigEnvSchema
+
+| Constant              | Type                                                                                     |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| `JunoConfigEnvSchema` | `ZodObject<{ mode: ZodUnion<readonly [ZodLiteral<"production">, ZodString]>; }, $strip>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L17)
+
+#### :gear: MaxMemorySizeConfigSchema
+
+| Constant                    | Type                                                                                    |
+| --------------------------- | --------------------------------------------------------------------------------------- |
+| `MaxMemorySizeConfigSchema` | `ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/feature.config.ts#L6)
+
+#### :gear: StorageConfigSourceGlobSchema
+
+| Constant                        | Type        |
+| ------------------------------- | ----------- |
+| `StorageConfigSourceGlobSchema` | `ZodString` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L7)
+
+#### :gear: StorageConfigHeaderSchema
+
+| Constant                    | Type                                                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `StorageConfigHeaderSchema` | `ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L18)
+
+#### :gear: StorageConfigRewriteSchema
+
+| Constant                     | Type                                                                 |
+| ---------------------------- | -------------------------------------------------------------------- |
+| `StorageConfigRewriteSchema` | `ZodObject<{ source: ZodString; destination: ZodString; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L49)
+
+#### :gear: StorageConfigRedirectSchema
+
+| Constant                      | Type                                                                                                                           |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `StorageConfigRedirectSchema` | `ZodObject<{ source: ZodString; location: ZodString; code: ZodUnion<readonly [ZodLiteral<301>, ZodLiteral<302>]>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L79)
+
+#### :gear: StorageConfigSchema
+
+| Constant              | Type                                                                                                                                                                                                             |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `StorageConfigSchema` | `ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L114)
+
+#### :gear: EncodingTypeSchema
+
+see EncodingType
+
+| Constant             | Type                                                                                                   |
+| -------------------- | ------------------------------------------------------------------------------------------------------ |
+| `EncodingTypeSchema` | `ZodEnum<{ identity: "identity"; gzip: "gzip"; compress: "compress"; deflate: "deflate"; br: "br"; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L6)
+
+#### :gear: CliConfigSchema
+
+| Constant          | Type                                                                                                                                                                                                                                                           |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CliConfigSchema` | `ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString>>; gzip: ZodOptional<ZodUnion<readonly [ZodString, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: ZodOptional<...>; postdeploy: ZodOptional<...>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L7)
+
 ### :tropical_drink: Interfaces
 
 - [JunoConfigEnv](#gear-junoconfigenv)
@@ -299,7 +394,7 @@ Represents the development configuration for Juno.
 - [OrbiterConfig](#gear-orbiterconfig)
 - [ModuleLogVisibility](#gear-modulelogvisibility)
 - [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
-- [EncodingType](#gear-encoding_type)
+- [EncodingType](#gear-encodingtype)
 - [SatelliteConfig](#gear-satelliteconfig)
 - [SatelliteDevDataStoreCollection](#gear-satellitedevdatastorecollection)
 - [SatelliteDevDbCollection](#gear-satellitedevdbcollection)
@@ -313,7 +408,7 @@ Represents the development configuration for Juno.
 | ---------------- | ------------------------ |
 | `JunoConfigMode` | `'production' or string` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L5)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L12)
 
 #### :gear: OrbiterConfig
 
@@ -337,7 +432,7 @@ Represents the development configuration for Juno.
 | ------------------------- | ---- |
 | `StorageConfigSourceGlob` |      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L13)
 
 #### :gear: EncodingType
 
@@ -345,7 +440,7 @@ Represents the development configuration for Juno.
 | -------------- | --------------------------------------------------------- |
 | `EncodingType` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L5)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L12)
 
 #### :gear: SatelliteConfig
 

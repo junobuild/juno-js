@@ -1,7 +1,15 @@
-import type {StorageConfig} from '../shared/storage.config';
-import type {CliConfig} from '../types/cli.config';
-import type {JunoConfigMode} from '../types/juno.env';
+import * as z from 'zod/v4';
+import {type StorageConfig, StorageConfigSchema} from '../shared/storage.config';
+import {type CliConfig, CliConfigSchema} from '../types/cli.config';
+import {type JunoConfigMode, JunoConfigModeSchema} from '../types/juno.env';
 import type {Either} from '../types/utility.types';
+
+/**
+ * @see ConsoleId
+ */
+export const ConsoleIdSchema = z.object({
+  id: z.string()
+});
 
 /**
  * Represents the unique identifier for a console.
@@ -14,6 +22,10 @@ export interface ConsoleId {
    */
   id: string;
 }
+
+export const ConsoleIdsSchema = z.object({
+  ids: z.record(JunoConfigModeSchema, z.string())
+});
 
 /**
  * Represents a mapping of console identifiers to different configurations based on the mode of the application.
@@ -28,6 +40,18 @@ export interface ConsoleIds {
    */
   ids: Record<JunoConfigMode, string>;
 }
+
+/**
+ * @see JunoConsoleConfig
+ */
+export const JunoConsoleConfigSchema = z
+  .union([ConsoleIdSchema, ConsoleIdsSchema])
+  .and(CliConfigSchema)
+  .and(
+    z.object({
+      storage: StorageConfigSchema.optional()
+    })
+  );
 
 /**
  * Represents the configuration for a console.

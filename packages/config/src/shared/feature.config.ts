@@ -1,3 +1,13 @@
+import * as z from 'zod/v4';
+
+/**
+ * @see MaxMemorySizeConfig
+ */
+export const MaxMemorySizeConfigSchema = z.object({
+  heap: z.bigint().optional(),
+  stable: z.bigint().optional()
+}).strict();
+
 /**
  * Configuration for granting access to features only if the maximum memory size limits are not reached.
  *

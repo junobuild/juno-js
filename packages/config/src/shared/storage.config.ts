@@ -1,10 +1,24 @@
-import type {MaxMemorySizeConfig} from './feature.config';
+import {MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from './feature.config';
+import * as z from 'zod/v4';
+
+/**
+ * @see StorageConfigSourceGlob
+ */
+export const StorageConfigSourceGlobSchema = z.string();
 
 /**
  * Represents a glob pattern for matching files in the Storage configuration.
  * @typedef {string} StorageConfigSourceGlob
  */
 export type StorageConfigSourceGlob = string;
+
+/**
+ * @see StorageConfigHeader
+ */
+export const StorageConfigHeaderSchema = z.object({
+  source: StorageConfigSourceGlobSchema,
+  headers: z.array(z.tuple([z.string(), z.string()])),
+}).strict();
 
 /**
  * Headers allow the client and the Storage to pass additional information along with a request or a response.
@@ -28,6 +42,14 @@ export interface StorageConfigHeader {
 }
 
 /**
+ * @see StorageConfigRewrite
+ */
+export const StorageConfigRewriteSchema = z.object({
+  source: StorageConfigSourceGlobSchema,
+  destination: z.string(),
+}).strict();
+
+/**
  * You can utilize optional rewrites to display the same content for multiple URLs.
  * Rewrites are especially useful when combined with pattern matching, allowing acceptance of any URL that matches the pattern.
  * @interface StorageConfigRewrite
@@ -46,6 +68,15 @@ export interface StorageConfigRewrite {
    */
   destination: string;
 }
+
+/**
+ * @see StorageConfigRedirect
+ */
+export const StorageConfigRedirectSchema = z.object({
+  source: StorageConfigSourceGlobSchema,
+  location: z.string(),
+  code: z.union([z.literal(301), z.literal(302)]),
+}).strict();
 
 /**
  * Use a URL redirect to prevent broken links if you've moved a page or to shorten URLs.
@@ -70,6 +101,18 @@ export interface StorageConfigRedirect {
    */
   code: 301 | 302;
 }
+
+/**
+ * @see StorageConfig
+ */
+export const StorageConfigSchema = z.object({
+  headers: z.array(StorageConfigHeaderSchema).optional(),
+  rewrites: z.array(StorageConfigRewriteSchema).optional(),
+  redirects: z.array(StorageConfigRedirectSchema).optional(),
+  iframe: z.enum(['deny', 'same-origin', 'allow-any']).optional(),
+  rawAccess: z.boolean().optional(),
+  maxMemorySize: MaxMemorySizeConfigSchema.optional(),
+});
 
 /**
  * Configures the hosting behavior of the Storage.

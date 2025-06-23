@@ -1,4 +1,4 @@
-import {PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
+import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
 import {type Rule, RuleSchema} from '../types/rules';
 

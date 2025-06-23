@@ -23,6 +23,9 @@ export interface ConsoleId {
   id: string;
 }
 
+/**
+ * @see ConsoleIds
+ */
 export const ConsoleIdsSchema = z.object({
   ids: z.record(JunoConfigModeSchema, z.string())
 });

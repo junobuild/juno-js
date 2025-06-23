@@ -1,6 +1,6 @@
-import type {baseObjectInputType, baseObjectOutputType, ZodObject, ZodTypeAny} from 'zod';
-import * as z from 'zod';
+import * as z from 'zod/v4';
 import {type RawUserId, RawUserIdSchema} from '../../schemas/satellite';
+import {createFunctionSchema} from '../../utils/zod.utils';
 
 /**
  * @see HookContext
@@ -11,14 +11,7 @@ export const HookContextSchema = <T extends z.ZodTypeAny>(dataSchema: T) => {
     data: dataSchema
   };
 
-  // TODO: workaround for https://github.com/colinhacks/zod/issues/3998
-  return z.object(schemaShape).strict() as ZodObject<
-    typeof schemaShape,
-    'strict',
-    ZodTypeAny,
-    baseObjectOutputType<typeof schemaShape>,
-    baseObjectInputType<typeof schemaShape>
-  >;
+  return z.object(schemaShape).strict();
 };
 
 /**
@@ -42,7 +35,7 @@ export interface HookContext<T> {
  * @see AssertFunction
  */
 export const AssertFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
-  z.function().args(contextSchema).returns(z.void());
+  createFunctionSchema(z.function({input: z.tuple([contextSchema]), output: z.void()}));
 
 /**
  * Defines the `assert` function schema for assertions.
@@ -57,7 +50,9 @@ export type AssertFunction<T> = (context: T) => void;
  * @see RunFunction
  */
 export const RunFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
-  z.function().args(contextSchema).returns(z.promise(z.void()).or(z.void()));
+  createFunctionSchema(
+    z.function({input: z.tuple([contextSchema]), output: z.promise(z.void()).or(z.void())})
+  );
 
 /**
  * Defines the `run` function schema for hooks.

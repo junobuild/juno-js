@@ -1,4 +1,5 @@
-import * as z from 'zod';
+import * as z from 'zod/v4';
+import {createFunctionSchema} from '../utils/zod.utils';
 import {type Collections, CollectionsSchema} from './schemas/collections';
 import {type AssertFunction, AssertFunctionSchema} from './schemas/context';
 import {
@@ -94,11 +95,14 @@ export const AssertSchema = z.union([
 export type Assert = AssertSetDoc | AssertDeleteDoc | AssertUploadAsset | AssertDeleteAsset;
 
 export const AssertFnSchema = <T extends z.ZodTypeAny>(assertSchema: T) =>
-  z.function().args(SatelliteEnvSchema).returns(assertSchema);
+  z.function({
+    input: z.tuple([SatelliteEnvSchema]),
+    output: assertSchema
+  });
 export type AssertFn<T extends Assert> = (assert: z.infer<typeof SatelliteEnvSchema>) => T;
 
 export const AssertFnOrObjectSchema = <T extends z.ZodTypeAny>(assertSchema: T) =>
-  z.union([assertSchema, AssertFnSchema(assertSchema)]);
+  z.union([assertSchema, createFunctionSchema(AssertFnSchema(assertSchema))]);
 export type AssertFnOrObject<T extends Assert> = T | AssertFn<T>;
 
 export function defineAssert<T extends Assert>(assert: T): T;

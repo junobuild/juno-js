@@ -51,6 +51,101 @@ Configuration options for [Juno] CLI.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L10)
 
+### :wrench: Constants
+
+- [JunoConfigModeSchema](#gear-junoconfigmodeschema)
+- [JunoConfigEnvSchema](#gear-junoconfigenvschema)
+- [MaxMemorySizeConfigSchema](#gear-maxmemorysizeconfigschema)
+- [StorageConfigSourceGlobSchema](#gear-storageconfigsourceglobschema)
+- [StorageConfigHeaderSchema](#gear-storageconfigheaderschema)
+- [StorageConfigRewriteSchema](#gear-storageconfigrewriteschema)
+- [StorageConfigRedirectSchema](#gear-storageconfigredirectschema)
+- [StorageConfigSchema](#gear-storageconfigschema)
+- [EncodingTypeSchema](#gear-encodingtypeschema)
+- [CliConfigSchema](#gear-cliconfigschema)
+
+#### :gear: JunoConfigModeSchema
+
+| Constant               | Type                                                       |
+| ---------------------- | ---------------------------------------------------------- |
+| `JunoConfigModeSchema` | `ZodUnion<readonly [ZodLiteral<"production">, ZodString]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L6)
+
+#### :gear: JunoConfigEnvSchema
+
+| Constant              | Type                                                                                     |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| `JunoConfigEnvSchema` | `ZodObject<{ mode: ZodUnion<readonly [ZodLiteral<"production">, ZodString]>; }, $strip>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L17)
+
+#### :gear: MaxMemorySizeConfigSchema
+
+| Constant                    | Type                                                                                    |
+| --------------------------- | --------------------------------------------------------------------------------------- |
+| `MaxMemorySizeConfigSchema` | `ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/feature.config.ts#L6)
+
+#### :gear: StorageConfigSourceGlobSchema
+
+| Constant                        | Type        |
+| ------------------------------- | ----------- |
+| `StorageConfigSourceGlobSchema` | `ZodString` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L7)
+
+#### :gear: StorageConfigHeaderSchema
+
+| Constant                    | Type                                                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `StorageConfigHeaderSchema` | `ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L18)
+
+#### :gear: StorageConfigRewriteSchema
+
+| Constant                     | Type                                                                 |
+| ---------------------------- | -------------------------------------------------------------------- |
+| `StorageConfigRewriteSchema` | `ZodObject<{ source: ZodString; destination: ZodString; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L49)
+
+#### :gear: StorageConfigRedirectSchema
+
+| Constant                      | Type                                                                                                                           |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `StorageConfigRedirectSchema` | `ZodObject<{ source: ZodString; location: ZodString; code: ZodUnion<readonly [ZodLiteral<301>, ZodLiteral<302>]>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L79)
+
+#### :gear: StorageConfigSchema
+
+| Constant              | Type                                                                                                                                                                                                             |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `StorageConfigSchema` | `ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L114)
+
+#### :gear: EncodingTypeSchema
+
+see EncodingType
+
+| Constant             | Type                                                                                                   |
+| -------------------- | ------------------------------------------------------------------------------------------------------ |
+| `EncodingTypeSchema` | `ZodEnum<{ identity: "identity"; gzip: "gzip"; compress: "compress"; deflate: "deflate"; br: "br"; }>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L6)
+
+#### :gear: CliConfigSchema
+
+| Constant          | Type                                                                                                                                                                                                                                                           |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CliConfigSchema` | `ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString>>; gzip: ZodOptional<ZodUnion<readonly [ZodString, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: ZodOptional<...>; postdeploy: ZodOptional<...>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L7)
+
 ### :tropical_drink: Interfaces
 
 - [JunoConfigEnv](#gear-junoconfigenv)
@@ -172,14 +267,14 @@ Configures the hosting behavior of the Storage.
 
 #### :gear: CliConfig
 
-| Property     | Type                                     | Description                                                                                                                                                                                                                                                                                                                                                                                    |
-| ------------ | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `source`     | `string or undefined`                    | Specifies the directory from which to deploy to Storage. For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: 'build'type: {string}                                                                                                                                                                                                               |
-| `ignore`     | `string[] or undefined`                  | Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore. type: {string[]}optional                                                                                                                                                                                                                                                          |
-| `gzip`       | `string or false or undefined`           | Controls the Gzip compression optimization for files in the source folder. By default, it targets JavaScript (js), ES Module (mjs), and CSS (css) files. You can disable this by setting it to `false` or customize it with a different file matching pattern using glob syntax. type: {string or false}optional                                                                               |
-| `encoding`   | `[string, ENCODING_TYPE][] or undefined` | Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension: - `.Z` for compress, - `.gz` for gzip, - `.br` for brotli, - `.zlib` for deflate, - anything else defaults to `identity`. The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types. type: {Array<[string, ENCODING_TYPE]>}optional |
-| `predeploy`  | `string[] or undefined`                  | Defines a list of scripts or commands to be run before the deployment process begins. This can be useful for tasks such as compiling assets, running tests, or building production-ready files. Example: `json { "predeploy": ["npm run build", "npm run lint"] } ` type: {string[]}optional                                                                                                   |
-| `postdeploy` | `string[] or undefined`                  | Defines a list of scripts or commands to be run after the deployment process completes. This can be used for tasks such as notifications, cleanup, or sending confirmation messages to services or team members. Example: `json { "postdeploy": ["./scripts/notify-admins.sh", "echo 'Deployment complete'"] } ` type: {string[]}optional                                                      |
+| Property     | Type                                    | Description                                                                                                                                                                                                                                                                                                                                                                                   |
+| ------------ | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source`     | `string or undefined`                   | Specifies the directory from which to deploy to Storage. For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: 'build'type: {string}                                                                                                                                                                                                              |
+| `ignore`     | `string[] or undefined`                 | Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore. type: {string[]}optional                                                                                                                                                                                                                                                         |
+| `gzip`       | `string or false or undefined`          | Controls the Gzip compression optimization for files in the source folder. By default, it targets JavaScript (js), ES Module (mjs), and CSS (css) files. You can disable this by setting it to `false` or customize it with a different file matching pattern using glob syntax. type: {string or false}optional                                                                              |
+| `encoding`   | `[string, EncodingType][] or undefined` | Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension: - `.Z` for compress, - `.gz` for gzip, - `.br` for brotli, - `.zlib` for deflate, - anything else defaults to `identity`. The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types. type: {Array<[string, EncodingType]>}optional |
+| `predeploy`  | `string[] or undefined`                 | Defines a list of scripts or commands to be run before the deployment process begins. This can be useful for tasks such as compiling assets, running tests, or building production-ready files. Example: `json { "predeploy": ["npm run build", "npm run lint"] } ` type: {string[]}optional                                                                                                  |
+| `postdeploy` | `string[] or undefined`                 | Defines a list of scripts or commands to be run after the deployment process completes. This can be used for tasks such as notifications, cleanup, or sending confirmation messages to services or team members. Example: `json { "postdeploy": ["./scripts/notify-admins.sh", "echo 'Deployment complete'"] } ` type: {string[]}optional                                                     |
 
 #### :gear: SatelliteAssertions
 
@@ -299,7 +394,7 @@ Represents the development configuration for Juno.
 - [OrbiterConfig](#gear-orbiterconfig)
 - [ModuleLogVisibility](#gear-modulelogvisibility)
 - [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
-- [ENCODING_TYPE](#gear-encoding_type)
+- [EncodingType](#gear-encodingtype)
 - [SatelliteConfig](#gear-satelliteconfig)
 - [SatelliteDevDataStoreCollection](#gear-satellitedevdatastorecollection)
 - [SatelliteDevDbCollection](#gear-satellitedevdbcollection)
@@ -313,7 +408,7 @@ Represents the development configuration for Juno.
 | ---------------- | ------------------------ |
 | `JunoConfigMode` | `'production' or string` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L5)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L12)
 
 #### :gear: OrbiterConfig
 
@@ -337,15 +432,15 @@ Represents the development configuration for Juno.
 | ------------------------- | ---- |
 | `StorageConfigSourceGlob` |      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L13)
 
-#### :gear: ENCODING_TYPE
+#### :gear: EncodingType
 
-| Type            | Type                                                      |
-| --------------- | --------------------------------------------------------- |
-| `ENCODING_TYPE` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
+| Type           | Type                                                      |
+| -------------- | --------------------------------------------------------- |
+| `EncodingType` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L5)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L12)
 
 #### :gear: SatelliteConfig
 

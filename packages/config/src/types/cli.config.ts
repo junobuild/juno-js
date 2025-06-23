@@ -1,4 +1,19 @@
-import type {ENCODING_TYPE} from './encoding';
+import * as z from 'zod/v4';
+import {type EncodingType, EncodingTypeSchema} from './encoding';
+
+/**
+ * @see CliConfig
+ */
+export const CliConfigSchema = z
+  .object({
+    source: z.string().optional(),
+    ignore: z.array(z.string()).optional(),
+    gzip: z.union([z.string(), z.literal(false)]).optional(),
+    encoding: z.array(z.tuple([z.string(), EncodingTypeSchema])).optional(),
+    predeploy: z.array(z.string()).optional(),
+    postdeploy: z.array(z.string()).optional()
+  })
+  .strict();
 
 export interface CliConfig {
   /**
@@ -33,10 +48,10 @@ export interface CliConfig {
    * - `.zlib` for deflate,
    * - anything else defaults to `identity`.
    * The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types.
-   * @type {Array<[string, ENCODING_TYPE]>}
+   * @type {Array<[string, EncodingType]>}
    * @optional
    */
-  encoding?: Array<[string, ENCODING_TYPE]>;
+  encoding?: Array<[string, EncodingType]>;
 
   /**
    * Defines a list of scripts or commands to be run before the deployment process begins.

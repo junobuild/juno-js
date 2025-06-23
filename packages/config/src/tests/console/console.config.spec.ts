@@ -1,10 +1,11 @@
 import {JunoConsoleConfigSchema} from '../../console/console.config';
+import {mockModuleIdText} from '../mocks/principal.mocks';
 
 describe('console.config', () => {
   describe('JunoConsoleConfigSchema', () => {
     it('accepts minimal ConsoleId config', () => {
       const result = JunoConsoleConfigSchema.safeParse({
-        id: 'abc'
+        id: mockModuleIdText
       });
       expect(result.success).toBe(true);
     });
@@ -12,9 +13,9 @@ describe('console.config', () => {
     it('accepts minimal ConsoleIds config', () => {
       const result = JunoConsoleConfigSchema.safeParse({
         ids: {
-          local: 'abc',
-          staging: 'def',
-          production: 'ghi'
+          development: mockModuleIdText,
+          production: mockModuleIdText,
+          staging: mockModuleIdText
         }
       });
       expect(result.success).toBe(true);
@@ -22,7 +23,7 @@ describe('console.config', () => {
 
     it('accepts full config with id and CLI options', () => {
       const result = JunoConsoleConfigSchema.safeParse({
-        id: 'abc',
+        id: mockModuleIdText,
         source: 'dist',
         gzip: '*.js',
         predeploy: ['npm run build'],
@@ -34,8 +35,8 @@ describe('console.config', () => {
     it('accepts full config with ids and storage config', () => {
       const result = JunoConsoleConfigSchema.safeParse({
         ids: {
-          local: 'abc',
-          production: 'xyz'
+          local: mockModuleIdText,
+          production: mockModuleIdText
         },
         storage: {
           redirects: [
@@ -57,19 +58,45 @@ describe('console.config', () => {
       expect(result.success).toBe(false);
     });
 
+    it('rejects config with neither id nor ids', () => {
+      const result = JunoConsoleConfigSchema.safeParse({
+        someBaseField: 'value'
+      });
+      expect(result.success).toBe(false);
+    });
+
     it('rejects config with both id and ids present', () => {
       const result = JunoConsoleConfigSchema.safeParse({
-        id: 'abc',
+        id: mockModuleIdText,
         ids: {
-          local: 'def'
+          local: mockModuleIdText
         }
       });
       expect(result.success).toBe(false);
     });
 
+    it('rejects config with invalid principal id', () => {
+      const config = {
+        id: 'invalid-principal'
+      };
+
+      expect(() => JunoConsoleConfigSchema.parse(config)).toThrow();
+    });
+
+    it('rejects config with invalid principal in ids', () => {
+      const config = {
+        ids: {
+          development: 'invalid',
+          production: mockModuleIdText
+        }
+      };
+
+      expect(() => JunoConsoleConfigSchema.parse(config)).toThrow();
+    });
+
     it('rejects config with invalid gzip type', () => {
       const result = JunoConsoleConfigSchema.safeParse({
-        id: 'abc',
+        id: mockModuleIdText,
         gzip: 123
       });
       expect(result.success).toBe(false);
@@ -77,7 +104,7 @@ describe('console.config', () => {
 
     it('rejects config with unknown key', () => {
       const result = JunoConsoleConfigSchema.safeParse({
-        id: 'abc',
+        id: mockModuleIdText,
         unknown: true
       });
       expect(result.success).toBe(false);

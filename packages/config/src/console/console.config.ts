@@ -1,3 +1,4 @@
+import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
 import {type StorageConfig, StorageConfigSchema} from '../shared/storage.config';
 import {type CliConfig, CliConfigSchema} from '../types/cli.config';
@@ -8,7 +9,7 @@ import type {Either} from '../types/utility.types';
  * @see ConsoleId
  */
 export const ConsoleIdSchema = z.object({
-  id: z.string()
+  id: PrincipalTextSchema
 });
 
 /**
@@ -20,14 +21,14 @@ export interface ConsoleId {
    * The unique identifier (ID) of the console.
    * @type {string}
    */
-  id: string;
+  id: PrincipalText;
 }
 
 /**
  * @see ConsoleIds
  */
 export const ConsoleIdsSchema = z.object({
-  ids: z.record(JunoConfigModeSchema, z.string())
+  ids: z.record(JunoConfigModeSchema, PrincipalTextSchema)
 });
 
 /**
@@ -41,20 +42,31 @@ export interface ConsoleIds {
    * This allows the application to use different console IDs, such as production, staging, etc.
    * @type {Record<JunoConfigMode, string>}
    */
-  ids: Record<JunoConfigMode, string>;
+  ids: Record<JunoConfigMode, PrincipalText>;
 }
 
 /**
  * @see JunoConsoleConfig
  */
-export const JunoConsoleConfigSchema = z
-  .union([ConsoleIdSchema, ConsoleIdsSchema])
-  .and(CliConfigSchema)
-  .and(
-    z.object({
-      storage: StorageConfigSchema.optional()
+const JunoConsoleConfigBaseSchema = z.object({
+  ...CliConfigSchema.shape,
+  storage: StorageConfigSchema.optional()
+});
+
+export const JunoConsoleConfigSchema = z.union([
+  z
+    .object({
+      ...ConsoleIdSchema.shape,
+      ...JunoConsoleConfigBaseSchema.shape
     })
-  );
+    .strict(),
+  z
+    .object({
+      ...ConsoleIdsSchema.shape,
+      ...JunoConsoleConfigBaseSchema.shape
+    })
+    .strict()
+]);
 
 /**
  * Represents the configuration for a console.

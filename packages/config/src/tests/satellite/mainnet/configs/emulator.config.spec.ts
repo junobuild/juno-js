@@ -109,5 +109,25 @@ describe('emulator.config', () => {
       });
       expect(result.success).toBe(true);
     });
+
+    it('accepts Console config without console port', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        console: {
+          ports: {
+            server: 1234
+          }
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts minimal Console config (no ports)', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        runner: 'docker',
+        console: {}
+      });
+      expect(result.success).toBe(true);
+    });
   });
 });

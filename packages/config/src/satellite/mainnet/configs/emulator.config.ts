@@ -17,7 +17,7 @@ const ConsolePortSchema = z.strictObject({
    * Console UI (like https://console.juno.build) running with the emulator.
    * @default 5866
    */
-  console: z.number()
+  console: z.number().optional()
 });
 
 /**

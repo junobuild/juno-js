@@ -52,7 +52,7 @@
   "peerDependencies": {
     "@dfinity/agent": "^2.3.0",
     "@dfinity/candid": "^2.3.0",
-    "@dfinity/ic-management": "^6.1",
+    "@dfinity/ic-management": "^6.2",
     "@dfinity/identity": "^2.3.0",
     "@dfinity/principal": "^2.3.0",
     "@dfinity/utils": "^2",

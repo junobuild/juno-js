@@ -59,5 +59,99 @@ describe('juno.config', () => {
         expect(result.error.issues[0].code).toBe('invalid_union');
       }
     });
+
+    it('accepts valid skylab emulator config', () => {
+      const result = JunoConfigSchema.safeParse({
+        satellite: {id: mockModuleIdText},
+        emulator: {
+          runner: 'docker',
+          volume: 'my-volume',
+          target: './functions',
+          skylab: {
+            config: 'config.ts',
+            ports: {
+              server: 1111,
+              admin: 2222,
+              console: 5866
+            }
+          }
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts valid console emulator config', () => {
+      const result = JunoConfigSchema.safeParse({
+        satellite: {id: mockModuleIdText},
+        emulator: {
+          runner: 'docker',
+          console: {
+            ports: {
+              server: 1234,
+              admin: 5678
+            }
+          }
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts valid satellite emulator config', () => {
+      const result = JunoConfigSchema.safeParse({
+        satellite: {id: mockModuleIdText},
+        emulator: {
+          runner: 'docker',
+          satellite: {
+            config: 'dev.config.json',
+            ports: {
+              server: 1000
+            }
+          }
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('rejects emulator config with multiple emulator types', () => {
+      const result = JunoConfigSchema.safeParse({
+        satellite: {id: mockModuleIdText},
+        emulator: {
+          runner: 'docker',
+          skylab: {config: 'config.ts', ports: {console: 5866}},
+          console: {}
+        }
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].code).toBe('invalid_union');
+      }
+    });
+
+    it('rejects emulator config with invalid runner', () => {
+      const result = JunoConfigSchema.safeParse({
+        satellite: {id: mockModuleIdText},
+        emulator: {
+          runner: 'podman',
+          console: {}
+        }
+      });
+
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects emulator skylab config with wrong file extension', () => {
+      const result = JunoConfigSchema.safeParse({
+        satellite: {id: mockModuleIdText},
+        emulator: {
+          runner: 'docker',
+          skylab: {
+            config: 'config.txt',
+            ports: {console: 5866}
+          }
+        }
+      });
+
+      expect(result.success).toBe(false);
+    });
   });
 });

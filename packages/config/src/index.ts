@@ -9,6 +9,7 @@ export * from './satellite/mainnet/config';
 export * from './satellite/mainnet/configs/assertions.config';
 export * from './satellite/mainnet/configs/authentication.config';
 export * from './satellite/mainnet/configs/datastore.config';
+export * from './satellite/mainnet/configs/emulator.config';
 export * from './satellite/mainnet/configs/orbiter.config';
 export * from './satellite/mainnet/configs/satellite.config';
 export * from './satellite/mainnet/juno.config';

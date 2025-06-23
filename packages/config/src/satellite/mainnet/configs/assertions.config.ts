@@ -1,3 +1,12 @@
+import * as z from 'zod/v4';
+
+/**
+ * @see SatelliteAssertions
+ */
+export const SatelliteAssertionsSchema = z.strictObject({
+  heapMemory: z.union([z.number(), z.boolean()]).optional()
+});
+
 /**
  * Configuration for satellite assertions.
  * @interface SatelliteAssertions

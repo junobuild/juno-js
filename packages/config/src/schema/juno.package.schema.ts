@@ -1,9 +1,9 @@
-import * as z from 'zod';
+import * as z from 'zod/v4';
 
 /**
  * @see JunoPackageDependencies
  */
-export const JunoPackageDependenciesSchema = z.record(z.string());
+export const JunoPackageDependenciesSchema = z.record(z.string(), z.string());
 
 /**
  * @see JunoPackage

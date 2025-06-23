@@ -4,12 +4,12 @@ const EmulatorPortsSchema = z.strictObject({
   /**
    * @default 5987
    */
-  localReplica: z.number().optional(),
+  server: z.number().optional(),
 
   /**
    * @default 5999
    */
-  adminServer: z.number().optional()
+  admin: z.number().optional()
 });
 
 const ConsolePortSchema = z.strictObject({
@@ -25,16 +25,17 @@ const ConsolePortSchema = z.strictObject({
  */
 export interface EmulatorPorts {
   /**
-   * Local replica used to simulate execution.
+   * The port of the server used to simulate execution. This is the port your app connects to.
+   * Also known as the "local Internet Computer replica" or the "Pocket-IC port".
    * @default 5987
    */
-  localReplica?: number;
+  server?: number;
 
   /**
-   * Admin server (e.g. to transfer ICP from the ledger).
+   * The port of the admin server used for tasks like transferring ICP from the ledger.
    * @default 5999
    */
-  adminServer?: number;
+  admin?: number;
 }
 
 /**

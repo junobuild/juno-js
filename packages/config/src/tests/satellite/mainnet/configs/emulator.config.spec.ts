@@ -14,8 +14,8 @@ describe('emulator.config', () => {
         skylab: {
           config: 'config.mjs',
           ports: {
-            localReplica: 1234,
-            adminServer: 5678,
+            server: 1234,
+            admin: 5678,
             console: 9000
           }
         }
@@ -28,7 +28,7 @@ describe('emulator.config', () => {
         ...validBase,
         console: {
           ports: {
-            localReplica: 1234
+            server: 1234
           }
         }
       });
@@ -41,7 +41,7 @@ describe('emulator.config', () => {
         satellite: {
           config: 'dev.ts',
           ports: {
-            adminServer: 4567
+            admin: 4567
           }
         }
       });

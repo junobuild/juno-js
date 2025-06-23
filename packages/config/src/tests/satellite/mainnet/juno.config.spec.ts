@@ -70,8 +70,8 @@ describe('juno.config', () => {
           skylab: {
             config: 'config.ts',
             ports: {
-              localReplica: 1111,
-              adminServer: 2222,
+              server: 1111,
+              admin: 2222,
               console: 5866
             }
           }
@@ -87,8 +87,8 @@ describe('juno.config', () => {
           runner: 'docker',
           console: {
             ports: {
-              localReplica: 1234,
-              adminServer: 5678
+              server: 1234,
+              admin: 5678
             }
           }
         }
@@ -104,7 +104,7 @@ describe('juno.config', () => {
           satellite: {
             config: 'dev.config.json',
             ports: {
-              localReplica: 1000
+              server: 1000
             }
           }
         }

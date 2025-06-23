@@ -55,6 +55,9 @@ Configuration options for [Juno] CLI.
 
 - [JunoConfigModeSchema](#gear-junoconfigmodeschema)
 - [JunoConfigEnvSchema](#gear-junoconfigenvschema)
+- [OrbiterIdSchema](#gear-orbiteridschema)
+- [OrbiterIdsSchema](#gear-orbiteridsschema)
+- [OrbiterConfigSchema](#gear-orbiterconfigschema)
 - [ModuleLogVisibilitySchema](#gear-modulelogvisibilityschema)
 - [ModuleSettingsSchema](#gear-modulesettingsschema)
 - [MaxMemorySizeConfigSchema](#gear-maxmemorysizeconfigschema)
@@ -65,6 +68,14 @@ Configuration options for [Juno] CLI.
 - [StorageConfigSchema](#gear-storageconfigschema)
 - [EncodingTypeSchema](#gear-encodingtypeschema)
 - [CliConfigSchema](#gear-cliconfigschema)
+- [SatelliteAssertionsSchema](#gear-satelliteassertionsschema)
+- [AuthenticationConfigInternetIdentitySchema](#gear-authenticationconfiginternetidentityschema)
+- [AuthenticationConfigSchema](#gear-authenticationconfigschema)
+- [DatastoreConfigSchema](#gear-datastoreconfigschema)
+- [SatelliteIdSchema](#gear-satelliteidschema)
+- [SatelliteIdsSchema](#gear-satelliteidsschema)
+- [SatelliteConfigOptionsSchema](#gear-satelliteconfigoptionsschema)
+- [JunoConfigSchema](#gear-junoconfigschema)
 - [SatelliteDevDataStoreCollectionSchema](#gear-satellitedevdatastorecollectionschema)
 - [SatelliteDevStorageCollectionSchema](#gear-satellitedevstoragecollectionschema)
 - [SatelliteDevCollectionsSchema](#gear-satellitedevcollectionsschema)
@@ -87,6 +98,30 @@ Configuration options for [Juno] CLI.
 | `JunoConfigEnvSchema` | `ZodObject<{ mode: ZodUnion<readonly [ZodLiteral<"production">, ZodString]>; }, $strip>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L17)
+
+#### :gear: OrbiterIdSchema
+
+| Constant          | Type                                    |
+| ----------------- | --------------------------------------- |
+| `OrbiterIdSchema` | `ZodObject<{ id: ZodString; }, $strip>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L9)
+
+#### :gear: OrbiterIdsSchema
+
+| Constant           | Type                                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `OrbiterIdsSchema` | `ZodObject<{ ids: ZodRecord<ZodUnion<readonly [ZodLiteral<"production">, ZodString]>, ZodString>; }, $strip>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L28)
+
+#### :gear: OrbiterConfigSchema
+
+| Constant              | Type                                                                                                                                                                        |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OrbiterConfigSchema` | `ZodUnion<readonly [ZodObject<{ id: ZodString; }, $strict>, ZodObject<{ ids: ZodRecord<ZodUnion<readonly [ZodLiteral<"production">, ZodString]>, ZodString>; }, $strict>]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L55)
 
 #### :gear: ModuleLogVisibilitySchema
 
@@ -169,6 +204,70 @@ see EncodingType
 | `CliConfigSchema` | `ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString>>; gzip: ZodOptional<ZodUnion<readonly [ZodString, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: ZodOptional<...>; postdeploy: ZodOptional<...>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L7)
+
+#### :gear: SatelliteAssertionsSchema
+
+| Constant                    | Type                                                                                           |
+| --------------------------- | ---------------------------------------------------------------------------------------------- |
+| `SatelliteAssertionsSchema` | `ZodObject<{ heapMemory: ZodOptional<ZodUnion<readonly [ZodNumber, ZodBoolean]>>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/assertions.config.ts#L6)
+
+#### :gear: AuthenticationConfigInternetIdentitySchema
+
+| Constant                                     | Type                                                                                                                        |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `AuthenticationConfigInternetIdentitySchema` | `ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/authentication.config.ts#L6)
+
+#### :gear: AuthenticationConfigSchema
+
+| Constant                     | Type                                                                                                                                                                                |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/authentication.config.ts#L35)
+
+#### :gear: DatastoreConfigSchema
+
+| Constant                | Type                                                                                                                                         |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DatastoreConfigSchema` | `ZodObject<{ maxMemorySize: ZodOptional<ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/datastore.config.ts#L7)
+
+#### :gear: SatelliteIdSchema
+
+| Constant            | Type                                    |
+| ------------------- | --------------------------------------- |
+| `SatelliteIdSchema` | `ZodObject<{ id: ZodString; }, $strip>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L15)
+
+#### :gear: SatelliteIdsSchema
+
+| Constant             | Type                                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `SatelliteIdsSchema` | `ZodObject<{ ids: ZodRecord<ZodUnion<readonly [ZodLiteral<"production">, ZodString]>, ZodString>; }, $strip>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L34)
+
+#### :gear: SatelliteConfigOptionsSchema
+
+| Constant                       | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; }, $strict>, ZodObject<.....` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L69)
+
+#### :gear: JunoConfigSchema
+
+| Constant           | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `JunoConfigSchema` | `ZodObject<{ satellite: ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; },...` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/juno.config.ts#L8)
 
 #### :gear: SatelliteDevDataStoreCollectionSchema
 
@@ -255,10 +354,9 @@ Represents the environment configuration for Juno.
 
 Represents the configuration for an orbiter.
 
-| Property    | Type                  | Description                                                                                                                      |
-| ----------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `id`        | `string`              | The identifier of the orbiter used in the dApp. type: {string}                                                                   |
-| `orbiterId` | `string or undefined` | The deprecated identifier of the orbiter. deprecated: `orbiterId` will be removed in the future. Use `id` instead.type: {string} |
+| Property | Type     | Description                                                    |
+| -------- | -------- | -------------------------------------------------------------- |
+| `id`     | `string` | The identifier of the orbiter used in the dApp. type: {string} |
 
 #### :gear: OrbiterIds
 
@@ -385,10 +483,9 @@ Configures the behavior of the Datastore.
 
 Represents the unique identifier for a satellite.
 
-| Property      | Type                  | Description                                                                                                                                      |
-| ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `id`          | `string`              | The unique identifier (ID) of the satellite for this application. type: {string}                                                                 |
-| `satelliteId` | `string or undefined` | The deprecated unique identifier (ID) of the satellite. deprecated: `satelliteId` will be removed in the future. Use `id` instead.type: {string} |
+| Property | Type     | Description                                                                      |
+| -------- | -------- | -------------------------------------------------------------------------------- |
+| `id`     | `string` | The unique identifier (ID) of the satellite for this application. type: {string} |
 
 #### :gear: SatelliteIds
 
@@ -486,7 +583,7 @@ Represents the development configuration for Juno.
 | --------------- | ------------------------------- |
 | `OrbiterConfig` | `Either<OrbiterId, OrbiterIds>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L63)
 
 #### :gear: ModuleLogVisibility
 
@@ -518,7 +615,7 @@ Represents the development configuration for Juno.
 | ----------------- | ---------------------------------------------------------------------------- |
 | `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> and CliConfig and SatelliteConfigOptions` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L114)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L149)
 
 #### :gear: SatelliteDevDataStoreCollection
 

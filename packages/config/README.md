@@ -297,7 +297,7 @@ see EncodingType
 
 | Constant                       | Type                                                                                                            |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| `SatelliteDevControllerSchema` | `ZodObject<{ id: ZodString; scope: ZodEnum<{ write: "write"; admin: "admin"; submit: "submit"; }>; }, $strict>` |
+| `SatelliteDevControllerSchema` | `ZodObject<{ id: ZodString; scope: ZodEnum<{ admin: "admin"; write: "write"; submit: "submit"; }>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L74)
 
@@ -538,7 +538,7 @@ Represents a controller configuration for a satellite in a development environme
 | Property | Type                             | Description                                                           |
 | -------- | -------------------------------- | --------------------------------------------------------------------- |
 | `id`     | `string`                         | The unique identifier of the controller. type: {string}               |
-| `scope`  | `"write" or "admin" or "submit"` | The scope of the controller's permissions. type: {'write' or 'admin'} |
+| `scope`  | `"admin" or "write" or "submit"` | The scope of the controller's permissions. type: {'write' or 'admin'} |
 
 #### :gear: SatelliteDevConfig
 

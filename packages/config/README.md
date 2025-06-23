@@ -53,6 +53,7 @@ Configuration options for [Juno] CLI.
 
 ### :wrench: Constants
 
+- [EmulatorConfigSchema](#gear-emulatorconfigschema)
 - [JunoConfigModeSchema](#gear-junoconfigmodeschema)
 - [JunoConfigEnvSchema](#gear-junoconfigenvschema)
 - [OrbiterIdSchema](#gear-orbiteridschema)
@@ -82,6 +83,14 @@ Configuration options for [Juno] CLI.
 - [SatelliteDevControllerSchema](#gear-satellitedevcontrollerschema)
 - [SatelliteDevConfigSchema](#gear-satellitedevconfigschema)
 - [JunoDevConfigSchema](#gear-junodevconfigschema)
+
+#### :gear: EmulatorConfigSchema
+
+| Constant               | Type                                                                                                                                                                                                           |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodEnum<{ docker: "docker"; }>; volume: ZodOptional<ZodString>; target: ZodOptional<ZodString>; skylab: ZodObject<...>; }, $strict>, ZodObject<...>, ZodObject<...>]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L172)
 
 #### :gear: JunoConfigModeSchema
 
@@ -319,6 +328,11 @@ see EncodingType
 
 ### :tropical_drink: Interfaces
 
+- [EmulatorPorts](#gear-emulatorports)
+- [EmulatorSkylab](#gear-emulatorskylab)
+- [EmulatorConsole](#gear-emulatorconsole)
+- [EmulatorSatellite](#gear-emulatorsatellite)
+- [EmulatorBaseConfig](#gear-emulatorbaseconfig)
 - [JunoConfigEnv](#gear-junoconfigenv)
 - [OrbiterId](#gear-orbiterid)
 - [OrbiterIds](#gear-orbiterids)
@@ -341,6 +355,51 @@ see EncodingType
 - [SatelliteDevController](#gear-satellitedevcontroller)
 - [SatelliteDevConfig](#gear-satellitedevconfig)
 - [JunoDevConfig](#gear-junodevconfig)
+
+#### :gear: EmulatorPorts
+
+Represents the ports exposed by an emulator container.
+
+| Property | Type                  | Description                                                                                                                                                                          |
+| -------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `server` | `number or undefined` | The port of the server used to simulate execution. This is the port your app connects to. Also known as the "local Internet Computer replica" or the "Pocket-IC port". default: 5987 |
+| `admin`  | `number or undefined` | The port of the admin server used for tasks like transferring ICP from the ledger. default: 5999                                                                                     |
+
+#### :gear: EmulatorSkylab
+
+Configuration for the Skylab emulator.
+
+| Property | Type                                                    | Description                            |
+| -------- | ------------------------------------------------------- | -------------------------------------- |
+| `ports`  | `(EmulatorPorts and { console: number; }) or undefined` | Ports exposed by the Skylab container. |
+| `config` | `string`                                                | Path to the Juno config file.          |
+
+#### :gear: EmulatorConsole
+
+Configuration for the Console emulator.
+
+| Property | Type                         | Description                             |
+| -------- | ---------------------------- | --------------------------------------- |
+| `ports`  | `EmulatorPorts or undefined` | Ports exposed by the Console container. |
+
+#### :gear: EmulatorSatellite
+
+Configuration for the Satellite emulator.
+
+| Property | Type                         | Description                                                  |
+| -------- | ---------------------------- | ------------------------------------------------------------ |
+| `ports`  | `EmulatorPorts or undefined` | Ports exposed by the Satellite container.                    |
+| `config` | `string`                     | Path to the dev config file to customize Satellite behavior. |
+
+#### :gear: EmulatorBaseConfig
+
+Shared options for all emulator variants.
+
+| Property | Type                  | Description                                                         |
+| -------- | --------------------- | ------------------------------------------------------------------- |
+| `runner` | `"docker"`            | The containerization tool to run the emulator.                      |
+| `volume` | `string or undefined` | Persistent volume to store internal state. default: "juno"          |
+| `target` | `string or undefined` | Shared folder for deploying and hot-reloading serverless functions. |
 
 #### :gear: JunoConfigEnv
 
@@ -559,6 +618,9 @@ Represents the development configuration for Juno.
 
 ### :cocktail: Types
 
+- [JunoConfigFile](#gear-junoconfigfile)
+- [JunoDevConfigFile](#gear-junodevconfigfile)
+- [EmulatorConfig](#gear-emulatorconfig)
 - [JunoConfigMode](#gear-junoconfigmode)
 - [OrbiterConfig](#gear-orbiterconfig)
 - [ModuleLogVisibility](#gear-modulelogvisibility)
@@ -569,6 +631,38 @@ Represents the development configuration for Juno.
 - [SatelliteDevStorageCollection](#gear-satellitedevstoragecollection)
 - [JunoDevConfigFn](#gear-junodevconfigfn)
 - [JunoDevConfigFnOrObject](#gear-junodevconfigfnorobject)
+
+#### :gear: JunoConfigFile
+
+Represents a Juno configuration file path.
+Must end in `.mjs`, `.ts`, `.js`, or `.json`.
+
+| Type             | Type |
+| ---------------- | ---- |
+| `JunoConfigFile` |      |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L57)
+
+#### :gear: JunoDevConfigFile
+
+Represents a Juno development config file path.
+Must end in `.mjs`, `.ts`, `.js`, or `.json`.
+
+| Type                | Type |
+| ------------------- | ---- |
+| `JunoDevConfigFile` |      |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L68)
+
+#### :gear: EmulatorConfig
+
+The configuration for running the Juno emulator.
+
+| Type             | Type |
+| ---------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EmulatorConfig` | `    | (EmulatorBaseConfig and {skylab: EmulatorSkylab}) or (EmulatorBaseConfig and {console: EmulatorConsole}) or (EmulatorBaseConfig and {satellite: EmulatorSatellite})` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L181)
 
 #### :gear: JunoConfigMode
 

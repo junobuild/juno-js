@@ -50,7 +50,7 @@ export interface AssetKey {
  * Type representing the possible encoding types.
  * @typedef {('identity' | 'gzip' | 'compress' | 'deflate' | 'br')} ENCODING_TYPE
  */
-export type ENCODING_TYPE = 'identity' | 'gzip' | 'compress' | 'deflate' | 'br';
+export type EncodingType = 'identity' | 'gzip' | 'compress' | 'deflate' | 'br';
 
 /**
  * Represents an asset with its key details, encodings, and metadata.
@@ -78,9 +78,9 @@ export interface Asset extends AssetKey {
 
   /**
    * The encodings of the asset.
-   * @type {Record<ENCODING_TYPE, AssetEncoding>}
+   * @type {Record<EncodingType, AssetEncoding>}
    */
-  encodings: Record<ENCODING_TYPE, AssetEncoding>;
+  encodings: Record<EncodingType, AssetEncoding>;
 
   /**
    * The owner of the asset.
@@ -144,9 +144,9 @@ export interface Storage {
 
   /**
    * The encoding type of the asset.
-   * @type {ENCODING_TYPE}
+   * @type {EncodingType}
    */
-  encoding?: ENCODING_TYPE;
+  encoding?: EncodingType;
 
   /**
    * An optional description of the asset. A field which can be used to filter assets when listing those.

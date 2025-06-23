@@ -1,5 +1,5 @@
 import {assertNonNullish} from '@dfinity/utils';
-import type {Asset, AssetEncoding, AssetKey, ENCODING_TYPE, Storage} from '@junobuild/storage';
+import type {Asset, AssetEncoding, AssetKey, EncodingType, Storage} from '@junobuild/storage';
 import {initAuthTimeoutWorker} from './services/auth-timout.services';
 import {initAuth} from './services/auth.services';
 import {AuthStore} from './stores/auth.store';
@@ -22,7 +22,7 @@ export type * from './types/satellite.types';
 export type * from './types/storage.types';
 export type * from './types/subscription.types';
 export type * from './types/utility.types';
-export type {Asset, AssetEncoding, AssetKey, ENCODING_TYPE, Storage};
+export type {Asset, AssetEncoding, AssetKey, EncodingType, Storage};
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {
   const satelliteId = userEnv?.satelliteId ?? envSatelliteId();

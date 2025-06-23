@@ -1,4 +1,4 @@
-import * as z from 'zod';
+import * as z from 'zod/v4';
 import {type Collections, CollectionsSchema} from './schemas/collections';
 import {type RunFunction, RunFunctionSchema} from './schemas/context';
 import {

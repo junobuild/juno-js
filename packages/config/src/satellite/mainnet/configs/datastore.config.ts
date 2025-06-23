@@ -1,4 +1,12 @@
-import type {MaxMemorySizeConfig} from '../../../shared/feature.config';
+import * as z from 'zod/v4';
+import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from '../../../shared/feature.config';
+
+/**
+ * @see DatastoreConfig
+ */
+export const DatastoreConfigSchema = z.strictObject({
+  maxMemorySize: MaxMemorySizeConfigSchema.optional()
+});
 
 /**
  * Configures the behavior of the Datastore.

@@ -45,14 +45,14 @@ export interface ConsoleIds {
   ids: Record<JunoConfigMode, PrincipalText>;
 }
 
-/**
- * @see JunoConsoleConfig
- */
 const JunoConsoleConfigBaseSchema = z.object({
   ...CliConfigSchema.shape,
   storage: StorageConfigSchema.optional()
 });
 
+/**
+ * @see JunoConsoleConfig
+ */
 export const JunoConsoleConfigSchema = z.union([
   z
     .object({

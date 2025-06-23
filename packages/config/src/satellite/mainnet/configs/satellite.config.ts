@@ -1,11 +1,20 @@
-import type {ModuleSettings} from '../../../module/module.settings';
-import type {StorageConfig} from '../../../shared/storage.config';
+import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
+import * as z from 'zod/v4';
+import {type ModuleSettings, ModuleSettingsSchema} from '../../../module/module.settings';
+import {type StorageConfig, StorageConfigSchema} from '../../../shared/storage.config';
 import type {CliConfig} from '../../../types/cli.config';
-import type {JunoConfigMode} from '../../../types/juno.env';
+import {type JunoConfigMode, JunoConfigModeSchema} from '../../../types/juno.env';
 import type {Either} from '../../../types/utility.types';
-import type {SatelliteAssertions} from './assertions.config';
-import type {AuthenticationConfig} from './authentication.config';
-import type {DatastoreConfig} from './datastore.config';
+import {type SatelliteAssertions, SatelliteAssertionsSchema} from './assertions.config';
+import {type AuthenticationConfig, AuthenticationConfigSchema} from './authentication.config';
+import {type DatastoreConfig, DatastoreConfigSchema} from './datastore.config';
+
+/**
+ * @see SatelliteId
+ */
+export const SatelliteIdSchema = z.object({
+  id: PrincipalTextSchema
+});
 
 /**
  * Represents the unique identifier for a satellite.
@@ -16,15 +25,15 @@ export interface SatelliteId {
    * The unique identifier (ID) of the satellite for this application.
    * @type {string}
    */
-  id: string;
-
-  /**
-   * The deprecated unique identifier (ID) of the satellite.
-   * @deprecated `satelliteId` will be removed in the future. Use `id` instead.
-   * @type {string}
-   */
-  satelliteId?: string;
+  id: PrincipalText;
 }
+
+/**
+ * @see SatelliteIds
+ */
+export const SatelliteIdsSchema = z.object({
+  ids: z.record(JunoConfigModeSchema, PrincipalTextSchema)
+});
 
 /**
  * Represents a mapping of satellite identifiers to different configurations based on the mode of the application.
@@ -43,8 +52,34 @@ export interface SatelliteIds {
    * }
    * @type {Record<JunoConfigMode, string>}
    */
-  ids: Record<JunoConfigMode, string>;
+  ids: Record<JunoConfigMode, PrincipalText>;
 }
+
+const SatelliteConfigOptionsBaseSchema = z.object({
+  storage: StorageConfigSchema.optional(),
+  datastore: DatastoreConfigSchema.optional(),
+  authentication: AuthenticationConfigSchema.optional(),
+  assertions: SatelliteAssertionsSchema.optional(),
+  settings: ModuleSettingsSchema.optional()
+});
+
+/**
+ * @see JunoConsoleConfig
+ */
+export const SatelliteConfigOptionsSchema = z.union([
+  z
+    .object({
+      ...SatelliteIdSchema.shape,
+      ...SatelliteConfigOptionsBaseSchema.shape
+    })
+    .strict(),
+  z
+    .object({
+      ...SatelliteIdsSchema.shape,
+      ...SatelliteConfigOptionsBaseSchema.shape
+    })
+    .strict()
+]);
 
 /**
  * SatelliteConfigOptions interface provides configuration settings that allow for fine-tuning

@@ -1,3 +1,13 @@
+import * as z from 'zod/v4';
+
+/**
+ * @see AuthenticationConfigInternetIdentity
+ */
+export const AuthenticationConfigInternetIdentitySchema = z.strictObject({
+  derivationOrigin: z.url().optional(),
+  externalAlternativeOrigins: z.array(z.url()).optional()
+});
+
 /**
  * Configure the behavior of Internet Identity.
  * @interface AuthenticationConfigInternetIdentity
@@ -18,6 +28,13 @@ export interface AuthenticationConfigInternetIdentity {
    */
   externalAlternativeOrigins?: string[];
 }
+
+/**
+ * @see AuthenticationConfig
+ */
+export const AuthenticationConfigSchema = z.strictObject({
+  internetIdentity: AuthenticationConfigInternetIdentitySchema.optional()
+});
 
 /**
  * Configures the Authentication options of a Satellite.

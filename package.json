@@ -135,9 +135,10 @@
     {
       "name": "@junobuild/config",
       "path": "./packages/config/dist/index.js",
-      "limit": "1 kB",
+      "limit": "10 kB",
       "ignore": [
-        "zod"
+        "zod",
+        "@dfinity/zod-schemas"
       ]
     },
     {

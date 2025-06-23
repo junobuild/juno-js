@@ -1,5 +1,5 @@
-import {MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from './feature.config';
 import * as z from 'zod/v4';
+import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from './feature.config';
 
 /**
  * @see StorageConfigSourceGlob
@@ -15,10 +15,12 @@ export type StorageConfigSourceGlob = string;
 /**
  * @see StorageConfigHeader
  */
-export const StorageConfigHeaderSchema = z.object({
-  source: StorageConfigSourceGlobSchema,
-  headers: z.array(z.tuple([z.string(), z.string()])),
-}).strict();
+export const StorageConfigHeaderSchema = z
+  .object({
+    source: StorageConfigSourceGlobSchema,
+    headers: z.array(z.tuple([z.string(), z.string()]))
+  })
+  .strict();
 
 /**
  * Headers allow the client and the Storage to pass additional information along with a request or a response.
@@ -44,10 +46,12 @@ export interface StorageConfigHeader {
 /**
  * @see StorageConfigRewrite
  */
-export const StorageConfigRewriteSchema = z.object({
-  source: StorageConfigSourceGlobSchema,
-  destination: z.string(),
-}).strict();
+export const StorageConfigRewriteSchema = z
+  .object({
+    source: StorageConfigSourceGlobSchema,
+    destination: z.string()
+  })
+  .strict();
 
 /**
  * You can utilize optional rewrites to display the same content for multiple URLs.
@@ -72,11 +76,13 @@ export interface StorageConfigRewrite {
 /**
  * @see StorageConfigRedirect
  */
-export const StorageConfigRedirectSchema = z.object({
-  source: StorageConfigSourceGlobSchema,
-  location: z.string(),
-  code: z.union([z.literal(301), z.literal(302)]),
-}).strict();
+export const StorageConfigRedirectSchema = z
+  .object({
+    source: StorageConfigSourceGlobSchema,
+    location: z.string(),
+    code: z.union([z.literal(301), z.literal(302)])
+  })
+  .strict();
 
 /**
  * Use a URL redirect to prevent broken links if you've moved a page or to shorten URLs.
@@ -111,7 +117,7 @@ export const StorageConfigSchema = z.object({
   redirects: z.array(StorageConfigRedirectSchema).optional(),
   iframe: z.enum(['deny', 'same-origin', 'allow-any']).optional(),
   rawAccess: z.boolean().optional(),
-  maxMemorySize: MaxMemorySizeConfigSchema.optional(),
+  maxMemorySize: MaxMemorySizeConfigSchema.optional()
 });
 
 /**

@@ -15,7 +15,7 @@ export type JunoConfigMode = 'production' | string;
  * @see JunoConfigEnv
  */
 export const JunoConfigEnvSchema = z.object({
-  mode: JunoConfigModeSchema,
+  mode: JunoConfigModeSchema
 });
 
 /**

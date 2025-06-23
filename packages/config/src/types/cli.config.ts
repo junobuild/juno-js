@@ -1,17 +1,19 @@
-import {EncodingType, EncodingTypeSchema} from './encoding';
 import * as z from 'zod/v4';
+import {type EncodingType, EncodingTypeSchema} from './encoding';
 
 /**
  * @see CliConfig
  */
-export const CliConfigSchema = z.object({
-  source: z.string().optional(),
-  ignore: z.array(z.string()).optional(),
-  gzip: z.union([z.string(), z.literal(false)]).optional(),
-  encoding: z.array(z.tuple([z.string(), EncodingTypeSchema])).optional(),
-  predeploy: z.array(z.string()).optional(),
-  postdeploy: z.array(z.string()).optional(),
-}).strict();
+export const CliConfigSchema = z
+  .object({
+    source: z.string().optional(),
+    ignore: z.array(z.string()).optional(),
+    gzip: z.union([z.string(), z.literal(false)]).optional(),
+    encoding: z.array(z.tuple([z.string(), EncodingTypeSchema])).optional(),
+    predeploy: z.array(z.string()).optional(),
+    postdeploy: z.array(z.string()).optional()
+  })
+  .strict();
 
 export interface CliConfig {
   /**

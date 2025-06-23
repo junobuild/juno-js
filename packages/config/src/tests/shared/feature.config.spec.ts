@@ -38,7 +38,7 @@ describe('feature.config', () => {
     it('rejects unknown keys', () => {
       const result = MaxMemorySizeConfigSchema.safeParse({
         heap: 1_000_000n,
-        foo: 123n,
+        foo: 123n
       });
       expect(result.success).toBe(false);
     });

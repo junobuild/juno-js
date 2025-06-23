@@ -1,6 +1,6 @@
 import {JunoConsoleConfigSchema} from '../../console/console.config';
 
-describe("console.config", () => {
+describe('console.config', () => {
   describe('JunoConsoleConfigSchema', () => {
     it('accepts minimal ConsoleId config', () => {
       const result = JunoConsoleConfigSchema.safeParse({
@@ -83,5 +83,4 @@ describe("console.config", () => {
       expect(result.success).toBe(false);
     });
   });
-
-})
+});

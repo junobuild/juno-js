@@ -48,7 +48,7 @@ describe('storage.config', () => {
       const result = StorageConfigHeaderSchema.safeParse({
         source: '**/*.js',
         headers: [['X-Test', '123']],
-        extra: true,
+        extra: true
       });
       expect(result.success).toBe(false);
     });
@@ -82,7 +82,7 @@ describe('storage.config', () => {
       const result = StorageConfigRewriteSchema.safeParse({
         source: '/api/**',
         destination: '/index.html',
-        unexpected: 'value',
+        unexpected: 'value'
       });
       expect(result.success).toBe(false);
     });

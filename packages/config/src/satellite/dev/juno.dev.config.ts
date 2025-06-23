@@ -1,3 +1,4 @@
+import {PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
 import {type Rule, RuleSchema} from '../types/rules';
 
@@ -71,7 +72,7 @@ export interface SatelliteDevCollections {
  * @see SatelliteDevController
  */
 export const SatelliteDevControllerSchema = z.strictObject({
-  id: z.string(),
+  id: PrincipalTextSchema,
   scope: z.enum(['write', 'admin', 'submit'])
 });
 
@@ -84,7 +85,7 @@ export interface SatelliteDevController {
    * The unique identifier of the controller.
    * @type {string}
    */
-  id: string;
+  id: PrincipalText;
 
   /**
    * The scope of the controller's permissions.

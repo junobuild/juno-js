@@ -5,6 +5,7 @@ import {
   SatelliteDevDataStoreCollectionSchema,
   SatelliteDevStorageCollectionSchema
 } from '../../../satellite/dev/juno.dev.config';
+import {mockUserIdText} from '../../mocks/principal.mocks';
 
 describe('juno.dev.config', () => {
   describe('SatelliteDevDataStoreCollectionSchema', () => {
@@ -27,6 +28,22 @@ describe('juno.dev.config', () => {
         memory: 'stable',
         mutablePermissions: true,
         version: BigInt(1) // not allowed in this schema
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects missing required fields', () => {
+      const result = SatelliteDevDataStoreCollectionSchema.safeParse({});
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects wrong types', () => {
+      const result = SatelliteDevDataStoreCollectionSchema.safeParse({
+        collection: 123,
+        read: 'public',
+        write: true,
+        memory: 'heap',
+        mutablePermissions: 'yes'
       });
       expect(result.success).toBe(false);
     });
@@ -55,18 +72,40 @@ describe('juno.dev.config', () => {
       });
       expect(result.success).toBe(false);
     });
+
+    it('rejects unexpected extra fields', () => {
+      const result = SatelliteDevStorageCollectionSchema.safeParse({
+        collection: 'media',
+        read: 'public',
+        write: 'private',
+        memory: 'heap',
+        mutablePermissions: true,
+        extra: 'should not be here'
+      });
+      expect(result.success).toBe(false);
+    });
   });
 
   describe('SatelliteDevControllerSchema', () => {
     it('accepts all valid scopes', () => {
       for (const scope of ['write', 'admin', 'submit']) {
-        const result = SatelliteDevControllerSchema.safeParse({id: 'abc', scope});
+        const result = SatelliteDevControllerSchema.safeParse({id: mockUserIdText, scope});
         expect(result.success).toBe(true);
       }
     });
 
     it('rejects unknown scope', () => {
-      const result = SatelliteDevControllerSchema.safeParse({id: 'abc', scope: 'owner'});
+      const result = SatelliteDevControllerSchema.safeParse({id: mockUserIdText, scope: 'owner'});
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects missing id field', () => {
+      const result = SatelliteDevControllerSchema.safeParse({scope: 'admin'});
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects non-string principal', () => {
+      const result = SatelliteDevControllerSchema.safeParse({id: 123, scope: 'write'});
       expect(result.success).toBe(false);
     });
   });
@@ -95,8 +134,8 @@ describe('juno.dev.config', () => {
           ]
         },
         controllers: [
-          {id: 'user123', scope: 'write'},
-          {id: 'admin456', scope: 'admin'}
+          {id: mockUserIdText, scope: 'write'},
+          {id: mockUserIdText, scope: 'admin'}
         ]
       });
       expect(result.success).toBe(true);
@@ -107,6 +146,28 @@ describe('juno.dev.config', () => {
         collections: {},
         controllers: [{id: 'x', scope: 'submit', extra: 'nope'}]
       });
+      expect(result.success).toBe(false);
+    });
+
+    it('accepts minimal valid config with only datastore', () => {
+      const result = SatelliteDevConfigSchema.safeParse({
+        collections: {
+          datastore: [
+            {
+              collection: 'users',
+              read: 'public',
+              write: 'public',
+              memory: 'stable',
+              mutablePermissions: false
+            }
+          ]
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('rejects if collections are not present', () => {
+      const result = SatelliteDevConfigSchema.safeParse({});
       expect(result.success).toBe(false);
     });
   });
@@ -126,7 +187,7 @@ describe('juno.dev.config', () => {
               }
             ]
           },
-          controllers: [{id: 'main', scope: 'submit'}]
+          controllers: [{id: mockUserIdText, scope: 'submit'}]
         }
       });
       expect(result.success).toBe(true);
@@ -139,6 +200,31 @@ describe('juno.dev.config', () => {
           controllers: []
         },
         somethingExtra: true
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects if satellite field is missing', () => {
+      const result = JunoDevConfigSchema.safeParse({});
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects extra fields inside nested satellite object', () => {
+      const result = JunoDevConfigSchema.safeParse({
+        satellite: {
+          collections: {
+            datastore: [
+              {
+                collection: 'demo',
+                read: 'public',
+                write: 'private',
+                memory: 'stable',
+                mutablePermissions: true
+              }
+            ]
+          },
+          unknown: 'nope'
+        }
       });
       expect(result.success).toBe(false);
     });

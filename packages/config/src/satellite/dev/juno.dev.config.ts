@@ -1,4 +1,15 @@
-import type {Rule} from '../types/rules';
+import * as z from 'zod/v4';
+import {type Rule, RuleSchema} from '../types/rules';
+
+/**
+ * @see SatelliteDevDataStoreCollection
+ */
+export const SatelliteDevDataStoreCollectionSchema = RuleSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  maxSize: true,
+  version: true
+});
 
 /**
  * Represents a database collection configuration for a satellite in a development environment.
@@ -10,13 +21,14 @@ export type SatelliteDevDataStoreCollection = Omit<
 >;
 
 /**
- * This type is an alias for SatelliteDevDataStoreCollection and is now deprecated.
- *
- * @see SatelliteDevDataStoreCollection
- * @deprecated Use {@link SatelliteDevDataStoreCollection} instead.
- * @typedef {SatelliteDevDataStoreCollection} SatelliteDevDbCollection
+ * @see SatelliteDevStorageCollection
  */
-export type SatelliteDevDbCollection = SatelliteDevDataStoreCollection;
+export const SatelliteDevStorageCollectionSchema = RuleSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  maxCapacity: true,
+  version: true
+});
 
 /**
  * Represents a Storage collection configuration for a satellite in a development environment.
@@ -26,6 +38,14 @@ export type SatelliteDevStorageCollection = Omit<
   Rule,
   'createdAt' | 'updatedAt' | 'maxCapacity' | 'version'
 >;
+
+/**
+ * @see SatelliteDevCollections
+ */
+export const SatelliteDevCollectionsSchema = z.strictObject({
+  datastore: z.array(SatelliteDevDataStoreCollectionSchema).optional(),
+  storage: z.array(SatelliteDevStorageCollectionSchema).optional()
+});
 
 /**
  * Represents the collections configuration for a satellite in a development environment.
@@ -40,21 +60,20 @@ export interface SatelliteDevCollections {
   datastore?: SatelliteDevDataStoreCollection[];
 
   /**
-   * The Datastore collections configuration.
-   * This property is deprecated. Use {@link datastore} instead.
-   *
-   * @deprecated
-   * @type {SatelliteDevDbCollection[]}
-   */
-  db?: SatelliteDevDbCollection[];
-
-  /**
    * The Storage collections configuration.
    * @type {SatelliteDevStorageCollection[]}
    * @optional
    */
   storage?: SatelliteDevStorageCollection[];
 }
+
+/**
+ * @see SatelliteDevController
+ */
+export const SatelliteDevControllerSchema = z.strictObject({
+  id: z.string(),
+  scope: z.enum(['write', 'admin', 'submit'])
+});
 
 /**
  * Represents a controller configuration for a satellite in a development environment.
@@ -71,8 +90,16 @@ export interface SatelliteDevController {
    * The scope of the controller's permissions.
    * @type {'write' | 'admin'}
    */
-  scope: 'write' | 'admin';
+  scope: 'write' | 'admin' | 'submit';
 }
+
+/**
+ * @see SatelliteDevConfig
+ */
+export const SatelliteDevConfigSchema = z.strictObject({
+  collections: SatelliteDevCollectionsSchema,
+  controllers: z.array(SatelliteDevControllerSchema).optional()
+});
 
 /**
  * Represents the development configuration for a satellite.
@@ -92,6 +119,13 @@ export interface SatelliteDevConfig {
    */
   controllers?: SatelliteDevController[];
 }
+
+/**
+ * @see JunoDevConfig
+ */
+export const JunoDevConfigSchema = z.strictObject({
+  satellite: SatelliteDevConfigSchema
+});
 
 /**
  * Represents the development configuration for Juno.

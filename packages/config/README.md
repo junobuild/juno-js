@@ -267,7 +267,7 @@ see EncodingType
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `JunoConfigSchema` | `ZodObject<{ satellite: ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; },...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/juno.config.ts#L8)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/juno.config.ts#L9)
 
 #### :gear: SatelliteDevDataStoreCollectionSchema
 
@@ -275,7 +275,7 @@ see EncodingType
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `SatelliteDevDataStoreCollectionSchema` | `ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; write: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 4 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L8)
 
 #### :gear: SatelliteDevStorageCollectionSchema
 
@@ -283,7 +283,7 @@ see EncodingType
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `SatelliteDevStorageCollectionSchema` | `ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; write: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 4 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L26)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L27)
 
 #### :gear: SatelliteDevCollectionsSchema
 
@@ -291,7 +291,7 @@ see EncodingType
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SatelliteDevCollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; write: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 4 more ...; maxTokens...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L45)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L46)
 
 #### :gear: SatelliteDevControllerSchema
 
@@ -299,7 +299,7 @@ see EncodingType
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
 | `SatelliteDevControllerSchema` | `ZodObject<{ id: ZodString; scope: ZodEnum<{ write: "write"; admin: "admin"; submit: "submit"; }>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L73)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L74)
 
 #### :gear: SatelliteDevConfigSchema
 
@@ -307,7 +307,7 @@ see EncodingType
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SatelliteDevConfigSchema` | `ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<...>; }, $strict>; control...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L99)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L100)
 
 #### :gear: JunoDevConfigSchema
 
@@ -315,7 +315,7 @@ see EncodingType
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `JunoDevConfigSchema` | `ZodObject<{ satellite: ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<......` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L126)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L127)
 
 ### :tropical_drink: Interfaces
 
@@ -516,10 +516,11 @@ changes, typically through CLI commands (e.g., `juno config`).
 
 Represents the overall configuration for Juno.
 
-| Property    | Type                         | Description                                                               |
-| ----------- | ---------------------------- | ------------------------------------------------------------------------- |
-| `satellite` | `SatelliteConfig`            | The configuration for the satellite. type: {SatelliteConfig}              |
-| `orbiter`   | `OrbiterConfig or undefined` | The optional configuration for the orbiter. type: {OrbiterConfig}optional |
+| Property    | Type                          | Description                                                               |
+| ----------- | ----------------------------- | ------------------------------------------------------------------------- |
+| `satellite` | `SatelliteConfig`             | The configuration for the satellite. type: {SatelliteConfig}              |
+| `orbiter`   | `OrbiterConfig or undefined`  | The optional configuration for the orbiter. type: {OrbiterConfig}optional |
+| `emulator`  | `EmulatorConfig or undefined` | Your options for the emulator.                                            |
 
 #### :gear: SatelliteDevCollections
 
@@ -623,7 +624,7 @@ Represents the development configuration for Juno.
 | --------------------------------- | -------------------------------------------------------------------- |
 | `SatelliteDevDataStoreCollection` | `Omit< Rule, 'createdAt' or 'updatedAt' or 'maxSize' or 'version' >` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L18)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L19)
 
 #### :gear: SatelliteDevStorageCollection
 
@@ -631,7 +632,7 @@ Represents the development configuration for Juno.
 | ------------------------------- | ------------------------------------------------------------------------ |
 | `SatelliteDevStorageCollection` | `Omit< Rule, 'createdAt' or 'updatedAt' or 'maxCapacity' or 'version' >` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L37)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L38)
 
 #### :gear: JunoDevConfigFn
 

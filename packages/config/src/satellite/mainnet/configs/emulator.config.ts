@@ -103,7 +103,8 @@ const EmulatorRunnerSchema = z.strictObject({
   image: z.string().optional(),
   name: z.string().optional(),
   volume: z.string().optional(),
-  target: z.string().optional()
+  target: z.string().optional(),
+  platform: z.enum(['linux/amd64', 'linux/arm64']).optional()
 });
 
 /**
@@ -137,6 +138,11 @@ export interface EmulatorRunner {
    * Shared folder for deploying and hot-reloading serverless functions.
    */
   target?: string;
+
+  /**
+   * The platform to use when running the emulator container.
+   */
+  platform?: 'linux/amd64' | 'linux/arm64';
 }
 
 /**

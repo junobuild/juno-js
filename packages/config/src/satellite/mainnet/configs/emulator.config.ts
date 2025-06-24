@@ -137,23 +137,30 @@ export interface EmulatorSatellite {
 }
 
 /**
- * @see EmulatorBaseConfig
+ * @see EmulatorRunner
  */
-const EmulatorBaseConfigSchema = z.strictObject({
-  runner: z.enum(['docker']),
+const EmulatorRunnerSchema = z.strictObject({
+  type: z.enum(['docker']),
+  image: z.string().optional(),
   name: z.string().optional(),
   volume: z.string().optional(),
   target: z.string().optional()
 });
 
 /**
- * Shared options for all emulator variants.
+ * Shared options for all runner variants.
  */
-export interface EmulatorBaseConfig {
+export interface EmulatorRunner {
   /**
    * The containerization tool to run the emulator.
    */
-  runner: 'docker';
+  type: 'docker';
+
+  /**
+   * Image reference.
+   * @default depends on emulator type, e.g. "junobuild/skylab:latest"
+   */
+  image?: string;
 
   /**
    * Optional container name to use for the emulator.
@@ -177,15 +184,24 @@ export interface EmulatorBaseConfig {
  * @see EmulatorConfig
  */
 export const EmulatorConfigSchema = z.union([
-  EmulatorBaseConfigSchema.extend({skylab: EmulatorSkylabSchema}).strict(),
-  EmulatorBaseConfigSchema.extend({console: EmulatorConsoleSchema}).strict(),
-  EmulatorBaseConfigSchema.extend({satellite: EmulatorSatelliteSchema}).strict()
+  z.strictObject({
+    runner: EmulatorRunnerSchema,
+    skylab: EmulatorSkylabSchema
+  }),
+  z.strictObject({
+    runner: EmulatorRunnerSchema,
+    console: EmulatorConsoleSchema
+  }),
+  z.strictObject({
+    runner: EmulatorRunnerSchema,
+    satellite: EmulatorSatelliteSchema
+  })
 ]);
 
 /**
  * The configuration for running the Juno emulator.
  */
 export type EmulatorConfig =
-  | (EmulatorBaseConfig & {skylab: EmulatorSkylab})
-  | (EmulatorBaseConfig & {console: EmulatorConsole})
-  | (EmulatorBaseConfig & {satellite: EmulatorSatellite});
+  | {runner: EmulatorRunner; skylab: EmulatorSkylab}
+  | {runner: EmulatorRunner; console: EmulatorConsole}
+  | {runner: EmulatorRunner; satellite: EmulatorSatellite};

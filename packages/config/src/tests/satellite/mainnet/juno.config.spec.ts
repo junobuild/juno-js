@@ -64,9 +64,11 @@ describe('juno.config', () => {
       const result = JunoConfigSchema.safeParse({
         satellite: {id: mockModuleIdText},
         emulator: {
-          runner: 'docker',
-          volume: 'my-volume',
-          target: './functions',
+          runner: {
+            type: 'docker',
+            volume: 'my-volume',
+            target: './functions'
+          },
           skylab: {
             config: 'config.ts',
             ports: {
@@ -84,7 +86,9 @@ describe('juno.config', () => {
       const result = JunoConfigSchema.safeParse({
         satellite: {id: mockModuleIdText},
         emulator: {
-          runner: 'docker',
+          runner: {
+            type: 'docker'
+          },
           console: {
             ports: {
               server: 1234,
@@ -100,7 +104,9 @@ describe('juno.config', () => {
       const result = JunoConfigSchema.safeParse({
         satellite: {id: mockModuleIdText},
         emulator: {
-          runner: 'docker',
+          runner: {
+            type: 'docker'
+          },
           satellite: {
             config: 'dev.config.json',
             ports: {
@@ -116,7 +122,9 @@ describe('juno.config', () => {
       const result = JunoConfigSchema.safeParse({
         satellite: {id: mockModuleIdText},
         emulator: {
-          runner: 'docker',
+          runner: {
+            type: 'docker'
+          },
           skylab: {config: 'config.ts', ports: {console: 5866}},
           console: {}
         }
@@ -131,7 +139,9 @@ describe('juno.config', () => {
       const result = JunoConfigSchema.safeParse({
         satellite: {id: mockModuleIdText},
         emulator: {
-          runner: 'podman',
+          runner: {
+            type: 'podman'
+          },
           console: {}
         }
       });
@@ -143,7 +153,9 @@ describe('juno.config', () => {
       const result = JunoConfigSchema.safeParse({
         satellite: {id: mockModuleIdText},
         emulator: {
-          runner: 'docker',
+          runner: {
+            type: 'docker'
+          },
           skylab: {
             config: 'config.txt',
             ports: {console: 5866}

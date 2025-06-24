@@ -3,9 +3,12 @@ import {EmulatorConfigSchema} from '../../../../satellite/mainnet/configs/emulat
 describe('emulator.config', () => {
   describe('EmulatorConfigSchema', () => {
     const validBase = {
-      runner: 'docker' as const,
-      volume: 'juno',
-      target: '/app/functions'
+      runner: {
+        type: 'docker',
+        name: 'my-container',
+        volume: 'juno',
+        target: '/app/functions'
+      }
     };
 
     it('accepts a valid Skylab config', () => {
@@ -79,7 +82,7 @@ describe('emulator.config', () => {
 
     it('accepts minimal valid Skylab config', () => {
       const result = EmulatorConfigSchema.safeParse({
-        runner: 'docker',
+        runner: {type: 'docker'},
         skylab: {
           config: 'conf.json'
         }
@@ -102,7 +105,7 @@ describe('emulator.config', () => {
 
     it('accepts Satellite config with only required fields', () => {
       const result = EmulatorConfigSchema.safeParse({
-        runner: 'docker',
+        runner: {type: 'docker'},
         satellite: {
           config: 'satellite.json'
         }
@@ -124,10 +127,21 @@ describe('emulator.config', () => {
 
     it('accepts minimal Console config (no ports)', () => {
       const result = EmulatorConfigSchema.safeParse({
-        runner: 'docker',
+        runner: {type: 'docker'},
         console: {}
       });
       expect(result.success).toBe(true);
+    });
+
+    it('rejects extra field in base config', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        skylab: {
+          config: 'config.mjs'
+        },
+        extra: false
+      });
+      expect(result.success).toBe(false);
     });
   });
 });

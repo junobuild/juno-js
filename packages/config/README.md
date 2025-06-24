@@ -86,11 +86,11 @@ Configuration options for [Juno] CLI.
 
 #### :gear: EmulatorConfigSchema
 
-| Constant               | Type                                                                                                                                                                                                           |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodEnum<{ docker: "docker"; }>; volume: ZodOptional<ZodString>; target: ZodOptional<ZodString>; skylab: ZodObject<...>; }, $strict>, ZodObject<...>, ZodObject<...>]>` |
+| Constant               | Type                                                                                                                                                                                                                                                                                           |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodObject<{ type: ZodEnum<{ docker: "docker"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; }, $strict>; skylab: ZodObject<...>; }, $strict>, ZodObject<...>, ZodObject<...>]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L172)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L186)
 
 #### :gear: JunoConfigModeSchema
 
@@ -332,7 +332,7 @@ see EncodingType
 - [EmulatorSkylab](#gear-emulatorskylab)
 - [EmulatorConsole](#gear-emulatorconsole)
 - [EmulatorSatellite](#gear-emulatorsatellite)
-- [EmulatorBaseConfig](#gear-emulatorbaseconfig)
+- [EmulatorRunner](#gear-emulatorrunner)
 - [JunoConfigEnv](#gear-junoconfigenv)
 - [OrbiterId](#gear-orbiterid)
 - [OrbiterIds](#gear-orbiterids)
@@ -391,15 +391,17 @@ Configuration for the Satellite emulator.
 | `ports`  | `EmulatorPorts or undefined` | Ports exposed by the Satellite container.                    |
 | `config` | `string`                     | Path to the dev config file to customize Satellite behavior. |
 
-#### :gear: EmulatorBaseConfig
+#### :gear: EmulatorRunner
 
-Shared options for all emulator variants.
+Shared options for all runner variants.
 
-| Property | Type                  | Description                                                         |
-| -------- | --------------------- | ------------------------------------------------------------------- |
-| `runner` | `"docker"`            | The containerization tool to run the emulator.                      |
-| `volume` | `string or undefined` | Persistent volume to store internal state. default: "juno"          |
-| `target` | `string or undefined` | Shared folder for deploying and hot-reloading serverless functions. |
+| Property | Type                  | Description                                                                                           |
+| -------- | --------------------- | ----------------------------------------------------------------------------------------------------- |
+| `type`   | `"docker"`            | The containerization tool to run the emulator.                                                        |
+| `image`  | `string or undefined` | Image reference. default: depends on emulator type, e.g. "junobuild/skylab:latest"                    |
+| `name`   | `string or undefined` | Optional container name to use for the emulator. Useful for reusing or managing a specific container. |
+| `volume` | `string or undefined` | Persistent volume to store internal state. default: "juno"                                            |
+| `target` | `string or undefined` | Shared folder for deploying and hot-reloading serverless functions.                                   |
 
 #### :gear: JunoConfigEnv
 
@@ -659,10 +661,10 @@ Must end in `.mjs`, `.ts`, `.js`, or `.json`.
 The configuration for running the Juno emulator.
 
 | Type             | Type |
-| ---------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfig` | `    | (EmulatorBaseConfig and {skylab: EmulatorSkylab}) or (EmulatorBaseConfig and {console: EmulatorConsole}) or (EmulatorBaseConfig and {satellite: EmulatorSatellite})` |
+| ---------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EmulatorConfig` | `    | {runner: EmulatorRunner; skylab: EmulatorSkylab} or {runner: EmulatorRunner; console: EmulatorConsole} or {runner: EmulatorRunner; satellite: EmulatorSatellite}` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L181)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L204)
 
 #### :gear: JunoConfigMode
 

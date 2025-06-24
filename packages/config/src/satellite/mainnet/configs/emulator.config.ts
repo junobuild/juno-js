@@ -39,40 +39,10 @@ export interface EmulatorPorts {
 }
 
 /**
- * Accepts .mjs, .ts, .js, or .json
- */
-const ConfigFileSchema = z.string().regex(/\.(mjs|ts|js|json)$/i, {
-  message: 'Must be a .mjs, .ts, .js, or .json file'
-});
-
-/**
- * @see JunoConfigFile
- */
-const JunoConfigFileSchema = ConfigFileSchema;
-
-/**
- * Represents a Juno configuration file path.
- * Must end in `.mjs`, `.ts`, `.js`, or `.json`.
- */
-export type JunoConfigFile = string;
-
-/**
- * @see JunoDevConfigFile
- */
-const JunoDevConfigFileSchema = ConfigFileSchema;
-
-/**
- * Represents a Juno development config file path.
- * Must end in `.mjs`, `.ts`, `.js`, or `.json`.
- */
-export type JunoDevConfigFile = string;
-
-/**
  * @see EmulatorSkylab
  */
 const EmulatorSkylabSchema = z.strictObject({
-  ports: EmulatorPortsSchema.extend(ConsolePortSchema.shape).optional(),
-  config: JunoConfigFileSchema
+  ports: EmulatorPortsSchema.extend(ConsolePortSchema.shape).optional()
 });
 
 /**
@@ -89,11 +59,6 @@ export interface EmulatorSkylab {
      */
     console: number;
   };
-
-  /**
-   * Path to the Juno config file.
-   */
-  config: JunoConfigFile;
 }
 
 /**
@@ -117,8 +82,7 @@ export interface EmulatorConsole {
  * @see EmulatorSatellite
  */
 const EmulatorSatelliteSchema = z.strictObject({
-  ports: EmulatorPortsSchema.optional(),
-  config: JunoDevConfigFileSchema
+  ports: EmulatorPortsSchema.optional()
 });
 
 /**
@@ -129,11 +93,6 @@ export interface EmulatorSatellite {
    * Ports exposed by the Satellite container.
    */
   ports?: EmulatorPorts;
-
-  /**
-   * Path to the dev config file to customize Satellite behavior.
-   */
-  config: JunoDevConfigFile;
 }
 
 /**

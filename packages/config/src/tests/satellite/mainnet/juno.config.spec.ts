@@ -70,7 +70,6 @@ describe('juno.config', () => {
             target: './functions'
           },
           skylab: {
-            config: 'config.ts',
             ports: {
               server: 1111,
               admin: 2222,
@@ -108,7 +107,6 @@ describe('juno.config', () => {
             type: 'docker'
           },
           satellite: {
-            config: 'dev.config.json',
             ports: {
               server: 1000
             }
@@ -125,7 +123,7 @@ describe('juno.config', () => {
           runner: {
             type: 'docker'
           },
-          skylab: {config: 'config.ts', ports: {console: 5866}},
+          skylab: {ports: {console: 5866}},
           console: {}
         }
       });
@@ -143,23 +141,6 @@ describe('juno.config', () => {
             type: 'podman'
           },
           console: {}
-        }
-      });
-
-      expect(result.success).toBe(false);
-    });
-
-    it('rejects emulator skylab config with wrong file extension', () => {
-      const result = JunoConfigSchema.safeParse({
-        satellite: {id: mockModuleIdText},
-        emulator: {
-          runner: {
-            type: 'docker'
-          },
-          skylab: {
-            config: 'config.txt',
-            ports: {console: 5866}
-          }
         }
       });
 

@@ -86,11 +86,11 @@ Configuration options for [Juno] CLI.
 
 #### :gear: EmulatorConfigSchema
 
-| Constant               | Type                                                                                                                                                                                                           |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodEnum<{ docker: "docker"; }>; volume: ZodOptional<ZodString>; target: ZodOptional<ZodString>; skylab: ZodObject<...>; }, $strict>, ZodObject<...>, ZodObject<...>]>` |
+| Constant               | Type                                                                                                                                                                                                                                         |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodEnum<{ docker: "docker"; }>; name: ZodOptional<ZodString>; volume: ZodOptional<ZodString>; target: ZodOptional<ZodString>; skylab: ZodObject<...>; }, $strict>, ZodObject<...>, ZodObject<...>]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L172)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L179)
 
 #### :gear: JunoConfigModeSchema
 
@@ -395,11 +395,12 @@ Configuration for the Satellite emulator.
 
 Shared options for all emulator variants.
 
-| Property | Type                  | Description                                                         |
-| -------- | --------------------- | ------------------------------------------------------------------- |
-| `runner` | `"docker"`            | The containerization tool to run the emulator.                      |
-| `volume` | `string or undefined` | Persistent volume to store internal state. default: "juno"          |
-| `target` | `string or undefined` | Shared folder for deploying and hot-reloading serverless functions. |
+| Property | Type                  | Description                                                                                           |
+| -------- | --------------------- | ----------------------------------------------------------------------------------------------------- |
+| `runner` | `"docker"`            | The containerization tool to run the emulator.                                                        |
+| `name`   | `string or undefined` | Optional container name to use for the emulator. Useful for reusing or managing a specific container. |
+| `volume` | `string or undefined` | Persistent volume to store internal state. default: "juno"                                            |
+| `target` | `string or undefined` | Shared folder for deploying and hot-reloading serverless functions.                                   |
 
 #### :gear: JunoConfigEnv
 
@@ -662,7 +663,7 @@ The configuration for running the Juno emulator.
 | ---------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `EmulatorConfig` | `    | (EmulatorBaseConfig and {skylab: EmulatorSkylab}) or (EmulatorBaseConfig and {console: EmulatorConsole}) or (EmulatorBaseConfig and {satellite: EmulatorSatellite})` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L181)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L188)
 
 #### :gear: JunoConfigMode
 

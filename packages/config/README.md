@@ -86,9 +86,9 @@ Configuration options for [Juno] CLI.
 
 #### :gear: EmulatorConfigSchema
 
-| Constant               | Type                                                                                                                                                                                                                                                                                           |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodObject<{ type: ZodEnum<{ docker: "docker"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; }, $strict>; skylab: ZodObject<...>; }, $strict>, ZodObject<...>, ZodObject<...>]>` |
+| Constant               | Type                                                                                                                                                                                                                                                                                                        |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; }, $strict>>; skylab: ZodObject<...>; }, $strict>, ZodObject<...>, ZodObject<...>]>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L145)
 
@@ -635,8 +635,8 @@ Represents the development configuration for Juno.
 The configuration for running the Juno emulator.
 
 | Type             | Type |
-| ---------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfig` | `    | {runner: EmulatorRunner; skylab: EmulatorSkylab} or {runner: EmulatorRunner; console: EmulatorConsole} or {runner: EmulatorRunner; satellite: EmulatorSatellite}` |
+| ---------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EmulatorConfig` | `    | {runner?: EmulatorRunner; skylab: EmulatorSkylab} or {runner?: EmulatorRunner; console: EmulatorConsole} or {runner?: EmulatorRunner; satellite: EmulatorSatellite}` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L163)
 

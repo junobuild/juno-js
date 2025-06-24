@@ -25,14 +25,31 @@ describe('emulator.config', () => {
       expect(result.success).toBe(true);
     });
 
+    it('accepts a minimal Skylab config', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        runner: {type: 'docker'},
+        skylab: {}
+      });
+      expect(result.success).toBe(true);
+    });
+
     it('accepts a valid Console config', () => {
       const result = EmulatorConfigSchema.safeParse({
         ...validBase,
         console: {
           ports: {
-            server: 1234
+            server: 1111,
+            admin: 2222
           }
         }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts a minimal Console config (no ports)', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        runner: {type: 'docker'},
+        console: {}
       });
       expect(result.success).toBe(true);
     });
@@ -42,84 +59,99 @@ describe('emulator.config', () => {
         ...validBase,
         satellite: {
           ports: {
-            admin: 4567
+            server: 7777
           }
         }
       });
       expect(result.success).toBe(true);
     });
 
-    it('rejects missing emulator variant', () => {
+    it('accepts a minimal Satellite config', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        runner: {type: 'docker'},
+        satellite: {}
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('rejects config with no emulator variant', () => {
       const result = EmulatorConfigSchema.safeParse(validBase);
       expect(result.success).toBe(false);
     });
 
-    it('rejects multiple emulator variants', () => {
-      const result = EmulatorConfigSchema.safeParse({
-        ...validBase,
-        skylab: {
-          ports: {console: 3000}
-        },
-        satellite: {}
-      });
-      expect(result.success).toBe(false);
-    });
-
-    it('accepts minimal valid Skylab config', () => {
-      const result = EmulatorConfigSchema.safeParse({
-        runner: {type: 'docker'},
-        skylab: {}
-      });
-      expect(result.success).toBe(true);
-    });
-
-    it('rejects invalid port type in Skylab', () => {
-      const result = EmulatorConfigSchema.safeParse({
-        ...validBase,
-        skylab: {
-          ports: {
-            console: 'not-a-number'
-          }
-        }
-      });
-      expect(result.success).toBe(false);
-    });
-
-    it('accepts Satellite config with minimal fields', () => {
-      const result = EmulatorConfigSchema.safeParse({
-        runner: {type: 'docker'},
-        satellite: {}
-      });
-      expect(result.success).toBe(true);
-    });
-
-    it('accepts Console config without console port', () => {
-      const result = EmulatorConfigSchema.safeParse({
-        ...validBase,
-        console: {
-          ports: {
-            server: 1234
-          }
-        }
-      });
-      expect(result.success).toBe(true);
-    });
-
-    it('accepts minimal Console config (no ports)', () => {
-      const result = EmulatorConfigSchema.safeParse({
-        runner: {type: 'docker'},
-        console: {}
-      });
-      expect(result.success).toBe(true);
-    });
-
-    it('rejects extra field in base config', () => {
+    it('rejects config with multiple emulator variants', () => {
       const result = EmulatorConfigSchema.safeParse({
         ...validBase,
         skylab: {},
-        extra: false
+        console: {}
       });
       expect(result.success).toBe(false);
+    });
+
+    it('rejects invalid port type', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        skylab: {
+          ports: {
+            server: 'abc' // invalid type
+          }
+        }
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects unknown field at top level', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        skylab: {},
+        unknownField: true
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects unknown field in emulator block', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        runner: {type: 'docker'},
+        console: {
+          ports: {},
+          extra: 'nope'
+        }
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('accepts valid Skylab config without runner', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        skylab: {
+          ports: {
+            server: 1234,
+            console: 5866
+          }
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts valid Satellite config without runner', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        satellite: {
+          ports: {
+            admin: 5999
+          }
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts valid Console config without runner', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        console: {
+          ports: {
+            server: 1111
+          }
+        }
+      });
+      expect(result.success).toBe(true);
     });
   });
 });

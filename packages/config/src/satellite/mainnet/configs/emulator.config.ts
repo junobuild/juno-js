@@ -144,15 +144,15 @@ export interface EmulatorRunner {
  */
 export const EmulatorConfigSchema = z.union([
   z.strictObject({
-    runner: EmulatorRunnerSchema,
+    runner: EmulatorRunnerSchema.optional(),
     skylab: EmulatorSkylabSchema
   }),
   z.strictObject({
-    runner: EmulatorRunnerSchema,
+    runner: EmulatorRunnerSchema.optional(),
     console: EmulatorConsoleSchema
   }),
   z.strictObject({
-    runner: EmulatorRunnerSchema,
+    runner: EmulatorRunnerSchema.optional(),
     satellite: EmulatorSatelliteSchema
   })
 ]);
@@ -161,6 +161,6 @@ export const EmulatorConfigSchema = z.union([
  * The configuration for running the Juno emulator.
  */
 export type EmulatorConfig =
-  | {runner: EmulatorRunner; skylab: EmulatorSkylab}
-  | {runner: EmulatorRunner; console: EmulatorConsole}
-  | {runner: EmulatorRunner; satellite: EmulatorSatellite};
+  | {runner?: EmulatorRunner; skylab: EmulatorSkylab}
+  | {runner?: EmulatorRunner; console: EmulatorConsole}
+  | {runner?: EmulatorRunner; satellite: EmulatorSatellite};

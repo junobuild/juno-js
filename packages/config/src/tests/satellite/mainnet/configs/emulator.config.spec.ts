@@ -15,7 +15,6 @@ describe('emulator.config', () => {
       const result = EmulatorConfigSchema.safeParse({
         ...validBase,
         skylab: {
-          config: 'config.mjs',
           ports: {
             server: 1234,
             admin: 5678,
@@ -42,7 +41,6 @@ describe('emulator.config', () => {
       const result = EmulatorConfigSchema.safeParse({
         ...validBase,
         satellite: {
-          config: 'dev.ts',
           ports: {
             admin: 4567
           }
@@ -60,22 +58,9 @@ describe('emulator.config', () => {
       const result = EmulatorConfigSchema.safeParse({
         ...validBase,
         skylab: {
-          config: 'config.ts',
           ports: {console: 3000}
         },
-        satellite: {
-          config: 'dev.ts'
-        }
-      });
-      expect(result.success).toBe(false);
-    });
-
-    it('rejects config with invalid file extension', () => {
-      const result = EmulatorConfigSchema.safeParse({
-        ...validBase,
-        satellite: {
-          config: 'not-a-config.txt'
-        }
+        satellite: {}
       });
       expect(result.success).toBe(false);
     });
@@ -83,9 +68,7 @@ describe('emulator.config', () => {
     it('accepts minimal valid Skylab config', () => {
       const result = EmulatorConfigSchema.safeParse({
         runner: {type: 'docker'},
-        skylab: {
-          config: 'conf.json'
-        }
+        skylab: {}
       });
       expect(result.success).toBe(true);
     });
@@ -94,7 +77,6 @@ describe('emulator.config', () => {
       const result = EmulatorConfigSchema.safeParse({
         ...validBase,
         skylab: {
-          config: 'conf.js',
           ports: {
             console: 'not-a-number'
           }
@@ -103,12 +85,10 @@ describe('emulator.config', () => {
       expect(result.success).toBe(false);
     });
 
-    it('accepts Satellite config with only required fields', () => {
+    it('accepts Satellite config with minimal fields', () => {
       const result = EmulatorConfigSchema.safeParse({
         runner: {type: 'docker'},
-        satellite: {
-          config: 'satellite.json'
-        }
+        satellite: {}
       });
       expect(result.success).toBe(true);
     });
@@ -136,9 +116,7 @@ describe('emulator.config', () => {
     it('rejects extra field in base config', () => {
       const result = EmulatorConfigSchema.safeParse({
         ...validBase,
-        skylab: {
-          config: 'config.mjs'
-        },
+        skylab: {},
         extra: false
       });
       expect(result.success).toBe(false);

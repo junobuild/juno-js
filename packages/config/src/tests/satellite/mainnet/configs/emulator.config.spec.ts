@@ -153,5 +153,49 @@ describe('emulator.config', () => {
       });
       expect(result.success).toBe(true);
     });
+
+    it('accepts runner with platform "linux/amd64"', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        runner: {
+          type: 'docker',
+          platform: 'linux/amd64'
+        },
+        skylab: {}
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts runner with platform "linux/arm64"', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        runner: {
+          type: 'docker',
+          platform: 'linux/arm64'
+        },
+        console: {}
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('rejects runner with invalid platform value', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        runner: {
+          type: 'docker',
+          platform: 'windows/amd64'
+        },
+        satellite: {}
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects runner with non-string platform value', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        runner: {
+          type: 'docker',
+          platform: 123
+        },
+        skylab: {}
+      });
+      expect(result.success).toBe(false);
+    });
   });
 });

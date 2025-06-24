@@ -141,6 +141,7 @@ export interface EmulatorSatellite {
  */
 const EmulatorBaseConfigSchema = z.strictObject({
   runner: z.enum(['docker']),
+  name: z.string().optional(),
   volume: z.string().optional(),
   target: z.string().optional()
 });
@@ -153,6 +154,12 @@ export interface EmulatorBaseConfig {
    * The containerization tool to run the emulator.
    */
   runner: 'docker';
+
+  /**
+   * Optional container name to use for the emulator.
+   * Useful for reusing or managing a specific container.
+   */
+  name?: string;
 
   /**
    * Persistent volume to store internal state.

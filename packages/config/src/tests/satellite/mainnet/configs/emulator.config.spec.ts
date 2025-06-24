@@ -4,6 +4,7 @@ describe('emulator.config', () => {
   describe('EmulatorConfigSchema', () => {
     const validBase = {
       runner: 'docker' as const,
+      name: 'my-container',
       volume: 'juno',
       target: '/app/functions'
     };
@@ -128,6 +129,17 @@ describe('emulator.config', () => {
         console: {}
       });
       expect(result.success).toBe(true);
+    });
+
+    it('reject extract field in base config', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        skylab: {
+          config: 'config.mjs'
+        },
+        extra: false
+      });
+      expect(result.success).toBe(false);
     });
   });
 });

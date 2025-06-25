@@ -1,9 +1,9 @@
-import * as z from 'zod/v4';
+import * as z from 'zod';
 
 /**
  * @see SatelliteEnv
  */
-export const SatelliteEnvSchema = z.record(z.string(), z.string());
+export const SatelliteEnvSchema = z.record(z.unknown());
 
 /**
  * Placeholder for future environment-specific configurations.

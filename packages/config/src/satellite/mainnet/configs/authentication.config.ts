@@ -1,11 +1,11 @@
-import * as z from 'zod/v4';
+import * as z from 'zod';
 
 /**
  * @see AuthenticationConfigInternetIdentity
  */
 export const AuthenticationConfigInternetIdentitySchema = z.strictObject({
-  derivationOrigin: z.url().optional(),
-  externalAlternativeOrigins: z.array(z.url()).optional()
+  derivationOrigin: z.string().url().optional(),
+  externalAlternativeOrigins: z.array(z.string().url()).optional()
 });
 
 /**

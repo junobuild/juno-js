@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import {z} from 'zod/v4';
 import {type ListParams, ListParamsSchema} from '../../schemas/list';
 import {
   type Collection,

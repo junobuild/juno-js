@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import {z} from 'zod/v4';
 import {AssetSchema, type Asset} from '../../../schemas/storage';
 import {HookContextSchema, type HookContext} from '../context';
 import {AssetAssertUploadSchema, type AssetAssertUpload} from './payload';

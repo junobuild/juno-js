@@ -1,4 +1,4 @@
-import * as z from 'zod/v4';
+import * as z from 'zod';
 import {type EmulatorConfig, EmulatorConfigSchema} from './configs/emulator.config';
 import {type OrbiterConfig, OrbiterConfigSchema} from './configs/orbiter.config';
 import {type SatelliteConfig, SatelliteConfigOptionsSchema} from './configs/satellite.config';

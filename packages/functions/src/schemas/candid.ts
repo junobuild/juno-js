@@ -1,5 +1,5 @@
 import {Principal as CandidPrincipal} from '@dfinity/principal';
-import * as z from 'zod/v4';
+import { z } from 'zod/v4';
 
 /**
  * A schema that validates a value is an Uint8Array.

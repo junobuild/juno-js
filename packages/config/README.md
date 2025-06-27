@@ -88,7 +88,7 @@ Configuration options for [Juno] CLI.
 
 | Constant               | Type                                                                                                                                                                                                                                                                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfigSchema` | `ZodUnion<[ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<["docker"]>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<ZodString>; target: ZodOptional<...>; platform: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; skylab: ZodObject<...>; }, "strict", ZodTy...` |
+| `EmulatorConfigSchema` | `ZodUnion<[ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<["docker", "podman"]>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; skylab: ZodObject<...>; }, "strict", Z...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L151)
 
@@ -395,7 +395,7 @@ Shared options for all runner variants.
 
 | Property   | Type                                          | Description                                                                                           |
 | ---------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `type`     | `"docker"`                                    | The containerization tool to run the emulator.                                                        |
+| `type`     | `"docker" or "podman"`                        | The containerization tool to run the emulator.                                                        |
 | `image`    | `string or undefined`                         | Image reference. default: depends on emulator type, e.g. "junobuild/skylab:latest"                    |
 | `name`     | `string or undefined`                         | Optional container name to use for the emulator. Useful for reusing or managing a specific container. |
 | `volume`   | `string or undefined`                         | Persistent volume to store internal state. default: "juno"                                            |

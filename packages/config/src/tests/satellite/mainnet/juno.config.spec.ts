@@ -138,7 +138,7 @@ describe('juno.config', () => {
         satellite: {id: mockModuleIdText},
         emulator: {
           runner: {
-            type: 'podman'
+            type: 'something'
           },
           console: {}
         }

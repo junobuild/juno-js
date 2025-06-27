@@ -99,7 +99,7 @@ export interface EmulatorSatellite {
  * @see EmulatorRunner
  */
 const EmulatorRunnerSchema = z.strictObject({
-  type: z.enum(['docker']),
+  type: z.enum(['docker', 'podman']),
   image: z.string().optional(),
   name: z.string().optional(),
   volume: z.string().optional(),
@@ -114,7 +114,7 @@ export interface EmulatorRunner {
   /**
    * The containerization tool to run the emulator.
    */
-  type: 'docker';
+  type: 'docker' | 'podman';
 
   /**
    * Image reference.

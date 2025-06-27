@@ -4,6 +4,7 @@ import {type StorageConfig, StorageConfigSchema} from '../shared/storage.config'
 import {type CliConfig, CliConfigSchema} from '../types/cli.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../types/juno.env';
 import type {Either} from '../types/utility.types';
+import {StrictPrincipalTextSchema} from '../utils/principal.utils';
 
 /**
  * @see ConsoleId
@@ -28,7 +29,7 @@ export interface ConsoleId {
  * @see ConsoleIds
  */
 export const ConsoleIdsSchema = z.object({
-  ids: z.record(JunoConfigModeSchema, PrincipalTextSchema)
+  ids: z.record(JunoConfigModeSchema, StrictPrincipalTextSchema)
 });
 
 /**

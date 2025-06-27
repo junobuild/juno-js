@@ -114,7 +114,7 @@ Configuration options for [Juno] CLI.
 | ----------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `OrbiterIdSchema` | `ZodObject<{ id: ZodEffects<ZodString, string, string>; }, "strip", ZodTypeAny, { id: string; }, { id: string; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L9)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L10)
 
 #### :gear: OrbiterIdsSchema
 
@@ -122,7 +122,7 @@ Configuration options for [Juno] CLI.
 | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OrbiterIdsSchema` | `ZodObject<{ ids: ZodRecord<ZodUnion<[ZodLiteral<"production">, ZodString]>, ZodEffects<ZodString, string, string>>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L28)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L29)
 
 #### :gear: OrbiterConfigSchema
 
@@ -130,7 +130,7 @@ Configuration options for [Juno] CLI.
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OrbiterConfigSchema` | `ZodUnion<[ZodObject<{ id: ZodEffects<ZodString, string, string>; }, "strict", ZodTypeAny, { id: string; }, { id: string; }>, ZodObject<{ ids: ZodRecord<ZodUnion<...>, ZodEffects<...>>; }, "strict", ZodTypeAny, { ...; }, { ...; }>]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L55)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L56)
 
 #### :gear: ModuleLogVisibilitySchema
 
@@ -252,7 +252,7 @@ see EncodingType
 | ------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `SatelliteIdSchema` | `ZodObject<{ id: ZodEffects<ZodString, string, string>; }, "strip", ZodTypeAny, { id: string; }, { id: string; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L15)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L16)
 
 #### :gear: SatelliteIdsSchema
 
@@ -260,7 +260,7 @@ see EncodingType
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SatelliteIdsSchema` | `ZodObject<{ ids: ZodRecord<ZodUnion<[ZodLiteral<"production">, ZodString]>, ZodEffects<ZodString, string, string>>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L34)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L35)
 
 #### :gear: SatelliteConfigOptionsSchema
 
@@ -268,7 +268,7 @@ see EncodingType
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SatelliteConfigOptionsSchema` | `ZodUnion<[ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>, "many">; }, "strict", ZodTypeAny, { ...; }, { ...; }>, "many">>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, "strip", ZodTypeAny, { ......` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L69)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L70)
 
 #### :gear: JunoConfigSchema
 
@@ -655,7 +655,7 @@ The configuration for running the Juno emulator.
 | --------------- | ------------------------------- |
 | `OrbiterConfig` | `Either<OrbiterId, OrbiterIds>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L63)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L64)
 
 #### :gear: ModuleLogVisibility
 
@@ -687,7 +687,7 @@ The configuration for running the Juno emulator.
 | ----------------- | ---------------------------------------------------------------------------- |
 | `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> and CliConfig and SatelliteConfigOptions` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L149)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L150)
 
 #### :gear: SatelliteDevDataStoreCollection
 

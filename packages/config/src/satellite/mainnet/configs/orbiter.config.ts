@@ -2,6 +2,7 @@ import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../../../types/juno.env';
 import type {Either} from '../../../types/utility.types';
+import {StrictPrincipalTextSchema} from '../../../utils/principal.utils';
 
 /**
  * @see OrbiterId
@@ -26,7 +27,7 @@ export interface OrbiterId {
  * @see OrbiterIds
  */
 export const OrbiterIdsSchema = z.object({
-  ids: z.record(JunoConfigModeSchema, PrincipalTextSchema)
+  ids: z.record(JunoConfigModeSchema, StrictPrincipalTextSchema)
 });
 
 /**

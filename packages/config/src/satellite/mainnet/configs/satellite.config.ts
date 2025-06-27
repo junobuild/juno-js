@@ -5,6 +5,7 @@ import {type StorageConfig, StorageConfigSchema} from '../../../shared/storage.c
 import type {CliConfig} from '../../../types/cli.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../../../types/juno.env';
 import type {Either} from '../../../types/utility.types';
+import {StrictPrincipalTextSchema} from '../../../utils/principal.utils';
 import {type SatelliteAssertions, SatelliteAssertionsSchema} from './assertions.config';
 import {type AuthenticationConfig, AuthenticationConfigSchema} from './authentication.config';
 import {type DatastoreConfig, DatastoreConfigSchema} from './datastore.config';
@@ -32,7 +33,7 @@ export interface SatelliteId {
  * @see SatelliteIds
  */
 export const SatelliteIdsSchema = z.object({
-  ids: z.record(JunoConfigModeSchema, PrincipalTextSchema)
+  ids: z.record(JunoConfigModeSchema, StrictPrincipalTextSchema)
 });
 
 /**

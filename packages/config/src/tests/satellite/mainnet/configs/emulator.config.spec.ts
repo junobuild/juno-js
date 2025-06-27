@@ -197,5 +197,37 @@ describe('emulator.config', () => {
       });
       expect(result.success).toBe(false);
     });
+
+    describe('runner type', () => {
+      it('accepts runner with type docker', () => {
+        const result = EmulatorConfigSchema.safeParse({
+          runner: {
+            type: 'docker'
+          },
+          console: {}
+        });
+        expect(result.success).toBe(true);
+      });
+
+      it('accepts runner with type podman', () => {
+        const result = EmulatorConfigSchema.safeParse({
+          runner: {
+            type: 'podman'
+          },
+          console: {}
+        });
+        expect(result.success).toBe(true);
+      });
+
+      it('rejects runner with invalid type value', () => {
+        const result = EmulatorConfigSchema.safeParse({
+          runner: {
+            type: 'unknown'
+          },
+          satellite: {}
+        });
+        expect(result.success).toBe(false);
+      });
+    });
   });
 });

@@ -12,7 +12,6 @@ import type {
   ListRulesResults,
   MemorySize,
   Rule,
-  _SERVICE as SatelliteActor,
   SetControllersArgs,
   SetRule,
   StorageConfig
@@ -147,12 +146,14 @@ export const listDeprecatedNoScopeControllers = async ({
 };
 
 export const listControllers = async ({
-  satellite
+  satellite,
+  certified
 }: {
   satellite: SatelliteParameters;
+  certified?: boolean;
 }): Promise<[Principal, Controller][]> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
-  return actor.list_controllers();
+  const {list_controllers} = await getSatelliteActor({...satellite, certified});
+  return list_controllers();
 };
 
 export const listCustomDomains = async ({

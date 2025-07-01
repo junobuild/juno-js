@@ -10,7 +10,7 @@ import {INSTALL_MODE_RESET, INSTALL_MODE_UPGRADE} from '../constants/upgrade.con
 import {upgrade} from '../handlers/upgrade.handlers';
 import type {SatelliteParameters} from '../types/actor.types';
 import type {UpgradeCodeParams} from '../types/upgrade.types';
-import {encodeIDLControllers} from '../utils/idl.utils';
+import {encodeAdminAccessKeysToIDL} from '../utils/idl.utils';
 
 /**
  * Upgrades a satellite with the provided WASM module.
@@ -75,10 +75,11 @@ export const upgradeSatellite = async ({
 
   const list = deprecatedNoScope ? listDeprecatedNoScopeControllers : listControllers;
 
-  // We pass the controllers to the upgrade but, it's just for the state of the art because I don't want to call the install without passing args. The module's post_upgrade do not consider the init parameters.
-  const controllers = await list({satellite});
+  // We pass the controllers to the upgrade but, it's just for the state of the art when upgrading because I don't want to call the install without passing args. The module's post_upgrade do not consider the init parameters.
+  // On the contrary those are useful on --reset
+  const controllers = await list({satellite, certified: reset});
 
-  const arg = encodeIDLControllers(controllers);
+  const arg = encodeAdminAccessKeysToIDL(controllers);
 
   await upgrade({
     actor,

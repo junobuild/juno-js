@@ -24,7 +24,7 @@ describe('authentication.config', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['derivationOrigin']);
-        expect(result.error.issues[0].code).toBe('invalid_string');
+        expect(result.error.issues[0].code).toBe('invalid_format');
       }
     });
 

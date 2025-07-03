@@ -8,6 +8,8 @@ import type {_SERVICE as DeprecatedOrbiterVersionActor} from '../../declarations
 import type {_SERVICE as OrbiterActor} from '../../declarations/orbiter/orbiter.did';
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactoryOrbiter} from '../../declarations/orbiter/orbiter.factory.did.js';
+// eslint-disable-next-line import/no-relative-parent-imports
+import {idlFactory as idlCertifiedFactoryOrbiter} from '../../declarations/orbiter/orbiter.factory.certified.did.js';
 import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
 import type {_SERVICE as DeprecatedSatelliteVersionActor} from '../../declarations/satellite/satellite-deprecated-version.did';
 // eslint-disable-next-line import/no-relative-parent-imports
@@ -24,6 +26,8 @@ import {idlFactory as idlDeprecatedFactorySatellite} from '../../declarations/sa
 import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactorySatellite} from '../../declarations/satellite/satellite.factory.did.js';
+// eslint-disable-next-line import/no-relative-parent-imports
+import {idlFactory as idlCertifiedFactorySatellite} from '../../declarations/satellite/satellite.factory.certified.did.js';
 import type {
   ActorParameters,
   MissionControlParameters,
@@ -47,12 +51,13 @@ export const getDeprecatedSatelliteActor = ({
 
 export const getSatelliteActor = ({
   satelliteId,
+  certified = false,
   ...rest
-}: SatelliteParameters): Promise<SatelliteActor> =>
+}: SatelliteParameters & {certified?: boolean}): Promise<SatelliteActor> =>
   getActor({
     canisterId: satelliteId,
     ...rest,
-    idlFactory: idlFactorySatellite
+    idlFactory: certified ? idlCertifiedFactorySatellite : idlFactorySatellite
   });
 
 /**
@@ -104,11 +109,15 @@ export const getDeprecatedMissionControlVersionActor = ({
     idlFactory: idlDeprecatedFactoryMissionControlVersion
   });
 
-export const getOrbiterActor = ({orbiterId, ...rest}: OrbiterParameters): Promise<OrbiterActor> =>
+export const getOrbiterActor = ({
+  orbiterId,
+  certified = false,
+  ...rest
+}: OrbiterParameters & {certified?: boolean}): Promise<OrbiterActor> =>
   getActor({
     canisterId: orbiterId,
     ...rest,
-    idlFactory: idlFactoryOrbiter
+    idlFactory: certified ? idlCertifiedFactoryOrbiter : idlFactoryOrbiter
   });
 
 /**

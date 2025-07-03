@@ -16,11 +16,13 @@ export const version = async ({orbiter}: {orbiter: OrbiterParameters}): Promise<
 };
 
 export const listControllers = async ({
-  orbiter
+  orbiter,
+  certified
 }: {
   orbiter: OrbiterParameters;
+  certified?: boolean;
 }): Promise<[Principal, Controller][]> => {
-  const actor: OrbiterActor = await getOrbiterActor(orbiter);
+  const actor: OrbiterActor = await getOrbiterActor({...orbiter, certified});
   return actor.list_controllers();
 };
 

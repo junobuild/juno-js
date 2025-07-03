@@ -1,5 +1,6 @@
 import {IDL} from '@dfinity/candid';
 import type {Principal} from '@dfinity/principal';
+import type {Controller} from '../../declarations/satellite/satellite.did';
 
 export const encoreIDLUser = (user: Principal): ArrayBuffer =>
   IDL.encode(
@@ -11,12 +12,18 @@ export const encoreIDLUser = (user: Principal): ArrayBuffer =>
     [{user}]
   );
 
-export const encodeIDLControllers = <T>(controllers: [Principal, T][]): ArrayBuffer =>
+export const encodeAdminAccessKeysToIDL = (controllers: [Principal, Controller][]): ArrayBuffer =>
   IDL.encode(
     [
       IDL.Record({
         controllers: IDL.Vec(IDL.Principal)
       })
     ],
-    [{controllers: controllers.map(([controller, _]) => controller)}]
+    [
+      {
+        controllers: controllers
+          .filter(([_, {scope}]) => 'Admin' in scope)
+          .map(([controller, _]) => controller)
+      }
+    ]
   );

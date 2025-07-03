@@ -4,7 +4,7 @@ import {INSTALL_MODE_RESET, INSTALL_MODE_UPGRADE} from '../constants/upgrade.con
 import {upgrade} from '../handlers/upgrade.handlers';
 import type {OrbiterParameters} from '../types/actor.types';
 import type {UpgradeCodeParams} from '../types/upgrade.types';
-import {encodeIDLControllers} from '../utils/idl.utils';
+import {encodeAdminAccessKeysToIDL} from '../utils/idl.utils';
 
 /**
  * Upgrades the Orbiter with the provided WASM module.
@@ -37,9 +37,10 @@ export const upgradeOrbiter = async ({
     throw new Error('No orbiter principal defined.');
   }
 
-  const controllers = await listControllers({orbiter});
+  const controllers = await listControllers({orbiter, certified: reset});
 
-  const arg = encodeIDLControllers(controllers);
+  // Only really use in case of --reset
+  const arg = encodeAdminAccessKeysToIDL(controllers);
 
   await upgrade({
     actor,

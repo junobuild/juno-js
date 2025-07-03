@@ -1,5 +1,6 @@
 import * as z from 'zod/v4';
 import {type RawUserId, RawUserIdSchema} from '../../schemas/satellite';
+import {createFunctionSchema} from '../../utils/zod.utils';
 
 /**
  * @see HookContext
@@ -33,17 +34,8 @@ export interface HookContext<T> {
 /**
  * @see AssertFunction
  */
-export const AssertFunctionSchema = <T extends z.ZodTypeAny>(_contextSchema: T) =>
-  // TODO: We need a schema but
-  // the Zod workaround https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912
-  // lead to the issue https://github.com/colinhacks/zod/issues/4773
-  z
-    .any()
-    .refine((val) => typeof val === 'function', {
-      message: 'Expected a function'
-    })
-    .transform((val) => val)
-    .describe('AssertFunction');
+export const AssertFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
+  createFunctionSchema(z.function({input: z.tuple([contextSchema]), output: z.void()}));
 
 /**
  * Defines the `assert` function schema for assertions.
@@ -57,17 +49,10 @@ export type AssertFunction<T> = (context: T) => void;
 /**
  * @see RunFunction
  */
-export const RunFunctionSchema = <T extends z.ZodTypeAny>(_contextSchema: T) =>
-  // TODO: We need a schema but
-  // the Zod workaround https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912
-  // lead to the issue https://github.com/colinhacks/zod/issues/4773
-  z
-    .any()
-    .refine((val) => typeof val === 'function', {
-      message: 'Expected a function'
-    })
-    .transform((val) => val)
-    .describe('RunFunction');
+export const RunFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
+  createFunctionSchema(
+    z.function({input: z.tuple([contextSchema]), output: z.promise(z.void()).or(z.void())})
+  );
 
 /**
  * Defines the `run` function schema for hooks.

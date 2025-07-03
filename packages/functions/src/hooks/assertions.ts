@@ -1,4 +1,5 @@
 import * as z from 'zod/v4';
+import {createFunctionSchema} from '../utils/zod.utils';
 import {type Collections, CollectionsSchema} from './schemas/collections';
 import {type AssertFunction, AssertFunctionSchema} from './schemas/context';
 import {
@@ -101,19 +102,7 @@ export const AssertFnSchema = <T extends z.ZodTypeAny>(assertSchema: T) =>
 export type AssertFn<T extends Assert> = (assert: z.infer<typeof SatelliteEnvSchema>) => T;
 
 export const AssertFnOrObjectSchema = <T extends z.ZodTypeAny>(assertSchema: T) =>
-  z
-    .any()
-    .refine(
-      (val) =>
-        assertSchema.safeParse(val).success ||
-        // TODO: We are loosing the HookFnSchema here but using
-        // the Zod workaround https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912
-        // lead to the issue https://github.com/colinhacks/zod/issues/4773
-        typeof val === 'function',
-      {message: 'Must be a valid assertion object or assertion function'}
-    )
-    .transform((val) => val)
-    .describe('AssertFnOrObject');
+  z.union([assertSchema, createFunctionSchema(AssertFnSchema(assertSchema))]);
 export type AssertFnOrObject<T extends Assert> = T | AssertFn<T>;
 
 export function defineAssert<T extends Assert>(assert: T): T;

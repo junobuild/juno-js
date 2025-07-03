@@ -145,7 +145,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------- | --------------------------------------------------------------------------------------------------------------- |
 | `HookFnSchema` | `<T extends z.ZodTypeAny>(hookSchema: T) => $ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L170)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L176)
 
 #### :gear: HookFnOrObjectSchema
 
@@ -153,7 +153,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ---------------------- | --------------------------------------------------- |
 | `HookFnOrObjectSchema` | `<T extends z.ZodTypeAny>(hookSchema: T) => ZodAny` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L174)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L180)
 
 #### :gear: defineHook
 
@@ -161,7 +161,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L186)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L192)
 
 #### :gear: defineHook
 
@@ -169,7 +169,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L187)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L193)
 
 #### :gear: defineHook
 
@@ -177,7 +177,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L188)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L194)
 
 #### :gear: defineHook
 
@@ -185,7 +185,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L189)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L195)
 
 #### :gear: createListResultsSchema
 
@@ -1074,83 +1074,83 @@ A schema that validates a value is an Uint8Array.
 
 #### :gear: OnSetDocSchema
 
-| Constant         | Type                                                                                  |
-| ---------------- | ------------------------------------------------------------------------------------- |
-| `OnSetDocSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>` |
+| Constant         | Type                                                                                                                                                                                                                          |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OnSetDocSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<RunFunction<{ caller: Uint8Array<ArrayBufferLike>; data: { collection: string; key: string; data: { ...; }; }; }>, RunFunction<...>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L54)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L60)
 
 #### :gear: OnSetManyDocsSchema
 
-| Constant              | Type                                                                                  |
-| --------------------- | ------------------------------------------------------------------------------------- |
-| `OnSetManyDocsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>` |
+| Constant              | Type                                                                                                                                                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OnSetManyDocsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<RunFunction<{ caller: Uint8Array<ArrayBufferLike>; data: { collection: string; key: string; data: { ...; }; }[]; }>, RunFunction<...>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L64)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L70)
 
 #### :gear: OnDeleteDocSchema
 
-| Constant            | Type                                                                                  |
-| ------------------- | ------------------------------------------------------------------------------------- |
-| `OnDeleteDocSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>` |
+| Constant            | Type                                                                                                                                                                                                                                        |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OnDeleteDocSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<RunFunction<{ caller: Uint8Array<ArrayBufferLike>; data: { collection: string; key: string; data?: { ...; } or undefined; }; }>, RunFunction<...>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L74)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L80)
 
 #### :gear: OnDeleteManyDocsSchema
 
-| Constant                 | Type                                                                                  |
-| ------------------------ | ------------------------------------------------------------------------------------- |
-| `OnDeleteManyDocsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>` |
+| Constant                 | Type                                                                                                                                                                                                                                          |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OnDeleteManyDocsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<RunFunction<{ caller: Uint8Array<ArrayBufferLike>; data: { collection: string; key: string; data?: { ...; } or undefined; }[]; }>, RunFunction<...>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L84)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L90)
 
 #### :gear: OnDeleteFilteredDocsSchema
 
-| Constant                     | Type                                                                                  |
-| ---------------------------- | ------------------------------------------------------------------------------------- |
-| `OnDeleteFilteredDocsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>` |
+| Constant                     | Type                                                                                                                                                                                                                                          |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OnDeleteFilteredDocsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<RunFunction<{ caller: Uint8Array<ArrayBufferLike>; data: { collection: string; key: string; data?: { ...; } or undefined; }[]; }>, RunFunction<...>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L94)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L100)
 
 #### :gear: OnUploadAssetSchema
 
-| Constant              | Type                                                                                  |
-| --------------------- | ------------------------------------------------------------------------------------- |
-| `OnUploadAssetSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>` |
+| Constant              | Type                                                                                                                                                                                                                                                                                                   |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `OnUploadAssetSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<RunFunction<{ caller: Uint8Array<ArrayBufferLike>; data: { key: { name: string; ... 4 more ...; description?: string or undefined; }; ... 4 more ...; version?: bigint or undefined; }; }>, RunFunction<...>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L104)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L110)
 
 #### :gear: OnDeleteAssetSchema
 
-| Constant              | Type                                                                                  |
-| --------------------- | ------------------------------------------------------------------------------------- |
-| `OnDeleteAssetSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>` |
+| Constant              | Type                                                                                                                                                                                                                                                     |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OnDeleteAssetSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<RunFunction<{ caller: Uint8Array<ArrayBufferLike>; data?: { key: { ...; }; ... 4 more ...; version?: bigint or undefined; } or undefined; }>, RunFunction<...>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L114)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L120)
 
 #### :gear: OnDeleteManyAssetsSchema
 
-| Constant                   | Type                                                                                  |
-| -------------------------- | ------------------------------------------------------------------------------------- |
-| `OnDeleteManyAssetsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>` |
+| Constant                   | Type                                                                                                                                                                                                                                                        |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OnDeleteManyAssetsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<RunFunction<{ caller: Uint8Array<ArrayBufferLike>; data: ({ key: { ...; }; ... 4 more ...; version?: bigint or undefined; } or undefined)[]; }>, RunFunction<...>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L124)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L130)
 
 #### :gear: OnDeleteFilteredAssetsSchema
 
-| Constant                       | Type                                                                                  |
-| ------------------------------ | ------------------------------------------------------------------------------------- |
-| `OnDeleteFilteredAssetsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>` |
+| Constant                       | Type                                                                                                                                                                                                                                                        |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OnDeleteFilteredAssetsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<RunFunction<{ caller: Uint8Array<ArrayBufferLike>; data: ({ key: { ...; }; ... 4 more ...; version?: bigint or undefined; } or undefined)[]; }>, RunFunction<...>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L134)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L140)
 
 #### :gear: HookSchema
 
-| Constant     | Type                                                                                                                                                                                                                            |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `HookSchema` | `ZodUnion<readonly [ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>, ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodAny; }, $strict>, ... 6 more ..., ZodObject<...>]>` |
+| Constant     | Type                                                                                                                                                                                                                                                                               |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `HookSchema` | `ZodUnion<readonly [ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<RunFunction<{ caller: Uint8Array<ArrayBufferLike>; data: { collection: string; key: string; data: { ...; }; }; }>, RunFunction<...>>; }, $strict>, ... 7 more ..., ZodObject<...>]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L144)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L150)
 
 #### :gear: TimestampMatcherSchema
 
@@ -2391,7 +2391,7 @@ A generic schema for defining hooks related to collections.
 | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnHook` | `Collections and { /** * A function that runs when the hook is triggered for the specified collections. * * @param {T} context - Contains information about the affected document(s). * @returns {Promise<void>} Resolves when the operation completes. */ run: RunFunction<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L41)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L47)
 
 #### :gear: OnSetDoc
 
@@ -2401,7 +2401,7 @@ A hook that runs when a document is created or updated.
 | ---------- | ------------------------- |
 | `OnSetDoc` | `OnHook<OnSetDocContext>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L59)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L65)
 
 #### :gear: OnSetManyDocs
 
@@ -2411,7 +2411,7 @@ A hook that runs when multiple documents are created or updated.
 | --------------- | ------------------------------ |
 | `OnSetManyDocs` | `OnHook<OnSetManyDocsContext>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L69)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L75)
 
 #### :gear: OnDeleteDoc
 
@@ -2421,7 +2421,7 @@ A hook that runs when a single document is deleted.
 | ------------- | ---------------------------- |
 | `OnDeleteDoc` | `OnHook<OnDeleteDocContext>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L79)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L85)
 
 #### :gear: OnDeleteManyDocs
 
@@ -2431,7 +2431,7 @@ A hook that runs when multiple documents are deleted.
 | ------------------ | --------------------------------- |
 | `OnDeleteManyDocs` | `OnHook<OnDeleteManyDocsContext>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L89)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L95)
 
 #### :gear: OnDeleteFilteredDocs
 
@@ -2441,7 +2441,7 @@ A hook that runs when a filtered set of documents is deleted based on query cond
 | ---------------------- | ------------------------------------- |
 | `OnDeleteFilteredDocs` | `OnHook<OnDeleteFilteredDocsContext>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L99)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L105)
 
 #### :gear: OnUploadAsset
 
@@ -2451,7 +2451,7 @@ A hook that runs when a single asset is uploaded.
 | --------------- | ------------------------------ |
 | `OnUploadAsset` | `OnHook<OnUploadAssetContext>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L109)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L115)
 
 #### :gear: OnDeleteAsset
 
@@ -2461,7 +2461,7 @@ A hook that runs when a single asset is potentially deleted.
 | --------------- | ------------------------------ |
 | `OnDeleteAsset` | `OnHook<OnDeleteAssetContext>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L119)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L125)
 
 #### :gear: OnDeleteManyAssets
 
@@ -2471,7 +2471,7 @@ A hook that runs when multiple assets are potentially deleted.
 | -------------------- | ----------------------------------- |
 | `OnDeleteManyAssets` | `OnHook<OnDeleteManyAssetsContext>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L129)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L135)
 
 #### :gear: OnDeleteFilteredAssets
 
@@ -2481,7 +2481,7 @@ A hook that runs when a filtered set of assets is deleted based on query conditi
 | ------------------------ | --------------------------------------- |
 | `OnDeleteFilteredAssets` | `OnHook<OnDeleteFilteredAssetsContext>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L139)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L145)
 
 #### :gear: Hook
 
@@ -2491,7 +2491,7 @@ All hooks definitions.
 | ------ | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Hook` | `    | OnSetDoc or OnSetManyDocs or OnDeleteDoc or OnDeleteManyDocs or OnDeleteFilteredDocs or OnUploadAsset or OnDeleteAsset or OnDeleteManyAssets or OnDeleteFilteredAssets` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L159)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L165)
 
 #### :gear: HookFn
 
@@ -2499,7 +2499,7 @@ All hooks definitions.
 | -------- | ------------------------------------------------- |
 | `HookFn` | `(hook: z.infer<typeof SatelliteEnvSchema>) => T` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L172)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L178)
 
 #### :gear: HookFnOrObject
 
@@ -2507,7 +2507,7 @@ All hooks definitions.
 | ---------------- | ---------------- |
 | `HookFnOrObject` | `T or HookFn<T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L184)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L190)
 
 #### :gear: TimestampMatcher
 

@@ -112,6 +112,7 @@ export const AssertFnOrObjectSchema = <T extends z.ZodTypeAny>(assertSchema: T) 
         typeof val === 'function',
       {message: 'Must be a valid assertion object or assertion function'}
     )
+    .transform((val) => val)
     .describe('AssertFnOrObject');
 export type AssertFnOrObject<T extends Assert> = T | AssertFn<T>;
 

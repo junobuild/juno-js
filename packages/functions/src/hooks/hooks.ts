@@ -189,6 +189,7 @@ export const HookFnOrObjectSchema = <T extends z.ZodTypeAny>(hookSchema: T) =>
         typeof val === 'function',
       {message: 'Must be a valid hook object or hook function'}
     )
+    .transform((val) => val)
     .describe('HookFnOrObject');
 export type HookFnOrObject<T extends Hook> = T | HookFn<T>;
 

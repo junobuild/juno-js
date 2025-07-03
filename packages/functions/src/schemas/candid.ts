@@ -5,9 +5,11 @@ import * as z from 'zod/v4';
  * A schema that validates a value is an Uint8Array.
  */
 export const Uint8ArraySchema = z
-  .custom<Uint8Array>((val) => val instanceof Uint8Array, {
+  .any()
+  .refine((val) => val instanceof Uint8Array, {
     message: 'Expected Uint8Array'
   })
+  .transform((val) => val)
   .describe('Uint8Array');
 
 /**
@@ -24,9 +26,11 @@ export type RawPrincipal = z.infer<typeof RawPrincipalSchema>;
  * @see Principal
  */
 export const PrincipalSchema = z
-  .custom<CandidPrincipal>((val) => val instanceof CandidPrincipal, {
+  .any()
+  .refine((val) => val instanceof CandidPrincipal, {
     message: 'Expected an instance of a Principal'
   })
+  .transform((val) => val)
   .describe('Principal');
 
 /**

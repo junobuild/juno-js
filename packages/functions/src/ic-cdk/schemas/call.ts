@@ -7,9 +7,11 @@ import {PrincipalSchema, type RawPrincipal, RawPrincipalSchema} from '../../sche
  * @see IDLType
  */
 export const IDLTypeSchema = z
-  .custom<IDL.Type<unknown>>((val) => val instanceof IDL.Type, {
+  .any()
+  .refine((val) => val instanceof IDL.Type, {
     message: 'Invalid IDL.Type'
   })
+  .transform((val) => val)
   .describe('IDL');
 
 /**

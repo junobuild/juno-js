@@ -81,7 +81,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `RunFunctionSchema` | `<T extends z.ZodTypeAny>(_contextSchema: T) => ZodCustom<RunFunction<output<T>>, RunFunction<output<T>>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L56)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L58)
 
 #### :gear: DocContextSchema
 
@@ -113,31 +113,31 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L115)
-
-#### :gear: defineAssert
-
-| Function       | Type                                                                                                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L116)
-
-#### :gear: defineAssert
-
-| Function       | Type                                                                                                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L117)
-
-#### :gear: defineAssert
-
-| Function       | Type                                                                                                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
-
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L118)
+
+#### :gear: defineAssert
+
+| Function       | Type                                                                                                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L119)
+
+#### :gear: defineAssert
+
+| Function       | Type                                                                                                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L120)
+
+#### :gear: defineAssert
+
+| Function       | Type                                                                                                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineAssert` | `{ <T extends Assert>(assert: T): T; <T extends Assert>(assert: AssertFn<T>): AssertFn<T>; <T extends Assert>(assert: AssertFnOrObject<T>): AssertFnOrObject<T>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L121)
 
 #### :gear: HookFnSchema
 
@@ -161,31 +161,31 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L192)
-
-#### :gear: defineHook
-
-| Function     | Type                                                                                                                                            |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L193)
-
-#### :gear: defineHook
-
-| Function     | Type                                                                                                                                            |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L194)
-
-#### :gear: defineHook
-
-| Function     | Type                                                                                                                                            |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
-
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L195)
+
+#### :gear: defineHook
+
+| Function     | Type                                                                                                                                            |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L196)
+
+#### :gear: defineHook
+
+| Function     | Type                                                                                                                                            |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L197)
+
+#### :gear: defineHook
+
+| Function     | Type                                                                                                                                            |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineHook` | `{ <T extends Hook>(hook: T): T; <T extends Hook>(hook: HookFn<T>): HookFn<T>; <T extends Hook>(hook: HookFnOrObject<T>): HookFnOrObject<T>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L198)
 
 #### :gear: createListResultsSchema
 
@@ -694,7 +694,7 @@ A schema that validates a value is an Uint8Array.
 | -------------------- | --------------------------------------------------------------------- |
 | `RawPrincipalSchema` | `ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L14)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L16)
 
 #### :gear: PrincipalSchema
 
@@ -702,7 +702,7 @@ A schema that validates a value is an Uint8Array.
 | ----------------- | --------------------------------- |
 | `PrincipalSchema` | `ZodCustom<Principal, Principal>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L24)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L26)
 
 #### :gear: TimestampSchema
 
@@ -1422,7 +1422,7 @@ A schema that validates a value is an Uint8Array.
 | --------------- | ----------------------------------------------------------------------- |
 | `CallArgSchema` | `ZodTuple<[ZodCustom<Type<unknown>, Type<unknown>>, ZodUnknown], null>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L21)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L23)
 
 #### :gear: CallArgsSchema
 
@@ -1432,7 +1432,7 @@ Schema for encoding the call arguments.
 | ---------------- | --------------------------------------------------------------------------------- |
 | `CallArgsSchema` | `ZodArray<ZodTuple<[ZodCustom<Type<unknown>, Type<unknown>>, ZodUnknown], null>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L33)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L35)
 
 #### :gear: CallResultSchema
 
@@ -1440,7 +1440,7 @@ Schema for encoding the call arguments.
 | ------------------ | ----------------------------------------- |
 | `CallResultSchema` | `ZodCustom<Type<unknown>, Type<unknown>>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L51)
 
 #### :gear: CallParamsSchema
 
@@ -1448,7 +1448,7 @@ Schema for encoding the call arguments.
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<Principal, Principal>]>; method: ZodString; args: ZodOptional<...>; result: ZodOptional<...>; }, $strip>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L59)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L61)
 
 ### :factory: CallResponseLengthError
 
@@ -1857,7 +1857,7 @@ Represents a raw principal - a Uint8Array representation of a Principal.
 | -------------- | ------------------------------------ |
 | `RawPrincipal` | `z.infer<typeof RawPrincipalSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L19)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L21)
 
 #### :gear: Principal
 
@@ -1867,7 +1867,7 @@ Represents a principal - i.e. an object instantiated with the class Principal.
 | ----------- | --------------------------------- |
 | `Principal` | `z.infer<typeof PrincipalSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L31)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L35)
 
 #### :gear: Timestamp
 
@@ -1958,7 +1958,7 @@ The function takes a context argument and returns `void`.
 | ---------------- | ---------------------- |
 | `AssertFunction` | `(context: T) => void` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L51)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L53)
 
 #### :gear: RunFunction
 
@@ -1970,7 +1970,7 @@ The function takes a context argument and returns either a `Promise<void>` or `v
 | ------------- | --------------------------------------- |
 | `RunFunction` | `(context: T) => void or Promise<void>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L71)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L75)
 
 #### :gear: RawData
 
@@ -2381,7 +2381,7 @@ All assertions definitions.
 | ------------------ | ------------------ |
 | `AssertFnOrObject` | `T or AssertFn<T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L113)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L116)
 
 #### :gear: OnHook
 
@@ -2507,7 +2507,7 @@ All hooks definitions.
 | ---------------- | ---------------- |
 | `HookFnOrObject` | `T or HookFn<T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L190)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L193)
 
 #### :gear: TimestampMatcher
 
@@ -2753,7 +2753,7 @@ Custom validation function to verify if a value is an instance of `IDL.Type` fro
 | --------- | ------------------------------- |
 | `IDLType` | `z.infer<typeof IDLTypeSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L16)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L18)
 
 #### :gear: CallArg
 
@@ -2763,7 +2763,7 @@ A call argument consisting of its IDL type and corresponding value.
 | --------- | ------------------------------- |
 | `CallArg` | `z.infer<typeof CallArgSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L26)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L28)
 
 #### :gear: CallArgs
 
@@ -2779,7 +2779,7 @@ The order of arguments is preserved for the function call.
 | ---------- | -------------------------------- |
 | `CallArgs` | `z.infer<typeof CallArgsSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L44)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L46)
 
 #### :gear: CallResult
 
@@ -2789,7 +2789,7 @@ Defines the type used to decode the result of a canister call.
 | ------------ | ---------------------------------- |
 | `CallResult` | `z.infer<typeof CallResultSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L54)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L56)
 
 <!-- TSDOC_END -->
 

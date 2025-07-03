@@ -14,7 +14,8 @@ import {rm} from 'node:fs/promises';
  * @param {string} options.infile - The path to the input file to be bundled.
  * @param {string} options.outfile - The path where the output bundle should be written.
  * @param {Object<string, string>} [options.banner] - Optional banner to prepend to the generated file.
- * @param {string} options.minify - Minify the bundle. Handy for debugging purposes. Default to true.
+ * @param {boolean} [options.minify=true] - Whether to minify the bundle. Defaults to `true`.
+ * @param {boolean} [options.keepNames=true] - Whether to preserve function and class names. Defaults to `true`.
  *
  * @returns {Promise<{
  *   metafile: Metafile,
@@ -29,12 +30,14 @@ export const buildEsm = async ({
   infile,
   outfile,
   banner,
-  minify = true
+  minify = true,
+  keepNames = true
 }: {
   infile: string;
   outfile: string;
   banner?: {[type: string]: string};
   minify?: boolean;
+  keepNames?: boolean;
 }): Promise<{
   metafile: Metafile;
   errors: Message[];
@@ -52,6 +55,7 @@ export const buildEsm = async ({
     outfile,
     bundle: true,
     minify,
+    keepNames,
     treeShaking: true,
     format: 'esm',
     platform: 'browser',

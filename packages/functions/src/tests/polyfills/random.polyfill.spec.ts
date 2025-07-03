@@ -7,7 +7,7 @@ globalThis.__juno_satellite_random = vi.fn(() => mockRandomValue);
 describe('Math.random override', () => {
   it('should return the value from __juno_satellite_random', () => {
     const result = Math.random();
-    expect(result).toBe(mockRandomValue);
+    expect(result).toBe(0.00028744502924382687);
     expect(globalThis.__juno_satellite_random).toHaveBeenCalled();
   });
 

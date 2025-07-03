@@ -1,5 +1,5 @@
 import {PrincipalTextSchema} from '@dfinity/zod-schemas';
-import * as z from 'zod';
+import * as z from 'zod/v4';
 
 /**
  * Ensures reliable validation of PrincipalTextSchema inside z.record.

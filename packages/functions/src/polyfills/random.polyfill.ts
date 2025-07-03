@@ -1,7 +1,13 @@
 /**
  * @see Math.random
  */
-const random = (): number => __juno_satellite_random();
+const random = (): number => {
+  // __juno_satellite_random() returns a signed 32-bit int (i32)
+  const value = __juno_satellite_random();
+
+  // >>> 0 converts it to unsigned
+  return (value >>> 0) / 2 ** 32;
+};
 
 /**
  * Overwrites Math.random with a pseudo-random number using the Satellite's internal RNG.

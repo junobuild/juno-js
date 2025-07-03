@@ -1,6 +1,6 @@
 import * as z from 'zod/v4';
 import {type Collections, CollectionsSchema} from './schemas/collections';
-import type {RunFunction} from './schemas/context';
+import {RunFunction, RunFunctionSchema} from './schemas/context';
 import {
   type OnDeleteDocContext,
   OnDeleteDocContextSchema,
@@ -30,7 +30,13 @@ import {
  */
 const OnHookSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
   CollectionsSchema.extend({
-    run: z.any().refine((val) => typeof val === 'function', {message: 'run must be a function'})
+    /**
+     * The function that runs when the hook is triggered for the specified collections.
+     *
+     * @param {T} context - Contains information about the affected document(s).
+     * @returns {Promise<void>} Resolves when the run completes.
+     */
+    run: RunFunctionSchema<T>(contextSchema)
   }).strict();
 
 /**

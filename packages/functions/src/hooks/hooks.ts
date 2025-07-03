@@ -1,7 +1,6 @@
 import * as z from 'zod/v4';
-import {createFunctionSchema} from '../utils/zod.utils';
 import {type Collections, CollectionsSchema} from './schemas/collections';
-import {type RunFunction, RunFunctionSchema} from './schemas/context';
+import type {RunFunction} from './schemas/context';
 import {
   type OnDeleteDocContext,
   OnDeleteDocContextSchema,
@@ -31,7 +30,7 @@ import {
  */
 const OnHookSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
   CollectionsSchema.extend({
-    run: RunFunctionSchema<T>(contextSchema)
+    run: z.any().refine((val) => typeof val === 'function', {message: 'run must be a function'})
   }).strict();
 
 /**
@@ -173,7 +172,15 @@ export const HookFnSchema = <T extends z.ZodTypeAny>(hookSchema: T) =>
 export type HookFn<T extends Hook> = (hook: z.infer<typeof SatelliteEnvSchema>) => T;
 
 export const HookFnOrObjectSchema = <T extends z.ZodTypeAny>(hookSchema: T) =>
-  z.union([hookSchema, createFunctionSchema(HookFnSchema(hookSchema))]);
+  z.any().refine(
+    (val) =>
+      hookSchema.safeParse(val).success ||
+      // TODO: We are loosing the HookFnSchema here but using
+      // the Zod workaround https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912
+      // lead to the issue https://github.com/colinhacks/zod/issues/4773
+      typeof val === 'function',
+    {message: 'Must be a valid hook object or hook function'}
+  );
 export type HookFnOrObject<T extends Hook> = T | HookFn<T>;
 
 export function defineHook<T extends Hook>(hook: T): T;

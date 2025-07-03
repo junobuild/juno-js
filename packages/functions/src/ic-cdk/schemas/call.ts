@@ -6,9 +6,11 @@ import {PrincipalSchema, type RawPrincipal, RawPrincipalSchema} from '../../sche
 /**
  * @see IDLType
  */
-export const IDLTypeSchema = z.custom<IDL.Type<unknown>>((val) => val instanceof IDL.Type, {
-  message: 'Invalid IDL.Type'
-});
+export const IDLTypeSchema = z
+  .custom<IDL.Type<unknown>>((val) => val instanceof IDL.Type, {
+    message: 'Invalid IDL.Type'
+  })
+  .describe('IDL');
 
 /**
  * Custom validation function to verify if a value is an instance of `IDL.Type` from `@dfinity/candid`.

@@ -37,9 +37,11 @@ export const AssertFunctionSchema = <T extends z.ZodTypeAny>(_contextSchema: T) 
   // TODO: We need a schema but
   // the Zod workaround https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912
   // lead to the issue https://github.com/colinhacks/zod/issues/4773
-  z.custom<AssertFunction<z.infer<T>>>((val) => typeof val === 'function', {
-    message: 'Expected a function'
-  });
+  z
+    .custom<AssertFunction<z.infer<T>>>((val) => typeof val === 'function', {
+      message: 'Expected a function'
+    })
+    .describe('AssertFunction');
 
 /**
  * Defines the `assert` function schema for assertions.
@@ -57,9 +59,11 @@ export const RunFunctionSchema = <T extends z.ZodTypeAny>(_contextSchema: T) =>
   // TODO: We need a schema but
   // the Zod workaround https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912
   // lead to the issue https://github.com/colinhacks/zod/issues/4773
-  z.custom<RunFunction<z.infer<T>>>((val) => typeof val === 'function', {
-    message: 'Expected a function'
-  });
+  z
+    .custom<RunFunction<z.infer<T>>>((val) => typeof val === 'function', {
+      message: 'Expected a function'
+    })
+    .describe('RunFunction');
 
 /**
  * Defines the `run` function schema for hooks.

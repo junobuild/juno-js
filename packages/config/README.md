@@ -88,71 +88,71 @@ Configuration options for [Juno] CLI.
 
 | Constant               | Type                                                                                                                                                                                                                                                                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfigSchema` | `ZodUnion<[ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<["docker", "podman"]>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; skylab: ZodObject<...>; }, "strict", Z...` |
+| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; podman: "podman"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; }, $strict>>; skylab: ZodObject<...>; }, $strict>, ZodObj...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/emulator.config.ts#L151)
 
 #### :gear: JunoConfigModeSchema
 
-| Constant               | Type                                              |
-| ---------------------- | ------------------------------------------------- |
-| `JunoConfigModeSchema` | `ZodUnion<[ZodLiteral<"production">, ZodString]>` |
+| Constant               | Type                                                       |
+| ---------------------- | ---------------------------------------------------------- |
+| `JunoConfigModeSchema` | `ZodUnion<readonly [ZodLiteral<"production">, ZodString]>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L6)
 
 #### :gear: JunoConfigEnvSchema
 
-| Constant              | Type                                                                                                                               |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `JunoConfigEnvSchema` | `ZodObject<{ mode: ZodUnion<[ZodLiteral<"production">, ZodString]>; }, "strip", ZodTypeAny, { mode: string; }, { mode: string; }>` |
+| Constant              | Type                                                                                     |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| `JunoConfigEnvSchema` | `ZodObject<{ mode: ZodUnion<readonly [ZodLiteral<"production">, ZodString]>; }, $strip>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L17)
 
 #### :gear: OrbiterIdSchema
 
-| Constant          | Type                                                                                                               |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `OrbiterIdSchema` | `ZodObject<{ id: ZodEffects<ZodString, string, string>; }, "strip", ZodTypeAny, { id: string; }, { id: string; }>` |
+| Constant          | Type                                    |
+| ----------------- | --------------------------------------- |
+| `OrbiterIdSchema` | `ZodObject<{ id: ZodString; }, $strip>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L10)
 
 #### :gear: OrbiterIdsSchema
 
-| Constant           | Type                                                                                                                                                              |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OrbiterIdsSchema` | `ZodObject<{ ids: ZodRecord<ZodUnion<[ZodLiteral<"production">, ZodString]>, ZodEffects<ZodString, string, string>>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant           | Type                                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `OrbiterIdsSchema` | `ZodObject<{ ids: ZodRecord<ZodUnion<readonly [ZodLiteral<"production">, ZodString]>, ZodString>; }, $strip>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L29)
 
 #### :gear: OrbiterConfigSchema
 
-| Constant              | Type                                                                                                                                                                                                                                      |
-| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `OrbiterConfigSchema` | `ZodUnion<[ZodObject<{ id: ZodEffects<ZodString, string, string>; }, "strict", ZodTypeAny, { id: string; }, { id: string; }>, ZodObject<{ ids: ZodRecord<ZodUnion<...>, ZodEffects<...>>; }, "strict", ZodTypeAny, { ...; }, { ...; }>]>` |
+| Constant              | Type                                                                                                                                                                        |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `OrbiterConfigSchema` | `ZodUnion<readonly [ZodObject<{ id: ZodString; }, $strict>, ZodObject<{ ids: ZodRecord<ZodUnion<readonly [ZodLiteral<"production">, ZodString]>, ZodString>; }, $strict>]>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/orbiter.config.ts#L56)
 
 #### :gear: ModuleLogVisibilitySchema
 
-| Constant                    | Type                                 |
-| --------------------------- | ------------------------------------ |
-| `ModuleLogVisibilitySchema` | `ZodEnum<["controllers", "public"]>` |
+| Constant                    | Type                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| `ModuleLogVisibilitySchema` | `ZodEnum<{ controllers: "controllers"; public: "public"; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/module/module.settings.ts#L6)
 
 #### :gear: ModuleSettingsSchema
 
-| Constant               | Type                                                                                                                                                                                                                                                                                                                           |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ModuleSettingsSchema` | `ZodObject<{ freezingThreshold: ZodOptional<ZodBigInt>; reservedCyclesLimit: ZodOptional<ZodBigInt>; logVisibility: ZodOptional<ZodEnum<["controllers", "public"]>>; heapMemoryLimit: ZodOptional<...>; memoryAllocation: ZodOptional<...>; computeAllocation: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant               | Type                                                                                                                                                                                                                                                                                                                  |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ModuleSettingsSchema` | `ZodObject<{ freezingThreshold: ZodOptional<ZodBigInt>; reservedCyclesLimit: ZodOptional<ZodBigInt>; logVisibility: ZodOptional<ZodEnum<{ controllers: "controllers"; public: "public"; }>>; heapMemoryLimit: ZodOptional<...>; memoryAllocation: ZodOptional<...>; computeAllocation: ZodOptional<...>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/module/module.settings.ts#L21)
 
 #### :gear: MaxMemorySizeConfigSchema
 
-| Constant                    | Type                                                                                                                                                                          |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `MaxMemorySizeConfigSchema` | `ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, "strict", ZodTypeAny, { heap?: bigint or undefined; stable?: bigint or undefined; }, { ...; }>` |
+| Constant                    | Type                                                                                    |
+| --------------------------- | --------------------------------------------------------------------------------------- |
+| `MaxMemorySizeConfigSchema` | `ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/feature.config.ts#L6)
 
@@ -166,33 +166,33 @@ Configuration options for [Juno] CLI.
 
 #### :gear: StorageConfigHeaderSchema
 
-| Constant                    | Type                                                                                                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `StorageConfigHeaderSchema` | `ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>, "many">; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                    | Type                                                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `StorageConfigHeaderSchema` | `ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L18)
 
 #### :gear: StorageConfigRewriteSchema
 
-| Constant                     | Type                                                                                                                                                                  |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `StorageConfigRewriteSchema` | `ZodObject<{ source: ZodString; destination: ZodString; }, "strict", ZodTypeAny, { source: string; destination: string; }, { source: string; destination: string; }>` |
+| Constant                     | Type                                                                 |
+| ---------------------------- | -------------------------------------------------------------------- |
+| `StorageConfigRewriteSchema` | `ZodObject<{ source: ZodString; destination: ZodString; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L49)
 
 #### :gear: StorageConfigRedirectSchema
 
-| Constant                      | Type                                                                                                                                                   |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `StorageConfigRedirectSchema` | `ZodObject<{ source: ZodString; location: ZodString; code: ZodUnion<[ZodLiteral<301>, ZodLiteral<302>]>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                      | Type                                                                                                                           |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `StorageConfigRedirectSchema` | `ZodObject<{ source: ZodString; location: ZodString; code: ZodUnion<readonly [ZodLiteral<301>, ZodLiteral<302>]>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L79)
 
 #### :gear: StorageConfigSchema
 
-| Constant              | Type                                                                                                                                                                                                                                                                                               |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `StorageConfigSchema` | `ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>, "many">; }, "strict", ZodTypeAny, { ...; }, { ...; }>, "many">>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant              | Type                                                                                                                                                                                                             |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `StorageConfigSchema` | `ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L114)
 
@@ -200,65 +200,65 @@ Configuration options for [Juno] CLI.
 
 see EncodingType
 
-| Constant             | Type                                                         |
-| -------------------- | ------------------------------------------------------------ |
-| `EncodingTypeSchema` | `ZodEnum<["identity", "gzip", "compress", "deflate", "br"]>` |
+| Constant             | Type                                                                                                   |
+| -------------------- | ------------------------------------------------------------------------------------------------------ |
+| `EncodingTypeSchema` | `ZodEnum<{ identity: "identity"; gzip: "gzip"; compress: "compress"; deflate: "deflate"; br: "br"; }>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L6)
 
 #### :gear: CliConfigSchema
 
-| Constant          | Type                                                                                                                                                                                                                                                                                           |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CliConfigSchema` | `ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString, "many">>; gzip: ZodOptional<ZodUnion<[ZodString, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: ZodOptional<...>; postdeploy: ZodOptional<...>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant          | Type                                                                                                                                                                                                                                                           |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CliConfigSchema` | `ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString>>; gzip: ZodOptional<ZodUnion<readonly [ZodString, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: ZodOptional<...>; postdeploy: ZodOptional<...>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L7)
 
 #### :gear: SatelliteAssertionsSchema
 
-| Constant                    | Type                                                                                                                                                           |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteAssertionsSchema` | `ZodObject<{ heapMemory: ZodOptional<ZodUnion<[ZodNumber, ZodBoolean]>>; }, "strict", ZodTypeAny, { heapMemory?: number or boolean or undefined; }, { ...; }>` |
+| Constant                    | Type                                                                                           |
+| --------------------------- | ---------------------------------------------------------------------------------------------- |
+| `SatelliteAssertionsSchema` | `ZodObject<{ heapMemory: ZodOptional<ZodUnion<readonly [ZodNumber, ZodBoolean]>>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/assertions.config.ts#L6)
 
 #### :gear: AuthenticationConfigInternetIdentitySchema
 
-| Constant                                     | Type                                                                                                                                                                       |
-| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AuthenticationConfigInternetIdentitySchema` | `ZodObject<{ derivationOrigin: ZodOptional<ZodString>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodString, "many">>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                                     | Type                                                                                                                        |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `AuthenticationConfigInternetIdentitySchema` | `ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/authentication.config.ts#L6)
 
 #### :gear: AuthenticationConfigSchema
 
-| Constant                     | Type                                                                                                                                                                                                                                                                |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodString>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodString, "many">>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                     | Type                                                                                                                                                                                |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/authentication.config.ts#L35)
 
 #### :gear: DatastoreConfigSchema
 
-| Constant                | Type                                                                                                                                                                                                           |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DatastoreConfigSchema` | `ZodObject<{ maxMemorySize: ZodOptional<ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, "strict", ZodTypeAny, { ...; }, { ...; }>>; }, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                | Type                                                                                                                                         |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DatastoreConfigSchema` | `ZodObject<{ maxMemorySize: ZodOptional<ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/datastore.config.ts#L7)
 
 #### :gear: SatelliteIdSchema
 
-| Constant            | Type                                                                                                               |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `SatelliteIdSchema` | `ZodObject<{ id: ZodEffects<ZodString, string, string>; }, "strip", ZodTypeAny, { id: string; }, { id: string; }>` |
+| Constant            | Type                                    |
+| ------------------- | --------------------------------------- |
+| `SatelliteIdSchema` | `ZodObject<{ id: ZodString; }, $strip>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L16)
 
 #### :gear: SatelliteIdsSchema
 
-| Constant             | Type                                                                                                                                                              |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteIdsSchema` | `ZodObject<{ ids: ZodRecord<ZodUnion<[ZodLiteral<"production">, ZodString]>, ZodEffects<ZodString, string, string>>; }, "strip", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant             | Type                                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `SatelliteIdsSchema` | `ZodObject<{ ids: ZodRecord<ZodUnion<readonly [ZodLiteral<"production">, ZodString]>, ZodString>; }, $strip>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L35)
 
@@ -266,7 +266,7 @@ see EncodingType
 
 | Constant                       | Type                                                                                                                                                                                                                                                                                                                               |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteConfigOptionsSchema` | `ZodUnion<[ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>, "many">; }, "strict", ZodTypeAny, { ...; }, { ...; }>, "many">>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, "strip", ZodTypeAny, { ......` |
+| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; }, $strict>, ZodObject<.....` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L70)
 
@@ -274,47 +274,47 @@ see EncodingType
 
 | Constant           | Type                                                                                                                                                                                                                                                                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `JunoConfigSchema` | `ZodObject<{ satellite: ZodUnion<[ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>, "many">; }, "strict", ZodTypeAny, { ...; }, { ...; }>, "many">>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, "st...` |
+| `JunoConfigSchema` | `ZodObject<{ satellite: ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; },...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/juno.config.ts#L9)
 
 #### :gear: SatelliteDevDataStoreCollectionSchema
 
-| Constant                                | Type                                                                                                                                                                                                                                                                                                              |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteDevDataStoreCollectionSchema` | `ZodObject<Omit<{ collection: ZodString; read: ZodEnum<["public", "private", "managed", "controllers"]>; write: ZodEnum<["public", "private", "managed", "controllers"]>; ... 8 more ...; maxTokens: ZodOptional<...>; }, "createdAt" or ... 2 more ... or "maxSize">, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                                | Type                                                                                                                                                                                                                                                                                                               |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `SatelliteDevDataStoreCollectionSchema` | `ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; write: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 4 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L8)
 
 #### :gear: SatelliteDevStorageCollectionSchema
 
-| Constant                              | Type                                                                                                                                                                                                                                                                                                                  |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteDevStorageCollectionSchema` | `ZodObject<Omit<{ collection: ZodString; read: ZodEnum<["public", "private", "managed", "controllers"]>; write: ZodEnum<["public", "private", "managed", "controllers"]>; ... 8 more ...; maxTokens: ZodOptional<...>; }, "createdAt" or ... 2 more ... or "maxCapacity">, "strict", ZodTypeAny, { ...; }, { ...; }>` |
+| Constant                              | Type                                                                                                                                                                                                                                                                                                               |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `SatelliteDevStorageCollectionSchema` | `ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; write: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 4 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L27)
 
 #### :gear: SatelliteDevCollectionsSchema
 
-| Constant                        | Type                                                                                                                                                                                                                                                                                                                                 |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `SatelliteDevCollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<Omit<{ collection: ZodString; read: ZodEnum<["public", "private", "managed", "controllers"]>; write: ZodEnum<["public", "private", "managed", "controllers"]>; ... 8 more ...; maxTokens: ZodOptional<...>; }, "createdAt" or ... 2 more ... or "maxSize">, "strict", Zod...` |
+| Constant                        | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SatelliteDevCollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; write: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 4 more ...; maxTokens...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L46)
 
 #### :gear: SatelliteDevControllerSchema
 
-| Constant                       | Type                                                                                                                                                                                                     |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteDevControllerSchema` | `ZodObject<{ id: ZodEffects<ZodString, string, string>; scope: ZodEnum<["write", "admin", "submit"]>; }, "strict", ZodTypeAny, { id: string; scope: "admin" or ... 1 more ... or "submit"; }, { ...; }>` |
+| Constant                       | Type                                                                                                            |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| `SatelliteDevControllerSchema` | `ZodObject<{ id: ZodString; scope: ZodEnum<{ admin: "admin"; write: "write"; submit: "submit"; }>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L74)
 
 #### :gear: SatelliteDevConfigSchema
 
-| Constant                   | Type                                                                                                                                                                                                                                                                                                                                 |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `SatelliteDevConfigSchema` | `ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<Omit<{ collection: ZodString; read: ZodEnum<["public", "private", "managed", "controllers"]>; write: ZodEnum<["public", "private", "managed", "controllers"]>; ... 8 more ...; maxTokens: ZodOptional<...>; }, "createdAt" or ... 2 more ... or ...` |
+| Constant                   | Type                                                                                                                                                                                                                                                                                                                               |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SatelliteDevConfigSchema` | `ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<...>; }, $strict>; control...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L100)
 
@@ -322,7 +322,7 @@ see EncodingType
 
 | Constant              | Type                                                                                                                                                                                                                                                                                                                               |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `JunoDevConfigSchema` | `ZodObject<{ satellite: ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<Omit<{ collection: ZodString; read: ZodEnum<["public", "private", "managed", "controllers"]>; write: ZodEnum<["public", "private", "managed", "controllers"]>; ... 8 more ...; maxTokens: ZodOptional<...>; }, "created...` |
+| `JunoDevConfigSchema` | `ZodObject<{ satellite: ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<......` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L127)
 

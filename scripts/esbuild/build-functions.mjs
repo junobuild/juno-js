@@ -16,7 +16,6 @@ const build = () => {
       minify: true,
       splitting: true,
       treeShaking: true,
-      keepNames: true,
       format: 'esm',
       target: ['esnext'],
       platform: 'browser',

@@ -9,7 +9,7 @@ import type {_SERVICE as OrbiterActor} from '../../declarations/orbiter/orbiter.
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactoryOrbiter} from '../../declarations/orbiter/orbiter.factory.did.js';
 // eslint-disable-next-line import/no-relative-parent-imports
-import {idlFactory as idlCertifiedFactoryOrbiter} from '../../declarations/orbiter/orbiter.factory.did.js';
+import {idlFactory as idlCertifiedFactoryOrbiter} from '../../declarations/orbiter/orbiter.factory.certified.did.js';
 import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
 import type {_SERVICE as DeprecatedSatelliteVersionActor} from '../../declarations/satellite/satellite-deprecated-version.did';
 // eslint-disable-next-line import/no-relative-parent-imports

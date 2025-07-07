@@ -219,6 +219,10 @@ Parameters:
 - `caller`: - The caller identity, either a raw `Uint8Array`
   or a `Principal` instance.
 
+Returns:
+
+The raw user ID as a `Uint8Array`.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/utils/caller.utils.ts#L12)
 
 #### :gear: getAdminControllers
@@ -229,6 +233,10 @@ Gets the list of admin controllers from the Satellite.
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `getAdminControllers` | `() => [Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; }][]` |
 
+Returns:
+
+The list of admin controllers.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L15)
 
 #### :gear: getControllers
@@ -238,6 +246,10 @@ Gets the list of controllers from the Satellite.
 | Function         | Type                                                                                                                                                                                        |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `getControllers` | `() => [Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; }][]` |
+
+Returns:
+
+The list of all controllers.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L24)
 
@@ -254,6 +266,10 @@ Parameters:
 - `params`: - The parameters including the caller identity
   and the list of controllers to verify against.
 
+Returns:
+
+Whether the caller is an admin.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L36)
 
 #### :gear: isController
@@ -268,6 +284,10 @@ Parameters:
 
 - `params`: - The parameters including the caller identity
   and the list of controllers to verify against.
+
+Returns:
+
+Whether the caller is a controller.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L56)
 
@@ -286,6 +306,11 @@ Parameters:
 - `params`: - The parameters required to store the document,
   including the caller, collection, key, and document data.
 
+Returns:
+
+The context of the stored or updated document,
+including its key, collection, and both the previous and current versions of the document.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L39)
 
 #### :gear: deleteDocStore
@@ -301,6 +326,11 @@ Parameters:
 - `params`: - The parameters required to delete the document,
   including the caller, collection, key, and the expected version of the document.
 
+Returns:
+
+The context of the deleted document,
+including its key, collection, and optionally the previous document data if it existed.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L61)
 
 #### :gear: getDocStore
@@ -314,6 +344,10 @@ Retrieve a document from the datastore.
 Parameters:
 
 - `params`: - The parameters required to get the document.
+
+Returns:
+
+The document if found, or undefined if not.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L81)
 
@@ -329,6 +363,10 @@ Parameters:
 
 - `params`: - The parameters required to perform the list operation.
 
+Returns:
+
+A list result containing matching documents and pagination metadata.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L101)
 
 #### :gear: countCollectionDocsStore
@@ -343,6 +381,10 @@ Parameters:
 
 - `params`: - The parameters required to count documents in the collection.
 
+Returns:
+
+The total number of documents in the specified collection.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L121)
 
 #### :gear: countDocsStore
@@ -356,6 +398,10 @@ Counts the number of documents in a collection matching specific filters and own
 Parameters:
 
 - `params`: - The parameters required to perform the filtered count.
+
+Returns:
+
+The number of documents that match the provided filters.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L139)
 
@@ -385,6 +431,10 @@ Parameters:
 
 - `params`: - The parameters required to perform the filtered deletion.
 
+Returns:
+
+The context resulting of the deletion of documents that match the provided filters.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L175)
 
 #### :gear: decodeDocData
@@ -398,6 +448,10 @@ Decodes the raw data of a document into a JavaScript object.
 Parameters:
 
 - `data`: - The raw data to be decoded.
+
+Returns:
+
+The parsed JavaScript object.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L11)
 
@@ -413,6 +467,10 @@ Parameters:
 
 - `data`: - The data to be encoded.
 
+Returns:
+
+The serialized raw data.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
 
 #### :gear: countCollectionAssetsStore
@@ -427,6 +485,10 @@ Parameters:
 
 - `params`: - The parameters required to count assets in the collection.
 
+Returns:
+
+The total number of assets in the specified collection.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L35)
 
 #### :gear: countAssetsStore
@@ -440,6 +502,10 @@ Counts the number of assets in a collection matching specific filters and owned 
 Parameters:
 
 - `params`: - The parameters required to perform the filtered count.
+
+Returns:
+
+The number of assets that match the provided filters.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L53)
 
@@ -469,6 +535,10 @@ Parameters:
 
 - `params`: - The parameters required to delete the asset.
 
+Returns:
+
+The potentially deleted asset.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L89)
 
 #### :gear: deleteAssetsStore
@@ -497,6 +567,10 @@ Parameters:
 
 - `params`: - The parameters required to perform the filtered deletion.
 
+Returns:
+
+The potential asset resulting of the deletion that match the provided filters.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L125)
 
 #### :gear: getAssetStore
@@ -511,6 +585,10 @@ Parameters:
 
 - `params`: - The parameters required to get the asset.
 
+Returns:
+
+The asset if found, or undefined if not.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L147)
 
 #### :gear: listAssetsStore
@@ -524,6 +602,10 @@ Lists assets (without content) from the storage using optional filtering, pagina
 Parameters:
 
 - `params`: - The parameters required to perform the list operation.
+
+Returns:
+
+A list result containing matching assets and pagination metadata.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L167)
 
@@ -540,6 +622,10 @@ This function fetches a content chunk of a given asset encoding using the specif
 Parameters:
 
 - `params`: - The parameters including encoding, chunk index, and memory type.
+
+Returns:
+
+The content chunk if found, or `undefined` if not.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L189)
 
@@ -558,6 +644,11 @@ Parameters:
 
 - `params`: - The parameters required for the canister call
 
+Returns:
+
+A promise resolving to the decoded result of the call.
+Returns `undefined` if the canister response is empty.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/call.ic-cdk.ts#L20)
 
 #### :gear: id
@@ -572,6 +663,10 @@ the Principal of the executing canister.
 | -------- | ----------------- |
 | `id`     | `() => Principal` |
 
+Returns:
+
+The Principal ID of the Satellite.
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/id.ic-cdk.ts#L12)
 
 #### :gear: time
@@ -585,6 +680,10 @@ the system time publicly exposed and verified part of the IC state tree
 | Function | Type           |
 | -------- | -------------- |
 | `time`   | `() => bigint` |
+
+Returns:
+
+The current timestamp.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/time.ic-cdk.ts#L10)
 

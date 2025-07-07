@@ -9,7 +9,7 @@ import type {Environment, UserEnvironment} from './types/env.types';
 import type {Unsubscribe} from './types/subscription.types';
 import {envContainer, envSatelliteId} from './utils/window.env.utils';
 export * from './providers/auth.providers';
-export {signIn, signOut, unsafeIdentity} from './services/auth.services';
+export {getIdentityOnce, signIn, signOut, unsafeIdentity} from './services/auth.services';
 export * from './services/doc.services';
 export * from './services/factory.services';
 export * from './services/storage.services';

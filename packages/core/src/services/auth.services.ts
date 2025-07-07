@@ -104,3 +104,31 @@ export const getIdentity = (): Identity | undefined => authClient?.getIdentity()
  */
 export const unsafeIdentity = async (): Promise<Identity> =>
   (authClient ?? (await createAuthClient())).getIdentity();
+
+/**
+ * Returns the current identity if the user is authenticated.
+ *
+ * ⚠️ Use this function imperatively only. Do **not** persist the identity in global state.
+ * It is intended for short-lived or one-time operations.
+ *
+ * Typical use case is to enable developers to implement custom features for the Internet Computer:
+ * - Passing the identity to temporarily create an actor or agent to call a canister
+ * - Signing a message or making a one-time authenticated call
+ *
+ * @returns The authenticated identity, or null if unavailable.
+ */
+export const getIdentityOnce = async (): Promise<Identity | null> => {
+  const user = AuthStore.getInstance().get();
+
+  if (isNullish(user)) {
+    return null;
+  }
+
+  const authenticated = (await authClient?.isAuthenticated()) ?? false;
+
+  if (!authenticated) {
+    return null;
+  }
+
+  return authClient?.getIdentity() ?? null;
+};

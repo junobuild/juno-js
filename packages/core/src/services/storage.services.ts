@@ -289,15 +289,32 @@ export const getManyAssets = async ({
 };
 
 /**
- * Generates a download URL for a given asset.
+ * Returns a public URL for accessing a specific asset stored on a Satellite.
  *
- * @param {Object} params - The parameters for generating the download URL.
- * @param {Object} params.assetKey - The key details of the asset.
- * @param {string} params.assetKey.fullPath - The full path of the asset.
- * @param {string} params.assetKey.token - The access token for the asset.
- * @param {SatelliteOptions} [params.satellite] -  The satellite options (required only in NodeJS environment).
+ * This URL can be used to:
+ * - Open the file directly in a browser
+ * - Embed the asset in HTML elements like `<img src="...">`, `<video src="...">`, or `<a href="...">`
+ * - Programmatically download or display the asset in your application
  *
- * @returns {string} The generated download URL.
+ * ### Example
+ * ```ts
+ * const url = downloadUrl({
+ *   assetKey: {
+ *     fullPath: '/images/logo.png',
+ *   }
+ * });
+ *
+ * // Usage in an <img> tag
+ * <img src={url} alt="Logo" />
+ * ```
+ *
+ * @param {Object} params - Parameters for generating the URL.
+ * @param {Object} params.assetKey - Identifies the asset to generate the URL for.
+ * @param {string} params.assetKey.fullPath - The full path of the asset (e.g., `/folder/file.jpg`).
+ * @param {string} [params.assetKey.token] - Optional access token for accessing protected assets.
+ * @param {SatelliteOptions} [params.satellite] - Required only in Node.js environments to specify which Satellite to use.
+ *
+ * @returns {string} A full URL pointing to the asset.
  */
 export const downloadUrl = ({
   assetKey: {fullPath, token},

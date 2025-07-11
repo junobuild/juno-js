@@ -1,4 +1,3 @@
-import {beforeEach, describe, expect, it} from 'vitest';
 import {ActorStore} from '../../stores/actor.store';
 import {mockIdentity, mockSatelliteId} from '../mocks/mocks';
 // eslint-disable-next-line import/no-relative-parent-imports

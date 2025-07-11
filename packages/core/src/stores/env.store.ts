@@ -1,5 +1,5 @@
 import type {Environment} from '../types/env.types';
-import {Store} from './store';
+import {Store} from './_store';
 
 export class EnvStore extends Store<Environment | undefined> {
   private static instance: EnvStore;

@@ -13,5 +13,12 @@
     "baseUrl": ".",
     "types": ["vitest/globals", "node"]
   },
-  "exclude": []
+  "exclude": [],
+  "include": [
+    "./vite.config.ts",
+    "./packages/**/src/**/*.js",
+    "./packages/**/src/**/*.ts",
+    "./vitest.config.ts",
+    "./vitest.setup.ts"
+  ]
 }

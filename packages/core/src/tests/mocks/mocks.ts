@@ -4,6 +4,8 @@ import {Principal} from '@dfinity/principal';
 export const mockUserIdText = 'xlmdg-vkosz-ceopx-7wtgu-g3xmd-koiyc-awqaq-7modz-zf6r6-364rh-oqe';
 export const mockUserIdPrincipal = Principal.fromText(mockUserIdText);
 
+export const mockSatelliteId = "jx5yt-yyaaa-aaaal-abzbq-cai"
+
 const transformRequest = () => {
   console.error(
     'It looks like the agent is trying to make a request that should have been mocked at',

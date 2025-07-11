@@ -1,9 +1,6 @@
-import {HttpAgent, type Agent} from '@dfinity/agent';
-import {isNullish, nonNullish} from '@dfinity/utils';
-import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
-import type {Satellite} from '../types/satellite.types';
-
-type AgentParams = Required<Pick<Satellite, 'identity'>> & Pick<Satellite, 'container'>;
+import type {Agent, HttpAgent} from '@dfinity/agent';
+import {isNullish} from '@dfinity/utils';
+import {type CreateAgentParams, createAgent} from './_agent.factory';
 
 export class AgentStore {
   private static instance: AgentStore;
@@ -19,11 +16,11 @@ export class AgentStore {
     return AgentStore.instance;
   }
 
-  async getAgent({identity, ...rest}: AgentParams): Promise<Agent> {
+  async getAgent({identity, ...rest}: CreateAgentParams): Promise<Agent> {
     const key = identity.getPrincipal().toText();
 
     if (isNullish(this.#agents) || isNullish(this.#agents[key])) {
-      const agent = await this.createAgent({identity, ...rest});
+      const agent = await createAgent({identity, ...rest});
 
       this.#agents = {
         ...(this.#agents ?? {}),
@@ -38,23 +35,5 @@ export class AgentStore {
 
   reset() {
     this.#agents = null;
-  }
-
-  private async createAgent({identity, container}: AgentParams): Promise<HttpAgent> {
-    const localActor = nonNullish(container) && container !== false;
-
-    const host = localActor
-      ? container === true
-        ? DOCKER_CONTAINER_URL
-        : container
-      : 'https://icp-api.io';
-
-    const shouldFetchRootKey = nonNullish(container);
-
-    return await HttpAgent.create({
-      identity,
-      shouldFetchRootKey,
-      host
-    });
   }
 }

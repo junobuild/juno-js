@@ -86,11 +86,7 @@ const logout = () => {
   postMessage({msg: 'junoSignOutAuthTimer'});
 };
 
-/**
- * ℹ️ Exported for test purpose only.
- * @param delegation
- */
-export const emitExpirationTime = (delegation: DelegationChain) => {
+const emitExpirationTime = (delegation: DelegationChain) => {
   const expirationTime: bigint | undefined = delegation.delegations[0]?.delegation.expiration;
 
   // That would be unexpected here because the delegation has just been tested and is valid

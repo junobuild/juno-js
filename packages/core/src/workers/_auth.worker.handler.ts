@@ -1,4 +1,4 @@
-import {DelegationChain} from '@dfinity/identity';
+import type {DelegationChain} from '@dfinity/identity';
 import {AUTH_TIMER_INTERVAL} from '../constants/auth.constants';
 import type {PostMessage, PostMessageDataRequest} from '../types/post-message';
 import {createAuthClient} from '../utils/auth.utils';

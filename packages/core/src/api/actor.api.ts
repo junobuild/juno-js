@@ -1,18 +1,15 @@
-import type {ActorSubclass} from '@dfinity/agent';
-import type {ActorMethod} from '@dfinity/agent/lib/esm/actor';
+import type {ActorMethod, ActorSubclass} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {assertNonNullish} from '@dfinity/utils';
-import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
-// eslint-disable-next-line import/no-relative-parent-imports
-import {idlFactory as stockIdlFactory} from '../../declarations/satellite/satellite.factory.did.js';
 import {ActorStore} from '../stores/actor.store';
 import type {BuildType} from '../types/build.types';
 import type {Satellite} from '../types/satellite.types';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
+import {satelliteIdlFactory, type SatelliteActor} from './_actor.factory';
 
 export const getSatelliteActor = (satellite: Satellite): Promise<SatelliteActor> =>
   getActor({
-    idlFactory: stockIdlFactory,
+    idlFactory: satelliteIdlFactory,
     buildType: 'stock',
     ...satellite
   });

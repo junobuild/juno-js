@@ -1,7 +1,6 @@
+import {satelliteIdlFactory} from '../../api/_actor.factory';
 import {ActorStore} from '../../stores/actor.store';
 import {mockIdentity, mockSatelliteId} from '../mocks/mocks';
-// eslint-disable-next-line import/no-relative-parent-imports
-import {idlFactory as stockIdlFactory} from '../../../declarations/satellite/satellite.factory.did.js';
 
 describe('actor.store', () => {
   let actorStore: ActorStore;
@@ -15,7 +14,7 @@ describe('actor.store', () => {
     const actor = await actorStore.getActor({
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
-      idlFactory: stockIdlFactory,
+      idlFactory: satelliteIdlFactory,
       container: true,
       buildType: 'stock'
     });
@@ -28,7 +27,7 @@ describe('actor.store', () => {
     const actor1 = await actorStore.getActor({
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
-      idlFactory: stockIdlFactory,
+      idlFactory: satelliteIdlFactory,
       container: true,
       buildType: 'stock'
     });
@@ -36,7 +35,7 @@ describe('actor.store', () => {
     const actor2 = await actorStore.getActor({
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
-      idlFactory: stockIdlFactory,
+      idlFactory: satelliteIdlFactory,
       container: true,
       buildType: 'stock'
     });
@@ -48,7 +47,7 @@ describe('actor.store', () => {
     const actor1 = await actorStore.getActor({
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
-      idlFactory: stockIdlFactory,
+      idlFactory: satelliteIdlFactory,
       container: true,
       buildType: 'stock'
     });
@@ -56,7 +55,7 @@ describe('actor.store', () => {
     const actor2 = await actorStore.getActor({
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
-      idlFactory: stockIdlFactory,
+      idlFactory: satelliteIdlFactory,
       container: true,
       buildType: 'extended'
     });
@@ -68,7 +67,7 @@ describe('actor.store', () => {
     const actor1 = await actorStore.getActor({
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
-      idlFactory: stockIdlFactory,
+      idlFactory: satelliteIdlFactory,
       container: true,
       buildType: 'stock'
     });
@@ -78,7 +77,7 @@ describe('actor.store', () => {
     const actor2 = await actorStore.getActor({
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
-      idlFactory: stockIdlFactory,
+      idlFactory: satelliteIdlFactory,
       container: true,
       buildType: 'stock'
     });

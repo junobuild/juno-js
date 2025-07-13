@@ -16,7 +16,7 @@ import type {SatelliteOptions} from '../types/satellite.types';
 import type {Assets} from '../types/storage.types';
 import {sha256ToBase64String} from '../utils/crypto.utils';
 import {satelliteUrl} from '../utils/env.utils';
-import {getIdentity} from './identity.services';
+import {getAnyIdentity} from './identity.services';
 
 /**
  * Uploads a blob to the storage.
@@ -51,7 +51,7 @@ const uploadAssetIC = async ({
   encoding,
   description
 }: Storage & {satellite?: SatelliteOptions}): Promise<AssetKey> => {
-  const identity = getIdentity(satelliteOptions?.identity);
+  const identity = getAnyIdentity(satelliteOptions?.identity);
 
   // The IC certification does not currently support encoding
   const filename: string = decodeURI(storageFilename);
@@ -101,7 +101,7 @@ export const listAssets = async ({
   satellite?: SatelliteOptions;
   filter?: ListParams;
 }): Promise<Assets> => {
-  const satellite = {...satelliteOptions, identity: getIdentity(satelliteOptions?.identity)};
+  const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
 
   const {items, ...rest} = await listAssetsApi({
     collection,
@@ -171,7 +171,7 @@ export const countAssets = async ({
   satellite?: SatelliteOptions;
   filter?: ListParams;
 }): Promise<bigint> => {
-  const satellite = {...satelliteOptions, identity: getIdentity(satelliteOptions?.identity)};
+  const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
 
   return await countAssetsApi({
     collection,
@@ -199,7 +199,7 @@ export const deleteAsset = ({
   deleteAssetApi({
     collection,
     fullPath,
-    satellite: {...satellite, identity: getIdentity(satellite?.identity)}
+    satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)}
   });
 
 /**
@@ -218,7 +218,7 @@ export const deleteManyAssets = ({
 } & Pick<AssetKey, 'fullPath'>): Promise<void> =>
   deleteManyAssetsApi({
     assets,
-    satellite: {...satellite, identity: getIdentity(satellite?.identity)}
+    satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)}
   });
 
 /**
@@ -240,7 +240,7 @@ export const deleteFilteredAssets = async ({
   satellite?: SatelliteOptions;
   filter?: ListParams;
 }): Promise<void> => {
-  const satellite = {...satelliteOptions, identity: getIdentity(satelliteOptions?.identity)};
+  const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
 
   return await deleteFilteredAssetsApi({
     collection,
@@ -264,7 +264,7 @@ export const getAsset = async ({
   collection: string;
   satellite?: SatelliteOptions;
 } & Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await getAssetApi({...rest, satellite: {...satellite, identity}});
 };
@@ -283,7 +283,7 @@ export const getManyAssets = async ({
   assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
   satellite?: SatelliteOptions;
 }): Promise<(AssetNoContent | undefined)[]> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await getManyAssetsApi({...rest, satellite: {...satellite, identity}});
 };
@@ -322,7 +322,7 @@ export const downloadUrl = ({
 }: {
   assetKey: Pick<Asset, 'fullPath' | 'token'>;
 } & {satellite?: SatelliteOptions}): string => {
-  const satellite = {...satelliteOptions, identity: getIdentity(satelliteOptions?.identity)};
+  const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
 
   return `${satelliteUrl(satellite)}${fullPath}${nonNullish(token) ? `?token=${token}` : ''}`;
 };

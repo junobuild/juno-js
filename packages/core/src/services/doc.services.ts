@@ -12,7 +12,7 @@ import {
 import type {Doc} from '../types/doc.types';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {SatelliteOptions} from '../types/satellite.types';
-import {getIdentity} from './identity.services';
+import {getAnyIdentity} from './identity.services';
 
 /**
  * Retrieves a single document from a collection.
@@ -30,7 +30,7 @@ export const getDoc = async <D>({
   collection: string;
   satellite?: SatelliteOptions;
 } & Pick<Doc<D>, 'key'>): Promise<Doc<D> | undefined> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await getDocApi({...rest, satellite: {...satellite, identity}});
 };
@@ -50,7 +50,7 @@ export const getManyDocs = async ({
   docs: ({collection: string} & Pick<Doc<any>, 'key'>)[];
   satellite?: SatelliteOptions;
 }): Promise<(Doc<any> | undefined)[]> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await getManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
@@ -73,7 +73,7 @@ export const setDoc = async <D>({
   doc: Doc<D>;
   satellite?: SatelliteOptions;
 }): Promise<Doc<D>> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await setDocApi({...rest, satellite: {...satellite, identity}});
 };
@@ -93,7 +93,7 @@ export const setManyDocs = async ({
   docs: {collection: string; doc: Doc<any>}[];
   satellite?: SatelliteOptions;
 }): Promise<Doc<any>[]> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await setManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
@@ -116,7 +116,7 @@ export const deleteDoc = async <D>({
   doc: Doc<D>;
   satellite?: SatelliteOptions;
 }): Promise<void> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await deleteDocApi({...rest, satellite: {...satellite, identity}});
 };
@@ -136,7 +136,7 @@ export const deleteManyDocs = async ({
   docs: {collection: string; doc: Doc<any>}[];
   satellite?: SatelliteOptions;
 }): Promise<void> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await deleteManyDocsApi({...rest, satellite: {...satellite, identity}});
 };
@@ -161,7 +161,7 @@ export const deleteFilteredDocs = async ({
   filter?: ListParams;
   satellite?: SatelliteOptions;
 }): Promise<void> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await deleteFilteredDocsApi({
     ...rest,
@@ -188,7 +188,7 @@ export const listDocs = async <D>({
   filter?: ListParams;
   satellite?: SatelliteOptions;
 }): Promise<ListResults<Doc<D>>> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await listDocsApi<D>({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
 };
@@ -210,7 +210,7 @@ export const countDocs = async ({
   filter?: ListParams;
   satellite?: SatelliteOptions;
 }): Promise<bigint> => {
-  const identity = getIdentity(satellite?.identity);
+  const identity = getAnyIdentity(satellite?.identity);
 
   return await countDocsApi({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
 };

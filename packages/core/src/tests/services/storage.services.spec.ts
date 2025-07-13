@@ -1,15 +1,16 @@
 import * as storageModule from '@junobuild/storage';
-import {beforeEach, describe, expect, it, vi} from 'vitest';
 import * as actorApi from '../../api/actor.api';
-import {mockIdentity, mockSatelliteId, mockUserIdPrincipal} from '../mocks/mocks';
 import {
   countAssets,
   deleteAsset,
   deleteFilteredAssets,
-  deleteManyAssets, getAsset, getManyAssets,
+  deleteManyAssets,
+  getAsset,
+  getManyAssets,
   listAssets,
   uploadBlob
 } from '../../services/storage.services';
+import {mockIdentity, mockSatelliteId, mockUserIdPrincipal} from '../mocks/mocks';
 
 describe('storage.services', () => {
   const satellite = {identity: mockIdentity, satelliteId: mockSatelliteId, container: true};

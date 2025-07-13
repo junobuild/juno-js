@@ -1,5 +1,6 @@
 import type {Identity} from '@dfinity/agent';
 import {Principal} from '@dfinity/principal';
+import type {User} from '../../types/auth.types';
 
 export const mockUserIdText = 'xlmdg-vkosz-ceopx-7wtgu-g3xmd-koiyc-awqaq-7modz-zf6r6-364rh-oqe';
 export const mockUserIdPrincipal = Principal.fromText(mockUserIdText);
@@ -18,3 +19,8 @@ export const mockIdentity = {
   getPrincipal: () => mockUserIdPrincipal,
   transformRequest
 } as unknown as Identity;
+
+export const mockUser: User = {
+  key: mockUserIdText,
+  data: {provider: 'internet_identity'}
+};

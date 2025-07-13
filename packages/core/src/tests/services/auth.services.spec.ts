@@ -1,6 +1,6 @@
 import {AnonymousIdentity} from '@dfinity/agent';
 import {AuthClient} from '@dfinity/auth-client';
-import {beforeEach, describe, Mock, MockInstance} from 'vitest';
+import type {Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import {
   getIdentity,
@@ -13,10 +13,9 @@ import {
 } from '../../services/auth.services';
 import * as userServices from '../../services/user.services';
 import {AuthStore} from '../../stores/auth.store';
-import type {User} from '../../types/auth.types';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../../types/errors.types';
 import * as authUtils from '../../utils/auth.utils';
-import {mockIdentity, mockUserIdText} from '../mocks/mocks';
+import {mockIdentity, mockUser} from '../mocks/mocks';
 
 vi.mock('@dfinity/auth-client', async () => {
   const actual = (await import('@dfinity/auth-client')) as typeof import('@dfinity/auth-client');
@@ -31,11 +30,6 @@ vi.mock('@dfinity/auth-client', async () => {
 });
 
 describe('auth.services', () => {
-  const mockUser: User = {
-    key: mockUserIdText,
-    data: {provider: 'internet_identity'}
-  };
-
   const authClientMock = mock<AuthClient>();
 
   beforeEach(async () => {

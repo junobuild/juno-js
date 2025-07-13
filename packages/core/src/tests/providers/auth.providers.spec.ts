@@ -9,7 +9,6 @@ import {
 import {InternetIdentityProvider, NFIDProvider} from '../../providers/auth.providers';
 import {EnvStore} from '../../stores/env.store';
 import {mockSatelliteId} from '../mocks/mocks';
-import {id} from '@junobuild/functions/ic-cdk';
 
 describe('auth.providers', () => {
   beforeEach(() => {

@@ -77,6 +77,18 @@ export const signIn = (options?: SignInOptions): Promise<void> =>
  * @returns {Promise<void>} A promise that resolves when the sign-out process is complete.
  */
 export const signOut = async (): Promise<void> => {
+  await resetAuth();
+
+  // Recreate an HttpClient immediately because next sign-in, if window is not reloaded, would fail if the agent is created within the process.
+  // For example, Safari blocks the Internet Identity (II) window if the agent is created during the interaction.
+  // Agent-js must be created either globally or at least before performing a sign-in.
+  authClient = await createAuthClient();
+};
+
+/**
+ * ℹ️ Exposed for testing purpose only. Should not be leaked to consumer or used by the library.
+ */
+export const resetAuth = async () => {
   await authClient?.logout();
 
   // Reset local object otherwise next sign in (sign in - sign out - sign in) might not work out - i.e. agent-js might not recreate the delegation or identity if not resetted
@@ -87,11 +99,6 @@ export const signOut = async (): Promise<void> => {
 
   ActorStore.getInstance().reset();
   AgentStore.getInstance().reset();
-
-  // Recreate an HttpClient immediately because next sign-in, if window is not reloaded, would fail if the agent is created within the process.
-  // For example, Safari blocks the Internet Identity (II) window if the agent is created during the interaction.
-  // Agent-js must be created either globally or at least before performing a sign-in.
-  authClient = await createAuthClient();
 };
 
 export const getIdentity = (): Identity | undefined => authClient?.getIdentity();

@@ -1,13 +1,9 @@
 import {AuthStore} from '../../stores/auth.store';
 import type {User} from '../../types/auth.types';
+import {mockUser} from '../mocks/mocks';
 
 describe('auth.store', () => {
   let authStore: AuthStore;
-
-  const mockUser: User = {
-    key: 'user-key',
-    data: {provider: 'internet_identity'}
-  };
 
   beforeEach(() => {
     authStore = AuthStore.getInstance();

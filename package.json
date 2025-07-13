@@ -41,6 +41,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^24.0.1",
     "esbuild": "^0.25.5",
+    "fake-indexeddb": "^6.0.1",
     "jsdom": "^26.1.0",
     "prettier": "^3.5.3",
     "prettier-plugin-organize-imports": "^4.1.0",

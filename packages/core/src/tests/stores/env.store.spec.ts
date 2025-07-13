@@ -63,4 +63,12 @@ describe('env.store', () => {
 
     expect(callback).toHaveBeenCalledTimes(1);
   });
+
+  it('resets env to null', () => {
+    envStore.set(mockEnv);
+
+    envStore.reset();
+
+    expect(envStore.get()).toBeNull();
+  });
 });

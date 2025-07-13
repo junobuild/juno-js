@@ -4,7 +4,7 @@ import {Store} from './_store';
 export class EnvStore extends Store<Environment | undefined> {
   private static instance: EnvStore;
 
-  private env: Environment | undefined;
+  private env: Environment | undefined | null;
 
   private constructor() {
     super();
@@ -23,8 +23,12 @@ export class EnvStore extends Store<Environment | undefined> {
     this.populate(env);
   }
 
-  get(): Environment | undefined {
+  get(): Environment | undefined | null {
     return this.env;
+  }
+
+  reset() {
+    this.env = null;
   }
 
   override subscribe(callback: (data: Environment | null | undefined) => void): () => void {

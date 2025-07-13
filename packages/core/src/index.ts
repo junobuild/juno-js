@@ -11,7 +11,7 @@ import {envContainer, envSatelliteId} from './utils/window.env.utils';
 export * from './providers/auth.providers';
 export {getIdentityOnce, signIn, signOut, unsafeIdentity} from './services/auth.services';
 export * from './services/doc.services';
-export * from './services/factory.services';
+export * from './services/functions.services';
 export * from './services/storage.services';
 export type * from './types/auth.types';
 export type * from './types/doc.types';

@@ -215,7 +215,7 @@ export const deleteManyAssets = ({
 }: {
   assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
   satellite?: SatelliteOptions;
-} & Pick<AssetKey, 'fullPath'>): Promise<void> =>
+}): Promise<void> =>
   deleteManyAssetsApi({
     assets,
     satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)}

@@ -1,4 +1,5 @@
 import type {HttpAgent} from '@dfinity/agent';
+import 'fake-indexeddb/auto';
 import {vi} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 

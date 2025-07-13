@@ -4,10 +4,7 @@ import {
   type AssetKey,
   type UploadAsset
 } from '@junobuild/storage';
-import type {
-  AssetNoContent,
-  _SERVICE as SatelliteActor
-} from '../../declarations/satellite/satellite.did';
+import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import type {ListParams, ListResults} from '../types/list.types';
 import type {Satellite} from '../types/satellite.types';
 import {toListParams} from '../utils/list.utils';
@@ -75,7 +72,7 @@ export const deleteAsset = async ({
   collection: string;
   satellite: Satellite;
 } & Pick<AssetKey, 'fullPath'>): Promise<void> => {
-  const actor: SatelliteActor = await getSatelliteActor(satellite);
+  const actor = await getSatelliteActor(satellite);
 
   return actor.del_asset(collection, fullPath);
 };

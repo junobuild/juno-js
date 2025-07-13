@@ -3,12 +3,18 @@ import {DelegationChain} from '@dfinity/identity';
 import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as workerModule from '../../workers/_auth.worker.handler';
+import * as authWorkerUtils from '../../workers/_auth.worker.utils';
+
+vi.mock('../../workers/_auth.worker.utils');
 
 vi.mock('@dfinity/auth-client', async () => {
   const actual =
     await vi.importActual<typeof import('@dfinity/auth-client')>('@dfinity/auth-client');
   return {
     ...actual,
+    IdbStorage: class {
+      get = vi.fn().mockResolvedValue(null);
+    },
     AuthClient: {
       ...actual.AuthClient,
       create: vi.fn()
@@ -20,6 +26,7 @@ describe('_auth.worker.handler', () => {
   const authClientMock = mock<AuthClient>();
 
   beforeEach(() => {
+    vi.resetModules();
     vi.restoreAllMocks();
     (AuthClient.create as Mock).mockResolvedValue(authClientMock);
     globalThis.postMessage = vi.fn();
@@ -39,7 +46,7 @@ describe('_auth.worker.handler', () => {
       ]
     } as unknown as DelegationChain;
 
-    vi.spyOn(workerModule, 'checkDelegationChain').mockResolvedValue({
+    vi.spyOn(authWorkerUtils, 'checkDelegationChain').mockResolvedValue({
       valid: true,
       delegation: delegationMock
     });
@@ -47,7 +54,7 @@ describe('_auth.worker.handler', () => {
     await workerModule.onTimerSignOut();
 
     expect(globalThis.postMessage).toHaveBeenCalledWith(
-      expect.objectContaining({ msg: 'junoDelegationRemainingTime' })
+      expect.objectContaining({msg: 'junoDelegationRemainingTime'})
     );
   });
 
@@ -56,36 +63,36 @@ describe('_auth.worker.handler', () => {
 
     await workerModule.onTimerSignOut();
 
-    expect(globalThis.postMessage).toHaveBeenCalledWith({ msg: 'junoSignOutAuthTimer' });
+    expect(globalThis.postMessage).toHaveBeenCalledWith({msg: 'junoSignOutAuthTimer'});
   });
 
   it('emits junoSignOutAuthTimer when delegation is invalid', async () => {
     authClientMock.isAuthenticated.mockResolvedValue(true);
 
-    vi.spyOn(workerModule, 'checkDelegationChain').mockResolvedValue({
+    vi.spyOn(authWorkerUtils, 'checkDelegationChain').mockResolvedValue({
       valid: false,
       delegation: null
     });
 
     await workerModule.onTimerSignOut();
 
-    expect(globalThis.postMessage).toHaveBeenCalledWith({ msg: 'junoSignOutAuthTimer' });
+    expect(globalThis.postMessage).toHaveBeenCalledWith({msg: 'junoSignOutAuthTimer'});
   });
 
   it('emits junoSignOutAuthTimer when delegation has no expiration', async () => {
     authClientMock.isAuthenticated.mockResolvedValue(true);
 
     const delegationMock = {
-      delegations: [{ delegation: {} }]
+      delegations: [{delegation: {}}]
     } as unknown as DelegationChain;
 
-    vi.spyOn(workerModule, 'checkDelegationChain').mockResolvedValue({
+    vi.spyOn(authWorkerUtils, 'checkDelegationChain').mockResolvedValue({
       valid: true,
       delegation: delegationMock
     });
 
     await workerModule.onTimerSignOut();
 
-    expect(globalThis.postMessage).toHaveBeenCalledWith({ msg: 'junoSignOutAuthTimer' });
+    expect(globalThis.postMessage).toHaveBeenCalledWith({msg: 'junoSignOutAuthTimer'});
   });
 });

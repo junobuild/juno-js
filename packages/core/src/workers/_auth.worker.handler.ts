@@ -1,8 +1,8 @@
-import type {DelegationChain} from '@dfinity/identity';
+import {IdbStorage, KEY_STORAGE_DELEGATION} from '@dfinity/auth-client';
+import {DelegationChain, isDelegationValid} from '@dfinity/identity';
 import {AUTH_TIMER_INTERVAL} from '../constants/auth.constants';
 import type {PostMessage, PostMessageDataRequest} from '../types/post-message';
 import {createAuthClient} from '../utils/auth.utils';
-import {checkDelegationChain} from './_auth.worker.utils';
 
 export const onAuthMessage = ({data}: MessageEvent<PostMessage<PostMessageDataRequest>>) => {
   const {msg} = data;
@@ -57,6 +57,26 @@ export const onTimerSignOut = async () => {
 const checkAuthentication = async (): Promise<boolean> => {
   const authClient = await createAuthClient();
   return authClient.isAuthenticated();
+};
+
+/**
+ * If there is no delegation or if not valid, then delegation is not valid.
+ *
+ * @returns Object true if delegation is valid and delegation
+ */
+const checkDelegationChain = async (): Promise<{
+  valid: boolean;
+  delegation: DelegationChain | null;
+}> => {
+  const idbStorage: IdbStorage = new IdbStorage();
+  const delegationChain: string | null = await idbStorage.get(KEY_STORAGE_DELEGATION);
+
+  const delegation = delegationChain !== null ? DelegationChain.fromJSON(delegationChain) : null;
+
+  return {
+    valid: delegation !== null && isDelegationValid(delegation),
+    delegation
+  };
 };
 
 const logout = () => {

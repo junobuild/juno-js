@@ -1,8 +1,15 @@
 import * as storageModule from '@junobuild/storage';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
 import * as actorApi from '../../api/actor.api';
-import * as storageServices from '../../services/storage.services';
 import {mockIdentity, mockSatelliteId, mockUserIdPrincipal} from '../mocks/mocks';
+import {
+  countAssets,
+  deleteAsset,
+  deleteFilteredAssets,
+  deleteManyAssets, getAsset, getManyAssets,
+  listAssets,
+  uploadBlob
+} from '../../services/storage.services';
 
 describe('storage.services', () => {
   const satellite = {identity: mockIdentity, satelliteId: mockSatelliteId, container: true};
@@ -25,7 +32,7 @@ describe('storage.services', () => {
       return;
     });
 
-    await storageServices.uploadBlob(asset);
+    await uploadBlob(asset);
 
     expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
     expect(mockUploadAssetStorage).toHaveBeenCalledOnce();
@@ -57,7 +64,7 @@ describe('storage.services', () => {
 
     vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({list_assets: mockListAssets} as any);
 
-    const result = await storageServices.listAssets({collection, filter: {}, satellite});
+    const result = await listAssets({collection, filter: {}, satellite});
 
     expect(result.items[0].fullPath).toBe(fullPath);
   });
@@ -68,7 +75,7 @@ describe('storage.services', () => {
       count_assets: mockCountAssets
     } as any);
 
-    const result = await storageServices.countAssets({collection, filter: {}, satellite});
+    const result = await countAssets({collection, filter: {}, satellite});
 
     expect(result).toBe(2n);
   });
@@ -77,7 +84,7 @@ describe('storage.services', () => {
     const mockDelAsset = vi.fn().mockResolvedValue(undefined);
     vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({del_asset: mockDelAsset} as any);
 
-    await storageServices.deleteAsset({collection, fullPath, satellite});
+    await deleteAsset({collection, fullPath, satellite});
 
     expect(mockDelAsset).toHaveBeenCalledOnce();
   });
@@ -88,7 +95,7 @@ describe('storage.services', () => {
       del_many_assets: mockDelManyAssets
     } as any);
 
-    await storageServices.deleteManyAssets({assets: [{collection, fullPath}], satellite});
+    await deleteManyAssets({assets: [{collection, fullPath}], satellite});
 
     expect(mockDelManyAssets).toHaveBeenCalledOnce();
   });
@@ -99,7 +106,7 @@ describe('storage.services', () => {
       del_filtered_assets: mockDelFilteredAssets
     } as any);
 
-    await storageServices.deleteFilteredAssets({collection, filter: {}, satellite});
+    await deleteFilteredAssets({collection, filter: {}, satellite});
 
     expect(mockDelFilteredAssets).toHaveBeenCalledOnce();
   });
@@ -108,7 +115,7 @@ describe('storage.services', () => {
     const mockGetAsset = vi.fn().mockResolvedValue([{key: {full_path: fullPath}}]);
     vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({get_asset: mockGetAsset} as any);
 
-    const result = await storageServices.getAsset({collection, fullPath, satellite});
+    const result = await getAsset({collection, fullPath, satellite});
 
     expect(result?.key?.full_path).toBe(fullPath);
   });
@@ -121,7 +128,7 @@ describe('storage.services', () => {
       get_many_assets: mockGetManyAssets
     } as any);
 
-    const result = await storageServices.getManyAssets({
+    const result = await getManyAssets({
       assets: [{collection, fullPath}],
       satellite
     });

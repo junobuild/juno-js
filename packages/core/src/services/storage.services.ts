@@ -18,11 +18,12 @@ import type {SatelliteOptions} from '../types/satellite';
 import type {Assets} from '../types/storage.types';
 import {sha256ToBase64String} from '../utils/crypto.utils';
 import {satelliteUrl} from '../utils/env.utils';
-import {getAnyIdentity} from './identity.services';
+import {getAnyIdentity} from './_identity.services';
 
 /**
  * Uploads a blob to the storage.
- * @param {Storage & {satellite?: SatelliteOptions}} params - The storage parameters. Satellite options are required only in NodeJS environment.
+ *
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<AssetKey>} A promise that resolves to the asset key.
  */
 export const uploadBlob = (params: Storage & {satellite?: SatelliteOptions}): Promise<AssetKey> =>
@@ -30,7 +31,8 @@ export const uploadBlob = (params: Storage & {satellite?: SatelliteOptions}): Pr
 
 /**
  * Uploads a file to the storage.
- * @param {Partial<Pick<Storage, 'filename'>> & Omit<Storage, 'filename' | 'data'> & {data: File} & {satellite?: SatelliteOptions}} params - The storage parameters. Satellite options are required only in NodeJS environment.
+ *
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<AssetKey>} A promise that resolves to the asset key.
  */
 export const uploadFile = (
@@ -91,11 +93,12 @@ const uploadAssetIC = async ({
 
 /**
  * Lists assets in a collection with optional filtering.
+ *
  * @param {Object} params - The parameters for listing the assets.
  * @param {string} params.collection - The name of the collection.
  * @param {ListParams} [params.filter] - The filter parameters.
- * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
  * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<Assets>} A promise that resolves to the list of assets.
  */
 export const listAssets = async ({
@@ -165,11 +168,12 @@ export const listAssets = async ({
 
 /**
  * Counts assets in a collection with optional filtering.
+ *
  * @param {Object} params - The parameters for counting the assets.
  * @param {string} params.collection - The name of the collection.
  * @param {ListParams} [params.filter] - The filter parameters for narrowing down the count.
- * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
  * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<bigint>} A promise that resolves to the count of assets as a bigint.
  */
 export const countAssets = async ({
@@ -195,10 +199,11 @@ export const countAssets = async ({
 
 /**
  * Deletes an asset from the storage.
+ *
  * @param {Object} params - The parameters for deleting the asset.
  * @param {string} params.collection - The name of the collection.
- * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
  * @param {string} params.fullPath - The full path of the asset.
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<void>} A promise that resolves when the asset is deleted.
  */
 export const deleteAsset = ({
@@ -218,9 +223,10 @@ export const deleteAsset = ({
 
 /**
  * Deletes multiple assets from the storage.
+ *
  * @param {Object} params - The parameters for deleting the assets.
  * @param {Array} params.assets - The list of assets with their collections and full paths.
- * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<void>} A promise that resolves when the assets are deleted.
  */
 export const deleteManyAssets = ({
@@ -241,9 +247,8 @@ export const deleteManyAssets = ({
  *
  * @param {Object} params - The parameters for deleting the assets.
  * @param {string} params.collection - The name of the collection from which to delete assets.
- * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
  * @param {ListParams} [params.filter] - The filter criteria to match assets for deletion.
- *
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<void>} A promise that resolves when the assets matching the filter criteria are deleted.
  */
 export const deleteFilteredAssets = async ({
@@ -267,11 +272,12 @@ export const deleteFilteredAssets = async ({
 
 /**
  * Retrieves an asset from the storage.
+ *
  * @param {Object} params - The parameters for retrieving the asset.
  * @param {string} params.collection - The name of the collection.
  * @param {string} params.fullPath - The full path of the asset.
- * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
  * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<AssetNoContent | undefined>} A promise that resolves to the asset or undefined if not found.
  */
 export const getAsset = async ({
@@ -294,10 +300,11 @@ export const getAsset = async ({
 
 /**
  * Retrieves multiple assets from the storage.
+ *
  * @param {Object} params - The parameters for retrieving the assets.
  * @param {Array} params.assets - The list of assets with their collections and full paths.
- * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
  * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<Array<AssetNoContent | undefined>>} A promise that resolves to an array of assets or undefined if not found.
  */
 export const getManyAssets = async ({
@@ -342,8 +349,7 @@ export const getManyAssets = async ({
  * @param {Object} params.assetKey - Identifies the asset to generate the URL for.
  * @param {string} params.assetKey.fullPath - The full path of the asset (e.g., `/folder/file.jpg`).
  * @param {string} [params.assetKey.token] - Optional access token for accessing protected assets.
- * @param {SatelliteOptions} [params.satellite] - Required only in Node.js environments to specify which Satellite to use.
- *
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {string} A full URL pointing to the asset.
  */
 export const downloadUrl = ({

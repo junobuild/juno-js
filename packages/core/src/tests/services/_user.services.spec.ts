@@ -1,8 +1,8 @@
 import {JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE} from '@junobuild/errors';
 import {toArray} from '@junobuild/utils';
 import * as actorApi from '../../api/actor.api';
+import * as userServices from '../../services/_user.services';
 import * as authServices from '../../services/auth.services';
-import * as userServices from '../../services/user.services';
 import {InitError} from '../../types/errors';
 import {mockIdentity, mockUserIdPrincipal, mockUserIdText} from '../mocks/mocks';
 

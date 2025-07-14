@@ -12,7 +12,7 @@ import {AuthStore} from '../stores/auth.store';
 import type {Provider, SignInOptions} from '../types/auth';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
 import {createAuthClient} from '../utils/auth.utils';
-import {initUser} from './user.services';
+import {initUser} from './_user.services';
 
 let authClient: AuthClient | undefined | null;
 

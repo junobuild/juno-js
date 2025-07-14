@@ -2,6 +2,7 @@ import {AnonymousIdentity} from '@dfinity/agent';
 import {AuthClient} from '@dfinity/auth-client';
 import type {Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
+import * as userServices from '../../services/_user.services';
 import {
   getIdentity,
   getIdentityOnce,
@@ -11,7 +12,6 @@ import {
   signOut,
   unsafeIdentity
 } from '../../services/auth.services';
-import * as userServices from '../../services/user.services';
 import {AuthStore} from '../../stores/auth.store';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../../types/errors';
 import * as authUtils from '../../utils/auth.utils';

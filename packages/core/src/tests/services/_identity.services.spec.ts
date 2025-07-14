@@ -1,6 +1,6 @@
 import {AnonymousIdentity} from '@dfinity/agent';
+import {getAnyIdentity} from '../../services/_identity.services';
 import * as authServices from '../../services/auth.services';
-import {getAnyIdentity} from '../../services/identity.services';
 import {mockIdentity} from '../mocks/mocks';
 
 describe('identity.services', () => {

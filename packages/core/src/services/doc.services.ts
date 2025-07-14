@@ -14,16 +14,17 @@ import type {ReadOptions} from '../types/call-options';
 import type {Doc} from '../types/doc';
 import type {ListParams, ListResults} from '../types/list';
 import type {SatelliteOptions} from '../types/satellite';
-import {getAnyIdentity} from './identity.services';
+import {getAnyIdentity} from './_identity.services';
 
 /**
  * Retrieves a single document from a collection.
+ *
  * @template D
  * @param {Object} params - The parameters for retrieving the document.
  * @param {string} params.collection - The name of the collection.
  * @param {string} params.key - The key of the document to retrieve.
- * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
  * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<Doc<D> | undefined>} A promise that resolves to the document or undefined if not found.
  */
 export const getDoc = async <D>({
@@ -46,10 +47,11 @@ export const getDoc = async <D>({
 
 /**
  * Retrieves multiple documents from a single or different collections in a single call.
+ *
  * @param {Object} params - The parameters for retrieving the documents.
  * @param {Array} params.docs - The list of documents with their collections and keys.
- * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
  * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<Array<Doc<any> | undefined>>} A promise that resolves to an array of documents or undefined if not found.
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -74,11 +76,12 @@ export const getManyDocs = async ({
 
 /**
  * Adds or updates a single document in a collection.
+ *
  * @template D
  * @param {Object} params - The parameters for adding or updating the document.
  * @param {string} params.collection - The name of the collection.
  * @param {Doc<D>} params.doc - The document to add or update.
- * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<Doc<D>>} A promise that resolves to the added or updated document.
  */
 export const setDoc = async <D>({
@@ -100,9 +103,10 @@ export const setDoc = async <D>({
 
 /**
  * Adds or updates multiple documents in a or different collections.
+ *
  * @param {Object} params - The parameters for adding or updating the documents.
  * @param {Array} params.docs - The list of documents with their collections and data.
- * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<Array<Doc<any>>>} A promise that resolves to an array of added or updated documents.
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -125,11 +129,12 @@ export const setManyDocs = async ({
 
 /**
  * Deletes a single document from a collection.
+ *
  * @template D
  * @param {Object} params - The parameters for deleting the document.
  * @param {string} params.collection - The name of the collection.
  * @param {Doc<D>} params.doc - The document to delete.
- * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<void>} A promise that resolves when the document is deleted.
  */
 export const deleteDoc = async <D>({
@@ -151,9 +156,10 @@ export const deleteDoc = async <D>({
 
 /**
  * Deletes multiple documents from a or different collections.
+ *
  * @param {Object} params - The parameters for deleting the documents.
  * @param {Array} params.docs - The list of documents with their collections and data.
- * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<void>} A promise that resolves when the documents are deleted.
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -180,8 +186,7 @@ export const deleteManyDocs = async ({
  * @param {Object} params - The parameters for deleting documents.
  * @param {string} params.collection - The name of the collection.
  * @param {ListParams} [params.filter] - The filter criteria to match documents for deletion.
- * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
- *
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<void>} A promise that resolves when the documents are deleted.
  */
 export const deleteFilteredDocs = async ({
@@ -205,12 +210,13 @@ export const deleteFilteredDocs = async ({
 
 /**
  * Lists documents in a collection with optional filtering.
+ *
  * @template D
  * @param {Object} params - The parameters for listing the documents.
  * @param {string} params.collection - The name of the collection.
  * @param {ListParams} [params.filter] - Optional filter parameters.
- * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
  * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<ListResults<Doc<D>>>} A promise that resolves to the list of documents.
  */
 export const listDocs = async <D>({
@@ -236,11 +242,12 @@ export const listDocs = async <D>({
 
 /**
  * Counts documents in a collection with optional filtering.
+ *
  * @param {Object} params - The parameters for counting the documents.
  * @param {string} params.collection - The name of the collection.
  * @param {ListParams} [params.filter] - Optional filter parameters.
- * @param {SatelliteOptions} [params.satellite] - Options for the satellite (useful for NodeJS usage only).
  * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<bigint>} A promise that resolves to the count of documents as a bigint.
  */
 export const countDocs = async ({

@@ -1,12 +1,12 @@
 import {nonNullish} from '@dfinity/utils';
 import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
 import {EnvStore} from '../stores/env.store';
-import type {Satellite} from '../types/satellite.types';
+import type {SatelliteContext} from '../types/satellite.types';
 
 export const satelliteUrl = ({
   satelliteId: customSatelliteId,
   container: customContainer
-}: Satellite): string => {
+}: SatelliteContext): string => {
   const {satelliteId} = customOrEnvSatelliteId({satelliteId: customSatelliteId});
   const {container} = customOrEnvContainer({container: customContainer});
 
@@ -22,14 +22,14 @@ export const satelliteUrl = ({
 
 export const customOrEnvSatelliteId = ({
   satelliteId
-}: Pick<Satellite, 'satelliteId'>): Pick<Satellite, 'satelliteId'> =>
+}: Pick<SatelliteContext, 'satelliteId'>): Pick<SatelliteContext, 'satelliteId'> =>
   nonNullish(satelliteId)
     ? {satelliteId}
     : (EnvStore.getInstance().get() ?? {satelliteId: undefined});
 
 export const customOrEnvContainer = ({
   container: customContainer
-}: Pick<Satellite, 'container'>): Pick<Satellite, 'container'> =>
+}: Pick<SatelliteContext, 'container'>): Pick<SatelliteContext, 'container'> =>
   nonNullish(customContainer)
     ? {container: customContainer}
     : (EnvStore.getInstance().get() ?? {container: undefined});

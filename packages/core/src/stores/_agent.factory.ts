@@ -1,10 +1,10 @@
 import {HttpAgent} from '@dfinity/agent';
 import {nonNullish} from '@dfinity/utils';
 import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
-import type {Satellite} from '../types/satellite.types';
+import type {SatelliteContext} from '../types/satellite.types';
 
-export type CreateAgentParams = Required<Pick<Satellite, 'identity'>> &
-  Pick<Satellite, 'container'>;
+export type CreateAgentParams = Required<Pick<SatelliteContext, 'identity'>> &
+  Pick<SatelliteContext, 'container'>;
 
 export const createAgent = async ({identity, container}: CreateAgentParams): Promise<HttpAgent> => {
   const localActor = nonNullish(container) && container !== false;

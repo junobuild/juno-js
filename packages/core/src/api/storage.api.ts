@@ -6,14 +6,14 @@ import {
 } from '@junobuild/storage';
 import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import type {ListParams, ListResults} from '../types/list.types';
-import type {Satellite} from '../types/satellite.types';
+import type {SatelliteContext} from '../types/satellite.types';
 import {toListParams} from '../utils/list.utils';
 import {getSatelliteActor} from './actor.api';
 
 export const uploadAsset = async ({
   satellite,
   ...asset
-}: UploadAsset & {satellite: Satellite}): Promise<void> => {
+}: UploadAsset & {satellite: SatelliteContext}): Promise<void> => {
   const actor = await getSatelliteActor(satellite);
 
   await uploadAssetStorage({
@@ -28,7 +28,7 @@ export const listAssets = async ({
   filter
 }: {
   collection: string;
-  satellite: Satellite;
+  satellite: SatelliteContext;
   filter: ListParams;
 }): Promise<ListResults<AssetNoContent>> => {
   const {list_assets} = await getSatelliteActor(satellite);
@@ -56,7 +56,7 @@ export const countAssets = async ({
   filter
 }: {
   collection: string;
-  satellite: Satellite;
+  satellite: SatelliteContext;
   filter: ListParams;
 }): Promise<bigint> => {
   const {count_assets} = await getSatelliteActor(satellite);
@@ -70,7 +70,7 @@ export const deleteAsset = async ({
   satellite
 }: {
   collection: string;
-  satellite: Satellite;
+  satellite: SatelliteContext;
 } & Pick<AssetKey, 'fullPath'>): Promise<void> => {
   const actor = await getSatelliteActor(satellite);
 
@@ -82,7 +82,7 @@ export const deleteManyAssets = async ({
   satellite
 }: {
   assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
-  satellite: Satellite;
+  satellite: SatelliteContext;
 }): Promise<void> => {
   const {del_many_assets} = await getSatelliteActor(satellite);
 
@@ -100,7 +100,7 @@ export const deleteFilteredAssets = async ({
   filter
 }: {
   collection: string;
-  satellite: Satellite;
+  satellite: SatelliteContext;
   filter: ListParams;
 }): Promise<void> => {
   const {del_filtered_assets} = await getSatelliteActor(satellite);
@@ -114,7 +114,7 @@ export const getAsset = async ({
   satellite
 }: {
   collection: string;
-  satellite: Satellite;
+  satellite: SatelliteContext;
 } & Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
   const {get_asset} = await getSatelliteActor(satellite);
   return fromNullable(await get_asset(collection, fullPath));
@@ -125,7 +125,7 @@ export const getManyAssets = async ({
   satellite
 }: {
   assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
-  satellite: Satellite;
+  satellite: SatelliteContext;
 }): Promise<(AssetNoContent | undefined)[]> => {
   const {get_many_assets} = await getSatelliteActor(satellite);
 

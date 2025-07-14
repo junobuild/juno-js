@@ -3,13 +3,13 @@ import type {ActorMethod} from '@dfinity/agent/lib/esm/actor';
 import type {IDL} from '@dfinity/candid';
 import {isNullish} from '@dfinity/utils';
 import type {BuildType} from '../types/build.types';
-import type {Satellite} from '../types/satellite.types';
+import type {SatelliteContext} from '../types/satellite.types';
 import {AgentStore} from './agent.store';
 
 type ActorParams = {
   idlFactory: IDL.InterfaceFactory;
-} & Required<Pick<Satellite, 'satelliteId' | 'identity'>> &
-  Pick<Satellite, 'container'>;
+} & Required<Pick<SatelliteContext, 'satelliteId' | 'identity'>> &
+  Pick<SatelliteContext, 'container'>;
 
 type ActorRecord = Record<string, ActorMethod>;
 

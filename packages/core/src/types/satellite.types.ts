@@ -1,31 +1,44 @@
 import type {Identity} from '@dfinity/agent';
 
 /**
- * Represents the configuration for a satellite.
+ * Configuration options for connecting to a satellite.
  * @interface
  */
-export interface Satellite {
+export interface SatelliteContext {
   /**
-   * The identity associated with the satellite.
+   * The identity used to authenticate with the satellite.
+   * Typically derived from Internet Identity or another supported identity type.
+   *
    * @type {Identity}
    */
   identity: Identity;
 
   /**
-   * The unique identifier for the satellite.
+   * The unique ID of the satellite to interact with.
+   * If not provided, attempts to use one defined in environment variables.
+   * If ultimately none is available, the call will fail.
+   *
    * @type {string}
+   * @optional
    */
   satelliteId?: string;
 
   /**
-   * Specifies whether the satellite is running in a container or provides the container URL. i.e. URL to Docker local development.
+   * Indicates if the satellite is running in a local container, or provides the container URL.
+   * - If `true`, connects to the default local container (for development).
+   * - If a string, specifies the full container URL (e.g., "http://localhost:4943").
+   * - If not set, connects to the production satellite.
+   *
    * @type {boolean | string}
+   * @optional
    */
   container?: boolean | string;
 }
 
 /**
- * Represents partial configuration options for a satellite. To be used only on NodeJS or rarely used for browser.
- * @typedef {Partial<Satellite>} SatelliteOptions
+ * Represents partial configuration options for connecting to a satellite.
+ * Typically used in Node.js environments or for advanced configuration scenarios in the browser.
+ *
+ * @typedef {Partial<SatelliteContext>} SatelliteOptions
  */
-export type SatelliteOptions = Partial<Satellite>;
+export type SatelliteOptions = Partial<SatelliteContext>;

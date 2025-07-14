@@ -1,10 +1,11 @@
-import type {Satellite} from './satellite.types';
+import type {SatelliteContext} from './satellite.types';
 
 /**
  * Represents the path to a web worker.
  * @typedef {string} EnvironmentWorkerPath
  */
 export type EnvironmentWorkerPath = string;
+
 /**
  * Represents a web worker which can be a enable for default path or provided with a specific path string.
  * @typedef {true | EnvironmentWorkerPath} EnvironmentWorker
@@ -34,8 +35,8 @@ export interface EnvironmentWorkers {
 export type Environment = {
   internetIdentityId?: string;
   workers?: EnvironmentWorkers;
-} & Required<Pick<Satellite, 'satelliteId'>> &
-  Pick<Satellite, 'container'>;
+} & Required<Pick<SatelliteContext, 'satelliteId'>> &
+  Pick<SatelliteContext, 'container'>;
 
 /**
  * Represents the user environment configuration. i.e. the optional parameters the user is providing to initialize Juno.
@@ -45,4 +46,5 @@ export type Environment = {
  * @property {string} satelliteId - An optional satellite ID. If not provided, the library tries to load the information injected by the Vite and NextJS plugins.
  * @property {string} [container] - The container. If not provided, the library tries to load the information injected by the Vite and NextJS plugins.
  */
-export type UserEnvironment = Omit<Environment, 'satelliteId'> & Pick<Satellite, 'satelliteId'>;
+export type UserEnvironment = Omit<Environment, 'satelliteId'> &
+  Pick<SatelliteContext, 'satelliteId'>;

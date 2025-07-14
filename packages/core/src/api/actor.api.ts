@@ -3,11 +3,11 @@ import type {IDL} from '@dfinity/candid';
 import {assertNonNullish} from '@dfinity/utils';
 import {ActorStore} from '../stores/actor.store';
 import type {BuildType} from '../types/build.types';
-import type {Satellite} from '../types/satellite.types';
+import type {SatelliteContext} from '../types/satellite.types';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
 import {idlFactorySatellite, type SatelliteActor} from './_actor.factory';
 
-export const getSatelliteActor = (satellite: Satellite): Promise<SatelliteActor> =>
+export const getSatelliteActor = (satellite: SatelliteContext): Promise<SatelliteActor> =>
   getActor({
     idlFactory: idlFactorySatellite,
     buildType: 'stock',
@@ -17,7 +17,7 @@ export const getSatelliteActor = (satellite: Satellite): Promise<SatelliteActor>
 export const getSatelliteExtendedActor = <T = Record<string, ActorMethod>>({
   idlFactory,
   ...rest
-}: Satellite & {idlFactory: IDL.InterfaceFactory}): Promise<ActorSubclass<T>> =>
+}: SatelliteContext & {idlFactory: IDL.InterfaceFactory}): Promise<ActorSubclass<T>> =>
   getActor({
     idlFactory,
     buildType: 'extended',
@@ -28,7 +28,7 @@ const getActor = async <T = Record<string, ActorMethod>>({
   satelliteId: customSatelliteId,
   container: customContainer,
   ...rest
-}: Satellite & {idlFactory: IDL.InterfaceFactory; buildType: BuildType}): Promise<
+}: SatelliteContext & {idlFactory: IDL.InterfaceFactory; buildType: BuildType}): Promise<
   ActorSubclass<T>
 > => {
   const {satelliteId} = customOrEnvSatelliteId({satelliteId: customSatelliteId});

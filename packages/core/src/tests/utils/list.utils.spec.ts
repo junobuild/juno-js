@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {ListParams} from '../../types/list.types';
+import {ListParams} from '../../types/list';
 import {toListParams} from '../../utils/list.utils';
 
 describe('list.utils', () => {

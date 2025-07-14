@@ -1,7 +1,7 @@
 import {nonNullish} from '@dfinity/utils';
 import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
 import {EnvStore} from '../stores/env.store';
-import type {SatelliteContext} from '../types/satellite.types';
+import type {SatelliteContext} from '../types/satellite';
 
 export const satelliteUrl = ({
   satelliteId: customSatelliteId,

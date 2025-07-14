@@ -3,7 +3,7 @@ import {toArray} from '@junobuild/utils';
 import * as actorApi from '../../api/actor.api';
 import * as authServices from '../../services/auth.services';
 import * as userServices from '../../services/user.services';
-import {InitError} from '../../types/errors.types';
+import {InitError} from '../../types/errors';
 import {mockIdentity, mockUserIdPrincipal, mockUserIdText} from '../mocks/mocks';
 
 describe('user.services', async () => {

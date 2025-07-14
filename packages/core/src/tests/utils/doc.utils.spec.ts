@@ -1,7 +1,7 @@
 import {Principal} from '@dfinity/principal';
 import {toArray} from '@junobuild/utils';
 import {Doc as DocDid} from '../../../declarations/satellite/satellite.did';
-import {Doc} from '../../types/doc.types';
+import {Doc} from '../../types/doc';
 import {fromDoc, toDelDoc, toSetDoc} from '../../utils/doc.utils';
 import {mockUserIdPrincipal, mockUserIdText} from '../mocks/mocks';
 

@@ -9,9 +9,9 @@ import {
   setDoc as setDocApi,
   setManyDocs as setManyDocsApi
 } from '../api/doc.api';
-import type {Doc} from '../types/doc.types';
-import type {ListParams, ListResults} from '../types/list.types';
-import type {SatelliteOptions} from '../types/satellite.types';
+import type {Doc} from '../types/doc';
+import type {ListParams, ListResults} from '../types/list';
+import type {SatelliteOptions} from '../types/satellite';
 import {getAnyIdentity} from './identity.services';
 
 /**

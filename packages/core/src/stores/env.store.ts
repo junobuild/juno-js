@@ -1,4 +1,4 @@
-import type {Environment} from '../types/env.types';
+import type {Environment} from '../types/env';
 import {Store} from './_store';
 
 export class EnvStore extends Store<Environment | undefined> {

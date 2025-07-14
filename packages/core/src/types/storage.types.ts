@@ -1,6 +1,6 @@
 import type {Asset} from '@junobuild/storage';
 import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
-import type {ListResults} from './list.types';
+import type {ListResults} from './list';
 
 /**
  * Represents a collection of assets with pagination details.

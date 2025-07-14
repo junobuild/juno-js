@@ -11,8 +11,8 @@ import {
   listAssets as listAssetsApi,
   uploadAsset as uploadAssetApi
 } from '../api/storage.api';
-import type {ListParams} from '../types/list.types';
-import type {SatelliteOptions} from '../types/satellite.types';
+import type {ListParams} from '../types/list';
+import type {SatelliteOptions} from '../types/satellite';
 import type {Assets} from '../types/storage.types';
 import {sha256ToBase64String} from '../utils/crypto.utils';
 import {satelliteUrl} from '../utils/env.utils';

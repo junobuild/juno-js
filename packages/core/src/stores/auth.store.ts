@@ -1,5 +1,5 @@
-import type {User} from '../types/auth.types';
-import type {Unsubscribe} from '../types/subscription.types';
+import type {User} from '../types/auth';
+import type {Unsubscribe} from '../types/subscription';
 import {Store} from './_store';
 
 export class AuthStore extends Store<User | null> {

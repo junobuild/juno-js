@@ -4,8 +4,8 @@ import type {
   ListParams as ListParamsApi,
   TimestampMatcher
 } from '../../declarations/satellite/satellite.did';
-import {ListError} from '../types/errors.types';
-import type {ListParams, ListTimestampMatcher} from '../types/list.types';
+import {ListError} from '../types/errors';
+import type {ListParams, ListTimestampMatcher} from '../types/list';
 
 const toListMatcherTimestamp = (matcher?: ListTimestampMatcher): [] | [TimestampMatcher] => {
   if (isNullish(matcher)) {

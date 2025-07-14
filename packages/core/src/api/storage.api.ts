@@ -5,8 +5,8 @@ import {
   type UploadAsset
 } from '@junobuild/storage';
 import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
-import type {ListParams, ListResults} from '../types/list.types';
-import type {SatelliteContext} from '../types/satellite.types';
+import type {ListParams, ListResults} from '../types/list';
+import type {SatelliteContext} from '../types/satellite';
 import {toListParams} from '../utils/list.utils';
 import {getSatelliteActor} from './actor.api';
 

@@ -1,7 +1,7 @@
 import {HttpAgent} from '@dfinity/agent';
 import {nonNullish} from '@dfinity/utils';
 import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
-import type {SatelliteContext} from '../types/satellite.types';
+import type {SatelliteContext} from '../types/satellite';
 
 export type CreateAgentParams = Required<Pick<SatelliteContext, 'identity'>> &
   Pick<SatelliteContext, 'container'>;

@@ -24,3 +24,21 @@ export const mockUser: User = {
   key: mockUserIdText,
   data: {provider: 'internet_identity'}
 };
+
+export const mockSatellite = {
+  identity: mockIdentity,
+  satelliteId: mockSatelliteId,
+  container: true
+};
+
+export const mockReadOptions = {
+  options: {
+    certified: false
+  }
+};
+
+export const mockUpdateOptions = {
+  options: {
+    certified: true as const
+  }
+};

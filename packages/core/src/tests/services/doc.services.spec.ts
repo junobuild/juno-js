@@ -11,10 +11,9 @@ import {
   setDoc,
   setManyDocs
 } from '../../services/doc.services';
-import {mockIdentity, mockSatelliteId, mockUserIdPrincipal} from '../mocks/mocks';
+import {mockSatellite, mockUserIdPrincipal} from '../mocks/mocks';
 
 describe('doc.services', async () => {
-  const satellite = {identity: mockIdentity, satelliteId: mockSatelliteId, container: true};
   const collection = 'test-collection';
   const key = 'test-key';
 
@@ -34,7 +33,7 @@ describe('doc.services', async () => {
     const mockGetDoc = vi.fn().mockResolvedValue([mockDocApiObject]);
     vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({get_doc: mockGetDoc} as any);
 
-    await getDoc({collection, key, satellite});
+    await getDoc({collection, key, satellite: mockSatellite});
 
     expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
     expect(mockGetDoc).toHaveBeenCalledOnce();
@@ -47,7 +46,7 @@ describe('doc.services', async () => {
       get_many_docs: mockGetManyDocs
     } as any);
 
-    await getManyDocs({docs: [{collection, key}], satellite});
+    await getManyDocs({docs: [{collection, key}], satellite: mockSatellite});
 
     expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
     expect(mockGetManyDocs).toHaveBeenCalledOnce();
@@ -58,7 +57,7 @@ describe('doc.services', async () => {
     const mockSetDoc = vi.fn().mockResolvedValue(mockDocApiObject);
     vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({set_doc: mockSetDoc} as any);
 
-    await setDoc({collection, doc: {key, data: mockData}, satellite});
+    await setDoc({collection, doc: {key, data: mockData}, satellite: mockSatellite});
 
     expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
     expect(mockSetDoc).toHaveBeenCalledOnce();
@@ -70,7 +69,7 @@ describe('doc.services', async () => {
       set_many_docs: mockSetManyDocs
     } as any);
 
-    await setManyDocs({docs: [{collection, doc: {key, data: mockData}}], satellite});
+    await setManyDocs({docs: [{collection, doc: {key, data: mockData}}], satellite: mockSatellite});
 
     expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
     expect(mockSetManyDocs).toHaveBeenCalledOnce();
@@ -80,7 +79,7 @@ describe('doc.services', async () => {
     const mockDelDoc = vi.fn().mockResolvedValue(undefined);
     vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({del_doc: mockDelDoc} as any);
 
-    await deleteDoc({collection, doc: {key, data: mockData}, satellite});
+    await deleteDoc({collection, doc: {key, data: mockData}, satellite: mockSatellite});
 
     expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
     expect(mockDelDoc).toHaveBeenCalledOnce();
@@ -92,7 +91,10 @@ describe('doc.services', async () => {
       del_many_docs: mockDelManyDocs
     } as any);
 
-    await deleteManyDocs({docs: [{collection, doc: {key, data: mockData}}], satellite});
+    await deleteManyDocs({
+      docs: [{collection, doc: {key, data: mockData}}],
+      satellite: mockSatellite
+    });
 
     expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
     expect(mockDelManyDocs).toHaveBeenCalledOnce();
@@ -104,7 +106,7 @@ describe('doc.services', async () => {
       del_filtered_docs: mockDelFilteredDocs
     } as any);
 
-    await deleteFilteredDocs({collection, filter: {}, satellite});
+    await deleteFilteredDocs({collection, filter: {}, satellite: mockSatellite});
 
     expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
     expect(mockDelFilteredDocs).toHaveBeenCalledOnce();
@@ -116,7 +118,7 @@ describe('doc.services', async () => {
       .mockResolvedValue({items: [[key, mockDocApiObject]], items_length: 1n, matches_length: 1n});
     vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({list_docs: mockListDocs} as any);
 
-    await listDocs({collection, filter: {}, satellite});
+    await listDocs({collection, filter: {}, satellite: mockSatellite});
 
     expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
     expect(mockListDocs).toHaveBeenCalledOnce();
@@ -126,7 +128,7 @@ describe('doc.services', async () => {
     const mockCountDocs = vi.fn().mockResolvedValue(1n);
     vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({count_docs: mockCountDocs} as any);
 
-    await countDocs({collection, filter: {}, satellite});
+    await countDocs({collection, filter: {}, satellite: mockSatellite});
 
     expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
     expect(mockCountDocs).toHaveBeenCalledOnce();

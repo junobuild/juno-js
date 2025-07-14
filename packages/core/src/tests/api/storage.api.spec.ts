@@ -12,27 +12,9 @@ import {
   uploadAsset
 } from '../../api/storage.api';
 import {toListParams} from '../../utils/list.utils';
-import {mockIdentity, mockSatelliteId} from '../mocks/mocks';
+import {mockReadOptions, mockSatellite, mockUpdateOptions} from '../mocks/mocks';
 
 describe('storage.api', async () => {
-  const satellite = {
-    identity: mockIdentity,
-    satelliteId: mockSatelliteId,
-    container: true
-  };
-
-  const readOptions = {
-    options: {
-      certified: false
-    }
-  };
-
-  const updateOptions = {
-    options: {
-      certified: true as const
-    }
-  };
-
   const collection = 'test-collection';
   const fullPath = '/test/path.png';
 
@@ -55,10 +37,10 @@ describe('storage.api', async () => {
       const asset = {collection, fullPath, data: mockBlob} as storageModule.UploadAsset;
       const spy = vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({} as any);
 
-      await uploadAsset({asset, satellite, ...updateOptions});
+      await uploadAsset({asset, satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(mockUploadAssetStorage).toHaveBeenCalledOnce();
       expect(mockUploadAssetStorage).toHaveBeenCalledWith({
@@ -72,7 +54,9 @@ describe('storage.api', async () => {
 
       const asset = {collection, fullPath, data: mockBlob} as storageModule.UploadAsset;
 
-      await expect(uploadAsset({asset, satellite, ...updateOptions})).rejects.toThrow('fail');
+      await expect(
+        uploadAsset({asset, satellite: mockSatellite, ...mockUpdateOptions})
+      ).rejects.toThrow('fail');
     });
   });
 
@@ -99,7 +83,12 @@ describe('storage.api', async () => {
       it('call and return', async () => {
         const expectedListParams = toListParams(filter);
 
-        const result = await listAssets({collection, filter, satellite, ...readOptions});
+        const result = await listAssets({
+          collection,
+          filter,
+          satellite: mockSatellite,
+          ...mockReadOptions
+        });
 
         expect(mockListAssets).toHaveBeenCalledOnce();
         expect(mockListAssets).toHaveBeenCalledWith(collection, expectedListParams);
@@ -108,26 +97,26 @@ describe('storage.api', async () => {
       });
 
       it('with query', async () => {
-        await listAssets({collection, filter, satellite, ...readOptions});
+        await listAssets({collection, filter, satellite: mockSatellite, ...mockReadOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
       });
 
       it('with update', async () => {
-        await listAssets({collection, filter, satellite, ...updateOptions});
+        await listAssets({collection, filter, satellite: mockSatellite, ...mockUpdateOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
       });
     });
 
     it('bubbles error', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
-      await expect(listAssets({collection, filter, satellite, ...readOptions})).rejects.toThrow(
-        'fail'
-      );
+      await expect(
+        listAssets({collection, filter, satellite: mockSatellite, ...mockReadOptions})
+      ).rejects.toThrow('fail');
     });
   });
 
@@ -148,7 +137,12 @@ describe('storage.api', async () => {
       it('call and return', async () => {
         const expectedFilter = toListParams(filter);
 
-        const result = await countAssets({collection, filter, satellite, ...readOptions});
+        const result = await countAssets({
+          collection,
+          filter,
+          satellite: mockSatellite,
+          ...mockReadOptions
+        });
 
         expect(mockCountAssets).toHaveBeenCalledOnce();
         expect(mockCountAssets).toHaveBeenCalledWith(collection, expectedFilter);
@@ -157,26 +151,26 @@ describe('storage.api', async () => {
       });
 
       it('with query', async () => {
-        await countAssets({collection, filter, satellite, ...readOptions});
+        await countAssets({collection, filter, satellite: mockSatellite, ...mockReadOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
       });
 
       it('with update', async () => {
-        await countAssets({collection, filter, satellite, ...updateOptions});
+        await countAssets({collection, filter, satellite: mockSatellite, ...mockUpdateOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
       });
     });
 
     it('bubbles error', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
-      await expect(countAssets({collection, filter, satellite, ...readOptions})).rejects.toThrow(
-        'fail'
-      );
+      await expect(
+        countAssets({collection, filter, satellite: mockSatellite, ...mockReadOptions})
+      ).rejects.toThrow('fail');
     });
   });
 
@@ -187,10 +181,10 @@ describe('storage.api', async () => {
         .spyOn(actorApi, 'getSatelliteActor')
         .mockResolvedValue({del_asset: mockDelAsset} as any);
 
-      await deleteAsset({collection, fullPath, satellite, ...updateOptions});
+      await deleteAsset({collection, fullPath, satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(mockDelAsset).toHaveBeenCalledOnce();
       expect(mockDelAsset).toHaveBeenCalledWith(collection, fullPath);
@@ -200,7 +194,7 @@ describe('storage.api', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
       await expect(
-        deleteAsset({collection, fullPath, satellite, ...updateOptions})
+        deleteAsset({collection, fullPath, satellite: mockSatellite, ...mockUpdateOptions})
       ).rejects.toThrow('fail');
     });
   });
@@ -215,10 +209,10 @@ describe('storage.api', async () => {
       const assets = [{collection, fullPath}];
       const expectedPayload = [[collection, fullPath]];
 
-      await deleteManyAssets({assets, satellite, ...updateOptions});
+      await deleteManyAssets({assets, satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(mockDelManyAssets).toHaveBeenCalledOnce();
       expect(mockDelManyAssets).toHaveBeenCalledWith(expectedPayload);
@@ -228,7 +222,11 @@ describe('storage.api', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
       await expect(
-        deleteManyAssets({assets: [{collection, fullPath}], satellite, ...updateOptions})
+        deleteManyAssets({
+          assets: [{collection, fullPath}],
+          satellite: mockSatellite,
+          ...mockUpdateOptions
+        })
       ).rejects.toThrow('fail');
     });
   });
@@ -244,10 +242,15 @@ describe('storage.api', async () => {
 
       const expectedFilter = toListParams(filter);
 
-      await deleteFilteredAssets({collection, filter, satellite, ...updateOptions});
+      await deleteFilteredAssets({
+        collection,
+        filter,
+        satellite: mockSatellite,
+        ...mockUpdateOptions
+      });
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(mockDelFilteredAssets).toHaveBeenCalledOnce();
       expect(mockDelFilteredAssets).toHaveBeenCalledWith(collection, expectedFilter);
@@ -257,7 +260,7 @@ describe('storage.api', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
       await expect(
-        deleteFilteredAssets({collection, filter, satellite, ...updateOptions})
+        deleteFilteredAssets({collection, filter, satellite: mockSatellite, ...mockUpdateOptions})
       ).rejects.toThrow('fail');
     });
   });
@@ -275,7 +278,12 @@ describe('storage.api', async () => {
       });
 
       it('call and return', async () => {
-        const result = await getAsset({collection, fullPath, satellite, ...readOptions});
+        const result = await getAsset({
+          collection,
+          fullPath,
+          satellite: mockSatellite,
+          ...mockReadOptions
+        });
 
         expect(mockGetAsset).toHaveBeenCalledOnce();
         expect(mockGetAsset).toHaveBeenCalledWith(collection, fullPath);
@@ -284,26 +292,26 @@ describe('storage.api', async () => {
       });
 
       it('with query', async () => {
-        await getAsset({collection, fullPath, satellite, ...readOptions});
+        await getAsset({collection, fullPath, satellite: mockSatellite, ...mockReadOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
       });
 
       it('with update', async () => {
-        await getAsset({collection, fullPath, satellite, ...updateOptions});
+        await getAsset({collection, fullPath, satellite: mockSatellite, ...mockUpdateOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
       });
     });
 
     it('bubbles error', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
-      await expect(getAsset({collection, fullPath, satellite, ...readOptions})).rejects.toThrow(
-        'fail'
-      );
+      await expect(
+        getAsset({collection, fullPath, satellite: mockSatellite, ...mockReadOptions})
+      ).rejects.toThrow('fail');
     });
   });
 
@@ -324,10 +332,10 @@ describe('storage.api', async () => {
       it('call and return', async () => {
         const expectedPayload = [[collection, fullPath]];
 
-        const result = await getManyAssets({assets, satellite, ...readOptions});
+        const result = await getManyAssets({assets, satellite: mockSatellite, ...mockReadOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
 
         expect(mockGetManyAssets).toHaveBeenCalledOnce();
         expect(mockGetManyAssets).toHaveBeenCalledWith(expectedPayload);
@@ -336,17 +344,17 @@ describe('storage.api', async () => {
       });
 
       it('with query', async () => {
-        await getManyAssets({assets, satellite, ...readOptions});
+        await getManyAssets({assets, satellite: mockSatellite, ...mockReadOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
       });
 
       it('with update', async () => {
-        await getManyAssets({assets, satellite, ...updateOptions});
+        await getManyAssets({assets, satellite: mockSatellite, ...mockUpdateOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
       });
     });
 
@@ -354,7 +362,11 @@ describe('storage.api', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
       await expect(
-        getManyAssets({assets: [{collection, fullPath}], satellite, ...readOptions})
+        getManyAssets({
+          assets: [{collection, fullPath}],
+          satellite: mockSatellite,
+          ...mockReadOptions
+        })
       ).rejects.toThrow('fail');
     });
   });

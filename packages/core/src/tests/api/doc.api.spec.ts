@@ -14,27 +14,15 @@ import {
 } from '../../api/doc.api';
 import {toDelDoc, toSetDoc} from '../../utils/doc.utils';
 import {toListParams} from '../../utils/list.utils';
-import {mockIdentity, mockSatelliteId, mockUserIdPrincipal, mockUserIdText} from '../mocks/mocks';
+import {
+  mockReadOptions,
+  mockSatellite,
+  mockUpdateOptions,
+  mockUserIdPrincipal,
+  mockUserIdText
+} from '../mocks/mocks';
 
 describe('doc.api', async () => {
-  const satellite = {
-    identity: mockIdentity,
-    satelliteId: mockSatelliteId,
-    container: true
-  };
-
-  const readOptions = {
-    options: {
-      certified: false
-    }
-  };
-
-  const updateOptions = {
-    options: {
-      certified: true as const
-    }
-  };
-
   const collection = 'test-collection';
   const key = 'test-key';
 
@@ -63,7 +51,12 @@ describe('doc.api', async () => {
       });
 
       it('call and return', async () => {
-        const result = await getDoc({collection, key, satellite, ...readOptions});
+        const result = await getDoc({
+          collection,
+          key,
+          satellite: mockSatellite,
+          ...mockReadOptions
+        });
 
         expect(mockGetDoc).toHaveBeenCalledOnce();
         expect(mockGetDoc).toHaveBeenCalledWith(collection, key);
@@ -74,24 +67,26 @@ describe('doc.api', async () => {
       });
 
       it('with query', async () => {
-        await getDoc({collection, key, satellite, ...readOptions});
+        await getDoc({collection, key, satellite: mockSatellite, ...mockReadOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
       });
 
       it('with update', async () => {
-        await getDoc({collection, key, satellite, ...updateOptions});
+        await getDoc({collection, key, satellite: mockSatellite, ...mockUpdateOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
       });
     });
 
     it('bubbles error', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
-      await expect(getDoc({collection, key, satellite, ...readOptions})).rejects.toThrow('fail');
+      await expect(
+        getDoc({collection, key, satellite: mockSatellite, ...mockReadOptions})
+      ).rejects.toThrow('fail');
     });
   });
 
@@ -108,7 +103,11 @@ describe('doc.api', async () => {
       });
 
       it('call and return', async () => {
-        const result = await getManyDocs({docs: [{collection, key}], satellite, ...readOptions});
+        const result = await getManyDocs({
+          docs: [{collection, key}],
+          satellite: mockSatellite,
+          ...mockReadOptions
+        });
 
         expect(mockGetManyDocs).toHaveBeenCalledOnce();
         expect(mockGetManyDocs).toHaveBeenCalledWith([[collection, key]]);
@@ -119,17 +118,25 @@ describe('doc.api', async () => {
       });
 
       it('with query', async () => {
-        await getManyDocs({docs: [{collection, key}], satellite, ...readOptions});
+        await getManyDocs({
+          docs: [{collection, key}],
+          satellite: mockSatellite,
+          ...mockReadOptions
+        });
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
       });
 
       it('with update', async () => {
-        await getManyDocs({docs: [{collection, key}], satellite, ...updateOptions});
+        await getManyDocs({
+          docs: [{collection, key}],
+          satellite: mockSatellite,
+          ...mockUpdateOptions
+        });
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
       });
     });
 
@@ -137,7 +144,7 @@ describe('doc.api', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
       await expect(
-        getManyDocs({docs: [{collection, key}], satellite, ...readOptions})
+        getManyDocs({docs: [{collection, key}], satellite: mockSatellite, ...mockReadOptions})
       ).rejects.toThrow('fail');
     });
   });
@@ -152,10 +159,15 @@ describe('doc.api', async () => {
       const doc = {key, data: mockData};
       const expectedSetDoc = await toSetDoc(doc);
 
-      const result = await setDoc({collection, doc, satellite, ...updateOptions});
+      const result = await setDoc({
+        collection,
+        doc,
+        satellite: mockSatellite,
+        ...mockUpdateOptions
+      });
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(mockSetDoc).toHaveBeenCalledOnce();
       expect(mockSetDoc).toHaveBeenCalledWith(collection, key, expectedSetDoc);
@@ -169,7 +181,7 @@ describe('doc.api', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
       await expect(
-        setDoc({collection, doc: {key, data: {}}, satellite, ...updateOptions})
+        setDoc({collection, doc: {key, data: {}}, satellite: mockSatellite, ...mockUpdateOptions})
       ).rejects.toThrow('fail');
     });
   });
@@ -184,10 +196,10 @@ describe('doc.api', async () => {
       const docs = [{collection, doc: {key, data: mockData}}];
       const expectedPayload = [[collection, key, await toSetDoc({key, data: mockData})]];
 
-      const result = await setManyDocs({docs, satellite, ...updateOptions});
+      const result = await setManyDocs({docs, satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(mockSetManyDocs).toHaveBeenCalledOnce();
       expect(mockSetManyDocs).toHaveBeenCalledWith(expectedPayload);
@@ -201,7 +213,11 @@ describe('doc.api', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
       await expect(
-        setManyDocs({docs: [{collection, doc: {key, data: {}}}], satellite, ...updateOptions})
+        setManyDocs({
+          docs: [{collection, doc: {key, data: {}}}],
+          satellite: mockSatellite,
+          ...mockUpdateOptions
+        })
       ).rejects.toThrow('fail');
     });
   });
@@ -215,10 +231,10 @@ describe('doc.api', async () => {
 
       const doc = {key, data: mockData};
 
-      await deleteDoc({collection, doc, satellite, ...updateOptions});
+      await deleteDoc({collection, doc, satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(mockDelDoc).toHaveBeenCalledOnce();
       expect(mockDelDoc).toHaveBeenCalledWith(collection, key, toDelDoc(doc));
@@ -228,7 +244,12 @@ describe('doc.api', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
       await expect(
-        deleteDoc({collection, doc: {key, data: {}}, satellite, ...updateOptions})
+        deleteDoc({
+          collection,
+          doc: {key, data: {}},
+          satellite: mockSatellite,
+          ...mockUpdateOptions
+        })
       ).rejects.toThrow('fail');
     });
   });
@@ -243,10 +264,14 @@ describe('doc.api', async () => {
       const doc = {key, data: mockData};
       const docs = [{collection, doc}];
 
-      await deleteManyDocs({docs: [{collection, doc}], satellite, ...updateOptions});
+      await deleteManyDocs({
+        docs: [{collection, doc}],
+        satellite: mockSatellite,
+        ...mockUpdateOptions
+      });
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(mockDelManyDocs).toHaveBeenCalledOnce();
       expect(mockDelManyDocs).toHaveBeenCalledWith([[collection, key, toDelDoc(doc)]]);
@@ -256,7 +281,11 @@ describe('doc.api', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
       await expect(
-        deleteManyDocs({docs: [{collection, doc: {key, data: {}}}], satellite, ...updateOptions})
+        deleteManyDocs({
+          docs: [{collection, doc: {key, data: {}}}],
+          satellite: mockSatellite,
+          ...mockUpdateOptions
+        })
       ).rejects.toThrow('fail');
     });
   });
@@ -271,10 +300,15 @@ describe('doc.api', async () => {
       const filter = {};
       const expectedFiler = toListParams(filter);
 
-      await deleteFilteredDocs({collection, filter: {}, satellite, ...updateOptions});
+      await deleteFilteredDocs({
+        collection,
+        filter: {},
+        satellite: mockSatellite,
+        ...mockUpdateOptions
+      });
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
 
       expect(mockDelFilteredDocs).toHaveBeenCalledOnce();
       expect(mockDelFilteredDocs).toHaveBeenCalledWith(collection, expectedFiler);
@@ -284,7 +318,7 @@ describe('doc.api', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
       await expect(
-        deleteFilteredDocs({collection, filter: {}, satellite, ...updateOptions})
+        deleteFilteredDocs({collection, filter: {}, satellite: mockSatellite, ...mockUpdateOptions})
       ).rejects.toThrow('fail');
     });
   });
@@ -310,7 +344,12 @@ describe('doc.api', async () => {
       it('call and return', async () => {
         const expectedListParams = toListParams(filter);
 
-        const result = await listDocs({collection, filter, satellite, ...readOptions});
+        const result = await listDocs({
+          collection,
+          filter,
+          satellite: mockSatellite,
+          ...mockReadOptions
+        });
 
         expect(mockListDocs).toHaveBeenCalledOnce();
         expect(mockListDocs).toHaveBeenCalledWith(collection, expectedListParams);
@@ -321,26 +360,26 @@ describe('doc.api', async () => {
       });
 
       it('with query', async () => {
-        await listDocs({collection, filter, satellite, ...readOptions});
+        await listDocs({collection, filter, satellite: mockSatellite, ...mockReadOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
       });
 
       it('with update', async () => {
-        await listDocs({collection, filter, satellite, ...updateOptions});
+        await listDocs({collection, filter, satellite: mockSatellite, ...mockUpdateOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
       });
     });
 
     it('bubbles error', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
-      await expect(listDocs({collection, filter, satellite, ...readOptions})).rejects.toThrow(
-        'fail'
-      );
+      await expect(
+        listDocs({collection, filter, satellite: mockSatellite, ...mockReadOptions})
+      ).rejects.toThrow('fail');
     });
   });
 
@@ -361,7 +400,12 @@ describe('doc.api', async () => {
       it('call and return', async () => {
         const expectedFilter = toListParams(filter);
 
-        const result = await countDocs({collection, filter, satellite, ...readOptions});
+        const result = await countDocs({
+          collection,
+          filter,
+          satellite: mockSatellite,
+          ...mockReadOptions
+        });
 
         expect(mockCountDocs).toHaveBeenCalledOnce();
         expect(mockCountDocs).toHaveBeenCalledWith(collection, expectedFilter);
@@ -370,26 +414,26 @@ describe('doc.api', async () => {
       });
 
       it('with query', async () => {
-        await countDocs({collection, filter, satellite, ...readOptions});
+        await countDocs({collection, filter, satellite: mockSatellite, ...mockReadOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
       });
 
       it('with update', async () => {
-        await countDocs({collection, filter, satellite, ...updateOptions});
+        await countDocs({collection, filter, satellite: mockSatellite, ...mockUpdateOptions});
 
         expect(spy).toHaveBeenCalledOnce();
-        expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
+        expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
       });
     });
 
     it('bubbles error', async () => {
       vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
 
-      await expect(countDocs({collection, filter, satellite, ...readOptions})).rejects.toThrow(
-        'fail'
-      );
+      await expect(
+        countDocs({collection, filter, satellite: mockSatellite, ...mockReadOptions})
+      ).rejects.toThrow('fail');
     });
   });
 });

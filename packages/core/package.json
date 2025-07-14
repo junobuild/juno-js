@@ -60,6 +60,7 @@
     "@dfinity/candid": "^2.3.0",
     "@dfinity/identity": "^2.3.0",
     "@dfinity/principal": "^2.3.0",
-    "@dfinity/utils": "^2"
+    "@dfinity/utils": "^2",
+    "@standard-schema/spec": "^1.0.0"
   }
 }

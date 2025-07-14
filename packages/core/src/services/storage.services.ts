@@ -60,15 +60,18 @@ const uploadAssetIC = async ({
   const satellite = {...satelliteOptions, identity};
 
   await uploadAssetApi({
-    data,
-    filename,
-    collection,
-    token,
-    headers,
-    fullPath,
-    encoding,
+    asset: {
+      data,
+      filename,
+      collection,
+      token,
+      headers,
+      fullPath,
+      encoding,
+      description
+    },
     satellite,
-    description
+    options: {certified: true}
   });
 
   return {
@@ -103,10 +106,12 @@ export const listAssets = async ({
 }): Promise<Assets> => {
   const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
 
+  // TODO
   const {items, ...rest} = await listAssetsApi({
     collection,
     satellite,
-    filter: filter ?? {}
+    filter: filter ?? {},
+    options: {certified: false}
   });
 
   const assets = items.map(
@@ -173,10 +178,12 @@ export const countAssets = async ({
 }): Promise<bigint> => {
   const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
 
+  // TODO
   return await countAssetsApi({
     collection,
     satellite,
-    filter: filter ?? {}
+    filter: filter ?? {},
+    options: {certified: false}
   });
 };
 
@@ -199,7 +206,8 @@ export const deleteAsset = ({
   deleteAssetApi({
     collection,
     fullPath,
-    satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)}
+    satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)},
+    options: {certified: true}
   });
 
 /**
@@ -218,7 +226,8 @@ export const deleteManyAssets = ({
 }): Promise<void> =>
   deleteManyAssetsApi({
     assets,
-    satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)}
+    satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)},
+    options: {certified: true}
   });
 
 /**
@@ -245,7 +254,8 @@ export const deleteFilteredAssets = async ({
   return await deleteFilteredAssetsApi({
     collection,
     satellite,
-    filter: filter ?? {}
+    filter: filter ?? {},
+    options: {certified: true}
   });
 };
 
@@ -266,7 +276,12 @@ export const getAsset = async ({
 } & Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  return await getAssetApi({...rest, satellite: {...satellite, identity}});
+  // TODO
+  return await getAssetApi({
+    ...rest,
+    satellite: {...satellite, identity},
+    options: {certified: false}
+  });
 };
 
 /**
@@ -285,7 +300,12 @@ export const getManyAssets = async ({
 }): Promise<(AssetNoContent | undefined)[]> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  return await getManyAssetsApi({...rest, satellite: {...satellite, identity}});
+  // TODO
+  return await getManyAssetsApi({
+    ...rest,
+    satellite: {...satellite, identity},
+    options: {certified: false}
+  });
 };
 
 /**

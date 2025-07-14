@@ -32,7 +32,12 @@ export const getDoc = async <D>({
 } & Pick<Doc<D>, 'key'>): Promise<Doc<D> | undefined> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  return await getDocApi({...rest, satellite: {...satellite, identity}});
+  // TODO
+  return await getDocApi({
+    ...rest,
+    satellite: {...satellite, identity},
+    options: {certified: false}
+  });
 };
 
 /**
@@ -52,7 +57,12 @@ export const getManyDocs = async ({
 }): Promise<(Doc<any> | undefined)[]> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  return await getManyDocsApi({...rest, satellite: {...satellite, identity}});
+  // TODO
+  return await getManyDocsApi({
+    ...rest,
+    satellite: {...satellite, identity},
+    options: {certified: false}
+  });
 };
 /* eslint-enable */
 
@@ -75,7 +85,11 @@ export const setDoc = async <D>({
 }): Promise<Doc<D>> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  return await setDocApi({...rest, satellite: {...satellite, identity}});
+  return await setDocApi({
+    ...rest,
+    satellite: {...satellite, identity},
+    options: {certified: true}
+  });
 };
 
 /**
@@ -95,7 +109,11 @@ export const setManyDocs = async ({
 }): Promise<Doc<any>[]> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  return await setManyDocsApi({...rest, satellite: {...satellite, identity}});
+  return await setManyDocsApi({
+    ...rest,
+    satellite: {...satellite, identity},
+    options: {certified: true}
+  });
 };
 /* eslint-enable */
 
@@ -118,7 +136,11 @@ export const deleteDoc = async <D>({
 }): Promise<void> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  return await deleteDocApi({...rest, satellite: {...satellite, identity}});
+  return await deleteDocApi({
+    ...rest,
+    satellite: {...satellite, identity},
+    options: {certified: true}
+  });
 };
 
 /**
@@ -138,7 +160,11 @@ export const deleteManyDocs = async ({
 }): Promise<void> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  return await deleteManyDocsApi({...rest, satellite: {...satellite, identity}});
+  return await deleteManyDocsApi({
+    ...rest,
+    satellite: {...satellite, identity},
+    options: {certified: true}
+  });
 };
 /* eslint-enable */
 
@@ -166,7 +192,8 @@ export const deleteFilteredDocs = async ({
   return await deleteFilteredDocsApi({
     ...rest,
     filter: filter ?? {},
-    satellite: {...satellite, identity}
+    satellite: {...satellite, identity},
+    options: {certified: true}
   });
 };
 
@@ -190,7 +217,13 @@ export const listDocs = async <D>({
 }): Promise<ListResults<Doc<D>>> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  return await listDocsApi<D>({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
+  // TODO
+  return await listDocsApi<D>({
+    ...rest,
+    filter: filter ?? {},
+    satellite: {...satellite, identity},
+    options: {certified: false}
+  });
 };
 
 /**
@@ -212,5 +245,11 @@ export const countDocs = async ({
 }): Promise<bigint> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  return await countDocsApi({...rest, filter: filter ?? {}, satellite: {...satellite, identity}});
+  // TODO
+  return await countDocsApi({
+    ...rest,
+    filter: filter ?? {},
+    satellite: {...satellite, identity},
+    options: {certified: false}
+  });
 };

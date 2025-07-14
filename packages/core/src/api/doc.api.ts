@@ -1,8 +1,8 @@
 import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import type {DelDoc, SetDoc} from '../../declarations/satellite/satellite.did';
+import type {ActorReadParams, ActorUpdateParams} from '../types/actor';
 import type {Doc} from '../types/doc';
 import type {ListParams, ListResults} from '../types/list';
-import type {SatelliteContext} from '../types/satellite';
 import type {ExcludeDate} from '../types/utility';
 import {mapData} from '../utils/data.utils';
 import {fromDoc, toDelDoc, toSetDoc} from '../utils/doc.utils';
@@ -12,13 +12,12 @@ import {getSatelliteActor} from './actor.api';
 export const getDoc = async <D>({
   collection,
   key,
-  satellite
+  ...rest
 }: {
   collection: string;
-  satellite: SatelliteContext;
-} & Pick<Doc<D>, 'key'>): Promise<Doc<D> | undefined> => {
-  // TODO
-  const {get_doc} = await getSatelliteActor({satellite, options: {certified: false}});
+} & ActorReadParams &
+  Pick<Doc<D>, 'key'>): Promise<Doc<D> | undefined> => {
+  const {get_doc} = await getSatelliteActor(rest);
 
   const doc = fromNullable(await get_doc(collection, key));
 
@@ -32,13 +31,11 @@ export const getDoc = async <D>({
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const getManyDocs = async ({
   docs,
-  satellite
+  ...rest
 }: {
   docs: ({collection: string} & Pick<Doc<any>, 'key'>)[];
-  satellite: SatelliteContext;
-}): Promise<(Doc<any> | undefined)[]> => {
-  // TODO
-  const {get_many_docs} = await getSatelliteActor({satellite, options: {certified: false}});
+} & ActorReadParams): Promise<(Doc<any> | undefined)[]> => {
+  const {get_many_docs} = await getSatelliteActor(rest);
 
   const payload: [string, string][] = docs.map(({collection, key}) => [collection, key]);
 
@@ -57,13 +54,12 @@ export const getManyDocs = async ({
 export const setDoc = async <D>({
   collection,
   doc,
-  satellite
+  ...rest
 }: {
   collection: string;
   doc: Doc<D>;
-  satellite: SatelliteContext;
-}): Promise<Doc<D>> => {
-  const {set_doc} = await getSatelliteActor({satellite, options: {certified: true}});
+} & ActorUpdateParams): Promise<Doc<D>> => {
+  const {set_doc} = await getSatelliteActor(rest);
 
   const {key} = doc;
 
@@ -77,12 +73,11 @@ export const setDoc = async <D>({
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const setManyDocs = async ({
   docs,
-  satellite
+  ...rest
 }: {
   docs: {collection: string; doc: Doc<any>}[];
-  satellite: SatelliteContext;
-}): Promise<Doc<any>[]> => {
-  const {set_many_docs} = await getSatelliteActor({satellite, options: {certified: true}});
+} & ActorUpdateParams): Promise<Doc<any>[]> => {
+  const {set_many_docs} = await getSatelliteActor(rest);
 
   const payload: [string, string, SetDoc][] = [];
   for (const {collection, doc} of docs) {
@@ -104,13 +99,12 @@ export const setManyDocs = async ({
 export const deleteDoc = async <D>({
   collection,
   doc,
-  satellite
+  ...rest
 }: {
   collection: string;
   doc: Doc<D>;
-  satellite: SatelliteContext;
-}): Promise<void> => {
-  const {del_doc} = await getSatelliteActor({satellite, options: {certified: true}});
+} & ActorUpdateParams): Promise<void> => {
+  const {del_doc} = await getSatelliteActor(rest);
 
   const {key} = doc;
 
@@ -120,12 +114,11 @@ export const deleteDoc = async <D>({
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const deleteManyDocs = async ({
   docs,
-  satellite
+  ...rest
 }: {
   docs: {collection: string; doc: Doc<any>}[];
-  satellite: SatelliteContext;
-}): Promise<void> => {
-  const {del_many_docs} = await getSatelliteActor({satellite, options: {certified: true}});
+} & ActorUpdateParams): Promise<void> => {
+  const {del_many_docs} = await getSatelliteActor(rest);
 
   const payload: [string, string, DelDoc][] = docs.map(({collection, doc}) => [
     collection,
@@ -140,13 +133,12 @@ export const deleteManyDocs = async ({
 export const deleteFilteredDocs = async ({
   collection,
   filter,
-  satellite
+  ...rest
 }: {
   collection: string;
   filter: ListParams;
-  satellite: SatelliteContext;
-}): Promise<void> => {
-  const {del_filtered_docs} = await getSatelliteActor({satellite, options: {certified: true}});
+} & ActorUpdateParams): Promise<void> => {
+  const {del_filtered_docs} = await getSatelliteActor(rest);
 
   return del_filtered_docs(collection, toListParams(filter));
 };
@@ -154,14 +146,12 @@ export const deleteFilteredDocs = async ({
 export const listDocs = async <D>({
   collection,
   filter,
-  satellite
+  ...rest
 }: {
   collection: string;
   filter: ListParams;
-  satellite: SatelliteContext;
-}): Promise<ListResults<Doc<D>>> => {
-  // TODO
-  const {list_docs} = await getSatelliteActor({satellite, options: {certified: false}});
+} & ActorReadParams): Promise<ListResults<Doc<D>>> => {
+  const {list_docs} = await getSatelliteActor(rest);
 
   const {items, items_page, items_length, matches_length, matches_pages} = await list_docs(
     collection,
@@ -195,14 +185,12 @@ export const listDocs = async <D>({
 export const countDocs = async ({
   collection,
   filter,
-  satellite
+  ...rest
 }: {
   collection: string;
   filter: ListParams;
-  satellite: SatelliteContext;
-}): Promise<bigint> => {
-  // TODO
-  const {count_docs} = await getSatelliteActor({satellite, options: {certified: false}});
+} & ActorReadParams): Promise<bigint> => {
+  const {count_docs} = await getSatelliteActor(rest);
 
   return count_docs(collection, toListParams(filter));
 };

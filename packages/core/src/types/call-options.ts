@@ -7,7 +7,7 @@
  *
  * @interface
  */
-interface UpdateOptions {
+export interface UpdateOptions {
   /**
    * For update calls: always `true`.
    * Certification is enforced by the Internet Computer protocol.

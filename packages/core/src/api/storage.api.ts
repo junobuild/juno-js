@@ -5,16 +5,16 @@ import {
   type UploadAsset
 } from '@junobuild/storage';
 import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
+import type {ActorReadParams, ActorUpdateParams} from '../types/actor';
 import type {ListParams, ListResults} from '../types/list';
-import type {SatelliteContext} from '../types/satellite';
 import {toListParams} from '../utils/list.utils';
 import {getSatelliteActor} from './actor.api';
 
 export const uploadAsset = async ({
-  satellite,
-  ...asset
-}: UploadAsset & {satellite: SatelliteContext}): Promise<void> => {
-  const actor = await getSatelliteActor({satellite, options: {certified: true}});
+  asset,
+  ...rest
+}: {asset: UploadAsset} & ActorUpdateParams): Promise<void> => {
+  const actor = await getSatelliteActor(rest);
 
   await uploadAssetStorage({
     actor,
@@ -24,15 +24,13 @@ export const uploadAsset = async ({
 
 export const listAssets = async ({
   collection,
-  satellite,
-  filter
+  filter,
+  ...rest
 }: {
   collection: string;
-  satellite: SatelliteContext;
   filter: ListParams;
-}): Promise<ListResults<AssetNoContent>> => {
-  // TODO
-  const {list_assets} = await getSatelliteActor({satellite, options: {certified: false}});
+} & ActorReadParams): Promise<ListResults<AssetNoContent>> => {
+  const {list_assets} = await getSatelliteActor(rest);
 
   const {
     items: assets,
@@ -53,15 +51,13 @@ export const listAssets = async ({
 
 export const countAssets = async ({
   collection,
-  satellite,
-  filter
+  filter,
+  ...rest
 }: {
   collection: string;
-  satellite: SatelliteContext;
   filter: ListParams;
-}): Promise<bigint> => {
-  // TODO
-  const {count_assets} = await getSatelliteActor({satellite, options: {certified: false}});
+} & ActorReadParams): Promise<bigint> => {
+  const {count_assets} = await getSatelliteActor(rest);
 
   return count_assets(collection, toListParams(filter));
 };
@@ -69,12 +65,12 @@ export const countAssets = async ({
 export const deleteAsset = async ({
   collection,
   fullPath,
-  satellite
+  ...rest
 }: {
   collection: string;
-  satellite: SatelliteContext;
-} & Pick<AssetKey, 'fullPath'>): Promise<void> => {
-  const actor = await getSatelliteActor({satellite, options: {certified: true}});
+} & ActorUpdateParams &
+  Pick<AssetKey, 'fullPath'>): Promise<void> => {
+  const actor = await getSatelliteActor(rest);
 
   return actor.del_asset(collection, fullPath);
 };
@@ -84,8 +80,7 @@ export const deleteManyAssets = async ({
   satellite
 }: {
   assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
-  satellite: SatelliteContext;
-}): Promise<void> => {
+} & ActorUpdateParams): Promise<void> => {
   const {del_many_assets} = await getSatelliteActor({satellite, options: {certified: true}});
 
   const payload: [string, string][] = assets.map(({collection, fullPath}) => [
@@ -98,14 +93,13 @@ export const deleteManyAssets = async ({
 
 export const deleteFilteredAssets = async ({
   collection,
-  satellite,
-  filter
+  filter,
+  ...rest
 }: {
   collection: string;
-  satellite: SatelliteContext;
   filter: ListParams;
-}): Promise<void> => {
-  const {del_filtered_assets} = await getSatelliteActor({satellite, options: {certified: true}});
+} & ActorUpdateParams): Promise<void> => {
+  const {del_filtered_assets} = await getSatelliteActor(rest);
 
   return del_filtered_assets(collection, toListParams(filter));
 };
@@ -113,25 +107,22 @@ export const deleteFilteredAssets = async ({
 export const getAsset = async ({
   collection,
   fullPath,
-  satellite
+  ...rest
 }: {
   collection: string;
-  satellite: SatelliteContext;
-} & Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
-  // TODO
-  const {get_asset} = await getSatelliteActor({satellite, options: {certified: false}});
+} & ActorReadParams &
+  Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
+  const {get_asset} = await getSatelliteActor(rest);
   return fromNullable(await get_asset(collection, fullPath));
 };
 
 export const getManyAssets = async ({
   assets,
-  satellite
+  ...rest
 }: {
   assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
-  satellite: SatelliteContext;
-}): Promise<(AssetNoContent | undefined)[]> => {
-  // TODO
-  const {get_many_assets} = await getSatelliteActor({satellite, options: {certified: false}});
+} & ActorReadParams): Promise<(AssetNoContent | undefined)[]> => {
+  const {get_many_assets} = await getSatelliteActor(rest);
 
   const payload: [string, string][] = assets.map(({collection, fullPath}) => [
     collection,

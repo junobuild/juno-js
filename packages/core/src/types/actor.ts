@@ -1,3 +1,6 @@
+import type {ReadOptions, UpdateOptions} from './call-options';
+import type {SatelliteContext} from './satellite';
+
 /**
  * Represents the type of build.
  * @typedef {'stock' | 'extended'} BuildType
@@ -26,3 +29,29 @@ export type ActorReadStrategy = 'update' | 'query';
  * @typedef {`${BuildType}#${ActorReadStrategy}`} ActorKey
  */
 export type ActorKey = `${BuildType}#${ActorReadStrategy}`;
+
+/**
+ * Parameters required to perform a read call using an actor.
+ *
+ * @property {SatelliteContext} satellite - The satellite configuration.
+ * @property {ReadOptions} options - Options controlling read call behavior, such as certification.
+ *
+ * @interface
+ */
+export interface ActorReadParams {
+  satellite: SatelliteContext;
+  options: ReadOptions;
+}
+
+/**
+ * Parameters required to perform an update call using an actor.
+ *
+ * @property {SatelliteContext} satellite - The satellite connection configuration.
+ * @property {UpdateOptions} options - Options controlling update call behavior. Certification is always enforced.
+ *
+ * @interface
+ */
+export interface ActorUpdateParams {
+  satellite: SatelliteContext;
+  options: UpdateOptions;
+}

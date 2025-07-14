@@ -1,4 +1,5 @@
 import {toArray} from '@junobuild/utils';
+import {beforeEach, describe, expect, MockInstance} from 'vitest';
 import * as actorApi from '../../api/actor.api';
 import {
   countDocs,
@@ -11,7 +12,13 @@ import {
   setDoc,
   setManyDocs
 } from '../../services/doc.services';
-import {mockSatellite, mockUserIdPrincipal} from '../mocks/mocks';
+import {
+  mockReadOptions,
+  mockSatellite,
+  mockUpdateOptions,
+  mockUserIdPrincipal,
+  mockUserIdText
+} from '../mocks/mocks';
 
 describe('doc.services', async () => {
   const collection = 'test-collection';
@@ -29,28 +36,117 @@ describe('doc.services', async () => {
     vi.restoreAllMocks();
   });
 
-  it('getDoc calls get_doc', async () => {
-    const mockGetDoc = vi.fn().mockResolvedValue([mockDocApiObject]);
-    vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({get_doc: mockGetDoc} as any);
+  describe('getDoc calls get_doc', () => {
+    let mockGetDoc: MockInstance;
+    let spy: MockInstance;
 
-    await getDoc({collection, key, satellite: mockSatellite});
+    beforeEach(() => {
+      mockGetDoc = vi.fn().mockResolvedValue([mockDocApiObject]);
+      spy = vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({get_doc: mockGetDoc} as any);
+    });
 
-    expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
-    expect(mockGetDoc).toHaveBeenCalledOnce();
-    expect(mockGetDoc).toHaveBeenCalledWith(collection, key);
+    it('call and return', async () => {
+      const result = await getDoc({collection, key, satellite: mockSatellite});
+
+      expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
+
+      expect(mockGetDoc).toHaveBeenCalledOnce();
+      expect(mockGetDoc).toHaveBeenCalledWith(collection, key);
+
+      expect(result).toEqual({
+        created_at: 0n,
+        data: {
+          hello: 'world'
+        },
+        description: undefined,
+        key: 'test-key',
+        owner: mockUserIdText,
+        version: undefined
+      });
+    });
+
+    it('with query by default', async () => {
+      await getDoc({collection, key, satellite: mockSatellite});
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
+    });
+
+    it('with query', async () => {
+      await getDoc({collection, key, satellite: mockSatellite, options: {certified: false}});
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
+    });
+
+    it('with update', async () => {
+      await getDoc({collection, key, satellite: mockSatellite, options: {certified: true}});
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
+    });
   });
 
-  it('getManyDocs calls get_many_docs', async () => {
-    const mockGetManyDocs = vi.fn().mockResolvedValue([[key, [mockDocApiObject]]]);
-    vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
-      get_many_docs: mockGetManyDocs
-    } as any);
+  describe('getManyDocs calls get_many_docs', () => {
+    let mockGetManyDocs: MockInstance;
+    let spy: MockInstance;
 
-    await getManyDocs({docs: [{collection, key}], satellite: mockSatellite});
+    beforeEach(() => {
+      mockGetManyDocs = vi.fn().mockResolvedValue([[key, [mockDocApiObject]]]);
+      spy = vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
+        get_many_docs: mockGetManyDocs
+      } as any);
+    });
 
-    expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
-    expect(mockGetManyDocs).toHaveBeenCalledOnce();
-    expect(mockGetManyDocs).toHaveBeenCalledWith([[collection, key]]);
+    it('call and return', async () => {
+      const result = await getManyDocs({docs: [{collection, key}], satellite: mockSatellite});
+
+      expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
+      expect(mockGetManyDocs).toHaveBeenCalledOnce();
+      expect(mockGetManyDocs).toHaveBeenCalledWith([[collection, key]]);
+
+      expect(result).toEqual([
+        {
+          created_at: 0n,
+          data: {
+            hello: 'world'
+          },
+          description: undefined,
+          key: 'test-key',
+          owner: mockUserIdText,
+          version: undefined
+        }
+      ]);
+    });
+
+    it('with query by default', async () => {
+      await getManyDocs({docs: [{collection, key}], satellite: mockSatellite});
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
+    });
+
+    it('with query', async () => {
+      await getManyDocs({
+        docs: [{collection, key}],
+        satellite: mockSatellite,
+        options: {certified: false}
+      });
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
+    });
+
+    it('with update', async () => {
+      await getManyDocs({
+        docs: [{collection, key}],
+        satellite: mockSatellite,
+        options: {certified: true}
+      });
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
+    });
   });
 
   it('setDoc calls set_doc', async () => {
@@ -112,25 +208,128 @@ describe('doc.services', async () => {
     expect(mockDelFilteredDocs).toHaveBeenCalledOnce();
   });
 
-  it('listDocs calls list_docs', async () => {
-    const mockListDocs = vi
-      .fn()
-      .mockResolvedValue({items: [[key, mockDocApiObject]], items_length: 1n, matches_length: 1n});
-    vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({list_docs: mockListDocs} as any);
+  describe('listDocs calls list_docs', () => {
+    let mockListDocs: MockInstance;
+    let spy: MockInstance;
 
-    await listDocs({collection, filter: {}, satellite: mockSatellite});
+    beforeEach(() => {
+      mockListDocs = vi.fn().mockResolvedValue({
+        items: [[key, mockDocApiObject]],
+        items_length: 1n,
+        matches_length: 1n
+      });
+      spy = vi
+        .spyOn(actorApi, 'getSatelliteActor')
+        .mockResolvedValue({list_docs: mockListDocs} as any);
+    });
 
-    expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
-    expect(mockListDocs).toHaveBeenCalledOnce();
+    it('call and return', async () => {
+      const result = await listDocs({collection, filter: {}, satellite: mockSatellite});
+
+      expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
+      expect(mockListDocs).toHaveBeenCalledOnce();
+
+      expect(result).toEqual({
+        items: [
+          {
+            created_at: 0n,
+            data: {
+              hello: 'world'
+            },
+            description: undefined,
+            key: 'test-key',
+            owner: mockUserIdText,
+            version: undefined
+          }
+        ],
+        items_length: 1n,
+        items_page: undefined,
+        matches_length: 1n,
+        matches_pages: undefined
+      });
+    });
+
+    it('with query by default', async () => {
+      await listDocs({collection, filter: {}, satellite: mockSatellite});
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
+    });
+
+    it('with query', async () => {
+      await listDocs({
+        collection,
+        filter: {},
+        satellite: mockSatellite,
+        options: {certified: false}
+      });
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
+    });
+
+    it('with update', async () => {
+      await listDocs({
+        collection,
+        filter: {},
+        satellite: mockSatellite,
+        options: {certified: true}
+      });
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
+    });
   });
 
-  it('countDocs calls count_docs', async () => {
-    const mockCountDocs = vi.fn().mockResolvedValue(1n);
-    vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({count_docs: mockCountDocs} as any);
+  describe('countDocs calls count_docs', () => {
+    let spy: MockInstance;
+    let mockCountDocs: MockInstance;
 
-    await countDocs({collection, filter: {}, satellite: mockSatellite});
+    beforeEach(() => {
+      mockCountDocs = vi.fn().mockResolvedValue(2n);
+      spy = vi
+        .spyOn(actorApi, 'getSatelliteActor')
+        .mockResolvedValue({count_docs: mockCountDocs} as any);
+    });
 
-    expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
-    expect(mockCountDocs).toHaveBeenCalledOnce();
+    it('call and return', async () => {
+      const result = await countDocs({collection, filter: {}, satellite: mockSatellite});
+
+      expect(actorApi.getSatelliteActor).toHaveBeenCalledOnce();
+      expect(mockCountDocs).toHaveBeenCalledOnce();
+
+      expect(result).toEqual(2n);
+    });
+
+    it('with query by default', async () => {
+      await countDocs({collection, filter: {}, satellite: mockSatellite});
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
+    });
+
+    it('with query', async () => {
+      await countDocs({
+        collection,
+        filter: {},
+        satellite: mockSatellite,
+        options: {certified: false}
+      });
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockReadOptions});
+    });
+
+    it('with update', async () => {
+      await countDocs({
+        collection,
+        filter: {},
+        satellite: mockSatellite,
+        options: {certified: true}
+      });
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
+    });
   });
 });

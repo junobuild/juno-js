@@ -22,6 +22,18 @@ describe('doc.api', async () => {
     container: true
   };
 
+  const readOptions = {
+    options: {
+      certified: false
+    }
+  };
+
+  const updateOptions = {
+    options: {
+      certified: true
+    }
+  };
+
   const collection = 'test-collection';
   const key = 'test-key';
 
@@ -47,7 +59,7 @@ describe('doc.api', async () => {
       const result = await getDoc({collection, key, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
 
       expect(mockGetDoc).toHaveBeenCalledOnce();
       expect(mockGetDoc).toHaveBeenCalledWith(collection, key);
@@ -74,7 +86,7 @@ describe('doc.api', async () => {
       const result = await getManyDocs({docs: [{collection, key}], satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
 
       expect(mockGetManyDocs).toHaveBeenCalledOnce();
       expect(mockGetManyDocs).toHaveBeenCalledWith([[collection, key]]);
@@ -104,7 +116,7 @@ describe('doc.api', async () => {
       const result = await setDoc({collection, doc, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
 
       expect(mockSetDoc).toHaveBeenCalledOnce();
       expect(mockSetDoc).toHaveBeenCalledWith(collection, key, expectedSetDoc);
@@ -134,7 +146,7 @@ describe('doc.api', async () => {
       const result = await setManyDocs({docs, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
 
       expect(mockSetManyDocs).toHaveBeenCalledOnce();
       expect(mockSetManyDocs).toHaveBeenCalledWith(expectedPayload);
@@ -165,7 +177,7 @@ describe('doc.api', async () => {
       await deleteDoc({collection, doc, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
 
       expect(mockDelDoc).toHaveBeenCalledOnce();
       expect(mockDelDoc).toHaveBeenCalledWith(collection, key, toDelDoc(doc));
@@ -193,7 +205,7 @@ describe('doc.api', async () => {
       await deleteManyDocs({docs: [{collection, doc}], satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
 
       expect(mockDelManyDocs).toHaveBeenCalledOnce();
       expect(mockDelManyDocs).toHaveBeenCalledWith([[collection, key, toDelDoc(doc)]]);
@@ -221,7 +233,7 @@ describe('doc.api', async () => {
       await deleteFilteredDocs({collection, filter: {}, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
 
       expect(mockDelFilteredDocs).toHaveBeenCalledOnce();
       expect(mockDelFilteredDocs).toHaveBeenCalledWith(collection, expectedFiler);
@@ -251,7 +263,7 @@ describe('doc.api', async () => {
       const result = await listDocs({collection, filter: {}, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
 
       expect(mockListDocs).toHaveBeenCalledOnce();
       expect(mockListDocs).toHaveBeenCalledWith(collection, expectedListParams);
@@ -281,7 +293,7 @@ describe('doc.api', async () => {
       const result = await countDocs({collection, filter: {}, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
 
       expect(mockCountDocs).toHaveBeenCalledOnce();
       expect(mockCountDocs).toHaveBeenCalledWith(collection, expectedFilter);

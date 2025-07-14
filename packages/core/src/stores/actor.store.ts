@@ -2,7 +2,7 @@ import {Actor, type ActorSubclass} from '@dfinity/agent';
 import type {ActorMethod} from '@dfinity/agent/lib/esm/actor';
 import type {IDL} from '@dfinity/candid';
 import {isNullish} from '@dfinity/utils';
-import type {BuildType} from '../types/build';
+import type {ActorKey} from '../types/actor';
 import type {SatelliteContext} from '../types/satellite';
 import {AgentStore} from './agent.store';
 
@@ -30,10 +30,10 @@ export class ActorStore {
   async getActor<T = ActorRecord>({
     satelliteId,
     identity,
-    buildType,
+    actorKey,
     ...rest
-  }: ActorParams & {buildType: BuildType}): Promise<ActorSubclass<T>> {
-    const key = `${buildType}#${identity.getPrincipal().toText()}#${satelliteId};`;
+  }: ActorParams & {actorKey: ActorKey}): Promise<ActorSubclass<T>> {
+    const key = `${actorKey}#${identity.getPrincipal().toText()}#${satelliteId};`;
 
     if (isNullish(this.#actors) || isNullish(this.#actors[key])) {
       const actor = await this.createActor({satelliteId, identity, ...rest});

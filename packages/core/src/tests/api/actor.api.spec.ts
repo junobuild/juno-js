@@ -1,4 +1,4 @@
-import {satelliteIdlFactory, sputnikIdlFactory} from '../../api/_actor.factory';
+import {idlFactorySatellite, idlFactorySputnik} from '../../api/_actor.factory';
 import {getSatelliteActor, getSatelliteExtendedActor} from '../../api/actor.api';
 import {ActorStore} from '../../stores/actor.store';
 import {mockIdentity, mockSatelliteId} from '../mocks/mocks';
@@ -25,7 +25,7 @@ describe('actor.api', () => {
       satelliteId: mockSatelliteId,
       container: true,
       buildType: 'stock',
-      idlFactory: satelliteIdlFactory
+      idlFactory: idlFactorySatellite
     });
 
     expect(actor).toBe(cached);
@@ -36,7 +36,7 @@ describe('actor.api', () => {
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
       container: false,
-      idlFactory: satelliteIdlFactory
+      idlFactory: idlFactorySatellite
     });
 
     expect(actor).toBeDefined();
@@ -46,7 +46,7 @@ describe('actor.api', () => {
       satelliteId: mockSatelliteId,
       container: false,
       buildType: 'extended',
-      idlFactory: sputnikIdlFactory
+      idlFactory: idlFactorySputnik
     });
 
     expect(actor).toBe(cached);

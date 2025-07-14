@@ -5,11 +5,11 @@ import {ActorStore} from '../stores/actor.store';
 import type {BuildType} from '../types/build.types';
 import type {Satellite} from '../types/satellite.types';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
-import {satelliteIdlFactory, type SatelliteActor} from './_actor.factory';
+import {idlFactorySatellite, type SatelliteActor} from './_actor.factory';
 
 export const getSatelliteActor = (satellite: Satellite): Promise<SatelliteActor> =>
   getActor({
-    idlFactory: satelliteIdlFactory,
+    idlFactory: idlFactorySatellite,
     buildType: 'stock',
     ...satellite
   });

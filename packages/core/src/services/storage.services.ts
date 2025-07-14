@@ -11,6 +11,8 @@ import {
   listAssets as listAssetsApi,
   uploadAsset as uploadAssetApi
 } from '../api/storage.api';
+import {DEFAULT_READ_OPTIONS} from '../constants/call-options.constants';
+import type {ReadOptions} from '../types/call-options';
 import type {ListParams} from '../types/list';
 import type {SatelliteOptions} from '../types/satellite';
 import type {Assets} from '../types/storage.types';
@@ -91,27 +93,29 @@ const uploadAssetIC = async ({
  * Lists assets in a collection with optional filtering.
  * @param {Object} params - The parameters for listing the assets.
  * @param {string} params.collection - The name of the collection.
- * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
  * @param {ListParams} [params.filter] - The filter parameters.
+ * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
  * @returns {Promise<Assets>} A promise that resolves to the list of assets.
  */
 export const listAssets = async ({
   collection,
+  filter,
   satellite: satelliteOptions,
-  filter
+  options
 }: {
   collection: string;
-  satellite?: SatelliteOptions;
   filter?: ListParams;
+  satellite?: SatelliteOptions;
+  options?: ReadOptions;
 }): Promise<Assets> => {
   const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
 
-  // TODO
   const {items, ...rest} = await listAssetsApi({
     collection,
-    satellite,
     filter: filter ?? {},
-    options: {certified: false}
+    satellite,
+    options: options ?? DEFAULT_READ_OPTIONS
   });
 
   const assets = items.map(
@@ -163,27 +167,29 @@ export const listAssets = async ({
  * Counts assets in a collection with optional filtering.
  * @param {Object} params - The parameters for counting the assets.
  * @param {string} params.collection - The name of the collection.
- * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
  * @param {ListParams} [params.filter] - The filter parameters for narrowing down the count.
+ * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
  * @returns {Promise<bigint>} A promise that resolves to the count of assets as a bigint.
  */
 export const countAssets = async ({
   collection,
+  filter,
   satellite: satelliteOptions,
-  filter
+  options
 }: {
   collection: string;
-  satellite?: SatelliteOptions;
   filter?: ListParams;
+  satellite?: SatelliteOptions;
+  options?: ReadOptions;
 }): Promise<bigint> => {
   const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
 
-  // TODO
   return await countAssetsApi({
     collection,
     satellite,
     filter: filter ?? {},
-    options: {certified: false}
+    options: options ?? DEFAULT_READ_OPTIONS
   });
 };
 
@@ -263,24 +269,26 @@ export const deleteFilteredAssets = async ({
  * Retrieves an asset from the storage.
  * @param {Object} params - The parameters for retrieving the asset.
  * @param {string} params.collection - The name of the collection.
- * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
  * @param {string} params.fullPath - The full path of the asset.
+ * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
  * @returns {Promise<AssetNoContent | undefined>} A promise that resolves to the asset or undefined if not found.
  */
 export const getAsset = async ({
   satellite,
+  options,
   ...rest
 }: {
   collection: string;
   satellite?: SatelliteOptions;
+  options?: ReadOptions;
 } & Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  // TODO
   return await getAssetApi({
     ...rest,
     satellite: {...satellite, identity},
-    options: {certified: false}
+    options: options ?? DEFAULT_READ_OPTIONS
   });
 };
 
@@ -289,22 +297,24 @@ export const getAsset = async ({
  * @param {Object} params - The parameters for retrieving the assets.
  * @param {Array} params.assets - The list of assets with their collections and full paths.
  * @param {SatelliteOptions} [params.satellite] - The satellite options (required only in NodeJS environment).
+ * @param {ReadOptions} [params.options] - Call options controlling certification. Defaults to uncertified reads for performance unless specified.
  * @returns {Promise<Array<AssetNoContent | undefined>>} A promise that resolves to an array of assets or undefined if not found.
  */
 export const getManyAssets = async ({
   satellite,
+  options,
   ...rest
 }: {
   assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
   satellite?: SatelliteOptions;
+  options?: ReadOptions;
 }): Promise<(AssetNoContent | undefined)[]> => {
   const identity = getAnyIdentity(satellite?.identity);
 
-  // TODO
   return await getManyAssetsApi({
     ...rest,
     satellite: {...satellite, identity},
-    options: {certified: false}
+    options: options ?? DEFAULT_READ_OPTIONS
   });
 };
 

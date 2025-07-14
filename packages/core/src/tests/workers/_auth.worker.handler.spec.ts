@@ -1,7 +1,7 @@
 import {AuthClient, IdbStorage, KEY_STORAGE_DELEGATION} from '@dfinity/auth-client';
 import {DelegationChain, Ed25519KeyIdentity} from '@dfinity/identity';
 import {Principal} from '@dfinity/principal';
-import {beforeEach, describe, Mock} from 'vitest';
+import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as workerModule from '../../workers/_auth.worker.handler';
 

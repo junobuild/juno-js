@@ -1,5 +1,5 @@
 import * as storageModule from '@junobuild/storage';
-import {beforeEach, describe, MockInstance} from 'vitest';
+import type {MockInstance} from 'vitest';
 import * as actorApi from '../../api/actor.api';
 import {
   countAssets,

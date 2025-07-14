@@ -1,3 +1,4 @@
+import {AnonymousIdentity} from '@dfinity/agent';
 import {idlFactorySatellite} from '../../api/_actor.factory';
 import {ActorStore} from '../../stores/actor.store';
 import {mockIdentity, mockSatelliteId} from '../mocks/mocks';
@@ -16,7 +17,7 @@ describe('actor.store', () => {
       satelliteId: mockSatelliteId,
       idlFactory: idlFactorySatellite,
       container: true,
-      buildType: 'stock'
+      actorKey: 'stock#query'
     });
 
     expect(actor).toBeDefined();
@@ -24,40 +25,58 @@ describe('actor.store', () => {
   });
 
   it('reuses cached actor on second call with same params', async () => {
-    const actor1 = await actorStore.getActor({
+    const params = {
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
       idlFactory: idlFactorySatellite,
       container: true,
-      buildType: 'stock'
-    });
+      actorKey: 'stock#query' as const
+    };
 
-    const actor2 = await actorStore.getActor({
-      identity: mockIdentity,
-      satelliteId: mockSatelliteId,
-      idlFactory: idlFactorySatellite,
-      container: true,
-      buildType: 'stock'
-    });
+    const actor1 = await actorStore.getActor(params);
+
+    const actor2 = await actorStore.getActor(params);
 
     expect(actor1).toBe(actor2);
   });
 
-  it('creates a new actor if buildType is different', async () => {
-    const actor1 = await actorStore.getActor({
+  it('creates a new actor if actor key is stock or extended but same strategy is different', async () => {
+    const common = {
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
       idlFactory: idlFactorySatellite,
-      container: true,
-      buildType: 'stock'
+      container: true
+    };
+
+    const actor1 = await actorStore.getActor({
+      ...common,
+      actorKey: 'stock#query'
     });
 
     const actor2 = await actorStore.getActor({
+      ...common,
+      actorKey: 'extended#query'
+    });
+
+    expect(actor1).not.toBe(actor2);
+  });
+
+  it('creates a new actor if actor key is stock but strategy is different', async () => {
+    const common = {
       identity: mockIdentity,
       satelliteId: mockSatelliteId,
       idlFactory: idlFactorySatellite,
-      container: true,
-      buildType: 'extended'
+      container: true
+    };
+
+    const actor1 = await actorStore.getActor({
+      ...common,
+      actorKey: 'stock#query'
+    });
+
+    const actor2 = await actorStore.getActor({
+      ...common,
+      actorKey: 'stock#update'
     });
 
     expect(actor1).not.toBe(actor2);
@@ -69,7 +88,7 @@ describe('actor.store', () => {
       satelliteId: mockSatelliteId,
       idlFactory: idlFactorySatellite,
       container: true,
-      buildType: 'stock'
+      actorKey: 'stock#query'
     });
 
     actorStore.reset();
@@ -79,7 +98,28 @@ describe('actor.store', () => {
       satelliteId: mockSatelliteId,
       idlFactory: idlFactorySatellite,
       container: true,
-      buildType: 'stock'
+      actorKey: 'stock#query'
+    });
+
+    expect(actor1).not.toBe(actor2);
+  });
+
+  it('creates a new actor if identity is different', async () => {
+    const common = {
+      satelliteId: mockSatelliteId,
+      idlFactory: idlFactorySatellite,
+      container: true,
+      actorKey: 'stock#query' as const
+    };
+
+    const actor1 = await actorStore.getActor({
+      identity: mockIdentity,
+      ...common
+    });
+
+    const actor2 = await actorStore.getActor({
+      identity: new AnonymousIdentity(),
+      ...common
     });
 
     expect(actor1).not.toBe(actor2);

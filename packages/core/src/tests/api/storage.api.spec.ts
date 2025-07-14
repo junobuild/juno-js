@@ -20,6 +20,18 @@ describe('storage.api', async () => {
     container: true
   };
 
+  const readOptions = {
+    options: {
+      certified: false
+    }
+  };
+
+  const updateOptions = {
+    options: {
+      certified: true
+    }
+  };
+
   const collection = 'test-collection';
   const fullPath = '/test/path.png';
 
@@ -45,7 +57,7 @@ describe('storage.api', async () => {
       await uploadAsset({...asset, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
 
       expect(mockUploadAssetStorage).toHaveBeenCalledOnce();
       expect(mockUploadAssetStorage).toHaveBeenCalledWith({
@@ -82,7 +94,7 @@ describe('storage.api', async () => {
       const result = await listAssets({collection, filter, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
 
       expect(mockListAssets).toHaveBeenCalledOnce();
       expect(mockListAssets).toHaveBeenCalledWith(collection, expectedListParams);
@@ -110,7 +122,7 @@ describe('storage.api', async () => {
       const result = await countAssets({collection, filter, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
 
       expect(mockCountAssets).toHaveBeenCalledOnce();
       expect(mockCountAssets).toHaveBeenCalledWith(collection, expectedFilter);
@@ -135,7 +147,7 @@ describe('storage.api', async () => {
       await deleteAsset({collection, fullPath, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
 
       expect(mockDelAsset).toHaveBeenCalledOnce();
       expect(mockDelAsset).toHaveBeenCalledWith(collection, fullPath);
@@ -161,7 +173,7 @@ describe('storage.api', async () => {
       await deleteManyAssets({assets, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
 
       expect(mockDelManyAssets).toHaveBeenCalledOnce();
       expect(mockDelManyAssets).toHaveBeenCalledWith(expectedPayload);
@@ -189,7 +201,7 @@ describe('storage.api', async () => {
       await deleteFilteredAssets({collection, filter, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...updateOptions});
 
       expect(mockDelFilteredAssets).toHaveBeenCalledOnce();
       expect(mockDelFilteredAssets).toHaveBeenCalledWith(collection, expectedFilter);
@@ -214,7 +226,7 @@ describe('storage.api', async () => {
       const result = await getAsset({collection, fullPath, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
 
       expect(mockGetAsset).toHaveBeenCalledOnce();
       expect(mockGetAsset).toHaveBeenCalledWith(collection, fullPath);
@@ -242,7 +254,7 @@ describe('storage.api', async () => {
       const result = await getManyAssets({assets, satellite});
 
       expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(satellite);
+      expect(spy).toHaveBeenCalledWith({satellite, ...readOptions});
 
       expect(mockGetManyAssets).toHaveBeenCalledOnce();
       expect(mockGetManyAssets).toHaveBeenCalledWith(expectedPayload);

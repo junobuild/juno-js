@@ -7,7 +7,11 @@ import type {SatelliteContext} from '../types/satellite';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
 import {idlFactorySatellite, type SatelliteActor} from './_actor.factory';
 
-export const getSatelliteActor = (satellite: SatelliteContext): Promise<SatelliteActor> =>
+export const getSatelliteActor = ({
+  satellite
+}: {
+  satellite: SatelliteContext;
+}): Promise<SatelliteActor> =>
   getActor({
     idlFactory: idlFactorySatellite,
     buildType: 'stock',

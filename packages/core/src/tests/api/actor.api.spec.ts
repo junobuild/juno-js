@@ -13,9 +13,7 @@ describe('actor.api', () => {
 
   it('creates a stock actor using getSatelliteActor', async () => {
     const actor = await getSatelliteActor({
-      identity: mockIdentity,
-      satelliteId: mockSatelliteId,
-      container: true
+      satellite: {identity: mockIdentity, satelliteId: mockSatelliteId, container: true}
     });
 
     expect(actor).toBeDefined();

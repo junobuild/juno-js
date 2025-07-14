@@ -8,7 +8,7 @@ import type {
   NFIDConfig,
   Provider,
   SignInOptions
-} from '../types/auth.types';
+} from '../types/auth';
 import {popupCenter} from '../utils/window.utils';
 
 /**

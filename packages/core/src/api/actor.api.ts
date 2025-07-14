@@ -2,8 +2,8 @@ import type {ActorMethod, ActorSubclass} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {assertNonNullish} from '@dfinity/utils';
 import {ActorStore} from '../stores/actor.store';
-import type {BuildType} from '../types/build.types';
-import type {SatelliteContext} from '../types/satellite.types';
+import type {BuildType} from '../types/build';
+import type {SatelliteContext} from '../types/satellite';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
 import {idlFactorySatellite, type SatelliteActor} from './_actor.factory';
 

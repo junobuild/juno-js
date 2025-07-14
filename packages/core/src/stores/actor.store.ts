@@ -2,8 +2,8 @@ import {Actor, type ActorSubclass} from '@dfinity/agent';
 import type {ActorMethod} from '@dfinity/agent/lib/esm/actor';
 import type {IDL} from '@dfinity/candid';
 import {isNullish} from '@dfinity/utils';
-import type {BuildType} from '../types/build.types';
-import type {SatelliteContext} from '../types/satellite.types';
+import type {BuildType} from '../types/build';
+import type {SatelliteContext} from '../types/satellite';
 import {AgentStore} from './agent.store';
 
 type ActorParams = {

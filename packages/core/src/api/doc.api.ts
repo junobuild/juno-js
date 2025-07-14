@@ -1,9 +1,9 @@
 import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import type {DelDoc, SetDoc} from '../../declarations/satellite/satellite.did';
-import type {Doc} from '../types/doc.types';
-import type {ListParams, ListResults} from '../types/list.types';
-import type {SatelliteContext} from '../types/satellite.types';
-import type {ExcludeDate} from '../types/utility.types';
+import type {Doc} from '../types/doc';
+import type {ListParams, ListResults} from '../types/list';
+import type {SatelliteContext} from '../types/satellite';
+import type {ExcludeDate} from '../types/utility';
 import {mapData} from '../utils/data.utils';
 import {fromDoc, toDelDoc, toSetDoc} from '../utils/doc.utils';
 import {toListParams} from '../utils/list.utils';

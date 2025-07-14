@@ -1,5 +1,5 @@
 import type {InternetIdentityProvider, NFIDProvider} from '../providers/auth.providers';
-import type {Doc} from './doc.types';
+import type {Doc} from './doc';
 
 /**
  * Type representing the available authentication providers.

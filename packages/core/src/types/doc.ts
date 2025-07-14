@@ -1,4 +1,4 @@
-import type {ExcludeDate} from './utility.types';
+import type {ExcludeDate} from './utility';
 
 /**
  * Represents a document stored in a collection.

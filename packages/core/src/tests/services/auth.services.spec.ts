@@ -13,7 +13,7 @@ import {
 } from '../../services/auth.services';
 import * as userServices from '../../services/user.services';
 import {AuthStore} from '../../stores/auth.store';
-import {SignInError, SignInInitError, SignInUserInterruptError} from '../../types/errors.types';
+import {SignInError, SignInInitError, SignInUserInterruptError} from '../../types/errors';
 import * as authUtils from '../../utils/auth.utils';
 import {mockIdentity, mockUser} from '../mocks/mocks';
 

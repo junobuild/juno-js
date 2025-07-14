@@ -1,4 +1,4 @@
-import type {SatelliteContext} from './satellite.types';
+import type {SatelliteContext} from './satellite';
 
 /**
  * Represents the path to a web worker.

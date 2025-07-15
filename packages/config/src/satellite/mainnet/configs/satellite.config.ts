@@ -1,5 +1,5 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
-import * as z from 'zod';
+import * as z from 'zod/v4';
 import {type ModuleSettings, ModuleSettingsSchema} from '../../../module/module.settings';
 import {type StorageConfig, StorageConfigSchema} from '../../../shared/storage.config';
 import type {CliConfig} from '../../../types/cli.config';

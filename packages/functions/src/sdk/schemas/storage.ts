@@ -1,4 +1,4 @@
-import * as z from 'zod/v4';
+import * as z from 'zod';
 import {type RawUserId, type UserId, RawUserIdSchema, UserIdSchema} from '../../schemas/satellite';
 import {
   type AssetEncoding,

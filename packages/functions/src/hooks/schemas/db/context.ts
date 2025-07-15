@@ -1,4 +1,4 @@
-import * as z from 'zod';
+import * as z from 'zod/v4';
 import {DocSchema, type OptionDoc} from '../../../schemas/db';
 import {type Collection, CollectionSchema, type Key, KeySchema} from '../../../schemas/satellite';
 import {type HookContext, HookContextSchema} from '../context';

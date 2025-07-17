@@ -4,7 +4,7 @@ export * from './helpers/crypto.helpers';
 export * from './helpers/package.helpers';
 export * from './helpers/version.helpers';
 export * from './helpers/wasm.helpers';
-export type * from './schemas/build';
+export * from './schemas/build';
 export * from './schemas/releases';
 export * from './services/mission-control.controllers.services';
 export * from './services/mission-control.upgrade.services';

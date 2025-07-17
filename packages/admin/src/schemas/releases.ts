@@ -81,6 +81,7 @@ export type ReleaseMetadata = z.infer<typeof ReleaseMetadataSchema>;
  * A schema representing the list of releases provided by Juno.
  *
  * Rules:
+ * - The list must contain at least one release.
  * - Each release must have a unique `tag` (version identifier).
  * - The same module version can appear in multiple releases, as not every release
  *   necessarily publishes a new version of each module.
@@ -90,6 +91,7 @@ export type ReleaseMetadata = z.infer<typeof ReleaseMetadataSchema>;
  */
 const ReleasesSchema = z
   .array(ReleaseMetadataSchema)
+  .min(1)
   .refine((releases) => new Set(releases.map(({tag}) => tag)).size === releases.length, {
     message: 'A release tag appears multiple times but must be unique'
   });

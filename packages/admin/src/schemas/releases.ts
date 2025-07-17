@@ -7,9 +7,14 @@ import * as z from 'zod/v4';
  * - 0.1.0"
  * - 2.3.4
  */
-const VersionSchema = z.string().refine((val) => /^\d+\.\d+\.\d+$/.test(val), {
+const MetadataVersionSchema = z.string().refine((val) => /^\d+\.\d+\.\d+$/.test(val), {
   message: 'Version does not match x.y.z format'
 });
+
+/**
+ * A version string in `x.y.z` format.
+ */
+export type MetadataVersion = z.infer<typeof MetadataVersionSchema>;
 
 /**
  * A schema representing the metadata of a single release.
@@ -17,37 +22,48 @@ const VersionSchema = z.string().refine((val) => /^\d+\.\d+\.\d+$/.test(val), {
  * Includes the version of the release itself (tag) and the versions
  * of all modules bundled with it.
  */
-const ReleaseSchema = z.strictObject({
+const ReleaseMetadataSchema = z.strictObject({
   /**
    * Unique version identifier for the release, following the `x.y.z` format.
+   * @type {MetadataVersion}
    */
-  tag: VersionSchema,
+  tag: MetadataVersionSchema,
 
   /**
    * The version of the console included in the release.
+   * @type {MetadataVersion}
    */
-  console: VersionSchema,
+  console: MetadataVersionSchema,
 
   /**
    * Version of the Observatory module included in the release.
+   * @type {MetadataVersion}
    */
-  observatory: VersionSchema,
+  observatory: MetadataVersionSchema,
 
   /**
    * Version of the Mission Control module included in the release.
+   * @type {MetadataVersion}
    */
-  mission_control: VersionSchema,
+  mission_control: MetadataVersionSchema,
 
   /**
    * Version of the Satellite module included in the release.
+   * @type {MetadataVersion}
    */
-  satellite: VersionSchema,
+  satellite: MetadataVersionSchema,
 
   /**
    * Version of the Orbiter module included in the release.
+   * @type {MetadataVersion}
    */
-  orbiter: VersionSchema
+  orbiter: MetadataVersionSchema
 });
+
+/**
+ * The metadata for a release provided by Juno.
+ */
+export type ReleaseMetadata = z.infer<typeof ReleaseMetadataSchema>;
 
 /**
  * A schema representing the list of releases provided by Juno.
@@ -61,7 +77,7 @@ const ReleaseSchema = z.strictObject({
  * - Ensures no duplicate `tag` values across the list of releases.
  */
 const ReleasesSchema = z
-  .array(ReleaseSchema)
+  .array(ReleaseMetadataSchema)
   .refine((releases) => new Set(releases.map(({tag}) => tag)).size === releases.length, {
     message: 'A release tag appears multiple times but must be unique'
   });
@@ -72,18 +88,21 @@ const ReleasesSchema = z
 export const ReleasesMetadataSchema = z.strictObject({
   /**
    * List of all Mission Control versions across releases.
+   * @type {MetadataVersion}
    */
-  mission_controls: z.array(VersionSchema),
+  mission_controls: z.array(MetadataVersionSchema),
 
   /**
    * List of all Satellite versions across releases.
+   * @type {MetadataVersion}
    */
-  satellites: z.array(VersionSchema),
+  satellites: z.array(MetadataVersionSchema),
 
   /**
    * List of all Orbiter versions across releases.
+   * @type {MetadataVersion}
    */
-  orbiters: z.array(VersionSchema),
+  orbiters: z.array(MetadataVersionSchema),
 
   /**
    * List of release metadata objects, each representing one release.
@@ -92,6 +111,6 @@ export const ReleasesMetadataSchema = z.strictObject({
 });
 
 /**
- * Type representing the metadata for multiple releases provided by Juno.
+ * The metadata for multiple releases provided by Juno.
  */
 export type ReleasesMetadata = z.infer<typeof ReleasesMetadataSchema>;

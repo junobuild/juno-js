@@ -3,8 +3,8 @@ import {
   listCustomDomains as listCustomDomainsApi,
   setCustomDomain as setCustomDomainApi
 } from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor.types';
-import type {CustomDomain} from '../types/customdomain.types';
+import type {SatelliteParameters} from '../types/actor';
+import type {CustomDomain} from '../types/customdomain';
 
 /**
  * Lists the custom domains for a satellite.

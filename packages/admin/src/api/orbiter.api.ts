@@ -4,7 +4,7 @@ import type {
   MemorySize,
   _SERVICE as OrbiterActor
 } from '../../declarations/orbiter/orbiter.did';
-import type {OrbiterParameters} from '../types/actor.types';
+import type {OrbiterParameters} from '../types/actor';
 import {getDeprecatedOrbiterVersionActor, getOrbiterActor} from './actor.api';
 
 /**

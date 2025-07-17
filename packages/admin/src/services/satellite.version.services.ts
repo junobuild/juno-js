@@ -4,8 +4,8 @@ import {canisterMetadata} from '../api/ic.api';
 import {version} from '../api/satellite.api';
 import {SatelliteMissingDependencyError} from '../errors/version.errors';
 import {findJunoPackageDependency} from '../helpers/package.helpers';
-import type {SatelliteParameters} from '../types/actor.types';
-import type {BuildType} from '../types/build.types';
+import type {SatelliteParameters} from '../types/actor';
+import type {BuildType} from '../types/build';
 import {getJunoPackage} from './package.services';
 
 /**

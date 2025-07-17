@@ -1,5 +1,5 @@
 import {countAssets as countAssetsApi, deleteAssets as deleteAssetsApi} from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor.types';
+import type {SatelliteParameters} from '../types/actor';
 
 /**
  * Counts the assets in a collection.

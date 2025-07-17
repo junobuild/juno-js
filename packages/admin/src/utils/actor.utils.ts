@@ -7,7 +7,7 @@ import {
 } from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {nonNullish} from '@dfinity/utils';
-import type {ActorParameters} from '../types/actor.types';
+import type {ActorParameters} from '../types/actor';
 
 export const createActor = async <T = Record<string, ActorMethod>>({
   canisterId,

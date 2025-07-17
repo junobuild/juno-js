@@ -4,7 +4,7 @@ import type {
   _SERVICE as MissionControlActor,
   SetController
 } from '../../declarations/mission_control/mission_control.did';
-import type {MissionControlParameters} from '../types/actor.types';
+import type {MissionControlParameters} from '../types/actor';
 import {getDeprecatedMissionControlVersionActor, getMissionControlActor} from './actor.api';
 
 /**

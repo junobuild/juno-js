@@ -16,7 +16,7 @@ import type {
   SetRule,
   StorageConfig
 } from '../../declarations/satellite/satellite.did';
-import type {SatelliteParameters} from '../types/actor.types';
+import type {SatelliteParameters} from '../types/actor';
 import {
   getDeprecatedSatelliteActor,
   getDeprecatedSatelliteNoScopeActor,

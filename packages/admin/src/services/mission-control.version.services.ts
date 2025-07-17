@@ -2,7 +2,7 @@ import {assertNonNullish, isNullish} from '@dfinity/utils';
 import {JUNO_PACKAGE_MISSION_CONTROL_ID} from '@junobuild/config';
 import {version} from '../api/mission-control.api';
 import {MissionControlVersionError} from '../errors/version.errors';
-import type {MissionControlParameters} from '../types/actor.types';
+import type {MissionControlParameters} from '../types/actor';
 import {getJunoPackage} from './package.services';
 
 /**

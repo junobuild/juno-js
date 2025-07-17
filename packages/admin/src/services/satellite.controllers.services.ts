@@ -5,7 +5,7 @@ import {
   listDeprecatedNoScopeControllers,
   setControllers
 } from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor.types';
+import type {SatelliteParameters} from '../types/actor';
 /**
  * Lists the controllers of a satellite.
  * @param {Object} params - The parameters for listing the controllers.

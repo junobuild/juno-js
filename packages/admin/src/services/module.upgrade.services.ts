@@ -1,6 +1,6 @@
 import {upgrade} from '../handlers/upgrade.handlers';
-import type {ActorParameters} from '../types/actor.types';
-import type {UpgradeCodeParams} from '../types/upgrade.types';
+import type {ActorParameters} from '../types/actor';
+import type {UpgradeCodeParams} from '../types/upgrade';
 
 /**
  * Upgrades a module with the provided WASM code and arguments. This generic is notably useful for Juno Docker.

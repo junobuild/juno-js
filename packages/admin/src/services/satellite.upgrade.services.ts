@@ -8,8 +8,8 @@ import {
 } from '../api/satellite.api';
 import {INSTALL_MODE_RESET, INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';
-import type {SatelliteParameters} from '../types/actor.types';
-import type {UpgradeCodeParams} from '../types/upgrade.types';
+import type {SatelliteParameters} from '../types/actor';
+import type {UpgradeCodeParams} from '../types/upgrade';
 import {encodeAdminAccessKeysToIDL} from '../utils/idl.utils';
 
 /**

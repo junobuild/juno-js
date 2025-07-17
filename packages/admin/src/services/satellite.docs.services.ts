@@ -1,5 +1,5 @@
 import {countDocs as countDocsApi, deleteDocs as deleteDocsApi} from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor.types';
+import type {SatelliteParameters} from '../types/actor';
 
 /**
  * Counts the documents in a collection.

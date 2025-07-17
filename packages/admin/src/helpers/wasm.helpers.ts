@@ -1,6 +1,6 @@
 import {isNullish, nonNullish} from '@dfinity/utils';
 import {type JunoPackage, JUNO_PACKAGE_SATELLITE_ID, JunoPackageSchema} from '@junobuild/config';
-import type {BuildType} from '../types/build.types';
+import type {BuildType} from '../types/build';
 import {findJunoPackageDependency} from './package.helpers';
 
 /**

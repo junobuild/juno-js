@@ -5,8 +5,8 @@ import {
   setMissionControlController as setMissionControlControllerApi,
   setSatellitesController as setSatellitesControllerApi
 } from '../api/mission-control.api';
-import type {MissionControlParameters} from '../types/actor.types';
-import type {SetControllerParams} from '../types/controllers.types';
+import type {MissionControlParameters} from '../types/actor';
+import type {SetControllerParams} from '../types/controllers';
 import {mapSetControllerParams} from '../utils/controllers.utils';
 
 /**

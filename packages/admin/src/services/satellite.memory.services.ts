@@ -1,6 +1,6 @@
 import type {MemorySize} from '../../declarations/satellite/satellite.did';
 import {memorySize} from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor.types';
+import type {SatelliteParameters} from '../types/actor';
 
 /**
  * Retrieves the stable and heap memory size of a satellite.

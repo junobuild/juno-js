@@ -18,7 +18,7 @@ import {
   setDatastoreConfig as setDatastoreConfigApi,
   setStorageConfig as setStorageConfigApi
 } from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor.types';
+import type {SatelliteParameters} from '../types/actor';
 import {toMaxMemorySize} from '../utils/memory.utils';
 
 /**

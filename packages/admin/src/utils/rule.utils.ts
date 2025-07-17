@@ -19,7 +19,7 @@ import {
   PermissionPublic,
   StorageRulesType
 } from '../constants/rules.constants';
-import type {ListRulesMatcher} from '../types/list.types';
+import type {ListRulesMatcher} from '../types/list';
 
 export const mapRuleType = (type: RulesType): CollectionTypeApi =>
   type === 'storage' ? StorageRulesType : DbRulesType;

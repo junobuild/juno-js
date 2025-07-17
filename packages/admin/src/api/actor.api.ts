@@ -33,7 +33,7 @@ import type {
   MissionControlParameters,
   OrbiterParameters,
   SatelliteParameters
-} from '../types/actor.types';
+} from '../types/actor';
 import {createActor} from '../utils/actor.utils';
 
 /**

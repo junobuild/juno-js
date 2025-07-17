@@ -57,7 +57,15 @@ const ReleaseMetadataSchema = z.strictObject({
    * Version of the Orbiter module included in the release.
    * @type {MetadataVersion}
    */
-  orbiter: MetadataVersionSchema
+  orbiter: MetadataVersionSchema,
+
+  /**
+   * Version of the Sputnik module included in the release.
+   * This field is optional because it was introduced in Juno v0.0.47.
+   *
+   * @type {MetadataVersion | undefined}
+   */
+  sputnik: MetadataVersionSchema.optional()
 });
 
 /**

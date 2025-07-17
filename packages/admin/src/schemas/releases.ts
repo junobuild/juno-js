@@ -7,7 +7,7 @@ import * as z from 'zod/v4';
  * - 0.1.0"
  * - 2.3.4
  */
-const MetadataVersionSchema = z.string().refine((val) => /^\d+\.\d+\.\d+$/.test(val), {
+export const MetadataVersionSchema = z.string().refine((val) => /^\d+\.\d+\.\d+$/.test(val), {
   message: 'Version does not match x.y.z format'
 });
 
@@ -22,7 +22,7 @@ export type MetadataVersion = z.infer<typeof MetadataVersionSchema>;
  * Includes the version of the release itself (tag) and the versions
  * of all modules bundled with it.
  */
-const ReleaseMetadataSchema = z.strictObject({
+export const ReleaseMetadataSchema = z.strictObject({
   /**
    * Unique version identifier for the release, following the `x.y.z` format.
    * @type {MetadataVersion}
@@ -89,12 +89,30 @@ export type ReleaseMetadata = z.infer<typeof ReleaseMetadataSchema>;
  * Validation:
  * - Ensures no duplicate `tag` values across the list of releases.
  */
-const ReleasesSchema = z
+export const ReleasesSchema = z
   .array(ReleaseMetadataSchema)
   .min(1)
   .refine((releases) => new Set(releases.map(({tag}) => tag)).size === releases.length, {
     message: 'A release tag appears multiple times but must be unique'
   });
+
+/**
+ * The list of releases provided by Juno.
+ */
+export type Releases = z.infer<typeof ReleasesSchema>;
+
+/**
+ * A schema for the list of all versions across releases.
+ *
+ * Rules:
+ * - The list must contain at least one release.
+ */
+export const MetadataVersionsSchema = z.array(MetadataVersionSchema).min(1);
+
+/**
+ * List of all versions across releases.
+ */
+export type MetadataVersions = z.infer<typeof MetadataVersionsSchema>;
 
 /**
  * A schema representing the metadata for multiple releases provided by Juno.
@@ -104,19 +122,19 @@ export const ReleasesMetadataSchema = z.strictObject({
    * List of all Mission Control versions across releases.
    * @type {MetadataVersion}
    */
-  mission_controls: z.array(MetadataVersionSchema),
+  mission_controls: MetadataVersionsSchema,
 
   /**
    * List of all Satellite versions across releases.
    * @type {MetadataVersion}
    */
-  satellites: z.array(MetadataVersionSchema),
+  satellites: MetadataVersionsSchema,
 
   /**
    * List of all Orbiter versions across releases.
    * @type {MetadataVersion}
    */
-  orbiters: z.array(MetadataVersionSchema),
+  orbiters: MetadataVersionsSchema,
 
   /**
    * List of release metadata objects, each representing one release.

@@ -37,9 +37,11 @@ const ReleaseMetadataSchema = z.strictObject({
 
   /**
    * Version of the Observatory module included in the release.
-   * @type {MetadataVersion}
+   * This field is optional because it was introduced in Juno v0.0.10.
+   *
+   * @type {MetadataVersion | undefined}
    */
-  observatory: MetadataVersionSchema,
+  observatory: MetadataVersionSchema.optional(),
 
   /**
    * Version of the Mission Control module included in the release.
@@ -55,9 +57,11 @@ const ReleaseMetadataSchema = z.strictObject({
 
   /**
    * Version of the Orbiter module included in the release.
-   * @type {MetadataVersion}
+   * This field is optional because it was introduced in Juno v0.0.17.
+   *
+   * @type {MetadataVersion | undefined}
    */
-  orbiter: MetadataVersionSchema,
+  orbiter: MetadataVersionSchema.optional(),
 
   /**
    * Version of the Sputnik module included in the release.

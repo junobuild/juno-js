@@ -36,8 +36,10 @@ describe('performance.services', () => {
       expect(onTTFB).toHaveBeenCalledOnce();
     });
 
-    it('should ignore deprecated and unknown metrics', async () => {
+    it('should ignore unknown metrics', async () => {
       const {onCLS} = await import('web-vitals');
+
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 
       const fakeMetric = {
         name: 'FID',
@@ -54,6 +56,14 @@ describe('performance.services', () => {
       await startPerformance({sessionId, postPerformanceMetric});
 
       expect(postPerformanceMetric).not.toHaveBeenCalled();
+
+      expect(consoleSpy).toHaveBeenCalledOnce();
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Performance metric ignored. Unknown metric name.',
+        fakeMetric
+      );
+
+      consoleSpy.mockReset();
     });
 
     it('should post known metrics', async () => {

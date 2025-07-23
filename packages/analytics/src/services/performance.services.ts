@@ -55,10 +55,6 @@ export class PerformanceServices {
       return;
     }
 
-    if (data === 'deprecated') {
-      return;
-    }
-
     await postPerformanceMetric({
       key: {
         key: nanoid(),
@@ -75,8 +71,8 @@ export class PerformanceServices {
     delta,
     id,
     navigationType
-  }: SessionMetric): SetPerformanceMetricPayload | 'deprecated' | 'unknown' {
-    const mapMetricName = (): PerformanceMetricNamePayload | 'deprecated' | 'unknown' => {
+  }: SessionMetric): SetPerformanceMetricPayload | 'unknown' {
+    const mapMetricName = (): PerformanceMetricNamePayload | 'unknown' => {
       switch (metricName) {
         case 'CLS':
         case 'FCP':
@@ -84,8 +80,6 @@ export class PerformanceServices {
         case 'LCP':
         case 'TTFB':
           return metricName;
-        case 'FID':
-          return 'deprecated';
         default:
           return 'unknown';
       }
@@ -93,7 +87,7 @@ export class PerformanceServices {
 
     const metric_name = mapMetricName();
 
-    if (metric_name === 'unknown' || metric_name === 'deprecated') {
+    if (metric_name === 'unknown') {
       return metric_name;
     }
 

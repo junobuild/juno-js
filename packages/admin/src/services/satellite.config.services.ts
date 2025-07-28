@@ -19,7 +19,7 @@ import {
   setStorageConfig as setStorageConfigApi
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor';
-import {toMaxMemorySize} from '../utils/memory.utils';
+import {fromMaxMemorySize, toMaxMemorySize} from '../utils/memory.utils';
 
 /**
  * Sets the configuration for the Storage of a Satellite.
@@ -39,13 +39,14 @@ export const setStorageConfig = async ({
     redirects: configRedirects,
     iframe: configIFrame,
     rawAccess: configRawAccess,
-    maxMemorySize: configMaxMemorySize
+    maxMemorySize: configMaxMemorySize,
+    version: configVersion
   },
   satellite
 }: {
-  config: StorageConfig;
+  config: Omit<StorageConfig, 'createdAt' | 'updatedAt'>;
   satellite: SatelliteParameters;
-}): Promise<void> => {
+}): Promise<StorageConfig> => {
   const headers: [string, [string, string][]][] = (configHeaders ?? []).map(
     ({source, headers}: StorageConfigHeader) => [source, headers]
   );
@@ -68,7 +69,16 @@ export const setStorageConfig = async ({
   const rawAccess: StorageConfigRawAccessDid =
     configRawAccess === true ? {Allow: null} : {Deny: null};
 
-  return await setStorageConfigApi({
+  const {
+    redirects: resultRedirects,
+    iframe: resultIframe,
+    version: resultVersion,
+    raw_access: resultRawAccess,
+    max_memory_size: resultMaxMemorySize,
+    updated_at: resultUpdatedAt,
+    created_at: resultCreatedAt,
+    ...rest
+  } = await setStorageConfigApi({
     satellite,
     config: {
       headers,
@@ -76,9 +86,34 @@ export const setStorageConfig = async ({
       redirects: [redirects],
       iframe: [iframe],
       raw_access: [rawAccess],
-      max_memory_size: toMaxMemorySize(configMaxMemorySize)
+      max_memory_size: toMaxMemorySize(configMaxMemorySize),
+      version: toNullable(configVersion)
     }
   });
+
+  return {
+    ...rest,
+    redirects: fromNullable(resultRedirects)?.map<StorageConfigRedirect>(
+      ([source, {status_code: code, ...rest}]) => ({
+        ...rest,
+        code: code as 301 | 302,
+        source
+      })
+    ),
+    ...(nonNullish(resultIframe) && {
+      iframe:
+        'SameOrigin' in resultIframe
+          ? 'same-origin'
+          : 'AllowAny' in resultIframe
+            ? 'allow-any'
+            : 'deny'
+    }),
+    version: fromNullable(resultVersion),
+    ...(nonNullish(resultRawAccess) && {rawAccess: 'Allow' in resultRawAccess}),
+    ...fromMaxMemorySize(resultMaxMemorySize),
+    updatedAt: fromNullable(resultUpdatedAt),
+    createdAt: fromNullable(resultCreatedAt)
+  };
 };
 
 /**

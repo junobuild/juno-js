@@ -13,7 +13,9 @@ import type {
   MemorySize,
   Rule,
   SetControllersArgs,
+  SetDbConfig,
   SetRule,
+  SetStorageConfig,
   StorageConfig
 } from '../../declarations/satellite/satellite.did';
 import type {SatelliteParameters} from '../types/actor';
@@ -28,9 +30,9 @@ export const setStorageConfig = async ({
   config,
   satellite
 }: {
-  config: StorageConfig;
+  config: SetStorageConfig;
   satellite: SatelliteParameters;
-}): Promise<void> => {
+}): Promise<StorageConfig> => {
   const {set_storage_config} = await getSatelliteActor(satellite);
   return set_storage_config(config);
 };
@@ -39,9 +41,9 @@ export const setDatastoreConfig = async ({
   config,
   satellite
 }: {
-  config: DbConfig;
+  config: SetDbConfig;
   satellite: SatelliteParameters;
-}): Promise<void> => {
+}): Promise<DbConfig> => {
   const {set_db_config} = await getSatelliteActor(satellite);
   return set_db_config(config);
 };

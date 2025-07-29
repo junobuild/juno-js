@@ -540,9 +540,9 @@ Configure the behavior of Internet Identity.
 
 Configure the rules of the authentication.
 
-| Property         | Type                    | Description                                                                                                                                                                                                                                                 |
-| ---------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `allowedCallers` | `string[] or undefined` | This option defines who's allowed to use your app. If you enable this, only the identities you list (in user key, format, like `bj4r4-5cdop-...`) will be allowed to sign in or use any features like Datastore or Storage. type: {PrincipalText[]}optional |
+| Property         | Type       | Description                                                                                                                                                                                                                                                 |
+| ---------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `allowedCallers` | `string[]` | This option defines who's allowed to use your app. If you enable this, only the identities you list (in user key, format, like `bj4r4-5cdop-...`) will be allowed to sign in or use any features like Datastore or Storage. type: {PrincipalText[]}optional |
 
 #### :gear: AuthenticationConfig
 

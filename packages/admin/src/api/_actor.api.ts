@@ -1,3 +1,4 @@
+import {type ActorConfig, type ActorMethod, type ActorSubclass, Actor} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {isNullish} from '@dfinity/utils';
 import type {_SERVICE as DeprecatedMissionControlVersionActor} from '../../declarations/mission_control/mission_control-deprecated-version.did';
@@ -34,7 +35,7 @@ import type {
   OrbiterParameters,
   SatelliteParameters
 } from '../types/actor';
-import {createActor} from '../utils/actor.utils';
+import {useOrInitAgent} from './_agent.api';
 
 /**
  * @deprecated TODO: for backwards compatibility - to be removed
@@ -149,5 +150,25 @@ export const getActor = <T>({
     canisterId,
     idlFactory,
     ...rest
+  });
+};
+
+const createActor = async <T = Record<string, ActorMethod>>({
+  canisterId,
+  idlFactory,
+  config,
+  ...rest
+}: {
+  idlFactory: IDL.InterfaceFactory;
+  canisterId: string;
+  config?: Pick<ActorConfig, 'callTransform' | 'queryTransform'>;
+} & ActorParameters): Promise<ActorSubclass<T>> => {
+  const agent = await useOrInitAgent(rest);
+
+  // Creates an actor with using the candid interface and the HttpAgent
+  return Actor.createActor(idlFactory, {
+    agent,
+    canisterId,
+    ...(config ?? {})
   });
 };

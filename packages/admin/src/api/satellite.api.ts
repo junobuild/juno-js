@@ -26,7 +26,7 @@ import {
   getDeprecatedSatelliteNoScopeActor,
   getDeprecatedSatelliteVersionActor,
   getSatelliteActor
-} from './actor.api';
+} from './_actor.api';
 
 export const setStorageConfig = async ({
   config,

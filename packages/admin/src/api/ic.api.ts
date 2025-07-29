@@ -12,7 +12,7 @@ import type {take_canister_snapshot_result} from '@dfinity/ic-management/dist/ca
 import type {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
 import {Principal} from '@dfinity/principal';
 import type {ActorParameters} from '../types/actor';
-import {useOrInitAgent} from '../utils/actor.utils';
+import {useOrInitAgent} from './_agent.api';
 
 export const canisterStop = async ({
   canisterId,

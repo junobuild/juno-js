@@ -5,7 +5,7 @@ import type {
   SetController
 } from '../../declarations/mission_control/mission_control.did';
 import type {MissionControlParameters} from '../types/actor';
-import {getDeprecatedMissionControlVersionActor, getMissionControlActor} from './actor.api';
+import {getDeprecatedMissionControlVersionActor, getMissionControlActor} from './_actor.api';
 
 /**
  * @deprecated - Replaced in Mission Control > v0.0.14 with public custom section juno:package

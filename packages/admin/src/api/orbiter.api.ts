@@ -5,7 +5,7 @@ import type {
   _SERVICE as OrbiterActor
 } from '../../declarations/orbiter/orbiter.did';
 import type {OrbiterParameters} from '../types/actor';
-import {getDeprecatedOrbiterVersionActor, getOrbiterActor} from './actor.api';
+import {getDeprecatedOrbiterVersionActor, getOrbiterActor} from './_actor.api';
 
 /**
  * @deprecated - Replaced in Orbiter > v0.0.8 with public custom section juno:package

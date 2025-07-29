@@ -8,14 +8,15 @@ import type {
   StorageConfigRewrite
 } from '@junobuild/config';
 import {describe, expect, it} from 'vitest';
-import {mockModuleIdText, mockUserIdText} from '../mocks/principal.mocks';
 import {
   fromAuthenticationConfig,
   fromDatastoreConfig,
-  fromStorageConfig, toAuthenticationConfig,
+  fromStorageConfig,
+  toAuthenticationConfig,
   toDatastoreConfig,
   toStorageConfig
 } from '../../utils/config.utils';
+import {mockModuleIdText, mockUserIdText} from '../mocks/principal.mocks';
 
 describe('config.utils', () => {
   const now = BigInt(Date.now());
@@ -63,6 +64,26 @@ describe('config.utils', () => {
       expect(result.version).toEqual([1n]);
       expect(result.max_memory_size).toEqual([{heap: [123n], stable: [456n]}]);
     });
+
+    it('handles nullish fields in fromStorageConfig', () => {
+      const result = fromStorageConfig({
+        headers: undefined,
+        rewrites: undefined,
+        redirects: undefined,
+        iframe: undefined,
+        rawAccess: undefined,
+        maxMemorySize: undefined,
+        version: undefined
+      });
+
+      expect(result.headers).toEqual([]);
+      expect(result.rewrites).toEqual([]);
+      expect(result.redirects).toEqual([[]]);
+      expect(result.iframe).toEqual([{Deny: null}]);
+      expect(result.raw_access).toEqual([{Deny: null}]);
+      expect(result.version).toEqual([]);
+      expect(result.max_memory_size).toEqual([]);
+    });
   });
 
   describe('toStorageConfig', () => {
@@ -91,6 +112,30 @@ describe('config.utils', () => {
       expect(result.createdAt).toBe(now);
       expect(result.updatedAt).toBe(now);
     });
+
+    it('handles missing optional fields in toStorageConfig', () => {
+      const result = toStorageConfig({
+        headers: [],
+        rewrites: [],
+        redirects: [],
+        iframe: [],
+        raw_access: [],
+        max_memory_size: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.headers).toBeUndefined()
+      expect(result.rewrites).toBeUndefined()
+      expect(result.redirects).toBeUndefined();
+      expect(result.iframe).toBeUndefined();
+      expect(result.rawAccess).toBeUndefined();
+      expect(result.maxMemorySize).toBeUndefined()
+      expect(result.version).toBeUndefined();
+      expect(result.createdAt).toBeUndefined();
+      expect(result.updatedAt).toBeUndefined();
+    });
   });
 
   describe('fromDatastoreConfig', () => {
@@ -105,6 +150,16 @@ describe('config.utils', () => {
       const result = fromDatastoreConfig(config);
       expect(result.version).toEqual([3n]);
       expect(result.max_memory_size).toEqual([{heap: [5n], stable: [10n]}]);
+    });
+
+    it('handles nullish values in fromDatastoreConfig', () => {
+      const result = fromDatastoreConfig({
+        maxMemorySize: undefined,
+        version: undefined
+      });
+
+      expect(result.max_memory_size).toEqual([]);
+      expect(result.version).toEqual([]);
     });
   });
 
@@ -121,6 +176,20 @@ describe('config.utils', () => {
       expect(result.maxMemorySize).toEqual({heap: 9n, stable: 11n});
       expect(result.createdAt).toBe(now);
       expect(result.updatedAt).toBe(now);
+    });
+
+    it('handles missing timestamps in toDatastoreConfig', () => {
+      const result = toDatastoreConfig({
+        version: [],
+        max_memory_size: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.version).toBeUndefined();
+      expect(result.createdAt).toBeUndefined();
+      expect(result.updatedAt).toBeUndefined();
+      expect(result.maxMemorySize).toEqual({});
     });
   });
 
@@ -157,6 +226,18 @@ describe('config.utils', () => {
       ]);
       expect(result.version).toEqual([7n]);
     });
+
+    it('handles nullish internetIdentity and rules in fromAuthenticationConfig', () => {
+      const result = fromAuthenticationConfig({
+        internetIdentity: undefined,
+        rules: undefined,
+        version: undefined
+      });
+
+      expect(result.internet_identity).toEqual([]);
+      expect(result.rules).toEqual([]);
+      expect(result.version).toEqual([]);
+    });
   });
 
   describe('toAuthenticationConfig', () => {
@@ -191,6 +272,22 @@ describe('config.utils', () => {
       expect(result.version).toBe(8n);
       expect(result.createdAt).toBe(now);
       expect(result.updatedAt).toBe(now);
+    });
+
+    it('handles empty nested fields in toAuthenticationConfig', () => {
+      const result = toAuthenticationConfig({
+        internet_identity: [],
+        rules: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.internetIdentity).toBeUndefined();
+      expect(result.rules).toBeUndefined();
+      expect(result.version).toBeUndefined();
+      expect(result.createdAt).toBeUndefined();
+      expect(result.updatedAt).toBeUndefined();
     });
   });
 });

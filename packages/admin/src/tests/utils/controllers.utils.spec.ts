@@ -1,10 +1,10 @@
-import { Principal } from '@dfinity/principal';
-import {SetControllerParams} from '../../types/controllers';
-import {mockUserIdText} from '../mocks/principal.mocks';
-import {mapSetControllerParams} from '../../utils/controllers.utils';
+import {Principal} from '@dfinity/principal';
 import {SetController} from '../../../declarations/satellite/satellite.did';
+import {SetControllerParams} from '../../types/controllers';
+import {mapSetControllerParams} from '../../utils/controllers.utils';
+import {mockUserIdText} from '../mocks/principal.mocks';
 
-describe("controllers.utils", () => {
+describe('controllers.utils', () => {
   describe('mapSetControllerParams', () => {
     it('maps controllerId and non-empty profile correctly', () => {
       const input: SetControllerParams = {
@@ -19,7 +19,7 @@ describe("controllers.utils", () => {
       const expected: SetController = {
         metadata: [['profile', 'hello world']],
         expires_at: [],
-        scope: { Admin: null }
+        scope: {Admin: null}
       };
 
       expect(result.controller).toEqual(expected);
@@ -36,7 +36,7 @@ describe("controllers.utils", () => {
       expect(result.controllerIds).toEqual([Principal.fromText(mockUserIdText)]);
       expect(result.controller.metadata).toEqual([]);
       expect(result.controller.expires_at).toEqual([]);
-      expect(result.controller.scope).toEqual({ Admin: null });
+      expect(result.controller.scope).toEqual({Admin: null});
     });
 
     it('maps controllerId and null profile correctly', () => {
@@ -61,6 +61,4 @@ describe("controllers.utils", () => {
       expect(result.controller.metadata).toEqual([]);
     });
   });
-
-})
-
+});

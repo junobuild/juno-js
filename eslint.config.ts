@@ -4,7 +4,6 @@ export default [
   ...config,
   {
     rules: {
-      'local-rules/use-option-type-wrapper': ['off'],
       'prefer-arrow/prefer-arrow-functions': ['off'],
       'func-style': ['off']
     }

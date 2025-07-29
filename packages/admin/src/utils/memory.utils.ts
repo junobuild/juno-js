@@ -22,11 +22,12 @@ export const fromMaxMemorySize = (
   const stable = fromNullable(memorySize?.stable ?? []);
 
   return {
-    ...(nonNullish(memorySize) && {
-      maxMemorySize: {
-        ...(nonNullish(heap) && {heap}),
-        ...(nonNullish(stable) && {stable})
-      }
-    })
+    ...(nonNullish(memorySize) &&
+      (nonNullish(heap) || nonNullish(stable)) && {
+        maxMemorySize: {
+          ...(nonNullish(heap) && {heap}),
+          ...(nonNullish(stable) && {stable})
+        }
+      })
   };
 };

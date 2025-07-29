@@ -2,7 +2,7 @@ import type {ActorSubclass} from '@dfinity/agent';
 import {MockInstance} from 'vitest';
 import * as actorApi from '../../api/_actor.api';
 import * as agentFactory from '../../api/_agent.api';
-import {mockIdentity, mockSatelliteId} from '../mocks/mocks';
+import {mockIdentity, mockSatelliteIdText} from '../mocks/mocks';
 
 vi.mock('../../api/_agent.api', () => ({
   useOrInitAgent: vi.fn().mockResolvedValue({} as unknown as ActorSubclass)
@@ -20,7 +20,7 @@ describe('_actor.api', () => {
   describe('getSatelliteActor', () => {
     it('creates a certified satellite actor', async () => {
       const actor = await actorApi.getSatelliteActor({
-        satelliteId: mockSatelliteId,
+        satelliteId: mockSatelliteIdText,
         certified: true,
         identity: mockIdentity
       });
@@ -31,7 +31,7 @@ describe('_actor.api', () => {
 
     it('creates a non-certified satellite actor', async () => {
       const actor = await actorApi.getSatelliteActor({
-        satelliteId: mockSatelliteId,
+        satelliteId: mockSatelliteIdText,
         certified: false,
         identity: mockIdentity
       });
@@ -44,7 +44,7 @@ describe('_actor.api', () => {
   describe('getMissionControlActor', () => {
     it('creates a mission control actor', async () => {
       const actor = await actorApi.getMissionControlActor({
-        missionControlId: mockSatelliteId,
+        missionControlId: mockSatelliteIdText,
         identity: mockIdentity
       });
 
@@ -56,7 +56,7 @@ describe('_actor.api', () => {
   describe('getOrbiterActor', () => {
     it('creates a certified orbiter actor', async () => {
       const actor = await actorApi.getOrbiterActor({
-        orbiterId: mockSatelliteId,
+        orbiterId: mockSatelliteIdText,
         certified: true,
         identity: mockIdentity
       });
@@ -67,7 +67,7 @@ describe('_actor.api', () => {
 
     it('creates a non-certified orbiter actor', async () => {
       const actor = await actorApi.getOrbiterActor({
-        orbiterId: mockSatelliteId,
+        orbiterId: mockSatelliteIdText,
         certified: false,
         identity: mockIdentity
       });
@@ -80,7 +80,7 @@ describe('_actor.api', () => {
   describe('getDeprecatedSatelliteActor', () => {
     it('creates a deprecated satellite actor', async () => {
       const actor = await actorApi.getDeprecatedSatelliteActor({
-        satelliteId: mockSatelliteId,
+        satelliteId: mockSatelliteIdText,
         identity: mockIdentity
       });
 
@@ -92,7 +92,7 @@ describe('_actor.api', () => {
   describe('getDeprecatedSatelliteNoScopeActor', () => {
     it('creates a deprecated satellite no scope actor', async () => {
       const actor = await actorApi.getDeprecatedSatelliteNoScopeActor({
-        satelliteId: mockSatelliteId,
+        satelliteId: mockSatelliteIdText,
         identity: mockIdentity
       });
 
@@ -104,7 +104,7 @@ describe('_actor.api', () => {
   describe('getDeprecatedSatelliteVersionActor', () => {
     it('creates a deprecated satellite version actor', async () => {
       const actor = await actorApi.getDeprecatedSatelliteVersionActor({
-        satelliteId: mockSatelliteId,
+        satelliteId: mockSatelliteIdText,
         identity: mockIdentity
       });
 
@@ -116,7 +116,7 @@ describe('_actor.api', () => {
   describe('getDeprecatedMissionControlVersionActor', () => {
     it('creates a deprecated mission control version actor', async () => {
       const actor = await actorApi.getDeprecatedMissionControlVersionActor({
-        missionControlId: mockSatelliteId,
+        missionControlId: mockSatelliteIdText,
         identity: mockIdentity
       });
 
@@ -128,7 +128,7 @@ describe('_actor.api', () => {
   describe('getDeprecatedOrbiterVersionActor', () => {
     it('creates a deprecated orbiter version actor', async () => {
       const actor = await actorApi.getDeprecatedOrbiterVersionActor({
-        orbiterId: mockSatelliteId,
+        orbiterId: mockSatelliteIdText,
         identity: mockIdentity
       });
 

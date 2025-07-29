@@ -16,7 +16,7 @@ import {
   toDatastoreConfig,
   toStorageConfig
 } from '../../utils/config.utils';
-import {mockSatelliteId, mockUserIdText} from '../mocks/mocks';
+import {mockSatelliteIdText, mockUserIdText} from '../mocks/mocks';
 
 describe('config.utils', () => {
   const now = BigInt(Date.now());
@@ -229,7 +229,7 @@ describe('config.utils', () => {
           externalAlternativeOrigins: ['https://bar.icp0.io']
         },
         rules: {
-          allowedCallers: [mockUserIdText, mockSatelliteId]
+          allowedCallers: [mockUserIdText, mockSatelliteIdText]
         },
         version: 7n,
         createdAt: now,
@@ -246,7 +246,7 @@ describe('config.utils', () => {
       ]);
       expect(result.rules).toEqual([
         {
-          allowed_callers: [Principal.fromText(mockUserIdText), Principal.fromText(mockSatelliteId)]
+          allowed_callers: [Principal.fromText(mockUserIdText), Principal.fromText(mockSatelliteIdText)]
         }
       ]);
       expect(result.version).toEqual([7n]);
@@ -295,7 +295,7 @@ describe('config.utils', () => {
           {
             allowed_callers: [
               Principal.fromText(mockUserIdText),
-              Principal.fromText(mockSatelliteId)
+              Principal.fromText(mockSatelliteIdText)
             ]
           }
         ],
@@ -309,7 +309,7 @@ describe('config.utils', () => {
         externalAlternativeOrigins: ['https://alt.icp0.io']
       });
       expect(result.rules).toEqual({
-        allowedCallers: [mockUserIdText, mockSatelliteId]
+        allowedCallers: [mockUserIdText, mockSatelliteIdText]
       });
       expect(result.version).toBe(8n);
       expect(result.createdAt).toBe(now);

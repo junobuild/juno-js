@@ -191,9 +191,9 @@ Configuration options for [Juno] CLI.
 
 #### :gear: StorageConfigSchema
 
-| Constant              | Type                                                                                                                                                                                                             |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `StorageConfigSchema` | `ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>` |
+| Constant              | Type                                                                                                                                                                                                       |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `StorageConfigSchema` | `ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 7 more ...; version: ZodOptional<...>; }, $strip>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L114)
 
@@ -249,9 +249,9 @@ see EncodingType
 
 #### :gear: DatastoreConfigSchema
 
-| Constant                | Type                                                                                                                                         |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DatastoreConfigSchema` | `ZodObject<{ maxMemorySize: ZodOptional<ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>>; }, $strict>` |
+| Constant                | Type                                                                                                                                                                                                                              |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DatastoreConfigSchema` | `ZodObject<{ maxMemorySize: ZodOptional<ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>>; createdAt: ZodOptional<...>; updatedAt: ZodOptional<...>; version: ZodOptional<...>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/datastore.config.ts#L7)
 
@@ -273,9 +273,9 @@ see EncodingType
 
 #### :gear: SatelliteConfigOptionsSchema
 
-| Constant                       | Type                                                                                                                                                                                                                                                                                                                               |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; }, $strict>, ZodObject<.....` |
+| Constant                       | Type                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 7 more ...; version: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; }, $strict>, ZodObject<...>]>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L70)
 
@@ -283,7 +283,7 @@ see EncodingType
 
 | Constant           | Type                                                                                                                                                                                                                                                                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `JunoConfigSchema` | `ZodObject<{ satellite: ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 4 more ...; maxMemorySize: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; },...` |
+| `JunoConfigSchema` | `ZodObject<{ satellite: ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 7 more ...; version: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; }, $stri...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/juno.config.ts#L9)
 

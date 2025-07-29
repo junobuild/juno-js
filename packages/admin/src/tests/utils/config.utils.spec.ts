@@ -16,7 +16,7 @@ import {
   toDatastoreConfig,
   toStorageConfig
 } from '../../utils/config.utils';
-import {mockModuleIdText, mockUserIdText} from '../mocks/principal.mocks';
+import {mockSatelliteId, mockUserIdText} from '../mocks/mocks';
 
 describe('config.utils', () => {
   const now = BigInt(Date.now());
@@ -87,22 +87,21 @@ describe('config.utils', () => {
 
     it('handles empty strings and special characters in redirects', () => {
       const config: StorageConfig = {
-        redirects: [{ source: '', location: '/new?query=1', code: 301 }],
+        redirects: [{source: '', location: '/new?query=1', code: 301}],
         rewrites: [],
         headers: [],
         iframe: 'same-origin',
         rawAccess: true,
         version: 1n,
-        maxMemorySize: { heap: 123n, stable: 456n },
+        maxMemorySize: {heap: 123n, stable: 456n},
         createdAt: now,
         updatedAt: now
       };
 
       const result = fromStorageConfig(config);
 
-      expect(result.redirects).toEqual([[['', { location: '/new?query=1', status_code: 301 }]]]);
+      expect(result.redirects).toEqual([[['', {location: '/new?query=1', status_code: 301}]]]);
     });
-
   });
 
   describe('toStorageConfig', () => {
@@ -145,12 +144,12 @@ describe('config.utils', () => {
         updated_at: []
       });
 
-      expect(result.headers).toBeUndefined()
-      expect(result.rewrites).toBeUndefined()
+      expect(result.headers).toBeUndefined();
+      expect(result.rewrites).toBeUndefined();
       expect(result.redirects).toBeUndefined();
       expect(result.iframe).toBeUndefined();
       expect(result.rawAccess).toBeUndefined();
-      expect(result.maxMemorySize).toBeUndefined()
+      expect(result.maxMemorySize).toBeUndefined();
       expect(result.version).toBeUndefined();
       expect(result.createdAt).toBeUndefined();
       expect(result.updatedAt).toBeUndefined();
@@ -183,11 +182,11 @@ describe('config.utils', () => {
 
     it('handles empty maxMemorySize', () => {
       const result = fromDatastoreConfig({
-        maxMemorySize: { heap: 0n, stable: 0n },
+        maxMemorySize: {heap: 0n, stable: 0n},
         version: 0n
       });
 
-      expect(result.max_memory_size).toEqual([{ heap: [0n], stable: [0n] }]);
+      expect(result.max_memory_size).toEqual([{heap: [0n], stable: [0n]}]);
       expect(result.version).toEqual([0n]);
     });
   });
@@ -220,7 +219,6 @@ describe('config.utils', () => {
       expect(result.updatedAt).toBeUndefined();
       expect(result.maxMemorySize).toBeUndefined();
     });
-
   });
 
   describe('fromAuthenticationConfig', () => {
@@ -231,7 +229,7 @@ describe('config.utils', () => {
           externalAlternativeOrigins: ['https://bar.icp0.io']
         },
         rules: {
-          allowedCallers: [mockUserIdText, mockModuleIdText]
+          allowedCallers: [mockUserIdText, mockSatelliteId]
         },
         version: 7n,
         createdAt: now,
@@ -248,10 +246,7 @@ describe('config.utils', () => {
       ]);
       expect(result.rules).toEqual([
         {
-          allowed_callers: [
-            Principal.fromText(mockUserIdText),
-            Principal.fromText(mockModuleIdText)
-          ]
+          allowed_callers: [Principal.fromText(mockUserIdText), Principal.fromText(mockSatelliteId)]
         }
       ]);
       expect(result.version).toEqual([7n]);
@@ -271,16 +266,18 @@ describe('config.utils', () => {
 
     it('handles empty internetIdentity and rules', () => {
       const result = fromAuthenticationConfig({
-        internetIdentity: { derivationOrigin: 'hello.com', externalAlternativeOrigins: [] },
-        rules: { allowedCallers: [] },
+        internetIdentity: {derivationOrigin: 'hello.com', externalAlternativeOrigins: []},
+        rules: {allowedCallers: []},
         version: 0n
       });
 
-      expect(result.internet_identity).toEqual([{
-        derivation_origin: ['hello.com'],
-        external_alternative_origins: [[]]
-      }]);
-      expect(result.rules).toEqual([{ allowed_callers: [] }]);
+      expect(result.internet_identity).toEqual([
+        {
+          derivation_origin: ['hello.com'],
+          external_alternative_origins: [[]]
+        }
+      ]);
+      expect(result.rules).toEqual([{allowed_callers: []}]);
       expect(result.version).toEqual([0n]);
     });
   });
@@ -298,7 +295,7 @@ describe('config.utils', () => {
           {
             allowed_callers: [
               Principal.fromText(mockUserIdText),
-              Principal.fromText(mockModuleIdText)
+              Principal.fromText(mockSatelliteId)
             ]
           }
         ],
@@ -312,7 +309,7 @@ describe('config.utils', () => {
         externalAlternativeOrigins: ['https://alt.icp0.io']
       });
       expect(result.rules).toEqual({
-        allowedCallers: [mockUserIdText, mockModuleIdText]
+        allowedCallers: [mockUserIdText, mockSatelliteId]
       });
       expect(result.version).toBe(8n);
       expect(result.createdAt).toBe(now);
@@ -337,13 +334,17 @@ describe('config.utils', () => {
 
     it('handles empty strings in internetIdentity', () => {
       const result = toAuthenticationConfig({
-        internet_identity: [{
-          derivation_origin: ['aaa.com'],
-          external_alternative_origins: [[]]
-        }],
-        rules: [{
-          allowed_callers: []
-        }],
+        internet_identity: [
+          {
+            derivation_origin: ['aaa.com'],
+            external_alternative_origins: [[]]
+          }
+        ],
+        rules: [
+          {
+            allowed_callers: []
+          }
+        ],
         version: [0n],
         created_at: [now],
         updated_at: [now]

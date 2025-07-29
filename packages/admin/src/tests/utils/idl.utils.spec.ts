@@ -2,7 +2,7 @@ import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {Controller} from '../../../declarations/satellite/satellite.did';
 import {encodeAdminAccessKeysToIDL, encoreIDLUser} from '../../utils/idl.utils';
-import {mockModuleIdText, mockUserIdText} from '../mocks/principal.mocks';
+import {mockSatelliteId, mockUserIdText} from '../mocks/mocks';
 
 describe('idl-encode.utils', () => {
   describe('encoreIDLUser', () => {
@@ -17,7 +17,7 @@ describe('idl-encode.utils', () => {
   });
 
   describe('encodeAdminAccessKeysToIDL', () => {
-    const adminPrincipal = Principal.fromText(mockModuleIdText);
+    const adminPrincipal = Principal.fromText(mockSatelliteId);
     const viewerPrincipal = Principal.fromText(mockUserIdText);
 
     it('encodes only Admin-scoped principals', () => {

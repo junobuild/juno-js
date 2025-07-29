@@ -84,6 +84,25 @@ describe('config.utils', () => {
       expect(result.version).toEqual([]);
       expect(result.max_memory_size).toEqual([]);
     });
+
+    it('handles empty strings and special characters in redirects', () => {
+      const config: StorageConfig = {
+        redirects: [{ source: '', location: '/new?query=1', code: 301 }],
+        rewrites: [],
+        headers: [],
+        iframe: 'same-origin',
+        rawAccess: true,
+        version: 1n,
+        maxMemorySize: { heap: 123n, stable: 456n },
+        createdAt: now,
+        updatedAt: now
+      };
+
+      const result = fromStorageConfig(config);
+
+      expect(result.redirects).toEqual([[['', { location: '/new?query=1', status_code: 301 }]]]);
+    });
+
   });
 
   describe('toStorageConfig', () => {
@@ -161,6 +180,16 @@ describe('config.utils', () => {
       expect(result.max_memory_size).toEqual([]);
       expect(result.version).toEqual([]);
     });
+
+    it('handles empty maxMemorySize', () => {
+      const result = fromDatastoreConfig({
+        maxMemorySize: { heap: 0n, stable: 0n },
+        version: 0n
+      });
+
+      expect(result.max_memory_size).toEqual([{ heap: [0n], stable: [0n] }]);
+      expect(result.version).toEqual([0n]);
+    });
   });
 
   describe('toDatastoreConfig', () => {
@@ -191,6 +220,7 @@ describe('config.utils', () => {
       expect(result.updatedAt).toBeUndefined();
       expect(result.maxMemorySize).toEqual({});
     });
+
   });
 
   describe('fromAuthenticationConfig', () => {
@@ -237,6 +267,21 @@ describe('config.utils', () => {
       expect(result.internet_identity).toEqual([]);
       expect(result.rules).toEqual([]);
       expect(result.version).toEqual([]);
+    });
+
+    it('handles empty internetIdentity and rules', () => {
+      const result = fromAuthenticationConfig({
+        internetIdentity: { derivationOrigin: 'hello.com', externalAlternativeOrigins: [] },
+        rules: { allowedCallers: [] },
+        version: 0n
+      });
+
+      expect(result.internet_identity).toEqual([{
+        derivation_origin: ['hello.com'],
+        external_alternative_origins: [[]]
+      }]);
+      expect(result.rules).toEqual([{ allowed_callers: [] }]);
+      expect(result.version).toEqual([0n]);
     });
   });
 
@@ -288,6 +333,32 @@ describe('config.utils', () => {
       expect(result.version).toBeUndefined();
       expect(result.createdAt).toBeUndefined();
       expect(result.updatedAt).toBeUndefined();
+    });
+
+    it('handles empty strings in internetIdentity', () => {
+      const result = toAuthenticationConfig({
+        internet_identity: [{
+          derivation_origin: ['aaa.com'],
+          external_alternative_origins: [[]]
+        }],
+        rules: [{
+          allowed_callers: []
+        }],
+        version: [0n],
+        created_at: [now],
+        updated_at: [now]
+      });
+
+      expect(result.internetIdentity).toEqual({
+        derivationOrigin: 'aaa.com',
+        externalAlternativeOrigins: []
+      });
+      expect(result.rules).toEqual({
+        allowedCallers: []
+      });
+      expect(result.version).toBe(0n);
+      expect(result.createdAt).toBe(now);
+      expect(result.updatedAt).toBe(now);
     });
   });
 });

@@ -2,17 +2,29 @@ import {
   AuthenticationConfig,
   Config,
   DbConfig,
+  SetControllersArgs,
+  SetRule,
   StorageConfig
 } from '../../../declarations/satellite/satellite.did';
 import * as actor from '../../api/_actor.api';
 import {
+  countAssets,
+  countDocs,
+  deleteAssets,
+  deleteDocs,
   getAuthConfig,
   getConfig,
   getDatastoreConfig,
   getStorageConfig,
+  listControllers,
+  listCustomDomains,
+  listRules,
   memorySize,
   setAuthConfig,
+  setControllers,
+  setCustomDomain,
   setDatastoreConfig,
+  setRule,
   setStorageConfig,
   version
 } from '../../api/satellite.api';
@@ -35,7 +47,16 @@ const mockActor = {
   get_storage_config: vi.fn(),
   get_db_config: vi.fn(),
   get_auth_config: vi.fn(),
-  get_config: vi.fn()
+  get_config: vi.fn(),
+  list_rules: vi.fn(),
+  set_rule: vi.fn(),
+  list_custom_domains: vi.fn(),
+  set_custom_domain: vi.fn(),
+  count_collection_docs: vi.fn(),
+  count_collection_assets: vi.fn(),
+  del_docs: vi.fn(),
+  del_assets: vi.fn(),
+  set_controllers: vi.fn()
 };
 
 describe('satellite.api', () => {
@@ -265,6 +286,283 @@ describe('satellite.api', () => {
       const err = new Error('fail');
       mockActor.get_config.mockRejectedValueOnce(err);
       await expect(getConfig({satellite: {identity: mockIdentity}})).rejects.toThrow(err);
+    });
+  });
+
+  describe('listRules', () => {
+    it('returns the list of rules', async () => {
+      const rules = {
+        matches_length: 1n,
+        items: [
+          [
+            'rule1',
+            {
+              max_capacity: [100],
+              memory: [{Heap: null}],
+              updated_at: 1624532800000n,
+              max_size: [1000n],
+              read: {Public: null},
+              created_at: 1624532700000n,
+              version: [1n],
+              mutable_permissions: [true],
+              rate_config: [{max_tokens: 1000n, time_per_token_ns: 1000000n}],
+              write: {Private: null},
+              max_changes_per_user: [10]
+            }
+          ]
+        ],
+        items_length: 1n
+      };
+      mockActor.list_rules.mockResolvedValue(rules);
+      const result = await listRules({
+        satellite: {identity: mockIdentity},
+        type: {Db: null},
+        filter: {matcher: []}
+      });
+      expect(result).toEqual(rules);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.list_rules.mockRejectedValueOnce(err);
+      await expect(
+        listRules({satellite: {identity: mockIdentity}, type: {Db: null}, filter: {matcher: []}})
+      ).rejects.toThrow(err);
+    });
+  });
+
+  describe('setRule', () => {
+    const rule: SetRule = {
+      max_capacity: [100],
+      memory: [{Heap: null}],
+      max_size: [1000n],
+      read: {Public: null},
+      version: [1n],
+      mutable_permissions: [true],
+      rate_config: [{max_tokens: 1000n, time_per_token_ns: 1000000n}],
+      write: {Private: null},
+      max_changes_per_user: [10]
+    };
+
+    it('sets a rule', async () => {
+      const expectedRule = {
+        ...rule,
+        updated_at: 1624532800000n,
+        created_at: 1624532700000n
+      };
+
+      mockActor.set_rule.mockResolvedValue(expectedRule);
+
+      const result = await setRule({
+        satellite: {identity: mockIdentity},
+        collection: 'collectionName',
+        rule,
+        type: {Db: null}
+      });
+
+      expect(result).toEqual(expectedRule);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.set_rule.mockRejectedValueOnce(err);
+      await expect(
+        setRule({
+          satellite: {identity: mockIdentity},
+          collection: 'collectionName',
+          rule,
+          type: {Db: null}
+        })
+      ).rejects.toThrow(err);
+    });
+  });
+
+  describe('listControllers', () => {
+    it('returns the list of controllers', async () => {
+      const controllers = [
+        [
+          mockUserIdPrincipal,
+          {
+            updated_at: 1624532800000n,
+            metadata: [['key', 'value']],
+            created_at: 1624532700000n,
+            scope: {Admin: null},
+            expires_at: [1624532900000n]
+          }
+        ]
+      ];
+      mockActor.list_controllers.mockResolvedValue(controllers);
+      const result = await listControllers({satellite: {identity: mockIdentity}});
+      expect(result).toEqual(controllers);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.list_controllers.mockRejectedValueOnce(err);
+      await expect(listControllers({satellite: {identity: mockIdentity}})).rejects.toThrow(err);
+    });
+  });
+
+  describe('listCustomDomains', () => {
+    it('returns the list of custom domains', async () => {
+      const domains = [
+        [
+          'example.com',
+          {
+            updated_at: 1624532800000n,
+            created_at: 1624532700000n,
+            version: [1n],
+            bn_id: ['bn123']
+          }
+        ]
+      ];
+      mockActor.list_custom_domains.mockResolvedValue(domains);
+      const result = await listCustomDomains({satellite: {identity: mockIdentity}});
+      expect(result).toEqual(domains);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.list_custom_domains.mockRejectedValueOnce(err);
+      await expect(listCustomDomains({satellite: {identity: mockIdentity}})).rejects.toThrow(err);
+    });
+  });
+
+  describe('setCustomDomain', () => {
+    it('sets a custom domain', async () => {
+      mockActor.set_custom_domain.mockResolvedValue(undefined);
+      await expect(
+        setCustomDomain({
+          satellite: {identity: mockIdentity},
+          domainName: 'example.com',
+          boundaryNodesId: 'bn123'
+        })
+      ).resolves.toBeUndefined();
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.set_custom_domain.mockRejectedValueOnce(err);
+      await expect(
+        setCustomDomain({
+          satellite: {identity: mockIdentity},
+          domainName: 'example.com',
+          boundaryNodesId: 'bn123'
+        })
+      ).rejects.toThrow(err);
+    });
+  });
+
+  describe('countDocs', () => {
+    it('returns the count of documents', async () => {
+      const count = 10n;
+      mockActor.count_collection_docs.mockResolvedValue(count);
+      const result = await countDocs({
+        satellite: {identity: mockIdentity},
+        collection: 'collectionName'
+      });
+      expect(result).toBe(count);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.count_collection_docs.mockRejectedValueOnce(err);
+      await expect(
+        countDocs({satellite: {identity: mockIdentity}, collection: 'collectionName'})
+      ).rejects.toThrow(err);
+    });
+  });
+
+  describe('countAssets', () => {
+    it('returns the count of assets', async () => {
+      const count = 10n;
+      mockActor.count_collection_assets.mockResolvedValue(count);
+      const result = await countAssets({
+        satellite: {identity: mockIdentity},
+        collection: 'collectionName'
+      });
+      expect(result).toBe(count);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.count_collection_assets.mockRejectedValueOnce(err);
+      await expect(
+        countAssets({satellite: {identity: mockIdentity}, collection: 'collectionName'})
+      ).rejects.toThrow(err);
+    });
+  });
+
+  describe('deleteDocs', () => {
+    it('deletes documents', async () => {
+      mockActor.del_docs.mockResolvedValue(undefined);
+      await expect(
+        deleteDocs({satellite: {identity: mockIdentity}, collection: 'collectionName'})
+      ).resolves.toBeUndefined();
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.del_docs.mockRejectedValueOnce(err);
+      await expect(
+        deleteDocs({satellite: {identity: mockIdentity}, collection: 'collectionName'})
+      ).rejects.toThrow(err);
+    });
+  });
+
+  describe('deleteAssets', () => {
+    it('deletes assets', async () => {
+      mockActor.del_assets.mockResolvedValue(undefined);
+      await expect(
+        deleteAssets({satellite: {identity: mockIdentity}, collection: 'collectionName'})
+      ).resolves.toBeUndefined();
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.del_assets.mockRejectedValueOnce(err);
+      await expect(
+        deleteAssets({satellite: {identity: mockIdentity}, collection: 'collectionName'})
+      ).rejects.toThrow(err);
+    });
+  });
+
+  describe('setControllers', () => {
+    const args: SetControllersArgs = {
+      controller: {
+        metadata: [['key', 'value']],
+        scope: {Admin: null},
+        expires_at: [1624532900000n]
+      },
+      controllers: [mockUserIdPrincipal]
+    };
+
+    it('sets controllers', async () => {
+      const expectedResponse = [
+        [
+          mockUserIdPrincipal,
+          {
+            updated_at: 1624532800000n,
+            metadata: [['key', 'value']],
+            created_at: 1624532700000n,
+            scope: {Admin: null},
+            expires_at: [1624532900000n]
+          }
+        ]
+      ];
+
+      mockActor.set_controllers.mockResolvedValue(expectedResponse);
+
+      const result = await setControllers({satellite: {identity: mockIdentity}, args});
+      expect(result).toEqual(expectedResponse);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.set_controllers.mockRejectedValueOnce(err);
+      await expect(setControllers({satellite: {identity: mockIdentity}, args})).rejects.toThrow(
+        err
+      );
     });
   });
 });

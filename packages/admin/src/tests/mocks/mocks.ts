@@ -5,6 +5,7 @@ export const mockUserIdText = 'xlmdg-vkosz-ceopx-7wtgu-g3xmd-koiyc-awqaq-7modz-z
 export const mockUserIdPrincipal = Principal.fromText(mockUserIdText);
 
 export const mockSatelliteId = 'jx5yt-yyaaa-aaaal-abzbq-cai';
+export const mockSatelliteIdPrincipal = Principal.fromText(mockSatelliteId)
 
 const transformRequest = () => {
   console.error(

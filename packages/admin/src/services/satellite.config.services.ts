@@ -1,17 +1,5 @@
-import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
-import type {
-  AuthenticationConfig,
-  DatastoreConfig,
-  StorageConfig,
-  StorageConfigHeader,
-  StorageConfigRedirect,
-  StorageConfigRewrite
-} from '@junobuild/config';
-import type {
-  StorageConfigIFrame as StorageConfigIFrameDid,
-  StorageConfigRawAccess as StorageConfigRawAccessDid,
-  StorageConfigRedirect as StorageConfigRedirectDid
-} from '../../declarations/satellite/satellite.did';
+import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
+import type {AuthenticationConfig, DatastoreConfig, StorageConfig} from '@junobuild/config';
 import {
   getAuthConfig as getAuthConfigApi,
   setAuthConfig as setAuthConfigApi,
@@ -19,7 +7,14 @@ import {
   setStorageConfig as setStorageConfigApi
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor';
-import {toMaxMemorySize} from '../utils/memory.utils';
+import {
+  fromAuthenticationConfig,
+  fromDatastoreConfig,
+  fromStorageConfig,
+  toAuthenticationConfig,
+  toDatastoreConfig,
+  toStorageConfig
+} from '../utils/config.utils';
 
 /**
  * Sets the configuration for the Storage of a Satellite.
@@ -30,55 +25,21 @@ import {toMaxMemorySize} from '../utils/memory.utils';
  * @param {Array<StorageConfigRedirect>} params.config.redirects - The redirects configuration.
  * @param {string} params.config.iframe - The iframe configuration.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
- * @returns {Promise<void>} A promise that resolves when the configuration is set.
+ * @returns {Promise<void>} A promise that resolves with the applied configuration when set.
  */
 export const setStorageConfig = async ({
-  config: {
-    headers: configHeaders,
-    rewrites: configRewrites,
-    redirects: configRedirects,
-    iframe: configIFrame,
-    rawAccess: configRawAccess,
-    maxMemorySize: configMaxMemorySize
-  },
+  config,
   satellite
 }: {
-  config: StorageConfig;
+  config: Omit<StorageConfig, 'createdAt' | 'updatedAt'>;
   satellite: SatelliteParameters;
-}): Promise<void> => {
-  const headers: [string, [string, string][]][] = (configHeaders ?? []).map(
-    ({source, headers}: StorageConfigHeader) => [source, headers]
-  );
-
-  const rewrites: [string, string][] = (configRewrites ?? []).map(
-    ({source, destination}: StorageConfigRewrite) => [source, destination]
-  );
-
-  const redirects: [string, StorageConfigRedirectDid][] = (configRedirects ?? []).map(
-    ({source, location, code}: StorageConfigRedirect) => [source, {status_code: code, location}]
-  );
-
-  const iframe: StorageConfigIFrameDid =
-    configIFrame === 'same-origin'
-      ? {SameOrigin: null}
-      : configIFrame === 'allow-any'
-        ? {AllowAny: null}
-        : {Deny: null};
-
-  const rawAccess: StorageConfigRawAccessDid =
-    configRawAccess === true ? {Allow: null} : {Deny: null};
-
-  return await setStorageConfigApi({
+}): Promise<StorageConfig> => {
+  const result = await setStorageConfigApi({
     satellite,
-    config: {
-      headers,
-      rewrites,
-      redirects: [redirects],
-      iframe: [iframe],
-      raw_access: [rawAccess],
-      max_memory_size: toMaxMemorySize(configMaxMemorySize)
-    }
+    config: fromStorageConfig(config)
   });
+
+  return toStorageConfig(result);
 };
 
 /**
@@ -86,21 +47,21 @@ export const setStorageConfig = async ({
  * @param {Object} params - The parameters for setting the authentication configuration.
  * @param {Object} params.config - The datastore configuration.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
- * @returns {Promise<void>} A promise that resolves when the datastore configuration is set.
+ * @returns {Promise<void>} A promise that resolves with the config when the datastore configuration is set.
  */
 export const setDatastoreConfig = async ({
-  config: {maxMemorySize},
+  config,
   ...rest
 }: {
-  config: DatastoreConfig;
+  config: Omit<DatastoreConfig, 'createdAt' | 'updatedAt'>;
   satellite: SatelliteParameters;
-}): Promise<void> => {
-  await setDatastoreConfigApi({
-    config: {
-      max_memory_size: toMaxMemorySize(maxMemorySize)
-    },
+}): Promise<DatastoreConfig> => {
+  const result = await setDatastoreConfigApi({
+    config: fromDatastoreConfig(config),
     ...rest
   });
+
+  return toDatastoreConfig(result);
 };
 
 /**
@@ -111,25 +72,18 @@ export const setDatastoreConfig = async ({
  * @returns {Promise<void>} A promise that resolves when the authentication configuration is set.
  */
 export const setAuthConfig = async ({
-  config: {internetIdentity},
+  config,
   ...rest
 }: {
-  config: AuthenticationConfig;
+  config: Omit<AuthenticationConfig, 'createdAt' | 'updatedAt'>;
   satellite: SatelliteParameters;
-}): Promise<void> => {
-  await setAuthConfigApi({
-    config: {
-      internet_identity: isNullish(internetIdentity)
-        ? []
-        : [
-            {
-              derivation_origin: toNullable(internetIdentity?.derivationOrigin),
-              external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
-            }
-          ]
-    },
+}): Promise<AuthenticationConfig> => {
+  const result = await setAuthConfigApi({
+    config: fromAuthenticationConfig(config),
     ...rest
   });
+
+  return toAuthenticationConfig(result);
 };
 
 /**

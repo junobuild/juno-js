@@ -27,11 +27,18 @@ export interface AssetsUpgradeOptions {
   clear_existing_assets: [] | [boolean];
 }
 export interface AuthenticationConfig {
+  updated_at: [] | [bigint];
+  created_at: [] | [bigint];
+  version: [] | [bigint];
   internet_identity: [] | [AuthenticationConfigInternetIdentity];
+  rules: [] | [AuthenticationRules];
 }
 export interface AuthenticationConfigInternetIdentity {
   derivation_origin: [] | [string];
   external_alternative_origins: [] | [Array<string>];
+}
+export interface AuthenticationRules {
+  allowed_callers: Array<Principal>;
 }
 export type CollectionType = {Db: null} | {Storage: null};
 export interface CommitBatch {
@@ -67,6 +74,9 @@ export interface CustomDomain {
   bn_id: [] | [string];
 }
 export interface DbConfig {
+  updated_at: [] | [bigint];
+  created_at: [] | [bigint];
+  version: [] | [bigint];
   max_memory_size: [] | [ConfigMaxMemorySize];
 }
 export interface DelDoc {
@@ -230,6 +240,11 @@ export interface SegmentsDeploymentOptions {
   mission_control_version: [] | [string];
   satellite_version: [] | [string];
 }
+export interface SetAuthenticationConfig {
+  version: [] | [bigint];
+  internet_identity: [] | [AuthenticationConfigInternetIdentity];
+  rules: [] | [AuthenticationRules];
+}
 export interface SetController {
   metadata: Array<[string, string]>;
   scope: ControllerScope;
@@ -238,6 +253,10 @@ export interface SetController {
 export interface SetControllersArgs {
   controller: SetController;
   controllers: Array<Principal>;
+}
+export interface SetDbConfig {
+  version: [] | [bigint];
+  max_memory_size: [] | [ConfigMaxMemorySize];
 }
 export interface SetDoc {
   data: Uint8Array | number[];
@@ -255,10 +274,22 @@ export interface SetRule {
   write: Permission;
   max_changes_per_user: [] | [number];
 }
-export interface StorageConfig {
+export interface SetStorageConfig {
   iframe: [] | [StorageConfigIFrame];
   rewrites: Array<[string, string]>;
   headers: Array<[string, Array<[string, string]>]>;
+  version: [] | [bigint];
+  max_memory_size: [] | [ConfigMaxMemorySize];
+  raw_access: [] | [StorageConfigRawAccess];
+  redirects: [] | [Array<[string, StorageConfigRedirect]>];
+}
+export interface StorageConfig {
+  iframe: [] | [StorageConfigIFrame];
+  updated_at: [] | [bigint];
+  rewrites: Array<[string, string]>;
+  headers: Array<[string, Array<[string, string]>]>;
+  created_at: [] | [bigint];
+  version: [] | [bigint];
   max_memory_size: [] | [ConfigMaxMemorySize];
   raw_access: [] | [StorageConfigRawAccess];
   redirects: [] | [Array<[string, StorageConfigRedirect]>];
@@ -349,14 +380,14 @@ export interface _SERVICE {
   list_rules: ActorMethod<[CollectionType, ListRulesParams], ListRulesResults>;
   memory_size: ActorMethod<[], MemorySize>;
   reject_proposal: ActorMethod<[CommitProposal], null>;
-  set_auth_config: ActorMethod<[AuthenticationConfig], undefined>;
+  set_auth_config: ActorMethod<[SetAuthenticationConfig], AuthenticationConfig>;
   set_controllers: ActorMethod<[SetControllersArgs], Array<[Principal, Controller]>>;
   set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;
-  set_db_config: ActorMethod<[DbConfig], undefined>;
+  set_db_config: ActorMethod<[SetDbConfig], DbConfig>;
   set_doc: ActorMethod<[string, string, SetDoc], Doc>;
   set_many_docs: ActorMethod<[Array<[string, string, SetDoc]>], Array<[string, Doc]>>;
   set_rule: ActorMethod<[CollectionType, string, SetRule], Rule>;
-  set_storage_config: ActorMethod<[StorageConfig], undefined>;
+  set_storage_config: ActorMethod<[SetStorageConfig], StorageConfig>;
   submit_proposal: ActorMethod<[bigint], [bigint, Proposal]>;
   upload_asset_chunk: ActorMethod<[UploadChunk], UploadChunkResult>;
   upload_proposal_asset_chunk: ActorMethod<[UploadChunk], UploadChunkResult>;

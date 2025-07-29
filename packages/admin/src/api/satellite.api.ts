@@ -1,7 +1,5 @@
 import type {Principal} from '@dfinity/principal';
 import {toNullable} from '@dfinity/utils';
-import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/satellite/satellite-deprecated-no-scope.did';
-import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/satellite/satellite-deprecated.did';
 import type {
   AuthenticationConfig,
   CollectionType,
@@ -137,8 +135,8 @@ export const listDeprecatedControllers = async ({
 }: {
   satellite: SatelliteParameters;
 }): Promise<Principal[]> => {
-  const actor: DeprecatedSatelliteActor = await getDeprecatedSatelliteActor(satellite);
-  return actor.list_controllers();
+  const {list_controllers} = await getDeprecatedSatelliteActor(satellite);
+  return list_controllers();
 };
 
 /**
@@ -149,9 +147,8 @@ export const listDeprecatedNoScopeControllers = async ({
 }: {
   satellite: SatelliteParameters;
 }): Promise<[Principal, Controller][]> => {
-  const actor: DeprecatedSatelliteNoScopeActor =
-    await getDeprecatedSatelliteNoScopeActor(satellite);
-  return actor.list_controllers() as Promise<[Principal, Controller][]>;
+  const {list_controllers} = await getDeprecatedSatelliteNoScopeActor(satellite);
+  return list_controllers() as Promise<[Principal, Controller][]>;
 };
 
 export const listControllers = async ({

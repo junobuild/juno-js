@@ -1,9 +1,5 @@
 import type {Principal} from '@dfinity/principal';
-import type {
-  Controller,
-  MemorySize,
-  _SERVICE as OrbiterActor
-} from '../../declarations/orbiter/orbiter.did';
+import type {Controller, MemorySize} from '../../declarations/orbiter/orbiter.did';
 import type {OrbiterParameters} from '../types/actor';
 import {getDeprecatedOrbiterVersionActor, getOrbiterActor} from './_actor.api';
 
@@ -22,8 +18,8 @@ export const listControllers = async ({
   orbiter: OrbiterParameters;
   certified?: boolean;
 }): Promise<[Principal, Controller][]> => {
-  const actor: OrbiterActor = await getOrbiterActor({...orbiter, certified});
-  return actor.list_controllers();
+  const {list_controllers} = await getOrbiterActor({...orbiter, certified});
+  return list_controllers();
 };
 
 export const memorySize = async ({orbiter}: {orbiter: OrbiterParameters}): Promise<MemorySize> => {

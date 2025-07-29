@@ -1,7 +1,6 @@
 import type {Principal} from '@dfinity/principal';
 import type {
   Controller,
-  _SERVICE as MissionControlActor,
   SetController
 } from '../../declarations/mission_control/mission_control.did';
 import type {MissionControlParameters} from '../types/actor';
@@ -24,8 +23,8 @@ export const getUser = async ({
 }: {
   missionControl: MissionControlParameters;
 }): Promise<Principal> => {
-  const actor: MissionControlActor = await getMissionControlActor(missionControl);
-  return actor.get_user();
+  const {get_user} = await getMissionControlActor(missionControl);
+  return get_user();
 };
 
 export const listControllers = async ({
@@ -33,8 +32,8 @@ export const listControllers = async ({
 }: {
   missionControl: MissionControlParameters;
 }): Promise<[Principal, Controller][]> => {
-  const actor: MissionControlActor = await getMissionControlActor(missionControl);
-  return actor.list_mission_control_controllers();
+  const {list_mission_control_controllers} = await getMissionControlActor(missionControl);
+  return list_mission_control_controllers();
 };
 
 export const setSatellitesController = async ({
@@ -48,8 +47,8 @@ export const setSatellitesController = async ({
   controllerIds: Principal[];
   controller: SetController;
 }) => {
-  const actor: MissionControlActor = await getMissionControlActor(missionControl);
-  return actor.set_satellites_controllers(satelliteIds, controllerIds, controller);
+  const {set_satellites_controllers} = await getMissionControlActor(missionControl);
+  return set_satellites_controllers(satelliteIds, controllerIds, controller);
 };
 
 export const setMissionControlController = async ({
@@ -61,6 +60,6 @@ export const setMissionControlController = async ({
   controllerIds: Principal[];
   controller: SetController;
 }) => {
-  const actor: MissionControlActor = await getMissionControlActor(missionControl);
-  return actor.set_mission_control_controllers(controllerIds, controller);
+  const {set_mission_control_controllers} = await getMissionControlActor(missionControl);
+  return set_mission_control_controllers(controllerIds, controller);
 };

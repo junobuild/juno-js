@@ -50,7 +50,7 @@ export interface AuthenticationConfigRules {
    * @type {PrincipalText[]}
    * @optional
    */
-  allowedCallers?: PrincipalText[];
+  allowedCallers: PrincipalText[];
 }
 
 /**

@@ -246,7 +246,10 @@ describe('config.utils', () => {
       ]);
       expect(result.rules).toEqual([
         {
-          allowed_callers: [Principal.fromText(mockUserIdText), Principal.fromText(mockSatelliteIdText)]
+          allowed_callers: [
+            Principal.fromText(mockUserIdText),
+            Principal.fromText(mockSatelliteIdText)
+          ]
         }
       ]);
       expect(result.version).toEqual([7n]);

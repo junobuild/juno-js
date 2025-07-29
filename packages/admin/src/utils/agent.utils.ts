@@ -7,7 +7,8 @@ export const createAgent = async ({
   identity,
   host,
   localActor
-}: Pick<ActorParameters, 'identity'> & {host: string; localActor: boolean}) => await HttpAgent.create({
+}: Pick<ActorParameters, 'identity'> & {host: string; localActor: boolean}) =>
+  await HttpAgent.create({
     identity,
     host,
     retryTimes: 10,

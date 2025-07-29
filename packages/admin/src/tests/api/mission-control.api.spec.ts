@@ -1,16 +1,19 @@
-import {Principal} from '@dfinity/principal';
-import {beforeEach, describe, expect, it, vi} from 'vitest';
-import {SetController} from '../../../declarations/mission_control/mission_control.did';
+import {Controller, SetController} from '../../../declarations/mission_control/mission_control.did';
 import * as actor from '../../api/_actor.api';
-import * as missionControlApi from '../../api/mission-control.api';
-import {mockIdentity} from '../mocks/mocks';
+import {
+  getUser,
+  listControllers,
+  setMissionControlController,
+  setSatellitesController,
+  version
+} from '../../api/mission-control.api';
+import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
 
 vi.mock('../../api/_actor.api', () => ({
   getMissionControlActor: vi.fn(),
   getDeprecatedMissionControlVersionActor: vi.fn()
 }));
 
-const mockPrincipal = Principal.fromText('aaaaa-aa');
 const mockActor = {
   version: vi.fn(),
   get_user: vi.fn(),
@@ -33,40 +36,44 @@ describe('mission_control.api', () => {
   describe('version', () => {
     it('returns the version string', async () => {
       mockActor.version.mockResolvedValue('0.0.1');
-      const result = await missionControlApi.version({missionControl: {identity: mockIdentity}});
+      const result = await version({missionControl: {identity: mockIdentity}});
       expect(result).toBe('0.0.1');
     });
 
     it('bubbles errors', async () => {
       const err = new Error('fail');
       mockActor.version.mockRejectedValueOnce(err);
-      await expect(
-        missionControlApi.version({missionControl: {identity: mockIdentity}})
-      ).rejects.toThrow(err);
+      await expect(version({missionControl: {identity: mockIdentity}})).rejects.toThrow(err);
     });
   });
 
   describe('getUser', () => {
     it('returns the principal', async () => {
-      mockActor.get_user.mockResolvedValue(mockPrincipal);
-      const result = await missionControlApi.getUser({missionControl: {identity: mockIdentity}});
-      expect(result).toBe(mockPrincipal);
+      mockActor.get_user.mockResolvedValue(mockSatelliteIdPrincipal);
+      const result = await getUser({missionControl: {identity: mockIdentity}});
+      expect(result).toBe(mockSatelliteIdPrincipal);
     });
 
     it('bubbles errors', async () => {
       const err = new Error('fail');
       mockActor.get_user.mockRejectedValueOnce(err);
-      await expect(
-        missionControlApi.getUser({missionControl: {identity: mockIdentity}})
-      ).rejects.toThrow(err);
+      await expect(getUser({missionControl: {identity: mockIdentity}})).rejects.toThrow(err);
     });
   });
 
   describe('listControllers', () => {
+    const controller: Controller = {
+      updated_at: 123n,
+      metadata: [],
+      created_at: 4456n,
+      scope: {Admin: null},
+      expires_at: []
+    };
+
     it('returns controller list', async () => {
-      const data = [[mockPrincipal, {}]];
+      const data = [[mockSatelliteIdPrincipal, controller]];
       mockActor.list_mission_control_controllers.mockResolvedValue(data);
-      const result = await missionControlApi.listControllers({
+      const result = await listControllers({
         missionControl: {identity: mockIdentity}
       });
       expect(result).toEqual(data);
@@ -75,9 +82,9 @@ describe('mission_control.api', () => {
     it('bubbles errors', async () => {
       const err = new Error('fail');
       mockActor.list_mission_control_controllers.mockRejectedValueOnce(err);
-      await expect(
-        missionControlApi.listControllers({missionControl: {identity: mockIdentity}})
-      ).rejects.toThrow(err);
+      await expect(listControllers({missionControl: {identity: mockIdentity}})).rejects.toThrow(
+        err
+      );
     });
   });
 
@@ -85,10 +92,10 @@ describe('mission_control.api', () => {
     it('sets satellites controller', async () => {
       const result = {};
       mockActor.set_satellites_controllers.mockResolvedValue(result);
-      const satelliteIds = [mockPrincipal];
-      const controllerIds = [mockPrincipal];
+      const satelliteIds = [mockSatelliteIdPrincipal];
+      const controllerIds = [mockSatelliteIdPrincipal];
 
-      const res = await missionControlApi.setSatellitesController({
+      const res = await setSatellitesController({
         missionControl: {identity: mockIdentity},
         satelliteIds,
         controllerIds,
@@ -106,10 +113,10 @@ describe('mission_control.api', () => {
       const err = new Error('fail');
       mockActor.set_satellites_controllers.mockRejectedValueOnce(err);
       await expect(
-        missionControlApi.setSatellitesController({
+        setSatellitesController({
           missionControl: {identity: mockIdentity},
-          satelliteIds: [mockPrincipal],
-          controllerIds: [mockPrincipal],
+          satelliteIds: [mockSatelliteIdPrincipal],
+          controllerIds: [mockSatelliteIdPrincipal],
           controller
         })
       ).rejects.toThrow(err);
@@ -120,9 +127,9 @@ describe('mission_control.api', () => {
     it('sets mission control controller', async () => {
       const result = {};
       mockActor.set_mission_control_controllers.mockResolvedValue(result);
-      const controllerIds = [mockPrincipal];
+      const controllerIds = [mockSatelliteIdPrincipal];
 
-      const res = await missionControlApi.setMissionControlController({
+      const res = await setMissionControlController({
         missionControl: {identity: mockIdentity},
         controllerIds,
         controller
@@ -138,9 +145,9 @@ describe('mission_control.api', () => {
       const err = new Error('fail');
       mockActor.set_mission_control_controllers.mockRejectedValueOnce(err);
       await expect(
-        missionControlApi.setMissionControlController({
+        setMissionControlController({
           missionControl: {identity: mockIdentity},
-          controllerIds: [mockPrincipal],
+          controllerIds: [mockSatelliteIdPrincipal],
           controller
         })
       ).rejects.toThrow(err);

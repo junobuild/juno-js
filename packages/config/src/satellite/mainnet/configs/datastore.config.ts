@@ -5,7 +5,10 @@ import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from '../../../shar
  * @see DatastoreConfig
  */
 export const DatastoreConfigSchema = z.strictObject({
-  maxMemorySize: MaxMemorySizeConfigSchema.optional()
+  maxMemorySize: MaxMemorySizeConfigSchema.optional(),
+  createdAt: z.bigint().optional(),
+  updatedAt: z.bigint().optional(),
+  version: z.bigint().optional()
 });
 
 /**

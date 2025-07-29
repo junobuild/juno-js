@@ -117,7 +117,10 @@ export const StorageConfigSchema = z.object({
   redirects: z.array(StorageConfigRedirectSchema).optional(),
   iframe: z.enum(['deny', 'same-origin', 'allow-any']).optional(),
   rawAccess: z.boolean().optional(),
-  maxMemorySize: MaxMemorySizeConfigSchema.optional()
+  maxMemorySize: MaxMemorySizeConfigSchema.optional(),
+  createdAt: z.bigint().optional(),
+  updatedAt: z.bigint().optional(),
+  version: z.bigint().optional()
 });
 
 /**

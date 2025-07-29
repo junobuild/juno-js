@@ -5,6 +5,7 @@ import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/sate
 import type {
   AuthenticationConfig,
   CollectionType,
+  Config,
   Controller,
   CustomDomain,
   DbConfig,
@@ -85,6 +86,11 @@ export const getAuthConfig = async ({
 }): Promise<[] | [AuthenticationConfig]> => {
   const {get_auth_config} = await getSatelliteActor(satellite);
   return get_auth_config();
+};
+
+export const getConfig = async ({satellite}: {satellite: SatelliteParameters}): Promise<Config> => {
+  const {get_config} = await getSatelliteActor(satellite);
+  return get_config();
 };
 
 export const listRules = async ({

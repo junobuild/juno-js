@@ -2,6 +2,9 @@ import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import type {AuthenticationConfig, DatastoreConfig, StorageConfig} from '@junobuild/config';
 import {
   getAuthConfig as getAuthConfigApi,
+  getConfig as getConfigApi,
+  getDatastoreConfig as getDatastoreConfigApi,
+  getStorageConfig as getStorageConfigApi,
   setAuthConfig as setAuthConfigApi,
   setDatastoreConfig as setDatastoreConfigApi,
   setStorageConfig as setStorageConfigApi
@@ -97,25 +100,86 @@ export const getAuthConfig = async ({
 }: {
   satellite: SatelliteParameters;
 }): Promise<AuthenticationConfig | undefined> => {
-  const config = fromNullable(
-    await getAuthConfigApi({
-      satellite
-    })
-  );
+  const result = await getAuthConfigApi({
+    satellite
+  });
+
+  const config = fromNullable(result);
 
   if (isNullish(config)) {
     return undefined;
   }
 
-  const internetIdentity = fromNullable(config.internet_identity ?? []);
+  return toAuthenticationConfig(config);
+};
+
+/**
+ * Gets the storage configuration for a satellite.
+ * @param {Object} params - The parameters for getting the storage configuration.
+ * @param {SatelliteParameters} params.satellite - The satellite parameters.
+ * @returns {Promise<StorageConfig | undefined>} A promise that resolves to the storage configuration or undefined if not found.
+ */
+export const getStorageConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<StorageConfig> => {
+  const config = await getStorageConfigApi({
+    satellite
+  });
+
+  return toStorageConfig(config);
+};
+
+/**
+ * Gets the datastore configuration for a satellite.
+ * @param {Object} params - The parameters for getting the datastore configuration.
+ * @param {SatelliteParameters} params.satellite - The satellite parameters.
+ * @returns {Promise<AuthenticationConfig | undefined>} A promise that resolves to the datastore configuration or undefined if not found.
+ */
+export const getDatastoreConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<DatastoreConfig | undefined> => {
+  const result = await getDatastoreConfigApi({
+    satellite
+  });
+
+  const config = fromNullable(result);
+
+  if (isNullish(config)) {
+    return undefined;
+  }
+
+  return toDatastoreConfig(config);
+};
+
+/**
+ * Gets all the configuration for a satellite.
+ * @param {Object} params - The parameters for getting the configurations.
+ * @param {SatelliteParameters} params.satellite - The satellite parameters.
+ * @returns {Promise<{storage: StorageConfig; datastore?: DatastoreConfig; auth?: AuthenticationConfig;}>} A promise that resolves to the configuration.
+ */
+export const getConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<{
+  storage: StorageConfig;
+  datastore?: DatastoreConfig;
+  auth?: AuthenticationConfig;
+}> => {
+  const {storage, db, authentication} = await getConfigApi({
+    satellite
+  });
+
+  const datastore = fromNullable(db);
+  const auth = fromNullable(authentication);
 
   return {
-    ...(nonNullish(internetIdentity) && {
-      internetIdentity: {
-        ...(nonNullish(fromNullable(internetIdentity.derivation_origin)) && {
-          derivationOrigin: fromNullable(internetIdentity.derivation_origin)
-        })
-      }
-    })
+    storage: toStorageConfig(storage),
+    ...(nonNullish(datastore) && {datastore: toDatastoreConfig(datastore)}),
+    ...(nonNullish(auth) && {auth: toAuthenticationConfig(auth)})
   };
 };

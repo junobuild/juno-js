@@ -1,4 +1,4 @@
-import {HttpAgent} from '@dfinity/agent';
+import type {HttpAgent} from '@dfinity/agent';
 import {nonNullish} from '@dfinity/utils';
 import type {ActorParameters} from '../types/actor';
 import {createAgent} from '../utils/agent.utils';

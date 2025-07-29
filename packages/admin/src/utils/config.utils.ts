@@ -1,3 +1,4 @@
+import {Principal} from '@dfinity/principal';
 import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
 import type {
   AuthenticationConfig,
@@ -137,6 +138,7 @@ export const toDatastoreConfig = ({
 
 export const fromAuthenticationConfig = ({
   internetIdentity,
+  rules,
   version
 }: Omit<AuthenticationConfig, 'createdAt' | 'updatedAt'>): SetAuthenticationConfig => ({
   internet_identity: isNullish(internetIdentity)
@@ -147,14 +149,20 @@ export const fromAuthenticationConfig = ({
           external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
         }
       ],
-  // TODO
-  rules: [],
+  rules: isNullish(rules)
+    ? []
+    : [
+        {
+          allowed_callers: rules.allowedCallers.map((caller) => Principal.fromText(caller))
+        }
+      ],
   version: toNullable(version)
 });
 
 export const toAuthenticationConfig = ({
   version,
   internet_identity,
+  rules: rulesDid,
   created_at,
   updated_at
 }: AuthenticationConfigDid): AuthenticationConfig => {
@@ -164,11 +172,18 @@ export const toAuthenticationConfig = ({
     internetIdentity?.external_alternative_origins ?? []
   );
 
+  const rules = fromNullable(rulesDid);
+
   return {
     ...(nonNullish(internetIdentity) && {
       internetIdentity: {
         ...(nonNullish(derivationOrigin) && {derivationOrigin}),
         ...(nonNullish(externalAlternativeOrigins) && {externalAlternativeOrigins})
+      }
+    }),
+    ...(nonNullish(rules) && {
+      rules: {
+        allowedCallers: rules.allowed_callers.map((caller) => caller.toText())
       }
     }),
     version: fromNullable(version),

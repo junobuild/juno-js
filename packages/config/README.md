@@ -71,6 +71,7 @@ Configuration options for [Juno] CLI.
 - [CliConfigSchema](#gear-cliconfigschema)
 - [SatelliteAssertionsSchema](#gear-satelliteassertionsschema)
 - [AuthenticationConfigInternetIdentitySchema](#gear-authenticationconfiginternetidentityschema)
+- [AuthenticationConfigRulesSchema](#gear-authenticationconfigrulesschema)
 - [AuthenticationConfigSchema](#gear-authenticationconfigschema)
 - [DatastoreConfigSchema](#gear-datastoreconfigschema)
 - [SatelliteIdSchema](#gear-satelliteidschema)
@@ -228,15 +229,23 @@ see EncodingType
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `AuthenticationConfigInternetIdentitySchema` | `ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/authentication.config.ts#L6)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/authentication.config.ts#L7)
+
+#### :gear: AuthenticationConfigRulesSchema
+
+| Constant                          | Type                                                           |
+| --------------------------------- | -------------------------------------------------------------- |
+| `AuthenticationConfigRulesSchema` | `ZodObject<{ allowedCallers: ZodArray<ZodString>; }, $strict>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/authentication.config.ts#L36)
 
 #### :gear: AuthenticationConfigSchema
 
-| Constant                     | Type                                                                                                                                                                                |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>>; }, $strict>` |
+| Constant                     | Type                                                                                                                                                                                                                                                                                              |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>>; rules: ZodOptional<...>; createdAt: ZodOptional<...>; updatedAt: ZodOptional<...>; version: ZodOptional<...>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/authentication.config.ts#L35)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/authentication.config.ts#L59)
 
 #### :gear: DatastoreConfigSchema
 
@@ -345,6 +354,7 @@ see EncodingType
 - [CliConfig](#gear-cliconfig)
 - [SatelliteAssertions](#gear-satelliteassertions)
 - [AuthenticationConfigInternetIdentity](#gear-authenticationconfiginternetidentity)
+- [AuthenticationConfigRules](#gear-authenticationconfigrules)
 - [AuthenticationConfig](#gear-authenticationconfig)
 - [DatastoreConfig](#gear-datastoreconfig)
 - [SatelliteId](#gear-satelliteid)
@@ -526,6 +536,14 @@ Configure the behavior of Internet Identity.
 | `derivationOrigin`           | `string or undefined`   | This setting ensures that users are recognized on your app, regardless of whether they use the default URL or any other custom domain. For example, if set to hello.com, a user signing on at https://hello.com will receive the same identifier (principal) as when signing on at https://www.hello.com. type: {string}optional |
 | `externalAlternativeOrigins` | `string[] or undefined` | An optional list of external alternative origins allowed for authentication, which can be useful if you want to reuse the same derivation origin across multiple Satellites. type: {string[]}optional                                                                                                                            |
 
+#### :gear: AuthenticationConfigRules
+
+Configure the rules of the authentication.
+
+| Property         | Type       | Description                                                                                                                                                                                                                                                 |
+| ---------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `allowedCallers` | `string[]` | This option defines who's allowed to use your app. If you enable this, only the identities you list (in user key, format, like `bj4r4-5cdop-...`) will be allowed to sign in or use any features like Datastore or Storage. type: {PrincipalText[]}optional |
+
 #### :gear: AuthenticationConfig
 
 Configures the Authentication options of a Satellite.
@@ -533,6 +551,7 @@ Configures the Authentication options of a Satellite.
 | Property           | Type                                                | Description                                                                                                                                                     |
 | ------------------ | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `internetIdentity` | `AuthenticationConfigInternetIdentity or undefined` | Optional configuration of Internet Identity authentication method. type: {AuthenticationConfigInternetIdentity}optional                                         |
+| `rules`            | `AuthenticationConfigRules or undefined`            | Optional configuration for the rules of the authentication. type: {AuthenticationConfigRules}optional                                                           |
 | `createdAt`        | `bigint or undefined`                               | The timestamp when the config was created. type: {bigint}optional                                                                                               |
 | `updatedAt`        | `bigint or undefined`                               | The timestamp when the config was last updated. type: {bigint}optional                                                                                          |
 | `version`          | `bigint or undefined`                               | The current version of the config. type: {bigint}optionaldescription: Must be provided when updating the config to ensure the correct version is being updated. |

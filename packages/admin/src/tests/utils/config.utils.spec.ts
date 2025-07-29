@@ -87,8 +87,7 @@ describe('config.utils', () => {
       ]);
       expect(result.rewrites).toEqual([{source: '/a', destination: '/b'}]);
       expect(result.redirects).toEqual([{source: '/old', location: '/new', code: 301}]);
-      expect(result.maxMemorySize).toEqual({heap: 100n});
-      expect(result.maxMemorySize).toEqual({stable: 4444n});
+      expect(result.maxMemorySize).toEqual({heap: 100n, stable: 4444n});
       expect(result.createdAt).toBe(now);
       expect(result.updatedAt).toBe(now);
     });
@@ -118,7 +117,7 @@ describe('config.utils', () => {
         updated_at: [now]
       });
 
-      expect(result.version).toBe(5n);
+      expect(result.version).toBe(6n);
       expect(result.maxMemorySize).toEqual({heap: 9n, stable: 11n});
       expect(result.createdAt).toBe(now);
       expect(result.updatedAt).toBe(now);

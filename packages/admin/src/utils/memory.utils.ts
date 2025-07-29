@@ -6,7 +6,9 @@ export const toMaxMemorySize = (
   configMaxMemorySize?: MaxMemorySizeConfig
 ): [] | [ConfigMaxMemorySize] =>
   toNullable(
-    nonNullish(configMaxMemorySize)
+    nonNullish(configMaxMemorySize) &&
+      (nonNullish(toNullable(configMaxMemorySize.heap)) ||
+        nonNullish(toNullable(configMaxMemorySize.stable)))
       ? {
           heap: toNullable(configMaxMemorySize.heap),
           stable: toNullable(configMaxMemorySize.stable)

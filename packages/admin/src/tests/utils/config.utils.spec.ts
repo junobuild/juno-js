@@ -218,7 +218,7 @@ describe('config.utils', () => {
       expect(result.version).toBeUndefined();
       expect(result.createdAt).toBeUndefined();
       expect(result.updatedAt).toBeUndefined();
-      expect(result.maxMemorySize).toEqual({});
+      expect(result.maxMemorySize).toBeUndefined();
     });
 
   });

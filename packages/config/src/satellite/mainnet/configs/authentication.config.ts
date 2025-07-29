@@ -1,4 +1,5 @@
 import * as z from 'zod/v4';
+import {PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 
 /**
  * @see AuthenticationConfigInternetIdentity
@@ -30,10 +31,37 @@ export interface AuthenticationConfigInternetIdentity {
 }
 
 /**
+ * @see AuthenticationConfigRules
+ */
+export const AuthenticationConfigRulesSchema = z.strictObject({
+  allowedCallers: z.array(PrincipalTextSchema)
+})
+
+/**
+ * Configure the rules of the authentication.
+ * @interface AuthenticationConfigRules
+ */
+export interface AuthenticationConfigRules {
+  /**
+   * This option defines who's allowed to use your app.
+   *
+   * If you enable this, only the identities you list (in user key, format, like `bj4r4-5cdop-...`) will be allowed to sign in or use any features like Datastore or Storage.
+   *
+   * @type {PrincipalText[]}
+   * @optional
+   */
+  allowedCallers: PrincipalText[];
+}
+
+/**
  * @see AuthenticationConfig
  */
 export const AuthenticationConfigSchema = z.strictObject({
-  internetIdentity: AuthenticationConfigInternetIdentitySchema.optional()
+  internetIdentity: AuthenticationConfigInternetIdentitySchema.optional(),
+  rules: AuthenticationConfigRulesSchema.optional(),
+  createdAt: z.bigint().optional(),
+  updatedAt: z.bigint().optional(),
+  version: z.bigint().optional(),
 });
 
 /**
@@ -47,6 +75,13 @@ export interface AuthenticationConfig {
    * @optional
    */
   internetIdentity?: AuthenticationConfigInternetIdentity;
+
+  /**
+   * Optional configuration for the rules of the authentication.
+   * @type {AuthenticationConfigRules}
+   * @optional
+   */
+  rules?: AuthenticationConfigRules;
 
   /**
    * The timestamp when the config was created.

@@ -1,5 +1,5 @@
+import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
-import {PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 
 /**
  * @see AuthenticationConfigInternetIdentity
@@ -35,7 +35,7 @@ export interface AuthenticationConfigInternetIdentity {
  */
 export const AuthenticationConfigRulesSchema = z.strictObject({
   allowedCallers: z.array(PrincipalTextSchema)
-})
+});
 
 /**
  * Configure the rules of the authentication.
@@ -61,7 +61,7 @@ export const AuthenticationConfigSchema = z.strictObject({
   rules: AuthenticationConfigRulesSchema.optional(),
   createdAt: z.bigint().optional(),
   updatedAt: z.bigint().optional(),
-  version: z.bigint().optional(),
+  version: z.bigint().optional()
 });
 
 /**

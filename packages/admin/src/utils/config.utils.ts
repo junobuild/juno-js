@@ -147,7 +147,9 @@ export const fromAuthenticationConfig = ({
           external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
         }
       ],
-  version: fromNullable(version)
+  // TODO
+  rules: [],
+  version: toNullable(version)
 });
 
 export const toAuthenticationConfig = ({

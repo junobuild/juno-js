@@ -1,4 +1,4 @@
-import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
+import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import type {
   AuthenticationConfig,
   DatastoreConfig,
@@ -15,6 +15,7 @@ import {
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor';
 import {
+  fromAuthenticationConfig,
   fromDatastoreConfig,
   fromStorageConfig,
   toAuthenticationConfig,
@@ -78,23 +79,14 @@ export const setDatastoreConfig = async ({
  * @returns {Promise<void>} A promise that resolves when the authentication configuration is set.
  */
 export const setAuthConfig = async ({
-  config: {internetIdentity, version},
+  config,
   ...rest
 }: {
   config: Omit<AuthenticationConfig, 'createdAt' | 'updatedAt'>;
   satellite: SatelliteParameters;
 }): Promise<AuthenticationConfig> => {
   const result = await setAuthConfigApi({
-    config: {
-      internet_identity: isNullish(internetIdentity)
-        ? []
-        : [
-            {
-              derivation_origin: toNullable(internetIdentity?.derivationOrigin),
-              external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
-            }
-          ]
-    },
+    config: fromAuthenticationConfig(config),
     ...rest
   });
 

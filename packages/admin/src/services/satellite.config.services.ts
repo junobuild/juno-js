@@ -7,11 +7,6 @@ import type {
   StorageConfigRedirect,
   StorageConfigRewrite
 } from '@junobuild/config';
-import type {
-  StorageConfigIFrame as StorageConfigIFrameDid,
-  StorageConfigRawAccess as StorageConfigRawAccessDid,
-  StorageConfigRedirect as StorageConfigRedirectDid
-} from '../../declarations/satellite/satellite.did';
 import {
   getAuthConfig as getAuthConfigApi,
   setAuthConfig as setAuthConfigApi,
@@ -19,7 +14,13 @@ import {
   setStorageConfig as setStorageConfigApi
 } from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor';
-import {fromMaxMemorySize, toMaxMemorySize} from '../utils/memory.utils';
+import {
+  fromDatastoreConfig,
+  fromStorageConfig,
+  toAuthenticationConfig,
+  toDatastoreConfig,
+  toStorageConfig
+} from '../utils/config.utils';
 
 /**
  * Sets the configuration for the Storage of a Satellite.
@@ -30,90 +31,21 @@ import {fromMaxMemorySize, toMaxMemorySize} from '../utils/memory.utils';
  * @param {Array<StorageConfigRedirect>} params.config.redirects - The redirects configuration.
  * @param {string} params.config.iframe - The iframe configuration.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
- * @returns {Promise<void>} A promise that resolves when the configuration is set.
+ * @returns {Promise<void>} A promise that resolves with the applied configuration when set.
  */
 export const setStorageConfig = async ({
-  config: {
-    headers: configHeaders,
-    rewrites: configRewrites,
-    redirects: configRedirects,
-    iframe: configIFrame,
-    rawAccess: configRawAccess,
-    maxMemorySize: configMaxMemorySize,
-    version: configVersion
-  },
+  config,
   satellite
 }: {
   config: Omit<StorageConfig, 'createdAt' | 'updatedAt'>;
   satellite: SatelliteParameters;
 }): Promise<StorageConfig> => {
-  const headers: [string, [string, string][]][] = (configHeaders ?? []).map(
-    ({source, headers}: StorageConfigHeader) => [source, headers]
-  );
-
-  const rewrites: [string, string][] = (configRewrites ?? []).map(
-    ({source, destination}: StorageConfigRewrite) => [source, destination]
-  );
-
-  const redirects: [string, StorageConfigRedirectDid][] = (configRedirects ?? []).map(
-    ({source, location, code}: StorageConfigRedirect) => [source, {status_code: code, location}]
-  );
-
-  const iframe: StorageConfigIFrameDid =
-    configIFrame === 'same-origin'
-      ? {SameOrigin: null}
-      : configIFrame === 'allow-any'
-        ? {AllowAny: null}
-        : {Deny: null};
-
-  const rawAccess: StorageConfigRawAccessDid =
-    configRawAccess === true ? {Allow: null} : {Deny: null};
-
-  const {
-    redirects: resultRedirects,
-    iframe: resultIframe,
-    version: resultVersion,
-    raw_access: resultRawAccess,
-    max_memory_size: resultMaxMemorySize,
-    updated_at: resultUpdatedAt,
-    created_at: resultCreatedAt,
-    ...rest
-  } = await setStorageConfigApi({
+  const result = await setStorageConfigApi({
     satellite,
-    config: {
-      headers,
-      rewrites,
-      redirects: [redirects],
-      iframe: [iframe],
-      raw_access: [rawAccess],
-      max_memory_size: toMaxMemorySize(configMaxMemorySize),
-      version: toNullable(configVersion)
-    }
+    config: fromStorageConfig(config)
   });
 
-  return {
-    ...rest,
-    redirects: fromNullable(resultRedirects)?.map<StorageConfigRedirect>(
-      ([source, {status_code: code, ...rest}]) => ({
-        ...rest,
-        code: code as 301 | 302,
-        source
-      })
-    ),
-    ...(nonNullish(resultIframe) && {
-      iframe:
-        'SameOrigin' in resultIframe
-          ? 'same-origin'
-          : 'AllowAny' in resultIframe
-            ? 'allow-any'
-            : 'deny'
-    }),
-    version: fromNullable(resultVersion),
-    ...(nonNullish(resultRawAccess) && {rawAccess: 'Allow' in resultRawAccess}),
-    ...fromMaxMemorySize(resultMaxMemorySize),
-    updatedAt: fromNullable(resultUpdatedAt),
-    createdAt: fromNullable(resultCreatedAt)
-  };
+  return toStorageConfig(result);
 };
 
 /**
@@ -121,21 +53,21 @@ export const setStorageConfig = async ({
  * @param {Object} params - The parameters for setting the authentication configuration.
  * @param {Object} params.config - The datastore configuration.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
- * @returns {Promise<void>} A promise that resolves when the datastore configuration is set.
+ * @returns {Promise<void>} A promise that resolves with the config when the datastore configuration is set.
  */
 export const setDatastoreConfig = async ({
-  config: {maxMemorySize},
+  config,
   ...rest
 }: {
-  config: DatastoreConfig;
+  config: Omit<DatastoreConfig, 'createdAt' | 'updatedAt'>;
   satellite: SatelliteParameters;
-}): Promise<void> => {
-  await setDatastoreConfigApi({
-    config: {
-      max_memory_size: toMaxMemorySize(maxMemorySize)
-    },
+}): Promise<DatastoreConfig> => {
+  const result = await setDatastoreConfigApi({
+    config: fromDatastoreConfig(config),
     ...rest
   });
+
+  return toDatastoreConfig(result);
 };
 
 /**
@@ -146,13 +78,13 @@ export const setDatastoreConfig = async ({
  * @returns {Promise<void>} A promise that resolves when the authentication configuration is set.
  */
 export const setAuthConfig = async ({
-  config: {internetIdentity},
+  config: {internetIdentity, version},
   ...rest
 }: {
-  config: AuthenticationConfig;
+  config: Omit<AuthenticationConfig, 'createdAt' | 'updatedAt'>;
   satellite: SatelliteParameters;
-}): Promise<void> => {
-  await setAuthConfigApi({
+}): Promise<AuthenticationConfig> => {
+  const result = await setAuthConfigApi({
     config: {
       internet_identity: isNullish(internetIdentity)
         ? []
@@ -165,6 +97,8 @@ export const setAuthConfig = async ({
     },
     ...rest
   });
+
+  return toAuthenticationConfig(result);
 };
 
 /**

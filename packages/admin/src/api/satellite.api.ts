@@ -11,7 +11,7 @@ import type {
   ListRulesParams,
   ListRulesResults,
   MemorySize,
-  Rule,
+  Rule, SetAuthenticationConfig,
   SetControllersArgs,
   SetDbConfig,
   SetRule,
@@ -52,9 +52,9 @@ export const setAuthConfig = async ({
   config,
   satellite
 }: {
-  config: AuthenticationConfig;
+  config: SetAuthenticationConfig;
   satellite: SatelliteParameters;
-}): Promise<void> => {
+}): Promise<AuthenticationConfig> => {
   const {set_auth_config} = await getSatelliteActor(satellite);
   return set_auth_config(config);
 };

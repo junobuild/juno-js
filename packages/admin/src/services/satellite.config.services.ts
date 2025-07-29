@@ -1,12 +1,5 @@
 import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
-import type {
-  AuthenticationConfig,
-  DatastoreConfig,
-  StorageConfig,
-  StorageConfigHeader,
-  StorageConfigRedirect,
-  StorageConfigRewrite
-} from '@junobuild/config';
+import type {AuthenticationConfig, DatastoreConfig, StorageConfig} from '@junobuild/config';
 import {
   getAuthConfig as getAuthConfigApi,
   setAuthConfig as setAuthConfigApi,

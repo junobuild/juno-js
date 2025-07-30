@@ -46,12 +46,12 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@babel/core": "^7.26.10",
-    "@babel/parser": "^7.26.10",
-    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
-    "@babel/preset-typescript": "^7.26.0",
-    "@babel/traverse": "^7.26.10",
-    "@babel/types": "^7.26.10",
+    "@babel/core": "^7.28.0",
+    "@babel/parser": "^7.28.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@babel/traverse": "^7.28.0",
+    "@babel/types": "^7.28.2",
     "@dfinity/utils": "^2"
   }
 }

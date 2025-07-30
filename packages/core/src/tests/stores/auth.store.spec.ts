@@ -1,6 +1,6 @@
 import {AuthStore} from '../../stores/auth.store';
 import type {User} from '../../types/auth';
-import {mockUser} from '../mocks/mocks';
+import {mockUser} from '../mocks/core.mock';
 
 describe('auth.store', () => {
   let authStore: AuthStore;

@@ -1,7 +1,7 @@
 import {describe, expect, it} from 'vitest';
 import {RawUserId} from '../../../schemas/satellite';
 import {normalizeCaller} from '../../../sdk/utils/caller.utils';
-import {mockUserIdPrincipal} from '../../mocks/controllers.mocks';
+import {mockUserIdPrincipal} from '../../mocks/controllers.mock';
 
 describe('caller.utils', () => {
   describe('normalizeCaller', () => {

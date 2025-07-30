@@ -1,7 +1,7 @@
 import {IDL} from '@dfinity/candid';
 import {call} from '../../ic-cdk/call.ic-cdk';
 import {CallParams} from '../../ic-cdk/schemas/call';
-import {mockCanisterId} from '../mocks/ic-cdk.mocks';
+import {mockCanisterId} from '../mocks/ic-cdk.mock';
 
 vi.stubGlobal(
   '__ic_cdk_call_raw',

@@ -1,5 +1,5 @@
 import {SatelliteConfigOptionsSchema} from '../../../../satellite/mainnet/configs/satellite.config';
-import {mockModuleIdText} from '../../../mocks/principal.mocks';
+import {mockModuleIdText} from '../../../mocks/principal.mock';
 
 describe('satellite.config', () => {
   describe('SatelliteConfigOptionsSchema', () => {

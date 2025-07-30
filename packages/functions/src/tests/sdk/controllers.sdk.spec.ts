@@ -5,7 +5,7 @@ import {
   isController
 } from '../../sdk/controllers.sdk';
 import {ControllerCheckParams, Controllers} from '../../sdk/schemas/controllers';
-import {mockRawUserId, mockUserIdPrincipal} from '../mocks/controllers.mocks';
+import {mockRawUserId, mockUserIdPrincipal} from '../mocks/controllers.mock';
 
 describe('controllers.sdk', () => {
   const validControllers: Controllers = [

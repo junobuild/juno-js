@@ -12,7 +12,7 @@ import {
   uploadAsset
 } from '../../api/storage.api';
 import {toListParams} from '../../utils/list.utils';
-import {mockReadOptions, mockSatellite, mockUpdateOptions} from '../mocks/mocks';
+import {mockReadOptions, mockSatellite, mockUpdateOptions} from '../mocks/core.mock';
 
 describe('storage.api', async () => {
   const collection = 'test-collection';

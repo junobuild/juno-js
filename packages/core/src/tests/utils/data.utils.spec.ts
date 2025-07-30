@@ -1,6 +1,6 @@
 import {toArray} from '@junobuild/utils';
 import {mapData} from '../../utils/data.utils';
-import {mockUserIdPrincipal, mockUserIdText} from '../mocks/mocks';
+import {mockUserIdPrincipal, mockUserIdText} from '../mocks/core.mock';
 
 describe('data.utils', () => {
   it('returns parsed value on valid data', async () => {

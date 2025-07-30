@@ -5,7 +5,7 @@ import {
   ControllerSchema,
   ControllersSchema
 } from '../../../sdk/schemas/controllers';
-import {mockRawUserId, mockUserIdText} from '../../mocks/controllers.mocks';
+import {mockRawUserId, mockUserIdText} from '../../mocks/controllers.mock';
 
 describe('controllers', () => {
   describe('ControllerSchema', () => {

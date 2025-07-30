@@ -15,7 +15,7 @@ import {
 import {AuthStore} from '../../stores/auth.store';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../../types/errors';
 import * as authUtils from '../../utils/auth.utils';
-import {mockIdentity, mockUser} from '../mocks/mocks';
+import {mockIdentity, mockUser} from '../mocks/core.mock';
 
 vi.mock('@dfinity/auth-client', async () => {
   const actual = (await import('@dfinity/auth-client')) as typeof import('@dfinity/auth-client');

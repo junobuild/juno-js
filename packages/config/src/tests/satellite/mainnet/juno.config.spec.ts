@@ -1,5 +1,5 @@
 import {JunoConfigSchema} from '../../../satellite/mainnet/juno.config';
-import {mockModuleIdText} from '../../mocks/principal.mocks';
+import {mockModuleIdText} from '../../mocks/principal.mock';
 
 describe('juno.config', () => {
   describe('JunoConfigSchema', () => {

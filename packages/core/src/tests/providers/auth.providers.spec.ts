@@ -8,7 +8,7 @@ import {
 } from '../../constants/container.constants';
 import {InternetIdentityProvider, NFIDProvider} from '../../providers/auth.providers';
 import {EnvStore} from '../../stores/env.store';
-import {mockSatelliteId} from '../mocks/mocks';
+import {mockSatelliteId} from '../mocks/core.mock';
 
 describe('auth.providers', () => {
   beforeEach(() => {

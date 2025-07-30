@@ -1,7 +1,7 @@
 import {idlFactorySputnik} from '../../api/_actor.factory';
 import * as actorApi from '../../api/actor.api';
 import {getSatelliteExtendedActor} from '../../services/functions.services';
-import {mockIdentity, mockSatellite} from '../mocks/mocks';
+import {mockIdentity, mockSatellite} from '../mocks/core.mock';
 
 describe('satellite.services', () => {
   beforeEach(() => {

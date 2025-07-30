@@ -1,5 +1,5 @@
 import {OrbiterConfigSchema} from '../../../../satellite/mainnet/configs/orbiter.config';
-import {mockModuleIdText} from '../../../mocks/principal.mocks';
+import {mockModuleIdText} from '../../../mocks/principal.mock';
 
 describe('orbiter.config', () => {
   describe('OrbiterConfigSchema', () => {

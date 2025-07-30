@@ -3,7 +3,7 @@ import {toArray} from '@junobuild/utils';
 import {Doc as DocDid} from '../../../declarations/satellite/satellite.did';
 import {Doc} from '../../types/doc';
 import {fromDoc, toDelDoc, toSetDoc} from '../../utils/doc.utils';
-import {mockUserIdPrincipal, mockUserIdText} from '../mocks/mocks';
+import {mockUserIdPrincipal, mockUserIdText} from '../mocks/core.mock';
 
 describe('doc.utils', () => {
   it('toSetDoc encodes values using toArray', async () => {

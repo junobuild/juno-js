@@ -1,7 +1,7 @@
 import type {MockInstance} from 'vitest';
 import * as agentFactory from '../../stores/_agent.factory';
 import {AgentStore} from '../../stores/agent.store';
-import {mockIdentity} from '../mocks/mocks';
+import {mockIdentity} from '../mocks/core.mock';
 
 describe('agent.store', () => {
   let agentStore: AgentStore;

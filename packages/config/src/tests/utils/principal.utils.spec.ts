@@ -1,5 +1,5 @@
 import {StrictPrincipalTextSchema} from '../../utils/principal.utils';
-import {mockModuleIdText} from '../mocks/principal.mocks';
+import {mockModuleIdText} from '../mocks/principal.mock';
 
 describe('principal.utils', () => {
   describe('StrictPrincipalTextSchema', () => {

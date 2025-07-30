@@ -3,7 +3,7 @@ import {initAuthTimeoutWorker} from '../../services/auth-timout.services';
 import * as authServices from '../../services/auth.services';
 import {AuthStore} from '../../stores/auth.store';
 import * as eventsUtils from '../../utils/events.utils';
-import {mockUser} from '../mocks/mocks';
+import {mockUser} from '../mocks/core.mock';
 
 describe('auth-timeout.services', () => {
   let mockPostMessage: Mock;

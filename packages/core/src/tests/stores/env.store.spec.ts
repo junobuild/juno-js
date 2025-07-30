@@ -1,6 +1,6 @@
 import {EnvStore} from '../../stores/env.store';
 import type {Environment} from '../../types/env';
-import {mockSatelliteId} from '../mocks/mocks';
+import {mockSatelliteId} from '../mocks/core.mock';
 
 describe('env.store', () => {
   let envStore: EnvStore;

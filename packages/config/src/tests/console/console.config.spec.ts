@@ -1,5 +1,5 @@
 import {JunoConsoleConfigSchema} from '../../console/console.config';
-import {mockModuleIdText} from '../mocks/principal.mocks';
+import {mockModuleIdText} from '../mocks/principal.mock';
 
 describe('console.config', () => {
   describe('JunoConsoleConfigSchema', () => {

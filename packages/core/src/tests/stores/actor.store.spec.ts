@@ -1,7 +1,7 @@
 import {AnonymousIdentity} from '@dfinity/agent';
 import {idlFactorySatellite} from '../../api/_actor.factory';
 import {ActorStore} from '../../stores/actor.store';
-import {mockIdentity, mockSatelliteId} from '../mocks/mocks';
+import {mockIdentity, mockSatelliteId} from '../mocks/core.mock';
 
 describe('actor.store', () => {
   let actorStore: ActorStore;

@@ -1,5 +1,5 @@
 import {envSatelliteId} from '../../utils/window.env.utils';
-import {mockSatelliteId} from '../mocks/mocks';
+import {mockSatelliteId} from '../mocks/core.mock';
 
 describe('window.env.utils', () => {
   describe('process', () => {

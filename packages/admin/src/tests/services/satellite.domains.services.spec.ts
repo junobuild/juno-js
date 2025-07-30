@@ -1,10 +1,10 @@
 import * as actor from '../../api/_actor.api';
 import {
-  mockHttpAgent,
-  mockIdentity,
-  mockSatelliteIdText
-} from '../mocks/mocks';
-import {listCustomDomains, setCustomDomain, setCustomDomains} from '../../services/satellite.domains.services';
+  listCustomDomains,
+  setCustomDomain,
+  setCustomDomains
+} from '../../services/satellite.domains.services';
+import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/mocks';
 
 vi.mock('../../api/_actor.api', () => ({
   getSatelliteActor: vi.fn()
@@ -84,10 +84,7 @@ describe('satellite.domains.services', () => {
         }
       });
 
-      expect(mockActor.set_custom_domain).toHaveBeenCalledWith(
-        'example.com',
-        ['bn-xyz']
-      );
+      expect(mockActor.set_custom_domain).toHaveBeenCalledWith('example.com', ['bn-xyz']);
     });
 
     it('calls set_custom_domain with domain and undefined bn_id', async () => {
@@ -101,10 +98,7 @@ describe('satellite.domains.services', () => {
         }
       });
 
-      expect(mockActor.set_custom_domain).toHaveBeenCalledWith(
-        'example.com',
-        []
-      );
+      expect(mockActor.set_custom_domain).toHaveBeenCalledWith('example.com', []);
     });
   });
 

@@ -1,4 +1,3 @@
-import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {SetControllersArgs} from '../../../declarations/satellite/satellite.did';
 import * as actor from '../../api/_actor.api';
 import {

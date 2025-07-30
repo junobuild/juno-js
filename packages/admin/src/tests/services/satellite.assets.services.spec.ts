@@ -1,4 +1,3 @@
-import {beforeEach, describe, expect, it, vi} from 'vitest';
 import * as actor from '../../api/_actor.api';
 import {countAssets, deleteAssets} from '../../services/satellite.assets.services';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/mocks';

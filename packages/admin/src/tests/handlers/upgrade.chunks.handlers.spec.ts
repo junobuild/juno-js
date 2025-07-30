@@ -7,7 +7,7 @@ import {blobSha256} from '../../helpers/crypto.helpers';
 import type {ActorParameters} from '../../types/actor';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
 
-describe('upgradeChunkedCode', () => {
+describe('upgrade.chunks.handlers', () => {
   const wasmBytes = new Uint8Array(1024); // 1KB mock WASM
 
   const actor: ActorParameters = {identity: mockIdentity, agent: mockHttpAgent};

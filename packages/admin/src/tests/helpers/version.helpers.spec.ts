@@ -1,6 +1,6 @@
 import {checkUpgradeVersion} from '../../helpers/version.helpers';
 
-describe('checkUpgradeVersion', () => {
+describe('version.helpers', () => {
   it('should allow upgrade when selected version is the same as current version', () => {
     const result = checkUpgradeVersion({
       currentVersion: '1.0.0',

@@ -4,7 +4,7 @@ import {mockDeep} from 'vitest-mock-extended';
 import {upgradeSingleChunkCode} from '../../handlers/upgrade.single.handlers';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
 
-describe('upgradeSingleChunkCode', () => {
+describe('upgrade.single.handlers', () => {
   const actor = {identity: mockIdentity, agent: mockHttpAgent};
 
   const wasmModule = new Uint8Array([1, 2, 3]);

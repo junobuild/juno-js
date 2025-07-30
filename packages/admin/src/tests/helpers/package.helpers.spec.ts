@@ -1,7 +1,7 @@
 import type {JunoPackageDependencies} from '@junobuild/config';
 import {findJunoPackageDependency} from '../../helpers/package.helpers';
 
-describe('findJunoPackageDependency', () => {
+describe('package.helpers', () => {
   it('should return the dependency if it exists', () => {
     const dependencies: JunoPackageDependencies = {
       'dependency-1': '1.0.0',

@@ -10,7 +10,7 @@ import type {ActorParameters} from '../../types/actor';
 import {UpgradeCodeProgress, UpgradeCodeProgressStep} from '../../types/upgrade';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
 
-describe('upgrade', () => {
+describe('upgrade.handlers', () => {
   const actor: ActorParameters = {identity: mockIdentity, agent: mockHttpAgent};
 
   const wasmModule = new Uint8Array([1, 2, 3]);

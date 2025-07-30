@@ -13,96 +13,98 @@ const mockWasmWithCustomSection = (sectionName: string, content: string): WebAss
   return {} as WebAssembly.Module;
 };
 
-describe('extractBuildType', () => {
-  it('returns "stock" when junoPackage name matches JUNO_PACKAGE_SATELLITE_ID', async () => {
-    const result = await extractBuildType({
-      junoPackage: {
+describe('wasm.helpers', () => {
+  describe('extractBuildType', () => {
+    it('returns "stock" when junoPackage name matches JUNO_PACKAGE_SATELLITE_ID', async () => {
+      const result = await extractBuildType({
+        junoPackage: {
+          name: JUNO_PACKAGE_SATELLITE_ID,
+          version: '0.0.3',
+          dependencies: {}
+        },
+        wasm: new Uint8Array()
+      });
+
+      expect(result).toBe('stock');
+    });
+
+    it('returns "extended" when dependency includes JUNO_PACKAGE_SATELLITE_ID', async () => {
+      const result = await extractBuildType({
+        junoPackage: {
+          name: 'custom-package',
+          version: '0.0.4',
+          dependencies: {
+            [JUNO_PACKAGE_SATELLITE_ID]: '1.0.0'
+          }
+        },
+        wasm: new Uint8Array()
+      });
+
+      expect(result).toBe('extended');
+    });
+
+    it('returns undefined when no relevant dependency found', async () => {
+      const result = await extractBuildType({
+        junoPackage: {
+          name: 'custom-package',
+          version: '0.0.6',
+          dependencies: {}
+        },
+        wasm: new Uint8Array()
+      });
+
+      expect(result).toBeUndefined();
+    });
+
+    it('falls back to readDeprecatedBuildType if junoPackage is undefined', async () => {
+      mockWasmWithCustomSection('icp:public juno:build', 'stock');
+
+      const result = await extractBuildType({
+        junoPackage: undefined,
+        wasm: new Uint8Array()
+      });
+
+      expect(result).toBe('stock');
+    });
+  });
+
+  describe('readCustomSectionJunoPackage', () => {
+    it('returns parsed JunoPackage if section is valid JSON and schema-valid', async () => {
+      const validPackage = {
         name: JUNO_PACKAGE_SATELLITE_ID,
-        version: '0.0.3',
+        version: '0.0.11',
         dependencies: {}
-      },
-      wasm: new Uint8Array()
+      };
+
+      mockWasmWithCustomSection('icp:public juno:package', JSON.stringify(validPackage));
+
+      const result = await readCustomSectionJunoPackage({wasm: new Uint8Array()});
+
+      expect(result).toEqual(validPackage);
     });
 
-    expect(result).toBe('stock');
-  });
+    it('returns undefined if custom section is missing', async () => {
+      mockWasmWithCustomSection('nonexistent-section', '');
 
-  it('returns "extended" when dependency includes JUNO_PACKAGE_SATELLITE_ID', async () => {
-    const result = await extractBuildType({
-      junoPackage: {
-        name: 'custom-package',
-        version: '0.0.4',
-        dependencies: {
-          [JUNO_PACKAGE_SATELLITE_ID]: '1.0.0'
-        }
-      },
-      wasm: new Uint8Array()
+      const result = await readCustomSectionJunoPackage({wasm: new Uint8Array()});
+
+      expect(result).toBeUndefined();
     });
 
-    expect(result).toBe('extended');
-  });
+    it('returns undefined if section is not valid JSON', async () => {
+      mockWasmWithCustomSection('icp:public juno:package', '{invalid json');
 
-  it('returns undefined when no relevant dependency found', async () => {
-    const result = await extractBuildType({
-      junoPackage: {
-        name: 'custom-package',
-        version: '0.0.6',
-        dependencies: {}
-      },
-      wasm: new Uint8Array()
+      await expect(readCustomSectionJunoPackage({wasm: new Uint8Array()})).rejects.toThrow();
     });
 
-    expect(result).toBeUndefined();
-  });
+    it('returns undefined if parsed JSON is invalid according to schema', async () => {
+      const invalidData = {foo: 'bar'};
 
-  it('falls back to readDeprecatedBuildType if junoPackage is undefined', async () => {
-    mockWasmWithCustomSection('icp:public juno:build', 'stock');
+      mockWasmWithCustomSection('icp:public juno:package', JSON.stringify(invalidData));
 
-    const result = await extractBuildType({
-      junoPackage: undefined,
-      wasm: new Uint8Array()
+      const result = await readCustomSectionJunoPackage({wasm: new Uint8Array()});
+
+      expect(result).toBeUndefined();
     });
-
-    expect(result).toBe('stock');
-  });
-});
-
-describe('readCustomSectionJunoPackage', () => {
-  it('returns parsed JunoPackage if section is valid JSON and schema-valid', async () => {
-    const validPackage = {
-      name: JUNO_PACKAGE_SATELLITE_ID,
-      version: '0.0.11',
-      dependencies: {}
-    };
-
-    mockWasmWithCustomSection('icp:public juno:package', JSON.stringify(validPackage));
-
-    const result = await readCustomSectionJunoPackage({wasm: new Uint8Array()});
-
-    expect(result).toEqual(validPackage);
-  });
-
-  it('returns undefined if custom section is missing', async () => {
-    mockWasmWithCustomSection('nonexistent-section', '');
-
-    const result = await readCustomSectionJunoPackage({wasm: new Uint8Array()});
-
-    expect(result).toBeUndefined();
-  });
-
-  it('returns undefined if section is not valid JSON', async () => {
-    mockWasmWithCustomSection('icp:public juno:package', '{invalid json');
-
-    await expect(readCustomSectionJunoPackage({wasm: new Uint8Array()})).rejects.toThrow();
-  });
-
-  it('returns undefined if parsed JSON is invalid according to schema', async () => {
-    const invalidData = {foo: 'bar'};
-
-    mockWasmWithCustomSection('icp:public juno:package', JSON.stringify(invalidData));
-
-    const result = await readCustomSectionJunoPackage({wasm: new Uint8Array()});
-
-    expect(result).toBeUndefined();
   });
 });

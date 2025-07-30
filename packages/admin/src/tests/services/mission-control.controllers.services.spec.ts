@@ -21,7 +21,7 @@ const mockActor = {
   set_mission_control_controllers: vi.fn()
 };
 
-describe('controllers.handlers', () => {
+describe('mission-control.controllers.services', () => {
   const missionControl = {identity: mockIdentity};
 
   const controllerId = mockUserIdText;

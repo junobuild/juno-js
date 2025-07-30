@@ -26,7 +26,7 @@ const mockActor = {
   get_user: vi.fn()
 };
 
-describe('upgradeMissionControl', () => {
+describe('mission-control.upgrade.services', () => {
   const wasmModule = new Uint8Array([1, 2, 3]);
   const user = Principal.fromText(mockUserIdText);
 

@@ -1,4 +1,3 @@
-import {beforeEach, describe, expect, it, vi} from 'vitest';
 import * as actor from '../../api/_actor.api';
 import {orbiterMemorySize} from '../../services/orbiter.memory.services';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/mocks';

@@ -7,7 +7,6 @@ import type {
   StorageConfigRedirect,
   StorageConfigRewrite
 } from '@junobuild/config';
-import {describe, expect, it} from 'vitest';
 import {
   fromAuthenticationConfig,
   fromDatastoreConfig,

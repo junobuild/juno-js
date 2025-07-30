@@ -1,5 +1,4 @@
 import {JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
-import {expect} from 'vitest';
 import {extractBuildType, readCustomSectionJunoPackage} from '../../helpers/wasm.helpers';
 
 const encodeTextSection = (str: string): Uint8Array => new TextEncoder().encode(str);

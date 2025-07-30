@@ -1,36 +1,49 @@
 import type {CanisterStatusResponse} from '@dfinity/ic-management';
 import {ICManagementCanister} from '@dfinity/ic-management';
+import type {Principal} from '@dfinity/principal';
 import {hexStringToUint8Array} from '@dfinity/utils';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
+import {Controller} from '../../../declarations/orbiter/orbiter.did';
 import * as actor from '../../api/_actor.api';
 import {UpgradeCodeUnchangedError} from '../../errors/upgrade.errors';
 import {uint8ArraySha256} from '../../helpers/crypto.helpers';
-import {upgradeMissionControl} from '../../services/mission-control.upgrade.services';
+import {upgradeOrbiter} from '../../services/orbiter.upgrade.services';
 import {UpgradeCodeProgressStep} from '../../types/upgrade';
-import {encoreIDLUser} from '../../utils/idl.utils';
+import {encodeAdminAccessKeysToIDL} from '../../utils/idl.utils';
 import {
+  mockHttpAgent,
   mockIdentity,
   mockSatelliteIdPrincipal,
-  mockSatelliteIdText,
-  mockUserIdPrincipal
+  mockSatelliteIdText
 } from '../mocks/mocks';
 
 vi.mock('../../api/_actor.api', () => ({
-  getMissionControlActor: vi.fn(),
-  getDeprecatedMissionControlVersionActor: vi.fn()
+  getOrbiterActor: vi.fn(),
+  getDeprecatedOrbiterVersionActor: vi.fn()
 }));
 
 const mockActor = {
-  get_user: vi.fn()
+  list_controllers: vi.fn()
 };
 
-describe('mission-control.upgrade.services', () => {
+describe('orbiter.upgrade.services', () => {
   const wasmModule = new Uint8Array([1, 2, 3]);
 
-  const missionControl = {
+  const orbiter = {
+    orbiterId: mockSatelliteIdText,
     identity: mockIdentity,
-    missionControlId: mockSatelliteIdText
+    agent: mockHttpAgent
   };
+
+  const controller: Controller = {
+    updated_at: 123n,
+    metadata: [],
+    created_at: 4456n,
+    scope: {Admin: null},
+    expires_at: []
+  };
+
+  const mockControllers: [Principal, Controller][] = [[mockSatelliteIdPrincipal, controller]];
 
   const icManagementMock = mockDeep<ICManagementCanister>();
 
@@ -39,12 +52,14 @@ describe('mission-control.upgrade.services', () => {
     mockReset(icManagementMock);
 
     // @ts-ignore
-    vi.mocked(actor.getMissionControlActor).mockResolvedValue(mockActor);
+    vi.mocked(actor.getOrbiterActor).mockResolvedValue(mockActor);
+    // @ts-ignore
+    vi.mocked(actor.getDeprecatedOrbiterVersionActor).mockResolvedValue(mockActor);
 
     // @ts-ignore
     vi.spyOn(ICManagementCanister, 'create').mockReturnValue(icManagementMock);
 
-    mockActor.get_user.mockResolvedValue(mockUserIdPrincipal);
+    mockActor.list_controllers.mockResolvedValue(mockControllers);
 
     icManagementMock.installCode.mockResolvedValue(undefined);
     icManagementMock.stopCanister.mockResolvedValue(undefined);
@@ -61,31 +76,31 @@ describe('mission-control.upgrade.services', () => {
     icManagementMock.takeCanisterSnapshot.mockImplementation(takeSnapshotMock);
   });
 
-  it('throws if missionControlId is not defined', async () => {
+  it('throws if orbiterId is not defined', async () => {
     const invalid = {identity: mockIdentity};
 
-    await expect(upgradeMissionControl({missionControl: invalid, wasmModule})).rejects.toThrow(
-      'No mission control principal defined.'
+    await expect(upgradeOrbiter({orbiter: invalid, wasmModule})).rejects.toThrow(
+      'No orbiter principal defined.'
     );
   });
 
   it('executes the upgrade with all steps', async () => {
     const onProgress = vi.fn();
 
-    await upgradeMissionControl({
-      missionControl,
+    await upgradeOrbiter({
+      orbiter,
       wasmModule,
       onProgress
     });
 
-    expect(mockActor.get_user).toHaveBeenCalledOnce();
+    expect(mockActor.list_controllers).toHaveBeenCalledOnce();
 
     expect(icManagementMock.canisterStatus).toHaveBeenCalled();
     expect(icManagementMock.stopCanister).toHaveBeenCalled();
     expect(icManagementMock.takeCanisterSnapshot).toHaveBeenCalled();
     expect(icManagementMock.startCanister).toHaveBeenCalled();
 
-    const arg = encoreIDLUser(mockUserIdPrincipal);
+    const arg = encodeAdminAccessKeysToIDL(mockControllers);
 
     expect(icManagementMock.installCode).toHaveBeenCalledWith({
       arg: new Uint8Array(arg),
@@ -102,7 +117,8 @@ describe('mission-control.upgrade.services', () => {
           }
         ]
       },
-      wasmModule
+      wasmModule,
+      reset: false
     });
 
     expect(onProgress).toHaveBeenCalledWith({
@@ -112,8 +128,8 @@ describe('mission-control.upgrade.services', () => {
   });
 
   it('skips snapshot if takeSnapshot is false', async () => {
-    await upgradeMissionControl({
-      missionControl,
+    await upgradeOrbiter({
+      orbiter,
       wasmModule,
       takeSnapshot: false
     });
@@ -122,10 +138,9 @@ describe('mission-control.upgrade.services', () => {
   });
 
   it('bypasses hash check if reset is true', async () => {
-    await upgradeMissionControl({
-      missionControl,
+    await upgradeOrbiter({
+      orbiter,
       wasmModule,
-      // @ts-expect-error: forcing reset
       reset: true
     });
 
@@ -143,8 +158,8 @@ describe('mission-control.upgrade.services', () => {
     icManagementMock.canisterStatus.mockImplementation(canisterStatusMock);
 
     await expect(
-      upgradeMissionControl({
-        missionControl,
+      upgradeOrbiter({
+        orbiter,
         wasmModule
       })
     ).rejects.toThrow(UpgradeCodeUnchangedError);

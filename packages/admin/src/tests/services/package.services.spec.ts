@@ -1,6 +1,5 @@
 import * as agent from '@dfinity/agent';
 import {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
-import {beforeEach, describe, expect, it, vi} from 'vitest';
 import type {GetJunoPackageParams} from '../../services/package.services';
 import {
   getJunoPackage,

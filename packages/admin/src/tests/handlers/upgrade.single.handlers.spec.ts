@@ -1,5 +1,4 @@
 import {ICManagementCanister} from '@dfinity/ic-management';
-import {beforeEach, describe, expect, it, vi} from 'vitest';
 import {mockDeep} from 'vitest-mock-extended';
 import {upgradeSingleChunkCode} from '../../handlers/upgrade.single.handlers';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';

@@ -1,5 +1,5 @@
 import type {Principal} from '@dfinity/principal';
-import {Controller} from '../../../declarations/orbiter/orbiter.did';
+import type {Controller} from '../../../declarations/orbiter/orbiter.did';
 import {mockUserIdPrincipal} from './mocks';
 
 export const mockController: Controller = {

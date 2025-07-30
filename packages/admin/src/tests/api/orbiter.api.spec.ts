@@ -1,7 +1,6 @@
-import {Controller} from '../../../declarations/orbiter/orbiter.did';
 import * as actor from '../../api/_actor.api';
 import {listControllers, memorySize, version} from '../../api/orbiter.api';
-import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
+import {mockIdentity} from '../mocks/mocks';
 import {mockControllers} from '../mocks/modules.mocks';
 
 vi.mock('../../api/_actor.api', () => ({

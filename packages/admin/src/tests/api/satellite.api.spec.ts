@@ -29,6 +29,7 @@ import {
   version
 } from '../../api/satellite.api';
 import {mockIdentity, mockUserIdPrincipal} from '../mocks/mocks';
+import {mockController, mockControllers} from '../mocks/modules.mocks';
 
 vi.mock('../../api/_actor.api', () => ({
   getSatelliteActor: vi.fn(),
@@ -379,21 +380,9 @@ describe('satellite.api', () => {
 
   describe('listControllers', () => {
     it('returns the list of controllers', async () => {
-      const controllers = [
-        [
-          mockUserIdPrincipal,
-          {
-            updated_at: 1624532800000n,
-            metadata: [['key', 'value']],
-            created_at: 1624532700000n,
-            scope: {Admin: null},
-            expires_at: [1624532900000n]
-          }
-        ]
-      ];
-      mockActor.list_controllers.mockResolvedValue(controllers);
+      mockActor.list_controllers.mockResolvedValue(mockControllers);
       const result = await listControllers({satellite: {identity: mockIdentity}});
-      expect(result).toEqual(controllers);
+      expect(result).toEqual(mockControllers);
     });
 
     it('bubbles errors', async () => {
@@ -529,11 +518,7 @@ describe('satellite.api', () => {
 
   describe('setControllers', () => {
     const args: SetControllersArgs = {
-      controller: {
-        metadata: [['key', 'value']],
-        scope: {Admin: null},
-        expires_at: [1624532900000n]
-      },
+      controller: mockController,
       controllers: [mockUserIdPrincipal]
     };
 

@@ -2,6 +2,7 @@ import {Controller} from '../../../declarations/orbiter/orbiter.did';
 import * as actor from '../../api/_actor.api';
 import {listControllers, memorySize, version} from '../../api/orbiter.api';
 import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
+import {mockControllers} from '../mocks/modules.mocks';
 
 vi.mock('../../api/_actor.api', () => ({
   getOrbiterActor: vi.fn(),
@@ -38,22 +39,13 @@ describe('orbiter.api', () => {
   });
 
   describe('listControllers', () => {
-    const controller: Controller = {
-      updated_at: 123n,
-      metadata: [],
-      created_at: 4456n,
-      scope: {Admin: null},
-      expires_at: []
-    };
-
     it('returns controller list', async () => {
-      const data = [[mockSatelliteIdPrincipal, controller]];
-      mockActor.list_controllers.mockResolvedValue(data);
+      mockActor.list_controllers.mockResolvedValue(mockControllers);
       const result = await listControllers({
         orbiter: {identity: mockIdentity},
         certified: true
       });
-      expect(result).toEqual(data);
+      expect(result).toEqual(mockControllers);
       expect(actor.getOrbiterActor).toHaveBeenCalledWith({identity: mockIdentity, certified: true});
     });
 

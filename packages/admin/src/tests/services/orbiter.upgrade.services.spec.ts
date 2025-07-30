@@ -1,9 +1,7 @@
 import type {CanisterStatusResponse} from '@dfinity/ic-management';
 import {ICManagementCanister} from '@dfinity/ic-management';
-import type {Principal} from '@dfinity/principal';
 import {hexStringToUint8Array} from '@dfinity/utils';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
-import {Controller} from '../../../declarations/orbiter/orbiter.did';
 import * as actor from '../../api/_actor.api';
 import {UpgradeCodeUnchangedError} from '../../errors/upgrade.errors';
 import {uint8ArraySha256} from '../../helpers/crypto.helpers';
@@ -16,6 +14,7 @@ import {
   mockSatelliteIdPrincipal,
   mockSatelliteIdText
 } from '../mocks/mocks';
+import {mockControllers} from '../mocks/modules.mocks';
 
 vi.mock('../../api/_actor.api', () => ({
   getOrbiterActor: vi.fn(),
@@ -34,16 +33,6 @@ describe('orbiter.upgrade.services', () => {
     identity: mockIdentity,
     agent: mockHttpAgent
   };
-
-  const controller: Controller = {
-    updated_at: 123n,
-    metadata: [],
-    created_at: 4456n,
-    scope: {Admin: null},
-    expires_at: []
-  };
-
-  const mockControllers: [Principal, Controller][] = [[mockSatelliteIdPrincipal, controller]];
 
   const icManagementMock = mockDeep<ICManagementCanister>();
 

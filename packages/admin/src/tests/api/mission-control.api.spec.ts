@@ -8,6 +8,7 @@ import {
   version
 } from '../../api/mission-control.api';
 import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
+import {mockControllers} from '../mocks/modules.mocks';
 
 vi.mock('../../api/_actor.api', () => ({
   getMissionControlActor: vi.fn(),
@@ -62,21 +63,12 @@ describe('mission_control.api', () => {
   });
 
   describe('listControllers', () => {
-    const controller: Controller = {
-      updated_at: 123n,
-      metadata: [],
-      created_at: 4456n,
-      scope: {Admin: null},
-      expires_at: []
-    };
-
     it('returns controller list', async () => {
-      const data = [[mockSatelliteIdPrincipal, controller]];
-      mockActor.list_mission_control_controllers.mockResolvedValue(data);
+      mockActor.list_mission_control_controllers.mockResolvedValue(mockControllers);
       const result = await listControllers({
         missionControl: {identity: mockIdentity}
       });
-      expect(result).toEqual(data);
+      expect(result).toEqual(mockControllers);
     });
 
     it('bubbles errors', async () => {

@@ -82,12 +82,14 @@ export const toStorageConfig = ({
     })
   );
 
-  const rawAccess = nonNullish(rawAccessDid) ? 'Allow' in rawAccessDid : undefined;
+  const access = fromNullable(rawAccessDid);
+  const rawAccess = nonNullish(access) ? 'Allow' in access : undefined;
 
-  const iframe = nonNullish(iframeDid)
-    ? 'SameOrigin' in iframeDid
+  const frame = fromNullable(iframeDid);
+  const iframe = nonNullish(frame)
+    ? 'SameOrigin' in frame
       ? 'same-origin'
-      : 'AllowAny' in iframeDid
+      : 'AllowAny' in frame
         ? 'allow-any'
         : 'deny'
     : undefined;

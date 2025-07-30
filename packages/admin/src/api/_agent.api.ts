@@ -1,6 +1,7 @@
-import {HttpAgent} from '@dfinity/agent';
+import type {HttpAgent} from '@dfinity/agent';
 import {nonNullish} from '@dfinity/utils';
 import type {ActorParameters} from '../types/actor';
+import {createAgent} from '../utils/agent.utils';
 
 export const useOrInitAgent = async ({agent, ...rest}: ActorParameters): Promise<HttpAgent> =>
   agent ?? (await initAgent(rest));
@@ -17,10 +18,9 @@ const initAgent = async ({
       : container
     : 'https://icp-api.io';
 
-  return await HttpAgent.create({
+  return await createAgent({
     identity,
     host,
-    retryTimes: 10,
-    shouldFetchRootKey: localActor
+    localActor
   });
 };

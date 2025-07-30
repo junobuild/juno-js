@@ -1,10 +1,10 @@
 import * as agent from '@dfinity/agent';
 import type {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
-import {JUNO_PACKAGE_MISSION_CONTROL_ID, JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
+import {JUNO_PACKAGE_ORBITER_ID, JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
 import * as actor from '../../api/_actor.api';
-import {MissionControlVersionError} from '../../errors/version.errors';
-import {missionControlVersion} from '../../services/mission-control.version.services';
-import type {MissionControlParameters} from '../../types/actor';
+import {OrbiterVersionError} from '../../errors/version.errors';
+import {orbiterVersion} from '../../services/orbiter.version.services';
+import {OrbiterParameters} from '../../types/actor';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/mocks';
 
 vi.mock('@dfinity/agent', () => {
@@ -16,17 +16,17 @@ vi.mock('@dfinity/agent', () => {
 });
 
 vi.mock('../../api/_actor.api', () => ({
-  getMissionControlActor: vi.fn(),
-  getDeprecatedMissionControlVersionActor: vi.fn()
+  getOrbiterActor: vi.fn(),
+  getDeprecatedOrbiterVersionActor: vi.fn()
 }));
 
 const mockActor = {
   version: vi.fn()
 };
 
-describe('mission-control.version.services', () => {
-  const missionControl: MissionControlParameters = {
-    missionControlId: mockSatelliteIdText,
+describe('orbiter.version.services', () => {
+  const orbiter: OrbiterParameters = {
+    orbiterId: mockSatelliteIdText,
     identity: mockIdentity,
     agent: mockHttpAgent
   };
@@ -35,13 +35,13 @@ describe('mission-control.version.services', () => {
     vi.restoreAllMocks();
 
     // @ts-ignore
-    vi.mocked(actor.getDeprecatedMissionControlVersionActor).mockResolvedValue(mockActor);
+    vi.mocked(actor.getDeprecatedOrbiterVersionActor).mockResolvedValue(mockActor);
   });
 
-  it('returns version from package if name matches mission control ID', async () => {
+  it('returns version from package if name matches orbiter ID', async () => {
     const metadataMock = vi.fn().mockReturnValue(
       JSON.stringify({
-        name: JUNO_PACKAGE_MISSION_CONTROL_ID,
+        name: JUNO_PACKAGE_ORBITER_ID,
         version: '0.0.15',
         dependencies: {}
       })
@@ -50,7 +50,7 @@ describe('mission-control.version.services', () => {
       get: metadataMock
     } as unknown as StatusMap);
 
-    const result = await missionControlVersion({missionControl});
+    const result = await orbiterVersion({orbiter});
     expect(result).toBe('0.0.15');
   });
 
@@ -62,11 +62,11 @@ describe('mission-control.version.services', () => {
 
     mockActor.version.mockResolvedValue('0.11.0');
 
-    const result = await missionControlVersion({missionControl});
+    const result = await orbiterVersion({orbiter});
     expect(result).toBe('0.11.0');
   });
 
-  it('throws if package is not mission control', async () => {
+  it('throws if package is not orbiter', async () => {
     const metadataMock = vi.fn().mockReturnValue(
       JSON.stringify({
         name: JUNO_PACKAGE_SATELLITE_ID,
@@ -78,20 +78,18 @@ describe('mission-control.version.services', () => {
       get: metadataMock
     } as unknown as StatusMap);
 
-    await expect(missionControlVersion({missionControl})).rejects.toThrow(
-      MissionControlVersionError
-    );
+    await expect(orbiterVersion({orbiter})).rejects.toThrow(OrbiterVersionError);
   });
 
   it('throws if missionControlId is missing', async () => {
-    const missionControl: MissionControlParameters = {
-      missionControlId: undefined,
+    const orbiter: OrbiterParameters = {
+      orbiterId: undefined,
       identity: mockIdentity,
       agent: mockHttpAgent
     };
 
-    await expect(missionControlVersion({missionControl})).rejects.toThrow(
-      'A Mission Control ID must be provided to request its version.'
+    await expect(orbiterVersion({orbiter})).rejects.toThrow(
+      'An Orbiter ID must be provided to request its version.'
     );
   });
 });

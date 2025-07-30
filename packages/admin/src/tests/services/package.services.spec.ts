@@ -1,5 +1,5 @@
 import * as agent from '@dfinity/agent';
-import {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
+import type {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
 import type {GetJunoPackageParams} from '../../services/package.services';
 import {
   getJunoPackage,

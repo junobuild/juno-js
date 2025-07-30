@@ -7,7 +7,7 @@ import {
   CallResultSchema,
   IDLTypeSchema
 } from '../../../ic-cdk/schemas/call';
-import {mockCanisterId} from '../../mocks/ic-cdk.mocks';
+import {mockCanisterId} from '../../mocks/ic-cdk.mock';
 
 describe('ic-cdk > schemas > call', () => {
   describe('IDLTypeSchema', () => {

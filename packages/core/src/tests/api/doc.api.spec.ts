@@ -20,7 +20,7 @@ import {
   mockUpdateOptions,
   mockUserIdPrincipal,
   mockUserIdText
-} from '../mocks/mocks';
+} from '../mocks/core.mock';
 
 describe('doc.api', async () => {
   const collection = 'test-collection';

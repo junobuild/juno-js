@@ -5,7 +5,7 @@ import {
   SatelliteDevDataStoreCollectionSchema,
   SatelliteDevStorageCollectionSchema
 } from '../../../satellite/dev/juno.dev.config';
-import {mockUserIdText} from '../../mocks/principal.mocks';
+import {mockUserIdText} from '../../mocks/principal.mock';
 
 describe('juno.dev.config', () => {
   describe('SatelliteDevDataStoreCollectionSchema', () => {

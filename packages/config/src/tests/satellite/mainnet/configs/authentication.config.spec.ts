@@ -3,7 +3,7 @@ import {
   AuthenticationConfigRulesSchema,
   AuthenticationConfigSchema
 } from '../../../../satellite/mainnet/configs/authentication.config';
-import {mockModuleIdText, mockUserIdText} from '../../../mocks/principal.mocks';
+import {mockModuleIdText, mockUserIdText} from '../../../mocks/principal.mock';
 
 describe('authentication.config', () => {
   describe('AuthenticationConfigInternetIdentitySchema', () => {

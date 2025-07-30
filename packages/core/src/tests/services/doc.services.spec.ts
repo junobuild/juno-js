@@ -18,7 +18,7 @@ import {
   mockUpdateOptions,
   mockUserIdPrincipal,
   mockUserIdText
-} from '../mocks/mocks';
+} from '../mocks/core.mock';
 
 describe('doc.services', async () => {
   const collection = 'test-collection';

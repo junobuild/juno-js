@@ -4,7 +4,7 @@ import * as actorApi from '../../api/actor.api';
 import * as userServices from '../../services/_user.services';
 import * as authServices from '../../services/auth.services';
 import {InitError} from '../../types/errors';
-import {mockIdentity, mockUserIdPrincipal, mockUserIdText} from '../mocks/mocks';
+import {mockIdentity, mockUserIdPrincipal, mockUserIdText} from '../mocks/core.mock';
 
 describe('user.services', async () => {
   const mockData = {provider: 'internet_identity'};

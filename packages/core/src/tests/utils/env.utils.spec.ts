@@ -1,6 +1,6 @@
 import {EnvStore} from '../../stores/env.store';
 import {customOrEnvContainer, customOrEnvSatelliteId, satelliteUrl} from '../../utils/env.utils';
-import {mockIdentity, mockSatelliteId, mockUserIdText} from '../mocks/mocks';
+import {mockIdentity, mockSatelliteId, mockUserIdText} from '../mocks/core.mock';
 
 describe('env.utils', () => {
   beforeEach(() => {

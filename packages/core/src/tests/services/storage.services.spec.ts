@@ -17,7 +17,7 @@ import {
   mockSatellite,
   mockUpdateOptions,
   mockUserIdPrincipal
-} from '../mocks/mocks';
+} from '../mocks/core.mock';
 
 describe('storage.services', () => {
   const collection = 'test-collection';

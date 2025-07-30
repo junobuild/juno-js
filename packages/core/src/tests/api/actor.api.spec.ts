@@ -1,7 +1,7 @@
 import {idlFactorySatellite, idlFactorySputnik} from '../../api/_actor.factory';
 import {getSatelliteActor, getSatelliteExtendedActor} from '../../api/actor.api';
 import {ActorStore} from '../../stores/actor.store';
-import {mockIdentity, mockSatelliteId} from '../mocks/mocks';
+import {mockIdentity, mockSatelliteId} from '../mocks/core.mock';
 
 describe('actor.api', () => {
   let actorStore: ActorStore;

@@ -28,8 +28,8 @@ import {
   setStorageConfig,
   version
 } from '../../api/satellite.api';
-import {mockIdentity, mockUserIdPrincipal} from '../mocks/mocks';
-import {mockController, mockControllers} from '../mocks/modules.mocks';
+import {mockIdentity, mockUserIdPrincipal} from '../mocks/admin.mock';
+import {mockController, mockControllers} from '../mocks/modules.mock';
 
 vi.mock('../../api/_actor.api', () => ({
   getSatelliteActor: vi.fn(),

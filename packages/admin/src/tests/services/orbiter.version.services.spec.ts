@@ -5,7 +5,7 @@ import * as actor from '../../api/_actor.api';
 import {OrbiterVersionError} from '../../errors/version.errors';
 import {orbiterVersion} from '../../services/orbiter.version.services';
 import {OrbiterParameters} from '../../types/actor';
-import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/mocks';
+import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
 vi.mock('@dfinity/agent', () => {
   return {

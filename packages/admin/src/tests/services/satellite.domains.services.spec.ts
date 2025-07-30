@@ -4,7 +4,7 @@ import {
   setCustomDomain,
   setCustomDomains
 } from '../../services/satellite.domains.services';
-import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/mocks';
+import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
 vi.mock('../../api/_actor.api', () => ({
   getSatelliteActor: vi.fn()

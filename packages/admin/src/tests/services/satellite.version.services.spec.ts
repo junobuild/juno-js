@@ -5,7 +5,7 @@ import * as actor from '../../api/_actor.api';
 import {SatelliteMissingDependencyError} from '../../errors/version.errors';
 import {satelliteBuildType, satelliteVersion} from '../../services/satellite.version.services';
 import type {SatelliteParameters} from '../../types/actor';
-import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/mocks';
+import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
 vi.mock('@dfinity/agent', () => {
   return {

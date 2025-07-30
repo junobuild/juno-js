@@ -2,7 +2,7 @@ import type {Rule} from '@junobuild/config';
 import * as actor from '../../api/_actor.api';
 import {DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS, DbRulesType} from '../../constants/rules.constants';
 import {listRules, setRule} from '../../services/satellite.rules.services';
-import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/mocks';
+import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
 vi.mock('../../api/_actor.api', () => ({
   getSatelliteActor: vi.fn()

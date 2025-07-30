@@ -21,7 +21,7 @@ import {
   takeCanisterSnapshot,
   uploadChunk
 } from '../../api/ic.api';
-import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
+import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/admin.mock';
 
 vi.mock('../../api/_agent.api', () => {
   return {

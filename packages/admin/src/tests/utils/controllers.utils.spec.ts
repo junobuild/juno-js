@@ -2,7 +2,7 @@ import {Principal} from '@dfinity/principal';
 import {SetController} from '../../../declarations/satellite/satellite.did';
 import {SetControllerParams} from '../../types/controllers';
 import {mapSetControllerParams} from '../../utils/controllers.utils';
-import {mockUserIdText} from '../mocks/mocks';
+import {mockUserIdText} from '../mocks/admin.mock';
 
 describe('controllers.utils', () => {
   describe('mapSetControllerParams', () => {

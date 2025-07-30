@@ -7,7 +7,7 @@ import {upgrade} from '../../handlers/upgrade.handlers';
 import {uint8ArraySha256} from '../../helpers/crypto.helpers';
 import type {ActorParameters} from '../../types/actor';
 import {UpgradeCodeProgress, UpgradeCodeProgressStep} from '../../types/upgrade';
-import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
+import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/admin.mock';
 
 describe('upgrade.handlers', () => {
   const actor: ActorParameters = {identity: mockIdentity, agent: mockHttpAgent};

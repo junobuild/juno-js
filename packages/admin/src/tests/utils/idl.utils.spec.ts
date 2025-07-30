@@ -2,7 +2,7 @@ import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {Controller} from '../../../declarations/satellite/satellite.did';
 import {encodeAdminAccessKeysToIDL, encoreIDLUser} from '../../utils/idl.utils';
-import {mockSatelliteIdText, mockUserIdText} from '../mocks/mocks';
+import {mockSatelliteIdText, mockUserIdText} from '../mocks/admin.mock';
 
 describe('idl-encode.utils', () => {
   describe('encoreIDLUser', () => {

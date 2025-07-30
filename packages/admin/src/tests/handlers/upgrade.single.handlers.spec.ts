@@ -1,7 +1,7 @@
 import {ICManagementCanister} from '@dfinity/ic-management';
 import {mockDeep} from 'vitest-mock-extended';
 import {upgradeSingleChunkCode} from '../../handlers/upgrade.single.handlers';
-import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
+import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/admin.mock';
 
 describe('upgrade.single.handlers', () => {
   const actor = {identity: mockIdentity, agent: mockHttpAgent};

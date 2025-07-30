@@ -1,7 +1,7 @@
 import * as actor from '../../api/_actor.api';
 import {listControllers, memorySize, version} from '../../api/orbiter.api';
-import {mockIdentity} from '../mocks/mocks';
-import {mockControllers} from '../mocks/modules.mocks';
+import {mockIdentity} from '../mocks/admin.mock';
+import {mockControllers} from '../mocks/modules.mock';
 
 vi.mock('../../api/_actor.api', () => ({
   getOrbiterActor: vi.fn(),

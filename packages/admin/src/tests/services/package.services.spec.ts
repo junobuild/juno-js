@@ -6,7 +6,7 @@ import {
   getJunoPackageDependencies,
   getJunoPackageVersion
 } from '../../services/package.services';
-import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/mocks';
+import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
 vi.mock('@dfinity/agent', () => {
   return {

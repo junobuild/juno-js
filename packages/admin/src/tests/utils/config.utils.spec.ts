@@ -15,7 +15,7 @@ import {
   toDatastoreConfig,
   toStorageConfig
 } from '../../utils/config.utils';
-import {mockSatelliteIdText, mockUserIdText} from '../mocks/mocks';
+import {mockSatelliteIdText, mockUserIdText} from '../mocks/admin.mock';
 
 describe('config.utils', () => {
   const now = BigInt(Date.now());

@@ -7,8 +7,8 @@ import {
   setSatellitesController,
   version
 } from '../../api/mission-control.api';
-import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/mocks';
-import {mockControllers} from '../mocks/modules.mocks';
+import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/admin.mock';
+import {mockControllers} from '../mocks/modules.mock';
 
 vi.mock('../../api/_actor.api', () => ({
   getMissionControlActor: vi.fn(),

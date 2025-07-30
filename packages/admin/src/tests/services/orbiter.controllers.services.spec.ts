@@ -6,7 +6,7 @@ import {
   mockIdentity,
   mockSatelliteIdPrincipal,
   mockSatelliteIdText
-} from '../mocks/mocks';
+} from '../mocks/admin.mock';
 
 vi.mock('../../api/_actor.api', () => ({
   getOrbiterActor: vi.fn(),

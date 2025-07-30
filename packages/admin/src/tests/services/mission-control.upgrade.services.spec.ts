@@ -13,7 +13,7 @@ import {
   mockSatelliteIdPrincipal,
   mockSatelliteIdText,
   mockUserIdPrincipal
-} from '../mocks/mocks';
+} from '../mocks/admin.mock';
 
 vi.mock('../../api/_actor.api', () => ({
   getMissionControlActor: vi.fn(),

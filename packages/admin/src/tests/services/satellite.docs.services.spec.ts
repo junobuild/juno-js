@@ -1,6 +1,6 @@
 import * as actor from '../../api/_actor.api';
 import {countDocs, deleteDocs} from '../../services/satellite.docs.services';
-import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/mocks';
+import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
 vi.mock('../../api/_actor.api', () => ({
   getSatelliteActor: vi.fn()

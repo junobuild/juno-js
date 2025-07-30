@@ -2,7 +2,7 @@ import type {HttpAgent} from '@dfinity/agent';
 import type {MockInstance} from 'vitest';
 import {useOrInitAgent} from '../../api/_agent.api';
 import * as agent from '../../utils/agent.utils';
-import {mockIdentity} from '../mocks/mocks';
+import {mockIdentity} from '../mocks/admin.mock';
 
 describe('_agent.api', () => {
   let spyCreateAgent: MockInstance;

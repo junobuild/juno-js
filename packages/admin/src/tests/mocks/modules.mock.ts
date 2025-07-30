@@ -1,6 +1,6 @@
 import type {Principal} from '@dfinity/principal';
 import type {Controller} from '../../../declarations/orbiter/orbiter.did';
-import {mockUserIdPrincipal} from './mocks';
+import {mockUserIdPrincipal} from './admin.mock';
 
 export const mockController: Controller = {
   metadata: [['key', 'value']],

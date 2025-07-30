@@ -23,7 +23,7 @@ import {
   mockSatelliteIdText,
   mockUserIdPrincipal,
   mockUserIdText
-} from '../mocks/mocks';
+} from '../mocks/admin.mock';
 
 vi.mock('../../api/_actor.api', () => ({
   getSatelliteActor: vi.fn()

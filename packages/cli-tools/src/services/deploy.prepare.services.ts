@@ -108,10 +108,20 @@ const fileNeedUpload = async ({
 
   const sha256 = await computeSha256(effectiveFilePath);
 
-  // TODO: current sha256 comparison (NodeJS vs Rust) with Gzip and BR is inaccurate. Therefore we re-upload compressed files only if their corresponding source files have been modified as well.
-  // return {file, upload: sha256 !== asset.encodings[file.encoding ?? 'identity']?.sha256};
-  // TODO: we also always assume the raw encoding is there
-  return {file, upload: sha256 !== asset.encodings.identity?.sha256};
+  // Previously, comparing the SHA-256 hash of Gzip and Brotli files between Node.js and Rust was inaccurate.
+  // Most likely, this was because third-party plugins generate Gzip data without specifying `--no-name`,
+  // which embeds the file's modified timestamp and causes hash mismatches.
+  //
+  // That's why, to avoid false positives, we re-upload compressed files only if their corresponding source (identity) files have changed.
+  //
+  // However, some files may be binary and not have an associated identity (raw) version.
+  // In such cases, we fall back to comparing the hash of the available encoded version.
+  return {
+    file,
+    upload:
+      sha256 !==
+      (asset.encodings.identity?.sha256 ?? asset.encodings[file.encoding ?? 'identity']?.sha256)
+  };
 };
 
 const listFiles = async ({

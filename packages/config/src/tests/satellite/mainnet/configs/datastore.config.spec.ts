@@ -34,8 +34,6 @@ describe('datastore.config', () => {
           heap: 512n,
           stable: 1024n
         },
-        createdAt: BigInt(1724532800000),
-        updatedAt: BigInt(1724532900000),
         version: BigInt(1)
       });
       expect(result.success).toBe(true);
@@ -70,28 +68,6 @@ describe('datastore.config', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].code).toBe('unrecognized_keys');
-      }
-    });
-
-    it('rejects non-bigint createdAt', () => {
-      const result = DatastoreConfigSchema.safeParse({
-        createdAt: 123
-      });
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(['createdAt']);
-        expect(result.error.issues[0].code).toBe('invalid_type');
-      }
-    });
-
-    it('rejects non-bigint updatedAt', () => {
-      const result = DatastoreConfigSchema.safeParse({
-        updatedAt: 123
-      });
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(['updatedAt']);
-        expect(result.error.issues[0].code).toBe('invalid_type');
       }
     });
 

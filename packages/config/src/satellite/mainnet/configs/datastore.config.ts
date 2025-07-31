@@ -6,8 +6,6 @@ import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from '../../../shar
  */
 export const DatastoreConfigSchema = z.strictObject({
   maxMemorySize: MaxMemorySizeConfigSchema.optional(),
-  createdAt: z.bigint().optional(),
-  updatedAt: z.bigint().optional(),
   version: z.bigint().optional()
 });
 
@@ -30,24 +28,13 @@ export interface DatastoreConfig {
   maxMemorySize?: MaxMemorySizeConfig;
 
   /**
-   * The timestamp when the config was created.
-   * @type {bigint}
-   * @optional
-   */
-  createdAt?: bigint;
-
-  /**
-   * The timestamp when the config was last updated.
-   * @type {bigint}
-   * @optional
-   */
-  updatedAt?: bigint;
-
-  /**
    * The current version of the config.
+   *
+   * Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite.
+   * You can provide it if you want to manage versioning manually within your config file.
+   *
    * @type {bigint}
    * @optional
-   * @description Must be provided when updating the config to ensure the correct version is being updated.
    */
   version?: bigint;
 }

@@ -181,9 +181,7 @@ describe('satellite.config.services', () => {
       rules: {
         allowedCallers: [mockUserIdText]
       },
-      version: 1n,
-      createdAt: now,
-      updatedAt: now
+      version: 1n
     };
 
     const mockResponse: AuthenticationConfigDid = {
@@ -208,7 +206,6 @@ describe('satellite.config.services', () => {
     const result = await setAuthConfig({config: mockInput, satellite});
     expect(mockActor.set_auth_config).toHaveBeenCalled();
     expect(result.version).toBe(1n);
-    expect(result.createdAt).toBe(now);
   });
 
   it('sets datastore config and returns mapped config', async () => {

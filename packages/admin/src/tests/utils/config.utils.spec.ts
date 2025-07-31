@@ -48,9 +48,7 @@ describe('config.utils', () => {
         maxMemorySize: {
           heap: 123n,
           stable: 456n
-        },
-        createdAt: now,
-        updatedAt: now
+        }
       };
 
       const result = fromStorageConfig(config);
@@ -92,9 +90,7 @@ describe('config.utils', () => {
         iframe: 'same-origin',
         rawAccess: true,
         version: 1n,
-        maxMemorySize: {heap: 123n, stable: 456n},
-        createdAt: now,
-        updatedAt: now
+        maxMemorySize: {heap: 123n, stable: 456n}
       };
 
       const result = fromStorageConfig(config);
@@ -126,8 +122,6 @@ describe('config.utils', () => {
       expect(result.rewrites).toEqual([{source: '/a', destination: '/b'}]);
       expect(result.redirects).toEqual([{source: '/old', location: '/new', code: 301}]);
       expect(result.maxMemorySize).toEqual({heap: 100n, stable: 4444n});
-      expect(result.createdAt).toBe(now);
-      expect(result.updatedAt).toBe(now);
     });
 
     it('handles missing optional fields in toStorageConfig', () => {
@@ -150,8 +144,6 @@ describe('config.utils', () => {
       expect(result.rawAccess).toBeUndefined();
       expect(result.maxMemorySize).toBeUndefined();
       expect(result.version).toBeUndefined();
-      expect(result.createdAt).toBeUndefined();
-      expect(result.updatedAt).toBeUndefined();
     });
   });
 
@@ -159,9 +151,7 @@ describe('config.utils', () => {
     it('maps DatastoreConfig correctly', () => {
       const config: DatastoreConfig = {
         version: 3n,
-        maxMemorySize: {heap: 5n, stable: 10n},
-        createdAt: now,
-        updatedAt: now
+        maxMemorySize: {heap: 5n, stable: 10n}
       };
 
       const result = fromDatastoreConfig(config);
@@ -201,8 +191,6 @@ describe('config.utils', () => {
 
       expect(result.version).toBe(6n);
       expect(result.maxMemorySize).toEqual({heap: 9n, stable: 11n});
-      expect(result.createdAt).toBe(now);
-      expect(result.updatedAt).toBe(now);
     });
 
     it('handles missing timestamps in toDatastoreConfig', () => {
@@ -214,8 +202,6 @@ describe('config.utils', () => {
       });
 
       expect(result.version).toBeUndefined();
-      expect(result.createdAt).toBeUndefined();
-      expect(result.updatedAt).toBeUndefined();
       expect(result.maxMemorySize).toBeUndefined();
     });
   });
@@ -230,9 +216,7 @@ describe('config.utils', () => {
         rules: {
           allowedCallers: [mockUserIdText, mockSatelliteIdText]
         },
-        version: 7n,
-        createdAt: now,
-        updatedAt: now
+        version: 7n
       };
 
       const result = fromAuthenticationConfig(config);
@@ -314,8 +298,6 @@ describe('config.utils', () => {
         allowedCallers: [mockUserIdText, mockSatelliteIdText]
       });
       expect(result.version).toBe(8n);
-      expect(result.createdAt).toBe(now);
-      expect(result.updatedAt).toBe(now);
     });
 
     it('handles empty nested fields in toAuthenticationConfig', () => {
@@ -330,8 +312,6 @@ describe('config.utils', () => {
       expect(result.internetIdentity).toBeUndefined();
       expect(result.rules).toBeUndefined();
       expect(result.version).toBeUndefined();
-      expect(result.createdAt).toBeUndefined();
-      expect(result.updatedAt).toBeUndefined();
     });
 
     it('handles empty strings in internetIdentity', () => {
@@ -360,8 +340,6 @@ describe('config.utils', () => {
         allowedCallers: []
       });
       expect(result.version).toBe(0n);
-      expect(result.createdAt).toBe(now);
-      expect(result.updatedAt).toBe(now);
     });
   });
 });

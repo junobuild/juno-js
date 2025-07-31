@@ -29,7 +29,7 @@ export const fromStorageConfig = ({
   rawAccess: configRawAccess,
   maxMemorySize: configMaxMemorySize,
   version: configVersion
-}: Omit<StorageConfig, 'createdAt' | 'updatedAt'>): SetStorageConfig => {
+}: StorageConfig): SetStorageConfig => {
   const headers: [string, [string, string][]][] = (configHeaders ?? []).map(
     ({source, headers}: StorageConfigHeader) => [source, headers]
   );
@@ -69,8 +69,6 @@ export const toStorageConfig = ({
   version,
   raw_access: rawAccessDid,
   max_memory_size,
-  updated_at,
-  created_at,
   headers: headersDid,
   rewrites: rewritesDid
 }: StorageConfigDid): StorageConfig => {
@@ -112,37 +110,25 @@ export const toStorageConfig = ({
     }),
     version: fromNullable(version),
     ...(nonNullish(rawAccess) && {rawAccess}),
-    ...maxMemorySize,
-    updatedAt: fromNullable(updated_at),
-    createdAt: fromNullable(created_at)
+    ...maxMemorySize
   };
 };
 
-export const fromDatastoreConfig = ({
-  maxMemorySize,
-  version
-}: Omit<DatastoreConfig, 'createdAt' | 'updatedAt'>): SetDbConfig => ({
+export const fromDatastoreConfig = ({maxMemorySize, version}: DatastoreConfig): SetDbConfig => ({
   max_memory_size: toMaxMemorySize(maxMemorySize),
   version: toNullable(version)
 });
 
-export const toDatastoreConfig = ({
-  version,
-  max_memory_size,
-  created_at,
-  updated_at
-}: DbConfigDid): DatastoreConfig => ({
+export const toDatastoreConfig = ({version, max_memory_size}: DbConfigDid): DatastoreConfig => ({
   ...fromMaxMemorySize(max_memory_size),
-  version: fromNullable(version),
-  updatedAt: fromNullable(updated_at),
-  createdAt: fromNullable(created_at)
+  version: fromNullable(version)
 });
 
 export const fromAuthenticationConfig = ({
   internetIdentity,
   rules,
   version
-}: Omit<AuthenticationConfig, 'createdAt' | 'updatedAt'>): SetAuthenticationConfig => ({
+}: AuthenticationConfig): SetAuthenticationConfig => ({
   internet_identity: isNullish(internetIdentity)
     ? []
     : [
@@ -164,9 +150,7 @@ export const fromAuthenticationConfig = ({
 export const toAuthenticationConfig = ({
   version,
   internet_identity,
-  rules: rulesDid,
-  created_at,
-  updated_at
+  rules: rulesDid
 }: AuthenticationConfigDid): AuthenticationConfig => {
   const internetIdentity = fromNullable(internet_identity);
   const derivationOrigin = fromNullable(internetIdentity?.derivation_origin ?? []);
@@ -188,8 +172,6 @@ export const toAuthenticationConfig = ({
         allowedCallers: rules.allowed_callers.map((caller) => caller.toText())
       }
     }),
-    version: fromNullable(version),
-    updatedAt: fromNullable(updated_at),
-    createdAt: fromNullable(created_at)
+    version: fromNullable(version)
   };
 };

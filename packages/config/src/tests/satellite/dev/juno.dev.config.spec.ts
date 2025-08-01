@@ -29,7 +29,7 @@ describe('juno.dev.config', () => {
         write: 'public',
         memory: 'stable',
         mutablePermissions: true,
-        version: BigInt(1) // not allowed in this schema
+        test: BigInt(1)
       });
       expect(result.success).toBe(false);
     });

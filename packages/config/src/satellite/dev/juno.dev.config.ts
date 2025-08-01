@@ -1,6 +1,6 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
-import {type Rule, RuleSchema} from '../types/rules';
+import {type Rule, RuleSchema} from '../configs/rules';
 
 /**
  * @see SatelliteDevDataStoreCollection

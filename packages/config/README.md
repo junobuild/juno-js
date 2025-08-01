@@ -287,9 +287,9 @@ see EncodingType
 
 #### :gear: SatelliteDevCollectionsSchema
 
-| Constant                        | Type                                                                                                                                                                                                                                                                                                                               |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteDevCollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; write: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 4 more ...; maxTokens...` |
+| Constant                        | Type                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `SatelliteDevCollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<...>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L13)
 
@@ -305,7 +305,7 @@ see EncodingType
 
 | Constant                   | Type                                                                                                                                                                                                                                                                                                                               |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteDevConfigSchema` | `ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<...>; }, $strict>; control...` |
+| `SatelliteDevConfigSchema` | `ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOp...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L67)
 
@@ -313,7 +313,7 @@ see EncodingType
 
 | Constant              | Type                                                                                                                                                                                                                                                                                                                               |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `JunoDevConfigSchema` | `ZodObject<{ satellite: ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<......` |
+| `JunoDevConfigSchema` | `ZodObject<{ satellite: ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $st...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L94)
 

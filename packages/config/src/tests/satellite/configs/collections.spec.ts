@@ -23,6 +23,16 @@ describe('collections', () => {
       expect(parsed).toHaveProperty('collection', 'test');
     });
 
+    it('accepts a valid object with version', () => {
+      const result = DataStoreCollectionSchema.safeParse({
+        ...base,
+        version: 999n
+      });
+
+      expect(result.success).toBe(true);
+      expect(result?.data?.version).toBe(999n);
+    });
+
     it('fails if createdAt is included', () => {
       expect(() =>
         DataStoreCollectionSchema.parse({
@@ -37,15 +47,6 @@ describe('collections', () => {
         DataStoreCollectionSchema.parse({
           ...base,
           updatedAt: BigInt(123)
-        })
-      ).toThrow();
-    });
-
-    it('fails if version is included', () => {
-      expect(() =>
-        DataStoreCollectionSchema.parse({
-          ...base,
-          version: BigInt(1)
         })
       ).toThrow();
     });
@@ -82,6 +83,16 @@ describe('collections', () => {
       expect(parsed.memory).toBe('heap');
     });
 
+    it('accepts a valid object with version', () => {
+      const result = StorageCollectionSchema.safeParse({
+        ...base,
+        version: 999n
+      });
+
+      expect(result.success).toBe(true);
+      expect(result?.data?.version).toBe(999n);
+    });
+
     it('fails if maxCapacity is included', () => {
       expect(() =>
         StorageCollectionSchema.parse({
@@ -105,15 +116,6 @@ describe('collections', () => {
         StorageCollectionSchema.parse({
           ...base,
           updatedAt: BigInt(0)
-        })
-      ).toThrow();
-    });
-
-    it('fails if version is included', () => {
-      expect(() =>
-        StorageCollectionSchema.parse({
-          ...base,
-          version: BigInt(2)
         })
       ).toThrow();
     });

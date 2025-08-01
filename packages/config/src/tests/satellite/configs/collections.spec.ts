@@ -1,5 +1,5 @@
 import {
-  DataStoreCollectionSchema,
+  DatastoreCollectionSchema,
   StorageCollectionSchema
 } from '../../../satellite/configs/collections';
 
@@ -12,9 +12,9 @@ describe('collections', () => {
     mutablePermissions: true
   };
 
-  describe('DataStoreCollectionSchema', () => {
-    it('accepts a valid DataStoreCollection object', () => {
-      const parsed = DataStoreCollectionSchema.parse({
+  describe('DatastoreCollectionSchema', () => {
+    it('accepts a valid DatastoreCollection object', () => {
+      const parsed = DatastoreCollectionSchema.parse({
         ...base,
         maxChangesPerUser: 100,
         maxCapacity: 500,
@@ -24,7 +24,7 @@ describe('collections', () => {
     });
 
     it('accepts a valid object with version', () => {
-      const result = DataStoreCollectionSchema.safeParse({
+      const result = DatastoreCollectionSchema.safeParse({
         ...base,
         version: 999n
       });
@@ -35,7 +35,7 @@ describe('collections', () => {
 
     it('fails if createdAt is included', () => {
       expect(() =>
-        DataStoreCollectionSchema.parse({
+        DatastoreCollectionSchema.parse({
           ...base,
           createdAt: BigInt(123)
         })
@@ -44,7 +44,7 @@ describe('collections', () => {
 
     it('fails if updatedAt is included', () => {
       expect(() =>
-        DataStoreCollectionSchema.parse({
+        DatastoreCollectionSchema.parse({
           ...base,
           updatedAt: BigInt(123)
         })
@@ -53,15 +53,15 @@ describe('collections', () => {
 
     it('fails if maxSize is included', () => {
       expect(() =>
-        DataStoreCollectionSchema.parse({
+        DatastoreCollectionSchema.parse({
           ...base,
           maxSize: 1024
         })
       ).toThrow();
     });
 
-    it('rejects unknown properties in DataStoreCollectionSchema', () => {
-      const result = DataStoreCollectionSchema.safeParse({
+    it('rejects unknown properties in DatastoreCollectionSchema', () => {
+      const result = DatastoreCollectionSchema.safeParse({
         ...base,
         unexpected: 123
       });

@@ -1,9 +1,9 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
 import {
-  type DataStoreCollection,
+  type DatastoreCollection,
   type StorageCollection,
-  DataStoreCollectionSchema,
+  DatastoreCollectionSchema,
   StorageCollectionSchema
 } from '../configs/collections';
 
@@ -11,7 +11,7 @@ import {
  * @see SatelliteDevCollections
  */
 export const SatelliteDevCollectionsSchema = z.strictObject({
-  datastore: z.array(DataStoreCollectionSchema).optional(),
+  datastore: z.array(DatastoreCollectionSchema).optional(),
   storage: z.array(StorageCollectionSchema).optional()
 });
 
@@ -22,10 +22,10 @@ export const SatelliteDevCollectionsSchema = z.strictObject({
 export interface SatelliteDevCollections {
   /**
    * The Datastore collections configuration.
-   * @type {DataStoreCollection[]}
+   * @type {DatastoreCollection[]}
    * @optional
    */
-  datastore?: DataStoreCollection[];
+  datastore?: DatastoreCollection[];
 
   /**
    * The Storage collections configuration.

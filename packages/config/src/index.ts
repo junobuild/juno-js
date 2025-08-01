@@ -23,8 +23,8 @@ export * from './types/juno.env';
 export * from './types/juno.package';
 
 export {
-  DataStoreCollection,
-  DataStoreCollectionSchema,
+  DatastoreCollection,
+  DatastoreCollectionSchema,
   StorageCollection,
   StorageCollectionSchema
 } from './satellite/configs/collections';

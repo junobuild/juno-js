@@ -1,5 +1,4 @@
 import * as z from 'zod/v4';
-import {type StorageCollection, StorageCollectionSchema} from '../satellite/configs/collections';
 import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from './feature.config';
 
 /**
@@ -119,7 +118,6 @@ export const StorageConfigSchema = z.object({
   iframe: z.enum(['deny', 'same-origin', 'allow-any']).optional(),
   rawAccess: z.boolean().optional(),
   maxMemorySize: MaxMemorySizeConfigSchema.optional(),
-  collections: z.array(StorageCollectionSchema).optional(),
   version: z.bigint().optional()
 });
 
@@ -190,13 +188,6 @@ export interface StorageConfig {
    * @optional
    */
   maxMemorySize?: MaxMemorySizeConfig;
-
-  /**
-   * An optional array that defines the collections of the Storage.
-   * @type {StorageCollection[]}
-   * @optional
-   */
-  collections?: StorageCollection[];
 
   /**
    * The current version of the config.

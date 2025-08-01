@@ -1,13 +1,11 @@
 import * as z from 'zod/v4';
 import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from '../../../shared/feature.config';
-import {type DatastoreCollection, DatastoreCollectionSchema} from '../../configs/collections';
 
 /**
  * @see DatastoreConfig
  */
 export const DatastoreConfigSchema = z.strictObject({
   maxMemorySize: MaxMemorySizeConfigSchema.optional(),
-  collections: z.array(DatastoreCollectionSchema).optional(),
   version: z.bigint().optional()
 });
 
@@ -28,13 +26,6 @@ export interface DatastoreConfig {
    * @optional
    */
   maxMemorySize?: MaxMemorySizeConfig;
-
-  /**
-   * An optional array that defines the collections of the Datastore.
-   * @type {StorageCollection[]}
-   * @optional
-   */
-  collections?: DatastoreCollection[];
 
   /**
    * The current version of the config.

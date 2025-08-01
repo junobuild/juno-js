@@ -3,7 +3,7 @@ import {
   PermissionTextSchema,
   RuleSchema,
   RulesTypeSchema
-} from '../../../satellite/types/rules';
+} from '../../../satellite/configs/rules';
 
 describe('rules', () => {
   describe('PermissionTextSchema', () => {

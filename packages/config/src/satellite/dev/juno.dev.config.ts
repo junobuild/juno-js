@@ -1,51 +1,18 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
-import {type Rule, RuleSchema} from '../types/rules';
-
-/**
- * @see SatelliteDevDataStoreCollection
- */
-export const SatelliteDevDataStoreCollectionSchema = RuleSchema.omit({
-  createdAt: true,
-  updatedAt: true,
-  maxSize: true,
-  version: true
-});
-
-/**
- * Represents a database collection configuration for a satellite in a development environment.
- * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize' | 'version'>} SatelliteDevDataStoreCollection
- */
-export type SatelliteDevDataStoreCollection = Omit<
-  Rule,
-  'createdAt' | 'updatedAt' | 'maxSize' | 'version'
->;
-
-/**
- * @see SatelliteDevStorageCollection
- */
-export const SatelliteDevStorageCollectionSchema = RuleSchema.omit({
-  createdAt: true,
-  updatedAt: true,
-  maxCapacity: true,
-  version: true
-});
-
-/**
- * Represents a Storage collection configuration for a satellite in a development environment.
- * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxCapacity' | 'version'>} SatelliteDevStorageCollection
- */
-export type SatelliteDevStorageCollection = Omit<
-  Rule,
-  'createdAt' | 'updatedAt' | 'maxCapacity' | 'version'
->;
+import {
+  type DatastoreCollection,
+  type StorageCollection,
+  DatastoreCollectionSchema,
+  StorageCollectionSchema
+} from '../configs/collections';
 
 /**
  * @see SatelliteDevCollections
  */
 export const SatelliteDevCollectionsSchema = z.strictObject({
-  datastore: z.array(SatelliteDevDataStoreCollectionSchema).optional(),
-  storage: z.array(SatelliteDevStorageCollectionSchema).optional()
+  datastore: z.array(DatastoreCollectionSchema).optional(),
+  storage: z.array(StorageCollectionSchema).optional()
 });
 
 /**
@@ -55,17 +22,17 @@ export const SatelliteDevCollectionsSchema = z.strictObject({
 export interface SatelliteDevCollections {
   /**
    * The Datastore collections configuration.
-   * @type {SatelliteDevDataStoreCollection[]}
+   * @type {DatastoreCollection[]}
    * @optional
    */
-  datastore?: SatelliteDevDataStoreCollection[];
+  datastore?: DatastoreCollection[];
 
   /**
    * The Storage collections configuration.
-   * @type {SatelliteDevStorageCollection[]}
+   * @type {StorageCollection[]}
    * @optional
    */
-  storage?: SatelliteDevStorageCollection[];
+  storage?: StorageCollection[];
 }
 
 /**

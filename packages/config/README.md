@@ -78,8 +78,6 @@ Configuration options for [Juno] CLI.
 - [SatelliteIdsSchema](#gear-satelliteidsschema)
 - [SatelliteConfigOptionsSchema](#gear-satelliteconfigoptionsschema)
 - [JunoConfigSchema](#gear-junoconfigschema)
-- [SatelliteDevDataStoreCollectionSchema](#gear-satellitedevdatastorecollectionschema)
-- [SatelliteDevStorageCollectionSchema](#gear-satellitedevstoragecollectionschema)
 - [SatelliteDevCollectionsSchema](#gear-satellitedevcollectionsschema)
 - [SatelliteDevControllerSchema](#gear-satellitedevcontrollerschema)
 - [SatelliteDevConfigSchema](#gear-satellitedevconfigschema)
@@ -163,7 +161,7 @@ Configuration options for [Juno] CLI.
 | ------------------------------- | ----------- |
 | `StorageConfigSourceGlobSchema` | `ZodString` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L8)
 
 #### :gear: StorageConfigHeaderSchema
 
@@ -171,7 +169,7 @@ Configuration options for [Juno] CLI.
 | --------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `StorageConfigHeaderSchema` | `ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L18)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L19)
 
 #### :gear: StorageConfigRewriteSchema
 
@@ -179,7 +177,7 @@ Configuration options for [Juno] CLI.
 | ---------------------------- | -------------------------------------------------------------------- |
 | `StorageConfigRewriteSchema` | `ZodObject<{ source: ZodString; destination: ZodString; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L50)
 
 #### :gear: StorageConfigRedirectSchema
 
@@ -187,15 +185,15 @@ Configuration options for [Juno] CLI.
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `StorageConfigRedirectSchema` | `ZodObject<{ source: ZodString; location: ZodString; code: ZodUnion<readonly [ZodLiteral<301>, ZodLiteral<302>]>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L79)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L80)
 
 #### :gear: StorageConfigSchema
 
 | Constant              | Type                                                                                                                                                                                                       |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `StorageConfigSchema` | `ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 7 more ...; version: ZodOptional<...>; }, $strip>` |
+| `StorageConfigSchema` | `ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 6 more ...; version: ZodOptional<...>; }, $strip>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L114)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L115)
 
 #### :gear: EncodingTypeSchema
 
@@ -241,19 +239,19 @@ see EncodingType
 
 #### :gear: AuthenticationConfigSchema
 
-| Constant                     | Type                                                                                                                                                                                                                                                                                              |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>>; rules: ZodOptional<...>; createdAt: ZodOptional<...>; updatedAt: ZodOptional<...>; version: ZodOptional<...>; }, $strict>` |
+| Constant                     | Type                                                                                                                                                                                                                                    |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>>; rules: ZodOptional<...>; version: ZodOptional<...>; }, $strict>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/authentication.config.ts#L59)
 
 #### :gear: DatastoreConfigSchema
 
-| Constant                | Type                                                                                                                                                                                                                              |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DatastoreConfigSchema` | `ZodObject<{ maxMemorySize: ZodOptional<ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>>; createdAt: ZodOptional<...>; updatedAt: ZodOptional<...>; version: ZodOptional<...>; }, $strict>` |
+| Constant                | Type                                                                                                                                                                                                   |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DatastoreConfigSchema` | `ZodObject<{ maxMemorySize: ZodOptional<ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>>; collections: ZodOptional<...>; version: ZodOptional<...>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/datastore.config.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/datastore.config.ts#L8)
 
 #### :gear: SatelliteIdSchema
 
@@ -275,7 +273,7 @@ see EncodingType
 
 | Constant                       | Type                                                                                                                                                                                                                                                                                                                          |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 7 more ...; version: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; }, $strict>, ZodObject<...>]>` |
+| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 6 more ...; version: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; }, $strict>, ZodObject<...>]>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L70)
 
@@ -283,33 +281,17 @@ see EncodingType
 
 | Constant           | Type                                                                                                                                                                                                                                                                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `JunoConfigSchema` | `ZodObject<{ satellite: ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 7 more ...; version: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; }, $stri...` |
+| `JunoConfigSchema` | `ZodObject<{ satellite: ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 6 more ...; version: ZodOptional<...>; }, $strip>>; ... 4 more ...; id: ZodString; }, $stri...` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/juno.config.ts#L9)
 
-#### :gear: SatelliteDevDataStoreCollectionSchema
-
-| Constant                                | Type                                                                                                                                                                                                                                                                                                               |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `SatelliteDevDataStoreCollectionSchema` | `ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; write: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 4 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L8)
-
-#### :gear: SatelliteDevStorageCollectionSchema
-
-| Constant                              | Type                                                                                                                                                                                                                                                                                                               |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `SatelliteDevStorageCollectionSchema` | `ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; write: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 4 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L27)
-
 #### :gear: SatelliteDevCollectionsSchema
 
-| Constant                        | Type                                                                                                                                                                                                                                                                                                                               |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteDevCollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; write: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 4 more ...; maxTokens...` |
+| Constant                        | Type                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `SatelliteDevCollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<...>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L46)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L13)
 
 #### :gear: SatelliteDevControllerSchema
 
@@ -317,23 +299,23 @@ see EncodingType
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
 | `SatelliteDevControllerSchema` | `ZodObject<{ id: ZodString; scope: ZodEnum<{ admin: "admin"; write: "write"; submit: "submit"; }>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L74)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L41)
 
 #### :gear: SatelliteDevConfigSchema
 
 | Constant                   | Type                                                                                                                                                                                                                                                                                                                               |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteDevConfigSchema` | `ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<...>; }, $strict>; control...` |
+| `SatelliteDevConfigSchema` | `ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOp...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L100)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L67)
 
 #### :gear: JunoDevConfigSchema
 
 | Constant              | Type                                                                                                                                                                                                                                                                                                                               |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `JunoDevConfigSchema` | `ZodObject<{ satellite: ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<......` |
+| `JunoDevConfigSchema` | `ZodObject<{ satellite: ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $st...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L127)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L94)
 
 ### :tropical_drink: Interfaces
 
@@ -504,9 +486,8 @@ Configures the hosting behavior of the Storage.
 | `iframe`        | `"deny" or "same-origin" or "allow-any" or undefined` | For security reasons and to prevent click-jacking attacks, dapps deployed with Juno are, by default, set to deny embedding in other sites. Options are: - `deny`: Prevents any content from being displayed in an iframe. - `same-origin`: Allows iframe content from the same origin as the page. - `allow-any`: Allows iframe content from any origin. If not specified, then `deny` is used as default value. type: {'deny' or 'same-origin' or 'allow-any'}optional                                                                                           |
 | `rawAccess`     | `boolean or undefined`                                | Optional flag to enable access for raw URLs. ⚠️ **WARNING: Enabling this option is highly discouraged due to security risks.** Enabling this option allows access to raw URLs (e.g., https://satellite-id.raw.icp0.io), bypassing certificate validation. This creates a security vulnerability where a malicious node in the chain can respond to requests with malicious or invalid content. Since there is no validation on raw URLs, the client may receive and process harmful data. If not specified, the default value is `false`. type: {boolean}optional |
 | `maxMemorySize` | `MaxMemorySizeConfig or undefined`                    | Configuration for maximum memory size limits for the Storage. This is used to specify optional limits on heap and stable memory for the smart contract. When the limit is reached, the Storage and smart contract continue to operate normally but reject the upload of new assets. If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional                                                                                                                                                                                          |
-| `createdAt`     | `bigint or undefined`                                 | The timestamp when the config was created. type: {bigint}optional                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `updatedAt`     | `bigint or undefined`                                 | The timestamp when the config was last updated. type: {bigint}optional                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `version`       | `bigint or undefined`                                 | The current version of the config. type: {bigint}optionaldescription: Must be provided when updating the config to ensure the correct version is being updated.                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `collections`   | `StorageCollection[] or undefined`                    | An optional array that defines the collections of the Storage. type: {StorageCollection[]}optional                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `version`       | `bigint or undefined`                                 | The current version of the config. Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite. You can provide it if you want to manage versioning manually within your config file. type: {bigint}optional                                                                                                                                                                                                                                                                                                           |
 
 #### :gear: CliConfig
 
@@ -548,24 +529,21 @@ Configure the rules of the authentication.
 
 Configures the Authentication options of a Satellite.
 
-| Property           | Type                                                | Description                                                                                                                                                     |
-| ------------------ | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `internetIdentity` | `AuthenticationConfigInternetIdentity or undefined` | Optional configuration of Internet Identity authentication method. type: {AuthenticationConfigInternetIdentity}optional                                         |
-| `rules`            | `AuthenticationConfigRules or undefined`            | Optional configuration for the rules of the authentication. type: {AuthenticationConfigRules}optional                                                           |
-| `createdAt`        | `bigint or undefined`                               | The timestamp when the config was created. type: {bigint}optional                                                                                               |
-| `updatedAt`        | `bigint or undefined`                               | The timestamp when the config was last updated. type: {bigint}optional                                                                                          |
-| `version`          | `bigint or undefined`                               | The current version of the config. type: {bigint}optionaldescription: Must be provided when updating the config to ensure the correct version is being updated. |
+| Property           | Type                                                | Description                                                                                                                                                                                                                                             |
+| ------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `internetIdentity` | `AuthenticationConfigInternetIdentity or undefined` | Optional configuration of Internet Identity authentication method. type: {AuthenticationConfigInternetIdentity}optional                                                                                                                                 |
+| `rules`            | `AuthenticationConfigRules or undefined`            | Optional configuration for the rules of the authentication. type: {AuthenticationConfigRules}optional                                                                                                                                                   |
+| `version`          | `bigint or undefined`                               | The current version of the config. Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite. You can provide it if you want to manage versioning manually within your config file. type: {bigint}optional |
 
 #### :gear: DatastoreConfig
 
 Configures the behavior of the Datastore.
 
-| Property        | Type                               | Description                                                                                                                                                                                                                                                                                                                                                                              |
-| --------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `maxMemorySize` | `MaxMemorySizeConfig or undefined` | Configuration for maximum memory size limits for the Datastore. This is used to specify optional limits on heap and stable memory for the smart contract. When the limit is reached, the Datastore and smart contract continue to operate normally but reject the creation or updates of documents. If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional |
-| `createdAt`     | `bigint or undefined`              | The timestamp when the config was created. type: {bigint}optional                                                                                                                                                                                                                                                                                                                        |
-| `updatedAt`     | `bigint or undefined`              | The timestamp when the config was last updated. type: {bigint}optional                                                                                                                                                                                                                                                                                                                   |
-| `version`       | `bigint or undefined`              | The current version of the config. type: {bigint}optionaldescription: Must be provided when updating the config to ensure the correct version is being updated.                                                                                                                                                                                                                          |
+| Property        | Type                                 | Description                                                                                                                                                                                                                                                                                                                                                                              |
+| --------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `maxMemorySize` | `MaxMemorySizeConfig or undefined`   | Configuration for maximum memory size limits for the Datastore. This is used to specify optional limits on heap and stable memory for the smart contract. When the limit is reached, the Datastore and smart contract continue to operate normally but reject the creation or updates of documents. If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional |
+| `collections`   | `DatastoreCollection[] or undefined` | An optional array that defines the collections of the Datastore. type: {StorageCollection[]}optional                                                                                                                                                                                                                                                                                     |
+| `version`       | `bigint or undefined`                | The current version of the config. Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite. You can provide it if you want to manage versioning manually within your config file. type: {bigint}optional                                                                                                                                  |
 
 #### :gear: SatelliteId
 
@@ -614,10 +592,10 @@ Represents the overall configuration for Juno.
 
 Represents the collections configuration for a satellite in a development environment.
 
-| Property    | Type                                             | Description                                                                                |
-| ----------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `datastore` | `SatelliteDevDataStoreCollection[] or undefined` | The Datastore collections configuration. type: {SatelliteDevDataStoreCollection[]}optional |
-| `storage`   | `SatelliteDevStorageCollection[] or undefined`   | The Storage collections configuration. type: {SatelliteDevStorageCollection[]}optional     |
+| Property    | Type                                 | Description                                                                    |
+| ----------- | ------------------------------------ | ------------------------------------------------------------------------------ |
+| `datastore` | `DatastoreCollection[] or undefined` | The Datastore collections configuration. type: {DatastoreCollection[]}optional |
+| `storage`   | `StorageCollection[] or undefined`   | The Storage collections configuration. type: {StorageCollection[]}optional     |
 
 #### :gear: SatelliteDevController
 
@@ -654,8 +632,6 @@ Represents the development configuration for Juno.
 - [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
 - [EncodingType](#gear-encodingtype)
 - [SatelliteConfig](#gear-satelliteconfig)
-- [SatelliteDevDataStoreCollection](#gear-satellitedevdatastorecollection)
-- [SatelliteDevStorageCollection](#gear-satellitedevstoragecollection)
 - [JunoDevConfigFn](#gear-junodevconfigfn)
 - [JunoDevConfigFnOrObject](#gear-junodevconfigfnorobject)
 
@@ -699,7 +675,7 @@ The configuration for running the Juno emulator.
 | ------------------------- | ---- |
 | `StorageConfigSourceGlob` |      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L13)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L14)
 
 #### :gear: EncodingType
 
@@ -716,22 +692,6 @@ The configuration for running the Juno emulator.
 | `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> and CliConfig and SatelliteConfigOptions` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L150)
-
-#### :gear: SatelliteDevDataStoreCollection
-
-| Type                              | Type                                                                 |
-| --------------------------------- | -------------------------------------------------------------------- |
-| `SatelliteDevDataStoreCollection` | `Omit< Rule, 'createdAt' or 'updatedAt' or 'maxSize' or 'version' >` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L19)
-
-#### :gear: SatelliteDevStorageCollection
-
-| Type                            | Type                                                                     |
-| ------------------------------- | ------------------------------------------------------------------------ |
-| `SatelliteDevStorageCollection` | `Omit< Rule, 'createdAt' or 'updatedAt' or 'maxCapacity' or 'version' >` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L38)
 
 #### :gear: JunoDevConfigFn
 

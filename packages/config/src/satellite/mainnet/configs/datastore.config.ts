@@ -1,13 +1,13 @@
 import * as z from 'zod/v4';
 import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from '../../../shared/feature.config';
+import {type DatastoreCollection, DatastoreCollectionSchema} from '../../configs/collections';
 
 /**
  * @see DatastoreConfig
  */
 export const DatastoreConfigSchema = z.strictObject({
   maxMemorySize: MaxMemorySizeConfigSchema.optional(),
-  createdAt: z.bigint().optional(),
-  updatedAt: z.bigint().optional(),
+  collections: z.array(DatastoreCollectionSchema).optional(),
   version: z.bigint().optional()
 });
 
@@ -30,24 +30,20 @@ export interface DatastoreConfig {
   maxMemorySize?: MaxMemorySizeConfig;
 
   /**
-   * The timestamp when the config was created.
-   * @type {bigint}
+   * An optional array that defines the collections of the Datastore.
+   * @type {StorageCollection[]}
    * @optional
    */
-  createdAt?: bigint;
-
-  /**
-   * The timestamp when the config was last updated.
-   * @type {bigint}
-   * @optional
-   */
-  updatedAt?: bigint;
+  collections?: DatastoreCollection[];
 
   /**
    * The current version of the config.
+   *
+   * Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite.
+   * You can provide it if you want to manage versioning manually within your config file.
+   *
    * @type {bigint}
    * @optional
-   * @description Must be provided when updating the config to ensure the correct version is being updated.
    */
   version?: bigint;
 }

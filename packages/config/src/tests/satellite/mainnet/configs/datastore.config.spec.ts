@@ -34,6 +34,19 @@ describe('datastore.config', () => {
           heap: 512n,
           stable: 1024n
         },
+        collections: [
+          {
+            collection: 'users',
+            read: 'public',
+            write: 'managed',
+            memory: 'heap',
+            mutablePermissions: true,
+            maxChangesPerUser: 10,
+            maxCapacity: 1000,
+            version: BigInt(1),
+            maxTokens: 25
+          }
+        ],
         version: BigInt(1)
       });
       expect(result.success).toBe(true);
@@ -80,6 +93,56 @@ describe('datastore.config', () => {
         expect(result.error.issues[0].path).toEqual(['version']);
         expect(result.error.issues[0].code).toBe('invalid_type');
       }
+    });
+
+    it('rejects collection with forbidden field', () => {
+      const result = DatastoreConfigSchema.safeParse({
+        collections: [
+          {
+            collection: 'invalid',
+            read: 'public',
+            write: 'managed',
+            memory: 'heap',
+            mutablePermissions: true,
+            maxSize: 1024
+          }
+        ]
+      });
+
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects collection with unknown field', () => {
+      const result = DatastoreConfigSchema.safeParse({
+        collections: [
+          {
+            collection: 'accounts',
+            read: 'private',
+            write: 'private',
+            memory: 'heap',
+            mutablePermissions: true,
+            extra: 'not-allowed'
+          }
+        ]
+      });
+
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects collection with invalid enum value', () => {
+      const result = DatastoreConfigSchema.safeParse({
+        collections: [
+          {
+            collection: 'bad',
+            read: 'everyone', // invalid
+            write: 'private',
+            memory: 'heap',
+            mutablePermissions: true
+          }
+        ]
+      });
+
+      expect(result.success).toBe(false);
     });
   });
 });

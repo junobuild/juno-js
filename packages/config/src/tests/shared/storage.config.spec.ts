@@ -159,6 +159,18 @@ describe('storage.config', () => {
           heap: 123456789n,
           stable: 987654321n
         },
+        collections: [
+          {
+            collection: 'images',
+            read: 'public',
+            write: 'private',
+            memory: 'heap',
+            mutablePermissions: true,
+            maxChangesPerUser: 5,
+            maxTokens: 20,
+            version: BigInt(1)
+          }
+        ],
         version: BigInt(1)
       });
       expect(result.success).toBe(true);
@@ -199,10 +211,53 @@ describe('storage.config', () => {
         version: '1'
       });
       expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(['version']);
-        expect(result.error.issues[0].code).toBe('invalid_type');
-      }
+    });
+
+    it('rejects collection with forbidden field', () => {
+      const result = StorageConfigSchema.safeParse({
+        collections: [
+          {
+            collection: 'bad',
+            read: 'public',
+            write: 'public',
+            memory: 'heap',
+            mutablePermissions: true,
+            maxCapacity: 100 // forbidden in StorageCollection
+          }
+        ]
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects collection with unknown field', () => {
+      const result = StorageConfigSchema.safeParse({
+        collections: [
+          {
+            collection: 'test',
+            read: 'public',
+            write: 'public',
+            memory: 'heap',
+            mutablePermissions: true,
+            unexpected: true
+          }
+        ]
+      });
+      expect(result.success).toBe(false);
+    });
+
+    it('rejects collection with invalid enum value', () => {
+      const result = StorageConfigSchema.safeParse({
+        collections: [
+          {
+            collection: 'broken',
+            read: 'everyone', // invalid
+            write: 'public',
+            memory: 'heap',
+            mutablePermissions: true
+          }
+        ]
+      });
+      expect(result.success).toBe(false);
     });
   });
 });

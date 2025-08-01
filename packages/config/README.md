@@ -78,7 +78,6 @@ Configuration options for [Juno] CLI.
 - [SatelliteIdsSchema](#gear-satelliteidsschema)
 - [SatelliteConfigOptionsSchema](#gear-satelliteconfigoptionsschema)
 - [JunoConfigSchema](#gear-junoconfigschema)
-- [SatelliteDevCollectionsSchema](#gear-satellitedevcollectionsschema)
 - [SatelliteDevControllerSchema](#gear-satellitedevcontrollerschema)
 - [SatelliteDevConfigSchema](#gear-satellitedevconfigschema)
 - [JunoDevConfigSchema](#gear-junodevconfigschema)
@@ -285,21 +284,13 @@ see EncodingType
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/juno.config.ts#L9)
 
-#### :gear: SatelliteDevCollectionsSchema
-
-| Constant                        | Type                                                                                                                                                                                                                                                                                                                           |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `SatelliteDevCollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<...>; }, $strict>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L13)
-
 #### :gear: SatelliteDevControllerSchema
 
 | Constant                       | Type                                                                                                            |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
 | `SatelliteDevControllerSchema` | `ZodObject<{ id: ZodString; scope: ZodEnum<{ admin: "admin"; write: "write"; submit: "submit"; }>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L41)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L8)
 
 #### :gear: SatelliteDevConfigSchema
 
@@ -307,7 +298,7 @@ see EncodingType
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SatelliteDevConfigSchema` | `ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOp...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L67)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L34)
 
 #### :gear: JunoDevConfigSchema
 
@@ -315,7 +306,7 @@ see EncodingType
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `JunoDevConfigSchema` | `ZodObject<{ satellite: ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $st...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L94)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L61)
 
 ### :tropical_drink: Interfaces
 
@@ -343,7 +334,6 @@ see EncodingType
 - [SatelliteIds](#gear-satelliteids)
 - [SatelliteConfigOptions](#gear-satelliteconfigoptions)
 - [JunoConfig](#gear-junoconfig)
-- [SatelliteDevCollections](#gear-satellitedevcollections)
 - [SatelliteDevController](#gear-satellitedevcontroller)
 - [SatelliteDevConfig](#gear-satellitedevconfig)
 - [JunoDevConfig](#gear-junodevconfig)
@@ -588,15 +578,6 @@ Represents the overall configuration for Juno.
 | `orbiter`   | `OrbiterConfig or undefined`  | The optional configuration for the orbiter. type: {OrbiterConfig}optional |
 | `emulator`  | `EmulatorConfig or undefined` | Your options for the emulator.                                            |
 
-#### :gear: SatelliteDevCollections
-
-Represents the collections configuration for a satellite in a development environment.
-
-| Property    | Type                                 | Description                                                                    |
-| ----------- | ------------------------------------ | ------------------------------------------------------------------------------ |
-| `datastore` | `DatastoreCollection[] or undefined` | The Datastore collections configuration. type: {DatastoreCollection[]}optional |
-| `storage`   | `StorageCollection[] or undefined`   | The Storage collections configuration. type: {StorageCollection[]}optional     |
-
 #### :gear: SatelliteDevController
 
 Represents a controller configuration for a satellite in a development environment.
@@ -612,7 +593,7 @@ Represents the development configuration for a satellite.
 
 | Property      | Type                                    | Description                                                                      |
 | ------------- | --------------------------------------- | -------------------------------------------------------------------------------- |
-| `collections` | `SatelliteDevCollections`               | The collections configuration. type: {SatelliteDevCollections}                   |
+| `collections` | `Collections`                           | The collections configuration. type: {Collections}                               |
 | `controllers` | `SatelliteDevController[] or undefined` | The optional controllers configuration. type: {SatelliteDevController[]}optional |
 
 #### :gear: JunoDevConfig

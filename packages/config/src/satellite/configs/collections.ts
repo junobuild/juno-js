@@ -1,3 +1,4 @@
+import * as z from 'zod/v4';
 import {type Rule, RuleSchema} from './rules';
 
 /**
@@ -29,3 +30,31 @@ export const StorageCollectionSchema = RuleSchema.omit({
  * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxCapacity'>} StorageCollection
  */
 export type StorageCollection = Omit<Rule, 'createdAt' | 'updatedAt' | 'maxCapacity'>;
+
+/**
+ * @see Collections
+ */
+export const CollectionsSchema = z.strictObject({
+  datastore: z.array(DatastoreCollectionSchema).optional(),
+  storage: z.array(StorageCollectionSchema).optional()
+});
+
+/**
+ * Represents the configuration for all the collections of a Satellite.
+ * @interface Collections
+ */
+export interface Collections {
+  /**
+   * An optional array that defines the collections of the Datastore.
+   * @type {DatastoreCollection[]}
+   * @optional
+   */
+  datastore?: DatastoreCollection[];
+
+  /**
+   * An optional array that defines the collections of the Storage.
+   * @type {StorageCollection[]}
+   * @optional
+   */
+  storage?: StorageCollection[];
+}

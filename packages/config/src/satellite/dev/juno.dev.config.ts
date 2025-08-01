@@ -1,39 +1,6 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
-import {
-  type DatastoreCollection,
-  type StorageCollection,
-  DatastoreCollectionSchema,
-  StorageCollectionSchema
-} from '../configs/collections';
-
-/**
- * @see SatelliteDevCollections
- */
-export const SatelliteDevCollectionsSchema = z.strictObject({
-  datastore: z.array(DatastoreCollectionSchema).optional(),
-  storage: z.array(StorageCollectionSchema).optional()
-});
-
-/**
- * Represents the collections configuration for a satellite in a development environment.
- * @interface SatelliteDevCollections
- */
-export interface SatelliteDevCollections {
-  /**
-   * The Datastore collections configuration.
-   * @type {DatastoreCollection[]}
-   * @optional
-   */
-  datastore?: DatastoreCollection[];
-
-  /**
-   * The Storage collections configuration.
-   * @type {StorageCollection[]}
-   * @optional
-   */
-  storage?: StorageCollection[];
-}
+import {type Collections, CollectionsSchema} from '../configs/collections';
 
 /**
  * @see SatelliteDevController
@@ -65,7 +32,7 @@ export interface SatelliteDevController {
  * @see SatelliteDevConfig
  */
 export const SatelliteDevConfigSchema = z.strictObject({
-  collections: SatelliteDevCollectionsSchema,
+  collections: CollectionsSchema,
   controllers: z.array(SatelliteDevControllerSchema).optional()
 });
 
@@ -76,9 +43,9 @@ export const SatelliteDevConfigSchema = z.strictObject({
 export interface SatelliteDevConfig {
   /**
    * The collections configuration.
-   * @type {SatelliteDevCollections}
+   * @type {Collections}
    */
-  collections: SatelliteDevCollections;
+  collections: Collections;
 
   /**
    * The optional controllers configuration.

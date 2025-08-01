@@ -1,4 +1,5 @@
 import {
+  CollectionsSchema,
   DatastoreCollectionSchema,
   StorageCollectionSchema
 } from '../../../satellite/configs/collections';
@@ -128,6 +129,53 @@ describe('collections', () => {
 
       expect(result.success).toBe(false);
       expect(result?.error?.issues).toHaveLength(1);
+      expect(result?.error?.issues[0].code).toBe('unrecognized_keys');
+    });
+  });
+
+  describe('CollectionsSchema', () => {
+    const base = {
+      collection: 'test',
+      read: 'public',
+      write: 'managed',
+      memory: 'heap',
+      mutablePermissions: true
+    };
+
+    it('accepts valid datastore and storage collections', () => {
+      const result = CollectionsSchema.safeParse({
+        datastore: [
+          {
+            ...base,
+            maxChangesPerUser: 10,
+            maxCapacity: 500,
+            maxTokens: 3
+          }
+        ],
+        storage: [
+          {
+            ...base,
+            maxChangesPerUser: 5,
+            maxSize: 2048,
+            maxTokens: 2
+          }
+        ]
+      });
+
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts empty object', () => {
+      const result = CollectionsSchema.safeParse({});
+      expect(result.success).toBe(true);
+    });
+
+    it('fails if unknown top-level key is provided', () => {
+      const result = CollectionsSchema.safeParse({
+        foo: []
+      });
+
+      expect(result.success).toBe(false);
       expect(result?.error?.issues[0].code).toBe('unrecognized_keys');
     });
   });

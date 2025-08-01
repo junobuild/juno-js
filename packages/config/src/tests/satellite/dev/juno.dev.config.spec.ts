@@ -1,5 +1,5 @@
 import {
-  DataStoreCollectionSchema,
+  DatastoreCollectionSchema,
   StorageCollectionSchema
 } from '../../../satellite/configs/collections';
 import {
@@ -10,9 +10,9 @@ import {
 import {mockUserIdText} from '../../mocks/principal.mock';
 
 describe('juno.dev.config', () => {
-  describe('SatelliteDevDataStoreCollectionSchema', () => {
+  describe('SatelliteDevDatastoreCollectionSchema', () => {
     it('accepts a minimal valid config', () => {
-      const result = DataStoreCollectionSchema.safeParse({
+      const result = DatastoreCollectionSchema.safeParse({
         collection: 'users',
         read: 'public',
         write: 'private',
@@ -23,7 +23,7 @@ describe('juno.dev.config', () => {
     });
 
     it('rejects unexpected field', () => {
-      const result = DataStoreCollectionSchema.safeParse({
+      const result = DatastoreCollectionSchema.safeParse({
         collection: 'posts',
         read: 'public',
         write: 'public',
@@ -35,12 +35,12 @@ describe('juno.dev.config', () => {
     });
 
     it('rejects missing required fields', () => {
-      const result = DataStoreCollectionSchema.safeParse({});
+      const result = DatastoreCollectionSchema.safeParse({});
       expect(result.success).toBe(false);
     });
 
     it('rejects wrong types', () => {
-      const result = DataStoreCollectionSchema.safeParse({
+      const result = DatastoreCollectionSchema.safeParse({
         collection: 123,
         read: 'public',
         write: true,

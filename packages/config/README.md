@@ -542,7 +542,7 @@ Configures the behavior of the Datastore.
 | Property        | Type                                 | Description                                                                                                                                                                                                                                                                                                                                                                              |
 | --------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `maxMemorySize` | `MaxMemorySizeConfig or undefined`   | Configuration for maximum memory size limits for the Datastore. This is used to specify optional limits on heap and stable memory for the smart contract. When the limit is reached, the Datastore and smart contract continue to operate normally but reject the creation or updates of documents. If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional |
-| `collections`   | `DataStoreCollection[] or undefined` | An optional array that defines the collections of the Datastore. type: {StorageCollection[]}optional                                                                                                                                                                                                                                                                                     |
+| `collections`   | `DatastoreCollection[] or undefined` | An optional array that defines the collections of the Datastore. type: {StorageCollection[]}optional                                                                                                                                                                                                                                                                                     |
 | `version`       | `bigint or undefined`                | The current version of the config. Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite. You can provide it if you want to manage versioning manually within your config file. type: {bigint}optional                                                                                                                                  |
 
 #### :gear: SatelliteId
@@ -594,7 +594,7 @@ Represents the collections configuration for a satellite in a development enviro
 
 | Property    | Type                                 | Description                                                                    |
 | ----------- | ------------------------------------ | ------------------------------------------------------------------------------ |
-| `datastore` | `DataStoreCollection[] or undefined` | The Datastore collections configuration. type: {DataStoreCollection[]}optional |
+| `datastore` | `DatastoreCollection[] or undefined` | The Datastore collections configuration. type: {DatastoreCollection[]}optional |
 | `storage`   | `StorageCollection[] or undefined`   | The Storage collections configuration. type: {StorageCollection[]}optional     |
 
 #### :gear: SatelliteDevController

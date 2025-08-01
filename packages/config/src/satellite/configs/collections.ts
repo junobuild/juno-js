@@ -1,9 +1,9 @@
 import {type Rule, RuleSchema} from './rules';
 
 /**
- * @see DataStoreCollection
+ * @see DatastoreCollection
  */
-export const DataStoreCollectionSchema = RuleSchema.omit({
+export const DatastoreCollectionSchema = RuleSchema.omit({
   createdAt: true,
   updatedAt: true,
   maxSize: true
@@ -11,9 +11,9 @@ export const DataStoreCollectionSchema = RuleSchema.omit({
 
 /**
  * Represents a configuration for a collection of the Satellite Datastore.
- * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize'>} DataStoreCollection
+ * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize'>} DatastoreCollection
  */
-export type DataStoreCollection = Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize'>;
+export type DatastoreCollection = Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize'>;
 
 /**
  * @see StorageCollection

@@ -6,6 +6,7 @@ import type {CliConfig} from '../../../types/cli.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../../../types/juno.env';
 import type {Either} from '../../../types/utility.types';
 import {StrictPrincipalTextSchema} from '../../../utils/principal.utils';
+import {type Collections, CollectionsSchema} from '../../configs/collections';
 import {type SatelliteAssertions, SatelliteAssertionsSchema} from './assertions.config';
 import {type AuthenticationConfig, AuthenticationConfigSchema} from './authentication.config';
 import {type DatastoreConfig, DatastoreConfigSchema} from './datastore.config';
@@ -56,12 +57,16 @@ export interface SatelliteIds {
   ids: Record<JunoConfigMode, PrincipalText>;
 }
 
+/**
+ * @see SatelliteConfigOptions
+ */
 const SatelliteConfigOptionsBaseSchema = z.object({
   storage: StorageConfigSchema.optional(),
   datastore: DatastoreConfigSchema.optional(),
   authentication: AuthenticationConfigSchema.optional(),
   assertions: SatelliteAssertionsSchema.optional(),
-  settings: ModuleSettingsSchema.optional()
+  settings: ModuleSettingsSchema.optional(),
+  collections: CollectionsSchema.optional()
 });
 
 /**
@@ -137,6 +142,13 @@ export interface SatelliteConfigOptions {
    * @optional
    */
   settings?: ModuleSettings;
+
+  /**
+   * Optional configuration for the Datastore and Storage collections.
+   * @type {Collections}
+   * @optional
+   */
+  collections?: Collections;
 }
 
 /**

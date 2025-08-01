@@ -1,16 +1,18 @@
 import {
+  DataStoreCollectionSchema,
+  StorageCollectionSchema
+} from '../../../satellite/configs/collections';
+import {
   JunoDevConfigSchema,
   SatelliteDevConfigSchema,
-  SatelliteDevControllerSchema,
-  SatelliteDevDataStoreCollectionSchema,
-  SatelliteDevStorageCollectionSchema
+  SatelliteDevControllerSchema
 } from '../../../satellite/dev/juno.dev.config';
 import {mockUserIdText} from '../../mocks/principal.mock';
 
 describe('juno.dev.config', () => {
   describe('SatelliteDevDataStoreCollectionSchema', () => {
     it('accepts a minimal valid config', () => {
-      const result = SatelliteDevDataStoreCollectionSchema.safeParse({
+      const result = DataStoreCollectionSchema.safeParse({
         collection: 'users',
         read: 'public',
         write: 'private',
@@ -21,7 +23,7 @@ describe('juno.dev.config', () => {
     });
 
     it('rejects unexpected field', () => {
-      const result = SatelliteDevDataStoreCollectionSchema.safeParse({
+      const result = DataStoreCollectionSchema.safeParse({
         collection: 'posts',
         read: 'public',
         write: 'public',
@@ -33,12 +35,12 @@ describe('juno.dev.config', () => {
     });
 
     it('rejects missing required fields', () => {
-      const result = SatelliteDevDataStoreCollectionSchema.safeParse({});
+      const result = DataStoreCollectionSchema.safeParse({});
       expect(result.success).toBe(false);
     });
 
     it('rejects wrong types', () => {
-      const result = SatelliteDevDataStoreCollectionSchema.safeParse({
+      const result = DataStoreCollectionSchema.safeParse({
         collection: 123,
         read: 'public',
         write: true,
@@ -51,7 +53,7 @@ describe('juno.dev.config', () => {
 
   describe('SatelliteDevStorageCollectionSchema', () => {
     it('accepts a valid config', () => {
-      const result = SatelliteDevStorageCollectionSchema.safeParse({
+      const result = StorageCollectionSchema.safeParse({
         collection: 'media',
         read: 'managed',
         write: 'controllers',
@@ -62,7 +64,7 @@ describe('juno.dev.config', () => {
     });
 
     it('rejects maxCapacity field', () => {
-      const result = SatelliteDevStorageCollectionSchema.safeParse({
+      const result = StorageCollectionSchema.safeParse({
         collection: 'media',
         read: 'private',
         write: 'private',
@@ -74,7 +76,7 @@ describe('juno.dev.config', () => {
     });
 
     it('rejects unexpected extra fields', () => {
-      const result = SatelliteDevStorageCollectionSchema.safeParse({
+      const result = StorageCollectionSchema.safeParse({
         collection: 'media',
         read: 'public',
         write: 'private',

@@ -3,6 +3,7 @@ export * from './console/console.config';
 export * from './module/module.settings';
 export * from './pkg/juno.package';
 export * from './pkg/juno.package.constants';
+export * from './satellite/configs/collections';
 export * from './satellite/configs/rules';
 export * from './satellite/dev/config';
 export * from './satellite/dev/juno.dev.config';
@@ -21,4 +22,10 @@ export * from './types/encoding';
 export * from './types/juno.env';
 export * from './types/juno.package';
 
+export {
+  DataStoreCollection,
+  DataStoreCollectionSchema,
+  StorageCollection,
+  StorageCollectionSchema
+} from './satellite/configs/collections';
 export type * from './types/utility.types';

@@ -89,7 +89,7 @@ describe('rules.utils', () => {
         read: 'public',
         write: 'private',
         memory: 'heap',
-        mutablePermissions: true,
+        mutablePermissions: undefined,
         version: undefined,
         maxTokens: undefined,
         maxSize: 0,
@@ -104,6 +104,22 @@ describe('rules.utils', () => {
       expect(result.max_capacity).toEqual([]);
       expect(result.max_changes_per_user).toEqual([]);
       expect(result.rate_config).toEqual([]);
+    });
+
+    it('accept mutable permissions set to false', () => {
+      const result = mapSetRule({
+        read: 'public',
+        write: 'private',
+        memory: 'heap',
+        mutablePermissions: false,
+        version: undefined,
+        maxTokens: undefined,
+        maxSize: 0,
+        maxChangesPerUser: 0,
+        maxCapacity: 0
+      });
+
+      expect(result.mutable_permissions).toEqual([false]);
     });
 
     it.each([

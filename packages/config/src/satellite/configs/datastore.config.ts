@@ -1,5 +1,5 @@
 import * as z from 'zod/v4';
-import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from '../../../shared/feature.config';
+import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from '../../shared/feature.config';
 
 /**
  * @see DatastoreConfig

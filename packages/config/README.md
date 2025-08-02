@@ -12,45 +12,6 @@ Configuration options for [Juno] CLI.
 
 <!-- TSDOC_START -->
 
-### :toolbox: Functions
-
-- [defineDevConfig](#gear-definedevconfig)
-- [defineDevConfig](#gear-definedevconfig)
-- [defineDevConfig](#gear-definedevconfig)
-- [defineDevConfig](#gear-definedevconfig)
-
-#### :gear: defineDevConfig
-
-| Function          | Type                                                                                                                                                  |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineDevConfig` | `{ (config: JunoDevConfig): JunoDevConfig; (config: JunoDevConfigFn): JunoDevConfigFn; (config: JunoDevConfigFnOrObject): JunoDevConfigFnOrObject; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L7)
-
-#### :gear: defineDevConfig
-
-| Function          | Type                                                                                                                                                  |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineDevConfig` | `{ (config: JunoDevConfig): JunoDevConfig; (config: JunoDevConfigFn): JunoDevConfigFn; (config: JunoDevConfigFnOrObject): JunoDevConfigFnOrObject; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L8)
-
-#### :gear: defineDevConfig
-
-| Function          | Type                                                                                                                                                  |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineDevConfig` | `{ (config: JunoDevConfig): JunoDevConfig; (config: JunoDevConfigFn): JunoDevConfigFn; (config: JunoDevConfigFnOrObject): JunoDevConfigFnOrObject; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L9)
-
-#### :gear: defineDevConfig
-
-| Function          | Type                                                                                                                                                  |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineDevConfig` | `{ (config: JunoDevConfig): JunoDevConfig; (config: JunoDevConfigFn): JunoDevConfigFn; (config: JunoDevConfigFnOrObject): JunoDevConfigFnOrObject; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L10)
-
 ### :wrench: Constants
 
 - [EmulatorConfigSchema](#gear-emulatorconfigschema)
@@ -78,9 +39,6 @@ Configuration options for [Juno] CLI.
 - [SatelliteIdsSchema](#gear-satelliteidsschema)
 - [SatelliteConfigOptionsSchema](#gear-satelliteconfigoptionsschema)
 - [JunoConfigSchema](#gear-junoconfigschema)
-- [SatelliteDevControllerSchema](#gear-satellitedevcontrollerschema)
-- [SatelliteDevConfigSchema](#gear-satellitedevconfigschema)
-- [JunoDevConfigSchema](#gear-junodevconfigschema)
 
 #### :gear: EmulatorConfigSchema
 
@@ -284,30 +242,6 @@ see EncodingType
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/juno.config.ts#L9)
 
-#### :gear: SatelliteDevControllerSchema
-
-| Constant                       | Type                                                                                                            |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| `SatelliteDevControllerSchema` | `ZodObject<{ id: ZodString; scope: ZodEnum<{ admin: "admin"; write: "write"; submit: "submit"; }>; }, $strict>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L8)
-
-#### :gear: SatelliteDevConfigSchema
-
-| Constant                   | Type                                                                                                                                                                                                                                                                                                                               |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteDevConfigSchema` | `ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOp...` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L34)
-
-#### :gear: JunoDevConfigSchema
-
-| Constant              | Type                                                                                                                                                                                                                                                                                                                               |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `JunoDevConfigSchema` | `ZodObject<{ satellite: ZodObject<{ collections: ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ controllers: "controllers"; public: "public"; private: "private"; managed: "managed"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $st...` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/juno.dev.config.ts#L61)
-
 ### :tropical_drink: Interfaces
 
 - [EmulatorPorts](#gear-emulatorports)
@@ -334,9 +268,6 @@ see EncodingType
 - [SatelliteIds](#gear-satelliteids)
 - [SatelliteConfigOptions](#gear-satelliteconfigoptions)
 - [JunoConfig](#gear-junoconfig)
-- [SatelliteDevController](#gear-satellitedevcontroller)
-- [SatelliteDevConfig](#gear-satellitedevconfig)
-- [JunoDevConfig](#gear-junodevconfig)
 
 #### :gear: EmulatorPorts
 
@@ -577,32 +508,6 @@ Represents the overall configuration for Juno.
 | `orbiter`   | `OrbiterConfig or undefined`  | The optional configuration for the orbiter. type: {OrbiterConfig}optional |
 | `emulator`  | `EmulatorConfig or undefined` | Your options for the emulator.                                            |
 
-#### :gear: SatelliteDevController
-
-Represents a controller configuration for a satellite in a development environment.
-
-| Property | Type                             | Description                                                           |
-| -------- | -------------------------------- | --------------------------------------------------------------------- |
-| `id`     | `string`                         | The unique identifier of the controller. type: {string}               |
-| `scope`  | `"admin" or "write" or "submit"` | The scope of the controller's permissions. type: {'write' or 'admin'} |
-
-#### :gear: SatelliteDevConfig
-
-Represents the development configuration for a satellite.
-
-| Property      | Type                                    | Description                                                                      |
-| ------------- | --------------------------------------- | -------------------------------------------------------------------------------- |
-| `collections` | `Collections`                           | The collections configuration. type: {Collections}                               |
-| `controllers` | `SatelliteDevController[] or undefined` | The optional controllers configuration. type: {SatelliteDevController[]}optional |
-
-#### :gear: JunoDevConfig
-
-Represents the development configuration for Juno.
-
-| Property    | Type                 | Description                                                                 |
-| ----------- | -------------------- | --------------------------------------------------------------------------- |
-| `satellite` | `SatelliteDevConfig` | The development configuration for the satellite. type: {SatelliteDevConfig} |
-
 ### :cocktail: Types
 
 - [EmulatorConfig](#gear-emulatorconfig)
@@ -612,8 +517,6 @@ Represents the development configuration for Juno.
 - [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
 - [EncodingType](#gear-encodingtype)
 - [SatelliteConfig](#gear-satelliteconfig)
-- [JunoDevConfigFn](#gear-junodevconfigfn)
-- [JunoDevConfigFnOrObject](#gear-junodevconfigfnorobject)
 
 #### :gear: EmulatorConfig
 
@@ -672,22 +575,6 @@ The configuration for running the Juno emulator.
 | `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> and CliConfig and SatelliteConfigOptions` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/mainnet/configs/satellite.config.ts#L162)
-
-#### :gear: JunoDevConfigFn
-
-| Type              | Type                  |
-| ----------------- | --------------------- |
-| `JunoDevConfigFn` | `() => JunoDevConfig` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L3)
-
-#### :gear: JunoDevConfigFnOrObject
-
-| Type                      | Type                               |
-| ------------------------- | ---------------------------------- |
-| `JunoDevConfigFnOrObject` | `JunoDevConfig or JunoDevConfigFn` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/dev/config.ts#L5)
 
 <!-- TSDOC_END -->
 

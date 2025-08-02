@@ -19,11 +19,4 @@ export * from './types/cli.config';
 export * from './types/encoding';
 export * from './types/juno.env';
 export * from './types/juno.package';
-
-export {
-  DatastoreCollection,
-  DatastoreCollectionSchema,
-  StorageCollection,
-  StorageCollectionSchema
-} from './satellite/configs/collections';
 export type * from './types/utility.types';

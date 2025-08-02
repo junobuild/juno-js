@@ -47,7 +47,7 @@ export const RuleSchema = z.strictObject({
   maxSize: z.number().optional(),
   maxChangesPerUser: z.number().optional(),
   maxCapacity: z.number().optional(),
-  mutablePermissions: z.boolean(),
+  mutablePermissions: z.boolean().optional().default(true),
   maxTokens: z.number().optional()
 });
 
@@ -125,9 +125,10 @@ export interface Rule {
 
   /**
    * Indicates whether the permissions are mutable.
+   * @default true
    * @type {boolean}
    */
-  mutablePermissions: boolean;
+  mutablePermissions?: boolean;
 
   /**
    * The maximum number of writes and deletes per minute.

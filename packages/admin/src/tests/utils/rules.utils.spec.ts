@@ -89,7 +89,7 @@ describe('rules.utils', () => {
         read: 'public',
         write: 'private',
         memory: 'heap',
-        mutablePermissions: true,
+        mutablePermissions: undefined,
         version: undefined,
         maxTokens: undefined,
         maxSize: 0,

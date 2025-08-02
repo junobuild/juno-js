@@ -66,10 +66,19 @@ describe('rules', () => {
         collection: 'users',
         read: 'controllers',
         write: 'controllers',
-        memory: 'stable',
-        mutablePermissions: false
+        memory: 'stable'
       });
       expect(result.success).toBe(true);
+    });
+
+    it('default to mutablePermissions to true', () => {
+      const result = RuleSchema.safeParse({
+        collection: 'users',
+        read: 'controllers',
+        write: 'controllers',
+        memory: 'stable'
+      });
+      expect(result?.data?.mutablePermissions).toBe(true);
     });
 
     it('rejects unknown keys', () => {

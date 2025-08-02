@@ -63,7 +63,7 @@ export const mapSetRule = ({
   max_changes_per_user: toNullable(
     nonNullish(maxChangesPerUser) && maxChangesPerUser > 0 ? maxChangesPerUser : undefined
   ),
-  mutable_permissions: toNullable(mutablePermissions),
+  mutable_permissions: toNullable(mutablePermissions ?? true),
   rate_config: nonNullish(maxTokens)
     ? [
         {

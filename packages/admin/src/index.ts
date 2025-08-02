@@ -27,4 +27,5 @@ export * from './services/satellite.version.services';
 export type * from './types/actor';
 export type * from './types/controllers';
 export type * from './types/customdomain';
+export type * from './types/list';
 export * from './types/upgrade';

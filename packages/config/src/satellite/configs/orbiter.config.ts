@@ -1,8 +1,8 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
-import {type JunoConfigMode, JunoConfigModeSchema} from '../../../types/juno.env';
-import type {Either} from '../../../types/utility.types';
-import {StrictPrincipalTextSchema} from '../../../utils/principal.utils';
+import {type JunoConfigMode, JunoConfigModeSchema} from '../../types/juno.env';
+import type {Either} from '../../types/utility.types';
+import {StrictPrincipalTextSchema} from '../../utils/principal.utils';
 
 /**
  * @see OrbiterId

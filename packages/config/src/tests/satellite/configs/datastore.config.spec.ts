@@ -1,5 +1,5 @@
-import {DatastoreConfigSchema} from '../../../../satellite/mainnet/configs/datastore.config';
-import {MaxMemorySizeConfigSchema} from '../../../../shared/feature.config';
+import {DatastoreConfigSchema} from '../../../satellite/configs/datastore.config';
+import {MaxMemorySizeConfigSchema} from '../../../shared/feature.config';
 
 describe('datastore.config', () => {
   describe('MaxMemorySizeConfigSchema', () => {

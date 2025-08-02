@@ -1,4 +1,4 @@
-import {SatelliteAssertionsSchema} from '../../../../satellite/mainnet/configs/assertions.config';
+import {SatelliteAssertionsSchema} from '../../../satellite/configs/assertions.config';
 
 describe('assertions.config', () => {
   describe('SatelliteAssertionsSchema', () => {

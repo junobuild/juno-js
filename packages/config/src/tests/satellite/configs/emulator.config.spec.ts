@@ -1,4 +1,4 @@
-import {EmulatorConfigSchema} from '../../../../satellite/mainnet/configs/emulator.config';
+import {EmulatorConfigSchema} from '../../../satellite/configs/emulator.config';
 
 describe('emulator.config', () => {
   describe('EmulatorConfigSchema', () => {

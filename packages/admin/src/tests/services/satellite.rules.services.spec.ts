@@ -2,6 +2,7 @@ import type {Rule} from '@junobuild/config';
 import * as actor from '../../api/_actor.api';
 import {DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS, DbRulesType} from '../../constants/rules.constants';
 import {listRules, setRule} from '../../services/satellite.rules.services';
+import {fromRule} from '../../utils/rule.utils';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
 vi.mock('../../api/_actor.api', () => ({
@@ -94,22 +95,29 @@ describe('satellite.rules.services', () => {
   });
 
   describe('setRule', () => {
-    it('calls set_rule with mapped input', async () => {
-      const inputRule: Rule = {
-        collection: 'users',
-        read: 'public',
-        write: 'private',
-        memory: 'heap',
-        maxSize: 100,
-        maxChangesPerUser: 10,
-        maxCapacity: 50,
-        version: 1n,
-        mutablePermissions: true,
-        maxTokens: 20
+    const inputRule: Rule = {
+      collection: 'users',
+      read: 'public',
+      write: 'private',
+      memory: 'heap',
+      maxSize: 100,
+      maxChangesPerUser: 10,
+      maxCapacity: 50,
+      version: 1n,
+      mutablePermissions: true,
+      maxTokens: 20
+    };
+
+    beforeEach(() => {
+      const setResult = {
+        ...fromRule(inputRule),
+        version: [99n]
       };
 
-      mockActor.set_rule.mockResolvedValue(undefined);
+      mockActor.set_rule.mockResolvedValue(setResult);
+    });
 
+    it('calls set_rule with mapped input', async () => {
       await setRule({
         rule: inputRule,
         type: 'db',
@@ -131,6 +139,21 @@ describe('satellite.rules.services', () => {
             time_per_token_ns: DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS
           }
         ]
+      });
+    });
+
+    it('returns mapped rule', async () => {
+      const result = await setRule({
+        rule: inputRule,
+        type: 'db',
+        satellite
+      });
+
+      expect(result).toStrictEqual({
+        ...inputRule,
+        createdAt: undefined,
+        updatedAt: undefined,
+        version: 99n
       });
     });
   });

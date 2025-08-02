@@ -49,11 +49,13 @@ export const setRule = async ({
   rule: Rule;
   type: RulesType;
   satellite: SatelliteParameters;
-}): Promise<void> => {
-  await setRuleApi({
+}): Promise<Rule> => {
+  const result = await setRuleApi({
     type: fromRuleType(type),
     rule: fromRule(rest),
     satellite,
     collection
   });
+
+  return toRule([collection, result]);
 };

@@ -4,10 +4,8 @@ import * as ts from '@babel/preset-typescript';
 import {
   defineConfig,
   defineConsoleConfig,
-  defineDevConfig,
   type JunoConfig,
-  type JunoConsoleConfig,
-  type JunoDevConfig
+  type JunoConsoleConfig
 } from '@junobuild/config';
 
 /**
@@ -47,7 +45,6 @@ export const nodeRequire = <T>({id, extension}: {id: string; extension: string})
       if (request === '@junobuild/config') {
         return {
           defineConfig: (config: JunoConfig) => defineConfig(config),
-          defineDevConfig: (config: JunoDevConfig) => defineDevConfig(config),
           defineConsoleConfig: (config: JunoConsoleConfig) => defineConsoleConfig(config)
         };
       }

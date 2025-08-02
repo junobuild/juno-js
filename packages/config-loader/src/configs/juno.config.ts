@@ -1,9 +1,4 @@
-import type {
-  JunoConfig,
-  JunoConfigFnOrObject,
-  JunoDevConfig,
-  JunoDevConfigFnOrObject
-} from '@junobuild/config';
+import type {JunoConfig, JunoConfigFnOrObject} from '@junobuild/config';
 import {existsSync, readFileSync} from 'node:fs';
 import {access, lstat, readFile} from 'node:fs/promises';
 import {extname, join} from 'node:path';
@@ -143,8 +138,8 @@ export const detectJunoConfigType = ({
 };
 
 export const readJunoConfig = async <
-  ConfigFnOrObject extends JunoConfigFnOrObject | JunoDevConfigFnOrObject,
-  Config extends JunoConfig | JunoDevConfig
+  ConfigFnOrObject extends JunoConfigFnOrObject,
+  Config extends JunoConfig
 >({
   config,
   ...rest

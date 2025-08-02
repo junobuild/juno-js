@@ -5,8 +5,6 @@ export * from './pkg/juno.package';
 export * from './pkg/juno.package.constants';
 export * from './satellite/configs/collections';
 export * from './satellite/configs/rules';
-export * from './satellite/dev/config';
-export * from './satellite/dev/juno.dev.config';
 export * from './satellite/mainnet/config';
 export * from './satellite/mainnet/configs/assertions.config';
 export * from './satellite/mainnet/configs/authentication.config';

@@ -8,39 +8,39 @@ import {
   StorageRulesType
 } from '../../constants/rules.constants';
 import {
-  mapRule,
-  mapRulesFilter,
-  mapRuleType,
-  mapSetRule,
+  fromRule,
+  fromRulesFilter,
+  fromRuleType,
   memoryFromText,
   memoryToText,
-  permissionToText
+  permissionToText,
+  toRule
 } from '../../utils/rule.utils';
 
 describe('rules.utils', () => {
-  describe('mapRuleType', () => {
+  describe('fromRuleType', () => {
     it('returns DbRulesType when type is "db"', () => {
-      expect(mapRuleType('db')).toEqual(DbRulesType);
+      expect(fromRuleType('db')).toEqual(DbRulesType);
     });
 
     it('returns StorageRulesType when type is "storage"', () => {
-      expect(mapRuleType('storage')).toEqual(StorageRulesType);
+      expect(fromRuleType('storage')).toEqual(StorageRulesType);
     });
   });
 
-  describe('mapRulesFilter', () => {
+  describe('fromRulesFilter', () => {
     it('returns null matcher when filter is undefined', () => {
-      expect(mapRulesFilter()).toEqual({matcher: []});
+      expect(fromRulesFilter()).toEqual({matcher: []});
     });
 
     it('returns matcher with include_system when provided', () => {
-      expect(mapRulesFilter({include_system: true})).toEqual({
+      expect(fromRulesFilter({include_system: true})).toEqual({
         matcher: [{include_system: true}]
       });
     });
   });
 
-  describe('mapSetRule', () => {
+  describe('fromRule', () => {
     it('maps full rule to SetRule', () => {
       const input: Pick<
         Rule,
@@ -65,7 +65,7 @@ describe('rules.utils', () => {
         maxTokens: 20
       };
 
-      const result = mapSetRule(input);
+      const result = fromRule(input);
       expect(result).toEqual({
         read: {Public: null},
         write: {Private: null},
@@ -85,7 +85,7 @@ describe('rules.utils', () => {
     });
 
     it('omits optional fields when undefined or invalid', () => {
-      const result = mapSetRule({
+      const result = fromRule({
         read: 'public',
         write: 'private',
         memory: 'heap',
@@ -107,7 +107,7 @@ describe('rules.utils', () => {
     });
 
     it('accept mutable permissions set to false', () => {
-      const result = mapSetRule({
+      const result = fromRule({
         read: 'public',
         write: 'private',
         memory: 'heap',
@@ -130,7 +130,7 @@ describe('rules.utils', () => {
     ] as const)(
       'maps read/write "%s" to correct Permission variant',
       (text, expectedPermission) => {
-        const result = mapSetRule({
+        const result = fromRule({
           read: text,
           write: text,
           memory: 'heap',
@@ -148,7 +148,7 @@ describe('rules.utils', () => {
     );
   });
 
-  describe('mapRule', () => {
+  describe('toRule', () => {
     it('maps RuleApi to Rule with all fields', () => {
       const input: [string, RuleApi] = [
         'test',
@@ -172,7 +172,7 @@ describe('rules.utils', () => {
         }
       ];
 
-      const result = mapRule(input);
+      const result = toRule(input);
       expect(result).toEqual({
         collection: 'test',
         read: 'public',

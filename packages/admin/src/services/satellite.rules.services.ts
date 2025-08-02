@@ -2,7 +2,7 @@ import type {Rule, RulesType} from '@junobuild/config';
 import {listRules as listRulesApi, setRule as setRuleApi} from '../api/satellite.api';
 import type {SatelliteParameters} from '../types/actor';
 import type {ListRulesMatcher, ListRulesResults} from '../types/list';
-import {mapRule, mapRulesFilter, mapRuleType, mapSetRule} from '../utils/rule.utils';
+import {fromRule, fromRulesFilter, fromRuleType, toRule} from '../utils/rule.utils';
 
 /**
  * Lists the rules for a satellite.
@@ -23,13 +23,13 @@ export const listRules = async ({
 }): Promise<ListRulesResults> => {
   const {items, ...rest} = await listRulesApi({
     satellite,
-    type: mapRuleType(type),
-    filter: mapRulesFilter(filter)
+    type: fromRuleType(type),
+    filter: fromRulesFilter(filter)
   });
 
   return {
     ...rest,
-    items: items.map((rule) => mapRule(rule))
+    items: items.map((rule) => toRule(rule))
   };
 };
 
@@ -51,8 +51,8 @@ export const setRule = async ({
   satellite: SatelliteParameters;
 }): Promise<void> => {
   await setRuleApi({
-    type: mapRuleType(type),
-    rule: mapSetRule(rest),
+    type: fromRuleType(type),
+    rule: fromRule(rest),
     satellite,
     collection
   });

@@ -21,10 +21,10 @@ import {
 } from '../constants/rules.constants';
 import type {ListRulesMatcher} from '../types/list';
 
-export const mapRuleType = (type: RulesType): CollectionTypeApi =>
+export const fromRuleType = (type: RulesType): CollectionTypeApi =>
   type === 'storage' ? StorageRulesType : DbRulesType;
 
-export const mapRulesFilter = (filter?: ListRulesMatcher): ListRulesParamsApi => ({
+export const fromRulesFilter = (filter?: ListRulesMatcher): ListRulesParamsApi => ({
   matcher: isNullish(filter)
     ? toNullable()
     : toNullable({
@@ -32,7 +32,7 @@ export const mapRulesFilter = (filter?: ListRulesMatcher): ListRulesParamsApi =>
       })
 });
 
-export const mapSetRule = ({
+export const fromRule = ({
   read,
   write,
   memory,
@@ -74,7 +74,7 @@ export const mapSetRule = ({
     : []
 });
 
-export const mapRule = ([collection, rule]: [string, RuleApi]): Rule => {
+export const toRule = ([collection, rule]: [string, RuleApi]): Rule => {
   const {
     read,
     write,

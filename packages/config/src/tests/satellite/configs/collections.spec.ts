@@ -19,7 +19,7 @@ describe('collections', () => {
         ...base,
         maxChangesPerUser: 100,
         maxCapacity: 500,
-        maxTokens: 20
+        maxTokens: 20n
       });
       expect(parsed).toHaveProperty('collection', 'test');
     });
@@ -56,7 +56,7 @@ describe('collections', () => {
       expect(() =>
         DatastoreCollectionSchema.parse({
           ...base,
-          maxSize: 1024
+          maxSize: 1024n
         })
       ).toThrow();
     });
@@ -78,8 +78,8 @@ describe('collections', () => {
       const parsed = StorageCollectionSchema.parse({
         ...base,
         maxChangesPerUser: 100,
-        maxSize: 2048,
-        maxTokens: 10
+        maxSize: 2048n,
+        maxTokens: 10n
       });
       expect(parsed.memory).toBe('heap');
     });
@@ -149,15 +149,15 @@ describe('collections', () => {
             ...base,
             maxChangesPerUser: 10,
             maxCapacity: 500,
-            maxTokens: 3
+            maxTokens: 3n
           }
         ],
         storage: [
           {
             ...base,
             maxChangesPerUser: 5,
-            maxSize: 2048,
-            maxTokens: 2
+            maxSize: 2048n,
+            maxTokens: 2n
           }
         ]
       });

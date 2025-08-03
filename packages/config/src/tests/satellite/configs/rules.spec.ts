@@ -50,10 +50,10 @@ describe('rules', () => {
       createdAt: BigInt(Date.now()),
       updatedAt: BigInt(Date.now()),
       version: BigInt(1),
-      maxSize: 1024 * 1024,
+      maxSize: BigInt(1024 * 1024),
       maxChangesPerUser: 100,
       maxCapacity: 5000,
-      maxTokens: 60
+      maxTokens: 60n
     };
 
     it('accepts a full valid rule object', () => {

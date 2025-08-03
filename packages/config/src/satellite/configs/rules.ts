@@ -44,11 +44,11 @@ export const RuleSchema = z.strictObject({
   createdAt: z.bigint().optional(),
   updatedAt: z.bigint().optional(),
   version: z.bigint().optional(),
-  maxSize: z.number().optional(),
+  maxSize: z.bigint().optional(),
   maxChangesPerUser: z.number().optional(),
   maxCapacity: z.number().optional(),
   mutablePermissions: z.boolean().optional().default(true),
-  maxTokens: z.number().optional()
+  maxTokens: z.bigint().optional()
 });
 
 /**
@@ -107,7 +107,7 @@ export interface Rule {
    * @type {number}
    * @optional
    */
-  maxSize?: number;
+  maxSize?: bigint;
 
   /**
    * The maximum number of changes (create, update or delete) per user for the collection.
@@ -133,5 +133,5 @@ export interface Rule {
   /**
    * The maximum number of writes and deletes per minute.
    */
-  maxTokens?: number;
+  maxTokens?: bigint;
 }

@@ -84,10 +84,10 @@ describe('satellite.rules.services', () => {
             updatedAt: 2n,
             version: 3n,
             maxCapacity: 100,
-            maxSize: 1000,
+            maxSize: 1000n,
             maxChangesPerUser: 5,
             mutablePermissions: false,
-            maxTokens: 50
+            maxTokens: 50n
           }
         ]
       });
@@ -100,12 +100,12 @@ describe('satellite.rules.services', () => {
       read: 'public',
       write: 'private',
       memory: 'heap',
-      maxSize: 100,
+      maxSize: 100n,
       maxChangesPerUser: 10,
       maxCapacity: 50,
       version: 1n,
       mutablePermissions: true,
-      maxTokens: 20
+      maxTokens: 20n
     };
 
     beforeEach(() => {

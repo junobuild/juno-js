@@ -58,20 +58,21 @@ export const fromRule = ({
   write: permissionFromText(write),
   memory: nonNullish(memory) ? [memoryFromText(memory)] : [],
   version: toNullable(version),
-  max_size: toNullable(nonNullish(maxSize) && maxSize > 0 ? BigInt(maxSize) : undefined),
+  max_size: toNullable(nonNullish(maxSize) && maxSize > 0n ? maxSize : undefined),
   max_capacity: toNullable(nonNullish(maxCapacity) && maxCapacity > 0 ? maxCapacity : undefined),
   max_changes_per_user: toNullable(
     nonNullish(maxChangesPerUser) && maxChangesPerUser > 0 ? maxChangesPerUser : undefined
   ),
   mutable_permissions: toNullable(mutablePermissions ?? true),
-  rate_config: nonNullish(maxTokens)
-    ? [
-        {
-          max_tokens: BigInt(maxTokens),
-          time_per_token_ns: DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS
-        }
-      ]
-    : []
+  rate_config:
+    nonNullish(maxTokens) && maxTokens > 0n
+      ? [
+          {
+            max_tokens: maxTokens,
+            time_per_token_ns: DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS
+          }
+        ]
+      : []
 });
 
 export const toRule = ([collection, rule]: [string, RuleApi]): Rule => {
@@ -89,7 +90,7 @@ export const toRule = ([collection, rule]: [string, RuleApi]): Rule => {
     rate_config
   } = rule;
 
-  const maxSize = (max_size?.[0] ?? 0n > 0n) ? Number(fromNullable(max_size)) : undefined;
+  const maxSize = (max_size?.[0] ?? 0n > 0n) ? fromNullable(max_size) : undefined;
   const maxChangesPerUser =
     (max_changes_per_user?.[0] ?? 0 > 0) ? fromNullable(max_changes_per_user) : undefined;
   const maxCapacity = (max_capacity?.[0] ?? 0 > 0) ? fromNullable(max_capacity) : undefined;
@@ -111,7 +112,7 @@ export const toRule = ([collection, rule]: [string, RuleApi]): Rule => {
     ...(nonNullish(maxSize) && {maxSize}),
     ...(nonNullish(maxCapacity) && {maxCapacity}),
     mutablePermissions: fromNullable(mutable_permissions) ?? true,
-    ...(nonNullish(maxTokens) && {maxTokens: Number(maxTokens)})
+    ...(nonNullish(maxTokens) && {maxTokens})
   };
 };
 

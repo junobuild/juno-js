@@ -57,12 +57,12 @@ describe('rules.utils', () => {
         read: 'public',
         write: 'private',
         memory: 'heap',
-        maxSize: 100,
+        maxSize: 100n,
         maxChangesPerUser: 10,
         maxCapacity: 50,
         version: 1n,
         mutablePermissions: true,
-        maxTokens: 20
+        maxTokens: 20n
       };
 
       const result = fromRule(input);
@@ -71,13 +71,13 @@ describe('rules.utils', () => {
         write: {Private: null},
         memory: [{Heap: null}],
         version: [1n],
-        max_size: [BigInt(100)],
+        max_size: [100n],
         max_capacity: [50],
         max_changes_per_user: [10],
         mutable_permissions: [true],
         rate_config: [
           {
-            max_tokens: BigInt(20),
+            max_tokens: 20n,
             time_per_token_ns: DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS
           }
         ]
@@ -92,7 +92,7 @@ describe('rules.utils', () => {
         mutablePermissions: undefined,
         version: undefined,
         maxTokens: undefined,
-        maxSize: 0,
+        maxSize: 0n,
         maxChangesPerUser: 0,
         maxCapacity: 0
       });
@@ -114,7 +114,7 @@ describe('rules.utils', () => {
         mutablePermissions: false,
         version: undefined,
         maxTokens: undefined,
-        maxSize: 0,
+        maxSize: 0n,
         maxChangesPerUser: 0,
         maxCapacity: 0
       });
@@ -137,7 +137,7 @@ describe('rules.utils', () => {
           mutablePermissions: true,
           version: undefined,
           maxTokens: undefined,
-          maxSize: 0,
+          maxSize: 0n,
           maxChangesPerUser: 0,
           maxCapacity: 0
         });
@@ -182,10 +182,10 @@ describe('rules.utils', () => {
         updatedAt: 2n,
         version: 3n,
         maxCapacity: 100,
-        maxSize: 1000,
+        maxSize: 1000n,
         maxChangesPerUser: 5,
         mutablePermissions: false,
-        maxTokens: 50
+        maxTokens: 50n
       });
     });
   });

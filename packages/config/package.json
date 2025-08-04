@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/config",
-  "version": "0.4.3",
+  "version": "1.0.0",
   "description": "Configuration options for Juno CLI",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

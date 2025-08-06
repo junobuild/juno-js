@@ -1,6 +1,5 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
-import {type ModuleSettings, ModuleSettingsSchema} from '../../module/module.settings';
 import {type StorageConfig, StorageConfigSchema} from '../../shared/storage.config';
 import type {CliConfig} from '../../types/cli.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../../types/juno.env';
@@ -10,6 +9,7 @@ import {type SatelliteAssertions, SatelliteAssertionsSchema} from './assertions.
 import {type AuthenticationConfig, AuthenticationConfigSchema} from './authentication.config';
 import {type Collections, CollectionsSchema} from './collections';
 import {type DatastoreConfig, DatastoreConfigSchema} from './datastore.config';
+import {type ModuleSettings, ModuleSettingsSchema} from './module.settings';
 
 /**
  * @see SatelliteId

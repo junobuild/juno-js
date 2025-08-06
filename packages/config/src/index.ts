@@ -1,6 +1,5 @@
 export * from './console/config';
 export * from './console/console.config';
-export * from './module/module.settings';
 export * from './pkg/juno.package';
 export * from './pkg/juno.package.constants';
 export * from './satellite/config';
@@ -9,6 +8,7 @@ export * from './satellite/configs/authentication.config';
 export * from './satellite/configs/collections';
 export * from './satellite/configs/datastore.config';
 export * from './satellite/configs/emulator.config';
+export * from './satellite/configs/module.settings';
 export * from './satellite/configs/orbiter.config';
 export * from './satellite/configs/rules';
 export * from './satellite/configs/satellite.config';

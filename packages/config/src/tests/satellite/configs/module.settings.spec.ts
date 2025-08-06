@@ -1,5 +1,8 @@
 import {describe, expect, it} from 'vitest';
-import {ModuleLogVisibilitySchema, ModuleSettingsSchema} from '../../module/module.settings';
+import {
+  ModuleLogVisibilitySchema,
+  ModuleSettingsSchema
+} from '../../../satellite/configs/module.settings';
 
 describe('module.settings', () => {
   describe('ModuleSettingsSchema', () => {

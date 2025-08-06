@@ -1,4 +1,5 @@
 import * as z from 'zod/v4';
+import {NumericValueSchema} from '../../types/numeric';
 
 /**
  * @see PermissionText
@@ -41,14 +42,14 @@ export const RuleSchema = z.strictObject({
   read: PermissionTextSchema,
   write: PermissionTextSchema,
   memory: MemoryTextSchema,
-  createdAt: z.bigint().optional(),
-  updatedAt: z.bigint().optional(),
-  version: z.bigint().optional(),
-  maxSize: z.bigint().optional(),
+  createdAt: NumericValueSchema.optional(),
+  updatedAt: NumericValueSchema.optional(),
+  version: NumericValueSchema.optional(),
+  maxSize: NumericValueSchema.optional(),
   maxChangesPerUser: z.number().optional(),
   maxCapacity: z.number().optional(),
   mutablePermissions: z.boolean().optional().default(true),
-  maxTokens: z.bigint().optional()
+  maxTokens: NumericValueSchema.optional()
 });
 
 /**

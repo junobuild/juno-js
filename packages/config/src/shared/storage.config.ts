@@ -1,5 +1,6 @@
 import * as z from 'zod/v4';
 import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from './feature.config';
+import {NumericValueSchema} from '../types/numeric';
 
 /**
  * @see StorageConfigSourceGlob
@@ -118,7 +119,7 @@ export const StorageConfigSchema = z.object({
   iframe: z.enum(['deny', 'same-origin', 'allow-any']).optional(),
   rawAccess: z.boolean().optional(),
   maxMemorySize: MaxMemorySizeConfigSchema.optional(),
-  version: z.bigint().optional()
+  version: NumericValueSchema.optional()
 });
 
 /**

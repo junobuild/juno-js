@@ -3,7 +3,9 @@ import * as z from 'zod/v4';
 /**
  * @see NumericValueS
  */
-export const NumericValueSchema = z.union([z.bigint(), z.number()]);
+export const NumericValueSchema = z
+  .union([z.bigint(), z.number()])
+  .transform((value) => (typeof value === 'number' ? BigInt(value) : value));
 
 /**
  * Represents a value that can be either a bigint or a number.

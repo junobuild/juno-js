@@ -1,12 +1,13 @@
 import * as z from 'zod/v4';
 import {type MaxMemorySizeConfig, MaxMemorySizeConfigSchema} from '../../shared/feature.config';
+import {NumericValueSchema} from '../../types/numeric';
 
 /**
  * @see DatastoreConfig
  */
 export const DatastoreConfigSchema = z.strictObject({
   maxMemorySize: MaxMemorySizeConfigSchema.optional(),
-  version: z.bigint().optional()
+  version: NumericValueSchema.optional()
 });
 
 /**

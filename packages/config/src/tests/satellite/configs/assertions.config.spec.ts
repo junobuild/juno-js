@@ -15,9 +15,9 @@ describe('assertions.config', () => {
     });
 
     it('accepts a number', () => {
-      const result = SatelliteAssertionsSchema.safeParse({heapMemory: 512});
+      const result = SatelliteAssertionsSchema.safeParse({heapMemory: 512n});
       expect(result.success).toBe(true);
-      expect(result.data?.heapMemory).toBe(512);
+      expect(result.data?.heapMemory).toBe(512n);
     });
 
     it('accepts an empty object (heapMemory is optional)', () => {

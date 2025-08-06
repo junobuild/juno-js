@@ -21,5 +21,5 @@ export interface SatelliteAssertions {
    * If not specified, then `true` is used as the default value.
    * @type {bigint | number | boolean}
    */
-  heapMemory?: bigint| number | boolean;
+  heapMemory?: bigint | number | boolean;
 }

@@ -20,8 +20,6 @@ Configuration options for [Juno] CLI.
 - [StorageConfigRewriteSchema](#gear-storageconfigrewriteschema)
 - [StorageConfigRedirectSchema](#gear-storageconfigredirectschema)
 - [StorageConfigSchema](#gear-storageconfigschema)
-- [ModuleLogVisibilitySchema](#gear-modulelogvisibilityschema)
-- [ModuleSettingsSchema](#gear-modulesettingsschema)
 - [JunoConfigModeSchema](#gear-junoconfigmodeschema)
 - [JunoConfigEnvSchema](#gear-junoconfigenvschema)
 - [EncodingTypeSchema](#gear-encodingtypeschema)
@@ -75,22 +73,6 @@ Configuration options for [Juno] CLI.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L114)
 
-#### :gear: ModuleLogVisibilitySchema
-
-| Constant                    | Type                                                         |
-| --------------------------- | ------------------------------------------------------------ |
-| `ModuleLogVisibilitySchema` | `ZodEnum<{ controllers: "controllers"; public: "public"; }>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/module/module.settings.ts#L6)
-
-#### :gear: ModuleSettingsSchema
-
-| Constant               | Type                                                                                                                                                                                                                                                                                                                  |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ModuleSettingsSchema` | `ZodObject<{ freezingThreshold: ZodOptional<ZodBigInt>; reservedCyclesLimit: ZodOptional<ZodBigInt>; logVisibility: ZodOptional<ZodEnum<{ controllers: "controllers"; public: "public"; }>>; heapMemoryLimit: ZodOptional<...>; memoryAllocation: ZodOptional<...>; computeAllocation: ZodOptional<...>; }, $strict>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/module/module.settings.ts#L21)
-
 #### :gear: JunoConfigModeSchema
 
 | Constant               | Type                                                       |
@@ -132,7 +114,6 @@ see EncodingType
 - [StorageConfigRewrite](#gear-storageconfigrewrite)
 - [StorageConfigRedirect](#gear-storageconfigredirect)
 - [StorageConfig](#gear-storageconfig)
-- [ModuleSettings](#gear-modulesettings)
 - [JunoConfigEnv](#gear-junoconfigenv)
 - [CliConfig](#gear-cliconfig)
 
@@ -191,21 +172,6 @@ Configures the hosting behavior of the Storage.
 | `maxMemorySize` | `MaxMemorySizeConfig or undefined`                    | Configuration for maximum memory size limits for the Storage. This is used to specify optional limits on heap and stable memory for the smart contract. When the limit is reached, the Storage and smart contract continue to operate normally but reject the upload of new assets. If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional                                                                                                                                                                                          |
 | `version`       | `bigint or undefined`                                 | The current version of the config. Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite. You can provide it if you want to manage versioning manually within your config file. type: {bigint}optional                                                                                                                                                                                                                                                                                                           |
 
-#### :gear: ModuleSettings
-
-Settings for a module - Satellite, Mission Control or Orbiter.
-
-These settings control various aspects of the module's behavior and resource usage.
-
-| Property              | Type                               | Description                                                                                                                                                                                                                             |
-| --------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `freezingThreshold`   | `bigint or undefined`              | The cycle threshold below which the module will automatically stop to avoid running out of cycles. For example, if set to `BigInt(1000000)`, the module will stop when it has fewer than 1,000,000 cycles remaining. type: {bigint}     |
-| `reservedCyclesLimit` | `bigint or undefined`              | The number of cycles reserved for the module's operations to ensure it has enough cycles to function. For example, setting it to `BigInt(5000000)` reserves 5,000,000 cycles for the module. type: {bigint}                             |
-| `logVisibility`       | `ModuleLogVisibility or undefined` | Controls who can see the module's logs. type: {ModuleLogVisibility}                                                                                                                                                                     |
-| `heapMemoryLimit`     | `bigint or undefined`              | The maximum amount of WebAssembly (Wasm) memory the module can use on the heap. For example, setting it to `BigInt(1024 * 1024 * 64)` allows the module to use up to 64 MB of Wasm memory. type: {bigint}                               |
-| `memoryAllocation`    | `bigint or undefined`              | The amount of memory explicitly allocated to the module. For example, setting it to `BigInt(1024 * 1024 * 128)` allocates 128 MB of memory to the module. type: {bigint}                                                                |
-| `computeAllocation`   | `bigint or undefined`              | The proportion of compute capacity allocated to the module. This is a fraction of the total compute capacity of the subnet. For example, setting it to `BigInt(10)` allocates 10% of the compute capacity to the module. type: {bigint} |
-
 #### :gear: JunoConfigEnv
 
 Represents the environment configuration for Juno.
@@ -228,7 +194,6 @@ Represents the environment configuration for Juno.
 ### :cocktail: Types
 
 - [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
-- [ModuleLogVisibility](#gear-modulelogvisibility)
 - [JunoConfigMode](#gear-junoconfigmode)
 - [EncodingType](#gear-encodingtype)
 
@@ -239,14 +204,6 @@ Represents the environment configuration for Juno.
 | `StorageConfigSourceGlob` |      |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L13)
-
-#### :gear: ModuleLogVisibility
-
-| Type                  | Type                        |
-| --------------------- | --------------------------- |
-| `ModuleLogVisibility` | `'controllers' or 'public'` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/module/module.settings.ts#L16)
 
 #### :gear: JunoConfigMode
 

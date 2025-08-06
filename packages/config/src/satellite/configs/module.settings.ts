@@ -1,5 +1,5 @@
 import * as z from 'zod/v4';
-import {NumericValueSchema} from '../../types/numeric';
+import {ConfigNumberSchema} from '../../types/numeric';
 
 /**
  * @see ModuleLogVisibility
@@ -20,12 +20,12 @@ export type ModuleLogVisibility = 'controllers' | 'public';
  * @see ModuleSettings
  */
 export const ModuleSettingsSchema = z.strictObject({
-  freezingThreshold: NumericValueSchema.optional(),
-  reservedCyclesLimit: NumericValueSchema.optional(),
+  freezingThreshold: ConfigNumberSchema.optional(),
+  reservedCyclesLimit: ConfigNumberSchema.optional(),
   logVisibility: ModuleLogVisibilitySchema.optional(),
-  heapMemoryLimit: NumericValueSchema.optional(),
-  memoryAllocation: NumericValueSchema.optional(),
-  computeAllocation: NumericValueSchema.optional()
+  heapMemoryLimit: ConfigNumberSchema.optional(),
+  memoryAllocation: ConfigNumberSchema.optional(),
+  computeAllocation: ConfigNumberSchema.optional()
 });
 
 /**

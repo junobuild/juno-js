@@ -1,6 +1,6 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
-import {NumericValueSchema} from '../../types/numeric';
+import {ConfigNumberSchema} from '../../types/numeric';
 
 /**
  * @see AuthenticationConfigInternetIdentity
@@ -60,7 +60,7 @@ export interface AuthenticationConfigRules {
 export const AuthenticationConfigSchema = z.strictObject({
   internetIdentity: AuthenticationConfigInternetIdentitySchema.optional(),
   rules: AuthenticationConfigRulesSchema.optional(),
-  version: NumericValueSchema.optional()
+  version: ConfigNumberSchema.optional()
 });
 
 /**

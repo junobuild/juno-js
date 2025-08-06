@@ -1,13 +1,13 @@
 import * as z from 'zod/v4';
-import {NumericValueSchema} from '../types/numeric';
+import {ConfigNumberSchema} from '../types/numeric';
 
 /**
  * @see MaxMemorySizeConfig
  */
 export const MaxMemorySizeConfigSchema = z
   .object({
-    heap: NumericValueSchema.optional(),
-    stable: NumericValueSchema.optional()
+    heap: ConfigNumberSchema.optional(),
+    stable: ConfigNumberSchema.optional()
   })
   .strict();
 

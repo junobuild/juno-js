@@ -1,11 +1,11 @@
 import * as z from 'zod/v4';
-import {NumericValueSchema} from '../../types/numeric';
+import {ConfigNumberSchema} from '../../types/numeric';
 
 /**
  * @see SatelliteAssertions
  */
 export const SatelliteAssertionsSchema = z.strictObject({
-  heapMemory: z.union([...NumericValueSchema.options, z.boolean()]).optional()
+  heapMemory: z.union([...ConfigNumberSchema.options, z.boolean()]).optional()
 });
 
 /**

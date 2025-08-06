@@ -1,9 +1,9 @@
 import * as z from 'zod/v4';
 
 /**
- * @see NumericValueS
+ * @see ConfigNumber
  */
-export const NumericValueSchema = z
+export const ConfigNumberSchema = z
   .union([z.bigint(), z.number()])
   .transform((value) => (typeof value === 'number' ? BigInt(value) : value));
 
@@ -11,6 +11,6 @@ export const NumericValueSchema = z
  * Represents a value that can be either a bigint or a number.
  * This is necessary because JSON does not support bigint, so configuration files may use number instead.
  *
- * @typedef {bigint | number} NumericValue
+ * @typedef {bigint | number} ConfigNumber
  */
-export type NumericValue = bigint | number;
+export type ConfigNumber = bigint | number;

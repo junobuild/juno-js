@@ -1,5 +1,5 @@
 import * as z from 'zod/v4';
-import {ConfigNumberSchema} from '../types/config.number';
+import {ConfigNumber, ConfigNumberSchema} from '../types/config.number';
 
 /**
  * @see MaxMemorySizeConfig
@@ -24,7 +24,7 @@ export interface MaxMemorySizeConfig {
    *
    * @type {bigint}
    */
-  heap?: bigint;
+  heap?: ConfigNumber;
 
   /**
    * Maximum allowed stable memory size in bytes.
@@ -33,5 +33,5 @@ export interface MaxMemorySizeConfig {
    *
    * @type {bigint}
    */
-  stable?: bigint;
+  stable?: ConfigNumber;
 }

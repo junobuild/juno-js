@@ -1,5 +1,5 @@
 import * as z from 'zod/v4';
-import {BaseConfigNumberSchema} from '../../types/config.number';
+import {BaseConfigNumberSchema, ConfigNumber} from '../../types/config.number';
 
 /**
  * @see SatelliteAssertions
@@ -22,5 +22,5 @@ export interface SatelliteAssertions {
    * If not specified, then `true` is used as the default value.
    * @type {bigint | number | boolean}
    */
-  heapMemory?: bigint | number | boolean;
+  heapMemory?: ConfigNumber | boolean;
 }

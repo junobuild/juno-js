@@ -1,5 +1,5 @@
 import * as z from 'zod/v4';
-import {ConfigNumberSchema} from '../../types/config.number';
+import {ConfigNumber, ConfigNumberSchema} from '../../types/config.number';
 
 /**
  * @see ModuleLogVisibility
@@ -43,7 +43,7 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  freezingThreshold?: bigint;
+  freezingThreshold?: ConfigNumber;
 
   /**
    * The number of cycles reserved for the module's operations to ensure it has enough cycles to function.
@@ -52,7 +52,7 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  reservedCyclesLimit?: bigint;
+  reservedCyclesLimit?: ConfigNumber;
 
   /**
    * Controls who can see the module's logs.
@@ -68,7 +68,7 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  heapMemoryLimit?: bigint;
+  heapMemoryLimit?: ConfigNumber;
 
   /**
    * The amount of memory explicitly allocated to the module.
@@ -77,7 +77,7 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  memoryAllocation?: bigint;
+  memoryAllocation?: ConfigNumber;
 
   /**
    * The proportion of compute capacity allocated to the module.
@@ -86,5 +86,5 @@ export interface ModuleSettings {
    *
    * @type {bigint}
    */
-  computeAllocation?: bigint;
+  computeAllocation?: ConfigNumber;
 }

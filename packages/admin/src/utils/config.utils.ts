@@ -1,7 +1,8 @@
 import {Principal} from '@dfinity/principal';
 import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
-import type {
+import {
   AuthenticationConfig,
+  ConfigNumberSchema,
   DatastoreConfig,
   StorageConfig,
   StorageConfigHeader,
@@ -59,7 +60,9 @@ export const fromStorageConfig = ({
     iframe: [iframe],
     raw_access: [rawAccess],
     max_memory_size: toMaxMemorySize(configMaxMemorySize),
-    version: toNullable(configVersion)
+    version: toNullable(
+      nonNullish(configVersion) ? ConfigNumberSchema.parse(configVersion) : undefined
+    )
   };
 };
 
@@ -116,7 +119,7 @@ export const toStorageConfig = ({
 
 export const fromDatastoreConfig = ({maxMemorySize, version}: DatastoreConfig): SetDbConfig => ({
   max_memory_size: toMaxMemorySize(maxMemorySize),
-  version: toNullable(version)
+  version: toNullable(nonNullish(version) ? ConfigNumberSchema.parse(version) : undefined)
 });
 
 export const toDatastoreConfig = ({version, max_memory_size}: DbConfigDid): DatastoreConfig => ({
@@ -144,7 +147,7 @@ export const fromAuthenticationConfig = ({
           allowed_callers: rules.allowedCallers.map((caller) => Principal.fromText(caller))
         }
       ],
-  version: toNullable(version)
+  version: toNullable(nonNullish(version) ? ConfigNumberSchema.parse(version) : undefined)
 });
 
 export const toAuthenticationConfig = ({

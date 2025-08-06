@@ -1,4 +1,5 @@
 import * as z from 'zod/v4';
+import {ConfigNumber, ConfigNumberSchema} from '../../types/config.number';
 import {type Rule, RuleSchema} from './rules';
 
 /**
@@ -7,14 +8,28 @@ import {type Rule, RuleSchema} from './rules';
 export const DatastoreCollectionSchema = RuleSchema.omit({
   createdAt: true,
   updatedAt: true,
-  maxSize: true
+  version: true,
+  maxSize: true,
+  maxTokens: true
+}).extend({
+  maxTokens: ConfigNumberSchema.optional(),
+  version: ConfigNumberSchema.optional()
 });
 
 /**
  * Represents a configuration for a collection of the Satellite Datastore.
- * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize'>} DatastoreCollection
+ * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'version' | 'maxSize' | 'maxTokens'> & {
+ *   version?: ConfigNumber;
+ *   maxTokens?: ConfigNumber;
+ * }} DatastoreCollection
  */
-export type DatastoreCollection = Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSize'>;
+export type DatastoreCollection = Omit<
+  Rule,
+  'createdAt' | 'updatedAt' | 'version' | 'maxSize' | 'maxTokens'
+> & {
+  version?: ConfigNumber;
+  maxTokens?: ConfigNumber;
+};
 
 /**
  * @see StorageCollection
@@ -22,14 +37,31 @@ export type DatastoreCollection = Omit<Rule, 'createdAt' | 'updatedAt' | 'maxSiz
 export const StorageCollectionSchema = RuleSchema.omit({
   createdAt: true,
   updatedAt: true,
-  maxCapacity: true
+  version: true,
+  maxSize: true,
+  maxCapacity: true,
+  maxTokens: true
+}).extend({
+  maxSize: ConfigNumberSchema.optional(),
+  maxTokens: ConfigNumberSchema.optional(),
+  version: ConfigNumberSchema.optional()
 });
 
 /**
  * Represents a configuration for a collection of the Satellite Storage.
- * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'maxCapacity'>} StorageCollection
+ * @typedef {Omit<Rule, 'createdAt' | 'updatedAt' | 'version' | 'maxSize | 'maxCapacity' | 'maxTokens'> & {
+ *   version?: ConfigNumber;
+ *   maxTokens?: ConfigNumber;
+ * }} StorageCollection
  */
-export type StorageCollection = Omit<Rule, 'createdAt' | 'updatedAt' | 'maxCapacity'>;
+export type StorageCollection = Omit<
+  Rule,
+  'createdAt' | 'updatedAt' | 'version' | 'maxSize' | 'maxCapacity' | 'maxTokens'
+> & {
+  version?: ConfigNumber;
+  maxSize?: ConfigNumber;
+  maxTokens?: ConfigNumber;
+};
 
 /**
  * @see Collections

@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {z} from 'zod/v4';
-import {ConfigNumberSchema} from '../../types/numeric';
+import {ConfigNumberSchema} from '../../types/config.number';
 
 describe('NumericValue', () => {
   it('should parse a number', () => {

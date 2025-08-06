@@ -1,6 +1,6 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
-import {ConfigNumberSchema} from '../../types/numeric';
+import {ConfigNumberSchema} from '../../types/config.number';
 
 /**
  * @see AuthenticationConfigInternetIdentity

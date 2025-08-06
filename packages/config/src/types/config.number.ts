@@ -1,11 +1,13 @@
 import * as z from 'zod/v4';
 
+export const BaseConfigNumberSchema = z.union([z.bigint(), z.number()]);
+
 /**
  * @see ConfigNumber
  */
-export const ConfigNumberSchema = z
-  .union([z.bigint(), z.number()])
-  .transform((value) => (typeof value === 'number' ? BigInt(value) : value));
+export const ConfigNumberSchema = BaseConfigNumberSchema.transform((value) =>
+  typeof value === 'number' ? BigInt(value) : value
+);
 
 /**
  * Represents a value that can be either a bigint or a number.

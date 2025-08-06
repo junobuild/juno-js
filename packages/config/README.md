@@ -27,11 +27,11 @@ Configuration options for [Juno] CLI.
 
 #### :gear: MaxMemorySizeConfigSchema
 
-| Constant                    | Type                                                                                    |
-| --------------------------- | --------------------------------------------------------------------------------------- |
-| `MaxMemorySizeConfigSchema` | `ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>` |
+| Constant                    | Type                                                                                                                                                               |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `MaxMemorySizeConfigSchema` | `ZodObject<{ heap: ZodOptional<ZodPipe<ZodUnion<readonly [ZodBigInt, ZodNumber]>, ZodTransform<bigint, number or bigint>>>; stable: ZodOptional<...>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/feature.config.ts#L6)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/feature.config.ts#L7)
 
 #### :gear: StorageConfigSourceGlobSchema
 
@@ -39,7 +39,7 @@ Configuration options for [Juno] CLI.
 | ------------------------------- | ----------- |
 | `StorageConfigSourceGlobSchema` | `ZodString` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L8)
 
 #### :gear: StorageConfigHeaderSchema
 
@@ -47,7 +47,7 @@ Configuration options for [Juno] CLI.
 | --------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `StorageConfigHeaderSchema` | `ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L18)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L19)
 
 #### :gear: StorageConfigRewriteSchema
 
@@ -55,7 +55,7 @@ Configuration options for [Juno] CLI.
 | ---------------------------- | -------------------------------------------------------------------- |
 | `StorageConfigRewriteSchema` | `ZodObject<{ source: ZodString; destination: ZodString; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L50)
 
 #### :gear: StorageConfigRedirectSchema
 
@@ -63,7 +63,7 @@ Configuration options for [Juno] CLI.
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `StorageConfigRedirectSchema` | `ZodObject<{ source: ZodString; location: ZodString; code: ZodUnion<readonly [ZodLiteral<301>, ZodLiteral<302>]>; }, $strict>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L79)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L80)
 
 #### :gear: StorageConfigSchema
 
@@ -71,7 +71,7 @@ Configuration options for [Juno] CLI.
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `StorageConfigSchema` | `ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 5 more ...; version: ZodOptional<...>; }, $strip>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L114)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L115)
 
 #### :gear: JunoConfigModeSchema
 
@@ -203,7 +203,7 @@ Represents the environment configuration for Juno.
 | ------------------------- | ---- |
 | `StorageConfigSourceGlob` |      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L13)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L14)
 
 #### :gear: JunoConfigMode
 

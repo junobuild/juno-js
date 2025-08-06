@@ -15,6 +15,12 @@ describe('assertions.config', () => {
     });
 
     it('accepts a number', () => {
+      const result = SatelliteAssertionsSchema.safeParse({heapMemory: 512});
+      expect(result.success).toBe(true);
+      expect(result.data?.heapMemory).toBe(512);
+    });
+
+    it('accepts a bigint', () => {
       const result = SatelliteAssertionsSchema.safeParse({heapMemory: 512n});
       expect(result.success).toBe(true);
       expect(result.data?.heapMemory).toBe(512n);

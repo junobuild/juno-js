@@ -1,24 +1,17 @@
 import {toNullable} from '@dfinity/utils';
 import {isBrowser} from '@junobuild/utils';
 import type {
-  _SERVICE as ConsoleActor,
   CommitBatch as ConsoleCommitBatch,
   InitAssetKey as ConsoleInitAssetKey,
   UploadChunk as ConsoleUploadChunk
 } from '../../declarations/console/console.did';
 import type {
-  _SERVICE as SatelliteActor,
   CommitBatch as SatelliteCommitBatch,
   InitAssetKey as SatelliteInitAssetKey,
   UploadChunk as SatelliteUploadChunk
 } from '../../declarations/satellite/satellite.did';
-import type {EncodingType, Storage} from '../types/storage.types';
-
-export type UploadAsset = Required<Omit<Storage, 'token' | 'encoding' | 'description'>> &
-  Pick<Storage, 'token' | 'encoding' | 'description'>;
-
-export type UploadAssetActor = SatelliteActor;
-export type UploadAssetWithProposalActor = ConsoleActor | SatelliteActor;
+import type {EncodingType} from '../types/storage';
+import type {UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '../types/upload';
 
 type InitAssetKey = SatelliteInitAssetKey | ConsoleInitAssetKey;
 type UploadChunk = SatelliteUploadChunk | ConsoleUploadChunk;

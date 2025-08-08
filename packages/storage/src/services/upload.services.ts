@@ -1,15 +1,13 @@
 import {toNullable} from '@dfinity/utils';
 import {isBrowser} from '@junobuild/utils';
 import type {
-  CommitBatch as ConsoleCommitBatch,
-  InitAssetKey as ConsoleInitAssetKey,
-  UploadChunk as ConsoleUploadChunk
-} from '../../declarations/console/console.did';
-import type {
-  CommitBatch as SatelliteCommitBatch,
-  InitAssetKey as SatelliteInitAssetKey,
-  UploadChunk as SatelliteUploadChunk
-} from '../../declarations/satellite/satellite.did';
+  ConsoleCommitBatch,
+  ConsoleInitAssetKey,
+  ConsoleUploadChunk,
+  SatelliteCommitBatch,
+  SatelliteInitAssetKey,
+  SatelliteUploadChunk
+} from '../api/actor.factory';
 import type {EncodingType} from '../types/storage';
 import type {UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '../types/upload';
 

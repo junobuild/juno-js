@@ -78,9 +78,9 @@ export interface Asset extends AssetKey {
 
   /**
    * The encodings of the asset.
-   * @type {Record<EncodingType, AssetEncoding>}
+   * @type {Partial<Record<EncodingType, AssetEncoding>>}
    */
-  encodings: Record<EncodingType, AssetEncoding>;
+  encodings: Partial<Record<EncodingType, AssetEncoding>>;
 
   /**
    * The owner of the asset.

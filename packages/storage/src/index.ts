@@ -1,2 +1,3 @@
-export * from './api/storage.api';
-export type * from './types/storage.types';
+export * from './services/upload.services';
+export type * from './types/storage';
+export type * from './types/upload';

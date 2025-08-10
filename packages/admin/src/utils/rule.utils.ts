@@ -7,7 +7,7 @@ import type {
   Permission,
   Rule as RuleApi,
   SetRule
-} from '../../declarations/satellite/satellite.did';
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {
   DbRulesType,
   DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS,

@@ -1,5 +1,5 @@
+import type {SatelliteParameters} from '@junobuild/ic-client';
 import {countAssets as countAssetsApi, deleteAssets as deleteAssetsApi} from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor';
 
 /**
  * Counts the assets in a collection.

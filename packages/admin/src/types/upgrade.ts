@@ -1,6 +1,6 @@
 import type {canister_install_mode} from '@dfinity/ic-management';
 import type {Principal} from '@dfinity/principal';
-import type {ActorParameters} from './actor';
+import type {ActorParameters} from '@junobuild/ic-client';
 
 export enum UpgradeCodeProgressStep {
   AssertingExistingCode,

@@ -1,6 +1,6 @@
-import type {MemorySize} from '../../declarations/satellite/satellite.did';
+import type {SatelliteParameters} from '@junobuild/ic-client';
+import type {MemorySize} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {memorySize} from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor';
 
 /**
  * Retrieves the stable and heap memory size of a satellite.

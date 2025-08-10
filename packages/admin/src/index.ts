@@ -24,7 +24,6 @@ export * from './services/satellite.memory.services';
 export * from './services/satellite.rules.services';
 export * from './services/satellite.upgrade.services';
 export * from './services/satellite.version.services';
-export type * from './types/actor';
 export type * from './types/controllers';
 export type * from './types/customdomain';
 export type * from './types/list';

@@ -1,8 +1,8 @@
 import type {CanisterStatusResponse} from '@dfinity/ic-management';
 import {ICManagementCanister} from '@dfinity/ic-management';
 import {hexStringToUint8Array} from '@dfinity/utils';
+import * as actor from '@junobuild/ic-client';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
-import * as actor from '../../api/_actor.api';
 import {UpgradeCodeUnchangedError} from '../../errors/upgrade.errors';
 import {uint8ArraySha256} from '../../helpers/crypto.helpers';
 import {upgradeSatellite} from '../../services/satellite.upgrade.services';
@@ -17,11 +17,15 @@ import {
 } from '../mocks/admin.mock';
 import {mockControllers} from '../mocks/modules.mock';
 
-vi.mock('../../api/_actor.api', () => ({
-  getSatelliteActor: vi.fn(),
-  getDeprecatedSatelliteActor: vi.fn(),
-  getDeprecatedSatelliteNoScopeActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getSatelliteActor: vi.fn(),
+    getDeprecatedSatelliteActor: vi.fn(),
+    getDeprecatedSatelliteNoScopeActor: vi.fn()
+  };
+});
 
 const mockActor = {
   list_controllers: vi.fn()

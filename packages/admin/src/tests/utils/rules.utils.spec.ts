@@ -1,5 +1,5 @@
 import type {Rule} from '@junobuild/config';
-import type {Rule as RuleApi} from '../../../declarations/satellite/satellite.did';
+import type {Rule as RuleApi} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {
   DbRulesType,
   DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS,

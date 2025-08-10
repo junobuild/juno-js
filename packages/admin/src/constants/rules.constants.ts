@@ -1,4 +1,8 @@
-import type {CollectionType, Memory, Permission} from '../../declarations/satellite/satellite.did';
+import type {
+  CollectionType,
+  Memory,
+  Permission
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 
 export const DbRulesType: CollectionType = {Db: null};
 export const StorageRulesType: CollectionType = {Storage: null};

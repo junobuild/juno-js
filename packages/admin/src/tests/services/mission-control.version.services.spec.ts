@@ -1,10 +1,10 @@
 import * as agent from '@dfinity/agent';
 import type {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
 import {JUNO_PACKAGE_MISSION_CONTROL_ID, JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
-import * as actor from '../../api/_actor.api';
+import type {MissionControlParameters} from '@junobuild/ic-client';
+import * as actor from '@junobuild/ic-client';
 import {MissionControlVersionError} from '../../errors/version.errors';
 import {missionControlVersion} from '../../services/mission-control.version.services';
-import type {MissionControlParameters} from '../../types/actor';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
 vi.mock('@dfinity/agent', () => {
@@ -15,10 +15,14 @@ vi.mock('@dfinity/agent', () => {
   };
 });
 
-vi.mock('../../api/_actor.api', () => ({
-  getMissionControlActor: vi.fn(),
-  getDeprecatedMissionControlVersionActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getMissionControlActor: vi.fn(),
+    getDeprecatedMissionControlVersionActor: vi.fn()
+  };
+});
 
 const mockActor = {
   version: vi.fn()

@@ -1,5 +1,5 @@
-import {SetControllersArgs} from '../../../declarations/satellite/satellite.did';
-import * as actor from '../../api/_actor.api';
+import * as actor from '@junobuild/ic-client';
+import {SetControllersArgs} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {
   listSatelliteControllers,
   setSatelliteControllers
@@ -12,10 +12,14 @@ import {
 } from '../mocks/admin.mock';
 import {mockController, mockControllers} from '../mocks/modules.mock';
 
-vi.mock('../../api/_actor.api', () => ({
-  getSatelliteActor: vi.fn(),
-  getDeprecatedSatelliteNoScopeActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getSatelliteActor: vi.fn(),
+    getDeprecatedSatelliteNoScopeActor: vi.fn()
+  };
+});
 
 const mockActor = {
   list_controllers: vi.fn(),

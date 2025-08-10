@@ -1,10 +1,13 @@
 import type {Principal} from '@dfinity/principal';
+import {
+  type MissionControlParameters,
+  getDeprecatedMissionControlVersionActor,
+  getMissionControlActor
+} from '@junobuild/ic-client';
 import type {
   Controller,
   SetController
-} from '../../declarations/mission_control/mission_control.did';
-import type {MissionControlParameters} from '../types/actor';
-import {getDeprecatedMissionControlVersionActor, getMissionControlActor} from './_actor.api';
+} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
 
 /**
  * @deprecated - Replaced in Mission Control > v0.0.14 with public custom section juno:package

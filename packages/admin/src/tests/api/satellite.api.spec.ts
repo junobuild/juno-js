@@ -1,3 +1,4 @@
+import * as actor from '@junobuild/ic-client';
 import {
   AuthenticationConfig,
   Config,
@@ -5,8 +6,7 @@ import {
   SetControllersArgs,
   SetRule,
   StorageConfig
-} from '../../../declarations/satellite/satellite.did';
-import * as actor from '../../api/_actor.api';
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {
   countAssets,
   countDocs,
@@ -31,12 +31,16 @@ import {
 import {mockIdentity, mockUserIdPrincipal} from '../mocks/admin.mock';
 import {mockController, mockControllers} from '../mocks/modules.mock';
 
-vi.mock('../../api/_actor.api', () => ({
-  getSatelliteActor: vi.fn(),
-  getDeprecatedSatelliteActor: vi.fn(),
-  getDeprecatedSatelliteNoScopeActor: vi.fn(),
-  getDeprecatedSatelliteVersionActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getSatelliteActor: vi.fn(),
+    getDeprecatedSatelliteActor: vi.fn(),
+    getDeprecatedSatelliteNoScopeActor: vi.fn(),
+    getDeprecatedSatelliteVersionActor: vi.fn()
+  };
+});
 
 const mockActor = {
   version: vi.fn(),

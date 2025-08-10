@@ -1,5 +1,5 @@
-import {SetController} from '../../../declarations/mission_control/mission_control.did';
-import * as actor from '../../api/_actor.api';
+import * as actor from '@junobuild/ic-client';
+import {SetController} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
 import {
   getUser,
   listControllers,
@@ -10,10 +10,14 @@ import {
 import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/admin.mock';
 import {mockControllers} from '../mocks/modules.mock';
 
-vi.mock('../../api/_actor.api', () => ({
-  getMissionControlActor: vi.fn(),
-  getDeprecatedMissionControlVersionActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getMissionControlActor: vi.fn(),
+    getDeprecatedMissionControlVersionActor: vi.fn()
+  };
+});
 
 const mockActor = {
   version: vi.fn(),

@@ -1,7 +1,7 @@
 import type {Principal} from '@dfinity/principal';
-import type {Controller} from '../../declarations/mission_control/mission_control.did';
+import type {OrbiterParameters} from '@junobuild/ic-client';
+import type {Controller} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
 import {listControllers} from '../api/orbiter.api';
-import type {OrbiterParameters} from '../types/actor';
 
 /**
  * Lists the controllers of the Orbiter.

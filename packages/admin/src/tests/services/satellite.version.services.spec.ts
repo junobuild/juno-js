@@ -1,10 +1,10 @@
 import * as agent from '@dfinity/agent';
 import type {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
 import {JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
-import * as actor from '../../api/_actor.api';
+import type {SatelliteParameters} from '@junobuild/ic-client';
+import * as actor from '@junobuild/ic-client';
 import {SatelliteMissingDependencyError} from '../../errors/version.errors';
 import {satelliteBuildType, satelliteVersion} from '../../services/satellite.version.services';
-import type {SatelliteParameters} from '../../types/actor';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
 vi.mock('@dfinity/agent', () => {
@@ -15,10 +15,14 @@ vi.mock('@dfinity/agent', () => {
   };
 });
 
-vi.mock('../../api/_actor.api', () => ({
-  getSatelliteActor: vi.fn(),
-  getDeprecatedSatelliteVersionActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getSatelliteActor: vi.fn(),
+    getDeprecatedSatelliteVersionActor: vi.fn()
+  };
+});
 
 const mockActor = {
   version: vi.fn()

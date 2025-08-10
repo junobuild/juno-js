@@ -1,7 +1,7 @@
 import type {
   ListProposalResults,
   ListProposalsParams
-} from '../../declarations/console/console.did';
+} from '@junobuild/ic-client/dist/declarations/console/console.did';
 import type {CdnParameters} from '../types/actor.params';
 import type {
   CommitProposal,

@@ -137,4 +137,28 @@ describe('_actor.api', () => {
       expect(spyUseOrInitAgent).toHaveBeenCalledOnce();
     });
   });
+
+  describe('getOrbiterActor', () => {
+    it('creates a certified orbiter actor', async () => {
+      const actor = await actorApi.getConsoleActor({
+        consoleId: mockSatelliteIdText,
+        certified: true,
+        identity: mockIdentity
+      });
+
+      expect(actor).toBeDefined();
+      expect(spyUseOrInitAgent).toHaveBeenCalledOnce();
+    });
+
+    it('creates a non-certified orbiter actor', async () => {
+      const actor = await actorApi.getConsoleActor({
+        consoleId: mockSatelliteIdText,
+        certified: false,
+        identity: mockIdentity
+      });
+
+      expect(actor).toBeDefined();
+      expect(spyUseOrInitAgent).toHaveBeenCalledOnce();
+    });
+  });
 });

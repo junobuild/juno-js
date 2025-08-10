@@ -18,7 +18,12 @@ import {idlFactory as idlDeprecatedFactorySatellite} from '../../declarations/de
 import {idlFactory as idlFactorySatellite} from '../../declarations/satellite/satellite.factory.did.js';
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlCertifiedFactorySatellite} from '../../declarations/satellite/satellite.factory.certified.did.js';
+// eslint-disable-next-line import/no-relative-parent-imports
+import {idlFactory as idlFactoryConsole} from '../../declarations/console/console.factory.did.js';
+// eslint-disable-next-line import/no-relative-parent-imports
+import {idlFactory as idlCertifiedFactoryConsole} from '../../declarations/console/console.factory.certified.did.js';
 
+import type {_SERVICE as ConsoleActor} from '../../declarations/console/console.did';
 import type {_SERVICE as DeprecatedMissionControlVersionActor} from '../../declarations/deprecated/mission_control-deprecated-version.did';
 import type {_SERVICE as DeprecatedOrbiterVersionActor} from '../../declarations/deprecated/orbiter-deprecated-version.did';
 import type {_SERVICE as DeprecatedSatelliteNoScopeActor} from '../../declarations/deprecated/satellite-deprecated-no-scope.did';
@@ -29,6 +34,7 @@ import type {_SERVICE as OrbiterActor} from '../../declarations/orbiter/orbiter.
 import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
 
 export {
+  idlCertifiedFactoryConsole,
   idlCertifiedFactoryOrbiter,
   idlCertifiedFactorySatellite,
   idlDeprecatedFactoryMissionControlVersion,
@@ -36,9 +42,11 @@ export {
   idlDeprecatedFactorySatellite,
   idlDeprecatedFactorySatelliteNoScope,
   idlDeprecatedFactorySatelliteVersion,
+  idlFactoryConsole,
   idlFactoryMissionControl,
   idlFactoryOrbiter,
   idlFactorySatellite,
+  type ConsoleActor,
   type DeprecatedMissionControlVersionActor,
   type DeprecatedOrbiterVersionActor,
   type DeprecatedSatelliteActor,

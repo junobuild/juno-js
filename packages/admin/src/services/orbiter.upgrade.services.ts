@@ -1,5 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import type {OrbiterParameters} from '@junobuild/ic-client';
+import {toPrincipal} from '@junobuild/utils';
 import {listControllers} from '../api/orbiter.api';
 import {INSTALL_MODE_RESET, INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';
@@ -44,7 +45,7 @@ export const upgradeOrbiter = async ({
 
   await upgrade({
     actor,
-    canisterId: Principal.fromText(orbiterId),
+    canisterId: toPrincipal(orbiterId),
     arg: new Uint8Array(arg),
     mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
     reset,

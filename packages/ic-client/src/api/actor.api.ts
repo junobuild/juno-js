@@ -1,13 +1,16 @@
 import {Actor, type ActorConfig, type ActorMethod, type ActorSubclass} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
+import type {Principal} from '@dfinity/principal';
 import {isNullish} from '@dfinity/utils';
 import type {
   ActorParameters,
+  ConsoleParameters,
   MissionControlParameters,
   OrbiterParameters,
   SatelliteParameters
 } from '../types/actor';
 import {
+  idlCertifiedFactoryConsole,
   idlCertifiedFactoryOrbiter,
   idlCertifiedFactorySatellite,
   idlDeprecatedFactoryMissionControlVersion,
@@ -15,9 +18,11 @@ import {
   idlDeprecatedFactorySatellite,
   idlDeprecatedFactorySatelliteNoScope,
   idlDeprecatedFactorySatelliteVersion,
+  idlFactoryConsole,
   idlFactoryMissionControl,
   idlFactoryOrbiter,
   idlFactorySatellite,
+  type ConsoleActor,
   type DeprecatedMissionControlVersionActor,
   type DeprecatedOrbiterVersionActor,
   type DeprecatedSatelliteActor,
@@ -126,12 +131,23 @@ export const getDeprecatedOrbiterVersionActor = ({
     idlFactory: idlDeprecatedFactoryOrbiterVersion
   });
 
+export const getConsoleActor = ({
+  consoleId,
+  certified = false,
+  ...rest
+}: ConsoleParameters & {certified?: boolean}): Promise<ConsoleActor> =>
+  getActor({
+    canisterId: consoleId,
+    ...rest,
+    idlFactory: certified ? idlCertifiedFactoryConsole : idlFactoryConsole
+  });
+
 export const getActor = <T>({
   canisterId,
   idlFactory,
   ...rest
 }: ActorParameters & {
-  canisterId: string | undefined;
+  canisterId: Principal | string | undefined;
   idlFactory: IDL.InterfaceFactory;
 }): Promise<T> => {
   if (isNullish(canisterId)) {
@@ -152,7 +168,7 @@ const createActor = async <T = Record<string, ActorMethod>>({
   ...rest
 }: {
   idlFactory: IDL.InterfaceFactory;
-  canisterId: string;
+  canisterId: Principal | string;
   config?: Pick<ActorConfig, 'callTransform' | 'queryTransform'>;
 } & ActorParameters): Promise<ActorSubclass<T>> => {
   const agent = await useOrInitAgent(rest);

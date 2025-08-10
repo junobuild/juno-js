@@ -2,6 +2,7 @@ import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
 import {isNullish} from '@dfinity/utils';
 import type {SatelliteParameters} from '@junobuild/ic-client';
+import {toPrincipal} from '@junobuild/utils';
 import {
   listControllers,
   listDeprecatedControllers,
@@ -63,7 +64,7 @@ export const upgradeSatellite = async ({
 
     await upgrade({
       actor,
-      canisterId: Principal.fromText(satelliteId),
+      canisterId: toPrincipal(satelliteId),
       arg: new Uint8Array(arg),
       mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
       reset,
@@ -83,7 +84,7 @@ export const upgradeSatellite = async ({
 
   await upgrade({
     actor,
-    canisterId: Principal.fromText(satelliteId),
+    canisterId: toPrincipal(satelliteId),
     arg: new Uint8Array(arg),
     mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
     reset,

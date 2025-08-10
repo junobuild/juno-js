@@ -1,5 +1,5 @@
-import type * as CdnConsole from '../../declarations/console/console.did';
-import type * as CdnSatellite from '../../declarations/satellite/satellite.did';
+import type * as CdnConsole from '@junobuild/ic-client/dist/declarations/console/console.did';
+import type * as CdnSatellite from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 
 export type CommitProposal = CdnConsole.CommitProposal | CdnSatellite.CommitProposal;
 export type RejectProposal = CommitProposal;

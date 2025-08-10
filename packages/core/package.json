@@ -28,7 +28,7 @@
   "scripts": {
     "rmdir": "node ../../scripts/rmdir.mjs",
     "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
-    "build": "npm run rmdir && mkdir -p dist && cp -R declarations dist && node esbuild.mjs && npm run ts-declaration",
+    "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },
   "repository": {
@@ -51,6 +51,7 @@
   "homepage": "https://juno.build",
   "dependencies": {
     "@junobuild/errors": "*",
+    "@junobuild/ic-client": "^0.0.1",
     "@junobuild/storage": "*",
     "@junobuild/utils": "*"
   },

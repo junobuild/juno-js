@@ -1,6 +1,10 @@
 import {fromNullable, toNullable} from '@dfinity/utils';
+import type {
+  DelDoc,
+  Doc as DocApi,
+  SetDoc
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {fromArray, toArray} from '@junobuild/utils';
-import type {DelDoc, Doc as DocApi, SetDoc} from '../../declarations/satellite/satellite.did';
 import type {Doc} from '../types/doc';
 import type {ExcludeDate} from '../types/utility';
 

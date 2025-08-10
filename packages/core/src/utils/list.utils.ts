@@ -3,7 +3,7 @@ import {isNullish, toNullable} from '@dfinity/utils';
 import type {
   ListParams as ListParamsApi,
   TimestampMatcher
-} from '../../declarations/satellite/satellite.did';
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {ListError} from '../types/errors';
 import type {ListParams, ListTimestampMatcher} from '../types/list';
 

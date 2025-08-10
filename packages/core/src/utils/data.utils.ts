@@ -1,5 +1,5 @@
+import type {Doc} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {fromArray} from '@junobuild/utils';
-import type {Doc} from '../../declarations/satellite/satellite.did';
 
 export const mapData = async <D>({data}: Pick<Doc, 'data'>): Promise<D> => {
   try {

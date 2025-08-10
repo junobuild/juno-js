@@ -64,6 +64,7 @@
         "@dfinity/principal",
         "@dfinity/utils",
         "@junobuild/config",
+        "@junobuild/ic-client",
         "semver",
         "zod"
       ]
@@ -157,6 +158,7 @@
         "@dfinity/ic-management",
         "@junobuild/config",
         "@junobuild/storage",
+        "@junobuild/ic-client",
         "semver"
       ]
     },

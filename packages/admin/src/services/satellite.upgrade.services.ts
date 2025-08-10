@@ -1,5 +1,4 @@
 import {IDL} from '@dfinity/candid';
-import {Principal} from '@dfinity/principal';
 import {isNullish} from '@dfinity/utils';
 import type {SatelliteParameters} from '@junobuild/ic-client';
 import {toPrincipal} from '@junobuild/utils';

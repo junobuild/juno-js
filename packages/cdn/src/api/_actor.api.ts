@@ -1,7 +1,6 @@
 import {
   type ConsoleActor,
-  type SatelliteActor
-,
+  type SatelliteActor,
   getConsoleActor,
   getSatelliteActor
 } from '@junobuild/ic-client';

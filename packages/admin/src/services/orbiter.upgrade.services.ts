@@ -1,4 +1,3 @@
-import {Principal} from '@dfinity/principal';
 import type {OrbiterParameters} from '@junobuild/ic-client';
 import {toPrincipal} from '@junobuild/utils';
 import {listControllers} from '../api/orbiter.api';

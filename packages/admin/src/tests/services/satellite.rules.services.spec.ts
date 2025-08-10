@@ -1,13 +1,17 @@
 import type {Rule} from '@junobuild/config';
-import * as actor from '../../api/_actor.api';
+import * as actor from '@junobuild/ic-client';
 import {DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS, DbRulesType} from '../../constants/rules.constants';
 import {listRules, setRule} from '../../services/satellite.rules.services';
 import {fromRule} from '../../utils/rule.utils';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
-vi.mock('../../api/_actor.api', () => ({
-  getSatelliteActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getSatelliteActor: vi.fn()
+  };
+});
 
 const mockActor = {
   list_rules: vi.fn(),

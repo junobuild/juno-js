@@ -1,8 +1,8 @@
 import * as agent from '@dfinity/agent';
 import type {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
 import {JUNO_PACKAGE_ORBITER_ID, JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
+import * as actor from '@junobuild/ic-client';
 import {OrbiterParameters} from '@junobuild/ic-client';
-import * as actor from '../../api/_actor.api';
 import {OrbiterVersionError} from '../../errors/version.errors';
 import {orbiterVersion} from '../../services/orbiter.version.services';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
@@ -15,10 +15,14 @@ vi.mock('@dfinity/agent', () => {
   };
 });
 
-vi.mock('../../api/_actor.api', () => ({
-  getOrbiterActor: vi.fn(),
-  getDeprecatedOrbiterVersionActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getOrbiterActor: vi.fn(),
+    getDeprecatedOrbiterVersionActor: vi.fn()
+  };
+});
 
 const mockActor = {
   version: vi.fn()

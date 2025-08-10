@@ -1,4 +1,4 @@
-import * as actor from '../../api/_actor.api';
+import * as actor from '@junobuild/ic-client';
 import {
   listCustomDomains,
   setCustomDomain,
@@ -6,9 +6,13 @@ import {
 } from '../../services/satellite.domains.services';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
-vi.mock('../../api/_actor.api', () => ({
-  getSatelliteActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getSatelliteActor: vi.fn()
+  };
+});
 
 const mockActor = {
   list_custom_domains: vi.fn(),

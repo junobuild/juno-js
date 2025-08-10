@@ -1,5 +1,5 @@
+import * as actor from '@junobuild/ic-client';
 import {Controller} from '@junobuild/ic-client/dist/declarations/orbiter/orbiter.did';
-import * as actor from '../../api/_actor.api';
 import {listOrbiterControllers} from '../../services/orbiter.controllers.services';
 import {
   mockHttpAgent,
@@ -8,10 +8,14 @@ import {
   mockSatelliteIdText
 } from '../mocks/admin.mock';
 
-vi.mock('../../api/_actor.api', () => ({
-  getOrbiterActor: vi.fn(),
-  getDeprecatedOrbiterVersionActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getOrbiterActor: vi.fn(),
+    getDeprecatedOrbiterVersionActor: vi.fn()
+  };
+});
 
 const mockActor = {
   list_controllers: vi.fn()

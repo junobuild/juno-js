@@ -1,10 +1,14 @@
-import * as actor from '../../api/_actor.api';
+import * as actor from '@junobuild/ic-client';
 import {countDocs, deleteDocs} from '../../services/satellite.docs.services';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
-vi.mock('../../api/_actor.api', () => ({
-  getSatelliteActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getSatelliteActor: vi.fn()
+  };
+});
 
 const mockActor = {
   count_collection_docs: vi.fn(),

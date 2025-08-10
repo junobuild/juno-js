@@ -1,12 +1,16 @@
-import * as actor from '../../api/_actor.api';
+import * as actor from '@junobuild/ic-client';
 import {listControllers, memorySize, version} from '../../api/orbiter.api';
 import {mockIdentity} from '../mocks/admin.mock';
 import {mockControllers} from '../mocks/modules.mock';
 
-vi.mock('../../api/_actor.api', () => ({
-  getOrbiterActor: vi.fn(),
-  getDeprecatedOrbiterVersionActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getOrbiterActor: vi.fn(),
+    getDeprecatedOrbiterVersionActor: vi.fn()
+  };
+});
 
 const mockActor = {
   version: vi.fn(),

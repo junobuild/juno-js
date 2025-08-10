@@ -1,12 +1,12 @@
 import {Principal} from '@dfinity/principal';
 import {toNullable} from '@dfinity/utils';
 import {AuthenticationConfig, StorageConfig} from '@junobuild/config';
+import * as actor from '@junobuild/ic-client';
 import {
   AuthenticationConfig as AuthenticationConfigDid,
   DbConfig as DbConfigDid,
   StorageConfig as StorageConfigDid
 } from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
-import * as actor from '../../api/_actor.api';
 import {
   getAuthConfig,
   getConfig,
@@ -25,9 +25,13 @@ import {
   mockUserIdText
 } from '../mocks/admin.mock';
 
-vi.mock('../../api/_actor.api', () => ({
-  getSatelliteActor: vi.fn()
-}));
+vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    getSatelliteActor: vi.fn()
+  };
+});
 
 const mockActor = {
   get_auth_config: vi.fn(),

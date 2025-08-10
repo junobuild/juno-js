@@ -23,7 +23,7 @@ import {
 } from '../../api/ic.api';
 import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/admin.mock';
 
-vi.mock('../../api/_agent.api', () => {
+vi.mock('@junobuild/ic-client', () => {
   return {
     useOrInitAgent: vi.fn().mockResolvedValue({})
   };

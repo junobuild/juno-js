@@ -21,7 +21,6 @@
     "packages/utils",
     "packages/errors",
     "packages/config",
-    "packages/ic-client",
     "packages/storage",
     "packages/cdn",
     "packages/core",
@@ -171,6 +170,17 @@
         "@dfinity/principal",
         "@dfinity/utils",
         "@junobuild/utils"
+      ]
+    },
+    {
+      "name": "@junobuild/ic-client",
+      "path": "./packages/Create new scratch file from selection/dist/index.js",
+      "limit": "5 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/identity",
+        "@dfinity/principal"
       ]
     }
   ]

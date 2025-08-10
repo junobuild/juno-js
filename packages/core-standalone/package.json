@@ -29,9 +29,8 @@
     "rmdir": "node ../../scripts/rmdir.mjs",
     "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
     "copy-src": "rm -rf src && cp -R ../core/src . && rm -rf ./src/tests",
-    "copy-declarations": "rm -rf declarations && cp -R ../core/declarations .",
-    "copy": "npm run copy-src && npm run copy-declarations",
-    "build": "npm run rmdir && mkdir -p dist && npm run copy && cp -R declarations dist && node esbuild.mjs && npm run ts-declaration",
+    "copy": "npm run copy-src",
+    "build": "npm run rmdir && mkdir -p dist && npm run copy && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },
   "repository": {
@@ -60,6 +59,7 @@
     "@dfinity/principal": "^2.3.0",
     "@dfinity/utils": "^2",
     "@junobuild/errors": "*",
+    "@junobuild/ic-client": "^0.0.1",
     "@junobuild/storage": "*",
     "@junobuild/utils": "*"
   }

@@ -1,5 +1,5 @@
+import type {AssetNoContent} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import type {Asset} from '@junobuild/storage';
-import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import type {ListResults} from './list';
 
 /**

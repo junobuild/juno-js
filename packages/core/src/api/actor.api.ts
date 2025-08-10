@@ -1,16 +1,16 @@
 import type {ActorMethod, ActorSubclass} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {assertNonNullish} from '@dfinity/utils';
+import {
+  idlCertifiedFactorySatellite,
+  idlFactorySatellite,
+  type SatelliteActor
+} from '@junobuild/ic-client';
 import {ActorStore} from '../stores/actor.store';
 import type {ActorKey} from '../types/actor';
 import type {CallOptions} from '../types/call-options';
 import type {SatelliteContext} from '../types/satellite';
 import {customOrEnvContainer, customOrEnvSatelliteId} from '../utils/env.utils';
-import {
-  idlCertifiedFactorySatellite,
-  idlFactorySatellite,
-  type SatelliteActor
-} from './_actor.factory';
 
 export const getSatelliteActor = ({
   satellite,

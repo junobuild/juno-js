@@ -1,10 +1,10 @@
 import {fromNullable} from '@dfinity/utils';
+import type {AssetNoContent} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {
   uploadAsset as uploadAssetStorage,
   type AssetKey,
   type UploadAsset
 } from '@junobuild/storage';
-import type {AssetNoContent} from '../../declarations/satellite/satellite.did';
 import type {ActorReadParams, ActorUpdateParams} from '../types/actor';
 import type {ListParams, ListResults} from '../types/list';
 import {toListParams} from '../utils/list.utils';

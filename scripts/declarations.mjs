@@ -4,12 +4,6 @@ import {join} from 'node:path';
 
 const src = '/Users/daviddalbusco/projects/juno/juno/src/declarations';
 
-const coreDeclarations = ['satellite', 'deprecated', 'sputnik'];
-const corePromises = coreDeclarations.map((d) =>
-  cp(join(src, d), join('./packages/core/declarations/', d), {recursive: true})
-);
-await Promise.all(corePromises);
-
 const icClientDeclarations = [
   'mission_control',
   'orbiter',

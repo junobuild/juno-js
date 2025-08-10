@@ -1,2 +1,2 @@
-export * from './api/_actor.api';
-export * from './api/_actor.factory';
+export * from './api/actor.api';
+export * from './api/actor.factory';

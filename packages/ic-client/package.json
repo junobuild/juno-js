@@ -1,0 +1,63 @@
+{
+  "name": "@junobuild/ic-client",
+  "version": "1.0.0",
+  "description": "Agent and actor with generated bindings for Juno on the Internet Computer",
+  "author": "David Dal Busco (https://daviddalbusco.com)",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/node/index.mjs",
+  "module": "./dist/browser/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/browser/index.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/node/index.mjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "rmdir": "node ../../scripts/rmdir.mjs",
+    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
+    "build": "npm run rmdir && mkdir -p dist && cp -R declarations dist && node esbuild.mjs && npm run ts-declaration",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junobuild/juno-js.git",
+    "directory": "packages/ic-client"
+  },
+  "bugs": {
+    "url": "https://github.com/junobuild/juno-js"
+  },
+  "keywords": [
+    "juno",
+    "internet-computer",
+    "ic",
+    "dfinity",
+    "canister",
+    "agent",
+    "actor",
+    "candid",
+    "idl",
+    "bindings",
+    "sdk",
+    "client"
+  ],
+  "homepage": "https://juno.build",
+  "peerDependencies": {
+    "@dfinity/agent": "^2.3.0",
+    "@dfinity/candid": "^2.3.0",
+    "@dfinity/identity": "^2.3.0",
+    "@dfinity/principal": "^2.3.0"
+  }
+}

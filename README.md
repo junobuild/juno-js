@@ -16,6 +16,7 @@ JavaScript libraries for interfacing with [Juno].
 - [cdn](/packages/console): toolkit for working with modules that implement CDN functionality
 - [storage](/packages/storage): interfacing with Junos' Storage features
 - [errors](/packages/errors): error constants and utilities
+- [ic-client](/packages/ic-client): client library for connecting Juno on the Internet Computer
 - [functions](/packages/functions): utilities for Serverless Functions
 
 ## License

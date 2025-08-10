@@ -1,5 +1,6 @@
 import type {Principal} from '@dfinity/principal';
-import {type MissionControlParameters,
+import {
+  type MissionControlParameters,
   getDeprecatedMissionControlVersionActor,
   getMissionControlActor
 } from '@junobuild/ic-client';

@@ -1,5 +1,9 @@
 import type {Principal} from '@dfinity/principal';
-import {type OrbiterParameters,getDeprecatedOrbiterVersionActor, getOrbiterActor} from '@junobuild/ic-client';
+import {
+  type OrbiterParameters,
+  getDeprecatedOrbiterVersionActor,
+  getOrbiterActor
+} from '@junobuild/ic-client';
 import type {
   Controller,
   MemorySize

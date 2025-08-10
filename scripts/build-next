@@ -5,6 +5,7 @@ set -eux
 node ./scripts/update-version.mjs utils
 node ./scripts/update-version.mjs errors
 node ./scripts/update-version.mjs config
+node ./scripts/update-version.mjs ic-client
 node ./scripts/update-version.mjs storage
 node ./scripts/update-version.mjs cdn
 node ./scripts/update-version.mjs cli-tools

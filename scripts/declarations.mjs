@@ -27,3 +27,17 @@ const cdnPromises = cdnDeclarations.map((d) =>
   cp(join(src, d), join('./packages/cdn/declarations/', d), {recursive: true})
 );
 await Promise.all(cdnPromises);
+
+const icClientDeclarations = [
+  'mission_control',
+  'orbiter',
+  'satellite',
+  'console',
+  'observatory',
+  'deprecated',
+  'sputnik'
+];
+const icClientPromises = icClientDeclarations.map((d) =>
+  cp(join(src, d), join('./packages/ic-client/declarations/', d), {recursive: true})
+);
+await Promise.all(icClientPromises);

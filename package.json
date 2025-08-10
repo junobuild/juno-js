@@ -21,6 +21,7 @@
     "packages/utils",
     "packages/errors",
     "packages/config",
+    "packages/ic-client",
     "packages/storage",
     "packages/cdn",
     "packages/core",

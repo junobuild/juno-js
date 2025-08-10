@@ -1,6 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import {describe, expect, it} from 'vitest';
-import {toPrincipal} from './principal.utils';
+import {toPrincipal} from '../../utils/principal.utils';
 
 describe('toPrincipal', () => {
   const principalText = 'xlmdg-vkosz-ceopx-7wtgu-g3xmd-koiyc-awqaq-7modz-zf6r6-364rh-oqe';

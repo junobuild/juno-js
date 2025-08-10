@@ -1,7 +1,7 @@
 import {IDL} from '@dfinity/candid';
 import {isNullish} from '@dfinity/utils';
 import type {SatelliteParameters} from '@junobuild/ic-client';
-import {toPrincipal} from '@junobuild/utils';
+import {toPrincipal} from '@junobuild/ic-client';
 import {
   listControllers,
   listDeprecatedControllers,

@@ -1,5 +1,5 @@
 import type {OrbiterParameters} from '@junobuild/ic-client';
-import {toPrincipal} from '@junobuild/utils';
+import {toPrincipal} from '@junobuild/ic-client';
 import {listControllers} from '../api/orbiter.api';
 import {INSTALL_MODE_RESET, INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';

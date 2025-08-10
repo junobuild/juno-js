@@ -8,6 +8,7 @@ import type {
   SatelliteInitAssetKey,
   SatelliteUploadChunk
 } from '../api/actor.factory';
+import {UPLOAD_CHUNK_SIZE} from '../constants/upload.constants';
 import type {EncodingType} from '../types/storage';
 import type {UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '../types/upload';
 
@@ -114,9 +115,6 @@ const uploadChunks = async ({
   batchId: bigint;
 } & Pick<UploadAsset, 'data'> &
   Pick<UploadChunkParams, 'uploadFn'>): Promise<{chunkIds: UploadChunkResult[]}> => {
-  // https://forum.dfinity.org/t/optimal-upload-chunk-size/20444/23?u=peterparker
-  const chunkSize = 1900000;
-
   const uploadChunks: UploadChunkParams[] = [];
 
   // Prevent transforming chunk to arrayBuffer error: The requested file could not be read, typically due to permission problems that have occurred after a reference to a file was acquired.
@@ -124,8 +122,8 @@ const uploadChunks = async ({
 
   // Split data into chunks
   let orderId = 0n;
-  for (let start = 0; start < clone.size; start += chunkSize) {
-    const chunk: Blob = clone.slice(start, start + chunkSize);
+  for (let start = 0; start < clone.size; start += UPLOAD_CHUNK_SIZE) {
+    const chunk: Blob = clone.slice(start, start + UPLOAD_CHUNK_SIZE);
 
     uploadChunks.push({
       batchId,

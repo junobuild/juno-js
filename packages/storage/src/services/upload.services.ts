@@ -8,9 +8,9 @@ import type {
   SatelliteInitAssetKey,
   SatelliteUploadChunk
 } from '../api/actor.factory';
+import {UPLOAD_CHUNK_SIZE} from '../constants/upload.constants';
 import type {EncodingType} from '../types/storage';
 import type {UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '../types/upload';
-import {UPLOAD_CHUNK_SIZE} from '../constants/upload.constants';
 
 type InitAssetKey = SatelliteInitAssetKey | ConsoleInitAssetKey;
 type UploadChunk = SatelliteUploadChunk | ConsoleUploadChunk;

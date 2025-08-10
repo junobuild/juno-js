@@ -1,22 +1,18 @@
 import type {
-  _SERVICE as ConsoleActor,
   CommitBatch as ConsoleCommitBatch,
   InitAssetKey as ConsoleInitAssetKey,
   UploadChunk as ConsoleUploadChunk
-} from '../../declarations/console/console.did';
+} from '@junobuild/ic-client/dist/declarations/console/console.did';
 import type {
-  _SERVICE as SatelliteActor,
   CommitBatch as SatelliteCommitBatch,
   InitAssetKey as SatelliteInitAssetKey,
   UploadChunk as SatelliteUploadChunk
-} from '../../declarations/satellite/satellite.did';
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 
-export {
-  ConsoleActor,
+export type {
   ConsoleCommitBatch,
   ConsoleInitAssetKey,
   ConsoleUploadChunk,
-  SatelliteActor,
   SatelliteCommitBatch,
   SatelliteInitAssetKey,
   SatelliteUploadChunk

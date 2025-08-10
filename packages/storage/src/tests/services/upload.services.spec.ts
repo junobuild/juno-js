@@ -1,7 +1,10 @@
 import {fromNullable} from '@dfinity/utils';
-import {expect, MockInstance} from 'vitest';
+import {
+  InitAssetKey,
+  UploadChunk
+} from '@junobuild/ic-client/dist/declarations/console/console.did';
+import type {MockInstance} from 'vitest';
 import {mockDeep} from 'vitest-mock-extended';
-import {InitAssetKey, UploadChunk} from '../../../declarations/console/console.did';
 import {UPLOAD_CHUNK_SIZE} from '../../constants/upload.constants';
 import {uploadAsset, uploadAssetWithProposal} from '../../services/upload.services';
 import {type UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '../../types/upload';

@@ -2,7 +2,7 @@ import {ICManagementCanister} from '@dfinity/ic-management';
 import {mockDeep} from 'vitest-mock-extended';
 import {createSnapshot} from '../../api/ic.api';
 import {CdnParameters} from '../../types/actor.params';
-import {mockIdentity, mockSatelliteIdPrincipal, mockSatelliteIdText} from '../mocks/cdn.mock';
+import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/cdn.mock';
 
 vi.mock('@junobuild/ic-client', () => ({
   useOrInitAgent: vi.fn().mockResolvedValue({})

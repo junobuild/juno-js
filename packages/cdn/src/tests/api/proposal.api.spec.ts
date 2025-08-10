@@ -1,8 +1,8 @@
-import {
+import * as actor from '@junobuild/ic-client';
+import type {
   ListProposalResults,
   ListProposalsParams
-} from '@junobuild/core/declarations/satellite/satellite.did';
-import * as actor from '@junobuild/ic-client';
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {
   commitProposal,
   countProposals,
@@ -13,8 +13,14 @@ import {
   rejectProposal,
   submitProposal
 } from '../../api/proposal.api';
-import {CdnParameters} from '../../types/actor.params';
-import {CommitProposal, Proposal, ProposalId, ProposalType, RejectProposal} from '../../types/cdn';
+import type {CdnParameters} from '../../types/actor.params';
+import type {
+  CommitProposal,
+  Proposal,
+  ProposalId,
+  ProposalType,
+  RejectProposal
+} from '../../types/cdn';
 import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/cdn.mock';
 
 vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {

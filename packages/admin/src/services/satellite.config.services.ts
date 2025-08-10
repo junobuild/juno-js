@@ -1,5 +1,6 @@
 import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import type {AuthenticationConfig, DatastoreConfig, StorageConfig} from '@junobuild/config';
+import type {SatelliteParameters} from '@junobuild/ic-client';
 import {
   getAuthConfig as getAuthConfigApi,
   getConfig as getConfigApi,
@@ -9,7 +10,6 @@ import {
   setDatastoreConfig as setDatastoreConfigApi,
   setStorageConfig as setStorageConfigApi
 } from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor';
 import {
   fromAuthenticationConfig,
   fromDatastoreConfig,

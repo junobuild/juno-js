@@ -1,11 +1,11 @@
 import type {Principal} from '@dfinity/principal';
-import type {Controller} from '../../declarations/mission_control/mission_control.did';
+import type {MissionControlParameters} from '@junobuild/ic-client';
+import type {Controller} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
 import {
   listControllers,
   setMissionControlController as setMissionControlControllerApi,
   setSatellitesController as setSatellitesControllerApi
 } from '../api/mission-control.api';
-import type {MissionControlParameters} from '../types/actor';
 import type {SetControllerParams} from '../types/controllers';
 import {mapSetControllerParams} from '../utils/controllers.utils';
 

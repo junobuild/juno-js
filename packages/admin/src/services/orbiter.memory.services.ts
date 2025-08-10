@@ -1,6 +1,6 @@
-import type {MemorySize} from '../../declarations/orbiter/orbiter.did';
+import type {OrbiterParameters} from '@junobuild/ic-client';
+import type {MemorySize} from '@junobuild/ic-client/dist/declarations/orbiter/orbiter.did';
 import {memorySize} from '../api/orbiter.api';
-import type {OrbiterParameters} from '../types/actor';
 
 /**
  * Retrieves the stable and heap memory size of the Orbiter.

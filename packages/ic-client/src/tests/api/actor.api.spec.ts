@@ -1,7 +1,7 @@
 import type {ActorSubclass} from '@dfinity/agent';
 import {MockInstance} from 'vitest';
-import * as agentFactory from '../../api/_agent.api';
 import * as actorApi from '../../api/actor.api';
+import * as agentFactory from '../../api/agent.api';
 import {mockIdentity} from '../mocks/ic-agent.mock';
 import {mockSatelliteIdText} from '../mocks/modules.mock';
 

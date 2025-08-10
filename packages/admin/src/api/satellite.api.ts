@@ -1,5 +1,12 @@
 import type {Principal} from '@dfinity/principal';
 import {toNullable} from '@dfinity/utils';
+import type {SatelliteParameters} from '@junobuild/ic-client';
+import {
+  getDeprecatedSatelliteActor,
+  getDeprecatedSatelliteNoScopeActor,
+  getDeprecatedSatelliteVersionActor,
+  getSatelliteActor
+} from '@junobuild/ic-client';
 import type {
   AuthenticationConfig,
   CollectionType,
@@ -17,14 +24,7 @@ import type {
   SetRule,
   SetStorageConfig,
   StorageConfig
-} from '../../declarations/satellite/satellite.did';
-import type {SatelliteParameters} from '../types/actor';
-import {
-  getDeprecatedSatelliteActor,
-  getDeprecatedSatelliteNoScopeActor,
-  getDeprecatedSatelliteVersionActor,
-  getSatelliteActor
-} from './_actor.api';
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 
 export const setStorageConfig = async ({
   config,

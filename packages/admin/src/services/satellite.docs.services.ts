@@ -1,5 +1,5 @@
+import type {SatelliteParameters} from '@junobuild/ic-client';
 import {countDocs as countDocsApi, deleteDocs as deleteDocsApi} from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor';
 
 /**
  * Counts the documents in a collection.

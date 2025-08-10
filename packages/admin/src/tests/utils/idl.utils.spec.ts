@@ -1,6 +1,6 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
-import {Controller} from '../../../declarations/satellite/satellite.did';
+import {Controller} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {encodeAdminAccessKeysToIDL, encoreIDLUser} from '../../utils/idl.utils';
 import {mockSatelliteIdText, mockUserIdText} from '../mocks/admin.mock';
 

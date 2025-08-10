@@ -1,4 +1,4 @@
-import {SetController} from '../../../declarations/mission_control/mission_control.did';
+import {SetController} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
 import * as actor from '../../api/_actor.api';
 import {
   getUser,

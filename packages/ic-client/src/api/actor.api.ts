@@ -7,7 +7,6 @@ import type {
   OrbiterParameters,
   SatelliteParameters
 } from '../types/actor';
-import {useOrInitAgent} from './_agent.api';
 import {
   idlCertifiedFactoryOrbiter,
   idlCertifiedFactorySatellite,
@@ -28,6 +27,7 @@ import {
   type OrbiterActor,
   type SatelliteActor
 } from './actor.factory';
+import {useOrInitAgent} from './agent.api';
 
 /**
  * @deprecated TODO: for backwards compatibility - to be removed

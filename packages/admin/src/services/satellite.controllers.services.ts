@@ -1,11 +1,14 @@
 import type {Principal} from '@dfinity/principal';
-import type {Controller, SetControllersArgs} from '../../declarations/satellite/satellite.did';
+import type {SatelliteParameters} from '@junobuild/ic-client';
+import type {
+  Controller,
+  SetControllersArgs
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {
   listControllers,
   listDeprecatedNoScopeControllers,
   setControllers
 } from '../api/satellite.api';
-import type {SatelliteParameters} from '../types/actor';
 /**
  * Lists the controllers of a satellite.
  * @param {Object} params - The parameters for listing the controllers.

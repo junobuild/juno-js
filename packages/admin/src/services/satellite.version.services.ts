@@ -1,11 +1,11 @@
 import {assertNonNullish, isNullish, nonNullish} from '@dfinity/utils';
 import {JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
+import type {SatelliteParameters} from '@junobuild/ic-client';
 import {canisterMetadata} from '../api/ic.api';
 import {version} from '../api/satellite.api';
 import {SatelliteMissingDependencyError} from '../errors/version.errors';
 import {findJunoPackageDependency} from '../helpers/package.helpers';
 import type {BuildType} from '../schemas/build';
-import type {SatelliteParameters} from '../types/actor';
 import {getJunoPackage} from './package.services';
 
 /**

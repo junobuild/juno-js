@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {Controller} from '../../../declarations/mission_control/mission_control.did';
+import {Controller} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
 import * as actor from '../../api/_actor.api';
 import {
   listMissionControlControllers,

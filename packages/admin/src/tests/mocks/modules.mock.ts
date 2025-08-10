@@ -1,5 +1,5 @@
 import type {Principal} from '@dfinity/principal';
-import type {Controller} from '../../../declarations/orbiter/orbiter.did';
+import type {Controller} from '@junobuild/ic-client/dist/declarations/orbiter/orbiter.did';
 import {mockUserIdPrincipal} from './admin.mock';
 
 export const mockController: Controller = {

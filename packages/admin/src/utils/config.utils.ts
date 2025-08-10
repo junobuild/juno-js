@@ -18,7 +18,7 @@ import type {
   StorageConfigIFrame as StorageConfigIFrameDid,
   StorageConfigRawAccess as StorageConfigRawAccessDid,
   StorageConfigRedirect as StorageConfigRedirectDid
-} from '../../declarations/satellite/satellite.did';
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {fromMaxMemorySize, toMaxMemorySize} from './memory.utils';
 
 export const fromStorageConfig = ({

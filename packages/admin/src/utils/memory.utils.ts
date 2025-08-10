@@ -1,6 +1,6 @@
 import {fromNullable, nonNullish, toNullable} from '@dfinity/utils';
 import type {MaxMemorySizeConfig} from '@junobuild/config';
-import type {ConfigMaxMemorySize} from '../../declarations/satellite/satellite.did';
+import type {ConfigMaxMemorySize} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 
 export const toMaxMemorySize = (
   configMaxMemorySize?: MaxMemorySizeConfig

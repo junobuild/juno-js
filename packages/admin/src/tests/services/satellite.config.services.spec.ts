@@ -5,7 +5,7 @@ import {
   AuthenticationConfig as AuthenticationConfigDid,
   DbConfig as DbConfigDid,
   StorageConfig as StorageConfigDid
-} from '../../../declarations/satellite/satellite.did';
+} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import * as actor from '../../api/_actor.api';
 import {
   getAuthConfig,

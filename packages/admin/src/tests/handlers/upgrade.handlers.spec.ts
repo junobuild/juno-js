@@ -1,11 +1,11 @@
 import {ICManagementCanister} from '@dfinity/ic-management';
 import {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
 import {hexStringToUint8Array} from '@dfinity/utils';
+import type {ActorParameters} from '@junobuild/ic-client';
 import {mockDeep} from 'vitest-mock-extended';
 import {UpgradeCodeUnchangedError} from '../../errors/upgrade.errors';
 import {upgrade} from '../../handlers/upgrade.handlers';
 import {uint8ArraySha256} from '../../helpers/crypto.helpers';
-import type {ActorParameters} from '../../types/actor';
 import {UpgradeCodeProgress, UpgradeCodeProgressStep} from '../../types/upgrade';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/admin.mock';
 

@@ -1,4 +1,4 @@
-import {SetControllersArgs} from '../../../declarations/satellite/satellite.did';
+import {SetControllersArgs} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import * as actor from '../../api/_actor.api';
 import {
   listSatelliteControllers,

@@ -1,10 +1,10 @@
 import * as agent from '@dfinity/agent';
 import type {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
 import {JUNO_PACKAGE_ORBITER_ID, JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
+import {OrbiterParameters} from '@junobuild/ic-client';
 import * as actor from '../../api/_actor.api';
 import {OrbiterVersionError} from '../../errors/version.errors';
 import {orbiterVersion} from '../../services/orbiter.version.services';
-import {OrbiterParameters} from '../../types/actor';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
 vi.mock('@dfinity/agent', () => {

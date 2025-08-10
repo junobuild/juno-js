@@ -1,8 +1,8 @@
 import {Principal} from '@dfinity/principal';
+import type {MissionControlParameters} from '@junobuild/ic-client';
 import {getUser} from '../api/mission-control.api';
 import {INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';
-import type {MissionControlParameters} from '../types/actor';
 import type {UpgradeCodeParams} from '../types/upgrade';
 import {encoreIDLUser} from '../utils/idl.utils';
 

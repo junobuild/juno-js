@@ -1,10 +1,10 @@
 import type {chunk_hash} from '@dfinity/ic-management';
+import type {ActorParameters} from '@junobuild/ic-client';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
 import * as icApi from '../../api/ic.api';
 import {INSTALL_MAX_CHUNK_SIZE} from '../../constants/upgrade.constants';
 import {upgradeChunkedCode} from '../../handlers/upgrade.chunks.handlers';
 import {blobSha256} from '../../helpers/crypto.helpers';
-import type {ActorParameters} from '../../types/actor';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/admin.mock';
 
 describe('upgrade.chunks.handlers', () => {

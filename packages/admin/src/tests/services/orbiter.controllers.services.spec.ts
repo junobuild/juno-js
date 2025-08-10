@@ -1,4 +1,4 @@
-import {Controller} from '../../../declarations/orbiter/orbiter.did';
+import {Controller} from '@junobuild/ic-client/dist/declarations/orbiter/orbiter.did';
 import * as actor from '../../api/_actor.api';
 import {listOrbiterControllers} from '../../services/orbiter.controllers.services';
 import {

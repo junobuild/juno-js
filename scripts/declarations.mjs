@@ -4,12 +4,6 @@ import {join} from 'node:path';
 
 const src = '/Users/daviddalbusco/projects/juno/juno/src/declarations';
 
-const adminDeclarations = ['mission_control', 'orbiter', 'satellite'];
-const adminPromises = adminDeclarations.map((d) =>
-  cp(join(src, d), join('./packages/admin/declarations/', d), {recursive: true})
-);
-await Promise.all(adminPromises);
-
 const coreDeclarations = ['satellite', 'deprecated', 'sputnik'];
 const corePromises = coreDeclarations.map((d) =>
   cp(join(src, d), join('./packages/core/declarations/', d), {recursive: true})

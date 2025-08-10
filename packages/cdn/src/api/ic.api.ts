@@ -5,8 +5,8 @@ import {
   ICManagementCanister
 } from '@dfinity/ic-management';
 import {Principal} from '@dfinity/principal';
-import type {ActorParameters, CdnParameters} from '../types/actor.params';
-import {useOrInitAgent} from '../utils/actor.utils';
+import {type ActorParameters, useOrInitAgent} from '@junobuild/ic-client';
+import type {CdnParameters} from '../types/actor.params';
 
 const listCanisterSnapshots = async ({
   actor,

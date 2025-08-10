@@ -2,6 +2,7 @@ import {
   uploadAssetWithProposal as uploadAssetWithProposalStorage,
   type UploadAsset
 } from '@junobuild/storage';
+
 import type {CdnParameters} from '../types/actor.params';
 import type {ProposalId} from '../types/cdn';
 import {getCdnActor} from './_actor.api';

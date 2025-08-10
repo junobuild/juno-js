@@ -1,5 +1,4 @@
-import {Principal} from '@dfinity/principal';
-import type {MissionControlParameters} from '@junobuild/ic-client';
+import {type MissionControlParameters, toPrincipal} from '@junobuild/ic-client';
 import {getUser} from '../api/mission-control.api';
 import {INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';
@@ -38,7 +37,7 @@ export const upgradeMissionControl = async ({
 
   await upgrade({
     actor,
-    canisterId: Principal.fromText(missionControlId),
+    canisterId: toPrincipal(missionControlId),
     arg: new Uint8Array(arg),
     mode: INSTALL_MODE_UPGRADE,
     ...rest

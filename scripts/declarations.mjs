@@ -16,12 +16,6 @@ const storagePromises = storageDeclarations.map((d) =>
 );
 await Promise.all(storagePromises);
 
-const cdnDeclarations = ['console', 'satellite'];
-const cdnPromises = cdnDeclarations.map((d) =>
-  cp(join(src, d), join('./packages/cdn/declarations/', d), {recursive: true})
-);
-await Promise.all(cdnPromises);
-
 const icClientDeclarations = [
   'mission_control',
   'orbiter',

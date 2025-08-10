@@ -1,4 +1,5 @@
 import type {HttpAgent, Identity} from '@dfinity/agent';
+import type {Principal} from '@dfinity/principal';
 
 /**
  * Represents the parameters for an actor.
@@ -35,7 +36,7 @@ export interface SatelliteParameters extends ActorParameters {
    * @type {string}
    * @optional
    */
-  satelliteId?: string;
+  satelliteId?: string | Principal;
 }
 
 /**
@@ -49,7 +50,7 @@ export interface MissionControlParameters extends ActorParameters {
    * @type {string}
    * @optional
    */
-  missionControlId?: string;
+  missionControlId?: string | Principal;
 }
 
 /**
@@ -63,7 +64,7 @@ export interface ConsoleParameters extends ActorParameters {
    * @type {string}
    * @optional
    */
-  consoleId?: string;
+  consoleId?: string | Principal;
 }
 
 /**
@@ -77,5 +78,5 @@ export interface OrbiterParameters extends ActorParameters {
    * @type {string}
    * @optional
    */
-  orbiterId?: string;
+  orbiterId?: string | Principal;
 }

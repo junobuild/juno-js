@@ -1,9 +1,9 @@
 import * as proposals from '../../api/proposal.api';
+import {executeRejectProposal} from '../../handlers/proposal.reject.handlers';
 import type {CdnParameters} from '../../types/actor.params';
 import type {RejectProposal} from '../../types/cdn';
 import {RejectProposalProgressStep} from '../../types/proposal.params';
 import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/cdn.mock';
-import {executeRejectProposal} from '../../handlers/proposal.reject.handlers';
 
 vi.mock(import('../../api/proposal.api'), async (importOriginal) => {
   const actual = await importOriginal<typeof proposals>();

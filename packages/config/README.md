@@ -52,6 +52,10 @@ Configuration options for [Juno] CLI.
 | --------------------------- | ---------------------------------------------------------------------------------------------- |
 | `SatelliteAssertionsSchema` | `ZodObject<{ heapMemory: ZodOptional<ZodUnion<readonly [ZodBigInt, ZodBoolean]>>; }, $strict>` |
 
+References:
+
+- SatelliteAssertions
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/assertions.config.ts#L6)
 
 #### :gear: AuthenticationConfigInternetIdentitySchema
@@ -59,6 +63,10 @@ Configuration options for [Juno] CLI.
 | Constant                                     | Type                                                                                                                        |
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | `AuthenticationConfigInternetIdentitySchema` | `ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>` |
+
+References:
+
+- AuthenticationConfigInternetIdentity
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L7)
 
@@ -68,6 +76,10 @@ Configuration options for [Juno] CLI.
 | --------------------------------- | -------------------------------------------------------------- |
 | `AuthenticationConfigRulesSchema` | `ZodObject<{ allowedCallers: ZodArray<ZodString>; }, $strict>` |
 
+References:
+
+- AuthenticationConfigRules
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L36)
 
 #### :gear: AuthenticationConfigSchema
@@ -75,6 +87,10 @@ Configuration options for [Juno] CLI.
 | Constant                     | Type                                                                                                                                                                                                                                    |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>>; rules: ZodOptional<...>; version: ZodOptional<...>; }, $strict>` |
+
+References:
+
+- AuthenticationConfig
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L59)
 
@@ -84,6 +100,10 @@ Configuration options for [Juno] CLI.
 | ---------------------- | ---------------------------------------------------------------------------------------------------- |
 | `PermissionTextSchema` | `ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>` |
 
+References:
+
+- PermissionText
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/rules.ts#L6)
 
 #### :gear: MemoryTextSchema
@@ -91,6 +111,10 @@ Configuration options for [Juno] CLI.
 | Constant           | Type                                           |
 | ------------------ | ---------------------------------------------- |
 | `MemoryTextSchema` | `ZodEnum<{ heap: "heap"; stable: "stable"; }>` |
+
+References:
+
+- MemoryText
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/rules.ts#L17)
 
@@ -100,6 +124,10 @@ Configuration options for [Juno] CLI.
 | ----------------- | -------------------------------------------- |
 | `RulesTypeSchema` | `ZodEnum<{ db: "db"; storage: "storage"; }>` |
 
+References:
+
+- RulesType
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/rules.ts#L28)
 
 #### :gear: RuleSchema
@@ -107,6 +135,10 @@ Configuration options for [Juno] CLI.
 | Constant     | Type                                                                                                                                                                                                                                                                                                               |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `RuleSchema` | `ZodObject<{ collection: ZodString; read: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; write: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; ... 8 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
+
+References:
+
+- Rule
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/rules.ts#L39)
 
@@ -116,6 +148,10 @@ Configuration options for [Juno] CLI.
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DatastoreCollectionSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
 
+References:
+
+- DatastoreCollection
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/collections.ts#L7)
 
 #### :gear: StorageCollectionSchema
@@ -123,6 +159,10 @@ Configuration options for [Juno] CLI.
 | Constant                  | Type                                                                                                                                                                                                                                     |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `StorageCollectionSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
+
+References:
+
+- StorageCollection
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/collections.ts#L22)
 
@@ -132,6 +172,10 @@ Configuration options for [Juno] CLI.
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `CollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<...>; }, $strict>` |
 
+References:
+
+- Collections
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/collections.ts#L37)
 
 #### :gear: MaxMemorySizeConfigSchema
@@ -139,6 +183,10 @@ Configuration options for [Juno] CLI.
 | Constant                    | Type                                                                                    |
 | --------------------------- | --------------------------------------------------------------------------------------- |
 | `MaxMemorySizeConfigSchema` | `ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>` |
+
+References:
+
+- MaxMemorySizeConfig
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/feature.config.ts#L6)
 
@@ -148,6 +196,10 @@ Configuration options for [Juno] CLI.
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DatastoreConfigSchema` | `ZodObject<{ maxMemorySize: ZodOptional<ZodObject<{ heap: ZodOptional<ZodBigInt>; stable: ZodOptional<ZodBigInt>; }, $strict>>; version: ZodOptional<...>; }, $strict>` |
 
+References:
+
+- DatastoreConfig
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/datastore.config.ts#L7)
 
 #### :gear: EmulatorConfigSchema
@@ -155,6 +207,10 @@ Configuration options for [Juno] CLI.
 | Constant               | Type                                                                                                                                                                                                                                                                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; podman: "podman"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; }, $strict>>; skylab: ZodObject<...>; }, $strict>, ZodObj...` |
+
+References:
+
+- EmulatorConfig
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L151)
 
@@ -164,6 +220,10 @@ Configuration options for [Juno] CLI.
 | --------------------------- | ------------------------------------------------------------ |
 | `ModuleLogVisibilitySchema` | `ZodEnum<{ public: "public"; controllers: "controllers"; }>` |
 
+References:
+
+- ModuleLogVisibility
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/module.settings.ts#L6)
 
 #### :gear: ModuleSettingsSchema
@@ -171,6 +231,10 @@ Configuration options for [Juno] CLI.
 | Constant               | Type                                                                                                                                                                                                                                                                                                                  |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ModuleSettingsSchema` | `ZodObject<{ freezingThreshold: ZodOptional<ZodBigInt>; reservedCyclesLimit: ZodOptional<ZodBigInt>; logVisibility: ZodOptional<ZodEnum<{ public: "public"; controllers: "controllers"; }>>; heapMemoryLimit: ZodOptional<...>; memoryAllocation: ZodOptional<...>; computeAllocation: ZodOptional<...>; }, $strict>` |
+
+References:
+
+- ModuleSettings
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/module.settings.ts#L21)
 
@@ -180,6 +244,10 @@ Configuration options for [Juno] CLI.
 | ---------------------- | ---------------------------------------------------------- |
 | `JunoConfigModeSchema` | `ZodUnion<readonly [ZodLiteral<"production">, ZodString]>` |
 
+References:
+
+- JunoConfigMode
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L6)
 
 #### :gear: JunoConfigEnvSchema
@@ -187,6 +255,10 @@ Configuration options for [Juno] CLI.
 | Constant              | Type                                                                                     |
 | --------------------- | ---------------------------------------------------------------------------------------- |
 | `JunoConfigEnvSchema` | `ZodObject<{ mode: ZodUnion<readonly [ZodLiteral<"production">, ZodString]>; }, $strip>` |
+
+References:
+
+- JunoConfigEnv
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L17)
 
@@ -196,6 +268,10 @@ Configuration options for [Juno] CLI.
 | ----------------- | --------------------------------------- |
 | `OrbiterIdSchema` | `ZodObject<{ id: ZodString; }, $strip>` |
 
+References:
+
+- OrbiterId
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/orbiter.config.ts#L10)
 
 #### :gear: OrbiterIdsSchema
@@ -203,6 +279,10 @@ Configuration options for [Juno] CLI.
 | Constant           | Type                                                                                                          |
 | ------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `OrbiterIdsSchema` | `ZodObject<{ ids: ZodRecord<ZodUnion<readonly [ZodLiteral<"production">, ZodString]>, ZodString>; }, $strip>` |
+
+References:
+
+- OrbiterIds
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/orbiter.config.ts#L29)
 
@@ -212,6 +292,10 @@ Configuration options for [Juno] CLI.
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OrbiterConfigSchema` | `ZodUnion<readonly [ZodObject<{ id: ZodString; }, $strict>, ZodObject<{ ids: ZodRecord<ZodUnion<readonly [ZodLiteral<"production">, ZodString]>, ZodString>; }, $strict>]>` |
 
+References:
+
+- OrbiterConfig
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/orbiter.config.ts#L56)
 
 #### :gear: StorageConfigSourceGlobSchema
@@ -219,6 +303,10 @@ Configuration options for [Juno] CLI.
 | Constant                        | Type        |
 | ------------------------------- | ----------- |
 | `StorageConfigSourceGlobSchema` | `ZodString` |
+
+References:
+
+- StorageConfigSourceGlob
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L7)
 
@@ -228,6 +316,10 @@ Configuration options for [Juno] CLI.
 | --------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `StorageConfigHeaderSchema` | `ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>` |
 
+References:
+
+- StorageConfigHeader
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L18)
 
 #### :gear: StorageConfigRewriteSchema
@@ -235,6 +327,10 @@ Configuration options for [Juno] CLI.
 | Constant                     | Type                                                                 |
 | ---------------------------- | -------------------------------------------------------------------- |
 | `StorageConfigRewriteSchema` | `ZodObject<{ source: ZodString; destination: ZodString; }, $strict>` |
+
+References:
+
+- StorageConfigRewrite
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L49)
 
@@ -244,6 +340,10 @@ Configuration options for [Juno] CLI.
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `StorageConfigRedirectSchema` | `ZodObject<{ source: ZodString; location: ZodString; code: ZodUnion<readonly [ZodLiteral<301>, ZodLiteral<302>]>; }, $strict>` |
 
+References:
+
+- StorageConfigRedirect
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L79)
 
 #### :gear: StorageConfigSchema
@@ -251,6 +351,10 @@ Configuration options for [Juno] CLI.
 | Constant              | Type                                                                                                                                                                                                       |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `StorageConfigSchema` | `ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 5 more ...; version: ZodOptional<...>; }, $strip>` |
+
+References:
+
+- StorageConfig
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L114)
 
@@ -270,6 +374,10 @@ see EncodingType
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CliConfigSchema` | `ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString>>; gzip: ZodOptional<ZodUnion<readonly [ZodString, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: ZodOptional<...>; postdeploy: ZodOptional<...>; }, $strict>` |
 
+References:
+
+- CliConfig
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L7)
 
 #### :gear: SatelliteIdSchema
@@ -277,6 +385,10 @@ see EncodingType
 | Constant            | Type                                    |
 | ------------------- | --------------------------------------- |
 | `SatelliteIdSchema` | `ZodObject<{ id: ZodString; }, $strip>` |
+
+References:
+
+- SatelliteId
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L17)
 
@@ -286,6 +398,10 @@ see EncodingType
 | -------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `SatelliteIdsSchema` | `ZodObject<{ ids: ZodRecord<ZodUnion<readonly [ZodLiteral<"production">, ZodString]>, ZodString>; }, $strip>` |
 
+References:
+
+- SatelliteIds
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L36)
 
 #### :gear: SatelliteConfigOptionsSchema
@@ -293,6 +409,10 @@ see EncodingType
 | Constant                       | Type                                                                                                                                                                                                                                                                                                                          |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 5 more ...; version: ZodOptional<...>; }, $strip>>; ... 5 more ...; id: ZodString; }, $strict>, ZodObject<...>]>` |
+
+References:
+
+- JunoConsoleConfig
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L75)
 
@@ -332,6 +452,8 @@ Configuration for satellite assertions.
 | ------------ | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `heapMemory` | `bigint or boolean or undefined` | Configuration for the heap memory size check, which can be: - `true` to enable the check with a default threshold of 900MB, - `false` to disable the heap memory size check, - A `bigint` to specify a custom threshold in MB (megabytes) for the heap memory size check. If not specified, then `true` is used as the default value. type: {bigint or boolean} |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/assertions.config.ts#L14)
+
 #### :gear: AuthenticationConfigInternetIdentity
 
 Configure the behavior of Internet Identity.
@@ -341,6 +463,8 @@ Configure the behavior of Internet Identity.
 | `derivationOrigin`           | `string or undefined`   | This setting ensures that users are recognized on your app, regardless of whether they use the default URL or any other custom domain. For example, if set to hello.com, a user signing on at https://hello.com will receive the same identifier (principal) as when signing on at https://www.hello.com. type: {string}optional |
 | `externalAlternativeOrigins` | `string[] or undefined` | An optional list of external alternative origins allowed for authentication, which can be useful if you want to reuse the same derivation origin across multiple Satellites. type: {string[]}optional                                                                                                                            |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L16)
+
 #### :gear: AuthenticationConfigRules
 
 Configure the rules of the authentication.
@@ -348,6 +472,8 @@ Configure the rules of the authentication.
 | Property         | Type       | Description                                                                                                                                                                                                                                                 |
 | ---------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `allowedCallers` | `string[]` | This option defines who's allowed to use your app. If you enable this, only the identities you list (in user key, format, like `bj4r4-5cdop-...`) will be allowed to sign in or use any features like Datastore or Storage. type: {PrincipalText[]}optional |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L44)
 
 #### :gear: AuthenticationConfig
 
@@ -358,6 +484,8 @@ Configures the Authentication options of a Satellite.
 | `internetIdentity` | `AuthenticationConfigInternetIdentity or undefined` | Optional configuration of Internet Identity authentication method. type: {AuthenticationConfigInternetIdentity}optional                                                                                                                                 |
 | `rules`            | `AuthenticationConfigRules or undefined`            | Optional configuration for the rules of the authentication. type: {AuthenticationConfigRules}optional                                                                                                                                                   |
 | `version`          | `bigint or undefined`                               | The current version of the config. Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite. You can provide it if you want to manage versioning manually within your config file. type: {bigint}optional |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L69)
 
 #### :gear: Rule
 
@@ -378,6 +506,8 @@ Represents a rule configuration for a collection.
 | `mutablePermissions` | `boolean or undefined` | Indicates whether the permissions are mutable. default: truetype: {boolean}                                                                         |
 | `maxTokens`          | `bigint or undefined`  | The maximum number of writes and deletes per minute.                                                                                                |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/rules.ts#L58)
+
 #### :gear: Collections
 
 Represents the configuration for all the collections of a Satellite.
@@ -386,6 +516,8 @@ Represents the configuration for all the collections of a Satellite.
 | ----------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
 | `datastore` | `DatastoreCollection[] or undefined` | An optional array that defines the collections of the Datastore. type: {DatastoreCollection[]}optional |
 | `storage`   | `StorageCollection[] or undefined`   | An optional array that defines the collections of the Storage. type: {StorageCollection[]}optional     |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/collections.ts#L46)
 
 #### :gear: MaxMemorySizeConfig
 
@@ -398,6 +530,8 @@ The maximum size corresponds to the overall heap or stable memory of the smart c
 | `heap`   | `bigint or undefined` | Maximum allowed heap memory size in bytes. This field is optional. If not specified, no limit is enforced on the heap memory size. type: {bigint}     |
 | `stable` | `bigint or undefined` | Maximum allowed stable memory size in bytes. This field is optional. If not specified, no limit is enforced on the stable memory size. type: {bigint} |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/feature.config.ts#L18)
+
 #### :gear: DatastoreConfig
 
 Configures the behavior of the Datastore.
@@ -406,6 +540,8 @@ Configures the behavior of the Datastore.
 | --------------- | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `maxMemorySize` | `MaxMemorySizeConfig or undefined` | Configuration for maximum memory size limits for the Datastore. This is used to specify optional limits on heap and stable memory for the smart contract. When the limit is reached, the Datastore and smart contract continue to operate normally but reject the creation or updates of documents. If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional |
 | `version`       | `bigint or undefined`              | The current version of the config. Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite. You can provide it if you want to manage versioning manually within your config file. type: {bigint}optional                                                                                                                                  |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/datastore.config.ts#L16)
 
 #### :gear: EmulatorPorts
 
@@ -416,6 +552,8 @@ Represents the ports exposed by an emulator container.
 | `server` | `number or undefined` | The port of the server used to simulate execution. This is the port your app connects to. Also known as the "local Internet Computer replica" or the "Pocket-IC port". default: 5987 |
 | `admin`  | `number or undefined` | The port of the admin server used for tasks like transferring ICP from the ledger. default: 5999                                                                                     |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L26)
+
 #### :gear: EmulatorSkylab
 
 Configuration for the Skylab emulator.
@@ -423,6 +561,8 @@ Configuration for the Skylab emulator.
 | Property | Type                                                    | Description                            |
 | -------- | ------------------------------------------------------- | -------------------------------------- |
 | `ports`  | `(EmulatorPorts and { console: number; }) or undefined` | Ports exposed by the Skylab container. |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L51)
 
 #### :gear: EmulatorConsole
 
@@ -432,6 +572,8 @@ Configuration for the Console emulator.
 | -------- | ---------------------------- | --------------------------------------- |
 | `ports`  | `EmulatorPorts or undefined` | Ports exposed by the Console container. |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L74)
+
 #### :gear: EmulatorSatellite
 
 Configuration for the Satellite emulator.
@@ -439,6 +581,8 @@ Configuration for the Satellite emulator.
 | Property | Type                         | Description                               |
 | -------- | ---------------------------- | ----------------------------------------- |
 | `ports`  | `EmulatorPorts or undefined` | Ports exposed by the Satellite container. |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L91)
 
 #### :gear: EmulatorRunner
 
@@ -452,6 +596,8 @@ Shared options for all runner variants.
 | `volume`   | `string or undefined`                         | Persistent volume to store internal state. default: "juno"                                            |
 | `target`   | `string or undefined`                         | Shared folder for deploying and hot-reloading serverless functions.                                   |
 | `platform` | `"linux/amd64" or "linux/arm64" or undefined` | The platform to use when running the emulator container.                                              |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L113)
 
 #### :gear: ModuleSettings
 
@@ -468,6 +614,8 @@ These settings control various aspects of the module's behavior and resource usa
 | `memoryAllocation`    | `bigint or undefined`              | The amount of memory explicitly allocated to the module. For example, setting it to `BigInt(1024 * 1024 * 128)` allocates 128 MB of memory to the module. type: {bigint}                                                                |
 | `computeAllocation`   | `bigint or undefined`              | The proportion of compute capacity allocated to the module. This is a fraction of the total compute capacity of the subnet. For example, setting it to `BigInt(10)` allocates 10% of the compute capacity to the module. type: {bigint} |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/module.settings.ts#L37)
+
 #### :gear: JunoConfigEnv
 
 Represents the environment configuration for Juno.
@@ -475,6 +623,8 @@ Represents the environment configuration for Juno.
 | Property | Type     | Description                                                |
 | -------- | -------- | ---------------------------------------------------------- |
 | `mode`   | `string` | The mode of the Juno configuration. type: {JunoConfigMode} |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/juno.env.ts#L25)
 
 #### :gear: OrbiterId
 
@@ -484,6 +634,8 @@ Represents the configuration for an orbiter.
 | -------- | -------- | -------------------------------------------------------------- |
 | `id`     | `string` | The identifier of the orbiter used in the dApp. type: {string} |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/orbiter.config.ts#L18)
+
 #### :gear: OrbiterIds
 
 Represents a mapping of orbiter identitifiers to different configurations based on the mode of the application.
@@ -491,6 +643,8 @@ Represents a mapping of orbiter identitifiers to different configurations based 
 | Property | Type                     | Description                                                                                                                                                                                                                                                                                                                                            |
 | -------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `ids`    | `Record<string, string>` | A mapping of orbiter identifiers (IDs) to different configurations based on the mode of the application. This allows the application to use different orbiter IDs, such as production, development, etc. Example: { "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "development": "gl6nx-5maaa-aaaaa-qaaqq-cai" } type: {Record<JunoConfigMode, string>} |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/orbiter.config.ts#L37)
 
 #### :gear: StorageConfigHeader
 
@@ -502,6 +656,8 @@ Some sets of headers can affect how the browser handles the page and its content
 | `source`  | `string`             | The glob pattern used to match files within the Storage that these headers will apply to. type: {StorageConfigSourceGlob}                                                                                                     |
 | `headers` | `[string, string][]` | An array of key-value pairs representing the headers to apply. Each pair includes the header name and its value. Example: `[["Cache-Control", "max-age=3600"], ["X-Custom-Header", "value"]]` type: {Array<[string, string]>} |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L30)
+
 #### :gear: StorageConfigRewrite
 
 You can utilize optional rewrites to display the same content for multiple URLs.
@@ -512,6 +668,8 @@ Rewrites are especially useful when combined with pattern matching, allowing acc
 | `source`      | `string` | The glob pattern or specific path to match for incoming requests. Matches are rewritten to the specified destination. type: {StorageConfigSourceGlob} |
 | `destination` | `string` | The destination path or file to which matching requests should be rewritten. type: {string}                                                           |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L61)
+
 #### :gear: StorageConfigRedirect
 
 Use a URL redirect to prevent broken links if you've moved a page or to shorten URLs.
@@ -521,6 +679,8 @@ Use a URL redirect to prevent broken links if you've moved a page or to shorten 
 | `source`   | `string`     | The glob pattern or specific path to match for incoming requests that should be redirected. type: {StorageConfigSourceGlob}      |
 | `location` | `string`     | The URL or path to which the request should be redirected. type: {string}                                                        |
 | `code`     | `301 or 302` | The HTTP status code to use for the redirect, typically 301 (permanent redirect) or 302 (temporary redirect). type: {301 or 302} |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L91)
 
 #### :gear: StorageConfig
 
@@ -536,6 +696,8 @@ Configures the hosting behavior of the Storage.
 | `maxMemorySize` | `MaxMemorySizeConfig or undefined`                    | Configuration for maximum memory size limits for the Storage. This is used to specify optional limits on heap and stable memory for the smart contract. When the limit is reached, the Storage and smart contract continue to operate normally but reject the upload of new assets. If not specified, no memory limits are enforced. type: {MaxMemorySizeConfig}optional                                                                                                                                                                                          |
 | `version`       | `bigint or undefined`                                 | The current version of the config. Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite. You can provide it if you want to manage versioning manually within your config file. type: {bigint}optional                                                                                                                                                                                                                                                                                                           |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L128)
+
 #### :gear: CliConfig
 
 | Property     | Type                                    | Description                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -547,6 +709,8 @@ Configures the hosting behavior of the Storage.
 | `predeploy`  | `string[] or undefined`                 | Defines a list of scripts or commands to be run before the deployment process begins. This can be useful for tasks such as compiling assets, running tests, or building production-ready files. Example: `json { "predeploy": ["npm run build", "npm run lint"] } ` type: {string[]}optional                                                                                                  |
 | `postdeploy` | `string[] or undefined`                 | Defines a list of scripts or commands to be run after the deployment process completes. This can be used for tasks such as notifications, cleanup, or sending confirmation messages to services or team members. Example: `json { "postdeploy": ["./scripts/notify-admins.sh", "echo 'Deployment complete'"] } ` type: {string[]}optional                                                     |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L18)
+
 #### :gear: SatelliteId
 
 Represents the unique identifier for a satellite.
@@ -555,6 +719,8 @@ Represents the unique identifier for a satellite.
 | -------- | -------- | -------------------------------------------------------------------------------- |
 | `id`     | `string` | The unique identifier (ID) of the satellite for this application. type: {string} |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L25)
+
 #### :gear: SatelliteIds
 
 Represents a mapping of satellite identifiers to different configurations based on the mode of the application.
@@ -562,6 +728,8 @@ Represents a mapping of satellite identifiers to different configurations based 
 | Property | Type                     | Description                                                                                                                                                                                                                                                                                                                                        |
 | -------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ids`    | `Record<string, string>` | A mapping of satellite identifiers (IDs) to different configurations based on the mode of the application. This allows the application to use different satellite IDs, such as production, staging, etc. Example: { "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai" } type: {Record<JunoConfigMode, string>} |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L44)
 
 #### :gear: SatelliteConfigOptions
 
@@ -580,6 +748,8 @@ changes, typically through CLI commands (e.g., `juno config`).
 | `assertions`     | `SatelliteAssertions or undefined`  | Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions. type: {SatelliteAssertions}optional                                                                                                                       |
 | `settings`       | `ModuleSettings or undefined`       | Optional configuration parameters for the Satellite. These settings control various aspects of the module's behavior and resource usage. type: {ModuleSettings}optional                                                                                                     |
 | `collections`    | `Collections or undefined`          | Optional configuration for the Datastore and Storage collections. type: {Collections}optional                                                                                                                                                                               |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L106)
 
 ### :cocktail: Types
 

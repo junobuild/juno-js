@@ -74,6 +74,10 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `HookContextSchema` | `<T extends z.ZodTypeAny>(dataSchema: T) => ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: T; }, $strict>` |
 
+References:
+
+- HookContext
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L8)
 
 #### :gear: AssertFunctionSchema
@@ -81,6 +85,10 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | Function               | Type                                                                                                                                                                    |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertFunctionSchema` | `<T extends z.ZodTypeAny>(contextSchema: T) => ZodCustom<$InferInnerFunctionType<ZodTuple<[T], null>, ZodVoid>, $InferInnerFunctionType<ZodTuple<[T], null>, ZodVoid>>` |
+
+References:
+
+- AssertFunction
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L37)
 
@@ -90,6 +98,10 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `RunFunctionSchema` | `<T extends z.ZodTypeAny>(contextSchema: T) => ZodCustom<$InferInnerFunctionType<ZodTuple<[T], null>, ZodUnion<[ZodPromise<ZodVoid>, ZodVoid]>>, $InferInnerFunctionType<...>>` |
 
+References:
+
+- RunFunction
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L52)
 
 #### :gear: DocContextSchema
@@ -97,6 +109,10 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 | Function           | Type                                                                                                                 |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------- |
 | `DocContextSchema` | `<T extends z.ZodTypeAny>(dataSchema: T) => ZodObject<{ collection: ZodString; key: ZodString; data: T; }, $strict>` |
+
+References:
+
+- DocContext
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L17)
 
@@ -203,6 +219,10 @@ Represents a list result.
 | Function                  | Type                                                                                                                                                                                                                                         |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `createListResultsSchema` | `<T extends z.ZodTypeAny>(itemData: T) => ZodObject<{ items: ZodArray<ZodTuple<[ZodString, T], null>>; items_length: ZodBigInt; items_page: ZodOptional<ZodBigInt>; matches_length: ZodBigInt; matches_pages: ZodOptional<...>; }, $strict>` |
+
+References:
+
+- JsListResults
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L128)
 
@@ -802,6 +822,10 @@ A schema that validates a value is an Uint8Array.
 | -------------------- | --------------------------------------------------------------------- |
 | `RawPrincipalSchema` | `ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>` |
 
+References:
+
+- RawPrincipal
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L14)
 
 #### :gear: PrincipalSchema
@@ -809,6 +833,10 @@ A schema that validates a value is an Uint8Array.
 | Constant          | Type                              |
 | ----------------- | --------------------------------- |
 | `PrincipalSchema` | `ZodCustom<Principal, Principal>` |
+
+References:
+
+- Principal
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L24)
 
@@ -818,6 +846,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------- | ----------- |
 | `TimestampSchema` | `ZodBigInt` |
 
+References:
+
+- Timestamp
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L7)
 
 #### :gear: VersionSchema
@@ -825,6 +857,10 @@ A schema that validates a value is an Uint8Array.
 | Constant        | Type        |
 | --------------- | ----------- |
 | `VersionSchema` | `ZodBigInt` |
+
+References:
+
+- Version
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L19)
 
@@ -834,6 +870,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------- | --------------------------------------------------------------------- |
 | `RawUserIdSchema` | `ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>` |
 
+References:
+
+- RawUserId
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L31)
 
 #### :gear: UserIdSchema
@@ -841,6 +881,10 @@ A schema that validates a value is an Uint8Array.
 | Constant       | Type                              |
 | -------------- | --------------------------------- |
 | `UserIdSchema` | `ZodCustom<Principal, Principal>` |
+
+References:
+
+- UserId
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L43)
 
@@ -850,6 +894,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------ | ----------- |
 | `CollectionSchema` | `ZodString` |
 
+References:
+
+- Collection
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L55)
 
 #### :gear: KeySchema
@@ -857,6 +905,10 @@ A schema that validates a value is an Uint8Array.
 | Constant    | Type        |
 | ----------- | ----------- |
 | `KeySchema` | `ZodString` |
+
+References:
+
+- Key
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L65)
 
@@ -866,6 +918,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------- | ----------- |
 | `DescriptionSchema` | `ZodString` |
 
+References:
+
+- Description
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L75)
 
 #### :gear: CollectionsSchema
@@ -873,6 +929,10 @@ A schema that validates a value is an Uint8Array.
 | Constant            | Type                                                                     |
 | ------------------- | ------------------------------------------------------------------------ |
 | `CollectionsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; }, $strict>` |
+
+References:
+
+- Collections
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L7)
 
@@ -882,6 +942,10 @@ A schema that validates a value is an Uint8Array.
 | --------------- | --------------------------------------------------------------------- |
 | `RawDataSchema` | `ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>` |
 
+References:
+
+- RawData
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L17)
 
 #### :gear: DocSchema
@@ -889,6 +953,10 @@ A schema that validates a value is an Uint8Array.
 | Constant    | Type                                                                                                                                                                                                                                                                         |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocSchema` | `ZodObject<{ owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; description: ZodOptional<...>; created_at: ZodBigInt; updated_at: ZodBigInt; version: ZodOptional<...>; }, $strict>` |
+
+References:
+
+- Doc
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L29)
 
@@ -898,6 +966,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OptionDocSchema` | `ZodOptional<ZodObject<{ owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; description: ZodOptional<...>; created_at: ZodBigInt; updated_at: ZodBigInt; version: ZodOptional<...>; }, $strict>>` |
 
+References:
+
+- OptionDoc
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L79)
 
 #### :gear: SetDocSchema
@@ -905,6 +977,10 @@ A schema that validates a value is an Uint8Array.
 | Constant       | Type                                                                                                                                                                 |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocSchema` | `ZodObject<{ data: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; description: ZodOptional<ZodString>; version: ZodOptional<...>; }, $strict>` |
+
+References:
+
+- SetDoc
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L89)
 
@@ -914,6 +990,10 @@ A schema that validates a value is an Uint8Array.
 | -------------- | ---------------------------------------------------------- |
 | `DelDocSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; }, $strict>` |
 
+References:
+
+- DelDoc
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L121)
 
 #### :gear: DocUpsertSchema
@@ -921,6 +1001,10 @@ A schema that validates a value is an Uint8Array.
 | Constant          | Type                                                                                                                                                                                                                                                                                                                               |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DocUpsertSchema` | `ZodObject<{ before: ZodOptional<ZodObject<{ owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodCustom<Uint8Array<...>, Uint8Array<...>>; description: ZodOptional<...>; created_at: ZodBigInt; updated_at: ZodBigInt; version: ZodOptional<...>; }, $strict>>; after: ZodObject<...>; }, $s...` |
+
+References:
+
+- DocUpsert
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L14)
 
@@ -930,6 +1014,10 @@ A schema that validates a value is an Uint8Array.
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `DocAssertSetSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodCustom<...>; description: ZodOptional<...>; created_at: ZodBigInt; updated_at: ZodBigInt; version: ZodOptional<...>; }, $strict>>; proposed: ZodObject<...>; }, $strict>` |
 
+References:
+
+- DocAssertSet
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L41)
 
 #### :gear: DocAssertDeleteSchema
@@ -937,6 +1025,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                | Type                                                                                                                                                                                                                                                                                                         |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `DocAssertDeleteSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodCustom<...>; description: ZodOptional<...>; created_at: ZodBigInt; updated_at: ZodBigInt; version: ZodOptional<...>; }, $strict>>; proposed: ZodObject<...>; }, $strict>` |
+
+References:
+
+- DocAssertDelete
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L71)
 
@@ -946,6 +1038,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnSetDocContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodObject<{ collection: ZodString; key: ZodString; data: ZodObject<...>; }, $strict>; }, $strict>` |
 
+References:
+
+- OnSetDocContext
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L52)
 
 #### :gear: OnSetManyDocsContextSchema
@@ -953,6 +1049,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                     | Type                                                                                                                                                                                                         |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `OnSetManyDocsContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodArray<ZodObject<{ collection: ZodString; key: ZodString; data: ZodObject<...>; }, $strict>>; }, $strict>` |
+
+References:
+
+- OnSetManyDocsContext
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L65)
 
@@ -962,6 +1062,10 @@ A schema that validates a value is an Uint8Array.
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnDeleteDocContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodObject<{ collection: ZodString; key: ZodString; data: ZodOptional<...>; }, $strict>; }, $strict>` |
 
+References:
+
+- OnDeleteDocContext
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L80)
 
 #### :gear: OnDeleteManyDocsContextSchema
@@ -969,6 +1073,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                        | Type                                                                                                                                                                                                           |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnDeleteManyDocsContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodArray<ZodObject<{ collection: ZodString; key: ZodString; data: ZodOptional<...>; }, $strict>>; }, $strict>` |
+
+References:
+
+- OnDeleteManyDocsContext
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L93)
 
@@ -978,6 +1086,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnDeleteFilteredDocsContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodArray<ZodObject<{ collection: ZodString; key: ZodString; data: ZodOptional<...>; }, $strict>>; }, $strict>` |
 
+References:
+
+- OnDeleteFilteredDocsContext
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L108)
 
 #### :gear: AssertSetDocContextSchema
@@ -985,6 +1097,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                    | Type                                                                                                                                                                                               |
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertSetDocContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodObject<{ collection: ZodString; key: ZodString; data: ZodObject<...>; }, $strict>; }, $strict>` |
+
+References:
+
+- AssertSetDocContext
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L123)
 
@@ -994,6 +1110,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertDeleteDocContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodObject<{ collection: ZodString; key: ZodString; data: ZodObject<...>; }, $strict>; }, $strict>` |
 
+References:
+
+- AssertDeleteDocContext
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L136)
 
 #### :gear: SatelliteEnvSchema
@@ -1001,6 +1121,10 @@ A schema that validates a value is an Uint8Array.
 | Constant             | Type                              |
 | -------------------- | --------------------------------- |
 | `SatelliteEnvSchema` | `ZodRecord<ZodString, ZodString>` |
+
+References:
+
+- SatelliteEnv
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/satellite.env.ts#L6)
 
@@ -1010,6 +1134,10 @@ A schema that validates a value is an Uint8Array.
 | -------------------- | -------------------------------------------------- |
 | `HeaderFieldsSchema` | `ZodArray<ZodTuple<[ZodString, ZodString], null>>` |
 
+References:
+
+- HeaderFields
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L29)
 
 #### :gear: BlobSchema
@@ -1017,6 +1145,10 @@ A schema that validates a value is an Uint8Array.
 | Constant     | Type                                                                  |
 | ------------ | --------------------------------------------------------------------- |
 | `BlobSchema` | `ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>` |
+
+References:
+
+- Blob
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L39)
 
@@ -1026,6 +1158,10 @@ A schema that validates a value is an Uint8Array.
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssetKeySchema` | `ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; description: ZodOptional<...>; }, $strict>` |
 
+References:
+
+- AssetKey
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L71)
 
 #### :gear: AssetEncodingSchema
@@ -1033,6 +1169,10 @@ A schema that validates a value is an Uint8Array.
 | Constant              | Type                                                                                                                                                                                          |
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssetEncodingSchema` | `ZodObject<{ modified: ZodBigInt; content_chunks: ZodArray<ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>>; total_length: ZodBigInt; sha256: ZodCustom<...>; }, $strip>` |
+
+References:
+
+- AssetEncoding
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L121)
 
@@ -1042,6 +1182,10 @@ A schema that validates a value is an Uint8Array.
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssetSchema` | `ZodObject<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; description: ZodOptional<...>; }, $strict>; ... 4 more ...; version: ZodOptional<...>; }, $strict>` |
 
+References:
+
+- Asset
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L176)
 
 #### :gear: AssetNoContentSchema
@@ -1049,6 +1193,10 @@ A schema that validates a value is an Uint8Array.
 | Constant               | Type                                                                                                                                                                                                                                                                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssetNoContentSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; created_at: ZodBigInt; updated_at: ZodBigInt; key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<...>; collection: ZodString; owner: ZodCustom<...>; description: ZodOptional<...>; }, $strict>; headers: ZodArray<...>; encodings: ZodArray<...>; }, $s...` |
+
+References:
+
+- AssetNoContent
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L225)
 
@@ -1058,6 +1206,10 @@ A schema that validates a value is an Uint8Array.
 | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `BatchSchema` | `ZodObject<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; description: ZodOptional<...>; }, $strict>; reference_id: ZodOptional<...>; expires_at: ZodBigInt; encoding_type: ZodOptional<...>;...` |
 
+References:
+
+- Batch
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L251)
 
 #### :gear: CommitBatchSchema
@@ -1065,6 +1217,10 @@ A schema that validates a value is an Uint8Array.
 | Constant            | Type                                                                                                                                      |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `CommitBatchSchema` | `ZodObject<{ batch_id: ZodBigInt; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; chunk_ids: ZodArray<ZodBigInt>; }, $strict>` |
+
+References:
+
+- CommitBatch
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L308)
 
@@ -1074,6 +1230,10 @@ A schema that validates a value is an Uint8Array.
 | ---------------- | ----------- |
 | `FullPathSchema` | `ZodString` |
 
+References:
+
+- FullPath
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L339)
 
 #### :gear: OptionAssetSchema
@@ -1081,6 +1241,10 @@ A schema that validates a value is an Uint8Array.
 | Constant            | Type                                                                                                                                                                                                                                                                                                        |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OptionAssetSchema` | `ZodOptional<ZodObject<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; description: ZodOptional<...>; }, $strict>; ... 4 more ...; version: ZodOptional<...>; }, $strict>>` |
+
+References:
+
+- OptionAsset
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L352)
 
@@ -1090,6 +1254,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssetAssertUploadSchema` | `ZodObject<{ current: ZodOptional<ZodObject<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodCustom<...>; description: ZodOptional<...>; }, $strict>; ... 4 more ...; version: ZodOptional<...>; }, $strict>>; batch: ZodObject<...>; commit_batch: Z...` |
 
+References:
+
+- AssetAssertUpload
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/storage/payload.ts#L14)
 
 #### :gear: OnUploadAssetContextSchema
@@ -1097,6 +1265,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                     | Type                                                                                                                                                                                                                                                                           |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `OnUploadAssetContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodObject<{ key: ZodObject<{ name: ZodString; ... 4 more ...; description: ZodOptional<...>; }, $strict>; ... 4 more ...; version: ZodOptional<...>; }, $strict>; }, $strict>` |
+
+References:
+
+- OnUploadAssetContext
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/storage/context.ts#L9)
 
@@ -1106,6 +1278,10 @@ A schema that validates a value is an Uint8Array.
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnDeleteAssetContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodOptional<ZodObject<{ key: ZodObject<{ name: ZodString; ... 4 more ...; description: ZodOptional<...>; }, $strict>; ... 4 more ...; version: ZodOptional<...>; }, $strict>>; }, $strict>` |
 
+References:
+
+- OnDeleteAssetContext
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/storage/context.ts#L21)
 
 #### :gear: OnDeleteManyAssetsContextSchema
@@ -1113,6 +1289,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                          | Type                                                                                                                                                                                                                                       |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `OnDeleteManyAssetsContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodArray<ZodOptional<ZodObject<{ key: ZodObject<{ ...; }, $strict>; ... 4 more ...; version: ZodOptional<...>; }, $strict>>>; }, $strict>` |
+
+References:
+
+- OnDeleteManyAssetsContext
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/storage/context.ts#L35)
 
@@ -1122,6 +1302,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `OnDeleteFilteredAssetsContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodArray<ZodOptional<ZodObject<{ key: ZodObject<{ ...; }, $strict>; ... 4 more ...; version: ZodOptional<...>; }, $strict>>>; }, $strict>` |
 
+References:
+
+- OnDeleteFilteredAssetsContext
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/storage/context.ts#L47)
 
 #### :gear: AssertUploadAssetContextSchema
@@ -1129,6 +1313,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                         | Type                                                                                                                                                                                                                             |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertUploadAssetContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodObject<{ current: ZodOptional<ZodObject<...>>; batch: ZodObject<...>; commit_batch: ZodObject<...>; }, $strict>; }, $strict>` |
+
+References:
+
+- AssertUploadAssetContext
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/storage/context.ts#L61)
 
@@ -1138,6 +1326,10 @@ A schema that validates a value is an Uint8Array.
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `AssertDeleteAssetContextSchema` | `ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>; data: ZodObject<{ key: ZodObject<{ name: ZodString; ... 4 more ...; description: ZodOptional<...>; }, $strict>; ... 4 more ...; version: ZodOptional<...>; }, $strict>; }, $strict>` |
 
+References:
+
+- AssertDeleteAssetContext
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/storage/context.ts#L73)
 
 #### :gear: AssertSetDocSchema
@@ -1145,6 +1337,10 @@ A schema that validates a value is an Uint8Array.
 | Constant             | Type                                                                                                                                                                                                                                                                                          |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertSetDocSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; assert: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodObject<...>; }, $strict>], null>, ZodVoid>, $InferInnerFunctionType<...>>; }, $strict>` |
+
+References:
+
+- AssertSetDoc
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L45)
 
@@ -1154,6 +1350,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertDeleteDocSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; assert: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodObject<...>; }, $strict>], null>, ZodVoid>, $InferInnerFunctionType<...>>; }, $strict>` |
 
+References:
+
+- AssertDeleteDoc
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L55)
 
 #### :gear: AssertUploadAssetSchema
@@ -1161,6 +1361,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                  | Type                                                                                                                                                                                                                                                                                          |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertUploadAssetSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; assert: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodObject<...>; }, $strict>], null>, ZodVoid>, $InferInnerFunctionType<...>>; }, $strict>` |
+
+References:
+
+- AssertUploadAsset
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L65)
 
@@ -1170,6 +1374,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertDeleteAssetSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; assert: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodObject<...>; }, $strict>], null>, ZodVoid>, $InferInnerFunctionType<...>>; }, $strict>` |
 
+References:
+
+- AssertDeleteAsset
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L75)
 
 #### :gear: AssertSchema
@@ -1177,6 +1385,10 @@ A schema that validates a value is an Uint8Array.
 | Constant       | Type                                                                                                                                                                                                                                                                                                                               |
 | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `AssertSchema` | `ZodUnion<readonly [ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; assert: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodObject<...>; }, $strict>], null>, ZodVoid>, $InferInnerFunctionType<...>>; }, $strict>, ZodObject<......` |
+
+References:
+
+- Assert
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L85)
 
@@ -1186,6 +1398,10 @@ A schema that validates a value is an Uint8Array.
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `OnSetDocSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodObject<...>; }, $strict>], null>, ZodUnion<...>>, $InferInnerFunctionType<...>>; }, $strict>` |
 
+References:
+
+- OnSetDoc
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L55)
 
 #### :gear: OnSetManyDocsSchema
@@ -1193,6 +1409,10 @@ A schema that validates a value is an Uint8Array.
 | Constant              | Type                                                                                                                                                                                                                                                                                            |
 | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnSetManyDocsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodArray<...>; }, $strict>], null>, ZodUnion<...>>, $InferInnerFunctionType<...>>; }, $strict>` |
+
+References:
+
+- OnSetManyDocs
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L65)
 
@@ -1202,6 +1422,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `OnDeleteDocSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodObject<...>; }, $strict>], null>, ZodUnion<...>>, $InferInnerFunctionType<...>>; }, $strict>` |
 
+References:
+
+- OnDeleteDoc
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L75)
 
 #### :gear: OnDeleteManyDocsSchema
@@ -1209,6 +1433,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                 | Type                                                                                                                                                                                                                                                                                            |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnDeleteManyDocsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodArray<...>; }, $strict>], null>, ZodUnion<...>>, $InferInnerFunctionType<...>>; }, $strict>` |
+
+References:
+
+- OnDeleteManyDocs
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L85)
 
@@ -1218,6 +1446,10 @@ A schema that validates a value is an Uint8Array.
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnDeleteFilteredDocsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodArray<...>; }, $strict>], null>, ZodUnion<...>>, $InferInnerFunctionType<...>>; }, $strict>` |
 
+References:
+
+- OnDeleteFilteredDocs
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L95)
 
 #### :gear: OnUploadAssetSchema
@@ -1225,6 +1457,10 @@ A schema that validates a value is an Uint8Array.
 | Constant              | Type                                                                                                                                                                                                                                                                                             |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `OnUploadAssetSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodObject<...>; }, $strict>], null>, ZodUnion<...>>, $InferInnerFunctionType<...>>; }, $strict>` |
+
+References:
+
+- OnUploadAsset
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L105)
 
@@ -1234,6 +1470,10 @@ A schema that validates a value is an Uint8Array.
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnDeleteAssetSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodOptional<...>; }, $strict>], null>, ZodUnion<...>>, $InferInnerFunctionType<...>>; }, $strict>` |
 
+References:
+
+- OnDeleteAsset
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L115)
 
 #### :gear: OnDeleteManyAssetsSchema
@@ -1241,6 +1481,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                   | Type                                                                                                                                                                                                                                                                                            |
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnDeleteManyAssetsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodArray<...>; }, $strict>], null>, ZodUnion<...>>, $InferInnerFunctionType<...>>; }, $strict>` |
+
+References:
+
+- OnDeleteManyAssets
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L125)
 
@@ -1250,6 +1494,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `OnDeleteFilteredAssetsSchema` | `ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodArray<...>; }, $strict>], null>, ZodUnion<...>>, $InferInnerFunctionType<...>>; }, $strict>` |
 
+References:
+
+- OnDeleteFilteredAssets
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L135)
 
 #### :gear: HookSchema
@@ -1257,6 +1505,10 @@ A schema that validates a value is an Uint8Array.
 | Constant     | Type                                                                                                                                                                                                                                                                                                                               |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `HookSchema` | `ZodUnion<readonly [ZodObject<{ collections: ZodReadonly<ZodArray<ZodString>>; run: ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodObject<{ caller: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; data: ZodObject<...>; }, $strict>], null>, ZodUnion<...>>, $InferInnerFunctionType<...>>; }, $strict>, ... 7 more...` |
+
+References:
+
+- Hook
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L145)
 
@@ -1266,6 +1518,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `TimestampMatcherSchema` | `ZodUnion<readonly [ZodObject<{ equal: ZodBigInt; }, $strip>, ZodObject<{ greater_than: ZodBigInt; }, $strip>, ZodObject<{ less_than: ZodBigInt; }, $strip>, ZodObject<...>]>` |
 
+References:
+
+- TimestampMatcher
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L16)
 
 #### :gear: ListMatcherSchema
@@ -1273,6 +1529,10 @@ A schema that validates a value is an Uint8Array.
 | Constant            | Type                                                                                                                                                                                                                                                              |
 | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ListMatcherSchema` | `ZodObject<{ key: ZodOptional<ZodString>; description: ZodOptional<ZodString>; created_at: ZodOptional<ZodUnion<readonly [ZodObject<{ equal: ZodBigInt; }, $strip>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>>; updated_at: ZodOptional<...>; }, $strict>` |
+
+References:
+
+- ListMatcher
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L35)
 
@@ -1282,6 +1542,10 @@ A schema that validates a value is an Uint8Array.
 | -------------------- | --------------------------------------------------------------------------------------------- |
 | `ListPaginateSchema` | `ZodObject<{ start_after: ZodOptional<ZodString>; limit: ZodOptional<ZodBigInt>; }, $strict>` |
 
+References:
+
+- ListPaginate
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L57)
 
 #### :gear: ListOrderFieldSchema
@@ -1289,6 +1553,10 @@ A schema that validates a value is an Uint8Array.
 | Constant               | Type                                                                             |
 | ---------------------- | -------------------------------------------------------------------------------- |
 | `ListOrderFieldSchema` | `ZodEnum<{ keys: "keys"; created_at: "created_at"; updated_at: "updated_at"; }>` |
+
+References:
+
+- ListOrderField
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L75)
 
@@ -1298,6 +1566,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `ListOrderSchema` | `ZodObject<{ desc: ZodBoolean; field: ZodEnum<{ keys: "keys"; created_at: "created_at"; updated_at: "updated_at"; }>; }, $strict>` |
 
+References:
+
+- ListOrder
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L85)
 
 #### :gear: ListParamsSchema
@@ -1305,6 +1577,10 @@ A schema that validates a value is an Uint8Array.
 | Constant           | Type                                                                                                                                                                                                                                                                                                                               |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ListParamsSchema` | `ZodObject<{ matcher: ZodOptional<ZodObject<{ key: ZodOptional<ZodString>; description: ZodOptional<ZodString>; created_at: ZodOptional<ZodUnion<readonly [ZodObject<{ equal: ZodBigInt; }, $strip>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>>; updated_at: ZodOptional<...>; }, $strict>>; paginate: ZodOptional<...>...` |
+
+References:
+
+- ListParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L103)
 
@@ -1314,6 +1590,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------------- | ---------------------------------------------------------------- |
 | `ControllerScopeSchema` | `ZodEnum<{ write: "write"; admin: "admin"; submit: "submit"; }>` |
 
+References:
+
+- ControllerScopeSchema
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L15)
 
 #### :gear: MetadataSchema
@@ -1321,6 +1601,10 @@ A schema that validates a value is an Uint8Array.
 | Constant         | Type                                     |
 | ---------------- | ---------------------------------------- |
 | `MetadataSchema` | `ZodTuple<[ZodString, ZodString], null>` |
+
+References:
+
+- MetadataSchema
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L25)
 
@@ -1330,6 +1614,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ControllerSchema` | `ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, $strict>` |
 
+References:
+
+- ControllerSchema
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L35)
 
 #### :gear: ControllerRecordSchema
@@ -1337,6 +1625,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                 | Type                                                                                                                                                                                                                                                                          |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ControllerRecordSchema` | `ZodTuple<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, $strict>], null>` |
+
+References:
+
+- ControllerRecordSchema
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L79)
 
@@ -1346,6 +1638,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ControllersSchema` | `ZodArray<ZodTuple<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, $strict>], null>>` |
 
+References:
+
+- ControllersSchema
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L89)
 
 #### :gear: ControllerCheckParamsSchema
@@ -1353,6 +1649,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                      | Type                                                                                                                                                                           |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `ControllerCheckParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<Principal, Principal>]>; controllers: ZodArray<...>; }, $strip>` |
+
+References:
+
+- ControllerCheckParamsSchema
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
 
@@ -1362,6 +1662,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------------ | ------------------------------------------------ |
 | `CollectionParamsSchema` | `ZodObject<{ collection: ZodString; }, $strict>` |
 
+References:
+
+- CollectionParams
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/params.ts#L15)
 
 #### :gear: ListStoreParamsSchema
@@ -1369,6 +1673,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                | Type                                                                                                                                                                              |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ListStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+
+References:
+
+- ListStoreParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/params.ts#L34)
 
@@ -1378,6 +1686,10 @@ A schema that validates a value is an Uint8Array.
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GetDocStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; key: ZodString; }, $strict>` |
 
+References:
+
+- GetDocStoreParams
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L20)
 
 #### :gear: SetDocStoreParamsSchema
@@ -1385,6 +1697,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                  | Type                                                                                                                                                                                           |
 | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetDocStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; key: ZodString; doc: ZodObject<...>; }, $strict>` |
+
+References:
+
+- SetDocStoreParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L43)
 
@@ -1394,6 +1710,10 @@ A schema that validates a value is an Uint8Array.
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DeleteDocStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; key: ZodString; doc: ZodObject<...>; }, $strict>` |
 
+References:
+
+- DeleteDocStoreParams
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L63)
 
 #### :gear: CountCollectionDocsStoreParamsSchema
@@ -1401,6 +1721,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                               | Type                                             |
 | -------------------------------------- | ------------------------------------------------ |
 | `CountCollectionDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; }, $strict>` |
+
+References:
+
+- CountCollectionDocsStoreParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L83)
 
@@ -1410,6 +1734,10 @@ A schema that validates a value is an Uint8Array.
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CountDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
 
+References:
+
+- CountDocsStoreParams
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L93)
 
 #### :gear: ListDocsStoreParamsSchema
@@ -1417,6 +1745,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                    | Type                                                                                                                                                                              |
 | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ListDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+
+References:
+
+- ListDocsStoreParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L103)
 
@@ -1426,6 +1758,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------------------- | ------------------------------------------------ |
 | `DeleteDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; }, $strict>` |
 
+References:
+
+- DeleteDocsStoreParams
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L113)
 
 #### :gear: DeleteFilteredDocsStoreParamsSchema
@@ -1433,6 +1769,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                              | Type                                                                                                                                                                              |
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DeleteFilteredDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+
+References:
+
+- DeleteFilteredDocsParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/db.ts#L123)
 
@@ -1442,6 +1782,10 @@ A schema that validates a value is an Uint8Array.
 | -------------- | ---------------------------------------------- |
 | `MemorySchema` | `ZodEnum<{ heap: "heap"; stable: "stable"; }>` |
 
+References:
+
+- Memory
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/collections.ts#L6)
 
 #### :gear: GetAssetStoreParamsSchema
@@ -1449,6 +1793,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                    | Type                                                                                                                                                                            |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GetAssetStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; full_path: ZodString; }, $strict>` |
+
+References:
+
+- GetAssetStoreParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L26)
 
@@ -1458,6 +1806,10 @@ A schema that validates a value is an Uint8Array.
 | ---------------------------------------- | ------------------------------------------------ |
 | `CountCollectionAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; }, $strict>` |
 
+References:
+
+- CountCollectionAssetsStoreParams
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L49)
 
 #### :gear: CountAssetsStoreParamsSchema
@@ -1465,6 +1817,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                       | Type                                                                                                                                                                              |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CountAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+
+References:
+
+- CountAssetsStoreParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L59)
 
@@ -1474,6 +1830,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SetAssetHandlerParamsSchema` | `ZodObject<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; description: ZodOptional<...>; }, $strict>; content: ZodCustom<...>; headers: ZodArray<...>; }, $strict>` |
 
+References:
+
+- SetAssetHandlerParams
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L69)
 
 #### :gear: DeleteAssetsStoreParamsSchema
@@ -1481,6 +1841,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                        | Type                                             |
 | ------------------------------- | ------------------------------------------------ |
 | `DeleteAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; }, $strict>` |
+
+References:
+
+- DeleteAssetsStoreParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L100)
 
@@ -1490,6 +1854,10 @@ A schema that validates a value is an Uint8Array.
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DeleteFilteredAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
 
+References:
+
+- DeleteFilteredAssetsParams
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L110)
 
 #### :gear: DeleteAssetStoreParamsSchema
@@ -1497,6 +1865,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                       | Type                                                                                                                                                                            |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DeleteAssetStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; full_path: ZodString; }, $strict>` |
+
+References:
+
+- DeleteAssetStoreParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L120)
 
@@ -1506,6 +1878,10 @@ A schema that validates a value is an Uint8Array.
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ListAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
 
+References:
+
+- ListAssetsStoreParams
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L130)
 
 #### :gear: GetContentChunksStoreParamsSchema
@@ -1513,6 +1889,10 @@ A schema that validates a value is an Uint8Array.
 | Constant                            | Type                                                                                                                                                                                                                                                                           |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `GetContentChunksStoreParamsSchema` | `ZodObject<{ encoding: ZodObject<{ modified: ZodBigInt; content_chunks: ZodArray<ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>>; total_length: ZodBigInt; sha256: ZodCustom<...>; }, $strip>; chunk_index: ZodBigInt; memory: ZodEnum<...>; }, $strict>` |
+
+References:
+
+- GetContentChunksStoreParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L140)
 
@@ -1522,6 +1902,10 @@ A schema that validates a value is an Uint8Array.
 | --------------- | ----------------------------------------- |
 | `IDLTypeSchema` | `ZodCustom<Type<unknown>, Type<unknown>>` |
 
+References:
+
+- IDLType
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L9)
 
 #### :gear: CallArgSchema
@@ -1529,6 +1913,10 @@ A schema that validates a value is an Uint8Array.
 | Constant        | Type                                                                    |
 | --------------- | ----------------------------------------------------------------------- |
 | `CallArgSchema` | `ZodTuple<[ZodCustom<Type<unknown>, Type<unknown>>, ZodUnknown], null>` |
+
+References:
+
+- CallArg
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L21)
 
@@ -1540,6 +1928,10 @@ Schema for encoding the call arguments.
 | ---------------- | --------------------------------------------------------------------------------- |
 | `CallArgsSchema` | `ZodArray<ZodTuple<[ZodCustom<Type<unknown>, Type<unknown>>, ZodUnknown], null>>` |
 
+References:
+
+- CallArgs
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L33)
 
 #### :gear: CallResultSchema
@@ -1548,6 +1940,10 @@ Schema for encoding the call arguments.
 | ------------------ | ----------------------------------------- |
 | `CallResultSchema` | `ZodCustom<Type<unknown>, Type<unknown>>` |
 
+References:
+
+- CallResult
+
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L49)
 
 #### :gear: CallParamsSchema
@@ -1555,6 +1951,10 @@ Schema for encoding the call arguments.
 | Constant           | Type                                                                                                                                                                                                                        |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<Principal, Principal>]>; method: ZodString; args: ZodOptional<...>; result: ZodOptional<...>; }, $strip>` |
+
+References:
+
+- CallParams
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L59)
 
@@ -1599,6 +1999,8 @@ Defines the collections where a hook or assertion should run.
 | ------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `collections` | `readonly string[]` | An array of collection names where the hook or assertion will run. If empty, no hooks or assertions are triggered. |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/collections.ts#L16)
+
 #### :gear: HookContext
 
 Represents the context provided to hooks, containing information about the caller and related data.
@@ -1607,6 +2009,8 @@ Represents the context provided to hooks, containing information about the calle
 | -------- | ----------------------------- | ------------------------------------------------------------------------------- |
 | `caller` | `Uint8Array<ArrayBufferLike>` | The user who originally triggered the function that in turn triggered the hook. |
 | `data`   | `T`                           | The data associated with the hook execution.                                    |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/context.ts#L22)
 
 #### :gear: Doc
 
@@ -1621,6 +2025,8 @@ Represents a document stored in a collection.
 | `updated_at`  | `bigint`                      | The timestamp when the document was last updated.                                                                       |
 | `version`     | `bigint or undefined`         | The version number of the document, used for consistency checks. If not provided, it's assumed to be the first version. |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L43)
+
 #### :gear: SetDoc
 
 Represents the proposed version of a document to be created or updated.
@@ -1632,6 +2038,8 @@ This can be validated before allowing the operation.
 | `description` | `string or undefined`         | An optional description of the document.           |
 | `version`     | `bigint or undefined`         | The expected version number to ensure consistency. |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L101)
+
 #### :gear: DelDoc
 
 Represents the proposed version of a document to be deleted.
@@ -1640,6 +2048,8 @@ This can be validated before allowing the operation.
 | Property  | Type                  | Description                                        |
 | --------- | --------------------- | -------------------------------------------------- |
 | `version` | `bigint or undefined` | The expected version number to ensure consistency. |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L131)
 
 #### :gear: DocUpsert
 
@@ -1651,6 +2061,8 @@ This is used in hooks where a document is either being created or updated.
 | -------- | ------------------ | -------------------------------------------------------------------------------------------- |
 | `before` | `Doc or undefined` | The previous version of the document before the update. Undefined if this is a new document. |
 | `after`  | `Doc`              | The new version of the document after the update.                                            |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L26)
 
 #### :gear: DocAssertSet
 
@@ -1664,6 +2076,8 @@ throw an error if their validation fails.
 | `current`  | `Doc or undefined` | The current version of the document before the operation. Undefined if this is a new document. |
 | `proposed` | `SetDoc`           | The proposed version of the document. This can be validated before allowing the operation.     |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L54)
+
 #### :gear: DocAssertDelete
 
 Represents a validation check before deleting a document.
@@ -1676,6 +2090,8 @@ throw an error if their validation fails.
 | `current`  | `Doc or undefined` | The current version of the document before the operation. Undefined if the document does not exist. |
 | `proposed` | `DelDoc`           | The proposed version of the document. This can be validated before allowing the operation.          |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/payload.ts#L84)
+
 #### :gear: DocContext
 
 Represents the context of a document operation within a collection.
@@ -1685,6 +2101,8 @@ Represents the context of a document operation within a collection.
 | `collection` | `string` | The name of the collection where the document is stored. |
 | `key`        | `string` | The key identifying the document within the collection.  |
 | `data`       | `T`      | The data associated with the document operation.         |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L32)
 
 #### :gear: AssetKey
 
@@ -1699,6 +2117,8 @@ Metadata identifying an asset within a collection and the storage system.
 | `owner`       | `Uint8Array<ArrayBufferLike>` | The owner of the asset.                                                                                                     |
 | `description` | `string or undefined`         | Optional description of the asset for indexing/search.                                                                      |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L85)
+
 #### :gear: AssetEncoding
 
 Represents a specific encoding of an asset, such as "gzip" or "identity" (no compression).
@@ -1709,6 +2129,8 @@ Represents a specific encoding of an asset, such as "gzip" or "identity" (no com
 | `content_chunks` | `BlobOrKey[]` | Chunks of binary content or references to them. |
 | `total_length`   | `bigint`      | Total byte size of the encoded content.         |
 | `sha256`         | `Hash`        | SHA-256 hash of the encoded content.            |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L131)
 
 #### :gear: Asset
 
@@ -1723,6 +2145,8 @@ A stored asset including its metadata, encodings, and timestamps.
 | `updated_at` | `bigint`                          | Timestamp when the asset was last updated.                                                     |
 | `version`    | `bigint or undefined`             | Optional version number of the asset.                                                          |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L190)
+
 #### :gear: Batch
 
 Represents a batch of chunks to be uploaded and committed to an asset.
@@ -1734,6 +2158,8 @@ Represents a batch of chunks to be uploaded and committed to an asset.
 | `expires_at`    | `bigint`                    | Timestamp when this batch expires.                |
 | `encoding_type` | `EncodingType or undefined` | Optional encoding format (e.g., "gzip").          |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L263)
+
 #### :gear: CommitBatch
 
 Represents the final step in uploading an asset, committing the batch to storage.
@@ -1744,6 +2170,8 @@ Represents the final step in uploading an asset, committing the batch to storage
 | `headers`   | `HeaderField[]` | HTTP headers associated with this asset.          |
 | `chunk_ids` | `bigint[]`      | List of chunk IDs that make up the asset content. |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L319)
+
 #### :gear: AssetAssertUpload
 
 Represents a validation context before uploading an asset.
@@ -1753,6 +2181,8 @@ Represents a validation context before uploading an asset.
 | `current`      | `Asset or undefined` | The current asset already stored (if any).        |
 | `batch`        | `Batch`              | The batch metadata being uploaded.                |
 | `commit_batch` | `CommitBatch`        | The commit data describing headers and chunk ids. |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/storage/payload.ts#L25)
 
 #### :gear: ListMatcher
 
@@ -1765,6 +2195,8 @@ Matcher used to filter list results.
 | `created_at`  | `TimestampMatcher or undefined` |             |
 | `updated_at`  | `TimestampMatcher or undefined` |             |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L47)
+
 #### :gear: ListPaginate
 
 Optional pagination controls for listing.
@@ -1774,6 +2206,8 @@ Optional pagination controls for listing.
 | `start_after` | `string or undefined` |             |
 | `limit`       | `bigint or undefined` |             |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L67)
+
 #### :gear: ListOrder
 
 Ordering strategy for listing documents.
@@ -1782,6 +2216,8 @@ Ordering strategy for listing documents.
 | -------- | ---------------- | ----------- |
 | `desc`   | `boolean`        |             |
 | `field`  | `ListOrderField` |             |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L95)
 
 #### :gear: ListParams
 
@@ -1793,6 +2229,8 @@ Full set of listing parameters.
 | `paginate` | `ListPaginate or undefined`                |             |
 | `order`    | `ListOrder or undefined`                   |             |
 | `owner`    | `Uint8Array<ArrayBufferLike> or undefined` |             |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L115)
 
 #### :gear: ListResults
 
@@ -1806,6 +2244,8 @@ List results, parameterized by type of returned item.
 | `matches_length` | `bigint`              |             |
 | `matches_pages`  | `bigint or undefined` |             |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L142)
+
 #### :gear: Controller
 
 Represents a controller with access scope and associated metadata.
@@ -1818,6 +2258,8 @@ Represents a controller with access scope and associated metadata.
 | `expires_at` | `bigint or undefined`            | Optional expiration timestamp for the controller. 👉 It's a placeholder for future implementation. |
 | `scope`      | `"write" or "admin" or "submit"` | The scope assigned to the controller.                                                              |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L48)
+
 #### :gear: ControllerCheckParams
 
 Represents the parameters required to perform controller checks.
@@ -1827,6 +2269,8 @@ Represents the parameters required to perform controller checks.
 | `caller`      | `Uint8Array<ArrayBufferLike> or Principal`                                                                                                                                            | The identity of the caller to verify against the controller list. |
 | `controllers` | `[Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; }][]` | The list of controllers to check against.                         |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L107)
+
 #### :gear: CollectionParams
 
 The parameters required to scope an operation to a collection.
@@ -1834,6 +2278,8 @@ The parameters required to scope an operation to a collection.
 | Property     | Type     | Description                           |
 | ------------ | -------- | ------------------------------------- |
 | `collection` | `string` | The name of the collection to target. |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/params.ts#L24)
 
 #### :gear: SetAssetHandlerParams
 
@@ -1845,6 +2291,8 @@ The parameters required to set (or update) an asset.
 | `content` | `Blob`         | The binary content of the asset. |
 | `headers` | `HeaderFields` | Associated HTTP headers.         |
 
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L80)
+
 #### :gear: GetContentChunksStoreParams
 
 The parameters required to retrieve a specific chunk from an asset.
@@ -1854,6 +2302,8 @@ The parameters required to retrieve a specific chunk from an asset.
 | `encoding`    | `AssetEncoding`      | The encoding of the chunks.                 |
 | `chunk_index` | `bigint`             | The index of the chunk to retrieve.         |
 | `memory`      | `"heap" or "stable"` | The memory type to retrieve the chunk from. |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L151)
 
 #### :gear: CallParams
 
@@ -1865,6 +2315,8 @@ Type representing the parameters required to make a canister call.
 | `method`     | `string`                                   | The name of the method to call. Minimum one character.            |
 | `args`       | `[Type<unknown>, unknown][] or undefined`  | The arguments, including types and values, for the canister call. |
 | `result`     | `Type<unknown> or undefined`               | The expected result type used for decoding the response.          |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L69)
 
 ### :cocktail: Types
 

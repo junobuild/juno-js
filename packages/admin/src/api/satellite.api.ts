@@ -1,7 +1,6 @@
 import type {Principal} from '@dfinity/principal';
 import {toNullable} from '@dfinity/utils';
-import type {SatelliteParameters} from '@junobuild/ic-client';
-import {
+import {type SatelliteParameters,
   getDeprecatedSatelliteActor,
   getDeprecatedSatelliteNoScopeActor,
   getDeprecatedSatelliteVersionActor,

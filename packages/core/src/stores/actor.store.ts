@@ -1,4 +1,4 @@
-import {type ActorMethod,Actor, type ActorSubclass} from '@dfinity/agent';
+import {Actor, type ActorMethod, type ActorSubclass} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {isNullish} from '@dfinity/utils';
 import type {ActorKey} from '../types/actor';

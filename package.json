@@ -172,7 +172,8 @@
         "@dfinity/identity",
         "@dfinity/principal",
         "@dfinity/utils",
-        "@junobuild/utils"
+        "@junobuild/utils",
+        "@junobuild/ic-client"
       ]
     },
     {

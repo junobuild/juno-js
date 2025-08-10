@@ -175,7 +175,7 @@
     },
     {
       "name": "@junobuild/ic-client",
-      "path": "./packages/Create new scratch file from selection/dist/index.js",
+      "path": "./packages/ic-client/dist/index.js",
       "limit": "15 kB",
       "ignore": [
         "@dfinity/agent",

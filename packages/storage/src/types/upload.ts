@@ -1,4 +1,4 @@
-import type {ConsoleActor, SatelliteActor} from '../api/actor.factory';
+import type {ConsoleActor, SatelliteActor} from '@junobuild/ic-client';
 import type {Storage} from './storage';
 
 export type UploadAsset = Required<Omit<Storage, 'token' | 'encoding' | 'description'>> &

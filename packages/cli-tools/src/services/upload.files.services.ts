@@ -1,5 +1,4 @@
 import {isNullish, nonNullish, notEmptyString} from '@dfinity/utils';
-import {Blob} from 'buffer';
 import {readFile} from 'node:fs/promises';
 import {basename} from 'node:path';
 import {

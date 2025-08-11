@@ -1,5 +1,5 @@
 import type {CliConfig, EncodingType} from '@junobuild/config';
-import type {Blob} from 'buffer';
+import type {Asset} from '@junobuild/storage';
 
 export type MimeType = string;
 
@@ -20,16 +20,6 @@ export type FilePaths = Required<Pick<UploadFileStorage, 'fullPath'>> & {
 export interface FileAndPaths {
   file: FileDetails;
   paths: FilePaths;
-}
-
-// TODO: we duplicate the types currently to not reference @junobuild/core
-export interface AssetEncoding {
-  sha256: string;
-}
-
-export interface Asset {
-  fullPath: string;
-  encodings: Record<EncodingType, AssetEncoding>;
 }
 
 export type ListAssets = ({startAfter}: {startAfter?: string}) => Promise<Asset[]>;
@@ -85,10 +75,10 @@ export type DeployParams = PrepareDeployOptions & {
 
 // TODO: better solution?
 // TODO: rename
-export type DeployParamsSingle<T = UploadFile> = {
+export interface DeployParamsSingle<T = UploadFile> {
   uploadFile: T;
-};
+}
 
-export type DeployParamsGrouped<T = UploadFiles> = {
+export interface DeployParamsGrouped<T = UploadFiles> {
   uploadFiles: T;
-};
+}

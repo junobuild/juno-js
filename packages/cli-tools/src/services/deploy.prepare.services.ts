@@ -1,5 +1,6 @@
 import {isNullish, nonNullish} from '@dfinity/utils';
 import type {CliConfig, EncodingType} from '@junobuild/config';
+import type {Asset} from '@junobuild/storage';
 import crypto from 'crypto';
 import {fileTypeFromFile} from 'file-type';
 import mime from 'mime-types';
@@ -12,13 +13,7 @@ import {
   DEPLOY_DEFAULT_IGNORE,
   DEPLOY_DEFAULT_SOURCE
 } from '../constants/deploy.constants';
-import type {
-  Asset,
-  FileDetails,
-  FileExtension,
-  ListAssets,
-  PrepareDeployOptions
-} from '../types/deploy';
+import type {FileDetails, FileExtension, ListAssets, PrepareDeployOptions} from '../types/deploy';
 import {gzipFiles} from '../utils/compress.utils';
 import {fullPath, listSourceFiles} from '../utils/deploy.utils';
 

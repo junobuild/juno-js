@@ -1,4 +1,4 @@
-import type {AssetNoContent} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 import type {Asset} from '@junobuild/storage';
 import type {ListResults} from './list';
 
@@ -7,7 +7,7 @@ import type {ListResults} from './list';
  * @interface
  * @extends {Pick<ListResults<AssetNoContent>, 'items_length' | 'items_page' | 'matches_length' | 'matches_pages'>}
  */
-export interface Assets extends Omit<ListResults<AssetNoContent>, 'items'> {
+export interface Assets extends Omit<ListResults<SatelliteDid.AssetNoContent>, 'items'> {
   /**
    * The collection of assets.
    * @type {Asset[]}

@@ -1,6 +1,6 @@
 import {IDL} from '@dfinity/candid';
 import {Principal} from '@dfinity/principal';
-import {Controller} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import {SatelliteDid} from '@junobuild/ic-client';
 import {encodeAdminAccessKeysToIDL, encoreIDLUser} from '../../utils/idl.utils';
 import {mockSatelliteIdText, mockUserIdText} from '../mocks/admin.mock';
 
@@ -21,7 +21,7 @@ describe('idl-encode.utils', () => {
     const viewerPrincipal = Principal.fromText(mockUserIdText);
 
     it('encodes only Admin-scoped principals', () => {
-      const controllers: [Principal, Controller][] = [
+      const controllers: [Principal, SatelliteDid.Controller][] = [
         [
           adminPrincipal,
           {
@@ -52,7 +52,7 @@ describe('idl-encode.utils', () => {
     });
 
     it('returns an empty list if no Admins are present', () => {
-      const controllers: [Principal, Controller][] = [
+      const controllers: [Principal, SatelliteDid.Controller][] = [
         [
           viewerPrincipal,
           {

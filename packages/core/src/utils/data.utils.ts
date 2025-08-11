@@ -1,7 +1,7 @@
-import type {Doc} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 import {fromArray} from '@junobuild/utils';
 
-export const mapData = async <D>({data}: Pick<Doc, 'data'>): Promise<D> => {
+export const mapData = async <D>({data}: Pick<SatelliteDid.Doc, 'data'>): Promise<D> => {
   try {
     return await fromArray<D>(data);
   } catch (err: unknown) {

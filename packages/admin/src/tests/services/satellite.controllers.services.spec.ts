@@ -1,5 +1,5 @@
 import * as actor from '@junobuild/ic-client';
-import {SetControllersArgs} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import {SatelliteDid} from '@junobuild/ic-client';
 import {
   listSatelliteControllers,
   setSatelliteControllers
@@ -82,7 +82,7 @@ describe('satellite.controllers.services', () => {
 
     mockActor.set_controllers.mockResolvedValue(expectedResponse);
 
-    const args: SetControllersArgs = {
+    const args: SatelliteDid.SetControllersArgs = {
       controller: mockController,
       controllers: [mockUserIdPrincipal]
     };

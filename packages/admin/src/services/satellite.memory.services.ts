@@ -1,5 +1,4 @@
-import type {SatelliteParameters} from '@junobuild/ic-client';
-import type {MemorySize} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid, SatelliteParameters} from '@junobuild/ic-client';
 import {memorySize} from '../api/satellite.api';
 
 /**
@@ -10,4 +9,4 @@ import {memorySize} from '../api/satellite.api';
  */
 export const satelliteMemorySize = (params: {
   satellite: SatelliteParameters;
-}): Promise<MemorySize> => memorySize(params);
+}): Promise<SatelliteDid.MemorySize> => memorySize(params);

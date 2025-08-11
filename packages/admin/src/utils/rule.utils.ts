@@ -1,13 +1,6 @@
 import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
 import type {MemoryText, PermissionText, Rule, RulesType} from '@junobuild/config';
-import type {
-  CollectionType as CollectionTypeApi,
-  ListRulesParams as ListRulesParamsApi,
-  Memory,
-  Permission,
-  Rule as RuleApi,
-  SetRule
-} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 import {
   DbRulesType,
   DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS,
@@ -21,10 +14,10 @@ import {
 } from '../constants/rules.constants';
 import type {ListRulesMatcher} from '../types/list';
 
-export const fromRuleType = (type: RulesType): CollectionTypeApi =>
+export const fromRuleType = (type: RulesType): SatelliteDid.CollectionType =>
   type === 'storage' ? StorageRulesType : DbRulesType;
 
-export const fromRulesFilter = (filter?: ListRulesMatcher): ListRulesParamsApi => ({
+export const fromRulesFilter = (filter?: ListRulesMatcher): SatelliteDid.ListRulesParams => ({
   matcher: isNullish(filter)
     ? toNullable()
     : toNullable({
@@ -53,7 +46,7 @@ export const fromRule = ({
   | 'memory'
   | 'mutablePermissions'
   | 'maxTokens'
->): SetRule => ({
+>): SatelliteDid.SetRule => ({
   read: permissionFromText(read),
   write: permissionFromText(write),
   memory: nonNullish(memory) ? [memoryFromText(memory)] : [],
@@ -75,7 +68,7 @@ export const fromRule = ({
       : []
 });
 
-export const toRule = ([collection, rule]: [string, RuleApi]): Rule => {
+export const toRule = ([collection, rule]: [string, SatelliteDid.Rule]): Rule => {
   const {
     read,
     write,
@@ -116,7 +109,7 @@ export const toRule = ([collection, rule]: [string, RuleApi]): Rule => {
   };
 };
 
-export const permissionToText = (permission: Permission): PermissionText => {
+export const permissionToText = (permission: SatelliteDid.Permission): PermissionText => {
   if ('Public' in permission) {
     return 'public';
   }
@@ -132,7 +125,7 @@ export const permissionToText = (permission: Permission): PermissionText => {
   return 'controllers';
 };
 
-const permissionFromText = (text: PermissionText): Permission => {
+const permissionFromText = (text: PermissionText): SatelliteDid.Permission => {
   switch (text) {
     case 'public':
       return PermissionPublic;
@@ -145,7 +138,7 @@ const permissionFromText = (text: PermissionText): Permission => {
   }
 };
 
-export const memoryFromText = (text: MemoryText): Memory => {
+export const memoryFromText = (text: MemoryText): SatelliteDid.Memory => {
   switch (text.toLowerCase()) {
     case 'heap':
       return MemoryHeap;
@@ -154,7 +147,7 @@ export const memoryFromText = (text: MemoryText): Memory => {
   }
 };
 
-export const memoryToText = (memory: Memory): MemoryText => {
+export const memoryToText = (memory: SatelliteDid.Memory): MemoryText => {
   if ('Heap' in memory) {
     return 'heap';
   }

@@ -1,14 +1,10 @@
 import {fromNullable, toNullable} from '@dfinity/utils';
-import type {
-  DelDoc,
-  Doc as DocApi,
-  SetDoc
-} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 import {fromArray, toArray} from '@junobuild/utils';
 import type {Doc} from '../types/doc';
 import type {ExcludeDate} from '../types/utility';
 
-export const toSetDoc = async <D>(doc: Doc<D>): Promise<SetDoc> => {
+export const toSetDoc = async <D>(doc: Doc<D>): Promise<SatelliteDid.SetDoc> => {
   const {data, version, description} = doc;
 
   return {
@@ -18,7 +14,7 @@ export const toSetDoc = async <D>(doc: Doc<D>): Promise<SetDoc> => {
   };
 };
 
-export const toDelDoc = <D>(doc: Doc<D>): DelDoc => {
+export const toDelDoc = <D>(doc: Doc<D>): SatelliteDid.DelDoc => {
   const {version} = doc;
 
   return {
@@ -26,7 +22,13 @@ export const toDelDoc = <D>(doc: Doc<D>): DelDoc => {
   };
 };
 
-export const fromDoc = async <D>({doc, key}: {doc: DocApi; key: string}): Promise<Doc<D>> => {
+export const fromDoc = async <D>({
+  doc,
+  key
+}: {
+  doc: SatelliteDid.Doc;
+  key: string;
+}): Promise<Doc<D>> => {
   const {owner, version, description: docDescription, data, ...rest} = doc;
 
   return {

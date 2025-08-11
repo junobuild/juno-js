@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {SetController} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import {SatelliteDid} from '@junobuild/ic-client';
 import {SetControllerParams} from '../../types/controllers';
 import {mapSetControllerParams} from '../../utils/controllers.utils';
 import {mockUserIdText} from '../mocks/admin.mock';
@@ -16,7 +16,7 @@ describe('controllers.utils', () => {
 
       expect(result.controllerIds).toEqual([Principal.fromText(mockUserIdText)]);
 
-      const expected: SetController = {
+      const expected: SatelliteDid.SetController = {
         metadata: [['profile', 'hello world']],
         expires_at: [],
         scope: {Admin: null}

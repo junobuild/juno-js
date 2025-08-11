@@ -1,6 +1,5 @@
 import type {Principal} from '@dfinity/principal';
-import type {OrbiterParameters} from '@junobuild/ic-client';
-import type {Controller} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
+import type {MissionControlDid, OrbiterParameters} from '@junobuild/ic-client';
 import {listControllers} from '../api/orbiter.api';
 
 /**
@@ -11,4 +10,4 @@ import {listControllers} from '../api/orbiter.api';
  */
 export const listOrbiterControllers = (params: {
   orbiter: OrbiterParameters;
-}): Promise<[Principal, Controller][]> => listControllers(params);
+}): Promise<[Principal, MissionControlDid.Controller][]> => listControllers(params);

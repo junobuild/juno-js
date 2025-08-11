@@ -1,13 +1,10 @@
 import type {Principal} from '@dfinity/principal';
 import {
+  type OrbiterDid,
   type OrbiterParameters,
   getDeprecatedOrbiterVersionActor,
   getOrbiterActor
 } from '@junobuild/ic-client';
-import type {
-  Controller,
-  MemorySize
-} from '@junobuild/ic-client/dist/declarations/orbiter/orbiter.did';
 
 /**
  * @deprecated - Replaced in Orbiter > v0.0.8 with public custom section juno:package
@@ -23,12 +20,16 @@ export const listControllers = async ({
 }: {
   orbiter: OrbiterParameters;
   certified?: boolean;
-}): Promise<[Principal, Controller][]> => {
+}): Promise<[Principal, OrbiterDid.Controller][]> => {
   const {list_controllers} = await getOrbiterActor({...orbiter, certified});
   return list_controllers();
 };
 
-export const memorySize = async ({orbiter}: {orbiter: OrbiterParameters}): Promise<MemorySize> => {
+export const memorySize = async ({
+  orbiter
+}: {
+  orbiter: OrbiterParameters;
+}): Promise<OrbiterDid.MemorySize> => {
   const {memory_size} = await getOrbiterActor(orbiter);
   return memory_size();
 };

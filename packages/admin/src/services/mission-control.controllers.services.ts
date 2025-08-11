@@ -1,6 +1,5 @@
 import type {Principal} from '@dfinity/principal';
-import type {MissionControlParameters} from '@junobuild/ic-client';
-import type {Controller} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
+import type {MissionControlDid, MissionControlParameters} from '@junobuild/ic-client';
 import {
   listControllers,
   setMissionControlController as setMissionControlControllerApi,
@@ -57,4 +56,4 @@ export const setMissionControlController = ({
  */
 export const listMissionControlControllers = (params: {
   missionControl: MissionControlParameters;
-}): Promise<[Principal, Controller][]> => listControllers(params);
+}): Promise<[Principal, MissionControlDid.Controller][]> => listControllers(params);

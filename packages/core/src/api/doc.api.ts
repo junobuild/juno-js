@@ -1,5 +1,5 @@
 import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
-import type {DelDoc, SetDoc} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 import type {ActorReadParams, ActorUpdateParams} from '../types/actor';
 import type {Doc} from '../types/doc';
 import type {ListParams, ListResults} from '../types/list';
@@ -79,7 +79,7 @@ export const setManyDocs = async ({
 } & ActorUpdateParams): Promise<Doc<any>[]> => {
   const {set_many_docs} = await getSatelliteActor(rest);
 
-  const payload: [string, string, SetDoc][] = [];
+  const payload: [string, string, SatelliteDid.SetDoc][] = [];
   for (const {collection, doc} of docs) {
     const {key} = doc;
     payload.push([collection, key, await toSetDoc(doc)]);
@@ -120,7 +120,7 @@ export const deleteManyDocs = async ({
 } & ActorUpdateParams): Promise<void> => {
   const {del_many_docs} = await getSatelliteActor(rest);
 
-  const payload: [string, string, DelDoc][] = docs.map(({collection, doc}) => [
+  const payload: [string, string, SatelliteDid.DelDoc][] = docs.map(({collection, doc}) => [
     collection,
     doc.key,
     toDelDoc(doc)

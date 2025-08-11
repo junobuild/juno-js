@@ -1,5 +1,5 @@
 import type {Rule} from '@junobuild/config';
-import type {Rule as RuleApi} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 import {
   DbRulesType,
   DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS,
@@ -150,7 +150,7 @@ describe('rules.utils', () => {
 
   describe('toRule', () => {
     it('maps RuleApi to Rule with all fields', () => {
-      const input: [string, RuleApi] = [
+      const input: [string, SatelliteDid.Rule] = [
         'test',
         {
           read: {Public: null},

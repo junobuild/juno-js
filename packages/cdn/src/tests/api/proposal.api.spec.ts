@@ -1,8 +1,5 @@
+import type {SatelliteDid} from '@junobuild/ic-client';
 import * as actor from '@junobuild/ic-client';
-import type {
-  ListProposalResults,
-  ListProposalsParams
-} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 import {
   commitProposal,
   countProposals,
@@ -171,10 +168,10 @@ describe('proposals.api', () => {
   });
 
   describe('listProposals', () => {
-    const filter: ListProposalsParams = {order: [], paginate: []};
+    const filter: SatelliteDid.ListProposalsParams = {order: [], paginate: []};
 
     it('returns the list results', async () => {
-      const list: ListProposalResults = {
+      const list: SatelliteDid.ListProposalResults = {
         items: [],
         items_length: 1n,
         matches_length: 1n

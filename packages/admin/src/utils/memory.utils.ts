@@ -1,10 +1,10 @@
 import {fromNullable, nonNullish, toNullable} from '@dfinity/utils';
 import type {MaxMemorySizeConfig} from '@junobuild/config';
-import type {ConfigMaxMemorySize} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 
 export const toMaxMemorySize = (
   configMaxMemorySize?: MaxMemorySizeConfig
-): [] | [ConfigMaxMemorySize] =>
+): [] | [SatelliteDid.ConfigMaxMemorySize] =>
   toNullable(
     nonNullish(configMaxMemorySize) &&
       (nonNullish(toNullable(configMaxMemorySize.heap)) ||
@@ -17,7 +17,7 @@ export const toMaxMemorySize = (
   );
 
 export const fromMaxMemorySize = (
-  configMaxMemorySize: [] | [ConfigMaxMemorySize]
+  configMaxMemorySize: [] | [SatelliteDid.ConfigMaxMemorySize]
 ): {maxMemorySize?: MaxMemorySizeConfig} => {
   const memorySize = fromNullable(configMaxMemorySize);
   const heap = fromNullable(memorySize?.heap ?? []);

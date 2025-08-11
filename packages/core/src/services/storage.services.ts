@@ -1,5 +1,5 @@
 import {fromNullable, nonNullish} from '@dfinity/utils';
-import type {AssetNoContent} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 import type {Asset, AssetEncoding, AssetKey, Storage} from '@junobuild/storage';
 import {
   countAssets as countAssetsApi,
@@ -128,7 +128,7 @@ export const listAssets = async ({
       encodings,
       created_at,
       updated_at
-    }: AssetNoContent) => {
+    }: SatelliteDid.AssetNoContent) => {
       const token = fromNullable(t);
 
       return {
@@ -288,7 +288,7 @@ export const getAsset = async ({
   collection: string;
   satellite?: SatelliteOptions;
   options?: ReadOptions;
-} & Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
+} & Pick<AssetKey, 'fullPath'>): Promise<SatelliteDid.AssetNoContent | undefined> => {
   const identity = getAnyIdentity(satellite?.identity);
 
   return await getAssetApi({
@@ -315,7 +315,7 @@ export const getManyAssets = async ({
   assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
   satellite?: SatelliteOptions;
   options?: ReadOptions;
-}): Promise<(AssetNoContent | undefined)[]> => {
+}): Promise<(SatelliteDid.AssetNoContent | undefined)[]> => {
   const identity = getAnyIdentity(satellite?.identity);
 
   return await getManyAssetsApi({

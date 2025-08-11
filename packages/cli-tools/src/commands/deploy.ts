@@ -4,14 +4,17 @@ import {COLLECTION_DAPP} from '../constants/deploy.constants';
 import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';
-import {uploadFiles} from '../services/upload.services';
+import {uploadFiles, uploadManyFiles} from '../services/upload.services';
 import type {
   DeployParams,
+  DeployParamsGrouped,
+  DeployParamsSingle,
   DeployResult,
   DeployResultWithProposal,
   FileAndPaths,
   FileDetails,
   FilePaths,
+  UploadFilesWithProposal,
   UploadFileWithProposal
 } from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
@@ -51,7 +54,7 @@ export const postDeploy = async ({config: {postdeploy}}: {config: CliConfig}) =>
  * This function handles:
  * 1. Resolving source files to upload.
  * 2. Verifying that enough memory is available (via `assertMemory`).
- * 3. Uploading all valid files using the provided `uploadFile` function.
+ * 3. Uploading all valid files using the provided `uploadFile` or `uploadFiles` function.
  *
  * If no files are detected (e.g., all files are unchanged), the deploy is skipped.
  *
@@ -60,14 +63,20 @@ export const postDeploy = async ({config: {postdeploy}}: {config: CliConfig}) =>
  * @param {ListAssets} options.listAssets - A function to list existing files on the target.
  * @param {Function} [options.assertSourceDirExists] - Optional check to ensure source directory exists.
  * @param {Function} options.assertMemory - A function to ensure enough memory is available.
- * @param {UploadFile} options.uploadFile - A function responsible for uploading a single file.
+ * @param {UploadFile} options.uploadFn - A function responsible for uploading a single or a batch of files.
  *
  * @returns {Promise<DeployResult>} An object containing the result of the deploy:
  *   - `skipped` if no files were found.
  *   - `deployed` and a list of uploaded files if the deploy succeeded.
  */
-export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<DeployResult> => {
-  const prepareResult = await prepareDeploy(rest);
+export const deploy = async ({
+  params,
+  upload
+}: {
+  params: DeployParams;
+  upload: DeployParamsSingle | DeployParamsGrouped;
+}): Promise<DeployResult> => {
+  const prepareResult = await prepareDeploy(params);
 
   if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
@@ -77,12 +86,25 @@ export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<Deplo
 
   const sourceFiles = prepareSourceFiles({files, sourceAbsolutePath});
 
-  await uploadFiles({
+  const source = {
     files: sourceFiles,
-    uploadFile,
-    sourceAbsolutePath,
-    collection: COLLECTION_DAPP
-  });
+    sourceAbsolutePath
+  };
+
+  // TODO: meh, refactor
+  if ('uploadFiles' in upload) {
+    await uploadManyFiles({
+      ...source,
+      collection: COLLECTION_DAPP,
+      uploadFiles: upload.uploadFiles
+    });
+  } else {
+    await uploadFiles({
+      ...source,
+      collection: COLLECTION_DAPP,
+      uploadFile: upload.uploadFile
+    });
+  }
 
   console.log(`\n🚀 Deploy complete!`);
 
@@ -111,13 +133,18 @@ export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<Deplo
  *   - `{result: 'deployed', files, proposalId}` if the upload and proposal was applied automatically committed.
  */
 export const deployWithProposal = async ({
-  deploy: {uploadFile, ...rest},
+  deploy: {params, upload},
   proposal: {clearAssets, ...restProposal}
 }: {
-  deploy: DeployParams<UploadFileWithProposal>;
+  deploy: {
+    params: DeployParams;
+    upload:
+      | DeployParamsSingle<UploadFileWithProposal>
+      | DeployParamsGrouped<UploadFilesWithProposal>;
+  };
   proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {clearAssets?: boolean};
 }): Promise<DeployResultWithProposal> => {
-  const prepareResult = await prepareDeploy(rest);
+  const prepareResult = await prepareDeploy(params);
 
   if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
@@ -128,7 +155,7 @@ export const deployWithProposal = async ({
   const sourceFiles = prepareSourceFiles(prepareResult);
 
   const result = await deployAndProposeChanges({
-    deploy: {uploadFile, files: sourceFiles, sourceAbsolutePath, collection: COLLECTION_DAPP},
+    deploy: {upload, files: sourceFiles, sourceAbsolutePath, collection: COLLECTION_DAPP},
     proposal: {
       ...restProposal,
       proposalType: {
@@ -149,7 +176,7 @@ export const deployWithProposal = async ({
 const prepareDeploy = async ({
   assertMemory,
   ...rest
-}: Omit<DeployParams, 'uploadFile'>): Promise<
+}: Omit<DeployParams, 'uploadFn'>): Promise<
   {result: 'skipped'} | {result: 'to-deploy'; files: FileDetails[]; sourceAbsolutePath: string}
 > => {
   const {files: sourceFiles, sourceAbsolutePath} = await prepareDeployServices(rest);

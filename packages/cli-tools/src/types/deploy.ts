@@ -45,10 +45,19 @@ export interface UploadFileStorage {
   description?: string;
 }
 
-export type UploadFileStorageWithProposal = UploadFileStorage & {proposalId: bigint};
-
+// TODO: align interfaces?
 export type UploadFile = (params: UploadFileStorage) => Promise<void>;
-export type UploadFileWithProposal = (params: UploadFileStorageWithProposal) => Promise<void>;
+export type UploadFileWithProposal = (
+  params: UploadFileStorage & {proposalId: bigint}
+) => Promise<void>;
+
+export type UploadFiles = (params: {files: UploadFileStorage[]}) => Promise<void>;
+export type UploadFilesWithProposal = (params: {
+  files: UploadFileStorage[];
+  proposalId: bigint;
+}) => Promise<void>;
+
+export type UploadFn = {uploadFile: UploadFile} | {uploadFiles: UploadFiles};
 
 export type DeployResult =
   | {result: 'deployed'; files: Pick<FileDetails, 'file'>[]}
@@ -68,9 +77,18 @@ export interface PrepareDeployOptions {
   includeAllFiles?: boolean;
 }
 
-export type DeployParams<T = UploadFile> = PrepareDeployOptions & {
+export type DeployParams = PrepareDeployOptions & {
   config: CliConfig;
   listAssets: ListAssets;
   assertMemory: () => Promise<void>;
+};
+
+// TODO: better solution?
+// TODO: rename
+export type DeployParamsSingle<T = UploadFile> = DeployParams & {
   uploadFile: T;
+};
+
+export type DeployParamsGrouped<T = UploadFiles> = DeployParams & {
+  uploadFiles: T;
 };

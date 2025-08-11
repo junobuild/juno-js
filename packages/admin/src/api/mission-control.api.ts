@@ -1,5 +1,6 @@
 import type {Principal} from '@dfinity/principal';
-import {type MissionControlDid,
+import {
+  type MissionControlDid,
   type MissionControlParameters,
   getDeprecatedMissionControlVersionActor,
   getMissionControlActor

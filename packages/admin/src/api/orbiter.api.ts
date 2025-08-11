@@ -1,5 +1,6 @@
 import type {Principal} from '@dfinity/principal';
-import {type OrbiterDid,
+import {
+  type OrbiterDid,
   type OrbiterParameters,
   getDeprecatedOrbiterVersionActor,
   getOrbiterActor

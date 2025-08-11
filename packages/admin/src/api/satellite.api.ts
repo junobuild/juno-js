@@ -1,6 +1,7 @@
 import type {Principal} from '@dfinity/principal';
 import {toNullable} from '@dfinity/utils';
-import {type SatelliteDid,
+import {
+  type SatelliteDid,
   type SatelliteParameters,
   getDeprecatedSatelliteActor,
   getDeprecatedSatelliteNoScopeActor,

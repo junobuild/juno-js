@@ -85,10 +85,10 @@ export type DeployParams = PrepareDeployOptions & {
 
 // TODO: better solution?
 // TODO: rename
-export type DeployParamsSingle<T = UploadFile> = DeployParams & {
+export type DeployParamsSingle<T = UploadFile> = {
   uploadFile: T;
 };
 
-export type DeployParamsGrouped<T = UploadFiles> = DeployParams & {
+export type DeployParamsGrouped<T = UploadFiles> = {
   uploadFiles: T;
 };

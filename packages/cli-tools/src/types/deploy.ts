@@ -1,6 +1,5 @@
 import type {CliConfig, EncodingType} from '@junobuild/config';
 import type {Asset} from '@junobuild/storage';
-import type {Blob} from 'buffer';
 
 export type MimeType = string;
 

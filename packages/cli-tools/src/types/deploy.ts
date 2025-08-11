@@ -1,4 +1,5 @@
 import type {CliConfig, EncodingType} from '@junobuild/config';
+import type {Asset} from '@junobuild/storage';
 
 export type MimeType = string;
 
@@ -19,16 +20,6 @@ export type FilePaths = Required<Pick<UploadFileStorage, 'fullPath'>> & {
 export interface FileAndPaths {
   file: FileDetails;
   paths: FilePaths;
-}
-
-// TODO: we duplicate the types currently to not reference @junobuild/core
-export interface AssetEncoding {
-  sha256: string;
-}
-
-export interface Asset {
-  fullPath: string;
-  encodings: Partial<Record<EncodingType, AssetEncoding>>;
 }
 
 export type ListAssets = ({startAfter}: {startAfter?: string}) => Promise<Asset[]>;

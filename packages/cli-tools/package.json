@@ -56,6 +56,7 @@
     "@dfinity/utils": "^2",
     "@junobuild/cdn": "*",
     "@junobuild/config": "*",
+    "@junobuild/storage": "*",
     "esbuild": "^0.25.1"
   },
   "dependencies": {

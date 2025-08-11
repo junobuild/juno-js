@@ -1,38 +1,21 @@
 import type {Principal} from '@dfinity/principal';
 import {toNullable} from '@dfinity/utils';
 import {
+  type SatelliteDid,
   type SatelliteParameters,
   getDeprecatedSatelliteActor,
   getDeprecatedSatelliteNoScopeActor,
   getDeprecatedSatelliteVersionActor,
   getSatelliteActor
 } from '@junobuild/ic-client';
-import type {
-  AuthenticationConfig,
-  CollectionType,
-  Config,
-  Controller,
-  CustomDomain,
-  DbConfig,
-  ListRulesParams,
-  ListRulesResults,
-  MemorySize,
-  Rule,
-  SetAuthenticationConfig,
-  SetControllersArgs,
-  SetDbConfig,
-  SetRule,
-  SetStorageConfig,
-  StorageConfig
-} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
 
 export const setStorageConfig = async ({
   config,
   satellite
 }: {
-  config: SetStorageConfig;
+  config: SatelliteDid.SetStorageConfig;
   satellite: SatelliteParameters;
-}): Promise<StorageConfig> => {
+}): Promise<SatelliteDid.StorageConfig> => {
   const {set_storage_config} = await getSatelliteActor(satellite);
   return set_storage_config(config);
 };
@@ -41,9 +24,9 @@ export const setDatastoreConfig = async ({
   config,
   satellite
 }: {
-  config: SetDbConfig;
+  config: SatelliteDid.SetDbConfig;
   satellite: SatelliteParameters;
-}): Promise<DbConfig> => {
+}): Promise<SatelliteDid.DbConfig> => {
   const {set_db_config} = await getSatelliteActor(satellite);
   return set_db_config(config);
 };
@@ -52,9 +35,9 @@ export const setAuthConfig = async ({
   config,
   satellite
 }: {
-  config: SetAuthenticationConfig;
+  config: SatelliteDid.SetAuthenticationConfig;
   satellite: SatelliteParameters;
-}): Promise<AuthenticationConfig> => {
+}): Promise<SatelliteDid.AuthenticationConfig> => {
   const {set_auth_config} = await getSatelliteActor(satellite);
   return set_auth_config(config);
 };
@@ -63,7 +46,7 @@ export const getStorageConfig = async ({
   satellite
 }: {
   satellite: SatelliteParameters;
-}): Promise<StorageConfig> => {
+}): Promise<SatelliteDid.StorageConfig> => {
   const {get_storage_config} = await getSatelliteActor(satellite);
   return get_storage_config();
 };
@@ -72,7 +55,7 @@ export const getDatastoreConfig = async ({
   satellite
 }: {
   satellite: SatelliteParameters;
-}): Promise<[] | [DbConfig]> => {
+}): Promise<[] | [SatelliteDid.DbConfig]> => {
   const {get_db_config} = await getSatelliteActor(satellite);
   return get_db_config();
 };
@@ -81,12 +64,16 @@ export const getAuthConfig = async ({
   satellite
 }: {
   satellite: SatelliteParameters;
-}): Promise<[] | [AuthenticationConfig]> => {
+}): Promise<[] | [SatelliteDid.AuthenticationConfig]> => {
   const {get_auth_config} = await getSatelliteActor(satellite);
   return get_auth_config();
 };
 
-export const getConfig = async ({satellite}: {satellite: SatelliteParameters}): Promise<Config> => {
+export const getConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<SatelliteDid.Config> => {
   const {get_config} = await getSatelliteActor(satellite);
   return get_config();
 };
@@ -97,9 +84,9 @@ export const listRules = async ({
   filter
 }: {
   satellite: SatelliteParameters;
-  type: CollectionType;
-  filter: ListRulesParams;
-}): Promise<ListRulesResults> => {
+  type: SatelliteDid.CollectionType;
+  filter: SatelliteDid.ListRulesParams;
+}): Promise<SatelliteDid.ListRulesResults> => {
   const {list_rules} = await getSatelliteActor(satellite);
   return list_rules(type, filter);
 };
@@ -110,11 +97,11 @@ export const setRule = async ({
   rule,
   satellite
 }: {
-  type: CollectionType;
+  type: SatelliteDid.CollectionType;
   collection: string;
-  rule: SetRule;
+  rule: SatelliteDid.SetRule;
   satellite: SatelliteParameters;
-}): Promise<Rule> => {
+}): Promise<SatelliteDid.Rule> => {
   const {set_rule} = await getSatelliteActor(satellite);
   return set_rule(type, collection, rule);
 };
@@ -146,9 +133,9 @@ export const listDeprecatedNoScopeControllers = async ({
   satellite
 }: {
   satellite: SatelliteParameters;
-}): Promise<[Principal, Controller][]> => {
+}): Promise<[Principal, SatelliteDid.Controller][]> => {
   const {list_controllers} = await getDeprecatedSatelliteNoScopeActor(satellite);
-  return list_controllers() as Promise<[Principal, Controller][]>;
+  return list_controllers() as Promise<[Principal, SatelliteDid.Controller][]>;
 };
 
 export const listControllers = async ({
@@ -157,7 +144,7 @@ export const listControllers = async ({
 }: {
   satellite: SatelliteParameters;
   certified?: boolean;
-}): Promise<[Principal, Controller][]> => {
+}): Promise<[Principal, SatelliteDid.Controller][]> => {
   const {list_controllers} = await getSatelliteActor({...satellite, certified});
   return list_controllers();
 };
@@ -166,7 +153,7 @@ export const listCustomDomains = async ({
   satellite
 }: {
   satellite: SatelliteParameters;
-}): Promise<[string, CustomDomain][]> => {
+}): Promise<[string, SatelliteDid.CustomDomain][]> => {
   const {list_custom_domains} = await getSatelliteActor(satellite);
   return list_custom_domains();
 };
@@ -188,7 +175,7 @@ export const memorySize = async ({
   satellite
 }: {
   satellite: SatelliteParameters;
-}): Promise<MemorySize> => {
+}): Promise<SatelliteDid.MemorySize> => {
   const {memory_size} = await getSatelliteActor(satellite);
   return memory_size();
 };
@@ -241,9 +228,9 @@ export const setControllers = async ({
   args,
   satellite
 }: {
-  args: SetControllersArgs;
+  args: SatelliteDid.SetControllersArgs;
   satellite: SatelliteParameters;
-}): Promise<[Principal, Controller][]> => {
+}): Promise<[Principal, SatelliteDid.Controller][]> => {
   const {set_controllers} = await getSatelliteActor(satellite);
   return set_controllers(args);
 };

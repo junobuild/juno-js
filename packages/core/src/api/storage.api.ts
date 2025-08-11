@@ -1,5 +1,5 @@
 import {fromNullable} from '@dfinity/utils';
-import type {AssetNoContent} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 import {
   uploadAsset as uploadAssetStorage,
   type AssetKey,
@@ -29,7 +29,7 @@ export const listAssets = async ({
 }: {
   collection: string;
   filter: ListParams;
-} & ActorReadParams): Promise<ListResults<AssetNoContent>> => {
+} & ActorReadParams): Promise<ListResults<SatelliteDid.AssetNoContent>> => {
   const {list_assets} = await getSatelliteActor(rest);
 
   const {
@@ -111,7 +111,7 @@ export const getAsset = async ({
 }: {
   collection: string;
 } & ActorReadParams &
-  Pick<AssetKey, 'fullPath'>): Promise<AssetNoContent | undefined> => {
+  Pick<AssetKey, 'fullPath'>): Promise<SatelliteDid.AssetNoContent | undefined> => {
   const {get_asset} = await getSatelliteActor(rest);
   return fromNullable(await get_asset(collection, fullPath));
 };
@@ -121,7 +121,7 @@ export const getManyAssets = async ({
   ...rest
 }: {
   assets: ({collection: string} & Pick<AssetKey, 'fullPath'>)[];
-} & ActorReadParams): Promise<(AssetNoContent | undefined)[]> => {
+} & ActorReadParams): Promise<(SatelliteDid.AssetNoContent | undefined)[]> => {
   const {get_many_assets} = await getSatelliteActor(rest);
 
   const payload: [string, string][] = assets.map(({collection, fullPath}) => [

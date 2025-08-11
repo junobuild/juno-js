@@ -1,13 +1,10 @@
 import type {Principal} from '@dfinity/principal';
 import {
+  type MissionControlDid,
   type MissionControlParameters,
   getDeprecatedMissionControlVersionActor,
   getMissionControlActor
 } from '@junobuild/ic-client';
-import type {
-  Controller,
-  SetController
-} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
 
 /**
  * @deprecated - Replaced in Mission Control > v0.0.14 with public custom section juno:package
@@ -34,7 +31,7 @@ export const listControllers = async ({
   missionControl
 }: {
   missionControl: MissionControlParameters;
-}): Promise<[Principal, Controller][]> => {
+}): Promise<[Principal, MissionControlDid.Controller][]> => {
   const {list_mission_control_controllers} = await getMissionControlActor(missionControl);
   return list_mission_control_controllers();
 };
@@ -48,7 +45,7 @@ export const setSatellitesController = async ({
   missionControl: MissionControlParameters;
   satelliteIds: Principal[];
   controllerIds: Principal[];
-  controller: SetController;
+  controller: MissionControlDid.SetController;
 }) => {
   const {set_satellites_controllers} = await getMissionControlActor(missionControl);
   return set_satellites_controllers(satelliteIds, controllerIds, controller);
@@ -61,7 +58,7 @@ export const setMissionControlController = async ({
 }: {
   missionControl: MissionControlParameters;
   controllerIds: Principal[];
-  controller: SetController;
+  controller: MissionControlDid.SetController;
 }) => {
   const {set_mission_control_controllers} = await getMissionControlActor(missionControl);
   return set_mission_control_controllers(controllerIds, controller);

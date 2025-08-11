@@ -1,9 +1,5 @@
 import type {Principal} from '@dfinity/principal';
-import type {SatelliteParameters} from '@junobuild/ic-client';
-import type {
-  Controller,
-  SetControllersArgs
-} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid, SatelliteParameters} from '@junobuild/ic-client';
 import {
   listControllers,
   listDeprecatedNoScopeControllers,
@@ -22,7 +18,7 @@ export const listSatelliteControllers = ({
 }: {
   satellite: SatelliteParameters;
   deprecatedNoScope?: boolean;
-}): Promise<[Principal, Controller][]> => {
+}): Promise<[Principal, SatelliteDid.Controller][]> => {
   const list = deprecatedNoScope === true ? listDeprecatedNoScopeControllers : listControllers;
   return list(params);
 };
@@ -36,5 +32,5 @@ export const listSatelliteControllers = ({
  */
 export const setSatelliteControllers = (params: {
   satellite: SatelliteParameters;
-  args: SetControllersArgs;
-}): Promise<[Principal, Controller][]> => setControllers(params);
+  args: SatelliteDid.SetControllersArgs;
+}): Promise<[Principal, SatelliteDid.Controller][]> => setControllers(params);

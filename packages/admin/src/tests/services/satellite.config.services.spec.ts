@@ -2,11 +2,7 @@ import {Principal} from '@dfinity/principal';
 import {toNullable} from '@dfinity/utils';
 import {AuthenticationConfig, StorageConfig} from '@junobuild/config';
 import * as actor from '@junobuild/ic-client';
-import {
-  AuthenticationConfig as AuthenticationConfigDid,
-  DbConfig as DbConfigDid,
-  StorageConfig as StorageConfigDid
-} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import {SatelliteDid} from '@junobuild/ic-client';
 import {
   getAuthConfig,
   getConfig,
@@ -52,7 +48,7 @@ describe('satellite.config.services', () => {
 
   const now = BigInt(Date.now());
 
-  const mockAuthConfig: AuthenticationConfigDid = {
+  const mockAuthConfig: SatelliteDid.AuthenticationConfig = {
     internet_identity: [
       {
         derivation_origin: ['https://foo.icp0.io'],
@@ -72,14 +68,14 @@ describe('satellite.config.services', () => {
     updated_at: [now]
   };
 
-  const mockDatastoreConfig: DbConfigDid = {
+  const mockDatastoreConfig: SatelliteDid.DbConfig = {
     max_memory_size: [{heap: [5n], stable: [10n]}],
     version: [7n],
     created_at: [now],
     updated_at: [now]
   };
 
-  const mockStorageConfig: StorageConfigDid = {
+  const mockStorageConfig: SatelliteDid.StorageConfig = {
     headers: [['*', [['cache-control', 'no-cache']]]],
     iframe: toNullable({Deny: null}),
     redirects: [
@@ -188,7 +184,7 @@ describe('satellite.config.services', () => {
       version: 1n
     };
 
-    const mockResponse: AuthenticationConfigDid = {
+    const mockResponse: SatelliteDid.AuthenticationConfig = {
       internet_identity: [
         {
           derivation_origin: ['https://example.com'],
@@ -220,7 +216,7 @@ describe('satellite.config.services', () => {
       updatedAt: now
     };
 
-    const mockResponse: DbConfigDid = {
+    const mockResponse: SatelliteDid.DbConfig = {
       version: [2n],
       max_memory_size: [{heap: [5n], stable: [10n]}],
       created_at: [now],
@@ -246,7 +242,7 @@ describe('satellite.config.services', () => {
       version: 3n
     };
 
-    const mockResponse: StorageConfigDid = {
+    const mockResponse: SatelliteDid.StorageConfig = {
       headers: [],
       rewrites: [],
       redirects: [],
@@ -280,7 +276,7 @@ describe('satellite.config.services', () => {
       updatedAt: now
     };
 
-    const mockResponse: AuthenticationConfigDid = {
+    const mockResponse: SatelliteDid.AuthenticationConfig = {
       internet_identity: [
         {
           derivation_origin: ['https://example.com'],

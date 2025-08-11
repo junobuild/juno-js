@@ -1,7 +1,4 @@
-import type {
-  ListProposalResults,
-  ListProposalsParams
-} from '@junobuild/ic-client/dist/declarations/console/console.did';
+import type {ConsoleDid} from '@junobuild/ic-client';
 import type {CdnParameters} from '../types/actor.params';
 import type {
   CommitProposal,
@@ -77,8 +74,8 @@ export const listProposals = async ({
   filter
 }: {
   cdn: CdnParameters;
-  filter: ListProposalsParams;
-}): Promise<ListProposalResults> => {
+  filter: ConsoleDid.ListProposalsParams;
+}): Promise<ConsoleDid.ListProposalResults> => {
   const {list_proposals} = await getCdnActor(cdn);
   return list_proposals(filter);
 };

@@ -1,5 +1,4 @@
-import type {OrbiterParameters} from '@junobuild/ic-client';
-import type {MemorySize} from '@junobuild/ic-client/dist/declarations/orbiter/orbiter.did';
+import type {OrbiterDid, OrbiterParameters} from '@junobuild/ic-client';
 import {memorySize} from '../api/orbiter.api';
 
 /**
@@ -8,5 +7,6 @@ import {memorySize} from '../api/orbiter.api';
  * @param {OrbiterParameters} params.orbiter - The Orbiter parameters.
  * @returns {Promise<MemorySize>} A promise that resolves to the memory size of the Orbiter.
  */
-export const orbiterMemorySize = (params: {orbiter: OrbiterParameters}): Promise<MemorySize> =>
-  memorySize(params);
+export const orbiterMemorySize = (params: {
+  orbiter: OrbiterParameters;
+}): Promise<OrbiterDid.MemorySize> => memorySize(params);

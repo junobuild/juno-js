@@ -1,5 +1,5 @@
 import * as actor from '@junobuild/ic-client';
-import {Controller} from '@junobuild/ic-client/dist/declarations/orbiter/orbiter.did';
+import {OrbiterDid} from '@junobuild/ic-client';
 import {listOrbiterControllers} from '../../services/orbiter.controllers.services';
 import {
   mockHttpAgent,
@@ -35,7 +35,7 @@ describe('orbiter.controllers.services', () => {
   });
 
   it('returns the list of controllers from the orbiter actor', async () => {
-    const controller: Controller = {
+    const controller: OrbiterDid.Controller = {
       updated_at: 123n,
       metadata: [],
       created_at: 4456n,

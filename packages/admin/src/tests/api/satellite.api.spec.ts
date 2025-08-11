@@ -1,12 +1,5 @@
 import * as actor from '@junobuild/ic-client';
-import {
-  AuthenticationConfig,
-  Config,
-  DbConfig,
-  SetControllersArgs,
-  SetRule,
-  StorageConfig
-} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import {SatelliteDid} from '@junobuild/ic-client';
 import {
   countAssets,
   countDocs,
@@ -121,7 +114,7 @@ describe('satellite.api', () => {
     });
   });
 
-  const mockStorageConfig: StorageConfig = {
+  const mockStorageConfig: SatelliteDid.StorageConfig = {
     headers: [],
     rewrites: [],
     redirects: [],
@@ -138,7 +131,7 @@ describe('satellite.api', () => {
     version: [2n]
   };
 
-  const mockDatastoreConfig: DbConfig = {
+  const mockDatastoreConfig: SatelliteDid.DbConfig = {
     max_memory_size: [
       {
         heap: [123456789n],
@@ -150,7 +143,7 @@ describe('satellite.api', () => {
     version: [2n]
   };
 
-  const mockAuthenticationConfig: AuthenticationConfig = {
+  const mockAuthenticationConfig: SatelliteDid.AuthenticationConfig = {
     internet_identity: [
       {
         derivation_origin: ['https://hello.com'],
@@ -167,7 +160,7 @@ describe('satellite.api', () => {
     version: [2n]
   };
 
-  const mockConfig: Config = {
+  const mockConfig: SatelliteDid.Config = {
     db: [mockDatastoreConfig],
     authentication: [mockAuthenticationConfig],
     storage: mockStorageConfig
@@ -337,7 +330,7 @@ describe('satellite.api', () => {
   });
 
   describe('setRule', () => {
-    const rule: SetRule = {
+    const rule: SatelliteDid.SetRule = {
       max_capacity: [100],
       memory: [{Heap: null}],
       max_size: [1000n],
@@ -521,7 +514,7 @@ describe('satellite.api', () => {
   });
 
   describe('setControllers', () => {
-    const args: SetControllersArgs = {
+    const args: SatelliteDid.SetControllersArgs = {
       controller: mockController,
       controllers: [mockUserIdPrincipal]
     };

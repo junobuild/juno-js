@@ -1,5 +1,5 @@
 import * as actor from '@junobuild/ic-client';
-import {SetController} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
+import {MissionControlDid} from '@junobuild/ic-client';
 import {
   getUser,
   listControllers,
@@ -28,7 +28,11 @@ const mockActor = {
 };
 
 describe('mission_control.api', () => {
-  const controller: SetController = {scope: {Admin: null}, expires_at: [], metadata: []};
+  const controller: MissionControlDid.SetController = {
+    scope: {Admin: null},
+    expires_at: [],
+    metadata: []
+  };
 
   beforeEach(() => {
     vi.restoreAllMocks();

@@ -1,6 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import * as actor from '@junobuild/ic-client';
-import {Controller} from '@junobuild/ic-client/dist/declarations/mission_control/mission_control.did';
+import {MissionControlDid} from '@junobuild/ic-client';
 import {
   listMissionControlControllers,
   setMissionControlController,
@@ -81,7 +81,7 @@ describe('mission-control.controllers.services', () => {
     );
   });
 
-  const controller: Controller = {
+  const controller: MissionControlDid.Controller = {
     updated_at: 123n,
     metadata: [],
     created_at: 4456n,

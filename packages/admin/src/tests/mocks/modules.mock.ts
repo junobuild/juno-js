@@ -1,8 +1,8 @@
 import type {Principal} from '@dfinity/principal';
-import type {Controller} from '@junobuild/ic-client/dist/declarations/orbiter/orbiter.did';
+import type {OrbiterDid} from '@junobuild/ic-client';
 import {mockUserIdPrincipal} from './admin.mock';
 
-export const mockController: Controller = {
+export const mockController: OrbiterDid.Controller = {
   metadata: [['key', 'value']],
   scope: {Admin: null},
   created_at: 1624532700000n,
@@ -10,4 +10,6 @@ export const mockController: Controller = {
   expires_at: [1624532900000n]
 };
 
-export const mockControllers: [Principal, Controller][] = [[mockUserIdPrincipal, mockController]];
+export const mockControllers: [Principal, OrbiterDid.Controller][] = [
+  [mockUserIdPrincipal, mockController]
+];

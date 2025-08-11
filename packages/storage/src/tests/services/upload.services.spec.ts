@@ -1,8 +1,5 @@
 import {fromNullable} from '@dfinity/utils';
-import {
-  InitAssetKey,
-  UploadChunk
-} from '@junobuild/ic-client/dist/declarations/console/console.did';
+import {ConsoleDid} from '@junobuild/ic-client';
 import type {MockInstance} from 'vitest';
 import {mockDeep} from 'vitest-mock-extended';
 import {UPLOAD_CHUNK_SIZE} from '../../constants/upload.constants';
@@ -326,16 +323,18 @@ describe('upload.services', () => {
         const timeline: string[] = [];
 
         actor.init_proposal_asset_upload.mockImplementation(
-          async (_initArgs: InitAssetKey, proposal_id: bigint) => {
+          async (_initArgs: ConsoleDid.InitAssetKey, proposal_id: bigint) => {
             timeline.push('init:proposal');
             expect(proposal_id).toBe(proposalId);
             return {batch_id: 42n};
           }
         );
-        actor.upload_proposal_asset_chunk.mockImplementation(async (args: UploadChunk) => {
-          timeline.push(`upload:${args.order_id[0]?.toString()}`);
-          return {chunk_id: 500n + (args.order_id[0] ?? 0n)};
-        });
+        actor.upload_proposal_asset_chunk.mockImplementation(
+          async (args: ConsoleDid.UploadChunk) => {
+            timeline.push(`upload:${args.order_id[0]?.toString()}`);
+            return {chunk_id: 500n + (args.order_id[0] ?? 0n)};
+          }
+        );
         actor.commit_proposal_asset_upload.mockImplementation(async () => {
           timeline.push('commit:proposal');
         });

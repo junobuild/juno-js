@@ -1,13 +1,12 @@
 import {Principal} from '@dfinity/principal';
 import {isNullish, toNullable} from '@dfinity/utils';
-import type {
-  ListParams as ListParamsApi,
-  TimestampMatcher
-} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 import {ListError} from '../types/errors';
 import type {ListParams, ListTimestampMatcher} from '../types/list';
 
-const toListMatcherTimestamp = (matcher?: ListTimestampMatcher): [] | [TimestampMatcher] => {
+const toListMatcherTimestamp = (
+  matcher?: ListTimestampMatcher
+): [] | [SatelliteDid.TimestampMatcher] => {
   if (isNullish(matcher)) {
     return toNullable();
   }
@@ -26,7 +25,12 @@ const toListMatcherTimestamp = (matcher?: ListTimestampMatcher): [] | [Timestamp
   }
 };
 
-export const toListParams = ({matcher, paginate, order, owner}: ListParams): ListParamsApi => ({
+export const toListParams = ({
+  matcher,
+  paginate,
+  order,
+  owner
+}: ListParams): SatelliteDid.ListParams => ({
   matcher: isNullish(matcher)
     ? []
     : [

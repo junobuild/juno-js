@@ -1,23 +1,14 @@
 import {assertNonNullish, toNullable} from '@dfinity/utils';
+import type {ConsoleDid, SatelliteDid} from '@junobuild/ic-client';
 import {isBrowser} from '@junobuild/utils';
-import type {
-  ConsoleCommitBatch,
-  ConsoleInitAssetKey,
-  ConsoleInitUploadResult,
-  ConsoleUploadChunk,
-  SatelliteCommitBatch,
-  SatelliteInitAssetKey,
-  SatelliteInitUploadResult,
-  SatelliteUploadChunk
-} from '../api/actor.factory';
 import {UPLOAD_CHUNK_SIZE} from '../constants/upload.constants';
 import type {EncodingType} from '../types/storage';
 import type {UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '../types/upload';
 
-type InitAssetKey = SatelliteInitAssetKey | ConsoleInitAssetKey;
-type UploadChunk = SatelliteUploadChunk | ConsoleUploadChunk;
-type CommitBatch = SatelliteCommitBatch | ConsoleCommitBatch;
-type InitUploadResult = SatelliteInitUploadResult | ConsoleInitUploadResult;
+type InitAssetKey = SatelliteDid.InitAssetKey | ConsoleDid.InitAssetKey;
+type UploadChunk = SatelliteDid.UploadChunk | ConsoleDid.UploadChunk;
+type CommitBatch = SatelliteDid.CommitBatch | ConsoleDid.CommitBatch;
+type InitUploadResult = SatelliteDid.InitUploadResult | ConsoleDid.InitUploadResult;
 
 export const uploadAsset = async ({
   asset: {data, headers, ...restAsset},

@@ -8,17 +8,7 @@ import type {
   StorageConfigRedirect,
   StorageConfigRewrite
 } from '@junobuild/config';
-import type {
-  AuthenticationConfig as AuthenticationConfigDid,
-  DbConfig as DbConfigDid,
-  SetAuthenticationConfig,
-  SetDbConfig,
-  SetStorageConfig,
-  StorageConfig as StorageConfigDid,
-  StorageConfigIFrame as StorageConfigIFrameDid,
-  StorageConfigRawAccess as StorageConfigRawAccessDid,
-  StorageConfigRedirect as StorageConfigRedirectDid
-} from '@junobuild/ic-client/dist/declarations/satellite/satellite.did';
+import type {SatelliteDid} from '@junobuild/ic-client';
 import {fromMaxMemorySize, toMaxMemorySize} from './memory.utils';
 
 export const fromStorageConfig = ({
@@ -29,7 +19,7 @@ export const fromStorageConfig = ({
   rawAccess: configRawAccess,
   maxMemorySize: configMaxMemorySize,
   version: configVersion
-}: StorageConfig): SetStorageConfig => {
+}: StorageConfig): SatelliteDid.SetStorageConfig => {
   const headers: [string, [string, string][]][] = (configHeaders ?? []).map(
     ({source, headers}: StorageConfigHeader) => [source, headers]
   );
@@ -38,18 +28,18 @@ export const fromStorageConfig = ({
     ({source, destination}: StorageConfigRewrite) => [source, destination]
   );
 
-  const redirects: [string, StorageConfigRedirectDid][] = (configRedirects ?? []).map(
+  const redirects: [string, SatelliteDid.StorageConfigRedirect][] = (configRedirects ?? []).map(
     ({source, location, code}: StorageConfigRedirect) => [source, {status_code: code, location}]
   );
 
-  const iframe: StorageConfigIFrameDid =
+  const iframe: SatelliteDid.StorageConfigIFrame =
     configIFrame === 'same-origin'
       ? {SameOrigin: null}
       : configIFrame === 'allow-any'
         ? {AllowAny: null}
         : {Deny: null};
 
-  const rawAccess: StorageConfigRawAccessDid =
+  const rawAccess: SatelliteDid.StorageConfigRawAccess =
     configRawAccess === true ? {Allow: null} : {Deny: null};
 
   return {
@@ -71,7 +61,7 @@ export const toStorageConfig = ({
   max_memory_size,
   headers: headersDid,
   rewrites: rewritesDid
-}: StorageConfigDid): StorageConfig => {
+}: SatelliteDid.StorageConfig): StorageConfig => {
   const redirects = fromNullable(redirectsDid)?.map<StorageConfigRedirect>(
     ([source, {status_code: code, ...rest}]) => ({
       ...rest,
@@ -114,12 +104,18 @@ export const toStorageConfig = ({
   };
 };
 
-export const fromDatastoreConfig = ({maxMemorySize, version}: DatastoreConfig): SetDbConfig => ({
+export const fromDatastoreConfig = ({
+  maxMemorySize,
+  version
+}: DatastoreConfig): SatelliteDid.SetDbConfig => ({
   max_memory_size: toMaxMemorySize(maxMemorySize),
   version: toNullable(version)
 });
 
-export const toDatastoreConfig = ({version, max_memory_size}: DbConfigDid): DatastoreConfig => ({
+export const toDatastoreConfig = ({
+  version,
+  max_memory_size
+}: SatelliteDid.DbConfig): DatastoreConfig => ({
   ...fromMaxMemorySize(max_memory_size),
   version: fromNullable(version)
 });
@@ -128,7 +124,7 @@ export const fromAuthenticationConfig = ({
   internetIdentity,
   rules,
   version
-}: AuthenticationConfig): SetAuthenticationConfig => ({
+}: AuthenticationConfig): SatelliteDid.SetAuthenticationConfig => ({
   internet_identity: isNullish(internetIdentity)
     ? []
     : [
@@ -151,7 +147,7 @@ export const toAuthenticationConfig = ({
   version,
   internet_identity,
   rules: rulesDid
-}: AuthenticationConfigDid): AuthenticationConfig => {
+}: SatelliteDid.AuthenticationConfig): AuthenticationConfig => {
   const internetIdentity = fromNullable(internet_identity);
   const derivationOrigin = fromNullable(internetIdentity?.derivation_origin ?? []);
   const externalAlternativeOrigins = fromNullable(

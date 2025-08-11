@@ -29,7 +29,7 @@ export interface AssetEncoding {
 
 export interface Asset {
   fullPath: string;
-  encodings: Record<EncodingType, AssetEncoding>;
+  encodings: Partial<Record<EncodingType, AssetEncoding>>;
 }
 
 export type ListAssets = ({startAfter}: {startAfter?: string}) => Promise<Asset[]>;

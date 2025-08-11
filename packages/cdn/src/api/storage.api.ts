@@ -1,5 +1,6 @@
 import {
   uploadAssetWithProposal as uploadAssetWithProposalStorage,
+  uploadAssetsWithProposal as uploadAssetsWithProposalStorage,
   type UploadAsset
 } from '@junobuild/storage';
 
@@ -21,6 +22,24 @@ export const uploadAssetWithProposal = async ({
   await uploadAssetWithProposalStorage({
     actor,
     asset,
+    proposalId
+  });
+};
+
+export const uploadAssetsWithProposal = async ({
+  cdn,
+  proposalId,
+  assets
+}: {
+  assets: UploadAsset[];
+  cdn: CdnParameters;
+  proposalId: ProposalId;
+}): Promise<void> => {
+  const actor = await getCdnActor(cdn);
+
+  await uploadAssetsWithProposalStorage({
+    actor,
+    assets,
     proposalId
   });
 };

@@ -113,14 +113,14 @@ const prepareFileForUpload = async ({
   UploadFileStorage,
   'fullPath' | 'collection' | 'token' | 'description'
 >): Promise<UploadFileStorage> => ({
-    filename: basename(filePath),
-    fullPath,
-    data: new Blob([await readFile(file.file)]),
-    collection,
-    headers: [
-      ...(file.mime === undefined ? [] : ([['Content-Type', file.mime]] as Array<[string, string]>))
-    ],
-    encoding: file.encoding,
-    ...(nonNullish(token) && notEmptyString(token) && {token}),
-    ...(nonNullish(description) && notEmptyString(description) && {description})
-  });
+  filename: basename(filePath),
+  fullPath,
+  data: new Blob([await readFile(file.file)]),
+  collection,
+  headers: [
+    ...(file.mime === undefined ? [] : ([['Content-Type', file.mime]] as Array<[string, string]>))
+  ],
+  encoding: file.encoding,
+  ...(nonNullish(token) && notEmptyString(token) && {token}),
+  ...(nonNullish(description) && notEmptyString(description) && {description})
+});

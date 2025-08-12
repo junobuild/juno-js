@@ -1,4 +1,4 @@
-import Listr from 'listr';
+import {Listr} from 'listr2';
 import {relative} from 'node:path';
 import {UPLOAD_BATCH_SIZE} from '../../constants/deploy.constants';
 import type {FileAndPaths, FileDetails, UploadFile, UploadFileStorage} from '../../types/deploy';

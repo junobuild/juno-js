@@ -3,7 +3,7 @@ import type {ConsoleDid, SatelliteDid} from '@junobuild/ic-client';
 import {isBrowser} from '@junobuild/utils';
 import {UPLOAD_CHUNK_SIZE} from '../constants/upload.constants';
 import type {EncodingType} from '../types/storage';
-import {UploadAsset, UploadParams, UploadWithProposalParams} from '../types/upload';
+import type {UploadAsset, UploadParams, UploadWithProposalParams} from '../types/upload';
 
 type InitAssetKey = SatelliteDid.InitAssetKey | ConsoleDid.InitAssetKey;
 type UploadChunk = SatelliteDid.UploadChunk | ConsoleDid.UploadChunk;

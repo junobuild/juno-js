@@ -8,7 +8,6 @@ import type {UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '
 type InitAssetKey = SatelliteDid.InitAssetKey | ConsoleDid.InitAssetKey;
 type UploadChunk = SatelliteDid.UploadChunk | ConsoleDid.UploadChunk;
 type CommitBatch = SatelliteDid.CommitBatch | ConsoleDid.CommitBatch;
-type InitUploadResult = SatelliteDid.InitUploadResult | ConsoleDid.InitUploadResult;
 
 export const uploadAsset = async ({
   asset: {data, headers, ...restAsset},

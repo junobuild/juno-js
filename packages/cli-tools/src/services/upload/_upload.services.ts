@@ -1,7 +1,9 @@
 import {nonNullish, notEmptyString} from '@dfinity/utils';
 import {readFile} from 'node:fs/promises';
 import {basename} from 'node:path';
-import type {FileDetails, UploadFileStorage} from '../../types/deploy';
+import type {FileAndPaths, FileDetails, UploadFileStorage} from '../../types/deploy';
+import {UploadFilesParams} from '../../types/upload';
+import {splitSourceFiles} from '../../utils/upload.utils';
 
 export const prepareFileForUpload = async ({
   file,
@@ -28,3 +30,16 @@ export const prepareFileForUpload = async ({
   ...(nonNullish(token) && notEmptyString(token) && {token}),
   ...(nonNullish(description) && notEmptyString(description) && {description})
 });
+
+export const executeUploadFiles = async ({
+  files,
+  uploadFiles
+}: {uploadFiles: (groupFiles: FileAndPaths[]) => Promise<void>} & Pick<
+  UploadFilesParams,
+  'files'
+>) => {
+  // We upload alternate files first. See comment in splitSourceFiles.
+  const [alternateFiles, sourceFiles] = splitSourceFiles(files);
+  await uploadFiles(alternateFiles);
+  await uploadFiles(sourceFiles);
+};

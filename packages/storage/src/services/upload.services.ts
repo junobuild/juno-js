@@ -2,6 +2,7 @@ import {assertNonNullish, toNullable} from '@dfinity/utils';
 import type {ConsoleDid, SatelliteDid} from '@junobuild/ic-client';
 import {isBrowser} from '@junobuild/utils';
 import {UPLOAD_CHUNK_SIZE} from '../constants/upload.constants';
+import type {OnUploadProgress} from '../types/progress';
 import type {EncodingType} from '../types/storage';
 import type {UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '../types/upload';
 
@@ -11,16 +12,19 @@ type CommitBatch = SatelliteDid.CommitBatch | ConsoleDid.CommitBatch;
 
 export const uploadAsset = async ({
   asset: {data, headers, ...restAsset},
-  actor
+  actor,
+  progress
 }: {
   asset: UploadAsset;
   actor: UploadAssetActor;
-}): Promise<void> => {
+} & OnUploadProgress): Promise<void> => {
   const {init_asset_upload, upload_asset_chunk, commit_asset_upload} = actor;
 
   const {batch_id: batchId} = await init_asset_upload(mapInitAssetUploadParams(restAsset));
 
   const {chunkIds} = await uploadChunks({data, uploadFn: upload_asset_chunk, batchId});
+
+  progress?.onUploadedFileChunks(restAsset.fullPath);
 
   await commitAsset({
     commitFn: commit_asset_upload,
@@ -34,12 +38,13 @@ export const uploadAsset = async ({
 export const uploadAssetWithProposal = async ({
   asset: {data, headers, ...restAsset},
   proposalId,
-  actor
+  actor,
+  progress
 }: {
   asset: UploadAsset;
   proposalId: bigint;
   actor: UploadAssetWithProposalActor;
-}): Promise<void> => {
+} & OnUploadProgress): Promise<void> => {
   const {init_proposal_asset_upload, upload_proposal_asset_chunk, commit_proposal_asset_upload} =
     actor;
 
@@ -49,6 +54,8 @@ export const uploadAssetWithProposal = async ({
   );
 
   const {chunkIds} = await uploadChunks({data, uploadFn: upload_proposal_asset_chunk, batchId});
+
+  progress?.onUploadedFileChunks(restAsset.fullPath);
 
   await commitAsset({
     commitFn: commit_proposal_asset_upload,
@@ -62,12 +69,13 @@ export const uploadAssetWithProposal = async ({
 export const uploadAssetsWithProposal = async ({
   assets,
   proposalId,
-  actor
+  actor,
+  progress
 }: {
   assets: UploadAsset[];
   proposalId: bigint;
   actor: UploadAssetWithProposalActor;
-}): Promise<void> => {
+} & OnUploadProgress): Promise<void> => {
   const {
     init_proposal_many_assets_upload,
     upload_proposal_asset_chunk,
@@ -92,6 +100,8 @@ export const uploadAssetsWithProposal = async ({
     const {batch_id: batchId} = initUpload;
 
     const {chunkIds} = await uploadChunks({data, uploadFn: upload_proposal_asset_chunk, batchId});
+
+    progress?.onUploadedFileChunks(fullPath);
 
     return {
       batchId,

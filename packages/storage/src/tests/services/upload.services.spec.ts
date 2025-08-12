@@ -1,9 +1,14 @@
 import {fromNullable} from '@dfinity/utils';
 import {ConsoleDid} from '@junobuild/ic-client';
+import {UploadChunk} from '@junobuild/ic-client/dist/declarations/console/console.did';
 import type {MockInstance} from 'vitest';
 import {mockDeep} from 'vitest-mock-extended';
 import {UPLOAD_CHUNK_SIZE} from '../../constants/upload.constants';
-import {uploadAsset, uploadAssetWithProposal} from '../../services/upload.services';
+import {
+  uploadAsset,
+  uploadAssetsWithProposal,
+  uploadAssetWithProposal
+} from '../../services/upload.services';
 import {type UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '../../types/upload';
 
 describe('upload.services', () => {
@@ -409,6 +414,156 @@ describe('upload.services', () => {
         const arg = upload_proposal_asset_chunk.mock.calls[0][0];
         expect(arg.order_id).toEqual([0n]);
         expect((arg.content as Uint8Array).length).toBe(UPLOAD_CHUNK_SIZE - 1);
+      });
+    });
+
+    describe('uploadAssetsWithProposal', () => {
+      describe('uploadAssetsWithProposal', () => {
+        it('calls init_proposal_many_assets_upload once, uploads all chunks per-asset, and commits once with correct mapping & headers', async () => {
+          const actor = mockDeep<UploadAssetWithProposalActor>();
+          const proposalId = 999n;
+
+          const assetA = makeUploadAsset({
+            filename: 'cat.png',
+            collection: 'pictures',
+            data: makeBlob(UPLOAD_CHUNK_SIZE * 2 + 10, 'image/png'),
+            headers: [],
+            fullPath: '/pictures/cat.png'
+          });
+
+          const assetB = makeUploadAsset({
+            filename: 'doc.pdf',
+            collection: 'docs',
+            data: makeBlob(UPLOAD_CHUNK_SIZE + 777, 'application/pdf'),
+            headers: [['Cache-Control', 'no-cache']],
+            fullPath: '/docs/doc.pdf'
+          });
+
+          actor.init_proposal_many_assets_upload.mockResolvedValue([
+            [assetA.fullPath, {batch_id: 11n}],
+            [assetB.fullPath, {batch_id: 22n}]
+          ]);
+
+          actor.upload_proposal_asset_chunk.mockImplementation(async (args: UploadChunk) => {
+            const order = args.order_id?.[0] ?? 0n;
+            return {chunk_id: args.batch_id * 1000n + order};
+          });
+
+          actor.commit_proposal_many_assets_upload.mockImplementation(async () => undefined);
+
+          await uploadAssetsWithProposal({assets: [assetA, assetB], proposalId, actor});
+
+          expect(actor.init_proposal_many_assets_upload).toHaveBeenCalledTimes(1);
+
+          const [initList, pid] = actor.init_proposal_many_assets_upload.mock.calls[0];
+          expect(pid).toBe(proposalId);
+          expect(Array.isArray(initList)).toBe(true);
+          expect(initList.length).toBe(2);
+          expect(initList).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                collection: assetA.collection,
+                full_path: assetA.fullPath,
+                name: assetA.filename,
+                token: [],
+                encoding_type: [],
+                description: []
+              })
+            ])
+          );
+
+          const expectedChunksA = Math.ceil(assetA.data.size / UPLOAD_CHUNK_SIZE);
+          const expectedChunksB = Math.ceil(assetB.data.size / UPLOAD_CHUNK_SIZE);
+          expect(actor.upload_proposal_asset_chunk).toHaveBeenCalledTimes(
+            expectedChunksA + expectedChunksB
+          );
+
+          const [callsA, callsB] = actor.upload_proposal_asset_chunk.mock.calls.map((c) => c[0]);
+
+          expect(callsA.order_id).toEqual([0n]);
+          expect(callsA.content.length).toBe(UPLOAD_CHUNK_SIZE);
+
+          expect(callsB.order_id).toEqual([1n]);
+          expect(callsB.content.length).toBe(UPLOAD_CHUNK_SIZE);
+
+          expect(actor.commit_proposal_many_assets_upload).toHaveBeenCalledTimes(1);
+
+          const commitList = actor.commit_proposal_many_assets_upload.mock.calls[0][0];
+          const commitA = commitList.find((c) => c.batch_id === 11n);
+          const commitB = commitList.find((c) => c.batch_id === 22n);
+
+          expect(commitA?.chunk_ids).toEqual(
+            Array.from({length: expectedChunksA}, (_, i) => 11n * 1000n + BigInt(i))
+          );
+          expect(commitB?.chunk_ids).toEqual(
+            Array.from({length: expectedChunksB}, (_, i) => 22n * 1000n + BigInt(i))
+          );
+
+          expect(commitA?.headers).toEqual(expect.arrayContaining([['Content-Type', 'image/png']]));
+          expect(commitB?.headers).toEqual(
+            expect.arrayContaining([
+              ['Cache-Control', 'no-cache'],
+              ['Content-Type', 'application/pdf']
+            ])
+          );
+
+          expect(actor.init_proposal_asset_upload).not.toHaveBeenCalled();
+          expect(actor.commit_proposal_asset_upload).not.toHaveBeenCalled();
+          expect(actor.init_asset_upload).not.toHaveBeenCalled();
+          expect(actor.commit_asset_upload).not.toHaveBeenCalled();
+          expect(actor.upload_asset_chunk).not.toHaveBeenCalled();
+        });
+
+        it('handles single-chunk assets and respects existing (case-insensitive) Content-Type headers', async () => {
+          const actor = mockDeep<UploadAssetWithProposalActor>();
+          const proposalId = 123n;
+
+          const assetC = makeUploadAsset({
+            filename: 'note.txt',
+            collection: 'notes',
+            fullPath: '/notes/note.txt',
+            data: makeBlob(UPLOAD_CHUNK_SIZE - 5, 'text/plain'),
+            headers: [['content-type', 'text/plain']]
+          });
+
+          const assetD = makeUploadAsset({
+            filename: 'pic.jpg',
+            collection: 'pics',
+            fullPath: '/pics/pic.jpg',
+            data: makeBlob(UPLOAD_CHUNK_SIZE - 1, 'image/jpeg'),
+            headers: []
+          });
+
+          actor.init_proposal_many_assets_upload.mockResolvedValue([
+            [assetC.fullPath, {batch_id: 33n}],
+            [assetD.fullPath, {batch_id: 44n}]
+          ]);
+
+          actor.upload_proposal_asset_chunk.mockImplementation(async (args: UploadChunk) => {
+            const order = args.order_id?.[0] ?? 0n;
+            return {chunk_id: args.batch_id * 1000n + order};
+          });
+
+          actor.commit_proposal_many_assets_upload.mockImplementation(async () => undefined);
+
+          await uploadAssetsWithProposal({assets: [assetC, assetD], proposalId, actor});
+
+          expect(actor.upload_proposal_asset_chunk).toHaveBeenCalledTimes(2);
+          const [call1, call2] = actor.upload_proposal_asset_chunk.mock.calls.map((c) => c[0]);
+          expect(call1.order_id).toEqual([0n]);
+          expect(call2.order_id).toEqual([0n]);
+
+          const commitList = actor.commit_proposal_many_assets_upload.mock.calls[0][0];
+          const commitC = commitList.find((c) => c.batch_id === 33n);
+          const commitD = commitList.find((c) => c.batch_id === 44n);
+
+          const ctHeadersC = (commitC?.headers ?? []).filter(
+            ([k]) => k.toLowerCase() === 'content-type'
+          );
+          expect(ctHeadersC).toEqual([['content-type', 'text/plain']]);
+
+          expect(commitD?.headers).toEqual([['Content-Type', 'image/jpeg']]);
+        });
       });
     });
   });

@@ -35,19 +35,18 @@ export interface UploadFileStorage {
   description?: string;
 }
 
-// TODO: align interfaces?
-export type UploadFile = (params: UploadFileStorage) => Promise<void>;
-export type UploadFileWithProposal = (
-  params: UploadFileStorage & {proposalId: bigint}
-) => Promise<void>;
+export type UploadFileStorageWithProposal = UploadFileStorage & {proposalId: bigint};
 
-export type UploadFiles = (params: {files: UploadFileStorage[]}) => Promise<void>;
-export type UploadFilesWithProposal = (params: {
+export type UploadFile = (params: UploadFileStorage) => Promise<void>;
+export type UploadFileWithProposal = (params: UploadFileStorageWithProposal) => Promise<void>;
+
+export type UploadFilesStorageWithProposal = {
   files: UploadFileStorage[];
   proposalId: bigint;
-}) => Promise<void>;
+};
 
-export type UploadFn = {uploadFile: UploadFile} | {uploadFiles: UploadFiles};
+export type UploadFiles = (params: {files: UploadFileStorage[]}) => Promise<void>;
+export type UploadFilesWithProposal = (params: UploadFilesStorageWithProposal) => Promise<void>;
 
 export type DeployResult =
   | {result: 'deployed'; files: Pick<FileDetails, 'file'>[]}
@@ -73,12 +72,10 @@ export type DeployParams = PrepareDeployOptions & {
   assertMemory: () => Promise<void>;
 };
 
-// TODO: better solution?
-// TODO: rename
-export interface DeployParamsSingle<T = UploadFile> {
+export interface UploadIndividually<T = UploadFile> {
   uploadFile: T;
 }
 
-export interface DeployParamsGrouped<T = UploadFiles> {
+export interface UploadWithBatch<T = UploadFiles> {
   uploadFiles: T;
 }

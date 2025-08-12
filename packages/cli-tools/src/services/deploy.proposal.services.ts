@@ -1,7 +1,7 @@
 import type {COLLECTION_CDN_RELEASES, COLLECTION_DAPP} from '../constants/deploy.constants';
 import type {
-  DeployParamsGrouped,
-  DeployParamsSingle,
+  UploadWithBatch,
+  UploadIndividually,
   DeployResultWithProposal,
   FileAndPaths,
   UploadFileStorage,
@@ -19,14 +19,16 @@ export const deployAndProposeChanges = async ({
 }: {
   deploy: {
     upload:
-      | DeployParamsSingle<UploadFileWithProposal>
-      | DeployParamsGrouped<UploadFilesWithProposal>;
+      | UploadIndividually<UploadFileWithProposal>
+      | UploadWithBatch<UploadFilesWithProposal>;
     files: FileAndPaths[];
     sourceAbsolutePath: string;
     collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
   };
   proposal: Omit<ProposeChangesParams, 'executeChanges'>;
 }): Promise<DeployResultWithProposal> => {
+
+
   const executeChanges = async (proposalId: bigint): Promise<void> => {
     // TODO: refactor
     if ('uploadFiles' in upload) {

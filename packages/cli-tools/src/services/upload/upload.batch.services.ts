@@ -30,7 +30,8 @@ export const uploadFilesWithBatch = async ({
 
 const batchUploadFiles = async ({
   files,
-  sourceAbsolutePath,
+  // TODO: use for on progress
+  sourceAbsolutePath: _,
   upload
 }: {
   upload: (params: FileAndPaths[]) => Promise<void>;

@@ -7,8 +7,8 @@ import {deployAndProposeChanges} from '../services/deploy.proposal.services';
 import {uploadFiles, uploadManyFiles} from '../services/upload.services';
 import type {
   DeployParams,
-  DeployParamsGrouped,
-  DeployParamsSingle,
+  UploadWithBatch,
+  UploadIndividually,
   DeployResult,
   DeployResultWithProposal,
   FileAndPaths,
@@ -74,7 +74,7 @@ export const deploy = async ({
   upload
 }: {
   params: DeployParams;
-  upload: DeployParamsSingle | DeployParamsGrouped;
+  upload: UploadIndividually | UploadWithBatch;
 }): Promise<DeployResult> => {
   const prepareResult = await prepareDeploy(params);
 
@@ -139,8 +139,8 @@ export const deployWithProposal = async ({
   deploy: {
     params: DeployParams;
     upload:
-      | DeployParamsSingle<UploadFileWithProposal>
-      | DeployParamsGrouped<UploadFilesWithProposal>;
+      | UploadIndividually<UploadFileWithProposal>
+      | UploadWithBatch<UploadFilesWithProposal>;
   };
   proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {clearAssets?: boolean};
 }): Promise<DeployResultWithProposal> => {

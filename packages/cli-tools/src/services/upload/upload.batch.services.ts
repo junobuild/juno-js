@@ -96,7 +96,7 @@ const batchUploadFiles = async ({
       );
 
       // We do not await the run on purpose
-      tasks.run();
+      const run = tasks.run();
 
       await upload({
         files,
@@ -109,6 +109,9 @@ const batchUploadFiles = async ({
           onCommittedBatch: () => commitBatch.resolve?.()
         }
       });
+
+      // wait for the renderer to flush & close cleanly before next batch
+      await run;
     }
   };
 

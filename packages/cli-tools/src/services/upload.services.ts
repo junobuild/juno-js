@@ -1,41 +1,31 @@
-import type {COLLECTION_CDN_RELEASES, COLLECTION_DAPP} from '../constants/deploy.constants';
-import type {FileAndPaths, UploadFile, UploadFiles} from '../types/deploy';
+import type {FileAndPaths, UploadIndividually, UploadWithBatch} from '../types/deploy';
+import {UploadFilesParams} from '../types/upload';
 import {formatBytes} from '../utils/format.utils';
 import {fileSizeInBytes} from '../utils/fs.utils';
-import {uploadFilesIndividually} from './upload/upload.individual.services';
 import {uploadFilesWithBatch} from './upload/upload.batch.services';
+import {uploadFilesIndividually} from './upload/upload.individual.services';
 
-// TODO: rename
 export const uploadFiles = async ({
-  files: sourceFiles,
-  uploadFile,
+  upload,
+  files,
   ...rest
-}: {
-  files: FileAndPaths[];
-  uploadFile: UploadFile;
-  sourceAbsolutePath: string;
-  collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
+}: UploadFilesParams & {
+  upload: UploadIndividually | UploadWithBatch;
 }) => {
-  // TODO: rename
-  await uploadFilesIndividually({files: sourceFiles, uploadFile, ...rest});
+  if ('uploadFiles' in upload) {
+    await uploadFilesWithBatch({
+      uploadFiles: upload.uploadFiles,
+      files,
+      ...rest
+    });
 
-  logSuccess({files: sourceFiles});
-};
+    logSuccess({files});
+    return;
+  }
 
-// TODO: rename and maybe move
-export const uploadManyFiles = async ({
-  files: sourceFiles,
-  uploadFiles,
-  ...rest
-}: {
-  files: FileAndPaths[];
-  uploadFiles: UploadFiles;
-  sourceAbsolutePath: string;
-  collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
-}) => {
-  await uploadFilesWithBatch({files: sourceFiles, uploadFiles, ...rest});
+  await uploadFilesIndividually({uploadFile: upload.uploadFile, files, ...rest});
 
-  logSuccess({files: sourceFiles});
+  logSuccess({files});
 };
 
 const logSuccess = ({files}: {files: FileAndPaths[]}) => {

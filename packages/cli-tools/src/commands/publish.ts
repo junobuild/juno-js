@@ -13,7 +13,7 @@ import type {PublishSatelliteWasmParams} from '../types/publish';
  * Optionally, the proposal can be auto-committed if `autoCommit` is true.
  *
  * @param {Object} options - The deployment and proposal configuration.
- * @param {PublishSatelliteWasmParams} options.deploy - Deployment parameters including the upload function, memory assertion, and file paths.
+ * @param {PublishSatelliteWasmParams} options.publish - Publication parameters including the upload function, memory assertion, and file paths.
  * @param {Object} options.proposal - Proposal options.
  * @param {CdnParameters} options.proposal.cdn - CDN and governance configuration.
  * @param {boolean} options.proposal.autoCommit - If `true`, the proposal is automatically committed after submission.

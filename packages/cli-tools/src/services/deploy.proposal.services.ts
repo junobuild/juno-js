@@ -1,16 +1,14 @@
-import type {COLLECTION_CDN_RELEASES, COLLECTION_DAPP} from '../constants/deploy.constants';
 import type {
-  UploadWithBatch,
-  UploadIndividually,
   DeployResultWithProposal,
-  FileAndPaths,
   UploadFileStorage,
   UploadFilesWithProposal,
-  UploadFileWithProposal
+  UploadFileWithProposal,
+  UploadIndividually,
+  UploadWithBatch
 } from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
+import {UploadFilesParams} from '../types/upload';
 import {proposeChanges} from './proposals.services';
-import {uploadFilesWithBatch} from './upload/upload.batch.services';
 import {uploadFiles} from './upload.services';
 
 export const deployAndProposeChanges = async ({
@@ -18,36 +16,28 @@ export const deployAndProposeChanges = async ({
   proposal: {proposalType, autoCommit, ...proposalRest}
 }: {
   deploy: {
-    upload:
-      | UploadIndividually<UploadFileWithProposal>
-      | UploadWithBatch<UploadFilesWithProposal>;
-    files: FileAndPaths[];
-    sourceAbsolutePath: string;
-    collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
-  };
+    upload: UploadIndividually<UploadFileWithProposal> | UploadWithBatch<UploadFilesWithProposal>;
+  } & UploadFilesParams;
   proposal: Omit<ProposeChangesParams, 'executeChanges'>;
 }): Promise<DeployResultWithProposal> => {
-
-
   const executeChanges = async (proposalId: bigint): Promise<void> => {
-    // TODO: refactor
     if ('uploadFiles' in upload) {
-      const uploadWithProposalId = (params: {files: UploadFileStorage[]}) =>
+      const uploadFilesWithProposalId = (params: {files: UploadFileStorage[]}) =>
         upload.uploadFiles({
           ...params,
           proposalId
         });
 
-      await uploadFilesWithBatch({
+      await uploadFiles({
         files,
         sourceAbsolutePath,
         collection,
-        uploadFiles: uploadWithProposalId
+        upload: {uploadFiles: uploadFilesWithProposalId}
       });
       return;
     }
 
-    const uploadWithProposalId = (params: UploadFileStorage) =>
+    const uploadFileWithProposalId = (params: UploadFileStorage) =>
       upload.uploadFile({
         ...params,
         proposalId
@@ -57,7 +47,7 @@ export const deployAndProposeChanges = async ({
       files,
       sourceAbsolutePath,
       collection,
-      uploadFile: uploadWithProposalId
+      upload: {uploadFile: uploadFileWithProposalId}
     });
   };
 

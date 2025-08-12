@@ -4,18 +4,18 @@ import {COLLECTION_DAPP} from '../constants/deploy.constants';
 import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';
-import {uploadFiles, uploadManyFiles} from '../services/upload.services';
+import {uploadFiles} from '../services/upload.services';
 import type {
   DeployParams,
-  UploadWithBatch,
-  UploadIndividually,
   DeployResult,
   DeployResultWithProposal,
   FileAndPaths,
   FileDetails,
   FilePaths,
   UploadFilesWithProposal,
-  UploadFileWithProposal
+  UploadFileWithProposal,
+  UploadIndividually,
+  UploadWithBatch
 } from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
 import {fullPath} from '../utils/deploy.utils';
@@ -91,20 +91,11 @@ export const deploy = async ({
     sourceAbsolutePath
   };
 
-  // TODO: meh, refactor
-  if ('uploadFiles' in upload) {
-    await uploadManyFiles({
-      ...source,
-      collection: COLLECTION_DAPP,
-      uploadFiles: upload.uploadFiles
-    });
-  } else {
-    await uploadFiles({
-      ...source,
-      collection: COLLECTION_DAPP,
-      uploadFile: upload.uploadFile
-    });
-  }
+  await uploadFiles({
+    ...source,
+    collection: COLLECTION_DAPP,
+    upload
+  });
 
   console.log(`\n🚀 Deploy complete!`);
 
@@ -138,9 +129,7 @@ export const deployWithProposal = async ({
 }: {
   deploy: {
     params: DeployParams;
-    upload:
-      | UploadIndividually<UploadFileWithProposal>
-      | UploadWithBatch<UploadFilesWithProposal>;
+    upload: UploadIndividually<UploadFileWithProposal> | UploadWithBatch<UploadFilesWithProposal>;
   };
   proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {clearAssets?: boolean};
 }): Promise<DeployResultWithProposal> => {

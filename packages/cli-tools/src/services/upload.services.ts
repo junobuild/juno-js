@@ -2,8 +2,8 @@ import type {COLLECTION_CDN_RELEASES, COLLECTION_DAPP} from '../constants/deploy
 import type {FileAndPaths, UploadFile, UploadFiles} from '../types/deploy';
 import {formatBytes} from '../utils/format.utils';
 import {fileSizeInBytes} from '../utils/fs.utils';
-import {uploadFilesSingle} from './upload.file.services';
-import {uploadFilesGrouped} from './upload.files.services';
+import {uploadFilesIndividually} from './upload/upload.individual.services';
+import {uploadFilesWithBatch} from './upload/upload.batch.services';
 
 // TODO: rename
 export const uploadFiles = async ({
@@ -17,7 +17,7 @@ export const uploadFiles = async ({
   collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
 }) => {
   // TODO: rename
-  await uploadFilesSingle({files: sourceFiles, uploadFile, ...rest});
+  await uploadFilesIndividually({files: sourceFiles, uploadFile, ...rest});
 
   logSuccess({files: sourceFiles});
 };
@@ -33,7 +33,7 @@ export const uploadManyFiles = async ({
   sourceAbsolutePath: string;
   collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
 }) => {
-  await uploadFilesGrouped({files: sourceFiles, uploadFiles, ...rest});
+  await uploadFilesWithBatch({files: sourceFiles, uploadFiles, ...rest});
 
   logSuccess({files: sourceFiles});
 };

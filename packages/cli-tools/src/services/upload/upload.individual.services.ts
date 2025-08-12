@@ -1,16 +1,15 @@
-import {isNullish, nonNullish, notEmptyString} from '@dfinity/utils';
+import {isNullish, nonNullish} from '@dfinity/utils';
 import Listr from 'listr';
-import {readFile} from 'node:fs/promises';
-import {basename, relative} from 'node:path';
+import {relative} from 'node:path';
 import {
   type COLLECTION_CDN_RELEASES,
   type COLLECTION_DAPP,
   UPLOAD_BATCH_SIZE
-} from '../constants/deploy.constants';
-import type {FileAndPaths, FileDetails, UploadFile, UploadFileStorage} from '../types/deploy';
+} from '../../constants/deploy.constants';
+import type {FileAndPaths, FileDetails, UploadFile, UploadFileStorage} from '../../types/deploy';
+import {prepareFileForUpload} from './_upload.services';
 
-// TODO: rename
-export const uploadFilesSingle = async ({
+export const uploadFilesIndividually = async ({
   files: sourceFiles,
   uploadFile,
   sourceAbsolutePath,
@@ -72,12 +71,7 @@ const batchUploadFiles = async ({
 
 const uploadFileToStorage = async ({
   uploadFile,
-  file,
-  fullPath,
-  collection,
-  filePath,
-  token,
-  description
+  ...rest
 }: {
   file: FileDetails;
   uploadFile: UploadFile;
@@ -86,16 +80,6 @@ const uploadFileToStorage = async ({
   UploadFileStorage,
   'fullPath' | 'collection' | 'token' | 'description'
 >): Promise<void> => {
-  await uploadFile({
-    filename: basename(filePath),
-    fullPath,
-    data: new Blob([await readFile(file.file)]),
-    collection,
-    headers: [
-      ...(file.mime === undefined ? [] : ([['Content-Type', file.mime]] as Array<[string, string]>))
-    ],
-    encoding: file.encoding,
-    ...(nonNullish(token) && notEmptyString(token) && {token}),
-    ...(nonNullish(description) && notEmptyString(description) && {description})
-  });
+  const fileToUpload = await prepareFileForUpload(rest);
+  await uploadFile(fileToUpload);
 };

@@ -10,7 +10,7 @@ import type {
 } from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
 import {proposeChanges} from './proposals.services';
-import {uploadFilesGrouped} from './upload.files.services';
+import {uploadFilesWithBatch} from './upload/upload.batch.services';
 import {uploadFiles} from './upload.services';
 
 export const deployAndProposeChanges = async ({
@@ -36,7 +36,7 @@ export const deployAndProposeChanges = async ({
           proposalId
         });
 
-      await uploadFilesGrouped({
+      await uploadFilesWithBatch({
         files,
         sourceAbsolutePath,
         collection,

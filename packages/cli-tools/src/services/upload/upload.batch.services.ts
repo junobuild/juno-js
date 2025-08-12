@@ -71,16 +71,17 @@ const batchUploadFiles = async ({
       }));
 
       const batchNumber = Math.floor(i / UPLOAD_BATCH_SIZE) + 1;
-      const batchLabel = `${step === 'alternate' ? '✨' : '📦'} ${batchNumber}/${totalBatches}`;
+      const batchLabel = `[${batchNumber}/${totalBatches}]`;
+      const batchType = step === 'alternate' ? '✨' : '📦';
 
       const tasks = new Listr<void>(
         [
           {
-            title: `${batchLabel} · Initializing`,
+            title: `${batchType} Initializing ${batchLabel}`,
             task: async () => await initBatch.promise
           },
           {
-            title: `${batchLabel} · Uploading`,
+            title: `${batchType} Uploading    ${batchLabel}`,
             // eslint-disable-next-line local-rules/prefer-object-params
             task: (_ctx, task): Listr =>
               task.newListr(uploadFilesTasks, {
@@ -88,7 +89,7 @@ const batchUploadFiles = async ({
               })
           },
           {
-            title: `${batchLabel} · Committing`,
+            title: `${batchType} Committing   ${batchLabel}`,
             task: async () => await commitBatch.promise
           }
         ],

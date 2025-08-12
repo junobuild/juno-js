@@ -70,8 +70,10 @@ const batchUploadFiles = async ({
       await upload({
         files,
         progress: {
-          onUploadedFileChunks: (fullPath) =>
-            filesProgress.find((file) => file.paths.fullPath === fullPath)?.resolve?.()
+          onUploadedFileChunks: (fullPath) => {
+            const progress = filesProgress.find((file) => file.paths.fullPath === fullPath);
+            progress?.resolve?.();
+          }
         }
       });
     }

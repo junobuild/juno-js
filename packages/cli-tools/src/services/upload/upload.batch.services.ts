@@ -38,6 +38,8 @@ const batchUploadFiles = async ({
   upload: (params: Pick<UploadFilesParamsWithProgress, 'files' | 'progress'>) => Promise<void>;
 } & Omit<UploadFilesParams, 'collection'>) => {
   const uploadFiles = async (groupFiles: FileAndPaths[]) => {
+    const totalBatches = Math.ceil(groupFiles.length / UPLOAD_BATCH_SIZE);
+
     // Execute upload UPLOAD_BATCH_SIZE files at a time max preventively to not stress too much the network
     for (let i = 0; i < groupFiles.length; i += UPLOAD_BATCH_SIZE) {
       const files = groupFiles.slice(i, i + UPLOAD_BATCH_SIZE);
@@ -64,14 +66,17 @@ const batchUploadFiles = async ({
         task: async () => await promise
       }));
 
+      const batchNumber = Math.floor(i / UPLOAD_BATCH_SIZE) + 1;
+      const batchLabel = `Batch ${batchNumber}/${totalBatches}`;
+
       const tasks = new Listr<void>(
         [
           {
-            title: 'Initializing batch...',
+            title: `[${batchLabel}] Initializing`,
             task: async () => await initBatch.promise
           },
           {
-            title: 'Upload chunks...',
+            title: `[${batchLabel}] Uploading`,
             // eslint-disable-next-line local-rules/prefer-object-params
             task: (_ctx, task): Listr =>
               task.newListr(uploadFilesTasks, {
@@ -79,7 +84,7 @@ const batchUploadFiles = async ({
               })
           },
           {
-            title: 'Commiting batch...',
+            title: `[${batchLabel}] Committing`,
             task: async () => await commitBatch.promise
           }
         ],

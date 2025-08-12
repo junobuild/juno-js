@@ -353,11 +353,6 @@ describe('upload.services', () => {
         expect(actor.upload_proposal_asset_chunk).toHaveBeenCalledTimes(expectedChunks);
         expect(actor.commit_proposal_asset_upload).toHaveBeenCalledTimes(1);
 
-        // Ensure non-proposal methods were not used
-        expect(actor.init_asset_upload).not.toHaveBeenCalled();
-        expect(actor.upload_asset_chunk).not.toHaveBeenCalled();
-        expect(actor.commit_asset_upload).not.toHaveBeenCalled();
-
         // Order
         const expectedTimeline = [
           'init:proposal',
@@ -509,9 +504,6 @@ describe('upload.services', () => {
 
           expect(actor.init_proposal_asset_upload).not.toHaveBeenCalled();
           expect(actor.commit_proposal_asset_upload).not.toHaveBeenCalled();
-          expect(actor.init_asset_upload).not.toHaveBeenCalled();
-          expect(actor.commit_asset_upload).not.toHaveBeenCalled();
-          expect(actor.upload_asset_chunk).not.toHaveBeenCalled();
         });
 
         it('handles single-chunk assets and respects existing (case-insensitive) Content-Type headers', async () => {

@@ -3,7 +3,11 @@ import {relative} from 'node:path';
 import {UPLOAD_BATCH_SIZE} from '../../constants/deploy.constants';
 import type {UploadFiles} from '../../types/deploy';
 import type {UploadFilesParams, UploadFilesParamsWithProgress} from '../../types/upload';
-import {type ExecuteUploadFiles, executeUploadFiles, prepareFileForUpload} from './_upload.services';
+import {
+  type ExecuteUploadFiles,
+  executeUploadFiles,
+  prepareFileForUpload
+} from './_upload.services';
 
 export const uploadFilesWithBatch = async ({
   uploadFiles,
@@ -67,16 +71,16 @@ const batchUploadFiles = async ({
       }));
 
       const batchNumber = Math.floor(i / UPLOAD_BATCH_SIZE) + 1;
-      const batchLabel = `${step === 'alternate' ? '✨' : '📦'} Batch ${batchNumber}/${totalBatches}`;
+      const batchLabel = `${step === 'alternate' ? '✨' : '📦'} ${batchNumber}/${totalBatches}`;
 
       const tasks = new Listr<void>(
         [
           {
-            title: `[${batchLabel}] Initializing`,
+            title: `${batchLabel} · Initializing`,
             task: async () => await initBatch.promise
           },
           {
-            title: `[${batchLabel}] Uploading`,
+            title: `${batchLabel} · Uploading`,
             // eslint-disable-next-line local-rules/prefer-object-params
             task: (_ctx, task): Listr =>
               task.newListr(uploadFilesTasks, {
@@ -84,7 +88,7 @@ const batchUploadFiles = async ({
               })
           },
           {
-            title: `[${batchLabel}] Committing`,
+            title: `${batchLabel} · Committing`,
             task: async () => await commitBatch.promise
           }
         ],

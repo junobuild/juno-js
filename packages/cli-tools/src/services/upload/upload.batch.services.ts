@@ -1,9 +1,9 @@
 import {Listr} from 'listr2';
 import {relative} from 'node:path';
 import {UPLOAD_BATCH_SIZE} from '../../constants/deploy.constants';
-import type {FileAndPaths, UploadFiles} from '../../types/deploy';
+import type {UploadFiles} from '../../types/deploy';
 import type {UploadFilesParams, UploadFilesParamsWithProgress} from '../../types/upload';
-import {executeUploadFiles, prepareFileForUpload} from './_upload.services';
+import {type ExecuteUploadFiles, executeUploadFiles, prepareFileForUpload} from './_upload.services';
 
 export const uploadFilesWithBatch = async ({
   uploadFiles,
@@ -37,7 +37,7 @@ const batchUploadFiles = async ({
 }: {
   upload: (params: Pick<UploadFilesParamsWithProgress, 'files' | 'progress'>) => Promise<void>;
 } & Omit<UploadFilesParams, 'collection'>) => {
-  const uploadFiles = async (groupFiles: FileAndPaths[]) => {
+  const uploadFiles: ExecuteUploadFiles = async ({groupFiles, step}) => {
     const totalBatches = Math.ceil(groupFiles.length / UPLOAD_BATCH_SIZE);
 
     // Execute upload UPLOAD_BATCH_SIZE files at a time max preventively to not stress too much the network
@@ -67,7 +67,7 @@ const batchUploadFiles = async ({
       }));
 
       const batchNumber = Math.floor(i / UPLOAD_BATCH_SIZE) + 1;
-      const batchLabel = `Batch ${batchNumber}/${totalBatches}`;
+      const batchLabel = `${step === 'alternate' ? '✨' : '📦'} Batch ${batchNumber}/${totalBatches}`;
 
       const tasks = new Listr<void>(
         [

@@ -31,15 +31,19 @@ export const prepareFileForUpload = async ({
   ...(nonNullish(description) && notEmptyString(description) && {description})
 });
 
+export type ExecuteUploadFiles = (params: {
+  groupFiles: FileAndPaths[];
+  step: 'alternate' | 'source';
+}) => Promise<void>;
+
 export const executeUploadFiles = async ({
   files,
   uploadFiles
-}: {uploadFiles: (groupFiles: FileAndPaths[]) => Promise<void>} & Pick<
-  UploadFilesParams,
-  'files'
->) => {
+}: {
+  uploadFiles: ExecuteUploadFiles;
+} & Pick<UploadFilesParams, 'files'>) => {
   // We upload alternate files first. See comment in splitSourceFiles.
   const [alternateFiles, sourceFiles] = splitSourceFiles(files);
-  await uploadFiles(alternateFiles);
-  await uploadFiles(sourceFiles);
+  await uploadFiles({groupFiles: alternateFiles, step: 'alternate'});
+  await uploadFiles({groupFiles: sourceFiles, step: 'source'});
 };

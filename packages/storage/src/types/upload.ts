@@ -9,7 +9,7 @@ export type UploadAssetActor = SatelliteActor;
 export type UploadAssetWithProposalActor = ConsoleActor | SatelliteActor;
 
 export type UploadParams = {
-  actor: UploadAssetActor
+  actor: UploadAssetActor;
 } & OnUploadProgress;
 
 export type UploadWithProposalParams = {

@@ -72,6 +72,7 @@ const batchUploadFiles = async ({
           },
           {
             title: 'Upload chunks...',
+            // eslint-disable-next-line local-rules/prefer-object-params
             task: (_ctx, task): Listr =>
               task.newListr(uploadFilesTasks, {
                 concurrent: true

@@ -1,7 +1,7 @@
 import {
-  OnUploadProgress,
   uploadAssetWithProposal as uploadAssetWithProposalStorage,
   uploadAssetsWithProposal as uploadAssetsWithProposalStorage,
+  type OnUploadProgress,
   type UploadAsset
 } from '@junobuild/storage';
 import type {CdnParameters} from '../types/actor.params';

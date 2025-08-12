@@ -321,7 +321,7 @@ describe('upload.services', () => {
       it('calls progress.onUploadedFileChunks once with the asset fullPath (uploadAsset)', async () => {
         const {actor} = makeActorMocks();
         const asset = makeUploadAsset({fullPath: '/pictures/cat.png'});
-        const progress = { onUploadedFileChunks: vi.fn() };
+        const progress = {onUploadedFileChunks: vi.fn()};
 
         await uploadAsset({asset, actor, progress});
 
@@ -425,7 +425,7 @@ describe('upload.services', () => {
       it('calls progress.onUploadedFileChunks once with the asset fullPath (uploadAssetWithProposal)', async () => {
         const {actor} = makeActorMocks();
         const asset = makeUploadAsset({fullPath: '/docs/file.pdf'});
-        const progress = { onUploadedFileChunks: vi.fn() };
+        const progress = {onUploadedFileChunks: vi.fn()};
 
         await uploadAssetWithProposal({asset, proposalId: 1n, actor: actor as any, progress});
 
@@ -583,9 +583,15 @@ describe('upload.services', () => {
       it('calls progress.onUploadedFileChunks once per asset with correct paths (uploadAssetsWithProposal)', async () => {
         const actor = mockDeep<UploadAssetWithProposalActor>();
         const proposalId = 999n;
-        const assetA = makeUploadAsset({ fullPath: '/pictures/cat.png', data: makeBlob(UPLOAD_CHUNK_SIZE + 1, 'image/png') });
-        const assetB = makeUploadAsset({ fullPath: '/docs/doc.pdf', data: makeBlob(UPLOAD_CHUNK_SIZE - 1, 'application/pdf') });
-        const progress = { onUploadedFileChunks: vi.fn() };
+        const assetA = makeUploadAsset({
+          fullPath: '/pictures/cat.png',
+          data: makeBlob(UPLOAD_CHUNK_SIZE + 1, 'image/png')
+        });
+        const assetB = makeUploadAsset({
+          fullPath: '/docs/doc.pdf',
+          data: makeBlob(UPLOAD_CHUNK_SIZE - 1, 'application/pdf')
+        });
+        const progress = {onUploadedFileChunks: vi.fn()};
 
         actor.init_proposal_many_assets_upload.mockResolvedValue([
           [assetA.fullPath, {batch_id: 11n}],
@@ -597,11 +603,11 @@ describe('upload.services', () => {
         });
         actor.commit_proposal_many_assets_upload.mockResolvedValue(undefined);
 
-        await uploadAssetsWithProposal({ assets: [assetA, assetB], proposalId, actor, progress });
+        await uploadAssetsWithProposal({assets: [assetA, assetB], proposalId, actor, progress});
 
         // Called once per asset, order not guaranteed
         expect(progress.onUploadedFileChunks).toHaveBeenCalledTimes(2);
-        const calledWith = new Set(progress.onUploadedFileChunks.mock.calls.map(c => c[0]));
+        const calledWith = new Set(progress.onUploadedFileChunks.mock.calls.map((c) => c[0]));
         expect(calledWith).toEqual(new Set(['/pictures/cat.png', '/docs/doc.pdf']));
       });
     });

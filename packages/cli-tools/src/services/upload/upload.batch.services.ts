@@ -56,12 +56,33 @@ const batchUploadFiles = async ({
         ...deferredPromise()
       }));
 
+      const initBatch = deferredPromise();
+      const commitBatch = deferredPromise();
+
+      const uploadFilesTasks = filesProgress.map(({file, promise}) => ({
+        title: `Uploading ${relative(sourceAbsolutePath, file.file)}`,
+        task: async () => await promise
+      }));
+
       const tasks = new Listr<void>(
-        filesProgress.map(({file, promise}) => ({
-          title: `Uploading ${relative(sourceAbsolutePath, file.file)}`,
-          task: async () => await promise
-        })),
-        {concurrent: true}
+        [
+          {
+            title: 'Initializing batch...',
+            task: async () => await initBatch.promise
+          },
+          {
+            title: 'Upload chunks...',
+            task: (_ctx, task): Listr =>
+              task.newListr(uploadFilesTasks, {
+                concurrent: true
+              })
+          },
+          {
+            title: 'Commiting batch...',
+            task: async () => await commitBatch.promise
+          }
+        ],
+        {concurrent: false}
       );
 
       // We do not await the run on purpose
@@ -73,7 +94,9 @@ const batchUploadFiles = async ({
           onUploadedFileChunks: (fullPath) => {
             const progress = filesProgress.find((file) => file.paths.fullPath === fullPath);
             progress?.resolve?.();
-          }
+          },
+          onInitiatedBatch: () => initBatch.resolve?.(),
+          onCommittedBatch: () => commitBatch.resolve?.()
         }
       });
     }

@@ -20,6 +20,8 @@ export const uploadAsset = async ({
 
   const {batch_id: batchId} = await init_asset_upload(mapInitAssetUploadParams(restAsset));
 
+  progress?.onInitiatedBatch();
+
   const {chunkIds} = await uploadChunks({data, uploadFn: upload_asset_chunk, batchId});
 
   progress?.onUploadedFileChunks(restAsset.fullPath);
@@ -31,6 +33,8 @@ export const uploadAsset = async ({
     headers,
     chunkIds
   });
+
+  progress?.onCommittedBatch();
 };
 
 export const uploadAssetWithProposal = async ({
@@ -43,6 +47,8 @@ export const uploadAssetWithProposal = async ({
 } & UploadWithProposalParams): Promise<void> => {
   const {init_proposal_asset_upload, upload_proposal_asset_chunk, commit_proposal_asset_upload} =
     actor;
+
+  progress?.onInitiatedBatch();
 
   const {batch_id: batchId} = await init_proposal_asset_upload(
     mapInitAssetUploadParams(restAsset),
@@ -60,6 +66,8 @@ export const uploadAssetWithProposal = async ({
     headers,
     chunkIds
   });
+
+  progress?.onCommittedBatch();
 };
 
 export const uploadAssetsWithProposal = async ({
@@ -80,6 +88,8 @@ export const uploadAssetsWithProposal = async ({
     assets.map(mapInitAssetUploadParams),
     proposalId
   );
+
+  progress?.onInitiatedBatch();
 
   const uploadAssetChunk = async ({
     fullPath,
@@ -108,6 +118,8 @@ export const uploadAssetsWithProposal = async ({
   const batchAndChunkIdsToCommit = await Promise.all(assets.map(uploadAssetChunk));
 
   await commit_proposal_many_assets_upload(batchAndChunkIdsToCommit.map(mapCommitBatch));
+
+  progress?.onCommittedBatch();
 };
 
 const mapInitAssetUploadParams = ({

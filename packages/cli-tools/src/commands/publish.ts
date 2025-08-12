@@ -8,12 +8,18 @@ import type {PublishSatelliteWasmParams} from '../types/publish';
 /**
  * Uploads a Satellite WASM file to the CDN as part of a proposal-based deployment.
  *
- * This function performs a memory check (if provided), packages the WASM file,
- * uploads it to the CDN, and submits a proposal for deployment.
- * Optionally, the proposal can be auto-committed if `autoCommit` is true.
+ * This function:
+ * 1. Optionally performs a memory check (via `assertMemory`).
+ * 2. Packages the WASM file into the required format.
+ * 3. Uploads the file(s) using the provided upload function — which may
+ *    perform a batched proposal flow or an individual file flow, depending
+ *    on the `upload` implementation.
+ * 4. Submits a proposal to deploy the uploaded Satellite WASM.
+ * 5. Optionally commits (applies) the proposal if `autoCommit` is `true`.
  *
  * @param {Object} options - The deployment and proposal configuration.
- * @param {PublishSatelliteWasmParams} options.publish - Publication parameters including the upload function, memory assertion, and file paths.
+ * @param {PublishSatelliteWasmParams} options.publish - Publication parameters including the upload function,
+ * memory assertion, and file paths.
  * @param {Object} options.proposal - Proposal options.
  * @param {CdnParameters} options.proposal.cdn - CDN and governance configuration.
  * @param {boolean} options.proposal.autoCommit - If `true`, the proposal is automatically committed after submission.

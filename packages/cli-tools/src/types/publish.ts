@@ -1,4 +1,4 @@
-import type {DeployParams, UploadIndividually, FilePaths, UploadFileWithProposal} from './deploy';
+import type {DeployParams, FilePaths, UploadFileWithProposal, UploadIndividually} from './deploy';
 
 export type PublishSatelliteWasmParams = {
   upload: UploadIndividually<UploadFileWithProposal>;

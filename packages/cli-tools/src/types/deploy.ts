@@ -40,10 +40,10 @@ export type UploadFileStorageWithProposal = UploadFileStorage & {proposalId: big
 export type UploadFile = (params: UploadFileStorage) => Promise<void>;
 export type UploadFileWithProposal = (params: UploadFileStorageWithProposal) => Promise<void>;
 
-export type UploadFilesStorageWithProposal = {
+export interface UploadFilesStorageWithProposal {
   files: UploadFileStorage[];
   proposalId: bigint;
-};
+}
 
 export type UploadFiles = (params: {files: UploadFileStorage[]}) => Promise<void>;
 export type UploadFilesWithProposal = (params: UploadFilesStorageWithProposal) => Promise<void>;

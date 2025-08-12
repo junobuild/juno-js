@@ -4,7 +4,7 @@ import {
   UPLOAD_BATCH_SIZE
 } from '../../constants/deploy.constants';
 import type {FileAndPaths, UploadFiles} from '../../types/deploy';
-import {UploadFilesParams} from '../../types/upload';
+import type {UploadFilesParams} from '../../types/upload';
 import {executeUploadFiles, prepareFileForUpload} from './_upload.services';
 
 export const uploadFilesWithBatch = async ({
@@ -35,7 +35,7 @@ const batchUploadFiles = async ({
   upload
 }: {
   upload: (params: FileAndPaths[]) => Promise<void>;
-} & Omit<UploadFilesParams, "collection">) => {
+} & Omit<UploadFilesParams, 'collection'>) => {
   const uploadFiles = async (groupFiles: FileAndPaths[]) => {
     // Execute upload UPLOAD_BATCH_SIZE files at a time max preventively to not stress too much the network
     for (let i = 0; i < groupFiles.length; i += UPLOAD_BATCH_SIZE) {

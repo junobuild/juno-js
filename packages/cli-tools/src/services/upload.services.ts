@@ -1,5 +1,5 @@
 import type {FileAndPaths, UploadIndividually, UploadWithBatch} from '../types/deploy';
-import {UploadFilesParams} from '../types/upload';
+import type {UploadFilesParams} from '../types/upload';
 import {formatBytes} from '../utils/format.utils';
 import {fileSizeInBytes} from '../utils/fs.utils';
 import {uploadFilesWithBatch} from './upload/upload.batch.services';

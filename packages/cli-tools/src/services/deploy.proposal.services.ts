@@ -7,7 +7,7 @@ import type {
   UploadWithBatch
 } from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
-import {UploadFilesParams} from '../types/upload';
+import type {UploadFilesParams} from '../types/upload';
 import {proposeChanges} from './proposals.services';
 import {uploadFiles} from './upload.services';
 

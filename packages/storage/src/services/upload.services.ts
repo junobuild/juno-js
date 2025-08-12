@@ -2,9 +2,8 @@ import {assertNonNullish, toNullable} from '@dfinity/utils';
 import type {ConsoleDid, SatelliteDid} from '@junobuild/ic-client';
 import {isBrowser} from '@junobuild/utils';
 import {UPLOAD_CHUNK_SIZE} from '../constants/upload.constants';
-import type {OnUploadProgress} from '../types/progress';
 import type {EncodingType} from '../types/storage';
-import type {UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '../types/upload';
+import {UploadAsset, UploadParams, UploadWithProposalParams} from '../types/upload';
 
 type InitAssetKey = SatelliteDid.InitAssetKey | ConsoleDid.InitAssetKey;
 type UploadChunk = SatelliteDid.UploadChunk | ConsoleDid.UploadChunk;
@@ -16,8 +15,7 @@ export const uploadAsset = async ({
   progress
 }: {
   asset: UploadAsset;
-  actor: UploadAssetActor;
-} & OnUploadProgress): Promise<void> => {
+} & UploadParams): Promise<void> => {
   const {init_asset_upload, upload_asset_chunk, commit_asset_upload} = actor;
 
   const {batch_id: batchId} = await init_asset_upload(mapInitAssetUploadParams(restAsset));
@@ -42,9 +40,7 @@ export const uploadAssetWithProposal = async ({
   progress
 }: {
   asset: UploadAsset;
-  proposalId: bigint;
-  actor: UploadAssetWithProposalActor;
-} & OnUploadProgress): Promise<void> => {
+} & UploadWithProposalParams): Promise<void> => {
   const {init_proposal_asset_upload, upload_proposal_asset_chunk, commit_proposal_asset_upload} =
     actor;
 
@@ -73,9 +69,7 @@ export const uploadAssetsWithProposal = async ({
   progress
 }: {
   assets: UploadAsset[];
-  proposalId: bigint;
-  actor: UploadAssetWithProposalActor;
-} & OnUploadProgress): Promise<void> => {
+} & UploadWithProposalParams): Promise<void> => {
   const {
     init_proposal_many_assets_upload,
     upload_proposal_asset_chunk,

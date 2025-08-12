@@ -12,7 +12,10 @@ import type {
   FileAndPaths,
   FileDetails,
   FilePaths,
-  UploadFileWithProposal
+  UploadFilesWithProposal,
+  UploadFileWithProposal,
+  UploadIndividually,
+  UploadWithBatch
 } from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
 import {fullPath} from '../utils/deploy.utils';
@@ -48,26 +51,34 @@ export const postDeploy = async ({config: {postdeploy}}: {config: CliConfig}) =>
 /**
  * Prepares and uploads dapp assets to a satellite.
  *
- * This function handles:
- * 1. Resolving source files to upload.
- * 2. Verifying that enough memory is available (via `assertMemory`).
- * 3. Uploading all valid files using the provided `uploadFile` function.
+ * Steps:
+ * 1) Resolve source files to upload.
+ * 2) Ensure enough memory is available (via internal checks).
+ * 3) Upload files using the provided upload function:
+ *    - `UploadWithBatch`: one init+commit for all files (batched).
+ *    - `UploadIndividually`: init+commit per file (unbatched).
  *
- * If no files are detected (e.g., all files are unchanged), the deploy is skipped.
+ * Notes:
+ * - Chunk uploading logic is identical in both modes; only init/commit differ.
+ * - If no files are detected (e.g. unchanged), the deploy is skipped.
  *
- * @param {Object} options - Deployment options.
- * @param {CliConfig} options.config - The CLI configuration object.
- * @param {ListAssets} options.listAssets - A function to list existing files on the target.
- * @param {Function} [options.assertSourceDirExists] - Optional check to ensure source directory exists.
- * @param {Function} options.assertMemory - A function to ensure enough memory is available.
- * @param {UploadFile} options.uploadFile - A function responsible for uploading a single file.
- *
- * @returns {Promise<DeployResult>} An object containing the result of the deploy:
- *   - `skipped` if no files were found.
- *   - `deployed` and a list of uploaded files if the deploy succeeded.
+ * @param {Object} options
+ * @param {DeployParams} options.params - Deployment parameters (paths, config, etc.).
+ * @param {UploadIndividually | UploadWithBatch} options.upload - Upload strategy function.
+ *   Pass a function that either uploads files **with batch** (single init/commit)
+ *   or **individually** (per-file init/commit).
+ * @returns {Promise<DeployResult>}
+ *   - `{ result: 'skipped' }` when there are no files to upload.
+ *   - `{ result: 'deployed', files }` when the upload completes.
  */
-export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<DeployResult> => {
-  const prepareResult = await prepareDeploy(rest);
+export const deploy = async ({
+  params,
+  upload
+}: {
+  params: DeployParams;
+  upload: UploadIndividually | UploadWithBatch;
+}): Promise<DeployResult> => {
+  const prepareResult = await prepareDeploy(params);
 
   if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
@@ -77,11 +88,15 @@ export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<Deplo
 
   const sourceFiles = prepareSourceFiles({files, sourceAbsolutePath});
 
-  await uploadFiles({
+  const source = {
     files: sourceFiles,
-    uploadFile,
-    sourceAbsolutePath,
-    collection: COLLECTION_DAPP
+    sourceAbsolutePath
+  };
+
+  await uploadFiles({
+    ...source,
+    collection: COLLECTION_DAPP,
+    upload
   });
 
   console.log(`\n🚀 Deploy complete!`);
@@ -90,34 +105,44 @@ export const deploy = async ({uploadFile, ...rest}: DeployParams): Promise<Deplo
 };
 
 /**
- * Prepares and uploads assets as part of a proposal-based workflow.
+ * Prepares and uploads assets through a proposal workflow.
  *
- * This function:
- * 1. Prepares the list of files to be uploaded.
- * 2. If no files are found (i.e. nothing to upload), the process is skipped.
- * 3. If files exist, uploads them a proposal flow.
- * 4. Optionally commits - apply - the proposal if `autoCommit` is `true`.
+ * Steps:
+ * 1) Prepare the list of files to upload.
+ * 2) If no files are found, skip.
+ * 3) Upload using the selected strategy (batched or per-file).
+ * 4) Submit a proposal for the asset upgrade and, if `autoCommit` is true, apply it.
  *
- * @param {Object} options - The deployment and proposal options.
- * @param {DeployParams} options.deploy - Deployment-related parameters (file system, memory check, upload function).
- * @param {Object} options.proposal - Proposal-related options.
- * @param {CdnParameters} options.proposal.cdn - Parameters for interacting with the CDN and governance.
- * @param {boolean} options.proposal.autoCommit - If `true`, automatically commits the proposal after submission.
- * @param {boolean} [options.proposal.clearAssets] - Whether to clear existing assets before upload (optional).
+ * Notes:
+ * - Chunk uploading is the same across strategies; only init/commit batching differs.
+ * - Set `clearAssets` to remove existing assets before upload (proposal field).
  *
- * @returns {Promise<DeployResultWithProposal>} The result of the deployment process:
- *   - `{result: 'skipped'}` if no files were found for upload.
- *   - `{result: 'submitted', files, proposalId}` if the upload and proposal submission succeeded.
- *   - `{result: 'deployed', files, proposalId}` if the upload and proposal was applied automatically committed.
+ * @param {Object} options
+ * @param {Object} options.deploy
+ * @param {DeployParams} options.deploy.params - Deployment parameters.
+ * @param {UploadIndividually<UploadFileWithProposal> | UploadWithBatch<UploadFilesWithProposal>} options.deploy.upload
+ *   Upload strategy function used *within the proposal flow*.
+ * @param {Object} options.proposal
+ * @param {CdnParameters} options.proposal.cdn - Governance/CDN params.
+ * @param {boolean} options.proposal.autoCommit - Apply the proposal automatically after submission.
+ * @param {boolean} [options.proposal.clearAssets] - Clear existing assets before upload.
+ *
+ * @returns {Promise<DeployResultWithProposal>}
+ *   - `{ result: 'skipped' }` when there are no files.
+ *   - `{ result: 'submitted', files, proposalId }` when proposed but not applied.
+ *   - `{ result: 'deployed', files, proposalId }` when proposed and auto-applied.
  */
 export const deployWithProposal = async ({
-  deploy: {uploadFile, ...rest},
+  deploy: {params, upload},
   proposal: {clearAssets, ...restProposal}
 }: {
-  deploy: DeployParams<UploadFileWithProposal>;
+  deploy: {
+    params: DeployParams;
+    upload: UploadIndividually<UploadFileWithProposal> | UploadWithBatch<UploadFilesWithProposal>;
+  };
   proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {clearAssets?: boolean};
 }): Promise<DeployResultWithProposal> => {
-  const prepareResult = await prepareDeploy(rest);
+  const prepareResult = await prepareDeploy(params);
 
   if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
@@ -128,7 +153,7 @@ export const deployWithProposal = async ({
   const sourceFiles = prepareSourceFiles(prepareResult);
 
   const result = await deployAndProposeChanges({
-    deploy: {uploadFile, files: sourceFiles, sourceAbsolutePath, collection: COLLECTION_DAPP},
+    deploy: {upload, files: sourceFiles, sourceAbsolutePath, collection: COLLECTION_DAPP},
     proposal: {
       ...restProposal,
       proposalType: {
@@ -149,7 +174,7 @@ export const deployWithProposal = async ({
 const prepareDeploy = async ({
   assertMemory,
   ...rest
-}: Omit<DeployParams, 'uploadFile'>): Promise<
+}: Omit<DeployParams, 'uploadFn'>): Promise<
   {result: 'skipped'} | {result: 'to-deploy'; files: FileDetails[]; sourceAbsolutePath: string}
 > => {
   const {files: sourceFiles, sourceAbsolutePath} = await prepareDeployServices(rest);

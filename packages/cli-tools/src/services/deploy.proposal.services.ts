@@ -1,29 +1,44 @@
-import type {COLLECTION_CDN_RELEASES, COLLECTION_DAPP} from '../constants/deploy.constants';
 import type {
-  DeployParams,
   DeployResultWithProposal,
-  FileAndPaths,
   UploadFileStorage,
-  UploadFileWithProposal
+  UploadFilesWithProposal,
+  UploadFileWithProposal,
+  UploadIndividually,
+  UploadWithBatch
 } from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
+import type {UploadFilesParams} from '../types/upload';
 import {proposeChanges} from './proposals.services';
 import {uploadFiles} from './upload.services';
 
 export const deployAndProposeChanges = async ({
-  deploy: {uploadFile, files, sourceAbsolutePath, collection},
+  deploy: {upload, files, sourceAbsolutePath, collection},
   proposal: {proposalType, autoCommit, ...proposalRest}
 }: {
-  deploy: Pick<DeployParams<UploadFileWithProposal>, 'uploadFile'> & {
-    files: FileAndPaths[];
-    sourceAbsolutePath: string;
-    collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
-  };
+  deploy: {
+    upload: UploadIndividually<UploadFileWithProposal> | UploadWithBatch<UploadFilesWithProposal>;
+  } & UploadFilesParams;
   proposal: Omit<ProposeChangesParams, 'executeChanges'>;
 }): Promise<DeployResultWithProposal> => {
   const executeChanges = async (proposalId: bigint): Promise<void> => {
-    const uploadWithProposalId = (params: UploadFileStorage) =>
-      uploadFile({
+    if ('uploadFiles' in upload) {
+      const uploadFilesWithProposalId = (params: {files: UploadFileStorage[]}) =>
+        upload.uploadFiles({
+          ...params,
+          proposalId
+        });
+
+      await uploadFiles({
+        files,
+        sourceAbsolutePath,
+        collection,
+        upload: {uploadFiles: uploadFilesWithProposalId}
+      });
+      return;
+    }
+
+    const uploadFileWithProposalId = (params: UploadFileStorage) =>
+      upload.uploadFile({
         ...params,
         proposalId
       });
@@ -32,7 +47,7 @@ export const deployAndProposeChanges = async ({
       files,
       sourceAbsolutePath,
       collection,
-      uploadFile: uploadWithProposalId
+      upload: {uploadFile: uploadFileWithProposalId}
     });
   };
 

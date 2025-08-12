@@ -40,6 +40,14 @@ export type UploadFileStorageWithProposal = UploadFileStorage & {proposalId: big
 export type UploadFile = (params: UploadFileStorage) => Promise<void>;
 export type UploadFileWithProposal = (params: UploadFileStorageWithProposal) => Promise<void>;
 
+export interface UploadFilesStorageWithProposal {
+  files: UploadFileStorage[];
+  proposalId: bigint;
+}
+
+export type UploadFiles = (params: {files: UploadFileStorage[]}) => Promise<void>;
+export type UploadFilesWithProposal = (params: UploadFilesStorageWithProposal) => Promise<void>;
+
 export type DeployResult =
   | {result: 'deployed'; files: Pick<FileDetails, 'file'>[]}
   | {result: 'skipped'};
@@ -58,9 +66,16 @@ export interface PrepareDeployOptions {
   includeAllFiles?: boolean;
 }
 
-export type DeployParams<T = UploadFile> = PrepareDeployOptions & {
+export type DeployParams = PrepareDeployOptions & {
   config: CliConfig;
   listAssets: ListAssets;
   assertMemory: () => Promise<void>;
-  uploadFile: T;
 };
+
+export interface UploadIndividually<T = UploadFile> {
+  uploadFile: T;
+}
+
+export interface UploadWithBatch<T = UploadFiles> {
+  uploadFiles: T;
+}

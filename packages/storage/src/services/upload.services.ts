@@ -1,4 +1,4 @@
-import {toNullable} from '@dfinity/utils';
+import {assertNonNullish, toNullable} from '@dfinity/utils';
 import type {ConsoleDid, SatelliteDid} from '@junobuild/ic-client';
 import {isBrowser} from '@junobuild/utils';
 import {UPLOAD_CHUNK_SIZE} from '../constants/upload.constants';
@@ -59,6 +59,53 @@ export const uploadAssetWithProposal = async ({
   });
 };
 
+export const uploadAssetsWithProposal = async ({
+  assets,
+  proposalId,
+  actor
+}: {
+  assets: UploadAsset[];
+  proposalId: bigint;
+  actor: UploadAssetWithProposalActor;
+}): Promise<void> => {
+  const {
+    init_proposal_many_assets_upload,
+    upload_proposal_asset_chunk,
+    commit_proposal_many_assets_upload
+  } = actor;
+
+  const batchIds = await init_proposal_many_assets_upload(
+    assets.map(mapInitAssetUploadParams),
+    proposalId
+  );
+
+  const uploadAssetChunk = async ({
+    fullPath,
+    data,
+    headers
+  }: UploadAsset): Promise<BatchToCommit> => {
+    const initializedBatch = batchIds.find(([batchIdFullPath]) => batchIdFullPath === fullPath);
+
+    assertNonNullish(initializedBatch);
+
+    const [_, initUpload] = initializedBatch;
+    const {batch_id: batchId} = initUpload;
+
+    const {chunkIds} = await uploadChunks({data, uploadFn: upload_proposal_asset_chunk, batchId});
+
+    return {
+      batchId,
+      headers,
+      chunkIds,
+      data
+    };
+  };
+
+  const batchAndChunkIdsToCommit = await Promise.all(assets.map(uploadAssetChunk));
+
+  await commit_proposal_many_assets_upload(batchAndChunkIdsToCommit.map(mapCommitBatch));
+};
+
 const mapInitAssetUploadParams = ({
   filename,
   collection,
@@ -75,17 +122,12 @@ const mapInitAssetUploadParams = ({
   description: toNullable(description)
 });
 
-const commitAsset = async ({
-  commitFn,
-  batchId,
-  chunkIds,
-  headers,
-  data
-}: {
-  commitFn: (commitBatch: CommitBatch) => Promise<void>;
+type BatchToCommit = {
   batchId: bigint;
   chunkIds: UploadChunkResult[];
-} & Pick<UploadAsset, 'headers' | 'data'>) => {
+} & Pick<UploadAsset, 'headers' | 'data'>;
+
+const mapCommitBatch = ({batchId, chunkIds, headers, data}: BatchToCommit): CommitBatch => {
   const contentType: [[string, string]] | undefined =
     headers.find(([type, _]) => type.toLowerCase() === 'content-type') === undefined &&
     data.type !== undefined &&
@@ -93,11 +135,23 @@ const commitAsset = async ({
       ? [['Content-Type', data.type]]
       : undefined;
 
-  await commitFn({
+  return {
     batch_id: batchId,
     chunk_ids: chunkIds.map(({chunk_id}: UploadChunkResult) => chunk_id),
     headers: [...headers, ...(contentType ?? [])]
-  });
+  };
+};
+
+const commitAsset = async ({
+  commitFn,
+  ...rest
+}: {
+  commitFn: (commitBatch: CommitBatch) => Promise<void>;
+  batchId: bigint;
+  chunkIds: UploadChunkResult[];
+} & Pick<UploadAsset, 'headers' | 'data'>) => {
+  const commitBatch = mapCommitBatch(rest);
+  await commitFn(commitBatch);
 };
 
 const uploadChunks = async ({

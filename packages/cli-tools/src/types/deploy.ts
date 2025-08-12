@@ -1,5 +1,5 @@
 import type {CliConfig, EncodingType} from '@junobuild/config';
-import type {Asset} from '@junobuild/storage';
+import type {Asset, OnUploadProgress} from '@junobuild/storage';
 
 export type MimeType = string;
 
@@ -45,7 +45,9 @@ export interface UploadFilesStorageWithProposal {
   proposalId: bigint;
 }
 
-export type UploadFiles = (params: {files: UploadFileStorage[]}) => Promise<void>;
+export type UploadFiles = (
+  params: {files: UploadFileStorage[]} & OnUploadProgress
+) => Promise<void>;
 export type UploadFilesWithProposal = (params: UploadFilesStorageWithProposal) => Promise<void>;
 
 export type DeployResult =

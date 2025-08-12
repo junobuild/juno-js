@@ -1,10 +1,8 @@
-import {
-  type COLLECTION_CDN_RELEASES,
-  type COLLECTION_DAPP,
-  UPLOAD_BATCH_SIZE
-} from '../../constants/deploy.constants';
+import Listr from 'listr';
+import {relative} from 'node:path';
+import {UPLOAD_BATCH_SIZE} from '../../constants/deploy.constants';
 import type {FileAndPaths, UploadFiles} from '../../types/deploy';
-import type {UploadFilesParams} from '../../types/upload';
+import type {UploadFilesParams, UploadFilesParamsWithProgress} from '../../types/upload';
 import {executeUploadFiles, prepareFileForUpload} from './_upload.services';
 
 export const uploadFilesWithBatch = async ({
@@ -14,11 +12,15 @@ export const uploadFilesWithBatch = async ({
 }: {
   uploadFiles: UploadFiles;
 } & UploadFilesParams) => {
-  const upload = async (files: FileAndPaths[]): Promise<void> => {
+  const upload = async ({
+    files,
+    progress
+  }: Pick<UploadFilesParamsWithProgress, 'files' | 'progress'>): Promise<void> => {
     await uploadFilesToStorage({
       collection,
       files,
-      uploadFiles
+      uploadFiles,
+      progress
     });
   };
 
@@ -30,29 +32,50 @@ export const uploadFilesWithBatch = async ({
 
 const batchUploadFiles = async ({
   files,
-  // TODO: use for on progress
-  sourceAbsolutePath: _,
+  sourceAbsolutePath,
   upload
 }: {
-  upload: (params: FileAndPaths[]) => Promise<void>;
+  upload: (params: Pick<UploadFilesParamsWithProgress, 'files' | 'progress'>) => Promise<void>;
 } & Omit<UploadFilesParams, 'collection'>) => {
   const uploadFiles = async (groupFiles: FileAndPaths[]) => {
     // Execute upload UPLOAD_BATCH_SIZE files at a time max preventively to not stress too much the network
     for (let i = 0; i < groupFiles.length; i += UPLOAD_BATCH_SIZE) {
       const files = groupFiles.slice(i, i + UPLOAD_BATCH_SIZE);
 
-      await upload(files);
+      const deferredPromise = (): {
+        promise: Promise<void>;
+        resolve: (() => void) | undefined;
+      } => {
+        let resolve: (() => void) | undefined = undefined;
+        const promise = new Promise<void>((res) => (resolve = res));
+        return {promise, resolve};
+      };
 
-      // TODO: on progress
-      // const tasks = new Listr<void>(
-      //   files.map(({file, paths}) => ({
-      //     title: `Uploading ${relative(sourceAbsolutePath, file.file)}`,
-      //     task: async () => await upload({file, paths})
-      //   })),
-      //   {concurrent: true}
-      // );
-      //
-      // await tasks.run();
+      const filesProgress = files.map((file) => ({
+        ...file,
+        ...deferredPromise()
+      }));
+
+      const tasks = new Listr<void>(
+        filesProgress.map(({file, promise}) => ({
+          title: `Uploading ${relative(sourceAbsolutePath, file.file)}`,
+          task: async () => await promise
+        })),
+        {concurrent: true}
+      );
+
+      // We do not await the run on purpose
+      tasks.run();
+
+      await upload({
+        files,
+        progress: {
+          onUploadedFileChunks: (fullPath) => {
+            const progress = filesProgress.find((file) => file.paths.fullPath === fullPath);
+            progress?.resolve?.();
+          }
+        }
+      });
     }
   };
 
@@ -65,12 +88,11 @@ const batchUploadFiles = async ({
 const uploadFilesToStorage = async ({
   uploadFiles,
   files,
-  collection
+  collection,
+  progress
 }: {
   uploadFiles: UploadFiles;
-  files: FileAndPaths[];
-  collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
-}): Promise<void> => {
+} & Omit<UploadFilesParamsWithProgress, 'sourceAbsolutePath'>): Promise<void> => {
   const filesToUpload = await Promise.all(
     files.map(
       async ({file, paths}) =>
@@ -83,6 +105,7 @@ const uploadFilesToStorage = async ({
   );
 
   await uploadFiles({
-    files: filesToUpload
+    files: filesToUpload,
+    progress
   });
 };

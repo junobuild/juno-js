@@ -1,6 +1,7 @@
 import {
   uploadAssetWithProposal as uploadAssetWithProposalStorage,
   uploadAssetsWithProposal as uploadAssetsWithProposalStorage,
+  type OnUploadProgress,
   type UploadAsset
 } from '@junobuild/storage';
 import type {CdnParameters} from '../types/actor.params';
@@ -9,36 +10,32 @@ import {getCdnActor} from './_actor.api';
 
 export const uploadAssetWithProposal = async ({
   cdn,
-  proposalId,
-  asset
+  ...rest
 }: {
   asset: UploadAsset;
   cdn: CdnParameters;
   proposalId: ProposalId;
-}): Promise<void> => {
+} & OnUploadProgress): Promise<void> => {
   const actor = await getCdnActor(cdn);
 
   await uploadAssetWithProposalStorage({
     actor,
-    asset,
-    proposalId
+    ...rest
   });
 };
 
 export const uploadAssetsWithProposal = async ({
   cdn,
-  proposalId,
-  assets
+  ...rest
 }: {
   assets: UploadAsset[];
   cdn: CdnParameters;
   proposalId: ProposalId;
-}): Promise<void> => {
+} & OnUploadProgress): Promise<void> => {
   const actor = await getCdnActor(cdn);
 
   await uploadAssetsWithProposalStorage({
     actor,
-    assets,
-    proposalId
+    ...rest
   });
 };

@@ -79,6 +79,33 @@ describe('storage.api', () => {
       await expect(uploadAssetWithProposal({cdn, proposalId, asset})).rejects.toThrow(err);
       expect(storage.uploadAssetWithProposal).not.toHaveBeenCalled();
     });
+
+    it('forwards progress to storage (uploadAssetWithProposal)', async () => {
+      const progress = {onUploadedFileChunks: vi.fn()};
+
+      await uploadAssetWithProposal({cdn, proposalId, asset, progress});
+
+      expect(storage.uploadAssetWithProposal).toHaveBeenCalledWith(
+        expect.objectContaining({
+          actor: mockActor,
+          asset,
+          proposalId,
+          progress
+        })
+      );
+    });
+
+    it('does not require progress (uploadAssetWithProposal)', async () => {
+      await uploadAssetWithProposal({cdn, proposalId, asset});
+
+      expect(storage.uploadAssetWithProposal).toHaveBeenCalledWith(
+        expect.objectContaining({
+          actor: mockActor,
+          asset,
+          proposalId
+        })
+      );
+    });
   });
 
   describe('uploadAssetsWithProposal', () => {
@@ -143,6 +170,33 @@ describe('storage.api', () => {
 
       await expect(uploadAssetsWithProposal({cdn, proposalId, assets})).rejects.toThrow(err);
       expect(storage.uploadAssetsWithProposal).not.toHaveBeenCalled();
+    });
+
+    it('forwards progress to storage (uploadAssetsWithProposal)', async () => {
+      const progress = {onUploadedFileChunks: vi.fn()};
+
+      await uploadAssetsWithProposal({cdn, proposalId, assets, progress});
+
+      expect(storage.uploadAssetsWithProposal).toHaveBeenCalledWith(
+        expect.objectContaining({
+          actor: mockActor,
+          assets,
+          proposalId,
+          progress
+        })
+      );
+    });
+
+    it('does not require progress (uploadAssetsWithProposal)', async () => {
+      await uploadAssetsWithProposal({cdn, proposalId, assets});
+
+      expect(storage.uploadAssetsWithProposal).toHaveBeenCalledWith(
+        expect.objectContaining({
+          actor: mockActor,
+          assets,
+          proposalId
+        })
+      );
     });
   });
 });

@@ -1,6 +1,8 @@
 import {fromNullable, isNullish, uint8ArrayToHexString} from '@dfinity/utils';
 import {commitProposal, initProposal, submitProposal} from '@junobuild/cdn';
+import {DeployProgressWithProposalStep, type OnDeployProgress} from '../types/progress';
 import type {ProposeChangesParams} from '../types/proposal';
+import {execute} from './deploy.progress.services';
 
 /**
  * Handles a change lifecycle using a proposal workflow, and optionally commits it.
@@ -30,15 +32,31 @@ export const proposeChanges = async ({
   proposalType,
   cdn,
   executeChanges,
-  autoCommit
-}: ProposeChangesParams): Promise<{proposalId: bigint}> => {
-  const [proposalId, _] = await initProposal({proposalType, cdn});
+  autoCommit,
+  onProgress
+}: ProposeChangesParams & OnDeployProgress<DeployProgressWithProposalStep>): Promise<{
+  proposalId: bigint;
+}> => {
+  const [proposalId, _] = await execute({
+    fn: async () => await initProposal({proposalType, cdn}),
+    onProgress,
+    step: DeployProgressWithProposalStep.InitProposal
+  });
 
-  await executeChanges(proposalId);
+  await execute({
+    fn: async () => await executeChanges(proposalId),
+    onProgress,
+    step: DeployProgressWithProposalStep.Deploy
+  });
 
-  const [__, {sha256: proposalSha256, status}] = await submitProposal({
-    cdn,
-    proposalId
+  const [__, {sha256: proposalSha256, status}] = await execute({
+    fn: async () =>
+      await submitProposal({
+        cdn,
+        proposalId
+      }),
+    onProgress,
+    step: DeployProgressWithProposalStep.SubmitProposal
   });
 
   const sha256 = fromNullable(proposalSha256);
@@ -58,12 +76,17 @@ export const proposeChanges = async ({
     return {proposalId};
   }
 
-  await commitProposal({
-    proposal: {
-      proposal_id: proposalId,
-      sha256
-    },
-    cdn
+  await execute({
+    fn: async () =>
+      await commitProposal({
+        proposal: {
+          proposal_id: proposalId,
+          sha256
+        },
+        cdn
+      }),
+    onProgress,
+    step: DeployProgressWithProposalStep.CommitProposal
   });
 
   console.log(`🎯 Change #${proposalId} applied.`);

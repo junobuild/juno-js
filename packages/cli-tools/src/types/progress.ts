@@ -3,13 +3,21 @@ export enum DeployProgressStep {
   Deploy
 }
 
+export enum DeployProgressWithProposalStep {
+  PrepareDeploy,
+  InitProposal,
+  Deploy,
+  SubmitProposal,
+  CommitProposal
+}
+
 export type DeployProgressState = 'in_progress' | 'success' | 'error';
 
-export interface DeployProgress {
-  step: DeployProgressStep;
+export interface DeployProgress<Step> {
+  step: Step;
   state: DeployProgressState;
 }
 
-export interface OnDeployProgress {
-  onProgress?: (progress: DeployProgress) => void;
+export interface OnDeployProgress<Step> {
+  onProgress?: (progress: DeployProgress<Step>) => void;
 }

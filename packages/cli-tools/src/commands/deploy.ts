@@ -18,7 +18,11 @@ import type {
   UploadIndividually,
   UploadWithBatch
 } from '../types/deploy';
-import {type OnDeployProgress, DeployProgressStep} from '../types/progress';
+import {
+  type OnDeployProgress,
+  DeployProgressStep,
+  DeployProgressWithProposalStep
+} from '../types/progress';
 import type {ProposeChangesParams} from '../types/proposal';
 import {fullPath} from '../utils/deploy.utils';
 
@@ -80,7 +84,7 @@ export const deploy = async ({
 }: {
   params: DeployParams;
   upload: UploadIndividually | UploadWithBatch;
-} & OnDeployProgress): Promise<DeployResult> => {
+} & OnDeployProgress<DeployProgressStep>): Promise<DeployResult> => {
   const prepareResult = await execute({
     fn: async () => await prepareDeploy({params}),
     onProgress,
@@ -150,13 +154,13 @@ export const deployWithProposal = async ({
   deploy: {
     params: DeployParams;
     upload: UploadIndividually<UploadFileWithProposal> | UploadWithBatch<UploadFilesWithProposal>;
-  } & OnDeployProgress;
+  } & OnDeployProgress<DeployProgressWithProposalStep>;
   proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {clearAssets?: boolean};
 }): Promise<DeployResultWithProposal> => {
   const prepareResult = await execute({
     fn: async () => await prepareDeploy({params}),
     onProgress,
-    step: DeployProgressStep.PrepareDeploy
+    step: DeployProgressWithProposalStep.PrepareDeploy
   });
 
   if (prepareResult.result === 'skipped') {
@@ -165,21 +169,16 @@ export const deployWithProposal = async ({
 
   const {sourceFiles, sourceAbsolutePath} = prepareResult;
 
-  const result = await execute({
-    fn: async () =>
-      await deployAndProposeChanges({
-        deploy: {upload, files: sourceFiles, sourceAbsolutePath, collection: COLLECTION_DAPP},
-        proposal: {
-          ...restProposal,
-          proposalType: {
-            AssetsUpgrade: {
-              clear_existing_assets: toNullable(clearAssets)
-            }
-          }
+  const result = await deployAndProposeChanges({
+    deploy: {upload, files: sourceFiles, sourceAbsolutePath, collection: COLLECTION_DAPP},
+    proposal: {
+      ...restProposal,
+      proposalType: {
+        AssetsUpgrade: {
+          clear_existing_assets: toNullable(clearAssets)
         }
-      }),
-    onProgress,
-    step: DeployProgressStep.Deploy
+      }
+    }
   });
 
   if (result.result === 'deployed') {

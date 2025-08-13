@@ -6,18 +6,20 @@ import type {
   UploadIndividually,
   UploadWithBatch
 } from '../types/deploy';
+import type {DeployProgressWithProposalStep, OnDeployProgress} from '../types/progress';
 import type {ProposeChangesParams} from '../types/proposal';
 import type {UploadFilesParams} from '../types/upload';
 import {proposeChanges} from './proposals.services';
 import {uploadFiles} from './upload.services';
 
 export const deployAndProposeChanges = async ({
-  deploy: {upload, files, sourceAbsolutePath, collection},
+  deploy: {upload, files, sourceAbsolutePath, collection, onProgress},
   proposal: {proposalType, autoCommit, ...proposalRest}
 }: {
   deploy: {
     upload: UploadIndividually<UploadFileWithProposal> | UploadWithBatch<UploadFilesWithProposal>;
-  } & UploadFilesParams;
+  } & UploadFilesParams &
+    OnDeployProgress<DeployProgressWithProposalStep>;
   proposal: Omit<ProposeChangesParams, 'executeChanges'>;
 }): Promise<DeployResultWithProposal> => {
   const executeChanges = async (proposalId: bigint): Promise<void> => {
@@ -55,6 +57,7 @@ export const deployAndProposeChanges = async ({
     ...proposalRest,
     autoCommit,
     proposalType,
+    onProgress,
     executeChanges
   });
 

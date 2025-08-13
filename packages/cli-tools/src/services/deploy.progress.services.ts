@@ -1,10 +1,13 @@
-import type {DeployProgressStep, OnDeployProgress} from '../types/progress';
+import type {OnDeployProgress} from '../types/progress';
 
-export const execute = async <T>({
+export const execute = async <Step, Result>({
   fn,
   step,
   onProgress
-}: {fn: () => Promise<T>; step: DeployProgressStep} & OnDeployProgress) => {
+}: {
+  fn: () => Promise<Result>;
+  step: Step;
+} & OnDeployProgress<Step>) => {
   onProgress?.({
     step,
     state: 'in_progress'

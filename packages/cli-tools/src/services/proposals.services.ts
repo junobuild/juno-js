@@ -34,7 +34,7 @@ export const proposeChanges = async ({
   autoCommit
 }: ProposeChangesParams): Promise<{proposalId: bigint}> => {
   const init = async (): Promise<{proposalId: bigint}> => {
-    const spinner = ora('Initiating proposal...').start();
+    const spinner = ora('Opening proposal...').start();
 
     try {
       const [proposalId, _] = await initProposal({proposalType, cdn});
@@ -49,6 +49,7 @@ export const proposeChanges = async ({
   await executeChanges(proposalId);
 
   const submit = async (): Promise<{sha256: Uint8Array | number[]}> => {
+    console.log('');
     const spinner = ora('Submitting proposal...').start();
 
     try {
@@ -59,7 +60,9 @@ export const proposeChanges = async ({
 
       const sha256 = fromNullable(proposalSha256);
 
-      console.log('\nChange submitted.\n');
+      spinner.stop();
+
+      console.log('Change submitted.\n');
       console.log('🆔 ', Number(proposalId));
       console.log('⏳ ', Object.keys(status)[0] ?? status);
 
@@ -73,8 +76,9 @@ export const proposeChanges = async ({
       console.log('🔒 ', uint8ArrayToHexString(sha256));
 
       return {sha256};
-    } finally {
+    } catch (err: unknown) {
       spinner.stop();
+      throw err;
     }
   };
 
@@ -85,6 +89,7 @@ export const proposeChanges = async ({
   }
 
   const commit = async () => {
+    console.log('');
     const spinner = ora('Committing proposal...').start();
 
     try {
@@ -96,9 +101,12 @@ export const proposeChanges = async ({
         cdn
       });
 
-      console.log(`🎯 Change #${proposalId} applied.`);
-    } finally {
       spinner.stop();
+
+      console.log(`🎯 Change #${proposalId} applied.`);
+    } catch (err: unknown) {
+      spinner.stop();
+      throw err;
     }
   };
 

@@ -3,7 +3,11 @@ import {relative} from 'node:path';
 import {UPLOAD_BATCH_SIZE} from '../../constants/deploy.constants';
 import type {FileAndPaths, FileDetails, UploadFile, UploadFileStorage} from '../../types/deploy';
 import type {UploadFilesParams} from '../../types/upload';
-import {type ExecuteUploadFiles, executeUploadFiles, prepareFileForUpload} from './_upload.services';
+import {
+  type ExecuteUploadFiles,
+  executeUploadFiles,
+  prepareFileForUpload
+} from './_upload.services';
 
 export const uploadFilesIndividually = async ({
   uploadFile,

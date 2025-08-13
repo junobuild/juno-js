@@ -9,6 +9,7 @@ import {
   uploadAssetsWithProposal,
   uploadAssetWithProposal
 } from '../../services/upload.services';
+import {OnUploadProgressCallbacks} from '../../types/progress';
 import {type UploadAsset, UploadAssetActor, UploadAssetWithProposalActor} from '../../types/upload';
 
 describe('upload.services', () => {
@@ -79,8 +80,16 @@ describe('upload.services', () => {
     };
   };
 
+  let progress: OnUploadProgressCallbacks;
+
   beforeEach(() => {
     vi.clearAllMocks();
+
+    progress = {
+      onUploadedFileChunks: vi.fn(),
+      onCommittedBatch: vi.fn(),
+      onInitiatedBatch: vi.fn()
+    };
   });
 
   describe('metadata', () => {
@@ -249,17 +258,14 @@ describe('upload.services', () => {
 
         const expectedChunks = Math.ceil(asset.data.size / UPLOAD_CHUNK_SIZE);
 
-        // 1) Call counts
         expect(actor.init_asset_upload).toHaveBeenCalledTimes(1);
         expect(actor.upload_asset_chunk).toHaveBeenCalledTimes(expectedChunks);
         expect(actor.commit_asset_upload).toHaveBeenCalledTimes(1);
 
-        // Ensure proposal variants were not used
         expect(actor.init_proposal_asset_upload).not.toHaveBeenCalled();
         expect(actor.upload_proposal_asset_chunk).not.toHaveBeenCalled();
         expect(actor.commit_proposal_asset_upload).not.toHaveBeenCalled();
 
-        // 2) Call order: init -> upload(0..N-1) -> commit
         const expectedTimeline = [
           'init',
           ...Array.from({length: expectedChunks}, (_, i) => `upload:${i}`),
@@ -267,7 +273,6 @@ describe('upload.services', () => {
         ];
         expect(timeline).toEqual(expectedTimeline);
 
-        // 3) Exact args for init
         const initArg = actor.init_asset_upload.mock.calls[0][0];
         expect(initArg).toEqual({
           collection: asset.collection,
@@ -278,7 +283,6 @@ describe('upload.services', () => {
           description: []
         });
 
-        // 4) Exact args for first and last upload calls
         const firstUploadArg = actor.upload_asset_chunk.mock.calls[0][0];
         expect(firstUploadArg.batch_id).toBe(1n);
         expect(firstUploadArg.order_id).toEqual([0n]);
@@ -291,7 +295,6 @@ describe('upload.services', () => {
         const expectedLastSize = asset.data.size - UPLOAD_CHUNK_SIZE * (expectedChunks - 1);
         expect((lastUploadArg.content as Uint8Array).length).toBe(expectedLastSize);
 
-        // 5) Exact args for commit
         const commitArg = actor.commit_asset_upload.mock.calls[0][0];
         // chunk_ids reflect our mocked returns 200n + order_id
         expect(commitArg.chunk_ids).toEqual(
@@ -321,12 +324,21 @@ describe('upload.services', () => {
       it('calls progress.onUploadedFileChunks once with the asset fullPath (uploadAsset)', async () => {
         const {actor} = makeActorMocks();
         const asset = makeUploadAsset({fullPath: '/pictures/cat.png'});
-        const progress = {onUploadedFileChunks: vi.fn()};
 
         await uploadAsset({asset, actor, progress});
 
         expect(progress.onUploadedFileChunks).toHaveBeenCalledTimes(1);
         expect(progress.onUploadedFileChunks).toHaveBeenCalledWith('/pictures/cat.png');
+      });
+
+      it('calls progress.onInitiatedBatch and progress.onCommittedBatch exactly once (uploadAsset)', async () => {
+        const {actor} = makeActorMocks();
+        const asset = makeUploadAsset();
+
+        await uploadAsset({asset, actor, progress});
+
+        expect(progress.onInitiatedBatch).toHaveBeenCalledTimes(1);
+        expect(progress.onCommittedBatch).toHaveBeenCalledTimes(1);
       });
     });
 
@@ -425,12 +437,28 @@ describe('upload.services', () => {
       it('calls progress.onUploadedFileChunks once with the asset fullPath (uploadAssetWithProposal)', async () => {
         const {actor} = makeActorMocks();
         const asset = makeUploadAsset({fullPath: '/docs/file.pdf'});
-        const progress = {onUploadedFileChunks: vi.fn()};
 
         await uploadAssetWithProposal({asset, proposalId: 1n, actor: actor as any, progress});
 
         expect(progress.onUploadedFileChunks).toHaveBeenCalledTimes(1);
         expect(progress.onUploadedFileChunks).toHaveBeenCalledWith('/docs/file.pdf');
+      });
+
+      it('calls progress.onInitiatedBatch and progress.onCommittedBatch once (uploadAssetWithProposal)', async () => {
+        const actor = mockDeep<UploadAssetWithProposalActor>();
+        const asset = makeUploadAsset();
+        const proposalId = 123n;
+
+        actor.init_proposal_asset_upload.mockResolvedValue({batch_id: 42n});
+        actor.upload_proposal_asset_chunk.mockImplementation(async (args: any) => ({
+          chunk_id: 500n + (args.order_id?.[0] ?? 0n)
+        }));
+        actor.commit_proposal_asset_upload.mockResolvedValue(undefined);
+
+        await uploadAssetWithProposal({asset, proposalId, actor, progress});
+
+        expect(progress.onInitiatedBatch).toHaveBeenCalledTimes(1);
+        expect(progress.onCommittedBatch).toHaveBeenCalledTimes(1);
       });
     });
 
@@ -591,7 +619,6 @@ describe('upload.services', () => {
           fullPath: '/docs/doc.pdf',
           data: makeBlob(UPLOAD_CHUNK_SIZE - 1, 'application/pdf')
         });
-        const progress = {onUploadedFileChunks: vi.fn()};
 
         actor.init_proposal_many_assets_upload.mockResolvedValue([
           [assetA.fullPath, {batch_id: 11n}],
@@ -607,8 +634,38 @@ describe('upload.services', () => {
 
         // Called once per asset, order not guaranteed
         expect(progress.onUploadedFileChunks).toHaveBeenCalledTimes(2);
+        // @ts-expect-error
         const calledWith = new Set(progress.onUploadedFileChunks.mock.calls.map((c) => c[0]));
         expect(calledWith).toEqual(new Set(['/pictures/cat.png', '/docs/doc.pdf']));
+      });
+
+      it('calls progress.onInitiatedBatch once and progress.onCommittedBatch once (uploadAssetsWithProposal)', async () => {
+        const actor = mockDeep<UploadAssetWithProposalActor>();
+        const proposalId = 999n;
+
+        const assetA = makeUploadAsset({
+          fullPath: '/a.bin',
+          data: makeBlob(UPLOAD_CHUNK_SIZE + 5, 'application/octet-stream')
+        });
+        const assetB = makeUploadAsset({
+          fullPath: '/b.txt',
+          data: makeBlob(UPLOAD_CHUNK_SIZE - 1, 'text/plain')
+        });
+
+        actor.init_proposal_many_assets_upload.mockResolvedValue([
+          [assetA.fullPath, {batch_id: 11n}],
+          [assetB.fullPath, {batch_id: 22n}]
+        ]);
+        actor.upload_proposal_asset_chunk.mockImplementation(async (args: any) => {
+          const order = args.order_id?.[0] ?? 0n;
+          return {chunk_id: (args.batch_id as bigint) * 1000n + order};
+        });
+        actor.commit_proposal_many_assets_upload.mockResolvedValue(undefined);
+
+        await uploadAssetsWithProposal({assets: [assetA, assetB], proposalId, actor, progress});
+
+        expect(progress.onInitiatedBatch).toHaveBeenCalledTimes(1);
+        expect(progress.onCommittedBatch).toHaveBeenCalledTimes(1);
       });
     });
   });

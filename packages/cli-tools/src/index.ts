@@ -4,6 +4,7 @@ export * from './commands/publish';
 export * from './constants/deploy.constants';
 export type * from './types/deploy';
 export type * from './types/pkg';
+export * from './types/progress';
 export type * from './types/proposal';
 export type * from './types/publish';
 export * from './utils/args.utils';

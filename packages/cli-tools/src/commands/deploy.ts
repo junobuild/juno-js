@@ -3,6 +3,7 @@ import type {CliConfig} from '@junobuild/config';
 import {COLLECTION_DAPP} from '../constants/deploy.constants';
 import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
+import {execute} from '../services/deploy.progress.services';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';
 import {uploadFiles} from '../services/upload.services';
 import type {
@@ -17,6 +18,7 @@ import type {
   UploadIndividually,
   UploadWithBatch
 } from '../types/deploy';
+import {type OnDeployProgress, DeployProgressStep} from '../types/progress';
 import type {ProposeChangesParams} from '../types/proposal';
 import {fullPath} from '../utils/deploy.utils';
 
@@ -73,35 +75,44 @@ export const postDeploy = async ({config: {postdeploy}}: {config: CliConfig}) =>
  */
 export const deploy = async ({
   params,
-  upload
+  upload,
+  onProgress
 }: {
   params: DeployParams;
   upload: UploadIndividually | UploadWithBatch;
-}): Promise<DeployResult> => {
-  const prepareResult = await prepareDeploy(params);
+} & OnDeployProgress): Promise<DeployResult> => {
+  const prepareResult = await execute({
+    fn: async () => await prepareDeploy({params}),
+    onProgress,
+    step: DeployProgressStep.PrepareDeploy
+  });
 
   if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
   }
 
-  const {files, sourceAbsolutePath} = prepareResult;
-
-  const sourceFiles = prepareSourceFiles({files, sourceAbsolutePath});
+  const {rawFiles, sourceFiles, sourceAbsolutePath} = prepareResult;
 
   const source = {
     files: sourceFiles,
     sourceAbsolutePath
   };
 
-  await uploadFiles({
-    ...source,
-    collection: COLLECTION_DAPP,
-    upload
+  await execute({
+    fn: async () => {
+      await uploadFiles({
+        ...source,
+        collection: COLLECTION_DAPP,
+        upload
+      });
+    },
+    onProgress,
+    step: DeployProgressStep.Deploy
   });
 
-  console.log(`\n🚀 Deploy complete!`);
+  logDeployComplete();
 
-  return {result: 'deployed', files};
+  return {result: 'deployed', files: rawFiles};
 };
 
 /**
@@ -133,45 +144,83 @@ export const deploy = async ({
  *   - `{ result: 'deployed', files, proposalId }` when proposed and auto-applied.
  */
 export const deployWithProposal = async ({
-  deploy: {params, upload},
+  deploy: {params, upload, onProgress},
   proposal: {clearAssets, ...restProposal}
 }: {
   deploy: {
     params: DeployParams;
     upload: UploadIndividually<UploadFileWithProposal> | UploadWithBatch<UploadFilesWithProposal>;
-  };
+  } & OnDeployProgress;
   proposal: Pick<ProposeChangesParams, 'cdn' | 'autoCommit'> & {clearAssets?: boolean};
 }): Promise<DeployResultWithProposal> => {
-  const prepareResult = await prepareDeploy(params);
+  const prepareResult = await execute({
+    fn: async () => await prepareDeploy({params}),
+    onProgress,
+    step: DeployProgressStep.PrepareDeploy
+  });
 
   if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
   }
 
-  const {sourceAbsolutePath} = prepareResult;
+  const {sourceFiles, sourceAbsolutePath} = prepareResult;
 
-  const sourceFiles = prepareSourceFiles(prepareResult);
-
-  const result = await deployAndProposeChanges({
-    deploy: {upload, files: sourceFiles, sourceAbsolutePath, collection: COLLECTION_DAPP},
-    proposal: {
-      ...restProposal,
-      proposalType: {
-        AssetsUpgrade: {
-          clear_existing_assets: toNullable(clearAssets)
+  const result = await execute({
+    fn: async () =>
+      await deployAndProposeChanges({
+        deploy: {upload, files: sourceFiles, sourceAbsolutePath, collection: COLLECTION_DAPP},
+        proposal: {
+          ...restProposal,
+          proposalType: {
+            AssetsUpgrade: {
+              clear_existing_assets: toNullable(clearAssets)
+            }
+          }
         }
-      }
-    }
+      }),
+    onProgress,
+    step: DeployProgressStep.Deploy
   });
 
   if (result.result === 'deployed') {
-    console.log(`\n🚀 Deploy complete!`);
+    logDeployComplete();
   }
 
   return result;
 };
 
 const prepareDeploy = async ({
+  params
+}: {
+  params: DeployParams;
+}): Promise<
+  | {result: 'skipped'}
+  | {
+      result: 'to-deploy';
+      rawFiles: FileDetails[];
+      sourceFiles: FileAndPaths[];
+      sourceAbsolutePath: string;
+    }
+> => {
+  const prepareResult = await prepareDeployFiles(params);
+
+  if (prepareResult.result === 'skipped') {
+    return {result: 'skipped'};
+  }
+
+  const {files: rawFiles, sourceAbsolutePath} = prepareResult;
+
+  const sourceFiles = prepareSourceFiles(prepareResult);
+
+  return {
+    result: 'to-deploy',
+    rawFiles,
+    sourceFiles,
+    sourceAbsolutePath
+  };
+};
+
+const prepareDeployFiles = async ({
   assertMemory,
   ...rest
 }: Omit<DeployParams, 'uploadFn'>): Promise<
@@ -212,3 +261,5 @@ const prepareSourceFiles = ({
 
   return files.map((file) => ({file, paths: filePaths(file)}));
 };
+
+const logDeployComplete = () => console.log(`\n🚀 Deploy complete!`);

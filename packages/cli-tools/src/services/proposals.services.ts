@@ -1,5 +1,6 @@
 import {fromNullable, isNullish, uint8ArrayToHexString} from '@dfinity/utils';
 import {commitProposal, initProposal, submitProposal} from '@junobuild/cdn';
+import ora from 'ora';
 import type {ProposeChangesParams} from '../types/proposal';
 
 /**
@@ -32,41 +33,76 @@ export const proposeChanges = async ({
   executeChanges,
   autoCommit
 }: ProposeChangesParams): Promise<{proposalId: bigint}> => {
-  const [proposalId, _] = await initProposal({proposalType, cdn});
+  const init = async (): Promise<{proposalId: bigint}> => {
+    const spinner = ora('Initiating proposal...').start();
+
+    try {
+      const [proposalId, _] = await initProposal({proposalType, cdn});
+      return {proposalId};
+    } finally {
+      spinner.stop();
+    }
+  };
+
+  const {proposalId} = await init();
 
   await executeChanges(proposalId);
 
-  const [__, {sha256: proposalSha256, status}] = await submitProposal({
-    cdn,
-    proposalId
-  });
+  const submit = async (): Promise<{sha256: Uint8Array | number[]}> => {
+    const spinner = ora('Submitting proposal...').start();
 
-  const sha256 = fromNullable(proposalSha256);
+    try {
+      const [__, {sha256: proposalSha256, status}] = await submitProposal({
+        cdn,
+        proposalId
+      });
 
-  console.log('\nChange submitted.\n');
-  console.log('🆔 ', Number(proposalId));
-  console.log('⏳ ', Object.keys(status)[0] ?? status);
+      const sha256 = fromNullable(proposalSha256);
 
-  if (isNullish(sha256)) {
-    console.log('❌ Hash undefined. This is unexpected.');
-    process.exit(1);
-  }
+      console.log('\nChange submitted.\n');
+      console.log('🆔 ', Number(proposalId));
+      console.log('⏳ ', Object.keys(status)[0] ?? status);
 
-  console.log('🔒 ', uint8ArrayToHexString(sha256));
+      if (isNullish(sha256)) {
+        spinner.stop();
+
+        console.log('❌ Hash undefined. This is unexpected.');
+        process.exit(1);
+      }
+
+      console.log('🔒 ', uint8ArrayToHexString(sha256));
+
+      return {sha256};
+    } finally {
+      spinner.stop();
+    }
+  };
+
+  const {sha256} = await submit();
 
   if (!autoCommit) {
     return {proposalId};
   }
 
-  await commitProposal({
-    proposal: {
-      proposal_id: proposalId,
-      sha256
-    },
-    cdn
-  });
+  const commit = async () => {
+    const spinner = ora('Committing proposal...').start();
 
-  console.log(`🎯 Change #${proposalId} applied.`);
+    try {
+      await commitProposal({
+        proposal: {
+          proposal_id: proposalId,
+          sha256
+        },
+        cdn
+      });
+
+      console.log(`🎯 Change #${proposalId} applied.`);
+    } finally {
+      spinner.stop();
+    }
+  };
+
+  await commit();
 
   return {proposalId};
 };

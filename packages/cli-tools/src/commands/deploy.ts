@@ -1,5 +1,6 @@
-import {toNullable} from '@dfinity/utils';
+import {nonNullish, toNullable} from '@dfinity/utils';
 import type {CliConfig} from '@junobuild/config';
+import ora from 'ora';
 import {COLLECTION_DAPP} from '../constants/deploy.constants';
 import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
@@ -177,21 +178,31 @@ const prepareDeploy = async ({
 }: Omit<DeployParams, 'uploadFn'>): Promise<
   {result: 'skipped'} | {result: 'to-deploy'; files: FileDetails[]; sourceAbsolutePath: string}
 > => {
-  const {files: sourceFiles, sourceAbsolutePath} = await prepareDeployServices(rest);
+  const spinner = ora('Preparing deploy...').start();
 
-  if (sourceFiles.length === 0) {
-    console.log('⚠️  No file changes detected. Upload skipped.');
+  try {
+    const {files: sourceFiles, sourceAbsolutePath} = await prepareDeployServices(rest);
 
-    return {result: 'skipped'};
+    if (sourceFiles.length === 0) {
+      console.log('⚠️  No file changes detected. Upload skipped.');
+
+      return {result: 'skipped'};
+    }
+
+    if (nonNullish(assertMemory)) {
+      spinner.text = 'Asserting memory...';
+    }
+
+    await assertMemory?.();
+
+    return {
+      result: 'to-deploy',
+      files: sourceFiles,
+      sourceAbsolutePath
+    };
+  } finally {
+    spinner.stop();
   }
-
-  await assertMemory?.();
-
-  return {
-    result: 'to-deploy',
-    files: sourceFiles,
-    sourceAbsolutePath
-  };
 };
 
 const prepareSourceFiles = ({

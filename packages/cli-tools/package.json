@@ -57,7 +57,8 @@
     "@junobuild/cdn": "^1",
     "@junobuild/config": "*",
     "@junobuild/storage": "^1",
-    "esbuild": "^0.25.1"
+    "esbuild": "^0.25.1",
+    "ora": "^8.2.0"
   },
   "dependencies": {
     "file-type": "^21.0.0",

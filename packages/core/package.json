@@ -52,7 +52,7 @@
   "dependencies": {
     "@junobuild/errors": "*",
     "@junobuild/ic-client": "^1",
-    "@junobuild/storage": "^1",
+    "@junobuild/storage": "*",
     "@junobuild/utils": "*"
   },
   "peerDependencies": {

@@ -57,7 +57,7 @@
     "@dfinity/utils": "^2",
     "@junobuild/config": "*",
     "@junobuild/ic-client": "^1",
-    "@junobuild/storage": "^1",
+    "@junobuild/storage": "*",
     "semver": "7.*"
   }
 }

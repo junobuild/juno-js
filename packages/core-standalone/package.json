@@ -60,7 +60,7 @@
     "@dfinity/utils": "^2",
     "@junobuild/errors": "*",
     "@junobuild/ic-client": "^1",
-    "@junobuild/storage": "*",
+    "@junobuild/storage": "^1",
     "@junobuild/utils": "*"
   }
 }

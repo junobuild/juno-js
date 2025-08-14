@@ -207,8 +207,6 @@ const prepareFiles = async ({
 
   // If the dev opt-out to uploading the source files that are compressed by the CLI
   const filterFilesOnReplaceMode = (): FileDetails[] => {
-    console.log('-______________________>', precompress);
-
     if (
       typeof precompress === 'boolean' ||
       (precompress ?? DEPLOY_DEFAULT_PRECOMPRESS).mode !== 'replace'
@@ -232,9 +230,6 @@ const prepareFiles = async ({
   };
 
   const filteredFiles = filterFilesOnReplaceMode();
-
-  // TODO: to be removed
-  console.log('---------------------------------->', filteredFiles);
 
   // juno deploy with proposals using clear
   if (includeAllFiles === true) {

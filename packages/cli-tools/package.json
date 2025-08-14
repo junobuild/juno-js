@@ -56,7 +56,7 @@
     "@dfinity/utils": "^2",
     "@junobuild/cdn": "^1",
     "@junobuild/config": "*",
-    "@junobuild/storage": "*",
+    "@junobuild/storage": "^1",
     "esbuild": "^0.25.1",
     "ora": "^8"
   },

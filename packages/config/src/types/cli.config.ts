@@ -2,19 +2,55 @@ import * as z from 'zod/v4';
 import {type EncodingType, EncodingTypeSchema} from './encoding';
 
 /**
+ * @see Precompress
+ */
+export const PrecompressSchema = z.strictObject({
+  pattern: z.string().optional(),
+  mode: z.enum(['both', 'replace']).optional(),
+  algorithm: z.enum(['gzip']).optional()
+});
+
+/**
  * @see CliConfig
  */
-export const CliConfigSchema = z
-  .object({
-    source: z.string().optional(),
-    ignore: z.array(z.string()).optional(),
-    gzip: z.union([z.string(), z.literal(false)]).optional(),
-    encoding: z.array(z.tuple([z.string(), EncodingTypeSchema])).optional(),
-    predeploy: z.array(z.string()).optional(),
-    postdeploy: z.array(z.string()).optional()
-  })
-  .strict();
+export const CliConfigSchema = z.strictObject({
+  source: z.string().optional(),
+  ignore: z.array(z.string()).optional(),
+  precompress: z.union([PrecompressSchema, z.literal(false)]).optional(),
+  encoding: z.array(z.tuple([z.string(), EncodingTypeSchema])).optional(),
+  predeploy: z.array(z.string()).optional(),
+  postdeploy: z.array(z.string()).optional()
+});
 
+/**
+ * Configuration for compressing files during deployment.
+ */
+export interface Precompress {
+  /**
+   * Glob pattern for files to precompress.
+   * @default any css|js|mjs|html
+   */
+  pattern?: string;
+
+  /**
+   * Determines what happens to the original files after compression:
+   * - `"both"` — upload both original and compressed versions.
+   * - `"replace"` — upload only the compressed version (served with `Content-Encoding`).
+   *
+   * @default "both"
+   */
+  mode?: 'both' | 'replace';
+
+  /**
+   * Compression algorithm.
+   * @default "gzip"
+   */
+  algorithm?: 'gzip';
+}
+
+/**
+ * The configuration used by the CLI to resolve, prepare and deploy your app.
+ */
 export interface CliConfig {
   /**
    * Specifies the directory from which to deploy to Storage.
@@ -33,12 +69,17 @@ export interface CliConfig {
   ignore?: string[];
 
   /**
-   * Controls the Gzip compression optimization for files in the source folder. By default, it targets JavaScript (js), ES Module (mjs), and CSS (css) files.
-   * You can disable this by setting it to `false` or customize it with a different file matching pattern using glob syntax.
-   * @type {string | false}
+   * Controls compression optimization for files in the source folder.
+   *
+   * By default, JavaScript (.js), ES Modules (.mjs), CSS (.css), and HTML (.html)
+   * are compressed, and both the original and compressed versions are uploaded.
+   *
+   * Set to `false` to disable, or provide a {@link Precompress} object to customize.
+   *
+   * @type {Precompress | false}
    * @optional
    */
-  gzip?: string | false;
+  precompress?: Precompress | false;
 
   /**
    * Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension:

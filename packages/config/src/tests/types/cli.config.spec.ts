@@ -11,7 +11,11 @@ describe('cli.config', () => {
       const config: CliConfig = {
         source: 'dist',
         ignore: ['**/*.test.js'],
-        gzip: '*.js',
+        precompress: {
+          pattern: '**/*.+(css|js|mjs|html)',
+          mode: 'both',
+          algorithm: 'gzip'
+        },
         encoding: [['*.br', 'br']],
         predeploy: ['npm run build'],
         postdeploy: ['echo done']
@@ -21,9 +25,46 @@ describe('cli.config', () => {
       expect(result.success).toBe(true);
     });
 
-    it('accepts gzip as false', () => {
-      const result = CliConfigSchema.safeParse({gzip: false});
-      expect(result.success).toBe(true);
+    describe('precompress', () => {
+      it('accepts precompress as false (opt-out)', () => {
+        const result = CliConfigSchema.safeParse({precompress: false});
+        expect(result.success).toBe(true);
+      });
+
+      it('accepts precompress mode replace', () => {
+        const result = CliConfigSchema.safeParse({
+          precompress: {
+            mode: 'replace'
+          }
+        });
+        expect(result.success).toBe(true);
+      });
+
+      it('rejects invalid precompress.mode', () => {
+        const result = CliConfigSchema.safeParse({
+          precompress: {mode: 'off'}
+        });
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects invalid precompress.algorithm', () => {
+        const result = CliConfigSchema.safeParse({
+          precompress: {algorithm: 'br'}
+        });
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects precompress if not an object or false', () => {
+        const result = CliConfigSchema.safeParse({precompress: 123});
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects precompress.pattern if not a string', () => {
+        const result = CliConfigSchema.safeParse({
+          precompress: {pattern: 123}
+        });
+        expect(result.success).toBe(false);
+      });
     });
 
     it('rejects invalid encoding values', () => {

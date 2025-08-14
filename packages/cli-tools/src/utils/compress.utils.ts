@@ -3,7 +3,7 @@ import {minimatch} from 'minimatch';
 import {createReadStream, createWriteStream} from 'node:fs';
 import {Readable} from 'node:stream';
 import {createGunzip, createGzip} from 'node:zlib';
-import {DEPLOY_DEFAULT_GZIP} from '../constants/deploy.constants';
+import {DEPLOY_DEFAULT_PRECOMPRESS} from '../constants/deploy.constants';
 
 export const gunzipFile = async ({source}: {source: Buffer}): Promise<Buffer> =>
   await new Promise<Buffer>((resolve, reject) => {
@@ -24,14 +24,17 @@ export const gunzipFile = async ({source}: {source: Buffer}): Promise<Buffer> =>
 
 export const gzipFiles = async ({
   sourceFiles,
-  gzip
-}: {sourceFiles: string[]} & Required<Pick<SatelliteConfig, 'gzip'>>): Promise<string[]> => {
-  if (gzip === false) {
+  precompress
+}: {sourceFiles: string[]} & Required<Pick<SatelliteConfig, 'precompress'>>): Promise<string[]> => {
+  if (precompress === false) {
     return [];
   }
 
-  // @ts-expect-error we read json so, it's possible that one provide a boolean that does not match the TS type
-  const pattern = gzip === true ? DEPLOY_DEFAULT_GZIP : gzip;
+  const pattern =
+    // @ts-expect-error we read json so, it's possible that one provide a boolean that does not match the TS type
+    precompress === true
+      ? DEPLOY_DEFAULT_PRECOMPRESS.pattern
+      : (precompress.pattern ?? DEPLOY_DEFAULT_PRECOMPRESS.pattern);
 
   const filesToCompress = sourceFiles.filter((file) => minimatch(file, pattern));
   return await Promise.all(filesToCompress.map(async (source) => await gzipFile({source})));

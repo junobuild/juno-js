@@ -25,7 +25,7 @@ describe('console.config', () => {
       const result = JunoConsoleConfigSchema.safeParse({
         id: mockModuleIdText,
         source: 'dist',
-        gzip: '*.js',
+        precompress: false,
         predeploy: ['npm run build'],
         postdeploy: ['echo done']
       });

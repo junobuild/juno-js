@@ -40,7 +40,7 @@ export const prepareDeploy = async ({
 
   assertSourceDirExists?.(sourceAbsolutePath);
 
-  const files = await listFiles({
+  const files = await prepareFiles({
     sourceAbsolutePath,
     ignore,
     encoding,
@@ -93,6 +93,7 @@ const fileNeedUpload = async ({
 }> => {
   const effectiveFilePath = file.alternateFile ?? file.file;
 
+  // Is it a new file?
   const asset = existingAssets.find(
     ({fullPath: f}) => f === fullPath({file: effectiveFilePath, sourceAbsolutePath})
   );
@@ -101,6 +102,7 @@ const fileNeedUpload = async ({
     return {file, upload: true};
   }
 
+  // Was the file modified?
   const sha256 = await computeSha256(effectiveFilePath);
 
   // Previously, comparing the SHA-256 hash of Gzip and Brotli files between Node.js and Rust was inaccurate.
@@ -119,7 +121,7 @@ const fileNeedUpload = async ({
   };
 };
 
-const listFiles = async ({
+const prepareFiles = async ({
   sourceAbsolutePath,
   ignore,
   encoding,
@@ -203,13 +205,39 @@ const listFiles = async ({
 
   const encodingFiles: FileDetails[] = await Promise.all(files.map(mapFiles));
 
+  // If the dev opt-out to uploading the source files that are compressed by the CLI
+  const filterFilesOnReplaceMode = (): FileDetails[] => {
+    if (
+      typeof precompress === 'boolean' ||
+      (precompress ?? DEPLOY_DEFAULT_PRECOMPRESS).mode !== 'replace'
+    ) {
+      return encodingFiles;
+    }
+
+    const [alternateFiles, identityFiles] = encodingFiles.reduce<[FileDetails[], FileDetails[]]>(
+      ([alternateFiles, sourceFiles], file) => [
+        [...alternateFiles, ...(nonNullish(file.alternateFile) ? [file] : [])],
+        [...sourceFiles, ...(isNullish(file.alternateFile) ? [file] : [])]
+      ],
+      [[], []]
+    );
+
+    const filterIdentityFiles = identityFiles.filter(
+      ({file}) => alternateFiles.find(({alternateFile}) => alternateFile === file) === undefined
+    );
+
+    return [...alternateFiles, ...filterIdentityFiles];
+  };
+
+  const filteredFiles = filterFilesOnReplaceMode();
+
   // juno deploy with proposals using clear
   if (includeAllFiles === true) {
-    return encodingFiles;
+    return filteredFiles;
   }
 
   return await filterFilesToUpload({
-    files: encodingFiles,
+    files: filteredFiles,
     sourceAbsolutePath,
     listAssets
   });

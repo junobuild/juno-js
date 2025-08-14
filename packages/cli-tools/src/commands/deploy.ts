@@ -184,6 +184,9 @@ const prepareDeploy = async ({
     const {files: sourceFiles, sourceAbsolutePath} = await prepareDeployServices(rest);
 
     if (sourceFiles.length === 0) {
+      spinner.stop();
+
+      console.log('');
       console.log('⚠️  No file changes detected. Upload skipped.');
 
       return {result: 'skipped'};
@@ -195,13 +198,16 @@ const prepareDeploy = async ({
 
     await assertMemory?.();
 
+    spinner.stop();
+
     return {
       result: 'to-deploy',
       files: sourceFiles,
       sourceAbsolutePath
     };
-  } finally {
+  } catch (err: unknown) {
     spinner.stop();
+    throw err;
   }
 };
 

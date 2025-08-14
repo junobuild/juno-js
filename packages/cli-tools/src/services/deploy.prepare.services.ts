@@ -14,7 +14,7 @@ import {
   DEPLOY_DEFAULT_SOURCE
 } from '../constants/deploy.constants';
 import type {FileDetails, FileExtension, ListAssets, PrepareDeployOptions} from '../types/deploy';
-import {gzipFiles} from '../utils/compress.utils';
+import {compressFiles} from '../utils/compress.utils';
 import {fullPath, listSourceFiles} from '../utils/deploy.utils';
 
 export const prepareDeploy = async ({
@@ -133,7 +133,7 @@ const prepareFiles = async ({
 } & {listAssets: ListAssets} & Pick<PrepareDeployOptions, 'includeAllFiles'> &
   Required<Pick<CliConfig, 'ignore' | 'encoding' | 'precompress'>>): Promise<FileDetails[]> => {
   const sourceFiles = listSourceFiles({sourceAbsolutePath, ignore});
-  const compressedFiles = await gzipFiles({sourceFiles, precompress});
+  const compressedFiles = await compressFiles({sourceFiles, precompress});
 
   const files = [...sourceFiles, ...compressedFiles.filter((file) => !sourceFiles.includes(file))];
 
@@ -160,11 +160,11 @@ const prepareFiles = async ({
       return 'gzip';
     }
 
-    if (extname(file) === '.br') {
+    if (extname(file).toLowerCase() === '.br') {
       return 'br';
     }
 
-    if (extname(file) === '.zlib') {
+    if (extname(file).toLowerCase() === '.zlib') {
       return 'deflate';
     }
 

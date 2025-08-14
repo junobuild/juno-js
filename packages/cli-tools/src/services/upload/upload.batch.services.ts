@@ -1,6 +1,5 @@
 import {Listr} from 'listr2';
 import {relative} from 'node:path';
-import {UPLOAD_BATCH_SIZE} from '../../constants/deploy.constants';
 import type {UploadFiles} from '../../types/deploy';
 import type {UploadFilesParams, UploadFilesParamsWithProgress} from '../../types/upload';
 import {
@@ -37,16 +36,17 @@ export const uploadFilesWithBatch = async ({
 const batchUploadFiles = async ({
   files,
   sourceAbsolutePath,
-  upload
+  upload,
+  batchSize
 }: {
   upload: (params: Pick<UploadFilesParamsWithProgress, 'files' | 'progress'>) => Promise<void>;
 } & Omit<UploadFilesParams, 'collection'>) => {
   const uploadFiles: ExecuteUploadFiles = async ({groupFiles, step}) => {
-    const totalBatches = Math.ceil(groupFiles.length / UPLOAD_BATCH_SIZE);
+    const totalBatches = Math.ceil(groupFiles.length / batchSize);
 
-    // Execute upload UPLOAD_BATCH_SIZE files at a time max preventively to not stress too much the network
-    for (let i = 0; i < groupFiles.length; i += UPLOAD_BATCH_SIZE) {
-      const files = groupFiles.slice(i, i + UPLOAD_BATCH_SIZE);
+    // Execute upload batchSize (default UPLOAD_BATCH_SIZE) files at a time max preventively to not stress too much the network
+    for (let i = 0; i < groupFiles.length; i += batchSize) {
+      const files = groupFiles.slice(i, i + batchSize);
 
       const deferredPromise = (): {
         promise: Promise<void>;
@@ -70,7 +70,7 @@ const batchUploadFiles = async ({
         task: async () => await promise
       }));
 
-      const batchNumber = Math.floor(i / UPLOAD_BATCH_SIZE) + 1;
+      const batchNumber = Math.floor(i / batchSize) + 1;
       const batchLabel = `[${batchNumber}/${totalBatches}]`;
       const batchType = step === 'alternate' ? '✨' : '📦';
 
@@ -129,7 +129,7 @@ const uploadFilesToStorage = async ({
   progress
 }: {
   uploadFiles: UploadFiles;
-} & Omit<UploadFilesParamsWithProgress, 'sourceAbsolutePath'>): Promise<void> => {
+} & Omit<UploadFilesParamsWithProgress, 'sourceAbsolutePath' | 'batchSize'>): Promise<void> => {
   const filesToUpload = await Promise.all(
     files.map(
       async ({file, paths}) =>

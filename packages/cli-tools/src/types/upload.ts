@@ -6,6 +6,7 @@ export interface UploadFilesParams {
   files: FileAndPaths[];
   sourceAbsolutePath: string;
   collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
+  batchSize: number;
 }
 
 export type UploadFilesParamsWithProgress = UploadFilesParams & Required<OnUploadProgress>;

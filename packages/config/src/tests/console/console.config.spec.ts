@@ -94,10 +94,10 @@ describe('console.config', () => {
       expect(() => JunoConsoleConfigSchema.parse(config)).toThrow();
     });
 
-    it('rejects config with invalid gzip type', () => {
+    it('rejects config with invalid precompress type', () => {
       const result = JunoConsoleConfigSchema.safeParse({
         id: mockModuleIdText,
-        gzip: 123
+        precompress: 123
       });
       expect(result.success).toBe(false);
     });

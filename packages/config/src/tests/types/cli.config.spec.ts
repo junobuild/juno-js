@@ -88,8 +88,8 @@ describe('cli.config', () => {
       expect(result.success).toBe(false);
     });
 
-    it('rejects invalid gzip type', () => {
-      const result = CliConfigSchema.safeParse({gzip: 123});
+    it('rejects invalid precompress type', () => {
+      const result = CliConfigSchema.safeParse({precompress: 123});
       expect(result.success).toBe(false);
     });
 

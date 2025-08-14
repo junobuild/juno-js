@@ -36,6 +36,8 @@ export const gzipFiles = async ({
       ? DEPLOY_DEFAULT_PRECOMPRESS.pattern
       : (precompress.pattern ?? DEPLOY_DEFAULT_PRECOMPRESS.pattern);
 
+  console.log('_______>', precompress, pattern);
+
   const filesToCompress = sourceFiles.filter((file) => minimatch(file, pattern));
   return await Promise.all(filesToCompress.map(async (source) => await gzipFile({source})));
 };

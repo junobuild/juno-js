@@ -9,8 +9,8 @@ import {readFile} from 'node:fs/promises';
 import {extname, join} from 'node:path';
 import {
   DEPLOY_DEFAULT_ENCODING,
-  DEPLOY_DEFAULT_GZIP,
   DEPLOY_DEFAULT_IGNORE,
+  DEPLOY_DEFAULT_PRECOMPRESS,
   DEPLOY_DEFAULT_SOURCE
 } from '../constants/deploy.constants';
 import type {FileDetails, FileExtension, ListAssets, PrepareDeployOptions} from '../types/deploy';
@@ -33,7 +33,7 @@ export const prepareDeploy = async ({
     source = DEPLOY_DEFAULT_SOURCE,
     ignore = DEPLOY_DEFAULT_IGNORE,
     encoding = DEPLOY_DEFAULT_ENCODING,
-    gzip = DEPLOY_DEFAULT_GZIP
+    precompress = DEPLOY_DEFAULT_PRECOMPRESS
   } = config;
 
   const sourceAbsolutePath = join(process.cwd(), source);
@@ -44,7 +44,7 @@ export const prepareDeploy = async ({
     sourceAbsolutePath,
     ignore,
     encoding,
-    gzip,
+    precompress,
     listAssets,
     includeAllFiles
   });
@@ -123,15 +123,15 @@ const listFiles = async ({
   sourceAbsolutePath,
   ignore,
   encoding,
-  gzip,
+  precompress,
   listAssets,
   includeAllFiles
 }: {
   sourceAbsolutePath: string;
 } & {listAssets: ListAssets} & Pick<PrepareDeployOptions, 'includeAllFiles'> &
-  Required<Pick<CliConfig, 'ignore' | 'encoding' | 'gzip'>>): Promise<FileDetails[]> => {
+  Required<Pick<CliConfig, 'ignore' | 'encoding' | 'precompress'>>): Promise<FileDetails[]> => {
   const sourceFiles = listSourceFiles({sourceAbsolutePath, ignore});
-  const compressedFiles = await gzipFiles({sourceFiles, gzip});
+  const compressedFiles = await gzipFiles({sourceFiles, precompress});
 
   const files = [...sourceFiles, ...compressedFiles.filter((file) => !sourceFiles.includes(file))];
 

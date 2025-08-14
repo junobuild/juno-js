@@ -1,7 +1,7 @@
 import {nonNullish, toNullable} from '@dfinity/utils';
 import type {CliConfig} from '@junobuild/config';
 import ora from 'ora';
-import {COLLECTION_DAPP} from '../constants/deploy.constants';
+import {COLLECTION_DAPP, UPLOAD_DEFAULT_BATCH_SIZE} from '../constants/deploy.constants';
 import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';
@@ -19,6 +19,7 @@ import type {
   UploadWithBatch
 } from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
+import type {UploadFilesParams} from '../types/upload';
 import {fullPath} from '../utils/deploy.utils';
 
 /**
@@ -89,9 +90,10 @@ export const deploy = async ({
 
   const sourceFiles = prepareSourceFiles({files, sourceAbsolutePath});
 
-  const source = {
+  const source: Omit<UploadFilesParams, 'collection'> = {
     files: sourceFiles,
-    sourceAbsolutePath
+    sourceAbsolutePath,
+    batchSize: params.uploadBatchSize ?? UPLOAD_DEFAULT_BATCH_SIZE
   };
 
   await uploadFiles({
@@ -154,7 +156,13 @@ export const deployWithProposal = async ({
   const sourceFiles = prepareSourceFiles(prepareResult);
 
   const result = await deployAndProposeChanges({
-    deploy: {upload, files: sourceFiles, sourceAbsolutePath, collection: COLLECTION_DAPP},
+    deploy: {
+      upload,
+      files: sourceFiles,
+      sourceAbsolutePath,
+      collection: COLLECTION_DAPP,
+      batchSize: params.uploadBatchSize ?? UPLOAD_DEFAULT_BATCH_SIZE
+    },
     proposal: {
       ...restProposal,
       proposalType: {

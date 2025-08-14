@@ -12,7 +12,7 @@ import {proposeChanges} from './proposals.services';
 import {uploadFiles} from './upload.services';
 
 export const deployAndProposeChanges = async ({
-  deploy: {upload, files, sourceAbsolutePath, collection},
+  deploy: {upload, files, sourceAbsolutePath, collection, batchSize},
   proposal: {proposalType, autoCommit, ...proposalRest}
 }: {
   deploy: {
@@ -32,6 +32,7 @@ export const deployAndProposeChanges = async ({
         files,
         sourceAbsolutePath,
         collection,
+        batchSize,
         upload: {uploadFiles: uploadFilesWithProposalId}
       });
       return;
@@ -47,6 +48,7 @@ export const deployAndProposeChanges = async ({
       files,
       sourceAbsolutePath,
       collection,
+      batchSize,
       upload: {uploadFile: uploadFileWithProposalId}
     });
   };

@@ -72,6 +72,7 @@ export type DeployParams = PrepareDeployOptions & {
   config: CliConfig;
   listAssets: ListAssets;
   assertMemory: () => Promise<void>;
+  uploadBatchSize?: number;
 };
 
 export interface UploadIndividually<T = UploadFile> {

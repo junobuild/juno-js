@@ -1,5 +1,5 @@
 import {toNullable} from '@dfinity/utils';
-import {COLLECTION_CDN_RELEASES} from '../constants/deploy.constants';
+import {COLLECTION_CDN_RELEASES, UPLOAD_DEFAULT_BATCH_SIZE} from '../constants/deploy.constants';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';
 import type {DeployResultWithProposal, FileAndPaths} from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
@@ -52,7 +52,13 @@ export const publishSatelliteWasmWithProposal = async ({
   ];
 
   const result = await deployAndProposeChanges({
-    deploy: {...restDeploy, upload, files: sourceFiles, collection: COLLECTION_CDN_RELEASES},
+    deploy: {
+      ...restDeploy,
+      upload,
+      files: sourceFiles,
+      collection: COLLECTION_CDN_RELEASES,
+      batchSize: UPLOAD_DEFAULT_BATCH_SIZE
+    },
     proposal: {
       ...restProposal,
       proposalType: {

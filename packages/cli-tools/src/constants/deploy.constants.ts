@@ -10,7 +10,7 @@ export const DEPLOY_DEFAULT_PRECOMPRESS: Required<Precompress> = {
 };
 
 export const IGNORE_OS_FILES = ['.ds_store', 'thumbs.db'];
-export const UPLOAD_BATCH_SIZE = 20;
+export const UPLOAD_DEFAULT_BATCH_SIZE = 20;
 
 export const COLLECTION_DAPP = '#dapp';
 export const COLLECTION_CDN_RELEASES = '#_juno/releases';

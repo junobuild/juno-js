@@ -8,4 +8,4 @@ export interface UploadFilesParams {
   collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
 }
 
-export type UploadFilesParamsWithProgress = UploadFilesParams & OnUploadProgress;
+export type UploadFilesParamsWithProgress = UploadFilesParams & Required<OnUploadProgress>;

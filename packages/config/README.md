@@ -371,9 +371,9 @@ see EncodingType
 
 #### :gear: PrecompressSchema
 
-| Constant            | Type                                                                                                                                                                              |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PrecompressSchema` | `ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<ZodEnum<{ both: "both"; replace: "replace"; }>>; algorithm: ZodOptional<ZodEnum<{ gzip: "gzip"; }>>; }, $strict>` |
+| Constant            | Type                                                                                                                                                                                                |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PrecompressSchema` | `ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<ZodEnum<{ both: "both"; replace: "replace"; }>>; algorithm: ZodOptional<ZodEnum<{ gzip: "gzip"; brotli: "brotli"; }>>; }, $strict>` |
 
 References:
 
@@ -720,7 +720,7 @@ Configuration for compressing files during deployment.
 | ----------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | --- | ---- |
 | `pattern`   | `string or undefined`              | Glob pattern for files to precompress. default: any css                                                                                                                                                                          | js  | mjs | html |
 | `mode`      | `"both" or "replace" or undefined` | Determines what happens to the original files after compression: - `"both"` — upload both original and compressed versions. - `"replace"` — upload only the compressed version (served with `Content-Encoding`). default: "both" |
-| `algorithm` | `"gzip" or undefined`              | Compression algorithm. default: "gzip"                                                                                                                                                                                           |
+| `algorithm` | `"gzip" or "brotli" or undefined`  | Compression algorithm. default: "gzip"                                                                                                                                                                                           |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L28)
 

@@ -54,6 +54,13 @@ describe('cli.config', () => {
         expect(result.success).toBe(false);
       });
 
+      it('accept precompress.algorithm brotli', () => {
+        const result = CliConfigSchema.safeParse({
+          precompress: {algorithm: 'brotli'}
+        });
+        expect(result.success).toBe(true);
+      });
+
       it('rejects precompress if not an object or false', () => {
         const result = CliConfigSchema.safeParse({precompress: 123});
         expect(result.success).toBe(false);

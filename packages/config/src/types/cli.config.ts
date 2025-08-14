@@ -7,7 +7,7 @@ import {type EncodingType, EncodingTypeSchema} from './encoding';
 export const PrecompressSchema = z.strictObject({
   pattern: z.string().optional(),
   mode: z.enum(['both', 'replace']).optional(),
-  algorithm: z.enum(['gzip']).optional()
+  algorithm: z.enum(['gzip', 'brotli']).optional()
 });
 
 /**
@@ -45,7 +45,7 @@ export interface Precompress {
    * Compression algorithm.
    * @default "gzip"
    */
-  algorithm?: 'gzip';
+  algorithm?: 'gzip' | 'brotli';
 }
 
 /**

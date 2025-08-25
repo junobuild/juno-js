@@ -37,7 +37,7 @@
     "**/*.d.ts.map"
   ],
   "scripts": {
-    "copy-declarations": "rm -rf declarations && cp -R src/declarations .",
+    "copy-declarations": "rm -rf declarations && cp -R src/declarations . && rm declarations/.npmignore",
     "clean": "git ls-files --others --ignored --exclude-standard | grep -v \"LICENSE\" | xargs rm -rf",
     "ts-declaration": "tsc --emitDeclarationOnly -outDir .",
     "build": "npm run clean && npm run copy-declarations && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",

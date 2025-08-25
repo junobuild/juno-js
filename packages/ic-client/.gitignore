@@ -7,5 +7,6 @@
 !package.json
 !README.md
 !tsconfig.json
+!.npmignore
 
 !src/**

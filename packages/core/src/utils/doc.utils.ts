@@ -1,5 +1,5 @@
 import {fromNullable, toNullable} from '@dfinity/utils';
-import type {SatelliteDid} from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {fromArray, toArray} from '@junobuild/utils';
 import type {Doc} from '../types/doc';
 import type {ExcludeDate} from '../types/utility';

@@ -1,5 +1,5 @@
 import {fromNullable, nonNullish} from '@dfinity/utils';
-import type {SatelliteParameters} from '@junobuild/ic-client';
+import type {SatelliteParameters} from '@junobuild/ic-client/actor';
 import {
   listCustomDomains as listCustomDomainsApi,
   setCustomDomain as setCustomDomainApi

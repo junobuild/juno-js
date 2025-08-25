@@ -1,5 +1,5 @@
-import * as actor from '@junobuild/ic-client';
-import {MissionControlDid} from '@junobuild/ic-client';
+import * as actor from '@junobuild/ic-client/actor';
+import {MissionControlDid} from '@junobuild/ic-client/actor';
 import {
   getUser,
   listControllers,
@@ -10,7 +10,7 @@ import {
 import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/admin.mock';
 import {mockControllers} from '../mocks/modules.mock';
 
-vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+vi.mock(import('@junobuild/ic-client/actor'), async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

@@ -1,5 +1,5 @@
 import {fromNullable} from '@dfinity/utils';
-import type {SatelliteDid} from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {
   uploadAsset as uploadAssetStorage,
   type AssetKey,

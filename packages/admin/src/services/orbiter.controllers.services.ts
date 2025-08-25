@@ -1,5 +1,5 @@
 import type {Principal} from '@dfinity/principal';
-import type {MissionControlDid, OrbiterParameters} from '@junobuild/ic-client';
+import type {MissionControlDid, OrbiterParameters} from '@junobuild/ic-client/actor';
 import {listControllers} from '../api/orbiter.api';
 
 /**

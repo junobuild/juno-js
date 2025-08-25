@@ -1,9 +1,9 @@
-import * as actor from '@junobuild/ic-client';
+import * as actor from '@junobuild/ic-client/actor';
 import {listControllers, memorySize, version} from '../../api/orbiter.api';
 import {mockIdentity} from '../mocks/admin.mock';
 import {mockControllers} from '../mocks/modules.mock';
 
-vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+vi.mock(import('@junobuild/ic-client/actor'), async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

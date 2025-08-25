@@ -1,4 +1,4 @@
-import type {ConsoleDid} from '@junobuild/ic-client';
+import type {ConsoleDid} from '@junobuild/ic-client/actor';
 import type {CdnParameters} from '../types/actor.params';
 import type {
   CommitProposal,

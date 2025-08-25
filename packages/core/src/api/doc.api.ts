@@ -1,5 +1,5 @@
 import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
-import type {SatelliteDid} from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import type {ActorReadParams, ActorUpdateParams} from '../types/actor';
 import type {Doc} from '../types/doc';
 import type {ListParams, ListResults} from '../types/list';

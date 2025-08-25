@@ -1,4 +1,4 @@
-import type {ConsoleActor, SatelliteActor} from '@junobuild/ic-client';
+import type {ConsoleActor, SatelliteActor} from '@junobuild/ic-client/actor';
 import type {OnUploadProgress} from './progress';
 import type {Storage} from './storage';
 

@@ -5,7 +5,7 @@ import {
   idlCertifiedFactorySatellite,
   idlFactorySatellite,
   type SatelliteActor
-} from '@junobuild/ic-client';
+} from '@junobuild/ic-client/actor';
 import {ActorStore} from '../stores/actor.store';
 import type {ActorKey} from '../types/actor';
 import type {CallOptions} from '../types/call-options';

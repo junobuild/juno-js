@@ -1,5 +1,5 @@
-import * as actor from '@junobuild/ic-client';
-import {SatelliteDid} from '@junobuild/ic-client';
+import * as actor from '@junobuild/ic-client/actor';
+import {SatelliteDid} from '@junobuild/ic-client/actor';
 import {
   countAssets,
   countDocs,
@@ -24,7 +24,7 @@ import {
 import {mockIdentity, mockUserIdPrincipal} from '../mocks/admin.mock';
 import {mockController, mockControllers} from '../mocks/modules.mock';
 
-vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+vi.mock(import('@junobuild/ic-client/actor'), async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

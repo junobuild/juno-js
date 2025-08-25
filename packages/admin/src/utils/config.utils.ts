@@ -8,7 +8,7 @@ import type {
   StorageConfigRedirect,
   StorageConfigRewrite
 } from '@junobuild/config';
-import type {SatelliteDid} from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {fromMaxMemorySize, toMaxMemorySize} from './memory.utils';
 
 export const fromStorageConfig = ({

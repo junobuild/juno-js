@@ -1,7 +1,7 @@
 import type {CanisterStatusResponse} from '@dfinity/ic-management';
 import {ICManagementCanister} from '@dfinity/ic-management';
 import {hexStringToUint8Array} from '@dfinity/utils';
-import * as actor from '@junobuild/ic-client';
+import * as actor from '@junobuild/ic-client/actor';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
 import {UpgradeCodeUnchangedError} from '../../errors/upgrade.errors';
 import {uint8ArraySha256} from '../../helpers/crypto.helpers';
@@ -17,7 +17,7 @@ import {
 } from '../mocks/admin.mock';
 import {mockControllers} from '../mocks/modules.mock';
 
-vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+vi.mock(import('@junobuild/ic-client/actor'), async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

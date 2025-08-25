@@ -1,6 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import {isNullish, toNullable} from '@dfinity/utils';
-import type {SatelliteDid} from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {ListError} from '../types/errors';
 import type {ListParams, ListTimestampMatcher} from '../types/list';
 

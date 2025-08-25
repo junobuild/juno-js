@@ -1,5 +1,5 @@
-import * as actor from '@junobuild/ic-client';
-import {OrbiterDid} from '@junobuild/ic-client';
+import * as actor from '@junobuild/ic-client/actor';
+import {OrbiterDid} from '@junobuild/ic-client/actor';
 import {listOrbiterControllers} from '../../services/orbiter.controllers.services';
 import {
   mockHttpAgent,
@@ -8,7 +8,7 @@ import {
   mockSatelliteIdText
 } from '../mocks/admin.mock';
 
-vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+vi.mock(import('@junobuild/ic-client/actor'), async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

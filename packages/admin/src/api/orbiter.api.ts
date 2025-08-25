@@ -4,7 +4,7 @@ import {
   type OrbiterParameters,
   getDeprecatedOrbiterVersionActor,
   getOrbiterActor
-} from '@junobuild/ic-client';
+} from '@junobuild/ic-client/actor';
 
 /**
  * @deprecated - Replaced in Orbiter > v0.0.8 with public custom section juno:package

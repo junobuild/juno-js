@@ -1,4 +1,4 @@
-import type {ConsoleDid, SatelliteDid} from '@junobuild/ic-client';
+import type {ConsoleDid, SatelliteDid} from '@junobuild/ic-client/actor';
 
 export type CommitProposal = ConsoleDid.CommitProposal | SatelliteDid.CommitProposal;
 export type RejectProposal = CommitProposal;

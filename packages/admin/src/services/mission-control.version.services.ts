@@ -1,6 +1,6 @@
 import {assertNonNullish, isNullish} from '@dfinity/utils';
 import {JUNO_PACKAGE_MISSION_CONTROL_ID} from '@junobuild/config';
-import type {MissionControlParameters} from '@junobuild/ic-client';
+import type {MissionControlParameters} from '@junobuild/ic-client/actor';
 import {version} from '../api/mission-control.api';
 import {MissionControlVersionError} from '../errors/version.errors';
 import {getJunoPackage} from './package.services';

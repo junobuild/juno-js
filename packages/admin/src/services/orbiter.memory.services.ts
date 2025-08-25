@@ -1,4 +1,4 @@
-import type {OrbiterDid, OrbiterParameters} from '@junobuild/ic-client';
+import type {OrbiterDid, OrbiterParameters} from '@junobuild/ic-client/actor';
 import {memorySize} from '../api/orbiter.api';
 
 /**

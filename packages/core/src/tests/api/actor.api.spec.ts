@@ -1,4 +1,4 @@
-import {idlFactorySatellite, idlFactorySputnik} from '@junobuild/ic-client';
+import {idlFactorySatellite, idlFactorySputnik} from '@junobuild/ic-client/actor';
 import {getSatelliteActor, getSatelliteExtendedActor} from '../../api/actor.api';
 import {ActorStore} from '../../stores/actor.store';
 import {mockIdentity, mockSatelliteId} from '../mocks/core.mock';

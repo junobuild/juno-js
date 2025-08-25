@@ -1,4 +1,4 @@
-import type {SatelliteDid, SatelliteParameters} from '@junobuild/ic-client';
+import type {SatelliteDid, SatelliteParameters} from '@junobuild/ic-client/actor';
 import {memorySize} from '../api/satellite.api';
 
 /**

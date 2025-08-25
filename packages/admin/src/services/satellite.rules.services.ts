@@ -1,5 +1,5 @@
 import type {Rule, RulesType} from '@junobuild/config';
-import type {SatelliteParameters} from '@junobuild/ic-client';
+import type {SatelliteParameters} from '@junobuild/ic-client/actor';
 import {listRules as listRulesApi, setRule as setRuleApi} from '../api/satellite.api';
 import type {ListRulesMatcher, ListRulesResults} from '../types/list';
 import {fromRule, fromRulesFilter, fromRuleType, toRule} from '../utils/rule.utils';

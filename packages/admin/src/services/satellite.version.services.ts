@@ -1,6 +1,6 @@
 import {assertNonNullish, isNullish, nonNullish} from '@dfinity/utils';
 import {JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
-import type {SatelliteParameters} from '@junobuild/ic-client';
+import type {SatelliteParameters} from '@junobuild/ic-client/actor';
 import {canisterMetadata} from '../api/ic.api';
 import {version} from '../api/satellite.api';
 import {SatelliteMissingDependencyError} from '../errors/version.errors';

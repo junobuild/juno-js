@@ -1,4 +1,4 @@
-import * as actor from '@junobuild/ic-client';
+import * as actor from '@junobuild/ic-client/actor';
 import type {UploadAsset} from '@junobuild/storage';
 import * as storage from '@junobuild/storage';
 import {uploadAssetsWithProposal, uploadAssetWithProposal} from '../../api/storage.api';
@@ -6,7 +6,7 @@ import type {CdnParameters} from '../../types/actor.params';
 import type {ProposalId} from '../../types/cdn';
 import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/cdn.mock';
 
-vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+vi.mock(import('@junobuild/ic-client/actor'), async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

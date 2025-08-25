@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "declarations": "node ./scripts/declarations.mjs && npm run format",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "npm run clean && prettier --write .",
+    "format:check": "npm run clean && prettier --check .",
     "lint": "eslint --max-warnings 0 .",
     "prepare": "./scripts/license.sh",
     "build": "npm run build --workspaces",

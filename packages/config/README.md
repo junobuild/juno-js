@@ -385,7 +385,7 @@ References:
 
 | Constant          | Type                                                                                                                                                                                                                                                                                                                               |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CliConfigSchema` | `ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString>>; precompress: ZodOptional<ZodUnion<readonly [ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<...>; algorithm: ZodOptional<...>; }, $strict>, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: ZodOptional<...>;...` |
+| `CliConfigSchema` | `ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString>>; precompress: ZodOptional<ZodUnion<readonly [ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<...>; algorithm: ZodOptional<...>; }, $strict>, ZodArray<...>, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: Zo...` |
 
 References:
 
@@ -716,28 +716,28 @@ Configures the hosting behavior of the Storage.
 
 Configuration for compressing files during deployment.
 
-| Property    | Type                               | Description                                                                                                                                                                                                                      |
-| ----------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | --- | ---- |
-| `pattern`   | `string or undefined`              | Glob pattern for files to precompress. default: any css                                                                                                                                                                          | js  | mjs | html |
-| `mode`      | `"both" or "replace" or undefined` | Determines what happens to the original files after compression: - `"both"` — upload both original and compressed versions. - `"replace"` — upload only the compressed version (served with `Content-Encoding`). default: "both" |
-| `algorithm` | `"gzip" or "brotli" or undefined`  | Compression algorithm. default: "gzip"                                                                                                                                                                                           |
+| Property    | Type                              | Description                                                                                          |
+| ----------- | --------------------------------- | ---------------------------------------------------------------------------------------------------- | --- | --- | ---- |
+| `pattern`   | `string or undefined`             | Glob pattern for files to precompress. default: any css                                              | js  | mjs | html |
+| `mode`      | `PrecompressMode or undefined`    | Determines what happens to the original files after compression. default: "both"see: PrecompressMode |
+| `algorithm` | `"gzip" or "brotli" or undefined` | Compression algorithm. default: "gzip"                                                               |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L28)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L37)
 
 #### :gear: CliConfig
 
 The configuration used by the CLI to resolve, prepare and deploy your app.
 
-| Property      | Type                                    | Description                                                                                                                                                                                                                                                                                                                                                                                   |
-| ------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `source`      | `string or undefined`                   | Specifies the directory from which to deploy to Storage. For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: 'build'type: {string}                                                                                                                                                                                                              |
-| `ignore`      | `string[] or undefined`                 | Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore. type: {string[]}optional                                                                                                                                                                                                                                                         |
-| `precompress` | `false or Precompress or undefined`     | Controls compression optimization for files in the source folder. By default, JavaScript (.js), ES Modules (.mjs), CSS (.css), and HTML (.html) are compressed, and both the original and compressed versions are uploaded. Set to `false` to disable, or provide a {@link Precompress} object to customize. type: {Precompress or false}optional                                             |
-| `encoding`    | `[string, EncodingType][] or undefined` | Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension: - `.Z` for compress, - `.gz` for gzip, - `.br` for brotli, - `.zlib` for deflate, - anything else defaults to `identity`. The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types. type: {Array<[string, EncodingType]>}optional |
-| `predeploy`   | `string[] or undefined`                 | Defines a list of scripts or commands to be run before the deployment process begins. This can be useful for tasks such as compiling assets, running tests, or building production-ready files. Example: `json { "predeploy": ["npm run build", "npm run lint"] } ` type: {string[]}optional                                                                                                  |
-| `postdeploy`  | `string[] or undefined`                 | Defines a list of scripts or commands to be run after the deployment process completes. This can be used for tasks such as notifications, cleanup, or sending confirmation messages to services or team members. Example: `json { "postdeploy": ["./scripts/notify-admins.sh", "echo 'Deployment complete'"] } ` type: {string[]}optional                                                     |
+| Property      | Type                                                 | Description                                                                                                                                                                                                                                                                                                                                                                                   |
+| ------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source`      | `string or undefined`                                | Specifies the directory from which to deploy to Storage. For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: 'build'type: {string}                                                                                                                                                                                                              |
+| `ignore`      | `string[] or undefined`                              | Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore. type: {string[]}optional                                                                                                                                                                                                                                                         |
+| `precompress` | `false or Precompress or Precompress[] or undefined` | Controls compression optimization for files in the source folder. By default, JavaScript (.js), ES Modules (.mjs), CSS (.css), and HTML (.html) are compressed, and both the original and compressed versions are uploaded. Set to `false` to disable, or provide one or more {@link Precompress} objects to customize. type: {Precompress or Precompress[] or false}optional                 |
+| `encoding`    | `[string, EncodingType][] or undefined`              | Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension: - `.Z` for compress, - `.gz` for gzip, - `.br` for brotli, - `.zlib` for deflate, - anything else defaults to `identity`. The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types. type: {Array<[string, EncodingType]>}optional |
+| `predeploy`   | `string[] or undefined`                              | Defines a list of scripts or commands to be run before the deployment process begins. This can be useful for tasks such as compiling assets, running tests, or building production-ready files. Example: `json { "predeploy": ["npm run build", "npm run lint"] } ` type: {string[]}optional                                                                                                  |
+| `postdeploy`  | `string[] or undefined`                              | Defines a list of scripts or commands to be run after the deployment process completes. This can be used for tasks such as notifications, cleanup, or sending confirmation messages to services or team members. Example: `json { "postdeploy": ["./scripts/notify-admins.sh", "echo 'Deployment complete'"] } ` type: {string[]}optional                                                     |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L54)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L61)
 
 #### :gear: SatelliteId
 
@@ -792,6 +792,7 @@ changes, typically through CLI commands (e.g., `juno config`).
 - [OrbiterConfig](#gear-orbiterconfig)
 - [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
 - [EncodingType](#gear-encodingtype)
+- [PrecompressMode](#gear-precompressmode)
 - [SatelliteConfig](#gear-satelliteconfig)
 
 #### :gear: PermissionText
@@ -883,6 +884,19 @@ The configuration for running the Juno emulator.
 | `EncodingType` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L12)
+
+#### :gear: PrecompressMode
+
+Determines what happens to the original files after compression:
+
+- `"both"` — upload both original and compressed versions.
+- `"replace"` — upload only the compressed version (served with `Content-Encoding`).
+
+| Type              | Type                  |
+| ----------------- | --------------------- |
+| `PrecompressMode` | `'both' or 'replace'` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L32)
 
 #### :gear: SatelliteConfig
 

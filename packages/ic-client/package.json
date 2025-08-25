@@ -5,24 +5,24 @@
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.mjs"
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.mjs"
     },
     "./actor": {
-      "types": "./dist/actor.d.ts",
-      "import": "./dist/actor.js",
-      "require": "./dist/actor.mjs"
+      "types": "./actor.d.ts",
+      "import": "./actor.js",
+      "require": "./actor.mjs"
     },
     "./utils": {
-      "types": "./dist/utils.d.ts",
-      "import": "./dist/utils.js",
-      "require": "./dist/utils.mjs"
+      "types": "./utils.d.ts",
+      "import": "./utils.js",
+      "require": "./utils.mjs"
     }
   },
   "files": [

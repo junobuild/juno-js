@@ -14,6 +14,6 @@ const icClientDeclarations = [
   'sputnik'
 ];
 const icClientPromises = icClientDeclarations.map((d) =>
-  cp(join(src, d), join('./packages/ic-client/declarations/', d), {recursive: true})
+  cp(join(src, d), join('./packages/ic-client/src/declarations/', d), {recursive: true})
 );
 await Promise.all(icClientPromises);

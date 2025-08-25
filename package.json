@@ -175,9 +175,20 @@
       ]
     },
     {
-      "name": "@junobuild/ic-client",
-      "path": "./packages/ic-client/dist/index.js",
+      "name": "@junobuild/ic-client/actor",
+      "path": "./packages/ic-client/dist/actor.js",
       "limit": "15 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/identity",
+        "@dfinity/principal"
+      ]
+    },
+    {
+      "name": "@junobuild/ic-client/utils",
+      "path": "./packages/ic-client/dist/utils.js",
+      "limit": "1 kB",
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",

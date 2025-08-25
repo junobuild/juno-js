@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# Except
+!src/
+!esbuild.mjs
+!package.json
+!README.md
+!tsconfig.json
+
+!src/**

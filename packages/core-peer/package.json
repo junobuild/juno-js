@@ -53,7 +53,7 @@
   "homepage": "https://juno.build",
   "dependencies": {
     "@junobuild/errors": "*",
-    "@junobuild/ic-client": "^2",
+    "@junobuild/ic-client": "*",
     "@junobuild/storage": "^1",
     "@junobuild/utils": "*"
   },

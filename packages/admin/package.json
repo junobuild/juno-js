@@ -57,7 +57,7 @@
     "@dfinity/principal": "^2.3.0",
     "@dfinity/utils": "^2",
     "@junobuild/config": "*",
-    "@junobuild/ic-client": "^2",
+    "@junobuild/ic-client": "*",
     "semver": "7.*",
     "zod": "^3.25"
   }

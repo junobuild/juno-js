@@ -1,4 +1,4 @@
-import type {Precompress, SatelliteConfig} from '@junobuild/config';
+import type {Precompress, PrecompressMode, SatelliteConfig} from '@junobuild/config';
 import {minimatch} from 'minimatch';
 import {createReadStream, createWriteStream} from 'node:fs';
 import {Readable} from 'node:stream';
@@ -25,11 +25,34 @@ export const gunzipFile = async ({source}: {source: Buffer}): Promise<Buffer> =>
 export const compressFiles = async ({
   sourceFiles,
   precompress
-}: {sourceFiles: string[]} & Required<Pick<SatelliteConfig, 'precompress'>>): Promise<string[]> => {
+}: {sourceFiles: string[]} & Required<Pick<SatelliteConfig, 'precompress'>>): Promise<
+  {source: string; compressed: string; mode: PrecompressMode}[]
+> => {
   if (precompress === false) {
     return [];
   }
 
+  const precompressions = Array.isArray(precompress) ? precompress : [precompress];
+
+  const compressedFiles = await Promise.all(
+    precompressions.map(
+      async (precompress) =>
+        await compressFilesForOptions({
+          sourceFiles,
+          precompress
+        })
+    )
+  );
+
+  return compressedFiles.reduce((acc, files) => [...acc, ...files], []);
+};
+
+const compressFilesForOptions = async ({
+  sourceFiles,
+  precompress
+}: {sourceFiles: string[]} & {precompress: Precompress}): Promise<
+  {source: string; compressed: string; mode: PrecompressMode}[]
+> => {
   const pattern =
     // @ts-expect-error we read json so, it's possible that one provide a boolean that does not match the TS type
     precompress === true
@@ -44,7 +67,11 @@ export const compressFiles = async ({
 
   const filesToCompress = sourceFiles.filter((file) => minimatch(file, pattern));
   return await Promise.all(
-    filesToCompress.map(async (source) => await compressFile({source, algorithm}))
+    filesToCompress.map(async (source) => ({
+      source,
+      compressed: await compressFile({source, algorithm}),
+      mode: precompress?.mode ?? DEPLOY_DEFAULT_PRECOMPRESS.mode
+    }))
   );
 };
 

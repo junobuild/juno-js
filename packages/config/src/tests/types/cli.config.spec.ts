@@ -72,6 +72,40 @@ describe('cli.config', () => {
         });
         expect(result.success).toBe(false);
       });
+
+      it('accepts precompress as an array of valid objects', () => {
+        const result = CliConfigSchema.safeParse({
+          precompress: [
+            {pattern: '**/*.js', mode: 'both', algorithm: 'gzip'},
+            {pattern: '**/*.css', mode: 'replace', algorithm: 'brotli'}
+          ]
+        });
+        expect(result.success).toBe(true);
+      });
+
+      it('rejects precompress array if one entry is invalid', () => {
+        const result = CliConfigSchema.safeParse({
+          precompress: [
+            {pattern: '**/*.js', mode: 'replace', algorithm: 'gzip'},
+            {pattern: '**/*.css', mode: 'invalid'} // ❌ invalid
+          ]
+        });
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects precompress array if not an array of objects', () => {
+        const result = CliConfigSchema.safeParse({
+          precompress: [123, 'not-an-object']
+        });
+        expect(result.success).toBe(false);
+      });
+
+      it('accepts precompress array with minimal valid object', () => {
+        const result = CliConfigSchema.safeParse({
+          precompress: [{mode: 'replace'}]
+        });
+        expect(result.success).toBe(true);
+      });
     });
 
     it('rejects invalid encoding values', () => {

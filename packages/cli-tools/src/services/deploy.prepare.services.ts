@@ -133,9 +133,17 @@ const prepareFiles = async ({
 } & {listAssets: ListAssets} & Pick<PrepareDeployOptions, 'includeAllFiles'> &
   Required<Pick<CliConfig, 'ignore' | 'encoding' | 'precompress'>>): Promise<FileDetails[]> => {
   const sourceFiles = listSourceFiles({sourceAbsolutePath, ignore});
-  const compressedFiles = await compressFiles({sourceFiles, precompress});
 
-  const files = [...sourceFiles, ...compressedFiles.filter((file) => !sourceFiles.includes(file))];
+  const allCompressedFiles = await compressFiles({sourceFiles, precompress});
+  const compressedFiles = allCompressedFiles.filter(
+    ({compressed}) => !sourceFiles.includes(compressed)
+  );
+
+  const uncompressedFiles = sourceFiles.filter(
+    (source) =>
+      compressedFiles.find(({source: sourceCompressed}) => sourceCompressed === source) ===
+      undefined
+  );
 
   // TODO: brotli and zlib naive
   const mapEncodingType = ({
@@ -171,26 +179,12 @@ const prepareFiles = async ({
     return undefined;
   };
 
-  const findAlternateFile = ({
+  const mapFiles = async ({
     file,
-    encodingType
-  }: {
-    file: string;
-    encodingType: EncodingType | undefined;
-  }): string | undefined => {
-    if (isNullish(encodingType)) {
-      return undefined;
-    }
-
-    return files.find((sourceFile) => sourceFile === file.replace(extname(file), ''));
-  };
-
-  const mapFiles = async (file: string): Promise<FileDetails> => {
+    alternateFile
+  }: Pick<FileDetails, 'file' | 'alternateFile'>): Promise<FileDetails> => {
     const fileType = await fileTypeFromFile(file);
     const encodingType = mapEncodingType({file, ext: fileType?.ext});
-
-    // The mime-type that matters is the one of the requested file by the browser, not the mime type of the encoding
-    const alternateFile = findAlternateFile({file, encodingType});
 
     // For some reason the library 'file-type' does not always map the mime type correctly
     const mimeType = mime.lookup(alternateFile ?? file);
@@ -203,41 +197,59 @@ const prepareFiles = async ({
     };
   };
 
-  const encodingFiles: FileDetails[] = await Promise.all(files.map(mapFiles));
+  const uncompressedFilesDetails = await Promise.all(
+    uncompressedFiles.map(async (file) => await mapFiles({file}))
+  );
 
-  // If the dev opt-out to uploading the source files that are compressed by the CLI
-  const filterFilesOnReplaceMode = (): FileDetails[] => {
-    if (
-      typeof precompress === 'boolean' ||
-      (precompress ?? DEPLOY_DEFAULT_PRECOMPRESS).mode !== 'replace'
-    ) {
-      return encodingFiles;
-    }
+  const mapBothFiles = async ({
+    source,
+    compressed
+  }: {
+    source: string;
+    compressed: string;
+  }): Promise<FileDetails[]> => {
+    const mapCompressedFile = async () => await mapFiles({file: compressed, alternateFile: source});
+    const mapSourceFile = async () => await mapFiles({file: source});
 
-    const [alternateFiles, identityFiles] = encodingFiles.reduce<[FileDetails[], FileDetails[]]>(
-      ([alternateFiles, sourceFiles], file) => [
-        [...alternateFiles, ...(nonNullish(file.alternateFile) ? [file] : [])],
-        [...sourceFiles, ...(isNullish(file.alternateFile) ? [file] : [])]
-      ],
-      [[], []]
-    );
-
-    const filterIdentityFiles = identityFiles.filter(
-      ({file}) => alternateFiles.find(({alternateFile}) => alternateFile === file) === undefined
-    );
-
-    return [...alternateFiles, ...filterIdentityFiles];
+    return await Promise.all([mapCompressedFile(), mapSourceFile()]);
   };
 
-  const filteredFiles = filterFilesOnReplaceMode();
+  const mapReplaceFile = async ({
+    compressed,
+    source
+  }: {
+    source: string;
+    compressed: string;
+  }): Promise<FileDetails> => {
+    const mapCompressedFile = async () => await mapFiles({file: compressed, alternateFile: source});
+    return await mapCompressedFile();
+  };
+
+  const bothCompressedFilesDetails = await Promise.all(
+    compressedFiles
+      .filter(({mode}) => mode === 'both')
+      .map(async ({source, compressed}) => await mapBothFiles({source, compressed}))
+  );
+
+  const replaceCompressedFilesDetails = await Promise.all(
+    compressedFiles
+      .filter(({mode}) => mode === 'replace')
+      .map(async ({source, compressed}) => await mapReplaceFile({source, compressed}))
+  );
+
+  const files = [
+    ...bothCompressedFilesDetails.flatMap((files) => files),
+    ...replaceCompressedFilesDetails,
+    ...uncompressedFilesDetails
+  ];
 
   // juno deploy with proposals using clear
   if (includeAllFiles === true) {
-    return filteredFiles;
+    return files;
   }
 
   return await filterFilesToUpload({
-    files: filteredFiles,
+    files,
     sourceAbsolutePath,
     listAssets
   });

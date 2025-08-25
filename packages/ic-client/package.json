@@ -5,41 +5,35 @@
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
-  "main": "index.js",
-  "module": "index.js",
-  "types": "index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "import": "./index.js",
-      "require": "./index.mjs"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.mjs"
     },
     "./actor": {
-      "types": "./actor.d.ts",
-      "import": "./actor.js",
-      "require": "./actor.mjs"
+      "types": "./dist/actor.d.ts",
+      "import": "./dist/actor.js",
+      "require": "./dist/actor.mjs"
     },
     "./utils": {
-      "types": "./utils.d.ts",
-      "import": "./utils.js",
-      "require": "./utils.mjs"
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.js",
+      "require": "./dist/utils.mjs"
     }
   },
   "files": [
+    "dist",
     "README.md",
-    "LICENSE",
-    "**/*.js",
-    "**/*.js.map",
-    "**/*.mjs",
-    "**/*.mjs.map",
-    "**/*.d.ts",
-    "**/*.d.ts.map",
-    "declarations"
+    "LICENSE"
   ],
   "scripts": {
-    "clean": "git ls-files --others --ignored --exclude-standard | grep -v \"LICENSE\" | xargs rm -rf",
-    "ts-declaration": "tsc --emitDeclarationOnly -outDir .",
-    "build": "npm run clean && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",
+    "rmdir": "node ../../scripts/rmdir.mjs",
+    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist",
+    "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },
   "repository": {

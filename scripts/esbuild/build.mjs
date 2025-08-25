@@ -13,7 +13,7 @@ const buildBrowser = ({multi} = {multi: false}) => {
   esbuild
     .build({
       entryPoints,
-      outdir: multi === true ? process.cwd() : join(DIST, 'browser'),
+      outdir: multi === true ? DIST : join(DIST, 'browser'),
       bundle: true,
       sourcemap: true,
       minify: true,
@@ -34,7 +34,7 @@ const buildNode = ({multi} = {multi: false}) => {
     .build({
       entryPoints: ['src/index.ts'],
       ...(multi === true
-        ? {entryPoints, outdir: process.cwd(), outExtension: {'.js': '.mjs'}}
+        ? {entryPoints, outdir: DIST, outExtension: {'.js': '.mjs'}}
         : {entryPoints: ['src/index.ts'], outfile: join(DIST, 'node', 'index.mjs')}),
       bundle: true,
       sourcemap: true,

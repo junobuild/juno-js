@@ -35,11 +35,12 @@ export const compressFiles = async ({
   const precompressions = Array.isArray(precompress) ? precompress : [precompress];
 
   const compressedFiles = await Promise.all(
-    precompressions.map(async (precompress) =>
-      compressFilesForOptions({
-        sourceFiles,
-        precompress
-      })
+    precompressions.map(
+      async (precompress) =>
+        await compressFilesForOptions({
+          sourceFiles,
+          precompress
+        })
     )
   );
 

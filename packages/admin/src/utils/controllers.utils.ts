@@ -1,6 +1,6 @@
 import {Principal} from '@dfinity/principal';
 import {nonNullish, toNullable} from '@dfinity/utils';
-import type {MissionControlDid} from '@junobuild/ic-client';
+import type {MissionControlDid} from '@junobuild/ic-client/actor';
 import type {SetControllerParams} from '../types/controllers';
 
 export const mapSetControllerParams = ({

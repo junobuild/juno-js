@@ -1,4 +1,4 @@
-import type {SatelliteDid} from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import type {Asset} from '@junobuild/storage';
 import type {ListResults} from './list';
 

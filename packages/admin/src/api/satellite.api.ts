@@ -7,7 +7,7 @@ import {
   getDeprecatedSatelliteNoScopeActor,
   getDeprecatedSatelliteVersionActor,
   getSatelliteActor
-} from '@junobuild/ic-client';
+} from '@junobuild/ic-client/actor';
 
 export const setStorageConfig = async ({
   config,

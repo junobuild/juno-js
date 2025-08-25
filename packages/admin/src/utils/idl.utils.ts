@@ -1,6 +1,6 @@
 import {IDL} from '@dfinity/candid';
 import type {Principal} from '@dfinity/principal';
-import type {SatelliteDid} from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 
 export const encoreIDLUser = (user: Principal): ArrayBuffer =>
   IDL.encode(

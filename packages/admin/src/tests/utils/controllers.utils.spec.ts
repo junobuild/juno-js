@@ -1,5 +1,5 @@
 import {Principal} from '@dfinity/principal';
-import {SatelliteDid} from '@junobuild/ic-client';
+import {SatelliteDid} from '@junobuild/ic-client/actor';
 import {SetControllerParams} from '../../types/controllers';
 import {mapSetControllerParams} from '../../utils/controllers.utils';
 import {mockUserIdText} from '../mocks/admin.mock';

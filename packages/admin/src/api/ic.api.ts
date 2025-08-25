@@ -11,7 +11,7 @@ import {
 import type {take_canister_snapshot_result} from '@dfinity/ic-management/dist/candid/ic-management';
 import type {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
 import {Principal} from '@dfinity/principal';
-import {type ActorParameters, useOrInitAgent} from '@junobuild/ic-client';
+import {type ActorParameters, useOrInitAgent} from '@junobuild/ic-client/actor';
 
 export const canisterStop = async ({
   canisterId,

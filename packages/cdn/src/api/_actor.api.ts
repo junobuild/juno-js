@@ -3,7 +3,7 @@ import {
   type SatelliteActor,
   getConsoleActor,
   getSatelliteActor
-} from '@junobuild/ic-client';
+} from '@junobuild/ic-client/actor';
 import type {CdnParameters} from '../types/actor.params';
 
 export const getCdnActor = (cdn: CdnParameters): Promise<ConsoleActor | SatelliteActor> =>

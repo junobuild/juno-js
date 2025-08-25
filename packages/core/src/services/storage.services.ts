@@ -1,5 +1,5 @@
 import {fromNullable, nonNullish} from '@dfinity/utils';
-import type {SatelliteDid} from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import type {Asset, AssetEncoding, AssetKey, Storage} from '@junobuild/storage';
 import {
   countAssets as countAssetsApi,

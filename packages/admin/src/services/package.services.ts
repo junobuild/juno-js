@@ -1,7 +1,7 @@
 import type {Principal} from '@dfinity/principal';
 import {isNullish} from '@dfinity/utils';
 import {type JunoPackage, JunoPackageSchema} from '@junobuild/config';
-import type {ActorParameters} from '@junobuild/ic-client';
+import type {ActorParameters} from '@junobuild/ic-client/actor';
 import * as z from 'zod/v4';
 import {canisterMetadata} from '../api/ic.api';
 

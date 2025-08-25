@@ -1,6 +1,6 @@
 import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
 import type {MemoryText, PermissionText, Rule, RulesType} from '@junobuild/config';
-import type {SatelliteDid} from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {
   DbRulesType,
   DEFAULT_RATE_CONFIG_TIME_PER_TOKEN_NS,

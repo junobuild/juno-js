@@ -1,10 +1,10 @@
 import {CdnParameters} from '@junobuild/cdn';
-import type {ConsoleActor, SatelliteActor} from '@junobuild/ic-client';
-import * as icClient from '@junobuild/ic-client';
+import type {ConsoleActor, SatelliteActor} from '@junobuild/ic-client/actor';
+import * as icClient from '@junobuild/ic-client/actor';
 import {getCdnActor} from '../../api/_actor.api';
 import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/cdn.mock';
 
-vi.mock('@junobuild/ic-client', () => {
+vi.mock('@junobuild/ic-client/actor', () => {
   return {
     getConsoleActor: vi.fn(),
     getSatelliteActor: vi.fn()

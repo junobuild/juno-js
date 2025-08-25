@@ -1,4 +1,4 @@
-import type {ActorParameters} from '@junobuild/ic-client';
+import type {ActorParameters} from '@junobuild/ic-client/actor';
 import {upgrade} from '../handlers/upgrade.handlers';
 import type {UpgradeCodeParams} from '../types/upgrade';
 

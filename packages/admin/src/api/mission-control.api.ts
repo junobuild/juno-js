@@ -4,7 +4,7 @@ import {
   type MissionControlParameters,
   getDeprecatedMissionControlVersionActor,
   getMissionControlActor
-} from '@junobuild/ic-client';
+} from '@junobuild/ic-client/actor';
 
 /**
  * @deprecated - Replaced in Mission Control > v0.0.14 with public custom section juno:package

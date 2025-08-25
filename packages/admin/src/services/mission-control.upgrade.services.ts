@@ -1,4 +1,5 @@
-import {type MissionControlParameters, toPrincipal} from '@junobuild/ic-client';
+import type {MissionControlParameters} from '@junobuild/ic-client/actor';
+import {toPrincipal} from '@junobuild/ic-client/utils';
 import {getUser} from '../api/mission-control.api';
 import {INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';

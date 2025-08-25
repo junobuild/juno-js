@@ -1,5 +1,5 @@
 import type {chunk_hash} from '@dfinity/ic-management';
-import type {ActorParameters} from '@junobuild/ic-client';
+import type {ActorParameters} from '@junobuild/ic-client/actor';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
 import * as icApi from '../../api/ic.api';
 import {INSTALL_MAX_CHUNK_SIZE} from '../../constants/upgrade.constants';

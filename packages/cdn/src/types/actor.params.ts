@@ -1,4 +1,4 @@
-import type {ConsoleParameters, SatelliteParameters} from '@junobuild/ic-client';
+import type {ConsoleParameters, SatelliteParameters} from '@junobuild/ic-client/actor';
 
 /**
  * Represents initialization parameters for either a Console or Satellite actor.

@@ -1,5 +1,5 @@
 import type {Principal} from '@dfinity/principal';
-import type {MissionControlDid, MissionControlParameters} from '@junobuild/ic-client';
+import type {MissionControlDid, MissionControlParameters} from '@junobuild/ic-client/actor';
 import {
   listControllers,
   setMissionControlController as setMissionControlControllerApi,

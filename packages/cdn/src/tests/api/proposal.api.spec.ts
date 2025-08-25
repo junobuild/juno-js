@@ -1,5 +1,5 @@
-import type {SatelliteDid} from '@junobuild/ic-client';
-import * as actor from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
+import * as actor from '@junobuild/ic-client/actor';
 import {
   commitProposal,
   countProposals,
@@ -20,7 +20,7 @@ import type {
 } from '../../types/cdn';
 import {mockIdentity, mockSatelliteIdPrincipal} from '../mocks/cdn.mock';
 
-vi.mock(import('@junobuild/ic-client'), async (importOriginal) => {
+vi.mock(import('@junobuild/ic-client/actor'), async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

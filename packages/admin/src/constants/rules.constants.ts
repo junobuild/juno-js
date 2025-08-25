@@ -1,4 +1,4 @@
-import type {SatelliteDid} from '@junobuild/ic-client';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 
 export const DbRulesType: SatelliteDid.CollectionType = {Db: null};
 export const StorageRulesType: SatelliteDid.CollectionType = {Storage: null};

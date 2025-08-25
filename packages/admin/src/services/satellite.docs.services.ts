@@ -1,4 +1,4 @@
-import type {SatelliteParameters} from '@junobuild/ic-client';
+import type {SatelliteParameters} from '@junobuild/ic-client/actor';
 import {countDocs as countDocsApi, deleteDocs as deleteDocsApi} from '../api/satellite.api';
 
 /**

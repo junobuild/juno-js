@@ -5,9 +5,9 @@
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/node/index.mjs",
-  "module": "./dist/browser/index.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
@@ -26,13 +26,19 @@
     }
   },
   "files": [
-    "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "**/*.js",
+    "**/*.js.map",
+    "**/*.mjs",
+    "**/*.mjs.map",
+    "**/*.d.ts",
+    "**/*.d.ts.map",
+    "declarations"
   ],
   "scripts": {
     "clean": "git ls-files --others --ignored --exclude-standard | grep -v \"LICENSE\" | xargs rm -rf",
-    "ts-declaration": "tsc --emitDeclarationOnly -outDir . && cp -R src/*.d.ts ./",
+    "ts-declaration": "tsc --emitDeclarationOnly -outDir .",
     "build": "npm run clean && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },

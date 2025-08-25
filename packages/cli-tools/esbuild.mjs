@@ -2,4 +2,4 @@
 
 import {build} from '../../scripts/esbuild/build.mjs';
 
-build('node');
+build({bundle: 'node'});

@@ -8,12 +8,12 @@ import {collectEntryPoints, createDistFolder, DIST, writeEntries} from './utils.
 
 const entryPoints = collectEntryPoints();
 
-const buildBrowser = () => {
+const buildBrowser = ({multi} = {multi: false}) => {
   // esm output bundles with code splitting
   esbuild
     .build({
       entryPoints,
-      outdir: join(DIST, 'browser'),
+      outdir: multi === true ? process.cwd() : join(DIST, 'browser'),
       bundle: true,
       sourcemap: true,
       minify: true,
@@ -28,12 +28,14 @@ const buildBrowser = () => {
     .catch(() => process.exit(1));
 };
 
-const buildNode = () => {
+const buildNode = ({multi} = {multi: false}) => {
   // esm output bundle for Node
   esbuild
     .build({
       entryPoints: ['src/index.ts'],
-      outfile: join(DIST, 'node', 'index.mjs'),
+      ...(multi === true
+        ? {entryPoints, outdir: process.cwd(), outExtension: {'.js': '.mjs'}}
+        : {entryPoints: ['src/index.ts'], outfile: join(DIST, 'node', 'index.mjs')}),
       bundle: true,
       sourcemap: true,
       minify: true,
@@ -48,23 +50,30 @@ const buildNode = () => {
     .catch(() => process.exit(1));
 };
 
-export const build = (bundle = 'browser_and_node') => {
+export const build = ({bundle, multi} = {bundle: 'browser_and_node', multi: false}) => {
   createDistFolder();
 
   switch (bundle) {
     case 'browser': {
-      buildBrowser();
-      writeEntries();
+      buildBrowser({multi});
+
+      if (!multi) {
+        writeEntries();
+      }
+
       break;
     }
     case 'node': {
-      buildNode();
+      buildNode({multi});
       break;
     }
     default: {
-      buildBrowser();
-      buildNode();
-      writeEntries();
+      buildBrowser({multi});
+      buildNode({multi});
+
+      if (!multi) {
+        writeEntries();
+      }
     }
   }
 };

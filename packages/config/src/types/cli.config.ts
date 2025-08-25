@@ -16,11 +16,20 @@ export const PrecompressSchema = z.strictObject({
 export const CliConfigSchema = z.strictObject({
   source: z.string().optional(),
   ignore: z.array(z.string()).optional(),
-  precompress: z.union([PrecompressSchema, z.literal(false)]).optional(),
+  precompress: z
+    .union([PrecompressSchema, z.array(PrecompressSchema), z.literal(false)])
+    .optional(),
   encoding: z.array(z.tuple([z.string(), EncodingTypeSchema])).optional(),
   predeploy: z.array(z.string()).optional(),
   postdeploy: z.array(z.string()).optional()
 });
+
+/**
+ * Determines what happens to the original files after compression:
+ * - `"both"` — upload both original and compressed versions.
+ * - `"replace"` — upload only the compressed version (served with `Content-Encoding`).
+ */
+export type PrecompressMode = 'both' | 'replace';
 
 /**
  * Configuration for compressing files during deployment.
@@ -33,13 +42,11 @@ export interface Precompress {
   pattern?: string;
 
   /**
-   * Determines what happens to the original files after compression:
-   * - `"both"` — upload both original and compressed versions.
-   * - `"replace"` — upload only the compressed version (served with `Content-Encoding`).
-   *
+   * Determines what happens to the original files after compression.
    * @default "both"
+   * @see PrecompressMode
    */
-  mode?: 'both' | 'replace';
+  mode?: PrecompressMode;
 
   /**
    * Compression algorithm.
@@ -74,12 +81,12 @@ export interface CliConfig {
    * By default, JavaScript (.js), ES Modules (.mjs), CSS (.css), and HTML (.html)
    * are compressed, and both the original and compressed versions are uploaded.
    *
-   * Set to `false` to disable, or provide a {@link Precompress} object to customize.
+   * Set to `false` to disable, or provide one or more {@link Precompress} objects to customize.
    *
-   * @type {Precompress | false}
+   * @type {Precompress | Precompress[] | false}
    * @optional
    */
-  precompress?: Precompress | false;
+  precompress?: Precompress | Precompress[] | false;
 
   /**
    * Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension:

@@ -1,9 +1,9 @@
 import type {ActorSubclass} from '@dfinity/agent';
 import {MockInstance} from 'vitest';
-import * as actorApi from '../../api/actor.api';
-import * as agentFactory from '../../api/agent.api';
-import {mockIdentity} from '../mocks/ic-agent.mock';
-import {mockSatelliteIdText} from '../mocks/modules.mock';
+import * as actorApi from '../../../actor/api/actor.api';
+import * as agentFactory from '../../../actor/api/agent.api';
+import {mockIdentity} from '../../mocks/ic-agent.mock';
+import {mockSatelliteIdText} from '../../mocks/modules.mock';
 
 vi.mock('../../api/_agent.api', () => ({
   useOrInitAgent: vi.fn().mockResolvedValue({} as unknown as ActorSubclass)

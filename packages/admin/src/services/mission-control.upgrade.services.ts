@@ -1,10 +1,10 @@
-import type { MissionControlParameters} from '@junobuild/ic-client/actor';
+import type {MissionControlParameters} from '@junobuild/ic-client/actor';
+import {toPrincipal} from '@junobuild/ic-client/utils';
 import {getUser} from '../api/mission-control.api';
 import {INSTALL_MODE_UPGRADE} from '../constants/upgrade.constants';
 import {upgrade} from '../handlers/upgrade.handlers';
 import type {UpgradeCodeParams} from '../types/upgrade';
 import {encoreIDLUser} from '../utils/idl.utils';
-import {toPrincipal} from '@junobuild/ic-client/utils';
 
 /**
  * Upgrades the Mission Control with the provided WASM module.

@@ -26,14 +26,21 @@
     }
   },
   "files": [
-    "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "declarations",
+    "**/*.js",
+    "**/*.js.map",
+    "**/*.mjs",
+    "**/*.mjs.map",
+    "**/*.d.ts",
+    "**/*.d.ts.map"
   ],
   "scripts": {
-    "rmdir": "node ../../scripts/rmdir.mjs",
-    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist",
-    "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs && npm run ts-declaration",
+    "copy-declarations": "rm -rf declarations && cp -R src/declarations .",
+    "clean": "git ls-files --others --ignored --exclude-standard | grep -v \"LICENSE\" | xargs rm -rf",
+    "ts-declaration": "tsc --emitDeclarationOnly -outDir .",
+    "build": "npm run clean && npm run copy-declarations && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },
   "repository": {

@@ -241,7 +241,7 @@ const prepareFiles = async ({
   // For example, if a developer defines overlapping patterns in both "replace" and "both" modes
   // that reference the same file, it may appear multiple times in the list.
   // In this case, the last uploaded compressed version takes precedence, and both the source
-  // and compressed files may still be uploaded, even under a "replace" pattern.
+  // and compressed files may still be uploaded.
   // In the future, we may add assertions to prevent this scenario. For now, responsibility
   // is left to developers using multiple pre-compression strategies — which is likely rare.
   const files = [

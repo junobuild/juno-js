@@ -22,7 +22,11 @@ export const gunzipFile = async ({source}: {source: Buffer}): Promise<Buffer> =>
     gzip.on('error', reject);
   });
 
-interface CompressedFile {source: string; compressed: string; mode: 'both' | 'replace'}
+interface CompressedFile {
+  source: string;
+  compressed: string;
+  mode: 'both' | 'replace';
+}
 
 export const compressFiles = async ({
   sourceFiles,

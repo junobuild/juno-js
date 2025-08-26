@@ -25,13 +25,6 @@ export const CliConfigSchema = z.strictObject({
 });
 
 /**
- * Determines what happens to the original files after compression:
- * - `"both"` — upload both original and compressed versions.
- * - `"replace"` — upload only the compressed version (served with `Content-Encoding`).
- */
-export type PrecompressMode = 'both' | 'replace';
-
-/**
  * Configuration for compressing files during deployment.
  */
 export interface Precompress {
@@ -42,11 +35,13 @@ export interface Precompress {
   pattern?: string;
 
   /**
-   * Determines what happens to the original files after compression.
+   * Determines what happens to the original files after compression:
+   * - `"both"` — upload both original and compressed versions.
+   * - `"replace"` — upload only the compressed version (served with `Content-Encoding`).
+   *
    * @default "both"
-   * @see PrecompressMode
    */
-  mode?: PrecompressMode;
+  mode?: 'both' | 'replace';
 
   /**
    * Compression algorithm.

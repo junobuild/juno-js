@@ -716,13 +716,13 @@ Configures the hosting behavior of the Storage.
 
 Configuration for compressing files during deployment.
 
-| Property    | Type                              | Description                                                                                          |
-| ----------- | --------------------------------- | ---------------------------------------------------------------------------------------------------- | --- | --- | ---- |
-| `pattern`   | `string or undefined`             | Glob pattern for files to precompress. default: any css                                              | js  | mjs | html |
-| `mode`      | `PrecompressMode or undefined`    | Determines what happens to the original files after compression. default: "both"see: PrecompressMode |
-| `algorithm` | `"gzip" or "brotli" or undefined` | Compression algorithm. default: "gzip"                                                               |
+| Property    | Type                               | Description                                                                                                                                                                                                                      |
+| ----------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | --- | ---- |
+| `pattern`   | `string or undefined`              | Glob pattern for files to precompress. default: any css                                                                                                                                                                          | js  | mjs | html |
+| `mode`      | `"both" or "replace" or undefined` | Determines what happens to the original files after compression: - `"both"` — upload both original and compressed versions. - `"replace"` — upload only the compressed version (served with `Content-Encoding`). default: "both" |
+| `algorithm` | `"gzip" or "brotli" or undefined`  | Compression algorithm. default: "gzip"                                                                                                                                                                                           |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L37)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L30)
 
 #### :gear: CliConfig
 
@@ -737,7 +737,7 @@ The configuration used by the CLI to resolve, prepare and deploy your app.
 | `predeploy`   | `string[] or undefined`                              | Defines a list of scripts or commands to be run before the deployment process begins. This can be useful for tasks such as compiling assets, running tests, or building production-ready files. Example: `json { "predeploy": ["npm run build", "npm run lint"] } ` type: {string[]}optional                                                                                                  |
 | `postdeploy`  | `string[] or undefined`                              | Defines a list of scripts or commands to be run after the deployment process completes. This can be used for tasks such as notifications, cleanup, or sending confirmation messages to services or team members. Example: `json { "postdeploy": ["./scripts/notify-admins.sh", "echo 'Deployment complete'"] } ` type: {string[]}optional                                                     |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L61)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L56)
 
 #### :gear: SatelliteId
 
@@ -792,7 +792,6 @@ changes, typically through CLI commands (e.g., `juno config`).
 - [OrbiterConfig](#gear-orbiterconfig)
 - [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
 - [EncodingType](#gear-encodingtype)
-- [PrecompressMode](#gear-precompressmode)
 - [SatelliteConfig](#gear-satelliteconfig)
 
 #### :gear: PermissionText
@@ -884,19 +883,6 @@ The configuration for running the Juno emulator.
 | `EncodingType` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L12)
-
-#### :gear: PrecompressMode
-
-Determines what happens to the original files after compression:
-
-- `"both"` — upload both original and compressed versions.
-- `"replace"` — upload only the compressed version (served with `Content-Encoding`).
-
-| Type              | Type                  |
-| ----------------- | --------------------- |
-| `PrecompressMode` | `'both' or 'replace'` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L32)
 
 #### :gear: SatelliteConfig
 

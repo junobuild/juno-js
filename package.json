@@ -182,7 +182,8 @@
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/identity",
-        "@dfinity/principal"
+        "@dfinity/principal",
+        "@dfinity/utils"
       ]
     },
     {
@@ -193,7 +194,8 @@
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/identity",
-        "@dfinity/principal"
+        "@dfinity/principal",
+        "@dfinity/utils"
       ]
     },
     {
@@ -204,7 +206,8 @@
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/identity",
-        "@dfinity/principal"
+        "@dfinity/principal",
+        "@dfinity/utils"
       ]
     }
   ]

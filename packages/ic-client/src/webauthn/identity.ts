@@ -95,10 +95,29 @@ const assertCredentialPublicKey: (
   }
 };
 
+/**
+ * A signing identity for the Internet Computer, backed by a WebAuthn credential.
+ *
+ * Use one of the factory methods to construct an instance:
+ * - {@link WebAuthnIdentity.createWithNewCredential} to create a new passkey on the device.
+ * - {@link WebAuthnIdentity.createWithExistingCredential} to use an existing passkey.
+ *
+ * @template T Concrete credential type for this identity
+ * ({@link WebAuthnNewCredential} or {@link WebAuthnExistingCredential}).
+ */
 export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity {
   readonly #onSignProgress: WebAuthnSignProgressFn | undefined;
   #state: WebAuthnState<T>;
 
+  /**
+   * @hidden Use the factory methods instead.
+   *
+   * Initializes the identity in either:
+   * - **pending** state (existing-credential path; public key not yet known), or
+   * - **initialized** state (new-credential path; public key known immediately).
+   *
+   * @private
+   */
   private constructor({
     onProgress,
     ...args
@@ -138,6 +157,15 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
     };
   }
 
+  /**
+   * Creates a new passkey on the device and returns an initialized identity.
+   *
+   * If you chain `create` and `sign`, the user will be prompted twice to authenticate
+   * with their authenticator. You can track progress via the `onProgress` callback.
+   *
+   * @param args {@link CreateWebAuthnIdentityWithNewCredentialArgs} Options to create the passkey.
+   * @returns A {@link WebAuthnIdentity} parameterized with {@link WebAuthnNewCredential}.
+   */
   static async createWithNewCredential({
     passkeyOptions,
     timeout,
@@ -175,6 +203,12 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
     });
   }
 
+  /**
+   * Creates an identity for an existing passkey.
+   *
+   * @param args {@link CreateWebAuthnIdentityWithExistingCredentialArgs} Options to retrieve the passkey.
+   * @returns A {@link WebAuthnIdentity} parameterized with {@link WebAuthnExistingCredential}.
+   */
   // We use async for consistency reason and because it might be future prone.
   // eslint-disable-next-line require-await
   static async createWithExistingCredential(
@@ -183,6 +217,13 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
     return new WebAuthnIdentity<WebAuthnExistingCredential>(args);
   }
 
+  /**
+   * Returns the credential’s public key.
+   *
+   * @returns {PublicKey}
+   * @throws WebAuthnIdentityCredentialNotInitializedError if the identity has not signed
+   * any request yet.
+   */
   override getPublicKey(): PublicKey {
     assertWebAuthnStateInitialized(this.#state);
 
@@ -191,6 +232,16 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
     return credential.getPublicKey();
   }
 
+  /**
+   * Returns the concrete credential wrapper for this identity.
+   *
+   * For identities created with:
+   * - `createWithNewCredential` → {@link WebAuthnNewCredential}
+   * - `createWithExistingCredential` → {@link WebAuthnExistingCredential}
+   *
+   * @throws WebAuthnIdentityCredentialNotInitializedError if the identity has not signed
+   * any request yet.
+   */
   getCredential(): T {
     assertWebAuthnStateInitialized(this.#state);
 
@@ -199,6 +250,12 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
     return credential;
   }
 
+  /**
+   * Signs an arbitrary blob using the platform authenticator.
+   *
+   * @param blob Bytes to sign (used as the WebAuthn challenge).
+   * @returns {Promise<Signature>} CBOR-encoded signature payload.
+   */
   override async sign(blob: ArrayBuffer): Promise<Signature> {
     // 1. Request user credential (navigator.credentials.get)
     const requestCredential = async (): Promise<PublicKeyCredential> => {

@@ -4,7 +4,12 @@ import {AUTHENTICATOR_ABORT_TIMEOUT} from './_constants';
 import {createPasskeyOptions, retrievePasskeyOptions} from './_options';
 import {execute} from './_progress';
 import {_authDataToCose} from './agent-js/cose-utils';
-import {type InitWebAuthnCredentialArgs, WebAuthnCredential} from './credential';
+import {
+  type InitWebAuthnCredentialArgs,
+  type WebAuthnCredential,
+  WebAuthnNewCredential,
+  WebAuthnRetrievedCredential
+} from './credential';
 import {
   WebAuthnIdentityCreateCredentialOnTheDeviceError,
   WebAuthnIdentityCredentialNotInitializedError,
@@ -115,13 +120,15 @@ export class WebAuthnIdentity extends SignIdentity {
       return;
     }
 
-    this.#state = WebAuthnIdentity.#createInitializedState(args);
+    this.#state = WebAuthnIdentity.#createInitializedState({
+      credential: new WebAuthnNewCredential(args)
+    });
   }
 
-  static #createInitializedState(args: InitWebAuthnCredentialArgs): WebAuthnState {
+  static #createInitializedState({credential}: {credential: WebAuthnCredential}): WebAuthnState {
     return {
       status: 'initialized',
-      credential: new WebAuthnCredential(args)
+      credential
     };
   }
 
@@ -235,8 +242,10 @@ export class WebAuthnIdentity extends SignIdentity {
       });
 
       this.#state = WebAuthnIdentity.#createInitializedState({
-        rawId: arrayBufferToUint8Array(rawId),
-        cose
+        credential: new WebAuthnRetrievedCredential({
+          rawId: arrayBufferToUint8Array(rawId),
+          cose
+        })
       });
     };
 

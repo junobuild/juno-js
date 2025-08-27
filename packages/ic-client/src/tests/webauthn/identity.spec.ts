@@ -3,8 +3,9 @@
  */
 
 import * as agent from '@dfinity/agent';
-import type {Mock} from 'vitest';
+import type {Mock, MockInstance} from 'vitest';
 import * as agentClone from '../../webauthn/agent-js/cose-utils';
+import {WebAuthnNewCredential, WebAuthnRetrievedCredential} from '../../webauthn/credential';
 import {
   WebAuthnIdentityCreateCredentialOnTheDeviceError,
   WebAuthnIdentityCredentialNotInitializedError,
@@ -47,60 +48,76 @@ describe('WebAuthnIdentity', () => {
 
   describe('With new credential', () => {
     describe('Create WebAuthnIdentity', () => {
-      it('should create a WebAuthnIdentity initialized with new credential', async () => {
+      describe('Success', () => {
         const rawIdBytes = new Uint8Array([1, 2, 3]);
         const attestationObject = new ArrayBuffer(8);
 
-        vi.spyOn(agent.Cbor, 'decode').mockReturnValue({
-          authData: new Uint8Array([9, 9, 9])
-        } as unknown);
-        vi.spyOn(agentClone, '_authDataToCose').mockReturnValue(new Uint8Array([7, 7, 7]));
+        let spyCredentialsCreate: MockInstance;
 
-        const spy = vi.spyOn(navigator.credentials, 'create');
-        spy.mockResolvedValue({
-          type: 'public-key',
-          rawId: rawIdBytes.buffer,
-          response: {attestationObject}
-        } as unknown as PublicKeyCredential);
+        beforeEach(() => {
+          vi.spyOn(agent.Cbor, 'decode').mockReturnValue({
+            authData: new Uint8Array([9, 9, 9])
+          } as unknown);
+          vi.spyOn(agentClone, '_authDataToCose').mockReturnValue(new Uint8Array([7, 7, 7]));
 
-        const identity = await WebAuthnIdentity.createWithNewCredential();
+          spyCredentialsCreate = vi.spyOn(navigator.credentials, 'create');
+          spyCredentialsCreate.mockResolvedValue({
+            type: 'public-key',
+            rawId: rawIdBytes.buffer,
+            response: {attestationObject}
+          } as unknown as PublicKeyCredential);
+        });
 
-        expect(spy).toHaveBeenCalledTimes(1);
+        it('should create a WebAuthnIdentity initialized with new credential', async () => {
+          const identity = await WebAuthnIdentity.createWithNewCredential();
 
-        expect(navigator.credentials.create).toHaveBeenCalledTimes(1);
-        expect(agent.Cbor.decode).toHaveBeenCalledWith(attestationObject);
-        expect(agentClone._authDataToCose).toHaveBeenCalled();
+          expect(spyCredentialsCreate).toHaveBeenCalledTimes(1);
 
-        const cred = identity.getCredential();
-        expect(cred.getCredentialId()).toEqual(rawIdBytes);
-        expect(identity.getPublicKey()).toBeTruthy();
+          expect(navigator.credentials.create).toHaveBeenCalledTimes(1);
+          expect(agent.Cbor.decode).toHaveBeenCalledWith(attestationObject);
+          expect(agentClone._authDataToCose).toHaveBeenCalled();
+
+          const cred = identity.getCredential();
+          expect(cred.getCredentialId()).toEqual(rawIdBytes);
+          expect(identity.getPublicKey()).toBeTruthy();
+        });
+
+        it('should create a WebAuthnIdentity with a dedicated credential class type', async () => {
+          const identity = await WebAuthnIdentity.createWithNewCredential();
+
+          expect(identity.getCredential()).toBeInstanceOf(WebAuthnNewCredential);
+        });
       });
 
-      it('throws when device returns null', async () => {
-        vi.spyOn(navigator.credentials, 'create').mockResolvedValue(null as unknown as Credential);
-        await expect(WebAuthnIdentity.createWithNewCredential()).rejects.toBeInstanceOf(
-          WebAuthnIdentityCreateCredentialOnTheDeviceError
-        );
-      });
+      describe('Errors', () => {
+        it('throws when device returns null', async () => {
+          vi.spyOn(navigator.credentials, 'create').mockResolvedValue(
+            null as unknown as Credential
+          );
+          await expect(WebAuthnIdentity.createWithNewCredential()).rejects.toBeInstanceOf(
+            WebAuthnIdentityCreateCredentialOnTheDeviceError
+          );
+        });
 
-      it('throws when credential type is not public-key', async () => {
-        vi.spyOn(navigator.credentials, 'create').mockResolvedValue({
-          type: 'password'
-        } as Credential);
-        await expect(WebAuthnIdentity.createWithNewCredential()).rejects.toBeInstanceOf(
-          WebAuthnIdentityCredentialNotPublicKeyError
-        );
-      });
+        it('throws when credential type is not public-key', async () => {
+          vi.spyOn(navigator.credentials, 'create').mockResolvedValue({
+            type: 'password'
+          } as Credential);
+          await expect(WebAuthnIdentity.createWithNewCredential()).rejects.toBeInstanceOf(
+            WebAuthnIdentityCredentialNotPublicKeyError
+          );
+        });
 
-      it('throws when attestationObject is missing', async () => {
-        vi.spyOn(navigator.credentials, 'create').mockResolvedValue({
-          type: 'public-key',
-          rawId: new ArrayBuffer(8),
-          response: {}
-        } as unknown as PublicKeyCredential);
-        await expect(WebAuthnIdentity.createWithNewCredential()).rejects.toBeInstanceOf(
-          WebAuthnIdentityNoAttestationError
-        );
+        it('throws when attestationObject is missing', async () => {
+          vi.spyOn(navigator.credentials, 'create').mockResolvedValue({
+            type: 'public-key',
+            rawId: new ArrayBuffer(8),
+            response: {}
+          } as unknown as PublicKeyCredential);
+          await expect(WebAuthnIdentity.createWithNewCredential()).rejects.toBeInstanceOf(
+            WebAuthnIdentityNoAttestationError
+          );
+        });
       });
     });
 
@@ -251,128 +268,170 @@ describe('WebAuthnIdentity', () => {
           retrievePublicKey = vi.fn(async () => new Uint8Array([1, 2, 3]));
         });
 
-        it('should sign successfully and emit progress', async () => {
-          vi.spyOn(navigator.credentials, 'get').mockResolvedValue({
-            type: 'public-key',
-            rawId: uint8ArrayToBuffer(new Uint8Array([1, 2, 3])),
-            response: {
-              clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{"type":"webauthn.get"}')),
-              authenticatorData: new ArrayBuffer(8),
-              signature: uint8ArrayToBuffer(new Uint8Array([9, 9]))
-            }
-          } as unknown as PublicKeyCredential);
-
-          const onProgress = vi.fn();
-
-          const identity = await WebAuthnIdentity.createWithExistingCredential({
-            retrievePublicKey,
-            onProgress
+        describe('With authenticator success', () => {
+          beforeEach(() => {
+            vi.spyOn(navigator.credentials, 'get').mockResolvedValue({
+              type: 'public-key',
+              rawId: uint8ArrayToBuffer(new Uint8Array([1, 2, 3])),
+              response: {
+                clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{"type":"webauthn.get"}')),
+                authenticatorData: new ArrayBuffer(8),
+                signature: uint8ArrayToBuffer(new Uint8Array([9, 9]))
+              }
+            } as unknown as PublicKeyCredential);
           });
 
-          const signature = await identity.sign(new ArrayBuffer(4));
-          expect(signature).toBeInstanceOf(ArrayBuffer);
+          describe('Success', () => {
+            it('should sign successfully and emit progress', async () => {
+              const onProgress = vi.fn();
 
-          expect(retrievePublicKey).toHaveBeenCalledTimes(1);
+              const identity = await WebAuthnIdentity.createWithExistingCredential({
+                retrievePublicKey,
+                onProgress
+              });
 
-          const calls = onProgress.mock.calls.map((c) => c[0]);
+              const signature = await identity.sign(new ArrayBuffer(4));
+              expect(signature).toBeInstanceOf(ArrayBuffer);
 
-          expect(calls).toEqual([
-            {step: WebAuthnSignProgressStep.RequestingUserCredential, state: 'in_progress'},
-            {step: WebAuthnSignProgressStep.RequestingUserCredential, state: 'success'},
-            {step: WebAuthnSignProgressStep.FinalizingCredential, state: 'in_progress'},
-            {step: WebAuthnSignProgressStep.FinalizingCredential, state: 'success'},
-            {step: WebAuthnSignProgressStep.Signing, state: 'in_progress'},
-            {step: WebAuthnSignProgressStep.Signing, state: 'success'}
-          ]);
+              expect(retrievePublicKey).toHaveBeenCalledTimes(1);
+
+              const calls = onProgress.mock.calls.map((c) => c[0]);
+
+              expect(calls).toEqual([
+                {step: WebAuthnSignProgressStep.RequestingUserCredential, state: 'in_progress'},
+                {step: WebAuthnSignProgressStep.RequestingUserCredential, state: 'success'},
+                {step: WebAuthnSignProgressStep.FinalizingCredential, state: 'in_progress'},
+                {step: WebAuthnSignProgressStep.FinalizingCredential, state: 'success'},
+                {step: WebAuthnSignProgressStep.Signing, state: 'in_progress'},
+                {step: WebAuthnSignProgressStep.Signing, state: 'success'}
+              ]);
+            });
+
+            it('should create credential with dedicated class type', async () => {
+              const identity = await WebAuthnIdentity.createWithExistingCredential({
+                retrievePublicKey,
+                onProgress: vi.fn()
+              });
+
+              await identity.sign(new ArrayBuffer(4));
+
+              expect(identity.getCredential()).toBeInstanceOf(WebAuthnRetrievedCredential);
+            });
+          });
+
+          describe('Errors', () => {
+            it('should throw error when getting credential if identity not yet signed', async () => {
+              const identity = await WebAuthnIdentity.createWithExistingCredential({
+                retrievePublicKey,
+                onProgress: vi.fn()
+              });
+
+              expect(() => identity.getCredential()).toThrow(
+                WebAuthnIdentityCredentialNotInitializedError
+              );
+            });
+          });
         });
 
-        it('should throw when navigator.credentials.get returns null', async () => {
-          vi.spyOn(navigator.credentials, 'get').mockResolvedValue(
-            null as unknown as PublicKeyCredential
-          );
+        describe('Errors', () => {
+          it('should throw when navigator.credentials.get returns null', async () => {
+            vi.spyOn(navigator.credentials, 'get').mockResolvedValue(
+              null as unknown as PublicKeyCredential
+            );
 
-          const identity = await WebAuthnIdentity.createWithExistingCredential({retrievePublicKey});
+            const identity = await WebAuthnIdentity.createWithExistingCredential({
+              retrievePublicKey
+            });
 
-          await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
-            WebAuthnIdentityCreateCredentialOnTheDeviceError
-          );
-        });
+            await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+              WebAuthnIdentityCreateCredentialOnTheDeviceError
+            );
+          });
 
-        it('should throw when credential type is not public-key', async () => {
-          vi.spyOn(navigator.credentials, 'get').mockResolvedValue({
-            type: 'password'
-          } as unknown as PublicKeyCredential);
+          it('should throw when credential type is not public-key', async () => {
+            vi.spyOn(navigator.credentials, 'get').mockResolvedValue({
+              type: 'password'
+            } as unknown as PublicKeyCredential);
 
-          const identity = await WebAuthnIdentity.createWithExistingCredential({retrievePublicKey});
+            const identity = await WebAuthnIdentity.createWithExistingCredential({
+              retrievePublicKey
+            });
 
-          await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
-            WebAuthnIdentityCredentialNotPublicKeyError
-          );
-        });
+            await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+              WebAuthnIdentityCredentialNotPublicKeyError
+            );
+          });
 
-        it('should throw when authenticatorData is missing', async () => {
-          vi.spyOn(navigator.credentials, 'get').mockResolvedValue({
-            type: 'public-key',
-            rawId: uint8ArrayToBuffer(new Uint8Array([1, 2, 3])),
-            response: {
-              clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{}')),
-              signature: uint8ArrayToBuffer(new Uint8Array([1]))
-            }
-          } as unknown as PublicKeyCredential);
+          it('should throw when authenticatorData is missing', async () => {
+            vi.spyOn(navigator.credentials, 'get').mockResolvedValue({
+              type: 'public-key',
+              rawId: uint8ArrayToBuffer(new Uint8Array([1, 2, 3])),
+              response: {
+                clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{}')),
+                signature: uint8ArrayToBuffer(new Uint8Array([1]))
+              }
+            } as unknown as PublicKeyCredential);
 
-          const identity = await WebAuthnIdentity.createWithExistingCredential({retrievePublicKey});
+            const identity = await WebAuthnIdentity.createWithExistingCredential({
+              retrievePublicKey
+            });
 
-          await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
-            WebAuthnIdentityNoAuthenticatorDataError
-          );
-        });
+            await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+              WebAuthnIdentityNoAuthenticatorDataError
+            );
+          });
 
-        it('should throw when signature is missing', async () => {
-          vi.spyOn(navigator.credentials, 'get').mockResolvedValue({
-            type: 'public-key',
-            rawId: uint8ArrayToBuffer(new Uint8Array([1, 2, 3])),
-            response: {
-              clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{}')),
-              authenticatorData: new ArrayBuffer(2)
-            }
-          } as unknown as PublicKeyCredential);
+          it('should throw when signature is missing', async () => {
+            vi.spyOn(navigator.credentials, 'get').mockResolvedValue({
+              type: 'public-key',
+              rawId: uint8ArrayToBuffer(new Uint8Array([1, 2, 3])),
+              response: {
+                clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{}')),
+                authenticatorData: new ArrayBuffer(2)
+              }
+            } as unknown as PublicKeyCredential);
 
-          const identity = await WebAuthnIdentity.createWithExistingCredential({retrievePublicKey});
+            const identity = await WebAuthnIdentity.createWithExistingCredential({
+              retrievePublicKey
+            });
 
-          await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
-            WebAuthnIdentityNoAuthenticatorDataError
-          );
-        });
+            await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+              WebAuthnIdentityNoAuthenticatorDataError
+            );
+          });
 
-        it('should throw on second sign when credential id mismatches after initialization', async () => {
-          const firstGet = vi.spyOn(navigator.credentials, 'get');
-          firstGet.mockResolvedValueOnce({
-            type: 'public-key',
-            rawId: uint8ArrayToBuffer(new Uint8Array([1, 2, 3])),
-            response: {
-              clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{}')),
-              authenticatorData: new ArrayBuffer(2),
-              signature: uint8ArrayToBuffer(new Uint8Array([1]))
-            }
-          } as unknown as PublicKeyCredential);
+          it('should throw on second sign when credential id mismatches after initialization', async () => {
+            const firstGet = vi.spyOn(navigator.credentials, 'get');
+            firstGet.mockResolvedValueOnce({
+              type: 'public-key',
+              rawId: uint8ArrayToBuffer(new Uint8Array([1, 2, 3])),
+              response: {
+                clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{}')),
+                authenticatorData: new ArrayBuffer(2),
+                signature: uint8ArrayToBuffer(new Uint8Array([1]))
+              }
+            } as unknown as PublicKeyCredential);
 
-          const identity = await WebAuthnIdentity.createWithExistingCredential({retrievePublicKey});
+            const identity = await WebAuthnIdentity.createWithExistingCredential({
+              retrievePublicKey
+            });
 
-          await identity.sign(new ArrayBuffer(1));
+            await identity.sign(new ArrayBuffer(1));
 
-          firstGet.mockResolvedValueOnce({
-            type: 'public-key',
-            rawId: uint8ArrayToBuffer(new Uint8Array([9, 9, 9])),
-            response: {
-              clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{}')),
-              authenticatorData: new ArrayBuffer(2),
-              signature: uint8ArrayToBuffer(new Uint8Array([1]))
-            }
-          } as unknown as PublicKeyCredential);
+            firstGet.mockResolvedValueOnce({
+              type: 'public-key',
+              rawId: uint8ArrayToBuffer(new Uint8Array([9, 9, 9])),
+              response: {
+                clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{}')),
+                authenticatorData: new ArrayBuffer(2),
+                signature: uint8ArrayToBuffer(new Uint8Array([1]))
+              }
+            } as unknown as PublicKeyCredential);
 
-          await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
-            WebAuthnIdentityInvalidCredentialIdError
-          );
+            await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+              WebAuthnIdentityInvalidCredentialIdError
+            );
+          });
         });
       });
 

@@ -18,12 +18,11 @@ export interface InitWebAuthnCredentialArgs {
 }
 
 /**
- * A wrapper around a WebAuthn credential that provides various useful information such as its ID or public key.
+ * A wrapper around a WebAuthn credential that provides various base information such as its ID or public key.
  */
-export class WebAuthnCredential {
+export abstract class WebAuthnCredential {
   readonly #credentialId: Uint8Array;
   readonly #publicKey: CosePublicKey;
-  // TODO: more fields like AAGUID?
 
   /**
    * @param args - {@link InitWebAuthnCredentialArgs} used to initialize the credential.
@@ -56,3 +55,17 @@ export class WebAuthnCredential {
     return uint8ArrayToBase64(this.#credentialId);
   }
 }
+
+/**
+ * A wrapper around a newly created WebAuthn credential.
+ * It is created using `navigator.credentials.create` which provides an attestation.
+ */
+export class WebAuthnNewCredential extends WebAuthnCredential {
+  // TODO: more fields like AAGUID?
+}
+
+/**
+ * A wrapper around a retrieval of existing WebAuthn credential.
+ * It is created using `navigator.credentials.get` which provides an assertion.
+ */
+export class WebAuthnRetrievedCredential extends WebAuthnCredential {}

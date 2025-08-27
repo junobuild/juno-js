@@ -1,4 +1,4 @@
-import {WebAuthnSignProgress, WebAuthnSignProgressArgs} from './types/progress';
+import type {WebAuthnSignProgress, WebAuthnSignProgressArgs} from './types/progress';
 
 export const execute = async <T>({
   fn,

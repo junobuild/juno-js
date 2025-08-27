@@ -68,4 +68,4 @@ export class WebAuthnNewCredential extends WebAuthnCredential {
  * A wrapper around a retrieval of existing WebAuthn credential.
  * It is created using `navigator.credentials.get` which provides an assertion.
  */
-export class WebAuthnRetrievedCredential extends WebAuthnCredential {}
+export class WebAuthnExistingCredential extends WebAuthnCredential {}

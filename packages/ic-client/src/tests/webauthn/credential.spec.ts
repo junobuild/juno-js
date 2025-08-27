@@ -1,6 +1,6 @@
 import {uint8ArrayToBase64} from '@dfinity/utils';
 import {CosePublicKey} from '../../webauthn/agent-js/cose-key';
-import {WebAuthnNewCredential, WebAuthnRetrievedCredential} from '../../webauthn/credential';
+import {WebAuthnExistingCredential, WebAuthnNewCredential} from '../../webauthn/credential';
 
 describe('WebAuthnCredential', () => {
   const rawId = new Uint8Array([1, 2, 3, 4]);
@@ -8,7 +8,7 @@ describe('WebAuthnCredential', () => {
 
   const cases = [
     ['WebAuthnNewCredential', WebAuthnNewCredential],
-    ['WebAuthnRetrievedCredential', WebAuthnRetrievedCredential]
+    ['WebAuthnRetrievedCredential', WebAuthnExistingCredential]
   ] as const;
 
   cases.forEach(([name, Ctor]) => {

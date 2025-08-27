@@ -7,8 +7,8 @@ import {_authDataToCose} from './agent-js/cose-utils';
 import {
   type InitWebAuthnCredentialArgs,
   type WebAuthnCredential,
-  WebAuthnNewCredential,
-  WebAuthnRetrievedCredential
+  WebAuthnExistingCredential,
+  WebAuthnNewCredential
 } from './credential';
 import {
   WebAuthnIdentityCreateCredentialOnTheDeviceError,
@@ -179,8 +179,8 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
   // eslint-disable-next-line require-await
   static async createWithExistingCredential(
     args: CreateWebAuthnIdentityWithExistingCredentialArgs
-  ): Promise<WebAuthnIdentity<WebAuthnRetrievedCredential>> {
-    return new WebAuthnIdentity<WebAuthnRetrievedCredential>(args);
+  ): Promise<WebAuthnIdentity<WebAuthnExistingCredential>> {
+    return new WebAuthnIdentity<WebAuthnExistingCredential>(args);
   }
 
   override getPublicKey(): PublicKey {
@@ -250,7 +250,7 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
       });
 
       this.#state = WebAuthnIdentity.#createInitializedState({
-        credential: new WebAuthnRetrievedCredential({
+        credential: new WebAuthnExistingCredential({
           rawId: arrayBufferToUint8Array(rawId),
           cose
         }) as T

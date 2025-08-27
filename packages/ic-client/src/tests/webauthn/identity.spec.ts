@@ -5,7 +5,7 @@
 import * as agent from '@dfinity/agent';
 import type {Mock, MockInstance} from 'vitest';
 import * as agentClone from '../../webauthn/agent-js/cose-utils';
-import {WebAuthnNewCredential, WebAuthnRetrievedCredential} from '../../webauthn/credential';
+import {WebAuthnExistingCredential, WebAuthnNewCredential} from '../../webauthn/credential';
 import {
   WebAuthnIdentityCreateCredentialOnTheDeviceError,
   WebAuthnIdentityCredentialNotInitializedError,
@@ -315,7 +315,7 @@ describe('WebAuthnIdentity', () => {
 
               await identity.sign(new ArrayBuffer(4));
 
-              expect(identity.getCredential()).toBeInstanceOf(WebAuthnRetrievedCredential);
+              expect(identity.getCredential()).toBeInstanceOf(WebAuthnExistingCredential);
             });
           });
 

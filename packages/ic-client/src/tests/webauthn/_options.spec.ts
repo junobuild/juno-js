@@ -54,6 +54,13 @@ describe('_options', () => {
       });
     });
 
+    it('should set the passkey as discoverable', () => {
+      const opts = createPasskeyOptions({});
+
+      expect(opts.authenticatorSelection?.residentKey).toEqual('required');
+      expect(opts.authenticatorSelection?.requireResidentKey === true).toBeTruthy();
+    });
+
     it('should use appId to override relying party default values', () => {
       const opts = createPasskeyOptions({
         appId: {id: 'mydomain.com', name: 'My app'}

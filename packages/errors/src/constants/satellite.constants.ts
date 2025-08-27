@@ -49,3 +49,5 @@ export const JUNO_DATASTORE_ERROR_USER_WEBAUTHN_INVALID_DATA =
   'juno.datastore.error.user.webauthn.invalid_data';
 export const JUNO_DATASTORE_ERROR_USER_WEBAUTHN_CALLER_KEY =
   'juno.datastore.error.user.webauthn.caller_key';
+export const JUNO_DATASTORE_ERROR_USER_WEBAUTHN_AAGUID_INVALID_LENGTH =
+  'juno.datastore.error.user.webauthn.aaguid_invalid_length';

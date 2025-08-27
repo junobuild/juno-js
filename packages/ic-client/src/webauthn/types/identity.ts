@@ -9,7 +9,8 @@ export interface AuthenticatorOptions {
   passkeyOptions?: CreatePasskeyOptions;
 }
 
-export type CreateWebAuthnIdentityWithNewCredentialArgs = AuthenticatorOptions & WebAuthnSignProgressArgs;
+export type CreateWebAuthnIdentityWithNewCredentialArgs = AuthenticatorOptions &
+  WebAuthnSignProgressArgs;
 
 export type CreateWebAuthnIdentityWithExistingCredentialArgs = AuthenticatorOptions & {
   retrievePublicKey: RetrievePublicKeyFn;

@@ -1,3 +1,4 @@
+export * from './webauthn/credential';
 export * from './webauthn/errors';
 export * from './webauthn/identity';
 export type * from './webauthn/types/agent';

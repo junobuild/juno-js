@@ -1,14 +1,10 @@
-import {Cbor, PublicKey, type Signature, SignIdentity} from '@dfinity/agent';
-import {
-  arrayBufferToUint8Array,
-  isNullish,
-  uint8ArraysEqual,
-  uint8ArrayToBase64
-} from '@dfinity/utils';
-import {_authDataToCose, CosePublicKey} from './_agent';
+import { type PublicKey,Cbor, type Signature, SignIdentity} from '@dfinity/agent';
+import {arrayBufferToUint8Array, isNullish, uint8ArraysEqual} from '@dfinity/utils';
+import {_authDataToCose} from './_agent';
 import {AUTHENTICATOR_ABORT_TIMEOUT} from './_constants';
 import {createPasskeyOptions, retrievePasskeyOptions} from './_options';
 import {execute} from './_progress';
+import {type InitWebAuthnCredentialArgs, WebAuthnCredential} from './credential';
 import {
   WebAuthnIdentityCreateCredentialOnTheDeviceError,
   WebAuthnIdentityCredentialNotInitializedError,
@@ -18,16 +14,15 @@ import {
   WebAuthnIdentityNoAttestationError,
   WebAuthnIdentityNoAuthenticatorDataError
 } from './errors';
-import type {CoseEncodedKey} from './types/agent';
-import {
+import type {
   AuthenticatorOptions,
   CreateWebAuthnIdentityWithExistingCredentialArgs,
   CreateWebAuthnIdentityWithNewCredentialArgs,
   RetrievePublicKeyFn
 } from './types/identity';
 import {
-  WebAuthnSignProgressArgs,
-  WebAuthnSignProgressFn,
+  type WebAuthnSignProgressArgs,
+  type WebAuthnSignProgressFn,
   WebAuthnSignProgressStep
 } from './types/progress';
 
@@ -61,20 +56,9 @@ const retrieveCredentials = async ({
     signal: createAbortSignal({timeout})
   });
 
-interface WebAuthnCredential {
-  credentialId: Uint8Array;
-  publicKey: CosePublicKey;
-  // TODO: more fields like AAGUID?
-}
-
 type WebAuthnState =
   | {status: 'pending'; retrievePublicKey: RetrievePublicKeyFn}
   | {status: 'initialized'; credential: WebAuthnCredential};
-
-interface WebAuthnCreateInitializedStateArgs {
-  rawId: Uint8Array;
-  cose: CoseEncodedKey;
-}
 
 const assertWebAuthnStateInitialized: (state: WebAuthnState) => asserts state is {
   status: 'initialized';
@@ -102,15 +86,15 @@ const assertCredentialPublicKey: (
 };
 
 export class WebAuthnIdentity extends SignIdentity {
-  #state: WebAuthnState;
   readonly #onSignProgress: WebAuthnSignProgressFn | undefined;
+  #state: WebAuthnState;
 
   private constructor({
     onProgress,
     ...args
   }: WebAuthnSignProgressArgs &
     (
-      | WebAuthnCreateInitializedStateArgs
+      | InitWebAuthnCredentialArgs
       | Pick<CreateWebAuthnIdentityWithExistingCredentialArgs, 'retrievePublicKey'>
     )) {
     super();
@@ -131,16 +115,10 @@ export class WebAuthnIdentity extends SignIdentity {
     this.#state = WebAuthnIdentity.#createInitializedState(args);
   }
 
-  static #createInitializedState({
-    rawId: credentialId,
-    cose
-  }: WebAuthnCreateInitializedStateArgs): WebAuthnState {
+  static #createInitializedState(args: InitWebAuthnCredentialArgs): WebAuthnState {
     return {
       status: 'initialized',
-      credential: {
-        credentialId,
-        publicKey: new CosePublicKey(cose)
-      }
+      credential: new WebAuthnCredential(args)
     };
   }
 
@@ -188,32 +166,17 @@ export class WebAuthnIdentity extends SignIdentity {
   override getPublicKey(): PublicKey {
     assertWebAuthnStateInitialized(this.#state);
 
-    const {
-      credential: {publicKey}
-    } = this.#state;
+    const {credential} = this.#state;
 
-    return publicKey;
+    return credential.getPublicKey();
   }
 
-  getCredentialId(): Uint8Array {
+  getCredential(): WebAuthnCredential {
     assertWebAuthnStateInitialized(this.#state);
 
-    const {
-      credential: {credentialId}
-    } = this.#state;
+    const {credential} = this.#state;
 
-    return credentialId;
-  }
-
-  // TODO: maybe a class for Credential?
-  getAnchorId(): string {
-    assertWebAuthnStateInitialized(this.#state);
-
-    const {
-      credential: {credentialId}
-    } = this.#state;
-
-    return uint8ArrayToBase64(credentialId);
+    return credential;
   }
 
   override async sign(blob: ArrayBuffer): Promise<Signature> {
@@ -222,7 +185,7 @@ export class WebAuthnIdentity extends SignIdentity {
       const credential = await retrieveCredentials({
         challenge: arrayBufferToUint8Array(blob),
         ...(this.#state.status === 'initialized' && {
-          credentialIds: [this.#state.credential.credentialId]
+          credentialIds: [this.#state.credential.getCredentialId()]
         })
       });
 
@@ -247,7 +210,7 @@ export class WebAuthnIdentity extends SignIdentity {
       if (this.#state.status === 'initialized') {
         if (
           !uint8ArraysEqual({
-            a: this.#state.credential.credentialId,
+            a: this.#state.credential.getCredentialId(),
             b: arrayBufferToUint8Array(rawId)
           })
         ) {

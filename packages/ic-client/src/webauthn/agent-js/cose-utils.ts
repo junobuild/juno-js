@@ -2,7 +2,7 @@ import {DER_COSE_OID, wrapDER, type DerEncodedPublicKey} from '@dfinity/agent';
 
 /**
  * ⚠️ !!!WARNING!!! ⚠️
- * This module is a copy/paste of the webauthn functions and classes not exposed by Agent-js.
+ * This module is a copy/paste of the webauthn functions not exposed by Agent-js.
  * It is therefore not covered by any tests (‼️) in this library.
  *
  * @see https://github.com/dfinity/agent-js/blob/main/packages/identity/src/identity/webauthn.ts

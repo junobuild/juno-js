@@ -3,7 +3,7 @@
  */
 
 import * as agent from '@dfinity/agent';
-import {beforeEach, Mock} from 'vitest';
+import type {Mock} from 'vitest';
 import * as agentClone from '../../webauthn/_agent';
 import {
   WebAuthnIdentityCreateCredentialOnTheDeviceError,

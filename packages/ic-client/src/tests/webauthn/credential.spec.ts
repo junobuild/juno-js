@@ -46,23 +46,38 @@ describe('WebAuthnCredential', () => {
       expect(cred.getPublicKey()).toBeInstanceOf(CosePublicKey);
     });
 
-    it('should extract AAGUID from attestation authData', () => {
-      const authData = makeAuthData({len: 53, aaguidBytes: hexToBytes({aaguid})});
+    it('should extract AAGUID bytes and text from attestation authData', () => {
+      const aaguidU8 = hexToBytes({aaguid});
+      const authData = makeAuthData({len: 53, aaguidBytes: aaguidU8});
       const cred = new WebAuthnNewCredential({rawId, cose, authData});
-      expect(cred.getAAGUID()).toBe(aaguid);
+
+      expect(cred.getAAGUID()).toEqual(Array.from(aaguidU8)); // bytes: number[]
+      expect(cred.getAAGUIDText()).toBe(aaguid); // text
     });
 
     it('should return undefined for zero/unknown AAGUID', () => {
       const zeros = new Uint8Array(16);
       const authData = makeAuthData({len: 53, aaguidBytes: zeros});
       const cred = new WebAuthnNewCredential({rawId, cose, authData});
+
       expect(cred.getAAGUID()).toBeUndefined();
+      expect(cred.getAAGUIDText()).toBeUndefined();
     });
 
     it('should return undefined when authData is too short to contain AAGUID', () => {
       const authData = makeAuthData({len: 52});
       const cred = new WebAuthnNewCredential({rawId, cose, authData});
+
       expect(cred.getAAGUID()).toBeUndefined();
+      expect(cred.getAAGUIDText()).toBeUndefined();
+    });
+
+    it('should produce lowercase hyphenated AAGUID text', () => {
+      const upper = 'ABCDEF12-3456-7890-ABCD-EF1234567890';
+      const authData = makeAuthData({len: 53, aaguidBytes: hexToBytes({aaguid: upper})});
+      const cred = new WebAuthnNewCredential({rawId, cose, authData});
+
+      expect(cred.getAAGUIDText()).toBe(upper.toLowerCase());
     });
   });
 });

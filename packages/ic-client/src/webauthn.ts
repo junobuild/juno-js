@@ -1,3 +1,4 @@
+export {bytesToAAGUID} from './webauthn/aaguid';
 export * from './webauthn/agent-js/cose-key';
 export * from './webauthn/credential';
 export * from './webauthn/errors';

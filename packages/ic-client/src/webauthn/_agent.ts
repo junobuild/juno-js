@@ -1,4 +1,4 @@
-import { type PublicKey,DER_COSE_OID, wrapDER, type DerEncodedPublicKey} from '@dfinity/agent';
+import {DER_COSE_OID, wrapDER, type DerEncodedPublicKey, type PublicKey} from '@dfinity/agent';
 
 /**
  * ⚠️ !!!WARNING!!! ⚠️

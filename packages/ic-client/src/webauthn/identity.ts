@@ -5,8 +5,8 @@ import {createPasskeyOptions, retrievePasskeyOptions} from './_options';
 import {execute} from './_progress';
 import {_authDataToCose} from './agent-js/cose-utils';
 import {
-  type WebAuthnCredential,
   type InitWebAuthnCredentialArgs,
+  type WebAuthnCredential,
   WebAuthnNewCredential,
   WebAuthnRetrievedCredential
 } from './credential';

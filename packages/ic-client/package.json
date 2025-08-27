@@ -19,6 +19,11 @@
       "import": "./actor.js",
       "require": "./actor.mjs"
     },
+    "./webauthn": {
+      "types": "./webauthn.d.ts",
+      "import": "./webauthn.js",
+      "require": "./webauthn.mjs"
+    },
     "./utils": {
       "types": "./utils.d.ts",
       "import": "./utils.js",

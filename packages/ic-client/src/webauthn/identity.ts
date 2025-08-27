@@ -1,4 +1,4 @@
-import { type PublicKey,Cbor, type Signature, SignIdentity} from '@dfinity/agent';
+import {Cbor, type PublicKey, type Signature, SignIdentity} from '@dfinity/agent';
 import {arrayBufferToUint8Array, isNullish, uint8ArraysEqual} from '@dfinity/utils';
 import {_authDataToCose} from './_agent';
 import {AUTHENTICATOR_ABORT_TIMEOUT} from './_constants';
@@ -286,7 +286,4 @@ export class WebAuthnIdentity extends SignIdentity {
       onProgress: this.#onSignProgress
     });
   }
-
-  // TODO: fomJson
-  // TODO: toJson
 }

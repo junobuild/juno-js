@@ -4,7 +4,7 @@
 
 import {PUBLIC_KEY_COSE_ALGORITHMS} from '../../webauthn/_constants';
 import {createPasskeyOptions, retrievePasskeyOptions} from '../../webauthn/_options';
-import {WebAuthnHostnameError} from '../../webauthn/errors';
+import {WebAuthnIdentityHostnameError} from '../../webauthn/errors';
 
 describe('_options', () => {
   const originalTitle = document.title;
@@ -91,7 +91,7 @@ describe('_options', () => {
         .spyOn(URL as unknown as {parse(href: string): URL | null}, 'parse')
         .mockReturnValue(null as unknown as URL);
 
-      expect(() => createPasskeyOptions({})).toThrow(WebAuthnHostnameError);
+      expect(() => createPasskeyOptions({})).toThrow(WebAuthnIdentityHostnameError);
 
       spy.mockRestore();
     });
@@ -118,7 +118,7 @@ describe('_options', () => {
         .spyOn(URL as unknown as {parse(href: string): URL | null}, 'parse')
         .mockReturnValue(null as unknown as URL);
 
-      expect(() => retrievePasskeyOptions({})).toThrow(WebAuthnHostnameError);
+      expect(() => retrievePasskeyOptions({})).toThrow(WebAuthnIdentityHostnameError);
 
       spy.mockRestore();
     });

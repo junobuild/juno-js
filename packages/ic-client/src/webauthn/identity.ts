@@ -64,14 +64,16 @@ const retrieveCredentials = async ({
     signal: createAbortSignal({timeout})
   });
 
-type WebAuthnState =
+type WebAuthnState<T extends WebAuthnCredential> =
   | {status: 'pending'; retrievePublicKey: RetrievePublicKeyFn}
-  | {status: 'initialized'; credential: WebAuthnCredential};
+  | {status: 'initialized'; credential: T};
 
-const assertWebAuthnStateInitialized: (state: WebAuthnState) => asserts state is {
+const assertWebAuthnStateInitialized: <T extends WebAuthnCredential>(
+  state: WebAuthnState<T>
+) => asserts state is {
   status: 'initialized';
-  credential: WebAuthnCredential;
-} = (state: WebAuthnState): void => {
+  credential: T;
+} = <T extends WebAuthnCredential>(state: WebAuthnState<T>): void => {
   if (state.status !== 'initialized') {
     throw new WebAuthnIdentityCredentialNotInitializedError();
   }
@@ -93,9 +95,9 @@ const assertCredentialPublicKey: (
   }
 };
 
-export class WebAuthnIdentity extends SignIdentity {
+export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity {
   readonly #onSignProgress: WebAuthnSignProgressFn | undefined;
-  #state: WebAuthnState;
+  #state: WebAuthnState<T>;
 
   private constructor({
     onProgress,
@@ -121,11 +123,15 @@ export class WebAuthnIdentity extends SignIdentity {
     }
 
     this.#state = WebAuthnIdentity.#createInitializedState({
-      credential: new WebAuthnNewCredential(args)
+      credential: new WebAuthnNewCredential(args) as T
     });
   }
 
-  static #createInitializedState({credential}: {credential: WebAuthnCredential}): WebAuthnState {
+  static #createInitializedState<T extends WebAuthnCredential>({
+    credential
+  }: {
+    credential: T;
+  }): WebAuthnState<T> {
     return {
       status: 'initialized',
       credential
@@ -136,7 +142,9 @@ export class WebAuthnIdentity extends SignIdentity {
     passkeyOptions,
     timeout,
     ...restArgs
-  }: CreateWebAuthnIdentityWithNewCredentialArgs = {}): Promise<WebAuthnIdentity> {
+  }: CreateWebAuthnIdentityWithNewCredentialArgs = {}): Promise<
+    WebAuthnIdentity<WebAuthnNewCredential>
+  > {
     const credential = await navigator.credentials.create({
       publicKey: createPasskeyOptions(passkeyOptions),
       signal: createAbortSignal({timeout})
@@ -160,7 +168,7 @@ export class WebAuthnIdentity extends SignIdentity {
 
     const cose = _authDataToCose(authData);
 
-    return new WebAuthnIdentity({
+    return new WebAuthnIdentity<WebAuthnNewCredential>({
       ...restArgs,
       rawId: arrayBufferToUint8Array(rawId),
       cose
@@ -171,8 +179,8 @@ export class WebAuthnIdentity extends SignIdentity {
   // eslint-disable-next-line require-await
   static async createWithExistingCredential(
     args: CreateWebAuthnIdentityWithExistingCredentialArgs
-  ): Promise<WebAuthnIdentity> {
-    return new WebAuthnIdentity(args);
+  ): Promise<WebAuthnIdentity<WebAuthnRetrievedCredential>> {
+    return new WebAuthnIdentity<WebAuthnRetrievedCredential>(args);
   }
 
   override getPublicKey(): PublicKey {
@@ -183,7 +191,7 @@ export class WebAuthnIdentity extends SignIdentity {
     return credential.getPublicKey();
   }
 
-  getCredential(): WebAuthnCredential {
+  getCredential(): T {
     assertWebAuthnStateInitialized(this.#state);
 
     const {credential} = this.#state;
@@ -245,7 +253,7 @@ export class WebAuthnIdentity extends SignIdentity {
         credential: new WebAuthnRetrievedCredential({
           rawId: arrayBufferToUint8Array(rawId),
           cose
-        })
+        }) as T
       });
     };
 

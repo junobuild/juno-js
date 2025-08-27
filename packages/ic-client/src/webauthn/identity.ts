@@ -157,6 +157,8 @@ export class WebAuthnIdentity extends SignIdentity {
     });
   }
 
+  // We use async for consistency reason and because it might be future prone.
+  // eslint-disable-next-line require-await
   static async createWithExistingCredential(
     args: CreateWebAuthnIdentityWithExistingCredentialArgs
   ): Promise<WebAuthnIdentity> {
@@ -242,6 +244,7 @@ export class WebAuthnIdentity extends SignIdentity {
     });
 
     // 3. Sign the request
+    // eslint-disable-next-line require-await
     const encodeSignature = async (): Promise<Signature> => {
       const {response} = credential;
 

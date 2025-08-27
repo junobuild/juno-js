@@ -4,7 +4,7 @@
 
 import * as agent from '@dfinity/agent';
 import type {Mock} from 'vitest';
-import * as agentClone from '../../webauthn/agent';
+import * as agentClone from '../../webauthn/agent-js/cose-utils';
 import {
   WebAuthnIdentityCreateCredentialOnTheDeviceError,
   WebAuthnIdentityCredentialNotInitializedError,

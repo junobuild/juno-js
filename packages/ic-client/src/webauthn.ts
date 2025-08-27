@@ -1,8 +1,7 @@
-export * from './webauthn/agent';
+export * from './webauthn/agent-js/cose-key';
 export * from './webauthn/credential';
 export * from './webauthn/errors';
 export * from './webauthn/identity';
-export type * from './webauthn/types/agent';
 export type * from './webauthn/types/identity';
 export type * from './webauthn/types/passkey';
 export type * from './webauthn/types/progress';

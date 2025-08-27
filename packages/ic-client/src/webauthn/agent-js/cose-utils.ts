@@ -1,5 +1,4 @@
-import {DER_COSE_OID, wrapDER, type DerEncodedPublicKey, type PublicKey} from '@dfinity/agent';
-import type {CoseEncodedKey} from './types/agent';
+import {DER_COSE_OID, wrapDER, type DerEncodedPublicKey} from '@dfinity/agent';
 
 /**
  * ⚠️ !!!WARNING!!! ⚠️
@@ -28,22 +27,6 @@ export function _authDataToCose(authData: Uint8Array): Uint8Array {
   return authData.slice(55 + credentialIdLength);
 }
 
-function _coseToDerEncodedBlob(cose: Uint8Array): DerEncodedPublicKey {
+export function _coseToDerEncodedBlob(cose: Uint8Array): DerEncodedPublicKey {
   return wrapDER(cose.buffer as ArrayBuffer, DER_COSE_OID).buffer as DerEncodedPublicKey;
-}
-
-export class CosePublicKey implements PublicKey {
-  protected _encodedKey: DerEncodedPublicKey;
-
-  public constructor(protected _cose: CoseEncodedKey) {
-    this._encodedKey = _coseToDerEncodedBlob(_cose);
-  }
-
-  public toDer(): DerEncodedPublicKey {
-    return this._encodedKey;
-  }
-
-  public getCose(): Uint8Array {
-    return this._cose;
-  }
 }

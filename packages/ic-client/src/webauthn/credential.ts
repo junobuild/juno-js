@@ -1,7 +1,6 @@
 import type {PublicKey} from '@dfinity/agent';
 import {uint8ArrayToBase64} from '@dfinity/utils';
-import {CosePublicKey} from './agent';
-import type {CoseEncodedKey} from './types/agent';
+import {type CoseEncodedKey, CosePublicKey} from './agent-js/cose-key';
 
 /**
  * Arguments to initialize a WebAuthn object.

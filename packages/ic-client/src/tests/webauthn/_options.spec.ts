@@ -15,7 +15,7 @@ describe('_options', () => {
       href: 'https://app.example.com/welcome'
     });
 
-    document.title = 'Acme';
+    document.title = 'Hello World';
   });
 
   afterAll(() => {
@@ -33,12 +33,12 @@ describe('_options', () => {
       expect(opts.challenge as Uint8Array).toHaveLength(16);
 
       expect(opts.rp?.id).toBe('app.example.com');
-      expect(opts.rp?.name).toBe('Acme');
+      expect(opts.rp?.name).toBe('Hello World');
 
       expect(opts.user.id).toBeInstanceOf(Uint8Array);
       expect(opts.user.id as Uint8Array).toHaveLength(16);
-      expect(opts.user.name).toBe('Acme');
-      expect(opts.user.displayName).toBe('Acme');
+      expect(opts.user.name).toBe('Hello World');
+      expect(opts.user.displayName).toBe('Hello World');
 
       const algs = opts.pubKeyCredParams.map((p) => p.alg);
       const expectedAlgs = Object.values(PUBLIC_KEY_COSE_ALGORITHMS);

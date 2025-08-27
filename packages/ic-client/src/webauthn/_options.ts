@@ -1,6 +1,6 @@
 import {isNullish} from '@dfinity/utils';
 import {PUBLIC_KEY_COSE_ALGORITHMS} from './_constants';
-import {WebAuthnHostnameError} from './errors';
+import {WebAuthnIdentityHostnameError} from './errors';
 import type {CreatePasskeyOptions, PasskeyOptions} from './types/passkey';
 
 const randomValue = (): BufferSource => window.crypto.getRandomValues(new Uint8Array(16));
@@ -32,7 +32,7 @@ const hostname = (): string => {
   const url = URL.parse(href);
 
   if (isNullish(url)) {
-    throw new WebAuthnHostnameError();
+    throw new WebAuthnIdentityHostnameError();
   }
 
   const {hostname} = url;
@@ -45,7 +45,7 @@ const relyingPartyId = ({appId}: Pick<PasskeyOptions, 'appId'>): string => appId
 export const createPasskeyOptions = ({
   appId,
   user: userOptions
-}: CreatePasskeyOptions): PublicKeyCredentialCreationOptions => {
+}: CreatePasskeyOptions = {}): PublicKeyCredentialCreationOptions => {
   const {
     document: {title: name}
   } = window;
@@ -90,7 +90,7 @@ export const createPasskeyOptions = ({
 };
 
 export const retrievePasskeyOptions = (
-  options: PasskeyOptions
+  options: PasskeyOptions = {}
 ): Omit<PublicKeyCredentialRequestOptions, 'challenge'> => ({
   rpId: relyingPartyId(options),
   allowCredentials: [],

@@ -4,7 +4,7 @@
 
 import {PUBLIC_KEY_COSE_ALGORITHMS} from '../../webauthn/_constants';
 import {createPasskeyOptions, retrievePasskeyOptions} from '../../webauthn/_options';
-import {WebAuthnHostnameError} from '../../webauthn/errors';
+import {WebAuthnIdentityHostnameError} from '../../webauthn/errors';
 
 describe('_options', () => {
   const originalTitle = document.title;
@@ -15,7 +15,7 @@ describe('_options', () => {
       href: 'https://app.example.com/welcome'
     });
 
-    document.title = 'Acme';
+    document.title = 'Hello World';
   });
 
   afterAll(() => {
@@ -33,12 +33,12 @@ describe('_options', () => {
       expect(opts.challenge as Uint8Array).toHaveLength(16);
 
       expect(opts.rp?.id).toBe('app.example.com');
-      expect(opts.rp?.name).toBe('Acme');
+      expect(opts.rp?.name).toBe('Hello World');
 
       expect(opts.user.id).toBeInstanceOf(Uint8Array);
       expect(opts.user.id as Uint8Array).toHaveLength(16);
-      expect(opts.user.name).toBe('Acme');
-      expect(opts.user.displayName).toBe('Acme');
+      expect(opts.user.name).toBe('Hello World');
+      expect(opts.user.displayName).toBe('Hello World');
 
       const algs = opts.pubKeyCredParams.map((p) => p.alg);
       const expectedAlgs = Object.values(PUBLIC_KEY_COSE_ALGORITHMS);
@@ -91,7 +91,7 @@ describe('_options', () => {
         .spyOn(URL as unknown as {parse(href: string): URL | null}, 'parse')
         .mockReturnValue(null as unknown as URL);
 
-      expect(() => createPasskeyOptions({})).toThrow(WebAuthnHostnameError);
+      expect(() => createPasskeyOptions({})).toThrow(WebAuthnIdentityHostnameError);
 
       spy.mockRestore();
     });
@@ -118,7 +118,7 @@ describe('_options', () => {
         .spyOn(URL as unknown as {parse(href: string): URL | null}, 'parse')
         .mockReturnValue(null as unknown as URL);
 
-      expect(() => retrievePasskeyOptions({})).toThrow(WebAuthnHostnameError);
+      expect(() => retrievePasskeyOptions({})).toThrow(WebAuthnIdentityHostnameError);
 
       spy.mockRestore();
     });

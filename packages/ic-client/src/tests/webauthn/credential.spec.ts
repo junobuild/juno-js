@@ -1,23 +1,30 @@
 import {uint8ArrayToBase64} from '@dfinity/utils';
 import {CosePublicKey} from '../../webauthn/agent-js/cose-key';
-import {WebAuthnCredential} from '../../webauthn/credential';
+import {WebAuthnNewCredential, WebAuthnRetrievedCredential} from '../../webauthn/credential';
 
 describe('WebAuthnCredential', () => {
   const rawId = new Uint8Array([1, 2, 3, 4]);
   const cose = new Uint8Array([5, 6, 7, 8]);
 
-  it('should stores and returns credential ID bytes', () => {
-    const cred = new WebAuthnCredential({rawId, cose});
-    expect(cred.getCredentialId()).toBe(rawId);
-  });
+  const cases = [
+    ['WebAuthnNewCredential', WebAuthnNewCredential],
+    ['WebAuthnRetrievedCredential', WebAuthnRetrievedCredential]
+  ] as const;
 
-  it('should exposes credential ID as base64 text', () => {
-    const cred = new WebAuthnCredential({rawId, cose});
-    expect(cred.getCredentialIdText()).toBe(uint8ArrayToBase64(rawId));
-  });
+  cases.forEach(([name, Ctor]) => {
+    it(`${name} stores and returns credential ID bytes`, () => {
+      const cred = new Ctor({rawId, cose} as any);
+      expect(cred.getCredentialId()).toBe(rawId);
+    });
 
-  it('should returns a CosePublicKey instance from getPublicKey', () => {
-    const cred = new WebAuthnCredential({rawId, cose});
-    expect(cred.getPublicKey()).toBeInstanceOf(CosePublicKey);
+    it(`${name} exposes credential ID as base64 text`, () => {
+      const cred = new Ctor({rawId, cose} as any);
+      expect(cred.getCredentialIdText()).toBe(uint8ArrayToBase64(rawId));
+    });
+
+    it(`${name} returns a CosePublicKey from getPublicKey`, () => {
+      const cred = new Ctor({rawId, cose} as any);
+      expect(cred.getPublicKey()).toBeInstanceOf(CosePublicKey);
+    });
   });
 });

@@ -1,9 +1,9 @@
 import {Cbor, type PublicKey, type Signature, SignIdentity} from '@dfinity/agent';
 import {arrayBufferToUint8Array, isNullish, uint8ArraysEqual} from '@dfinity/utils';
-import {_authDataToCose} from './_agent';
 import {AUTHENTICATOR_ABORT_TIMEOUT} from './_constants';
 import {createPasskeyOptions, retrievePasskeyOptions} from './_options';
 import {execute} from './_progress';
+import {_authDataToCose} from './agent';
 import {type InitWebAuthnCredentialArgs, WebAuthnCredential} from './credential';
 import {
   WebAuthnIdentityCreateCredentialOnTheDeviceError,

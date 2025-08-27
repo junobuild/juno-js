@@ -1,4 +1,4 @@
-import type {CoseEncodedKey} from './agent';
+import type {CoseEncodedKey} from '../agent-js/cose-key';
 import type {CreatePasskeyOptions, PasskeyOptions} from './passkey';
 import type {WebAuthnSignProgressArgs} from './progress';
 

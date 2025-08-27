@@ -1,9 +1,8 @@
-import {DER_COSE_OID, wrapDER, type DerEncodedPublicKey, type PublicKey} from '@dfinity/agent';
-import type {CoseEncodedKey} from './types/agent';
+import {DER_COSE_OID, wrapDER, type DerEncodedPublicKey} from '@dfinity/agent';
 
 /**
  * ⚠️ !!!WARNING!!! ⚠️
- * This module is a copy/paste of the webauthn functions and classes not exposed by Agent-js.
+ * This module is a copy/paste of the webauthn functions not exposed by Agent-js.
  * It is therefore not covered by any tests (‼️) in this library.
  *
  * @see https://github.com/dfinity/agent-js/blob/main/packages/identity/src/identity/webauthn.ts
@@ -28,22 +27,6 @@ export function _authDataToCose(authData: Uint8Array): Uint8Array {
   return authData.slice(55 + credentialIdLength);
 }
 
-function _coseToDerEncodedBlob(cose: Uint8Array): DerEncodedPublicKey {
+export function _coseToDerEncodedBlob(cose: Uint8Array): DerEncodedPublicKey {
   return wrapDER(cose.buffer as ArrayBuffer, DER_COSE_OID).buffer as DerEncodedPublicKey;
-}
-
-export class CosePublicKey implements PublicKey {
-  protected _encodedKey: DerEncodedPublicKey;
-
-  public constructor(protected _cose: CoseEncodedKey) {
-    this._encodedKey = _coseToDerEncodedBlob(_cose);
-  }
-
-  public toDer(): DerEncodedPublicKey {
-    return this._encodedKey;
-  }
-
-  public getCose(): Uint8Array {
-    return this._cose;
-  }
 }

@@ -1,5 +1,5 @@
 import {uint8ArrayToBase64} from '@dfinity/utils';
-import {CosePublicKey} from '../../webauthn/_agent';
+import {CosePublicKey} from '../../webauthn/agent-js/cose-key';
 import {WebAuthnCredential} from '../../webauthn/credential';
 
 describe('WebAuthnCredential', () => {

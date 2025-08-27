@@ -1,5 +1,6 @@
 import type {PublicKey} from '@dfinity/agent';
 import {uint8ArrayToBase64} from '@dfinity/utils';
+import {extractAAGUID} from './_aaguid';
 import {type CoseEncodedKey, CosePublicKey} from './agent-js/cose-key';
 
 /**
@@ -15,6 +16,13 @@ export interface InitWebAuthnCredentialArgs {
    * COSE-encoded public key extracted from attestation/authData.
    */
   cose: CoseEncodedKey;
+}
+
+export interface InitWebAuthnNewCredentialArgs extends InitWebAuthnCredentialArgs {
+  /**
+   * The authenticator data from the attestation.
+   */
+  authData: Uint8Array;
 }
 
 /**
@@ -61,7 +69,27 @@ export abstract class WebAuthnCredential {
  * It is created using `navigator.credentials.create` which provides an attestation.
  */
 export class WebAuthnNewCredential extends WebAuthnCredential {
-  // TODO: more fields like AAGUID?
+  readonly #aaguid: string | undefined;
+
+  /**
+   * @param args - {@link InitWebAuthnNewCredentialArgs} used to initialize the credential.
+   * @param args.rawId - Credential ID (`rawId`) as bytes.
+   * @param args.cose - COSE-encoded public key.
+   * @params args.authData - Authenticator data from the attestation.
+   */
+  constructor({authData, ...rest}: InitWebAuthnNewCredentialArgs) {
+    super(rest);
+
+    const optionAaguid = extractAAGUID({authData});
+    this.#aaguid = 'aaguid' in optionAaguid ? optionAaguid.aaguid : undefined;
+  }
+
+  /**
+   * Returns the AAGUID (Authenticator Attestation GUID).
+   */
+  getAAGUID(): string | undefined {
+    return this.#aaguid;
+  }
 }
 
 /**

@@ -5,7 +5,7 @@ import {createPasskeyOptions, retrievePasskeyOptions} from './_options';
 import {execute} from './_progress';
 import {_authDataToCose} from './agent-js/cose-utils';
 import {
-  type InitWebAuthnCredentialArgs,
+  type InitWebAuthnNewCredentialArgs,
   type WebAuthnCredential,
   WebAuthnExistingCredential,
   WebAuthnNewCredential
@@ -123,7 +123,7 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
     ...args
   }: WebAuthnSignProgressArgs &
     (
-      | InitWebAuthnCredentialArgs
+      | InitWebAuthnNewCredentialArgs
       | Pick<CreateWebAuthnIdentityWithExistingCredentialArgs, 'retrievePublicKey'>
     )) {
     super();
@@ -142,18 +142,18 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
     }
 
     this.#state = WebAuthnIdentity.#createInitializedState({
-      credential: new WebAuthnNewCredential(args) as T
+      credential: new WebAuthnNewCredential(args)
     });
   }
 
   static #createInitializedState<T extends WebAuthnCredential>({
     credential
   }: {
-    credential: T;
+    credential: WebAuthnNewCredential | WebAuthnExistingCredential;
   }): WebAuthnState<T> {
     return {
       status: 'initialized',
-      credential
+      credential: credential as T
     };
   }
 
@@ -199,7 +199,8 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
     return new WebAuthnIdentity<WebAuthnNewCredential>({
       ...restArgs,
       rawId: arrayBufferToUint8Array(rawId),
-      cose
+      cose,
+      authData
     });
   }
 
@@ -310,7 +311,7 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
         credential: new WebAuthnExistingCredential({
           rawId: arrayBufferToUint8Array(rawId),
           cose
-        }) as T
+        })
       });
     };
 

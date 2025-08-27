@@ -1,7 +1,7 @@
 import {isNullish} from '@dfinity/utils';
 import {PUBLIC_KEY_COSE_ALGORITHMS} from './_constants';
 import {WebAuthnHostnameError} from './errors';
-import type {CreatePasskeyOptions, PasskeyOptions} from './types';
+import type {CreatePasskeyOptions, PasskeyOptions} from './types/passkey';
 
 const randomValue = (): BufferSource => window.crypto.getRandomValues(new Uint8Array(16));
 

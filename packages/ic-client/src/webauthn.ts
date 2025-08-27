@@ -1,2 +1,2 @@
 export * from './webauthn/errors';
-export type * from './webauthn/types';
+export type * from './webauthn/types/passkey';

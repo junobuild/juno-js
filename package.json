@@ -182,7 +182,20 @@
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/identity",
-        "@dfinity/principal"
+        "@dfinity/principal",
+        "@dfinity/utils"
+      ]
+    },
+    {
+      "name": "@junobuild/ic-client/webauthn",
+      "path": "./packages/ic-client/webauthn.js",
+      "limit": "5 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/identity",
+        "@dfinity/principal",
+        "@dfinity/utils"
       ]
     },
     {
@@ -193,7 +206,8 @@
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/identity",
-        "@dfinity/principal"
+        "@dfinity/principal",
+        "@dfinity/utils"
       ]
     }
   ]

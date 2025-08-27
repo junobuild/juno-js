@@ -19,6 +19,11 @@
       "import": "./actor.js",
       "require": "./actor.mjs"
     },
+    "./webauthn": {
+      "types": "./webauthn.d.ts",
+      "import": "./webauthn.js",
+      "require": "./webauthn.mjs"
+    },
     "./utils": {
       "types": "./utils.d.ts",
       "import": "./utils.js",
@@ -70,6 +75,7 @@
     "@dfinity/agent": "^2.3.0",
     "@dfinity/candid": "^2.3.0",
     "@dfinity/identity": "^2.3.0",
-    "@dfinity/principal": "^2.3.0"
+    "@dfinity/principal": "^2.3.0",
+    "@dfinity/utils": "^2"
   }
 }

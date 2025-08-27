@@ -20,7 +20,7 @@ import type {
   CreateWebAuthnIdentityWithNewCredentialArgs,
   RetrievePublicKeyFn
 } from './types/identity';
-import {PasskeyOptions} from './types/passkey';
+import type {PasskeyOptions} from './types/passkey';
 import {
   type WebAuthnSignProgressArgs,
   type WebAuthnSignProgressFn,

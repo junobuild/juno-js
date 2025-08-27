@@ -1,4 +1,5 @@
 import {DER_COSE_OID, wrapDER, type DerEncodedPublicKey, type PublicKey} from '@dfinity/agent';
+import type {CoseEncodedKey} from './types/agent';
 
 /**
  * ⚠️ !!!WARNING!!! ⚠️
@@ -30,9 +31,6 @@ export function _authDataToCose(authData: Uint8Array): Uint8Array {
 function _coseToDerEncodedBlob(cose: Uint8Array): DerEncodedPublicKey {
   return wrapDER(cose.buffer as ArrayBuffer, DER_COSE_OID).buffer as DerEncodedPublicKey;
 }
-
-// COSE = CBOR Object Signing and Encryption
-export type CoseEncodedKey = Uint8Array;
 
 export class CosePublicKey implements PublicKey {
   protected _encodedKey: DerEncodedPublicKey;

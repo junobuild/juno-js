@@ -1,3 +1,5 @@
+import {uint8ArrayToArrayOfNumber} from '@dfinity/utils';
+
 /**
  * Extracts the AAGUID (Authenticator Attestation GUID) from a WebAuthn data buffer.
  *
@@ -13,7 +15,10 @@
  *
  * @param {Object} params
  * @param {Uint8Array} params.authData - The WebAuthn `authenticatorData` bytes.
- * @returns {ExtractAAGUIDResult} The extracted AAGUID or a reason it couldn’t be provided.
+ * @returns {{aaguid: string; bytes: number[]} | {invalidAuthData: null} | {unknownProvider: null}}
+ * - { aaguidText, aaguidBytes } for valid AAGUID
+ * - { unknownProvider: null } for all-zero AAGUID
+ * - { invalidAuthData: null } if `authData` is invalid (too short, too long, etc.)
  *
  * @see https://web.dev/articles/webauthn-aaguid
  */
@@ -21,7 +26,10 @@ export const extractAAGUID = ({
   authData
 }: {
   authData: Uint8Array;
-}): {aaguid: string} | {invalidAuthData: null} | {unknownProvider: null} => {
+}):
+  | {aaguidText: string; aaguidBytes: number[]}
+  | {invalidAuthData: null}
+  | {unknownProvider: null} => {
   if (authData.byteLength < 37) {
     return {invalidAuthData: null};
   }
@@ -30,7 +38,38 @@ export const extractAAGUID = ({
     return {invalidAuthData: null};
   }
 
-  const hex = [...authData.slice(37, 53)]
+  const bytes = [...authData.slice(37, 53)];
+
+  const result = bytesToAAGUID({bytes});
+
+  if ('aaguid' in result) {
+    return {aaguidBytes: bytes, aaguidText: result.aaguid};
+  }
+
+  return {unknownProvider: null};
+};
+
+/**
+ * Convert 16 AAGUID bytes to canonical UUID string (lowercase, hyphenated).
+ *
+ * Returns:
+ * - { aaguid } for non-zero AAGUIDs
+ * - { unknownProvider: null } for all-zero AAGUID
+ * - { invalidBytes: null } if length ≠ 16
+ *
+ * @param {{bytes: Uint8Array | number[]}} params
+ * @returns {{aaguid: string} | {invalidBytes: null} | {unknownProvider: null}}
+ */
+export const bytesToAAGUID = ({
+  bytes
+}: {
+  bytes: Uint8Array | number[];
+}): {aaguid: string} | {invalidBytes: null} | {unknownProvider: null} => {
+  if (bytes.length !== 16) {
+    return {invalidBytes: null};
+  }
+
+  const hex = (bytes instanceof Uint8Array ? uint8ArrayToArrayOfNumber(bytes) : bytes)
     .map((byte) => byte.toString(16).padStart(2, '0'))
     .join('');
 

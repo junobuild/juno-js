@@ -1,5 +1,5 @@
 import {extractAAGUID} from '../../webauthn/_aaguid';
-import {hexToBytes, makeAuthData} from './_aaguid.mocks';
+import {hexToBytes, makeAuthData} from './_aaguid.mock';
 
 describe('extractAAGUID', () => {
   it('should return invalidAuthData for buffers shorter than 37 bytes', () => {

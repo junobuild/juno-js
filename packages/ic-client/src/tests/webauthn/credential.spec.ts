@@ -1,7 +1,7 @@
 import {uint8ArrayToBase64} from '@dfinity/utils';
 import {CosePublicKey} from '../../webauthn/agent-js/cose-key';
 import {WebAuthnExistingCredential, WebAuthnNewCredential} from '../../webauthn/credential';
-import {hexToBytes, makeAuthData} from './_aaguid.mocks';
+import {hexToBytes, makeAuthData} from './_aaguid.mock';
 
 describe('WebAuthnCredential', () => {
   const rawId = new Uint8Array([1, 2, 3, 4]);

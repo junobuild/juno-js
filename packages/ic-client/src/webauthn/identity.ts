@@ -20,6 +20,7 @@ import type {
   CreateWebAuthnIdentityWithNewCredentialArgs,
   RetrievePublicKeyFn
 } from './types/identity';
+import {PasskeyOptions} from './types/passkey';
 import {
   type WebAuthnSignProgressArgs,
   type WebAuthnSignProgressFn,
@@ -32,7 +33,9 @@ type PublicKeyCredentialWithAttachment = Omit<PublicKeyCredential, 'response'> &
   };
 };
 
-const createAbortSignal = ({timeout}: Pick<AuthenticatorOptions, 'timeout'>): AbortSignal =>
+const createAbortSignal = ({
+  timeout
+}: Pick<AuthenticatorOptions<PasskeyOptions>, 'timeout'>): AbortSignal =>
   AbortSignal.timeout(timeout ?? AUTHENTICATOR_ABORT_TIMEOUT);
 
 const retrieveCredentials = async ({
@@ -43,7 +46,7 @@ const retrieveCredentials = async ({
 }: {
   challenge: Uint8Array;
   credentialIds?: Uint8Array[];
-} & AuthenticatorOptions): Promise<Credential | null> =>
+} & AuthenticatorOptions<PasskeyOptions>): Promise<Credential | null> =>
   await navigator.credentials.get({
     publicKey: {
       ...retrievePasskeyOptions(passkeyOptions),

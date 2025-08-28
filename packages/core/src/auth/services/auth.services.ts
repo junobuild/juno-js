@@ -3,12 +3,12 @@ import type {AuthClient} from '@dfinity/auth-client';
 import {isNullish} from '@dfinity/utils';
 import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';
+import {InternetIdentityProvider} from '../providers/internet-identity.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInOptions} from '../types/auth';
 import type {Provider} from '../types/provider';
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser} from './_user.services';
-import {InternetIdentityProvider} from '../providers/internet-identity.providers';
 
 let authClient: AuthClient | undefined | null;
 

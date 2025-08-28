@@ -1,6 +1,6 @@
+import type {InternetIdentityProvider} from '../providers/internet-identity.providers';
+import type {NFIDProvider} from '../providers/nfid.providers';
 import type {AuthClientSignInOptions} from './auth-client';
-import {InternetIdentityProvider} from '../providers/internet-identity.providers';
-import {NFIDProvider} from '../providers/nfid.providers';
 
 /**
  * Interface representing sign-in options.

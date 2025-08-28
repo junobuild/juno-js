@@ -1,6 +1,9 @@
 import {type AuthClient, ERROR_USER_INTERRUPT} from '@dfinity/auth-client';
 import {isNullish} from '@dfinity/utils';
-import {ALLOW_PIN_AUTHENTICATION, DELEGATION_IDENTITY_EXPIRATION} from '../constants/auth.constants';
+import {
+  ALLOW_PIN_AUTHENTICATION,
+  DELEGATION_IDENTITY_EXPIRATION
+} from '../constants/auth.constants';
 import {initAuth} from '../services/auth.services';
 import type {AuthClientSignInOptions} from '../types/auth-client';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
@@ -103,4 +106,3 @@ export abstract class AuthClientProvider implements AuthProvider {
     });
   }
 }
-

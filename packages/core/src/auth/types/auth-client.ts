@@ -4,7 +4,7 @@
  */
 export interface AuthClientSignInOptions {
   /**
-   * Maximum time to live for the session. Cannot be extended.
+   * Maximum time to live for the session in nanoseconds. Cannot be extended.
    * @type {bigint}
    */
   maxTimeToLive?: bigint;

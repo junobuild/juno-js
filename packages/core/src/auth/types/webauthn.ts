@@ -11,7 +11,7 @@ export enum WebAuthnSignInProgressStep {
   /** Completing the session setup after signing */
   FinalizingSession,
   /** Retrieving the authenticated user information */
-  RetrievingUser,
+  RetrievingUser
 }
 
 /**
@@ -29,7 +29,7 @@ export enum WebAuthnSignUpProgressStep {
   /** Completing the session setup after signing */
   FinalizingSession,
   /** Registering the new user in the system */
-  RegisteringUser,
+  RegisteringUser
 }
 
 /**
@@ -38,7 +38,7 @@ export enum WebAuthnSignUpProgressStep {
  * - `success`: The step completed successfully.
  * - `error`: The step failed.
  */
-export type WebAuthnProgressState = "in_progress" | "success" | "error";
+export type WebAuthnProgressState = 'in_progress' | 'success' | 'error';
 
 /**
  * Progress event emitted during a WebAuthn sign-in or sign-up flow.
@@ -56,16 +56,22 @@ export interface WebAuthnSignProgress<Step> {
 export type WebAuthnSignProgressFn<Step> = (progress: WebAuthnSignProgress<Step>) => void;
 
 /**
+ * Interface representing common sign-in and sing-up options when using a WebAuthn (passkey) based provider.
+ * @interface WebAuthnSignOptions
+ */
+export interface WebAuthnSignOptions {
+  /**
+   * Maximum time to live for the session in milliseconds. Cannot be extended.
+   * @type {number}
+   */
+  maxTimeToLiveInMilliseconds?: number;
+}
+
+/**
  * Interface representing sign-in options when using a WebAuthn (passkey) based provider.
  * @interface WebAuthnSignInOptions
  */
-export interface WebAuthnSignInOptions {
-  /**
-   * Maximum time to live for the session. Cannot be extended.
-   * @type {bigint}
-   */
-  maxTimeToLive?: bigint;
-
+export interface WebAuthnSignInOptions extends WebAuthnSignOptions {
   /**
    * Optional callback to receive progress updates about the sign-in flow.
    * Useful for showing UI feedback such as loading indicators or status messages.
@@ -77,13 +83,7 @@ export interface WebAuthnSignInOptions {
  * Interface representing sign-up options when using a WebAuthn (passkey) based provider.
  * @interface WebAuthnSignUpOptions
  */
-export interface WebAuthnSignUpOptions {
-  /**
-   * Maximum time to live for the session. Cannot be extended.
-   * @type {bigint}
-   */
-  maxTimeToLive?: bigint;
-
+export interface WebAuthnSignUpOptions extends WebAuthnSignOptions {
   /**
    * Optional callback to receive progress updates about the sign-up flow.
    * Useful for showing UI feedback such as loading indicators or status messages.

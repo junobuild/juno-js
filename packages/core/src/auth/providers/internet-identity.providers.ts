@@ -1,0 +1,82 @@
+import {isNullish, nonNullish} from '@dfinity/utils';
+import {
+  DOCKER_CONTAINER_URL,
+  DOCKER_INTERNET_IDENTITY_ID
+} from '../../core/constants/container.constants';
+import {EnvStore} from '../../core/stores/env.store';
+import {II_POPUP, INTERNET_COMPUTER_ORG} from '../constants/auth.constants';
+import type {
+  AuthClientSignInOptions,
+  InternetIdentityConfig,
+  InternetIdentityDomain
+} from '../types/auth-client';
+import type {Provider} from '../types/provider';
+import {popupCenter} from '../utils/window.utils';
+import {AuthClientProvider, type AuthProviderSignInOptions} from './_auth-client.providers';
+
+/**
+ * Internet Identity authentication provider.
+ * @class InternetIdentityProvider
+ * @implements {AuthProvider}
+ */
+export class InternetIdentityProvider extends AuthClientProvider {
+  #domain?: InternetIdentityDomain;
+
+  /**
+   * Creates an instance of InternetIdentityProvider.
+   * @param {InternetIdentityConfig} config - The configuration for Internet Identity.
+   */
+  constructor({domain}: InternetIdentityConfig) {
+    super();
+
+    this.#domain = domain;
+  }
+
+  /**
+   * Gets the identifier of the provider.
+   * @returns {Provider} The identifier of the provider - `internet_identity`.
+   */
+  get id(): Provider {
+    return 'internet_identity';
+  }
+
+  /**
+   * Gets the sign-in options for Internet Identity.
+   * @param {Pick<SignInOptions, 'windowed'>} options - The sign-in options.
+   * @returns {AuthProviderSignInOptions} The sign-in options for Internet Identity.
+   */
+  override signInOptions({
+    windowed
+  }: Pick<AuthClientSignInOptions, 'windowed'>): AuthProviderSignInOptions {
+    const identityProviderUrl = (): string => {
+      const container = EnvStore.getInstance().get()?.container;
+
+      // Production
+      if (isNullish(container) || container === false) {
+        return `https://identity.${this.#domain ?? INTERNET_COMPUTER_ORG}`;
+      }
+
+      const env = EnvStore.getInstance().get();
+
+      const internetIdentityId =
+        nonNullish(env) && nonNullish(env?.internetIdentityId)
+          ? env.internetIdentityId
+          : DOCKER_INTERNET_IDENTITY_ID;
+
+      const {host: containerHost, protocol} = new URL(
+        container === true ? DOCKER_CONTAINER_URL : container
+      );
+
+      return /apple/i.test(navigator?.vendor)
+        ? `${protocol}//${containerHost}?canisterId=${internetIdentityId}`
+        : `${protocol}//${internetIdentityId}.${containerHost.replace('127.0.0.1', 'localhost')}`;
+    };
+
+    return {
+      ...(windowed !== false && {
+        windowOpenerFeatures: popupCenter(II_POPUP)
+      }),
+      identityProvider: identityProviderUrl()
+    };
+  }
+}

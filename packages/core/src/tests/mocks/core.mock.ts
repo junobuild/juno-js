@@ -1,6 +1,6 @@
 import type {Identity} from '@dfinity/agent';
 import {Principal} from '@dfinity/principal';
-import type {User} from '../../types/auth';
+import type {User} from '../../auth/types/auth';
 
 export const mockUserIdText = 'xlmdg-vkosz-ceopx-7wtgu-g3xmd-koiyc-awqaq-7modz-zf6r6-364rh-oqe';
 export const mockUserIdPrincipal = Principal.fromText(mockUserIdText);

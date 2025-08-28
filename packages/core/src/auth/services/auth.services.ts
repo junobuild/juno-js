@@ -1,16 +1,12 @@
 import type {Identity} from '@dfinity/agent';
-import {type AuthClient, ERROR_USER_INTERRUPT} from '@dfinity/auth-client';
+import type {AuthClient} from '@dfinity/auth-client';
 import {isNullish} from '@dfinity/utils';
 import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';
-import {
-  ALLOW_PIN_AUTHENTICATION,
-  DELEGATION_IDENTITY_EXPIRATION
-} from '../constants/auth.constants';
 import {InternetIdentityProvider} from '../providers/auth.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {Provider, SignInOptions} from '../types/auth';
-import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
+import {SignInError} from '../types/errors';
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser} from './_user.services';
 
@@ -36,41 +32,10 @@ export const initAuth = async (provider?: Provider) => {
  * @returns {Promise<void>} A promise that resolves when the sign-in process is complete and the authenticated user is initialized.
  * @throws {SignInError} If the sign-in process fails or no authentication client is available.
  */
-export const signIn = (options?: SignInOptions): Promise<void> =>
-  /* eslint-disable no-async-promise-executor */
-  new Promise<void>(async (resolve, reject) => {
-    if (isNullish(authClient)) {
-      reject(
-        new SignInInitError(
-          'No client is ready to perform a sign-in. Have you initialized the Satellite?'
-        )
-      );
-      return;
-    }
-
-    const provider = options?.provider ?? new InternetIdentityProvider({});
-
-    await authClient.login({
-      onSuccess: async () => {
-        await initAuth(provider.id);
-        resolve();
-      },
-      onError: (error?: string) => {
-        if (error === ERROR_USER_INTERRUPT) {
-          reject(new SignInUserInterruptError(error));
-          return;
-        }
-
-        reject(new SignInError(error));
-      },
-      maxTimeToLive: options?.maxTimeToLive ?? DELEGATION_IDENTITY_EXPIRATION,
-      allowPinAuthentication: options?.allowPin ?? ALLOW_PIN_AUTHENTICATION,
-      ...(options?.derivationOrigin !== undefined && {derivationOrigin: options.derivationOrigin}),
-      ...provider.signInOptions({
-        windowed: options?.windowed
-      })
-    });
-  });
+export const signIn = async (options?: SignInOptions): Promise<void> => {
+  const provider = options?.provider ?? new InternetIdentityProvider({});
+  await provider.signIn({options, authClient});
+};
 
 /**
  * Signs out the current user.

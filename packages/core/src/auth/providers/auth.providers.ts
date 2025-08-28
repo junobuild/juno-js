@@ -1,10 +1,18 @@
+import {type AuthClient, ERROR_USER_INTERRUPT} from '@dfinity/auth-client';
 import {isNullish, nonNullish} from '@dfinity/utils';
 import {
   DOCKER_CONTAINER_URL,
   DOCKER_INTERNET_IDENTITY_ID
 } from '../../core/constants/container.constants';
 import {EnvStore} from '../../core/stores/env.store';
-import {II_POPUP, INTERNET_COMPUTER_ORG, NFID_POPUP} from '../constants/auth.constants';
+import {
+  ALLOW_PIN_AUTHENTICATION,
+  DELEGATION_IDENTITY_EXPIRATION,
+  II_POPUP,
+  INTERNET_COMPUTER_ORG,
+  NFID_POPUP
+} from '../constants/auth.constants';
+import {initAuth} from '../services/auth.services';
 import type {
   InternetIdentityConfig,
   InternetIdentityDomain,
@@ -12,13 +20,14 @@ import type {
   Provider,
   SignInOptions
 } from '../types/auth';
+import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
 import {popupCenter} from '../utils/window.utils';
 
 /**
  * Options for signing in with an authentication provider.
  * @interface AuthProviderSignInOptions
  */
-export interface AuthProviderSignInOptions {
+interface AuthProviderSignInOptions {
   /**
    * The URL of the identity provider - commonly Internet Identity.
    */
@@ -38,12 +47,87 @@ export interface AuthProvider {
    * The unique identifier of the provider.
    */
   readonly id: Provider;
+}
+
+/**
+ * Abstract base class for all authentication providers that integrate with the `@dfinity/auth-client`.
+ *
+ * @abstract
+ * @class AuthClientProvider
+ * @implements {AuthProvider}
+ */
+export abstract class AuthClientProvider implements AuthProvider {
   /**
-   * Method to get the sign-in options for the provider.
-   * @param options - The sign-in options.
-   * @returns The sign-in options for the provider that can be use to effectively perform a sign-in.
+   * The unique identifier of the provider.
+   *
+   * @abstract
+   * @type {Provider}
    */
-  signInOptions: (options: Pick<SignInOptions, 'windowed'>) => AuthProviderSignInOptions;
+  abstract get id(): Provider;
+
+  /**
+   * Returns the sign-in options for the provider.
+   *
+   * @abstract
+   * @param {Pick<SignInOptions, 'windowed'>} options - Options controlling window behavior.
+   * @returns {AuthProviderSignInOptions} Provider-specific sign-in options.
+   */
+  abstract signInOptions(options: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions;
+
+  /**
+   * Signs in a user with the given authentication provider.
+   *
+   * @param {Object} params - The sign-in parameters.
+   * @param {Omit<SignInOptions, 'provider'>} [params.options] - Optional configuration for the login request.
+   * @param {AuthClient | undefined | null} params.authClient - The AuthClient instance in its current state.
+   *
+   * @returns {Promise<void>} Resolves if the sign-in is successful. Rejects with:
+   * - {@link SignInInitError} if no AuthClient is available.
+   * - {@link SignInUserInterruptError} if the user cancels the login.
+   * - {@link SignInError} for other errors during sign-in.
+   */
+  signIn({
+    options,
+    authClient
+  }: {
+    options?: Omit<SignInOptions, 'provider'>;
+    authClient: AuthClient | undefined | null;
+  }): Promise<void> {
+    /* eslint-disable no-async-promise-executor */
+    return new Promise<void>(async (resolve, reject) => {
+      if (isNullish(authClient)) {
+        reject(
+          new SignInInitError(
+            'No client is ready to perform a sign-in. Have you initialized the Satellite?'
+          )
+        );
+        return;
+      }
+
+      await authClient.login({
+        onSuccess: async () => {
+          await initAuth(this.id);
+          resolve();
+        },
+        onError: (error?: string) => {
+          if (error === ERROR_USER_INTERRUPT) {
+            reject(new SignInUserInterruptError(error));
+            return;
+          }
+
+          reject(new SignInError(error));
+        },
+        maxTimeToLive: options?.maxTimeToLive ?? DELEGATION_IDENTITY_EXPIRATION,
+        allowPinAuthentication: options?.allowPin ?? ALLOW_PIN_AUTHENTICATION,
+        ...(options?.derivationOrigin !== undefined && {
+          derivationOrigin: options.derivationOrigin
+        }),
+        ...this.signInOptions({
+          windowed: options?.windowed
+        })
+      });
+    });
+  }
 }
 
 /**
@@ -51,7 +135,7 @@ export interface AuthProvider {
  * @class InternetIdentityProvider
  * @implements {AuthProvider}
  */
-export class InternetIdentityProvider implements AuthProvider {
+export class InternetIdentityProvider extends AuthClientProvider {
   #domain?: InternetIdentityDomain;
 
   /**
@@ -59,6 +143,8 @@ export class InternetIdentityProvider implements AuthProvider {
    * @param {InternetIdentityConfig} config - The configuration for Internet Identity.
    */
   constructor({domain}: InternetIdentityConfig) {
+    super();
+
     this.#domain = domain;
   }
 
@@ -75,7 +161,7 @@ export class InternetIdentityProvider implements AuthProvider {
    * @param {Pick<SignInOptions, 'windowed'>} options - The sign-in options.
    * @returns {AuthProviderSignInOptions} The sign-in options for Internet Identity.
    */
-  signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions {
+  override signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions {
     const identityProviderUrl = (): string => {
       const container = EnvStore.getInstance().get()?.container;
 
@@ -114,7 +200,7 @@ export class InternetIdentityProvider implements AuthProvider {
  * @class NFIDProvider
  * @implements {AuthProvider}
  */
-export class NFIDProvider implements AuthProvider {
+export class NFIDProvider extends AuthClientProvider {
   #appName: string;
   #logoUrl: string;
 
@@ -123,6 +209,8 @@ export class NFIDProvider implements AuthProvider {
    * @param {NFIDConfig} config - The configuration for NFID.
    */
   constructor({appName, logoUrl}: NFIDConfig) {
+    super();
+
     this.#appName = appName;
     this.#logoUrl = logoUrl;
   }

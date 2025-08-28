@@ -28,7 +28,7 @@ export class NFIDProvider extends AuthClientProvider {
    * Gets the identifier of the provider.
    * @returns {Provider} The identifier of the provider- nfid.
    */
-  get id(): Provider {
+  override get id(): Provider {
     return 'nfid';
   }
 
@@ -37,7 +37,9 @@ export class NFIDProvider extends AuthClientProvider {
    * @param {Pick<SignInOptions, 'windowed'>} options - The sign-in options.
    * @returns {AuthProviderSignInOptions} The sign-in options to effectively sign-in with NFID.
    */
-  signInOptions({windowed}: Pick<AuthClientSignInOptions, 'windowed'>): AuthProviderSignInOptions {
+  override signInOptions({
+    windowed
+  }: Pick<AuthClientSignInOptions, 'windowed'>): AuthProviderSignInOptions {
     return {
       ...(windowed !== false && {
         windowOpenerFeatures: popupCenter(NFID_POPUP)

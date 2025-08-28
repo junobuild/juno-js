@@ -36,7 +36,7 @@ export class InternetIdentityProvider extends AuthClientProvider {
    * Gets the identifier of the provider.
    * @returns {Provider} The identifier of the provider - `internet_identity`.
    */
-  get id(): Provider {
+  override get id(): Provider {
     return 'internet_identity';
   }
 

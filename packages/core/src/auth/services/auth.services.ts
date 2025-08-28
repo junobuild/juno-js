@@ -3,7 +3,7 @@ import type {AuthClient} from '@dfinity/auth-client';
 import {isNullish} from '@dfinity/utils';
 import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';
-import {InternetIdentityProvider} from '../providers/auth-client.providers';
+import {InternetIdentityProvider} from '../providers/internet-identity.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInOptions} from '../types/auth';
 import type {Provider} from '../types/provider';

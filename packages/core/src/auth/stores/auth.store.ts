@@ -1,6 +1,7 @@
 import {Store} from '../../core/stores/_store';
 import type {Unsubscribe} from '../../core/types/subscription';
-import type {User} from '../types/auth';
+
+import type {User} from '../types/user';
 
 export class AuthStore extends Store<User | null> {
   private static instance: AuthStore;

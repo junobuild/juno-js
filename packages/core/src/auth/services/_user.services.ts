@@ -2,8 +2,9 @@ import type {Identity} from '@dfinity/agent';
 import {isNullish, nonNullish} from '@dfinity/utils';
 import {isSatelliteError, JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE} from '@junobuild/errors';
 import {getDoc, setDoc} from '../../datastore/services/doc.services';
-import type {Provider, User, UserData} from '../types/auth';
 import {InitError} from '../types/errors';
+import type {Provider} from '../types/provider';
+import type {User, UserData} from '../types/user';
 import {getIdentity} from './auth.services';
 
 export const initUser = async (provider?: Provider): Promise<User> => {

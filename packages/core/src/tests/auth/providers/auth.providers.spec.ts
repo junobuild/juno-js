@@ -2,7 +2,10 @@
  * @vitest-environment jsdom
  */
 
-import {InternetIdentityProvider, NFIDProvider} from '../../../auth/providers/auth.providers';
+import {
+  InternetIdentityProvider,
+  NFIDProvider
+} from '../../../auth/providers/auth-client.providers';
 import {
   DOCKER_CONTAINER_URL,
   DOCKER_INTERNET_IDENTITY_ID

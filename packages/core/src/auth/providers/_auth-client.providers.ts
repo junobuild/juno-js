@@ -47,7 +47,7 @@ export abstract class AuthClientProvider implements AuthProvider {
    * @param {Pick<SignInOptions, 'windowed'>} options - Options controlling window behavior.
    * @returns {AuthProviderSignInOptions} Provider-specific sign-in options.
    */
-  abstract signInOptions(
+  protected abstract signInOptions(
     options: Pick<AuthClientSignInOptions, 'windowed'>
   ): AuthProviderSignInOptions;
 
@@ -55,7 +55,7 @@ export abstract class AuthClientProvider implements AuthProvider {
    * Signs in a user with the given authentication provider.
    *
    * @param {Object} params - The sign-in parameters.
-   * @param {Omit<SignInOptions, 'provider'>} [params.options] - Optional configuration for the login request.
+   * @param {AuthClientSignInOptions} [params.options] - Optional configuration for the login request.
    * @param {AuthClient | undefined | null} params.authClient - The AuthClient instance in its current state.
    *
    * @returns {Promise<void>} Resolves if the sign-in is successful. Rejects with:
@@ -67,7 +67,7 @@ export abstract class AuthClientProvider implements AuthProvider {
     options,
     authClient
   }: {
-    options?: Omit<AuthClientSignInOptions, 'provider'>;
+    options?: AuthClientSignInOptions;
     authClient: AuthClient | undefined | null;
   }): Promise<void> {
     /* eslint-disable no-async-promise-executor */

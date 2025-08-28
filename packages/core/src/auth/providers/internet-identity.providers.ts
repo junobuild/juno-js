@@ -45,7 +45,7 @@ export class InternetIdentityProvider extends AuthClientProvider {
    * @param {Pick<SignInOptions, 'windowed'>} options - The sign-in options.
    * @returns {AuthProviderSignInOptions} The sign-in options for Internet Identity.
    */
-  override signInOptions({
+  protected override signInOptions({
     windowed
   }: Pick<AuthClientSignInOptions, 'windowed'>): AuthProviderSignInOptions {
     const identityProviderUrl = (): string => {

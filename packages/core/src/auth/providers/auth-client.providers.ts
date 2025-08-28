@@ -14,13 +14,13 @@ import {
 } from '../constants/auth.constants';
 import {initAuth} from '../services/auth.services';
 import type {
+  AuthClientSignInOptions,
   InternetIdentityConfig,
   InternetIdentityDomain,
-  NFIDConfig,
-  Provider,
-  SignInOptions
-} from '../types/auth';
+  NFIDConfig
+} from '../types/auth-client';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
+import type {AuthProvider, Provider} from '../types/provider';
 import {popupCenter} from '../utils/window.utils';
 
 /**
@@ -36,17 +36,6 @@ interface AuthProviderSignInOptions {
    * Optional features for the window opener.
    */
   windowOpenerFeatures?: string;
-}
-
-/**
- * Common traits for all authentication providers
- * @interface AuthProvider
- */
-export interface AuthProvider {
-  /**
-   * The unique identifier of the provider.
-   */
-  readonly id: Provider;
 }
 
 /**
@@ -72,7 +61,9 @@ export abstract class AuthClientProvider implements AuthProvider {
    * @param {Pick<SignInOptions, 'windowed'>} options - Options controlling window behavior.
    * @returns {AuthProviderSignInOptions} Provider-specific sign-in options.
    */
-  abstract signInOptions(options: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions;
+  abstract signInOptions(
+    options: Pick<AuthClientSignInOptions, 'windowed'>
+  ): AuthProviderSignInOptions;
 
   /**
    * Signs in a user with the given authentication provider.
@@ -90,7 +81,7 @@ export abstract class AuthClientProvider implements AuthProvider {
     options,
     authClient
   }: {
-    options?: Omit<SignInOptions, 'provider'>;
+    options?: Omit<AuthClientSignInOptions, 'provider'>;
     authClient: AuthClient | undefined | null;
   }): Promise<void> {
     /* eslint-disable no-async-promise-executor */
@@ -161,7 +152,9 @@ export class InternetIdentityProvider extends AuthClientProvider {
    * @param {Pick<SignInOptions, 'windowed'>} options - The sign-in options.
    * @returns {AuthProviderSignInOptions} The sign-in options for Internet Identity.
    */
-  override signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions {
+  override signInOptions({
+    windowed
+  }: Pick<AuthClientSignInOptions, 'windowed'>): AuthProviderSignInOptions {
     const identityProviderUrl = (): string => {
       const container = EnvStore.getInstance().get()?.container;
 
@@ -228,7 +221,7 @@ export class NFIDProvider extends AuthClientProvider {
    * @param {Pick<SignInOptions, 'windowed'>} options - The sign-in options.
    * @returns {AuthProviderSignInOptions} The sign-in options to effectively sign-in with NFID.
    */
-  signInOptions({windowed}: Pick<SignInOptions, 'windowed'>): AuthProviderSignInOptions {
+  signInOptions({windowed}: Pick<AuthClientSignInOptions, 'windowed'>): AuthProviderSignInOptions {
     return {
       ...(windowed !== false && {
         windowOpenerFeatures: popupCenter(NFID_POPUP)

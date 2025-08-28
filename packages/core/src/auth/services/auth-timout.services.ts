@@ -2,8 +2,8 @@ import {isNullish} from '@dfinity/utils';
 import type {EnvironmentWorker} from '../../core/types/env';
 import type {Unsubscribe} from '../../core/types/subscription';
 import {AuthStore} from '../stores/auth.store';
-import type {User} from '../types/auth';
 import type {PostMessage, PostMessageDataResponseAuth} from '../types/post-message';
+import type {User} from '../types/user';
 import {emit} from '../utils/events.utils';
 import {signOut} from './auth.services';
 

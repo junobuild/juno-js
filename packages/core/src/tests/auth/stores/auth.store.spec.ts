@@ -1,5 +1,5 @@
 import {AuthStore} from '../../../auth/stores/auth.store';
-import type {User} from '../../../auth/types/auth';
+import {User} from '../../../auth/types/user';
 import {mockUser} from '../../mocks/core.mock';
 
 describe('auth.store', () => {

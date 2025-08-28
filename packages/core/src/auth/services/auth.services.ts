@@ -6,7 +6,6 @@ import {AgentStore} from '../../core/stores/agent.store';
 import {InternetIdentityProvider} from '../providers/auth.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {Provider, SignInOptions} from '../types/auth';
-import {SignInError} from '../types/errors';
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser} from './_user.services';
 

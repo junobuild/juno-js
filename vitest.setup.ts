@@ -3,7 +3,7 @@ import 'fake-indexeddb/auto';
 import {vi} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 
-vi.mock(import('./packages/core/src/stores/_agent.factory'), async (importOriginal) => {
+vi.mock(import('./packages/core/src/core/stores/_agent.factory'), async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,

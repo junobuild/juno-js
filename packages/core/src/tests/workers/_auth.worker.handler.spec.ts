@@ -3,7 +3,7 @@ import {DelegationChain, Ed25519KeyIdentity} from '@dfinity/identity';
 import {Principal} from '@dfinity/principal';
 import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
-import * as workerModule from '../../workers/_auth.worker.handler';
+import * as workerModule from '../../auth/workers/auth.worker';
 
 vi.mock('@dfinity/auth-client', async () => {
   const actual =

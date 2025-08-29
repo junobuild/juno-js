@@ -1,4 +1,4 @@
-import {type SignIdentity,AnonymousIdentity} from '@dfinity/agent';
+import {type SignIdentity, AnonymousIdentity} from '@dfinity/agent';
 import {IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@dfinity/auth-client';
 import {
   DelegationChain,
@@ -7,19 +7,21 @@ import {
   ECDSAKeyIdentity,
   unwrapDER
 } from '@dfinity/identity';
-import {assertNonNullish, uint8ArrayToBase64} from '@dfinity/utils';
+import {isNullish, uint8ArrayToBase64} from '@dfinity/utils';
 import {
   type RetrievePublicKeyFn,
-  type WebAuthnSignProgressFn
-,
-  WebAuthnIdentity
+  type WebAuthnSignProgressFn,
+  WebAuthnIdentity,
+  WebAuthnSignProgressStep
 } from '@junobuild/ic-client/webauthn';
 import {EnvStore} from '../../core/stores/env.store';
 import {getDoc} from '../../datastore/services/doc.services';
 import {DELEGATION_IDENTITY_EXPIRATION_IN_MILLISECONDS} from '../constants/auth.constants';
+import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../types/errors';
 import type {AuthProvider, Provider} from '../types/provider';
-import type {
+import {
   WebAuthnSignInOptions,
+  WebAuthnSignInProgressStep,
   WebAuthnSignProgressFn as WebAuthnSignProviderProgressFn
 } from '../types/webauthn';
 
@@ -37,11 +39,27 @@ export class WebAuthnProvider implements AuthProvider {
     return 'webauthn';
   }
 
-  async signIn({onProgress, maxTimeToLiveInMilliseconds}: WebAuthnSignInOptions = {}) {
+  /**
+   * Signs in a user with an existing passkey.
+   *
+   * @param {Object} params - The sign-in parameters.
+   * @param {WebAuthnSignInOptions} [params.options] - Optional configuration for the login request.
+   * @param {initAuth} params.initAuth - The function to load or initialize the user. Provided as a callback to avoid recursive import.
+   *
+   * @returns {Promise<void>} Resolves if the sign-in is successful.
+   */
+  async signIn({
+    options: {onProgress, maxTimeToLiveInMilliseconds} = {},
+    initAuth
+  }: {
+    options?: WebAuthnSignInOptions;
+    initAuth: (provider?: Provider) => Promise<void>;
+  }) {
     const {satelliteId} = EnvStore.getInstance().get() ?? {satelliteId: undefined};
 
-    // TODO throw better error?
-    assertNonNullish(satelliteId);
+    if (isNullish(satelliteId)) {
+      throw new SignInInitError('Satellite ID not set. Have you initialized the Satellite?');
+    }
 
     const retrievePublicKey: RetrievePublicKeyFn = async ({credentialId}) => {
       const doc = await getDoc({
@@ -56,8 +74,11 @@ export class WebAuthnProvider implements AuthProvider {
         }
       });
 
-      // TODO: throw comprehensive error
-      assertNonNullish(doc);
+      if (isNullish(doc)) {
+        throw new WebAuthnSignInRetrievePublicKeyError(
+          'No public key found for the selected passkey.'
+        );
+      }
 
       const {data} = doc;
 
@@ -67,7 +88,26 @@ export class WebAuthnProvider implements AuthProvider {
     };
 
     const onSignProgress: WebAuthnSignProgressFn = ({step, state}) => {
-      // TODO onProgress
+      switch (step) {
+        case WebAuthnSignProgressStep.RequestingUserCredential:
+          onProgress?.({
+            step: WebAuthnSignInProgressStep.RequestingUserCredential,
+            state
+          });
+          break;
+        case WebAuthnSignProgressStep.FinalizingCredential:
+          onProgress?.({
+            step: WebAuthnSignInProgressStep.FinalizingCredential,
+            state
+          });
+          break;
+        case WebAuthnSignProgressStep.Signing:
+          onProgress?.({
+            step: WebAuthnSignInProgressStep.Signing,
+            state
+          });
+          break;
+      }
     };
 
     const passkeyIdentity = await WebAuthnIdentity.createWithExistingCredential({
@@ -85,9 +125,24 @@ export class WebAuthnProvider implements AuthProvider {
       maxTimeToLiveInMilliseconds
     });
 
-    await this.#saveSessionIdentityForAuthClient({delegationIdentity, sessionKey});
+    // 4. Save session identity for loading it with auth client
+    const saveSession = async () =>
+      await this.#saveSessionIdentityForAuthClient({delegationIdentity, sessionKey});
 
-    // TODO execute
+    await this.#execute({
+      fn: saveSession,
+      step: WebAuthnSignInProgressStep.FinalizingSession,
+      onProgress
+    });
+
+    // 5. Load the user
+    const loadUser = async () => await initAuth(this.id);
+
+    await this.#execute({
+      fn: loadUser,
+      step: WebAuthnSignInProgressStep.RetrievingUser,
+      onProgress
+    });
   }
 
   async #createSessionDelegation({
@@ -130,7 +185,7 @@ export class WebAuthnProvider implements AuthProvider {
     ]);
   }
 
-  async execute<T, Step>({
+  async #execute<T, Step>({
     fn,
     step,
     onProgress

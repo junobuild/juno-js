@@ -4,7 +4,7 @@
 
 import {AnonymousIdentity} from '@dfinity/agent';
 import {AuthClient} from '@dfinity/auth-client';
-import type {Mock, MockInstance} from 'vitest';
+import {beforeEach, Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as userServices from '../../../auth/services/_user.services';
 import {
@@ -93,6 +93,24 @@ describe('auth.services', () => {
         });
 
         await expect(signIn()).resolves.toBeUndefined();
+      });
+
+      it('add and remove window beforeunload guard', async () => {
+        const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
+        const removeSpy = vi
+          .spyOn(window, 'removeEventListener')
+          .mockImplementation(() => undefined);
+
+        authClientMock.isAuthenticated.mockResolvedValue(false);
+        authClientMock.login.mockImplementation(async (options) => {
+          // @ts-ignore
+          options?.onSuccess?.();
+        });
+
+        await signIn();
+
+        expect(addSpy).toHaveBeenCalledTimes(1);
+        expect(removeSpy).toHaveBeenCalledTimes(1);
       });
 
       it('call auth client with internet identity options', async () => {

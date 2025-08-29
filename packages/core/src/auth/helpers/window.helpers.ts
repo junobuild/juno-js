@@ -1,0 +1,22 @@
+const onBeforeUnload = ($event: BeforeUnloadEvent) => {
+  $event.preventDefault();
+  return ($event.returnValue = 'Are you sure you want to exit?');
+};
+
+const addBeforeUnload = () => {
+  window.addEventListener('beforeunload', onBeforeUnload, {capture: true});
+};
+
+const removeBeforeUnload = () => {
+  window.removeEventListener('beforeunload', onBeforeUnload, {capture: true});
+};
+
+export const executeWithWindowGuard = async <T>({fn}: {fn: () => Promise<T>}): Promise<T> => {
+  try {
+    addBeforeUnload();
+
+    return await fn();
+  } finally {
+    removeBeforeUnload();
+  }
+};

@@ -76,6 +76,7 @@
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
+        "@dfinity/identity",
         "@dfinity/principal",
         "@dfinity/auth-client",
         "@dfinity/utils"
@@ -93,6 +94,7 @@
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
+        "@dfinity/identity",
         "@dfinity/principal",
         "@dfinity/auth-client",
         "@dfinity/utils"

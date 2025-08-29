@@ -4,7 +4,7 @@
 
 import {AnonymousIdentity} from '@dfinity/agent';
 import {AuthClient} from '@dfinity/auth-client';
-import {expect, Mock, MockInstance} from 'vitest';
+import type {Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as userServices from '../../../auth/services/_user.services';
 import {

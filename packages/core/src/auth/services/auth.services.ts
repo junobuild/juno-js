@@ -9,6 +9,7 @@ import {NFIDProvider} from '../providers/nfid.providers';
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInOptions} from '../types/auth';
+import type {Provider} from '../types/provider';
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser, loadUser} from './_user.services';
 
@@ -31,9 +32,9 @@ export const loadAuth = async () => {
  * Initialize the authClient, load or create a new user.
  * Executed on sign-in.
  */
-export const createAuth = async () => {
+export const createAuth = async (provider?: Provider) => {
   const init = async () => {
-    const user = await initUser();
+    const user = await initUser(provider);
     AuthStore.getInstance().set(user);
   };
 
@@ -81,7 +82,7 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
 
     await new WebAuthnProvider().signIn({
       options: signInOptions,
-      initAuth: createAuth
+      loadAuth
     });
     return;
   }

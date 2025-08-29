@@ -44,16 +44,16 @@ export class WebAuthnProvider implements AuthProvider {
    *
    * @param {Object} params - The sign-in parameters.
    * @param {WebAuthnSignInOptions} [params.options] - Optional configuration for the login request.
-   * @param {initAuth} params.initAuth - The function to load or initialize the user. Provided as a callback to avoid recursive import.
+   * @param {loadAuth} params.initAuth - The function to load or initialize the user. Provided as a callback to avoid recursive import.
    *
    * @returns {Promise<void>} Resolves if the sign-in is successful.
    */
   async signIn({
     options: {onProgress, maxTimeToLiveInMilliseconds} = {},
-    initAuth
+    loadAuth
   }: {
     options?: WebAuthnSignInOptions;
-    initAuth: (provider?: Provider) => Promise<void>;
+    loadAuth: () => Promise<void>;
   }) {
     const {satelliteId} = EnvStore.getInstance().get() ?? {satelliteId: undefined};
 
@@ -136,10 +136,8 @@ export class WebAuthnProvider implements AuthProvider {
     });
 
     // 5. Load the user
-    const loadUser = async () => await initAuth(this.id);
-
     await this.#execute({
-      fn: loadUser,
+      fn: loadAuth,
       step: WebAuthnSignInProgressStep.RetrievingUser,
       onProgress
     });

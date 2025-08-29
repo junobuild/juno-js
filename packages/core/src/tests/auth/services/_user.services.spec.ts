@@ -18,78 +18,123 @@ describe('user.services', async () => {
     vi.restoreAllMocks();
   });
 
-  it('throws InitError if no identity', async () => {
-    vi.spyOn(authServices, 'getIdentity').mockReturnValue(undefined);
+  describe('initUser', () => {
+    it('throws InitError if no identity', async () => {
+      vi.spyOn(authServices, 'getIdentity').mockReturnValue(undefined);
 
-    await expect(userServices.initUser()).rejects.toThrowError(
-      new InitError('No identity to initialize the user. Have you initialized Juno?')
-    );
+      await expect(userServices.initUser()).rejects.toThrowError(
+        new InitError('No identity to initialize the user. Have you initialized Juno?')
+      );
+    });
+
+    it('returns user if getDoc finds user', async () => {
+      vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
+
+      const mockGetDoc = vi.fn().mockResolvedValue([mockDocApiObject]);
+      vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({get_doc: mockGetDoc} as any);
+
+      const user = await userServices.initUser();
+
+      expect(user?.key).toBe(mockUserIdText);
+      expect(user?.data).toStrictEqual(mockData);
+    });
+
+    it('creates user if getDoc returns undefined', async () => {
+      vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
+
+      const mockGetDoc = vi.fn().mockResolvedValue(undefined);
+      const mockSetDoc = vi.fn().mockResolvedValue(mockDocApiObject);
+      vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
+        get_doc: mockGetDoc,
+        set_doc: mockSetDoc
+      } as any);
+
+      const user = await userServices.initUser();
+
+      expect(mockGetDoc).toHaveBeenCalled();
+      expect(mockSetDoc).toHaveBeenCalled();
+      expect(user?.key).toBe(mockUserIdText);
+    });
+
+    it('retries getDoc on JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE', async () => {
+      vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
+
+      const mockGetDoc = vi
+        .fn()
+        .mockResolvedValueOnce(undefined)
+        .mockResolvedValueOnce([mockDocApiObject]);
+
+      const error = new Error(JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE);
+
+      const mockSetDoc = vi.fn().mockRejectedValue(error);
+
+      vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
+        get_doc: mockGetDoc,
+        set_doc: mockSetDoc
+      } as any);
+
+      const user = await userServices.initUser();
+
+      expect(mockGetDoc).toHaveBeenCalledTimes(2);
+      expect(mockSetDoc).toHaveBeenCalledOnce();
+      expect(user?.key).toBe(mockUserIdText);
+    });
+
+    it('bubbles unknown error', async () => {
+      vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
+
+      const mockGetDoc = vi.fn().mockResolvedValue(undefined);
+      const mockSetDoc = vi.fn().mockRejectedValue(new Error('generic error'));
+
+      vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
+        get_doc: mockGetDoc,
+        set_doc: mockSetDoc
+      } as any);
+
+      await expect(userServices.initUser()).rejects.toThrow('generic error');
+    });
   });
 
-  it('returns user if getDoc finds user', async () => {
-    vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
+  describe('loadUser', () => {
+    it('throws InitError if no identity', async () => {
+      vi.spyOn(authServices, 'getIdentity').mockReturnValue(undefined);
 
-    const mockGetDoc = vi.fn().mockResolvedValue([mockDocApiObject]);
-    vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({get_doc: mockGetDoc} as any);
+      await expect(userServices.loadUser()).rejects.toThrowError(
+        new InitError('No identity to initialize the user. Have you initialized Juno?')
+      );
+    });
 
-    const user = await userServices.initUser();
+    it('returns { userId, user } when user exists', async () => {
+      vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
 
-    expect(user?.key).toBe(mockUserIdText);
-    expect(user?.data).toStrictEqual(mockData);
-  });
+      const mockGetDoc = vi.fn().mockResolvedValue([mockDocApiObject]);
+      vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({get_doc: mockGetDoc} as any);
 
-  it('creates user if getDoc returns undefined', async () => {
-    vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
+      const {user, userId} = await userServices.loadUser();
 
-    const mockGetDoc = vi.fn().mockResolvedValue(undefined);
-    const mockSetDoc = vi.fn().mockResolvedValue(mockDocApiObject);
-    vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
-      get_doc: mockGetDoc,
-      set_doc: mockSetDoc
-    } as any);
+      expect(mockGetDoc).toHaveBeenCalled();
 
-    const user = await userServices.initUser();
+      expect(user?.key).toBe(mockUserIdText);
+      expect(user?.data).toStrictEqual(mockData);
+      expect(userId).toEqual(mockUserIdText);
+    });
 
-    expect(mockGetDoc).toHaveBeenCalled();
-    expect(mockSetDoc).toHaveBeenCalled();
-    expect(user?.key).toBe(mockUserIdText);
-  });
+    it('returns { userId, undefined } when user does not exist', async () => {
+      vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
 
-  it('retries getDoc on JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE', async () => {
-    vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
+      const mockGetDoc = vi.fn().mockResolvedValue(undefined);
+      const mockSetDoc = vi.fn().mockResolvedValue(mockDocApiObject);
+      vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
+        get_doc: mockGetDoc,
+        set_doc: mockSetDoc
+      } as any);
 
-    const mockGetDoc = vi
-      .fn()
-      .mockResolvedValueOnce(undefined)
-      .mockResolvedValueOnce([mockDocApiObject]);
+      const {user, userId} = await userServices.loadUser();
 
-    const error = new Error(JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE);
+      expect(mockGetDoc).toHaveBeenCalled();
 
-    const mockSetDoc = vi.fn().mockRejectedValue(error);
-
-    vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
-      get_doc: mockGetDoc,
-      set_doc: mockSetDoc
-    } as any);
-
-    const user = await userServices.initUser();
-
-    expect(mockGetDoc).toHaveBeenCalledTimes(2);
-    expect(mockSetDoc).toHaveBeenCalledOnce();
-    expect(user?.key).toBe(mockUserIdText);
-  });
-
-  it('bubbles unknown error', async () => {
-    vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
-
-    const mockGetDoc = vi.fn().mockResolvedValue(undefined);
-    const mockSetDoc = vi.fn().mockRejectedValue(new Error('generic error'));
-
-    vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
-      get_doc: mockGetDoc,
-      set_doc: mockSetDoc
-    } as any);
-
-    await expect(userServices.initUser()).rejects.toThrow('generic error');
+      expect(user).toBeUndefined();
+      expect(userId).toEqual(mockUserIdText);
+    });
   });
 });

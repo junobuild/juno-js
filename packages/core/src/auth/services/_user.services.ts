@@ -6,23 +6,13 @@ import type {Provider} from '../types/provider';
 import type {User, UserData} from '../types/user';
 import {getIdentity} from './auth.services';
 
+type UserId = string;
+
 export const initUser = async (provider?: Provider): Promise<User> => {
-  const identity = getIdentity();
+  const {user, userId} = await loadUser();
 
-  if (isNullish(identity)) {
-    throw new InitError('No identity to initialize the user. Have you initialized Juno?');
-  }
-
-  const userId = identity.getPrincipal().toText();
-
-  const loadUser = (): Promise<User | undefined> =>
-    getDoc<UserData>({
-      collection: `#user`,
-      key: userId
-    });
-
-  const user = await loadUser();
-
+  // For returning users we do not need to create a user entry.
+  // Sign-in, sign-out, and sign-in again.
   if (nonNullish(user)) {
     return user;
   }
@@ -37,7 +27,7 @@ export const initUser = async (provider?: Provider): Promise<User> => {
     // created in the meantime. To prevent errors, we reload the user data,
     // as the issue indicates the user entity exists.
     if (isSatelliteError({error, type: JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE})) {
-      const userOnCreateError = await loadUser();
+      const userOnCreateError = await getUser({userId});
 
       if (nonNullish(userOnCreateError)) {
         return userOnCreateError;
@@ -47,6 +37,29 @@ export const initUser = async (provider?: Provider): Promise<User> => {
     throw error;
   }
 };
+
+export const loadUser = async (): Promise<{userId: UserId; user: User | undefined}> => {
+  const identity = getIdentity();
+
+  if (isNullish(identity)) {
+    throw new InitError('No identity to initialize the user. Have you initialized Juno?');
+  }
+
+  const userId = identity.getPrincipal().toText();
+
+  const user = await getUser({userId});
+
+  return {
+    userId,
+    user
+  };
+};
+
+const getUser = ({userId}: {userId: UserId}): Promise<User | undefined> =>
+  getDoc<UserData>({
+    collection: `#user`,
+    key: userId
+  });
 
 const createUser = ({
   userId,

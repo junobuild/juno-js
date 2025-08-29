@@ -19,7 +19,7 @@ import {getDoc} from '../../datastore/services/doc.services';
 import {DELEGATION_IDENTITY_EXPIRATION_IN_MILLISECONDS} from '../constants/auth.constants';
 import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../types/errors';
 import type {AuthProvider, Provider} from '../types/provider';
-import {
+import type {
   WebAuthnSignInOptions,
   WebAuthnSignInProgressStep,
   WebAuthnSignProgressFn as WebAuthnSignProviderProgressFn

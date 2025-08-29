@@ -35,5 +35,5 @@ export type SignInOptions =
       nfid: {config: NFIDConfig; options?: AuthClientSignInOptions; context?: SignInContext};
     }
   | {
-  webauthn: {options?: WebAuthnSignInOptions};
-};
+      webauthn: {options?: WebAuthnSignInOptions; context?: SignInContext};
+    };

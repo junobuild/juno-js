@@ -74,12 +74,15 @@ export const signIn = async (options?: SignInOptions): Promise<void> => {
 };
 
 const signInWithProvider = async (options: SignInOptions): Promise<void> => {
-  if ('webauthn' in opts) {
+  if ('webauthn' in options) {
     const {
       webauthn: {options: signInOptions}
-    } = opts;
+    } = options;
 
-    await new WebAuthnProvider().signIn(signInOptions);
+    await new WebAuthnProvider().signIn({
+      options: signInOptions,
+      initAuth: createAuth
+    });
     return;
   }
 

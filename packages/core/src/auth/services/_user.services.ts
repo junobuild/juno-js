@@ -20,12 +20,15 @@ export const initUser = async (provider?: Provider): Promise<User> => {
   try {
     return await createUser({userId, provider});
   } catch (error: unknown) {
-    // When a user signs in for the first time and get user returns `undefined`,
-    // a new user entry is created. If the browser is reloaded and get user
-    // still returns `undefined`, another try is made to create user entry, which is not
-    // allowed since only the controller can update users, assuming the entry has been
-    // created in the meantime. To prevent errors, we reload the user data,
-    // as the issue indicates the user entity exists.
+    // It's unlikely, but since updating a user is restricted to the controller,
+    // we want to guard against a rare race condition where a user attempts
+    // to create a user entry that already exists. In such a case, instead of
+    // throwing, we retry loading the user data. If that succeeds, it provides
+    // a more graceful UX.
+    //
+    // With the new flow introduced in core library v2, this scenario should
+    // never occur, but the handling remains given it was already implemented
+    // with the earlier flow where user creation could happen during init.
     if (isSatelliteError({error, type: JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE})) {
       const userOnCreateError = await getUser({userId});
 

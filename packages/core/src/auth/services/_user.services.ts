@@ -1,4 +1,3 @@
-import type {Identity} from '@dfinity/agent';
 import {isNullish, nonNullish} from '@dfinity/utils';
 import {isSatelliteError, JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE} from '@junobuild/errors';
 import {getDoc, setDoc} from '../../datastore/services/doc.services';
@@ -8,7 +7,7 @@ import type {User, UserData} from '../types/user';
 import {getIdentity} from './auth.services';
 
 export const initUser = async (provider?: Provider): Promise<User> => {
-  const identity: Identity | undefined = getIdentity();
+  const identity = getIdentity();
 
   if (isNullish(identity)) {
     throw new InitError('No identity to initialize the user. Have you initialized Juno?');

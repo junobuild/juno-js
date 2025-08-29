@@ -16,7 +16,7 @@ let authClient: AuthClient | undefined | null;
 export const initAuth = async (provider?: Provider) => {
   authClient = authClient ?? (await createAuthClient());
 
-  const isAuthenticated: boolean = (await authClient?.isAuthenticated()) ?? false;
+  const isAuthenticated = await authClient.isAuthenticated();
 
   if (!isAuthenticated) {
     return;

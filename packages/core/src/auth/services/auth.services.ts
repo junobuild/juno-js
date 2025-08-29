@@ -8,13 +8,38 @@ import {InternetIdentityProvider} from '../providers/internet-identity.providers
 import {NFIDProvider} from '../providers/nfid.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInOptions} from '../types/auth';
-import type {Provider} from '../types/provider';
 import {createAuthClient} from '../utils/auth.utils';
-import {initUser} from './_user.services';
+import {initUser, loadUser} from './_user.services';
 
 let authClient: AuthClient | undefined | null;
 
-export const initAuth = async (provider?: Provider) => {
+/**
+ * Initialize the authClient and load the existing user.
+ * Executed when the library is initialized through initSatellite.
+ */
+export const loadAuth = async () => {
+  const init = async () => {
+    const {user} = await loadUser();
+    AuthStore.getInstance().set(user ?? null);
+  };
+
+  await executeAuth({fn: init});
+};
+
+/**
+ * Initialize the authClient, load or create a new user.
+ * Executed on sign-in.
+ */
+export const createAuth = async () => {
+  const init = async () => {
+    const user = await initUser();
+    AuthStore.getInstance().set(user);
+  };
+
+  await executeAuth({fn: init});
+};
+
+const executeAuth = async ({fn}: {fn: () => Promise<void>}) => {
   authClient = authClient ?? (await createAuthClient());
 
   const isAuthenticated = await authClient.isAuthenticated();
@@ -23,8 +48,7 @@ export const initAuth = async (provider?: Provider) => {
     return;
   }
 
-  const user = await initUser(provider);
-  AuthStore.getInstance().set(user);
+  await fn();
 };
 
 /**
@@ -54,7 +78,11 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
       nfid: {config, options: signInOptions}
     } = options;
 
-    await new NFIDProvider(config).signIn({options: signInOptions, authClient, initAuth});
+    await new NFIDProvider(config).signIn({
+      options: signInOptions,
+      authClient,
+      initAuth: createAuth
+    });
     return;
   }
 
@@ -62,7 +90,11 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
     internet_identity: {config, options: signInOptions}
   } = options;
 
-  await new InternetIdentityProvider(config).signIn({options: signInOptions, authClient, initAuth});
+  await new InternetIdentityProvider(config).signIn({
+    options: signInOptions,
+    authClient,
+    initAuth: createAuth
+  });
 };
 
 /**

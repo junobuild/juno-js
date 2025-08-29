@@ -4,13 +4,14 @@
 
 import {AnonymousIdentity} from '@dfinity/agent';
 import {AuthClient} from '@dfinity/auth-client';
-import {beforeEach, Mock, MockInstance} from 'vitest';
+import type {Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as userServices from '../../../auth/services/_user.services';
 import {
+  createAuth,
   getIdentity,
   getIdentityOnce,
-  initAuth,
+  loadAuth,
   resetAuth,
   signIn,
   signOut,
@@ -19,7 +20,7 @@ import {
 import {AuthStore} from '../../../auth/stores/auth.store';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../../../auth/types/errors';
 import * as authUtils from '../../../auth/utils/auth.utils';
-import {mockIdentity, mockUser} from '../../mocks/core.mock';
+import {mockIdentity, mockUser, mockUserIdText} from '../../mocks/core.mock';
 
 vi.mock('@dfinity/auth-client', async () => {
   const actual = (await import('@dfinity/auth-client')) as typeof import('@dfinity/auth-client');
@@ -43,17 +44,18 @@ describe('auth.services', () => {
 
     (AuthClient.create as Mock).mockResolvedValue(authClientMock);
     vi.spyOn(userServices, 'initUser').mockResolvedValue(mockUser);
+    vi.spyOn(userServices, 'loadUser').mockResolvedValue({user: mockUser, userId: mockUserIdText});
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('initAuth', () => {
+  describe('createAuth', () => {
     it('does nothing if not authenticated', async () => {
       authClientMock.isAuthenticated.mockResolvedValue(false);
 
-      await initAuth();
+      await createAuth();
 
       expect(authClientMock.isAuthenticated).toHaveBeenCalled();
     });
@@ -64,7 +66,29 @@ describe('auth.services', () => {
       const authStore = AuthStore.getInstance();
       authStore.reset();
 
-      await initAuth();
+      await createAuth();
+
+      expect(authClientMock.isAuthenticated).toHaveBeenCalled();
+      expect(authStore.get()).not.toBeNull();
+    });
+  });
+
+  describe('loadAuth', () => {
+    it('does nothing if not authenticated', async () => {
+      authClientMock.isAuthenticated.mockResolvedValue(false);
+
+      await loadAuth();
+
+      expect(authClientMock.isAuthenticated).toHaveBeenCalled();
+    });
+
+    it('loads user if authenticated', async () => {
+      authClientMock.isAuthenticated.mockResolvedValue(true);
+
+      const authStore = AuthStore.getInstance();
+      authStore.reset();
+
+      await loadAuth();
 
       expect(authClientMock.isAuthenticated).toHaveBeenCalled();
       expect(authStore.get()).not.toBeNull();
@@ -82,7 +106,7 @@ describe('auth.services', () => {
 
     describe('Initialized', () => {
       beforeEach(async () => {
-        await initAuth();
+        await loadAuth();
       });
 
       it('resolves if login succeeds', async () => {
@@ -220,7 +244,7 @@ describe('auth.services', () => {
     let spy: MockInstance;
 
     beforeEach(async () => {
-      await initAuth();
+      await loadAuth();
 
       spy = vi.spyOn(authUtils, 'createAuthClient').mockResolvedValue(authClientMock);
     });
@@ -245,7 +269,7 @@ describe('auth.services', () => {
     it('returns identity if available', async () => {
       authClientMock.getIdentity.mockReturnValue(mockIdentity);
 
-      await initAuth();
+      await loadAuth();
 
       const identity = getIdentity();
 
@@ -296,7 +320,7 @@ describe('auth.services', () => {
     it('returns identity if authenticated', async () => {
       AuthStore.getInstance().set(mockUser);
 
-      await initAuth();
+      await loadAuth();
 
       authClientMock.isAuthenticated.mockResolvedValue(true);
       authClientMock.getIdentity.mockReturnValue(mockIdentity);

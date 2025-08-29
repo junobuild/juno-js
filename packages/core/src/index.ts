@@ -1,7 +1,7 @@
 import {assertNonNullish} from '@dfinity/utils';
 import type {Asset, AssetEncoding, AssetKey, EncodingType, Storage} from '@junobuild/storage';
 import {initAuthTimeoutWorker} from './auth/services/auth-timout.services';
-import {initAuth} from './auth/services/auth.services';
+import {loadAuth} from './auth/services/auth.services';
 import {AuthStore} from './auth/stores/auth.store';
 import type {User} from './auth/types/user';
 import {EnvStore} from './core/stores/env.store';
@@ -64,7 +64,7 @@ export const initSatellite = async (userEnv?: UserEnvironment): Promise<Unsubscr
 
   EnvStore.getInstance().set(env);
 
-  await initAuth();
+  await loadAuth();
 
   const authSubscribe =
     env.workers?.auth !== undefined ? initAuthTimeoutWorker(env.workers.auth) : undefined;

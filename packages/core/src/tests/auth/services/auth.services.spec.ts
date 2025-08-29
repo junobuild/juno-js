@@ -1,6 +1,10 @@
+/**
+ * @vitest-environment jsdom
+ */
+
 import {AnonymousIdentity} from '@dfinity/agent';
 import {AuthClient} from '@dfinity/auth-client';
-import type {Mock, MockInstance} from 'vitest';
+import {expect, Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as userServices from '../../../auth/services/_user.services';
 import {
@@ -89,6 +93,67 @@ describe('auth.services', () => {
         });
 
         await expect(signIn()).resolves.toBeUndefined();
+      });
+
+      it('call auth client with internet identity options', async () => {
+        authClientMock.isAuthenticated.mockResolvedValue(false);
+        const spy = authClientMock.login.mockImplementation(async (options) => {
+          // @ts-ignore
+          options?.onSuccess?.();
+        });
+
+        await expect(
+          signIn({
+            internet_identity: {
+              config: {domain: 'ic0.app'},
+              options: {
+                maxTimeToLive: 111n
+              }
+            }
+          })
+        ).resolves.toBeUndefined();
+
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith(
+          expect.objectContaining({
+            allowPinAuthentication: false,
+            identityProvider: 'https://identity.ic0.app',
+            maxTimeToLive: 111n,
+            windowOpenerFeatures:
+              'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=576, height=576, top=96, left=224'
+          })
+        );
+      });
+
+      it('call auth client with nfid options', async () => {
+        authClientMock.isAuthenticated.mockResolvedValue(false);
+        const spy = authClientMock.login.mockImplementation(async (options) => {
+          // @ts-ignore
+          options?.onSuccess?.();
+        });
+
+        await expect(
+          signIn({
+            nfid: {
+              config: {appName: 'test', logoUrl: 'https://my.com/logo.png'},
+              options: {
+                maxTimeToLive: 222n
+              }
+            }
+          })
+        ).resolves.toBeUndefined();
+
+        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalledWith(
+          expect.objectContaining({
+            allowPinAuthentication: false,
+            identityProvider:
+              'https://nfid.one/authenticate/?applicationName=test&applicationLogo=https://my.com/logo.png',
+            maxTimeToLive: 222n,
+            windowOpenerFeatures:
+              'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=505, height=705, top=31.5, left=259.5'
+          })
+        );
       });
 
       it('rejects with SignInUserInterruptError if interrupted', async () => {

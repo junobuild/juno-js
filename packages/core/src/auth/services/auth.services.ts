@@ -4,6 +4,7 @@ import {isNullish} from '@dfinity/utils';
 import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';
 import {InternetIdentityProvider} from '../providers/internet-identity.providers';
+import {NFIDProvider} from '../providers/nfid.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInOptions} from '../types/auth';
 import type {Provider} from '../types/provider';
@@ -28,13 +29,27 @@ export const initAuth = async (provider?: Provider) => {
 /**
  * Signs in a user with the specified options.
  *
- * @param {SignInOptions} [options] - The options for signing in.
+ * @param {SignInOptions} [options] - The options and authentication provider for signing in.
  * @returns {Promise<void>} A promise that resolves when the sign-in process is complete and the authenticated user is initialized.
  * @throws {SignInError} If the sign-in process fails or no authentication client is available.
  */
 export const signIn = async (options?: SignInOptions): Promise<void> => {
-  const provider = options?.provider ?? new InternetIdentityProvider({});
-  await provider.signIn({options, authClient, initAuth});
+  const opts = options ?? {internet_identity: {}};
+
+  if ('nfid' in opts) {
+    const {
+      nfid: {config, options: signInOptions}
+    } = opts;
+
+    await new NFIDProvider(config).signIn({options: signInOptions, authClient, initAuth});
+    return;
+  }
+
+  const {
+    internet_identity: {config, options: signInOptions}
+  } = opts;
+
+  await new InternetIdentityProvider(config).signIn({options: signInOptions, authClient, initAuth});
 };
 
 /**

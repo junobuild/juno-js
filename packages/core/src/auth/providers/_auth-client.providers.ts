@@ -4,7 +4,6 @@ import {
   ALLOW_PIN_AUTHENTICATION,
   DELEGATION_IDENTITY_EXPIRATION
 } from '../constants/auth.constants';
-import {initAuth} from '../services/auth.services';
 import type {AuthClientSignInOptions} from '../types/auth-client';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
 import type {AuthProvider, Provider} from '../types/provider';
@@ -43,11 +42,13 @@ export abstract class AuthClientProvider implements AuthProvider {
   /**
    * Returns the sign-in options for the provider.
    *
+   * Note: set as public instead of protected for testing purposes.
+   *
    * @abstract
    * @param {Pick<SignInOptions, 'windowed'>} options - Options controlling window behavior.
    * @returns {AuthProviderSignInOptions} Provider-specific sign-in options.
    */
-  protected abstract signInOptions(
+  abstract signInOptions(
     options: Pick<AuthClientSignInOptions, 'windowed'>
   ): AuthProviderSignInOptions;
 
@@ -57,6 +58,7 @@ export abstract class AuthClientProvider implements AuthProvider {
    * @param {Object} params - The sign-in parameters.
    * @param {AuthClientSignInOptions} [params.options] - Optional configuration for the login request.
    * @param {AuthClient | undefined | null} params.authClient - The AuthClient instance in its current state.
+   * @param {initAuth} params.initAuth - The function to load or initialize the user. Provided as a callback to avoid recursive import.
    *
    * @returns {Promise<void>} Resolves if the sign-in is successful. Rejects with:
    * - {@link SignInInitError} if no AuthClient is available.
@@ -65,10 +67,12 @@ export abstract class AuthClientProvider implements AuthProvider {
    */
   signIn({
     options,
-    authClient
+    authClient,
+    initAuth
   }: {
     options?: AuthClientSignInOptions;
     authClient: AuthClient | undefined | null;
+    initAuth: (provider?: Provider) => Promise<void>;
   }): Promise<void> {
     /* eslint-disable no-async-promise-executor */
     return new Promise<void>(async (resolve, reject) => {

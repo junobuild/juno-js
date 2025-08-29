@@ -51,7 +51,7 @@ export const signIn = async (options?: SignInOptions): Promise<void> => {
       nfid: {config, options: signInOptions}
     } = opts;
 
-    await new NFIDProvider(config).signIn({options: signInOptions, authClient});
+    await new NFIDProvider(config).signIn({options: signInOptions, authClient, initAuth});
     return;
   }
 
@@ -59,7 +59,7 @@ export const signIn = async (options?: SignInOptions): Promise<void> => {
     internet_identity: {config, options: signInOptions}
   } = opts;
 
-  await new InternetIdentityProvider(config).signIn({options: signInOptions, authClient});
+  await new InternetIdentityProvider(config).signIn({options: signInOptions, authClient, initAuth});
 };
 
 /**

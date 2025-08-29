@@ -3,28 +3,53 @@ import type {AuthClient} from '@dfinity/auth-client';
 import {isNullish} from '@dfinity/utils';
 import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';
+import {executeWithWindowGuard} from '../helpers/window.helpers';
 import {InternetIdentityProvider} from '../providers/internet-identity.providers';
 import {NFIDProvider} from '../providers/nfid.providers';
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInOptions} from '../types/auth';
-import type {Provider} from '../types/provider';
 import {createAuthClient} from '../utils/auth.utils';
-import {initUser} from './_user.services';
+import {initUser, loadUser} from './_user.services';
 
 let authClient: AuthClient | undefined | null;
 
-export const initAuth = async (provider?: Provider) => {
+/**
+ * Initialize the authClient and load the existing user.
+ * Executed when the library is initialized through initSatellite.
+ */
+export const loadAuth = async () => {
+  const init = async () => {
+    const {user} = await loadUser();
+    AuthStore.getInstance().set(user ?? null);
+  };
+
+  await executeAuth({fn: init});
+};
+
+/**
+ * Initialize the authClient, load or create a new user.
+ * Executed on sign-in.
+ */
+export const createAuth = async () => {
+  const init = async () => {
+    const user = await initUser();
+    AuthStore.getInstance().set(user);
+  };
+
+  await executeAuth({fn: init});
+};
+
+const executeAuth = async ({fn}: {fn: () => Promise<void>}) => {
   authClient = authClient ?? (await createAuthClient());
 
-  const isAuthenticated: boolean = (await authClient?.isAuthenticated()) ?? false;
+  const isAuthenticated = await authClient.isAuthenticated();
 
   if (!isAuthenticated) {
     return;
   }
 
-  const user = await initUser(provider);
-  AuthStore.getInstance().set(user);
+  await fn();
 };
 
 /**
@@ -36,7 +61,19 @@ export const initAuth = async (provider?: Provider) => {
  */
 export const signIn = async (options?: SignInOptions): Promise<void> => {
   const opts = options ?? {internet_identity: {}};
+  const fn = async () => await signInWithProvider(opts);
 
+  const disableWindowGuard = Object.values(opts)?.[0].context?.windowGuard === false;
+
+  if (disableWindowGuard) {
+    await fn();
+    return;
+  }
+
+  await executeWithWindowGuard({fn});
+};
+
+const signInWithProvider = async (options: SignInOptions): Promise<void> => {
   if ('webauthn' in opts) {
     const {
       webauthn: {options: signInOptions}
@@ -46,20 +83,28 @@ export const signIn = async (options?: SignInOptions): Promise<void> => {
     return;
   }
 
-  if ('nfid' in opts) {
+  if ('nfid' in options) {
     const {
       nfid: {config, options: signInOptions}
-    } = opts;
+    } = options;
 
-    await new NFIDProvider(config).signIn({options: signInOptions, authClient, initAuth});
+    await new NFIDProvider(config).signIn({
+      options: signInOptions,
+      authClient,
+      initAuth: createAuth
+    });
     return;
   }
 
   const {
     internet_identity: {config, options: signInOptions}
-  } = opts;
+  } = options;
 
-  await new InternetIdentityProvider(config).signIn({options: signInOptions, authClient, initAuth});
+  await new InternetIdentityProvider(config).signIn({
+    options: signInOptions,
+    authClient,
+    initAuth: createAuth
+  });
 };
 
 /**

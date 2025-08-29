@@ -2,6 +2,21 @@ import type {AuthClientSignInOptions, InternetIdentityConfig, NFIDConfig} from '
 import type {WebAuthnSignInOptions} from './webauthn';
 
 /**
+ * Options for the context of the sign-in flow.
+ */
+export interface SignInContext {
+  /**
+   * Opt out of the beforeunload window guard for the sign-in which prevents
+   * the user to closing the current window/tab while the sign-in flow is in progress.
+   *
+   * Disabling it is discouraged.
+   *
+   * @default true
+   */
+  windowGuard?: boolean;
+}
+
+/**
  * The options for sign-in.
  *
  * - `internetIdentity`: Internet Identity config + options
@@ -10,11 +25,15 @@ import type {WebAuthnSignInOptions} from './webauthn';
  */
 export type SignInOptions =
   | {
-      internet_identity: {config?: InternetIdentityConfig; options?: AuthClientSignInOptions};
+      internet_identity: {
+        config?: InternetIdentityConfig;
+        options?: AuthClientSignInOptions;
+        context?: SignInContext;
+      };
     }
   | {
-      nfid: {config: NFIDConfig; options?: AuthClientSignInOptions};
+      nfid: {config: NFIDConfig; options?: AuthClientSignInOptions; context?: SignInContext};
     }
   | {
-      webauthn: {options?: WebAuthnSignInOptions};
-    };
+  webauthn: {options?: WebAuthnSignInOptions};
+};

@@ -113,6 +113,24 @@ describe('auth.services', () => {
         expect(removeSpy).toHaveBeenCalledTimes(1);
       });
 
+      it('should not add and remove window beforeunload guard if opted-out', async () => {
+        const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
+        const removeSpy = vi
+          .spyOn(window, 'removeEventListener')
+          .mockImplementation(() => undefined);
+
+        authClientMock.isAuthenticated.mockResolvedValue(false);
+        authClientMock.login.mockImplementation(async (options) => {
+          // @ts-ignore
+          options?.onSuccess?.();
+        });
+
+        await signIn({internet_identity: {context: {windowGuard: false}}});
+
+        expect(addSpy).not.toHaveBeenCalled();
+        expect(removeSpy).not.toHaveBeenCalled();
+      });
+
       it('call auth client with internet identity options', async () => {
         authClientMock.isAuthenticated.mockResolvedValue(false);
         const spy = authClientMock.login.mockImplementation(async (options) => {

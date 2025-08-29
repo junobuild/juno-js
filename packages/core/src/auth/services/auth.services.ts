@@ -38,6 +38,13 @@ export const signIn = async (options?: SignInOptions): Promise<void> => {
   const opts = options ?? {internet_identity: {}};
   const fn = async () => await signInWithProvider(opts);
 
+  const disableWindowGuard = Object.values(opts)?.[0].context?.windowGuard === false;
+
+  if (disableWindowGuard) {
+    await fn();
+    return;
+  }
+
   await executeWithWindowGuard({fn});
 };
 

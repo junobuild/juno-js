@@ -44,7 +44,7 @@ export class WebAuthnProvider implements AuthProvider {
    *
    * @param {Object} params - The sign-in parameters.
    * @param {WebAuthnSignInOptions} [params.options] - Optional configuration for the login request.
-   * @param {loadAuth} params.initAuth - The function to load or initialize the user. Provided as a callback to avoid recursive import.
+   * @param {loadAuth} params.loadAuth - The function to load the user. Provided as a callback to avoid recursive import.
    *
    * @returns {Promise<void>} Resolves if the sign-in is successful.
    */

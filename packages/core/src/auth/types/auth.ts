@@ -1,16 +1,15 @@
-import type {InternetIdentityProvider} from '../providers/internet-identity.providers';
-import type {NFIDProvider} from '../providers/nfid.providers';
-import type {AuthClientSignInOptions} from './auth-client';
+import type {AuthClientSignInOptions, InternetIdentityConfig, NFIDConfig} from './auth-client';
 
 /**
- * Interface representing sign-in options.
- * @interface SignInOptions
+ * The options for sign-in.
+ *
+ * - `internetIdentity`: Internet Identity config + options
+ * - `nfid`: NFID config (required) + popup options
  */
-export interface SignInOptions extends AuthClientSignInOptions {
-  /**
-   * The authentication provider to use.
-   * @default InternetIdentityProvider
-   * @type {(InternetIdentityProvider | NFIDProvider)}
-   */
-  provider?: InternetIdentityProvider | NFIDProvider;
-}
+export type SignInOptions =
+  | {
+      internet_identity: {config?: InternetIdentityConfig; options?: AuthClientSignInOptions};
+    }
+  | {
+      nfid: {config: NFIDConfig; options?: AuthClientSignInOptions};
+    };

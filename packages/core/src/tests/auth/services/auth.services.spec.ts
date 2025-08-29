@@ -1,3 +1,7 @@
+/**
+ * @vitest-environment jsdom
+ */
+
 import {AnonymousIdentity} from '@dfinity/agent';
 import {AuthClient} from '@dfinity/auth-client';
 import {expect, Mock, MockInstance} from 'vitest';
@@ -115,7 +119,8 @@ describe('auth.services', () => {
             allowPinAuthentication: false,
             identityProvider: 'https://identity.ic0.app',
             maxTimeToLive: 111n,
-            windowOpenerFeatures: undefined
+            windowOpenerFeatures:
+              'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=576, height=576, top=96, left=224'
           })
         );
       });
@@ -145,7 +150,8 @@ describe('auth.services', () => {
             identityProvider:
               'https://nfid.one/authenticate/?applicationName=test&applicationLogo=https://my.com/logo.png',
             maxTimeToLive: 222n,
-            windowOpenerFeatures: undefined
+            windowOpenerFeatures:
+              'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=505, height=705, top=31.5, left=259.5'
           })
         );
       });

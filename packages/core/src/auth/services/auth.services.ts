@@ -3,6 +3,7 @@ import type {AuthClient} from '@dfinity/auth-client';
 import {isNullish} from '@dfinity/utils';
 import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';
+import {executeWithWindowGuard} from '../helpers/window.helpers';
 import {InternetIdentityProvider} from '../providers/internet-identity.providers';
 import {NFIDProvider} from '../providers/nfid.providers';
 import {AuthStore} from '../stores/auth.store';
@@ -35,11 +36,23 @@ export const initAuth = async (provider?: Provider) => {
  */
 export const signIn = async (options?: SignInOptions): Promise<void> => {
   const opts = options ?? {internet_identity: {}};
+  const fn = async () => await signInWithProvider(opts);
 
-  if ('nfid' in opts) {
+  const disableWindowGuard = Object.values(opts)?.[0].context?.windowGuard === false;
+
+  if (disableWindowGuard) {
+    await fn();
+    return;
+  }
+
+  await executeWithWindowGuard({fn});
+};
+
+const signInWithProvider = async (options: SignInOptions): Promise<void> => {
+  if ('nfid' in options) {
     const {
       nfid: {config, options: signInOptions}
-    } = opts;
+    } = options;
 
     await new NFIDProvider(config).signIn({options: signInOptions, authClient, initAuth});
     return;
@@ -47,7 +60,7 @@ export const signIn = async (options?: SignInOptions): Promise<void> => {
 
   const {
     internet_identity: {config, options: signInOptions}
-  } = opts;
+  } = options;
 
   await new InternetIdentityProvider(config).signIn({options: signInOptions, authClient, initAuth});
 };

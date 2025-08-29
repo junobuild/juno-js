@@ -34,7 +34,7 @@ export const initAuth = async (provider?: Provider) => {
  */
 export const signIn = async (options?: SignInOptions): Promise<void> => {
   const provider = options?.provider ?? new InternetIdentityProvider({});
-  await provider.signIn({options, authClient});
+  await provider.signIn({options, authClient, initAuth});
 };
 
 /**

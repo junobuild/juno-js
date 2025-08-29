@@ -37,7 +37,7 @@ export class NFIDProvider extends AuthClientProvider {
    * @param {Pick<SignInOptions, 'windowed'>} options - The sign-in options.
    * @returns {AuthProviderSignInOptions} The sign-in options to effectively sign-in with NFID.
    */
-  protected override signInOptions({
+  override signInOptions({
     windowed
   }: Pick<AuthClientSignInOptions, 'windowed'>): AuthProviderSignInOptions {
     return {

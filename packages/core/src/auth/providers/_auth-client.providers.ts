@@ -43,11 +43,13 @@ export abstract class AuthClientProvider implements AuthProvider {
   /**
    * Returns the sign-in options for the provider.
    *
+   * Note: set as public instead of protected for testing purposes.
+   *
    * @abstract
    * @param {Pick<SignInOptions, 'windowed'>} options - Options controlling window behavior.
    * @returns {AuthProviderSignInOptions} Provider-specific sign-in options.
    */
-  protected abstract signInOptions(
+  abstract signInOptions(
     options: Pick<AuthClientSignInOptions, 'windowed'>
   ): AuthProviderSignInOptions;
 

@@ -26,7 +26,7 @@ export class InternetIdentityProvider extends AuthClientProvider {
    * Creates an instance of InternetIdentityProvider.
    * @param {InternetIdentityConfig} config - The configuration for Internet Identity.
    */
-  constructor({domain}: InternetIdentityConfig) {
+  constructor({domain}: InternetIdentityConfig = {}) {
     super();
 
     this.#domain = domain;

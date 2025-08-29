@@ -1,5 +1,4 @@
-import type {SignIdentity} from '@dfinity/agent';
-import {AnonymousIdentity} from '@dfinity/agent';
+import {type SignIdentity,AnonymousIdentity} from '@dfinity/agent';
 import {IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@dfinity/auth-client';
 import {
   DelegationChain,
@@ -10,15 +9,16 @@ import {
 } from '@dfinity/identity';
 import {assertNonNullish, uint8ArrayToBase64} from '@dfinity/utils';
 import {
-  RetrievePublicKeyFn,
-  WebAuthnIdentity,
-  WebAuthnSignProgressFn
+  type RetrievePublicKeyFn,
+  type WebAuthnSignProgressFn
+,
+  WebAuthnIdentity
 } from '@junobuild/ic-client/webauthn';
 import {EnvStore} from '../../core/stores/env.store';
 import {getDoc} from '../../datastore/services/doc.services';
 import {DELEGATION_IDENTITY_EXPIRATION_IN_MILLISECONDS} from '../constants/auth.constants';
 import type {AuthProvider, Provider} from '../types/provider';
-import {
+import type {
   WebAuthnSignInOptions,
   WebAuthnSignProgressFn as WebAuthnSignProviderProgressFn
 } from '../types/webauthn';
@@ -28,7 +28,7 @@ interface SessionDelegationIdentity {
   sessionKey: ECDSAKeyIdentity;
 }
 
-export class WebauthnProvider implements AuthProvider {
+export class WebAuthnProvider implements AuthProvider {
   /**
    * Gets the identifier of the provider.
    * @returns {Provider} The identifier of the provider is webauthn.

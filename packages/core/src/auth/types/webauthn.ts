@@ -83,7 +83,7 @@ export interface WebAuthnSignInOptions extends WebAuthnSignOptions {
  * Interface representing sign-up options when using a WebAuthn (passkey) based provider.
  * @interface WebAuthnSignUpSessionOptions
  */
-export interface WebAuthnSignUpSessionOptions extends WebAuthnSignOptions {
+export interface WebAuthnSignUpOptions extends WebAuthnSignOptions {
   /**
    * Optional callback to receive progress updates about the sign-up flow.
    * Useful for showing UI feedback such as loading indicators or status messages.

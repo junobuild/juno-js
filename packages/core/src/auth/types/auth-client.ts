@@ -4,10 +4,10 @@
  */
 export interface AuthClientSignInOptions {
   /**
-   * Maximum time to live for the session. Cannot be extended.
+   * Maximum time to live for the session in nanoseconds. Cannot be extended.
    * @type {bigint}
    */
-  maxTimeToLive?: bigint;
+  maxTimeToLiveInNanoseconds?: bigint;
 
   /**
    * Origin for derivation. Useful when sign-in using the same domain - e.g. sign-in on www.hello.com for hello.com.

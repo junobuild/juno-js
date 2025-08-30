@@ -167,7 +167,7 @@ describe('auth.services', () => {
             internet_identity: {
               config: {domain: 'ic0.app'},
               options: {
-                maxTimeToLive: 111n
+                maxTimeToLiveInNanoseconds: 111n
               }
             }
           })
@@ -197,7 +197,7 @@ describe('auth.services', () => {
             nfid: {
               config: {appName: 'test', logoUrl: 'https://my.com/logo.png'},
               options: {
-                maxTimeToLive: 222n
+                maxTimeToLiveInNanoseconds: 222n
               }
             }
           })

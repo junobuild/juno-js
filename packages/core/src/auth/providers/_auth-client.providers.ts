@@ -98,7 +98,7 @@ export abstract class AuthClientProvider implements AuthProvider {
 
           reject(new SignInError(error));
         },
-        maxTimeToLive: options?.maxTimeToLive ?? DELEGATION_IDENTITY_EXPIRATION,
+        maxTimeToLive: options?.maxTimeToLiveInNanoseconds ?? DELEGATION_IDENTITY_EXPIRATION,
         allowPinAuthentication: options?.allowPin ?? ALLOW_PIN_AUTHENTICATION,
         ...(options?.derivationOrigin !== undefined && {
           derivationOrigin: options.derivationOrigin

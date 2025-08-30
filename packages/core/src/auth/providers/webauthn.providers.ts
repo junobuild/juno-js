@@ -9,8 +9,8 @@ import {
 } from '@dfinity/identity';
 import {isNullish, uint8ArrayToBase64} from '@dfinity/utils';
 import {
-  type WebAuthnNewCredential,
   type RetrievePublicKeyFn,
+  type WebAuthnNewCredential,
   type WebAuthnSignProgressFn,
   WebAuthnIdentity,
   WebAuthnSignProgressStep
@@ -23,9 +23,9 @@ import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../types/er
 import type {AuthProvider, Provider} from '../types/provider';
 import type {User} from '../types/user';
 import {
-  type WebAuthnSignUpOptions,
   type WebAuthnSignInOptions,
   type WebAuthnSignProgressFn as WebAuthnSignProviderProgressFn,
+  type WebAuthnSignUpOptions,
   WebAuthnSignInProgressStep,
   WebAuthnSignUpProgressStep
 } from '../types/webauthn';
@@ -113,7 +113,7 @@ export class WebAuthnProvider implements AuthProvider {
     // a race condition where the user would reload the window and the lib
     // would try to retrieve and undefined user for the delegation saved in indexeddb.
     const register = async () =>
-      createWebAuthnUser({
+      await createWebAuthnUser({
         delegationIdentity,
         passkeyIdentity,
         satelliteId

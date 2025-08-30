@@ -7,7 +7,7 @@ import * as identityLib from '@dfinity/identity';
 import {arrayOfNumberToUint8Array} from '@dfinity/utils';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import {toArray} from '@junobuild/utils';
-import {beforeEach} from 'vitest';
+import {beforeEach, MockInstance} from 'vitest';
 import {WebAuthnProvider} from '../../../auth/providers/webauthn.providers';
 import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../../../auth/types/errors';
 import {WebAuthnSignInProgressStep, WebAuthnSignUpProgressStep} from '../../../auth/types/webauthn';
@@ -203,10 +203,12 @@ describe('webauthn.providers', async () => {
     });
 
     describe('With env configured', () => {
+      let set_many_docs: MockInstance;
+
       beforeEach(() => {
         EnvStore.getInstance().set({satelliteId: mockSatelliteId});
 
-        const set_many_docs = vi.fn().mockResolvedValue([
+        set_many_docs = vi.fn().mockResolvedValue([
           [mockUserIdText, mockWebAuthnDocUserApiObject],
           [mockPasskeyIdentity.getCredential().getCredentialIdText(), mockWebAuthnDocApiObject]
         ]);
@@ -214,7 +216,7 @@ describe('webauthn.providers', async () => {
         vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({set_many_docs} as any);
       });
 
-      it('runs sign-up flow, maps progress, persists session, and calls loadAuthWithUser with created user', async () => {
+      it('maps lower-level progress to sign-up progress steps', async () => {
         vi.spyOn(webAuthnLib.WebAuthnIdentity, 'createWithNewCredential').mockImplementation(
           async ({onProgress}: any) => {
             onProgress?.({
@@ -229,7 +231,6 @@ describe('webauthn.providers', async () => {
               step: webAuthnLib.WebAuthnSignProgressStep.Signing,
               state: 'in_progress'
             });
-
             return mockPasskeyIdentity;
           }
         );
@@ -238,33 +239,23 @@ describe('webauthn.providers', async () => {
           getPublicKey: vi.fn(),
           getKeyPair: vi.fn()
         } as any);
-
         vi.spyOn(identityLib.DelegationChain, 'create').mockResolvedValue({} as any);
-
         vi.spyOn(identityLib.DelegationIdentity, 'fromDelegation').mockReturnValue({
           getDelegation: () => ({toJSON: () => ({})}),
           getPrincipal: () => ({toText: () => mockUserIdText})
         } as any);
 
         const events: Array<{step: any; state: string}> = [];
-        const loadAuthWithUser = vi.fn().mockResolvedValue(undefined);
-
         await new WebAuthnProvider().signUp({
           options: {onProgress: (e) => events.push(e)},
-          loadAuthWithUser
+          loadAuthWithUser: async () => {}
         });
 
         expect(events).toEqual(
           expect.arrayContaining([
-            {
-              step: WebAuthnSignUpProgressStep.CreatingUserCredential,
-              state: 'in_progress'
-            },
+            {step: WebAuthnSignUpProgressStep.CreatingUserCredential, state: 'in_progress'},
             {step: WebAuthnSignUpProgressStep.CreatingUserCredential, state: 'success'},
-            {
-              step: WebAuthnSignUpProgressStep.ValidatingUserCredential,
-              state: 'in_progress'
-            },
+            {step: WebAuthnSignUpProgressStep.ValidatingUserCredential, state: 'in_progress'},
             {step: WebAuthnSignUpProgressStep.FinalizingCredential, state: 'success'},
             {step: WebAuthnSignUpProgressStep.Signing, state: 'in_progress'},
             {step: WebAuthnSignUpProgressStep.RegisteringUser, state: 'in_progress'},
@@ -275,16 +266,61 @@ describe('webauthn.providers', async () => {
             {step: WebAuthnSignUpProgressStep.RegisteringUser, state: 'success'}
           ])
         );
+      });
 
+      it('registers user via set_many_docs and passes it to loadAuthWithUser', async () => {
+        vi.spyOn(webAuthnLib.WebAuthnIdentity, 'createWithNewCredential').mockResolvedValue(
+          mockPasskeyIdentity as any
+        );
+        vi.spyOn(identityLib.ECDSAKeyIdentity, 'generate').mockResolvedValue({
+          getPublicKey: vi.fn(),
+          getKeyPair: vi.fn()
+        } as any);
+        vi.spyOn(identityLib.DelegationChain, 'create').mockResolvedValue({} as any);
+        vi.spyOn(identityLib.DelegationIdentity, 'fromDelegation').mockReturnValue({
+          getDelegation: () => ({toJSON: () => ({})}),
+          getPrincipal: () => ({toText: () => mockUserIdText})
+        } as any);
+
+        const loadAuthWithUser = vi.fn().mockResolvedValue(undefined);
+
+        await new WebAuthnProvider().signUp({loadAuthWithUser});
+
+        expect(set_many_docs).toHaveBeenCalledTimes(1);
         expect(loadAuthWithUser).toHaveBeenCalledWith({
-          user: expect.objectContaining({key: mockUserIdText, data: mockWebAuthnDataProvider})
+          user: {
+            created_at: 0n,
+            data: mockWebAuthnDataProvider,
+            description: undefined,
+            key: mockUserIdText,
+            owner: mockUserIdText,
+            version: undefined
+          }
         });
+      });
+
+      it('persists session keys and delegation to IndexedDB', async () => {
+        vi.spyOn(webAuthnLib.WebAuthnIdentity, 'createWithNewCredential').mockResolvedValue(
+          mockPasskeyIdentity as any
+        );
+        vi.spyOn(identityLib.ECDSAKeyIdentity, 'generate').mockResolvedValue({
+          getPublicKey: vi.fn(),
+          getKeyPair: vi.fn()
+        } as any);
+        vi.spyOn(identityLib.DelegationChain, 'create').mockResolvedValue({} as any);
+        const fakeDelegation = {foo: 'bar'};
+        vi.spyOn(identityLib.DelegationIdentity, 'fromDelegation').mockReturnValue({
+          getDelegation: () => ({toJSON: () => fakeDelegation}),
+          getPrincipal: () => ({toText: () => mockUserIdText})
+        } as any);
+
+        await new WebAuthnProvider().signUp({loadAuthWithUser: async () => {}});
 
         const storage = new IdbStorage();
         const storedKey = await storage.get(KEY_STORAGE_KEY);
         const storedDelegation = await storage.get(KEY_STORAGE_DELEGATION);
         expect(storedKey).toBeDefined();
-        expect(() => JSON.parse(storedDelegation ?? '')).not.toThrow();
+        expect(JSON.parse(storedDelegation ?? '')).toEqual(fakeDelegation);
       });
 
       it('creates session delegation with provided maxTimeToLiveInMilliseconds', async () => {

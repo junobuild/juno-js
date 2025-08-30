@@ -4,6 +4,8 @@
 
 import {AnonymousIdentity} from '@dfinity/agent';
 import {AuthClient} from '@dfinity/auth-client';
+import * as identityLib from '@dfinity/identity';
+import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as userServices from '../../../auth/services/_user.services';
@@ -20,7 +22,8 @@ import {
 import {AuthStore} from '../../../auth/stores/auth.store';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../../../auth/types/errors';
 import * as authUtils from '../../../auth/utils/auth.utils';
-import {mockIdentity, mockUser, mockUserIdText} from '../../mocks/core.mock';
+import {EnvStore} from '../../../core/stores/env.store';
+import {mockIdentity, mockSatelliteId, mockUser, mockUserIdText} from '../../mocks/core.mock';
 
 vi.mock('@dfinity/auth-client', async () => {
   const actual = (await import('@dfinity/auth-client')) as typeof import('@dfinity/auth-client');
@@ -214,6 +217,33 @@ describe('auth.services', () => {
               'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=505, height=705, top=31.5, left=259.5'
           })
         );
+      });
+
+      it('should call webauthn provider with options', async () => {
+        EnvStore.getInstance().set({satelliteId: mockSatelliteId});
+
+        const loginSpy = authClientMock.login.mockImplementation(async () => {
+          throw new Error('authClient.login must not be called for webauthn');
+        });
+
+        vi.spyOn(webAuthnLib.WebAuthnIdentity, 'createWithExistingCredential').mockResolvedValue(
+          {} as any
+        );
+        vi.spyOn(identityLib.ECDSAKeyIdentity, 'generate').mockResolvedValue({
+          getPublicKey: vi.fn(),
+          getKeyPair: vi.fn()
+        } as any);
+        vi.spyOn(identityLib.DelegationChain, 'create').mockResolvedValue({} as any);
+        vi.spyOn(identityLib.DelegationIdentity, 'fromDelegation').mockReturnValue({
+          getDelegation: () => ({toJSON: () => ({})})
+        } as any);
+
+        authClientMock.isAuthenticated.mockResolvedValue(true);
+
+        await expect(signIn({webauthn: {}})).resolves.toBeUndefined();
+
+        expect(loginSpy).not.toHaveBeenCalled();
+        expect(userServices.loadUser).toHaveBeenCalled();
       });
 
       it('rejects with SignInUserInterruptError if interrupted', async () => {

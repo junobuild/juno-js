@@ -1,8 +1,8 @@
 /**
  * Type representing the available authentication providers.
- * @typedef {('internet_identity' | 'nfid')} Provider
+ * @typedef {('internet_identity' | 'nfid' | 'webauthn')} Provider
  */
-export type Provider = 'internet_identity' | 'nfid';
+export type Provider = 'internet_identity' | 'nfid' | 'webauthn';
 
 /**
  * Common traits for all authentication providers

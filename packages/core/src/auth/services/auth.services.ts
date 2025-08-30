@@ -6,6 +6,7 @@ import {AgentStore} from '../../core/stores/agent.store';
 import {executeWithWindowGuard} from '../helpers/window.helpers';
 import {InternetIdentityProvider} from '../providers/internet-identity.providers';
 import {NFIDProvider} from '../providers/nfid.providers';
+import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInOptions} from '../types/auth';
 import type {Provider} from '../types/provider';
@@ -55,7 +56,7 @@ const executeAuth = async ({fn}: {fn: () => Promise<void>}) => {
 /**
  * Signs in a user with the specified options.
  *
- * @param {SignInOptions} [options] - The options and authentication provider for signing in.
+ * @param {SignInOptions} [options] - The options for signing in.
  * @returns {Promise<void>} A promise that resolves when the sign-in process is complete and the authenticated user is initialized.
  * @throws {SignInError} If the sign-in process fails or no authentication client is available.
  */
@@ -74,6 +75,18 @@ export const signIn = async (options?: SignInOptions): Promise<void> => {
 };
 
 const signInWithProvider = async (options: SignInOptions): Promise<void> => {
+  if ('webauthn' in options) {
+    const {
+      webauthn: {options: signInOptions}
+    } = options;
+
+    await new WebAuthnProvider().signIn({
+      options: signInOptions,
+      loadAuth
+    });
+    return;
+  }
+
   if ('nfid' in options) {
     const {
       nfid: {config, options: signInOptions}

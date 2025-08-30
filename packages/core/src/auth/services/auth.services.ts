@@ -32,9 +32,9 @@ export const loadAuth = async () => {
  * Initialize the authClient, load or create a new user.
  * Executed on sign-in.
  */
-export const createAuth = async (provider?: Provider) => {
+export const createAuth = async ({provider}: {provider: Provider}) => {
   const init = async () => {
-    const user = await initUser(provider);
+    const user = await initUser({provider});
     AuthStore.getInstance().set(user);
   };
 

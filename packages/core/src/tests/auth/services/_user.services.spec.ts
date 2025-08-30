@@ -3,6 +3,7 @@ import {toArray} from '@junobuild/utils';
 import * as userServices from '../../../auth/services/_user.services';
 import * as authServices from '../../../auth/services/auth.services';
 import {InitError} from '../../../auth/types/errors';
+import type {Provider} from '../../../auth/types/provider';
 import * as actorApi from '../../../core/api/actor.api';
 import {mockIdentity, mockUserIdPrincipal, mockUserIdText} from '../../mocks/core.mock';
 
@@ -22,7 +23,7 @@ describe('user.services', async () => {
     it('throws InitError if no identity', async () => {
       vi.spyOn(authServices, 'getIdentity').mockReturnValue(undefined);
 
-      await expect(userServices.initUser()).rejects.toThrowError(
+      await expect(userServices.initUser({provider: 'internet_identity'})).rejects.toThrowError(
         new InitError('No identity to initialize the user. Have you initialized Juno?')
       );
     });
@@ -33,7 +34,7 @@ describe('user.services', async () => {
       const mockGetDoc = vi.fn().mockResolvedValue([mockDocApiObject]);
       vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({get_doc: mockGetDoc} as any);
 
-      const user = await userServices.initUser();
+      const user = await userServices.initUser({provider: 'internet_identity'});
 
       expect(user?.key).toBe(mockUserIdText);
       expect(user?.data).toStrictEqual(mockData);
@@ -49,11 +50,34 @@ describe('user.services', async () => {
         set_doc: mockSetDoc
       } as any);
 
-      const user = await userServices.initUser();
+      const user = await userServices.initUser({provider: 'internet_identity'});
 
       expect(mockGetDoc).toHaveBeenCalled();
       expect(mockSetDoc).toHaveBeenCalled();
       expect(user?.key).toBe(mockUserIdText);
+    });
+
+    it.each(['internet_identity', 'nfid'])('creates user with provider %s', async (provider) => {
+      vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
+
+      const mockGetDoc = vi.fn().mockResolvedValue(undefined);
+      const mockSetDoc = vi.fn().mockResolvedValue(mockDocApiObject);
+      vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
+        get_doc: mockGetDoc,
+        set_doc: mockSetDoc
+      } as any);
+
+      await userServices.initUser({provider: provider as Provider});
+
+      const expectedData = await toArray({
+        provider
+      });
+
+      expect(mockSetDoc).toHaveBeenCalledWith('#user', mockUserIdText, {
+        data: expectedData,
+        description: [],
+        version: []
+      });
     });
 
     it('retries getDoc on JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE', async () => {
@@ -73,7 +97,7 @@ describe('user.services', async () => {
         set_doc: mockSetDoc
       } as any);
 
-      const user = await userServices.initUser();
+      const user = await userServices.initUser({provider: 'internet_identity'});
 
       expect(mockGetDoc).toHaveBeenCalledTimes(2);
       expect(mockSetDoc).toHaveBeenCalledOnce();
@@ -91,7 +115,9 @@ describe('user.services', async () => {
         set_doc: mockSetDoc
       } as any);
 
-      await expect(userServices.initUser()).rejects.toThrow('generic error');
+      await expect(userServices.initUser({provider: 'internet_identity'})).rejects.toThrow(
+        'generic error'
+      );
     });
   });
 

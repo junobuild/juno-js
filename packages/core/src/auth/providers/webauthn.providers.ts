@@ -12,7 +12,7 @@ import {
   type RetrievePublicKeyFn,
   type WebAuthnSignProgressFn,
   WebAuthnIdentity,
-  WebAuthnSignProgressStep
+  WebAuthnSignProgressStep, WebAuthnNewCredential
 } from '@junobuild/ic-client/webauthn';
 import {EnvStore} from '../../core/stores/env.store';
 import {getDoc} from '../../datastore/services/doc.services';
@@ -22,7 +22,7 @@ import type {AuthProvider, Provider} from '../types/provider';
 import {
   type WebAuthnSignInOptions,
   type WebAuthnSignProgressFn as WebAuthnSignProviderProgressFn,
-  WebAuthnSignInProgressStep
+  WebAuthnSignInProgressStep, WebAuthnSignUpProgressStep, WebAuthnSignUpOptions
 } from '../types/webauthn';
 
 interface SessionDelegationIdentity {
@@ -37,6 +37,66 @@ export class WebAuthnProvider implements AuthProvider {
    */
   get id(): Provider {
     return 'webauthn';
+  }
+
+  async signUp({
+                 options: {onProgress, maxTimeToLiveInMilliseconds} = {},
+                 loadAuth
+               }: {
+    options?: WebAuthnSignUpOptions;
+    loadAuth: () => Promise<void>;
+  }) {
+    const {satelliteId} = EnvStore.getInstance().get() ?? {satelliteId: undefined};
+
+    if (isNullish(satelliteId)) {
+      throw new SignInInitError('Satellite ID not set. Have you initialized the Satellite?');
+    }
+
+    const onSignProgress: WebAuthnSignProgressFn = ({step, state}) => {
+      switch (step) {
+        case WebAuthnSignProgressStep.RequestingUserCredential:
+          onProgress?.({
+            step: WebAuthnSignUpProgressStep.ValidatingUserCredential,
+            state,
+          });
+          break;
+        case WebAuthnSignProgressStep.FinalizingCredential:
+          onProgress?.({
+            step: WebAuthnSignUpProgressStep.FinalizingCredential,
+            state,
+          });
+          break;
+        case WebAuthnSignProgressStep.Signing:
+          onProgress?.({
+            step: WebAuthnSignUpProgressStep.Signing,
+            state,
+          });
+          break;
+      }
+    };
+
+    // 1. Create passkey
+    const createPasskey = async (): Promise<
+      WebAuthnIdentity<WebAuthnNewCredential>
+    > =>
+      await WebAuthnIdentity.createWithNewCredential({
+        onProgress: onSignProgress,
+      });
+
+    const passkeyIdentity = await this.#execute({
+      fn: createPasskey,
+      step: WebAuthnSignUpProgressStep.CreatingUserCredential,
+      onProgress,
+    });
+
+    // 2. Create session delegation. This will require the user the sign the session using their authenticator.
+    // i.e. they will have to use their authenticator a second time after create.
+    const {delegationIdentity, sessionKey} = await this.#createSessionDelegation({
+      identity: passkeyIdentity,
+      maxTimeToLiveInMilliseconds
+    });
+
+
   }
 
   /**

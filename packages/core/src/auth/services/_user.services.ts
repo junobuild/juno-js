@@ -8,7 +8,7 @@ import {getIdentity} from './auth.services';
 
 type UserId = string;
 
-export const initUser = async (provider?: Provider): Promise<User> => {
+export const initUser = async ({provider}: {provider: Provider}): Promise<User> => {
   const {user, userId} = await loadUser();
 
   // For returning users we do not need to create a user entry.

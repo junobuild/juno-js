@@ -72,7 +72,7 @@ export abstract class AuthClientProvider implements AuthProvider {
   }: {
     options?: AuthClientSignInOptions;
     authClient: AuthClient | undefined | null;
-    initAuth: (provider?: Provider) => Promise<void>;
+    initAuth: (params: {provider: Provider}) => Promise<void>;
   }): Promise<void> {
     /* eslint-disable no-async-promise-executor */
     return new Promise<void>(async (resolve, reject) => {
@@ -87,7 +87,7 @@ export abstract class AuthClientProvider implements AuthProvider {
 
       await authClient.login({
         onSuccess: async () => {
-          await initAuth(this.id);
+          await initAuth({provider: this.id});
           resolve();
         },
         onError: (error?: string) => {

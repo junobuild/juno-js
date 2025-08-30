@@ -55,7 +55,7 @@ describe('auth.services', () => {
     it('does nothing if not authenticated', async () => {
       authClientMock.isAuthenticated.mockResolvedValue(false);
 
-      await createAuth();
+      await createAuth({provider: 'internet_identity'});
 
       expect(authClientMock.isAuthenticated).toHaveBeenCalled();
     });
@@ -66,7 +66,7 @@ describe('auth.services', () => {
       const authStore = AuthStore.getInstance();
       authStore.reset();
 
-      await createAuth();
+      await createAuth({provider: 'internet_identity'});
 
       expect(authClientMock.isAuthenticated).toHaveBeenCalled();
       expect(authStore.get()).not.toBeNull();

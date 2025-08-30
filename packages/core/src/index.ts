@@ -10,12 +10,19 @@ import type {Unsubscribe} from './core/types/subscription';
 import {envContainer, envSatelliteId} from './core/utils/window.env.utils';
 export * from './auth/providers/internet-identity.providers';
 export * from './auth/providers/nfid.providers';
-export {getIdentityOnce, signIn, signOut, unsafeIdentity} from './auth/services/auth.services';
+export {
+  getIdentityOnce,
+  signIn,
+  signOut,
+  signUp,
+  unsafeIdentity
+} from './auth/services/auth.services';
 export type * from './auth/types/auth';
 export type * from './auth/types/auth-client';
 export * from './auth/types/errors';
 export type {Provider} from './auth/types/provider';
 export type * from './auth/types/user';
+export * from './auth/types/webauthn';
 export type * from './core/types/env';
 export {ListOrder, ListPaginate, ListParams, ListResults} from './core/types/list';
 export type * from './core/types/satellite';

@@ -8,11 +8,12 @@ import {InternetIdentityProvider} from '../providers/internet-identity.providers
 import {NFIDProvider} from '../providers/nfid.providers';
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthStore} from '../stores/auth.store';
-import type {SignInOptions} from '../types/auth';
+import type {SignInOptions, SignUpOptions} from '../types/auth';
+import {SignUpProviderNotSupportedError} from '../types/errors';
 import type {Provider} from '../types/provider';
+import type {User} from '../types/user';
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser, loadUser} from './_user.services';
-import {User} from "../types/user";
 
 let authClient: AuthClient | undefined | null;
 
@@ -34,11 +35,11 @@ export const loadAuth = async () => {
  * Executed on sign-up.
  */
 const loadAuthWithUser = async ({user}: {user: User}) => {
-    const init = async () => {
-        AuthStore.getInstance().set(user);
-    };
+  const init = async () => {
+    AuthStore.getInstance().set(user);
+  };
 
-    await executeAuth({fn: init});
+  await executeAuth({fn: init});
 };
 
 /**
@@ -69,15 +70,34 @@ const executeAuth = async ({fn}: {fn: () => Promise<void>}) => {
 /**
  * Signs in a user with the specified options.
  *
+ * @default Signs in by default with Internet Identity
  * @param {SignInOptions} [options] - The options for signing in.
  * @returns {Promise<void>} A promise that resolves when the sign-in process is complete and the authenticated user is initialized.
- * @throws {SignInError} If the sign-in process fails or no authentication client is available.
  */
 export const signIn = async (options?: SignInOptions): Promise<void> => {
   const opts = options ?? {internet_identity: {}};
   const fn = async () => await signInWithProvider(opts);
 
   const disableWindowGuard = Object.values(opts)?.[0].context?.windowGuard === false;
+
+  if (disableWindowGuard) {
+    await fn();
+    return;
+  }
+
+  await executeWithWindowGuard({fn});
+};
+
+/**
+ * Signs up to create a new user with the specified options.
+ *
+ * @param {SignUpOptions} [options] - The options for signing up including the provider to use for the process.
+ * @returns {Promise<void>} A promise that resolves when the sign-up process is complete and the user is authenticated.
+ */
+export const signUp = async (options: SignUpOptions): Promise<void> => {
+  const fn = async () => await signUpWithProvider(options);
+
+  const disableWindowGuard = Object.values(options)?.[0].context?.windowGuard === false;
 
   if (disableWindowGuard) {
     await fn();
@@ -122,6 +142,24 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
     authClient,
     initAuth: createAuth
   });
+};
+
+const signUpWithProvider = async (options: SignUpOptions): Promise<void> => {
+  if ('webauthn' in options) {
+    const {
+      webauthn: {options: signUpOptions}
+    } = options;
+
+    await new WebAuthnProvider().signUp({
+      options: signUpOptions,
+      loadAuthWithUser
+    });
+    return;
+  }
+
+  throw new SignUpProviderNotSupportedError(
+    'An unknown or unsupported provider was provided for sign-up. Try signing in instead.'
+  );
 };
 
 /**

@@ -9,6 +9,7 @@ import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as userServices from '../../../auth/services/_user.services';
+import * as userWebAuthnServices from '../../../auth/services/user-webauthn.services';
 import {
   createAuth,
   getIdentity,
@@ -17,13 +18,25 @@ import {
   resetAuth,
   signIn,
   signOut,
+  signUp,
   unsafeIdentity
 } from '../../../auth/services/auth.services';
 import {AuthStore} from '../../../auth/stores/auth.store';
-import {SignInError, SignInInitError, SignInUserInterruptError} from '../../../auth/types/errors';
+import {
+  SignInError,
+  SignInInitError,
+  SignInUserInterruptError,
+  SignUpProviderNotSupportedError
+} from '../../../auth/types/errors';
 import * as authUtils from '../../../auth/utils/auth.utils';
+import * as actorApi from '../../../core/api/actor.api';
 import {EnvStore} from '../../../core/stores/env.store';
 import {mockIdentity, mockSatelliteId, mockUser, mockUserIdText} from '../../mocks/core.mock';
+import {
+  mockPasskeyIdentity,
+  mockWebAuthnDocApiObject,
+  mockWebAuthnDocUserApiObject
+} from '../../mocks/webauthn.mock';
 
 vi.mock('@dfinity/auth-client', async () => {
   const actual = (await import('@dfinity/auth-client')) as typeof import('@dfinity/auth-client');
@@ -266,6 +279,115 @@ describe('auth.services', () => {
         await expect(signIn()).rejects.toSatisfy((error) => {
           return error instanceof SignInError && error.message === 'AnotherError';
         });
+      });
+    });
+  });
+
+  describe('signUp', () => {
+    const authClientMock = mock<AuthClient>();
+
+    beforeEach(async () => {
+      vi.restoreAllMocks();
+      vi.resetModules();
+
+      (AuthClient.create as Mock).mockResolvedValue(authClientMock);
+    });
+
+    it('throws SignUpProviderNotSupportedError when provider is unknown', async () => {
+      await expect(signUp({internet_identity: {}} as any)).rejects.toThrowError(
+        new SignUpProviderNotSupportedError(
+          'An unknown or unsupported provider was provided for sign-up. Try signing in instead.'
+        )
+      );
+    });
+
+    it('throws SignInInitError when satelliteId is missing', async () => {
+      await expect(signUp({webauthn: {}})).rejects.toThrow(SignInInitError);
+    });
+
+    describe('with env configured', () => {
+      let set_many_docs: MockInstance;
+
+      beforeEach(() => {
+        EnvStore.getInstance().set({satelliteId: mockSatelliteId});
+
+        vi.spyOn(webAuthnLib.WebAuthnIdentity, 'createWithNewCredential').mockResolvedValue(
+          mockPasskeyIdentity
+        );
+        vi.spyOn(identityLib.ECDSAKeyIdentity, 'generate').mockResolvedValue({
+          getPublicKey: vi.fn(),
+          getKeyPair: vi.fn()
+        } as any);
+        vi.spyOn(identityLib.DelegationChain, 'create').mockResolvedValue({} as any);
+        vi.spyOn(identityLib.DelegationIdentity, 'fromDelegation').mockReturnValue({
+          getDelegation: () => ({toJSON: () => ({})}),
+          getPrincipal: () => ({toText: () => mockUserIdText})
+        } as any);
+
+        set_many_docs = vi.fn().mockResolvedValue([
+          [mockUserIdText, mockWebAuthnDocUserApiObject],
+          [mockPasskeyIdentity.getCredential().getCredentialIdText(), mockWebAuthnDocApiObject]
+        ]);
+        vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({set_many_docs} as any);
+      });
+
+      it('use window guard (adds/removes by default)', async () => {
+        const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
+        const removeSpy = vi
+          .spyOn(window, 'removeEventListener')
+          .mockImplementation(() => undefined);
+
+        await signUp({webauthn: {}});
+
+        expect(addSpy).toHaveBeenCalledTimes(1);
+        expect(removeSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it('does not add/remove window guard when opted out', async () => {
+        const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
+        const removeSpy = vi
+          .spyOn(window, 'removeEventListener')
+          .mockImplementation(() => undefined);
+
+        await signUp({webauthn: {context: {windowGuard: false}}});
+
+        expect(addSpy).not.toHaveBeenCalled();
+        expect(removeSpy).not.toHaveBeenCalled();
+      });
+
+      it('should use maxTimeToLiveInMilliseconds', async () => {
+        const chainSpy = vi
+          .spyOn(identityLib.DelegationChain, 'create')
+          .mockImplementation(async (_identity, _pub, expires) => {
+            const delta = Math.abs((expires?.getTime() ?? 0) - (Date.now() + 12_345));
+            expect(delta).toBeLessThan(200);
+            return {} as any;
+          });
+
+        await signUp({webauthn: {options: {maxTimeToLiveInMilliseconds: 12_345}}});
+
+        expect(chainSpy).toHaveBeenCalledTimes(1);
+      });
+
+      it("it should call webauthn provider on signUp", async () => {
+        const loginSpy = authClientMock.login.mockImplementation(async () => {
+          throw new Error('authClient.login must not be called for webauthn signUp');
+        });
+
+        const loadSpy = vi.spyOn(userServices, "loadUser");
+        const createSpy = vi.spyOn(userWebAuthnServices, "createWebAuthnUser");
+
+        await expect(signUp({webauthn: {}})).resolves.toBeUndefined();
+
+        expect(loginSpy).not.toHaveBeenCalled();
+        expect(set_many_docs).toHaveBeenCalledTimes(1);
+
+        expect(loadSpy).not.toHaveBeenCalled();
+        expect(createSpy).toHaveBeenCalledTimes(1);
+
+        expect(AuthStore.getInstance().get()).toEqual(
+          expect.objectContaining({key: mockUserIdText})
+        );
       });
     });
   });

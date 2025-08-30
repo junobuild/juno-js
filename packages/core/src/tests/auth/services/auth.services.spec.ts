@@ -110,6 +110,26 @@ describe('auth.services', () => {
       expect(authClientMock.isAuthenticated).toHaveBeenCalled();
       expect(authStore.get()).not.toBeNull();
     });
+
+    it('should not reset the AuthClient if authenticated', async () => {
+      authClientMock.isAuthenticated.mockResolvedValue(true);
+
+      const resetSpy = vi.spyOn(authUtils, 'resetAuthClient');
+
+      await loadAuth();
+
+      expect(resetSpy).not.toHaveBeenCalledTimes(1);
+    });
+
+    it('resets the AuthClient when not authenticated', async () => {
+      authClientMock.isAuthenticated.mockResolvedValue(false);
+
+      const resetSpy = vi.spyOn(authUtils, 'resetAuthClient');
+
+      await loadAuth();
+
+      expect(resetSpy).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('signIn', () => {

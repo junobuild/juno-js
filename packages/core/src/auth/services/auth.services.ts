@@ -12,7 +12,7 @@ import type {SignInOptions, SignUpOptions} from '../types/auth';
 import {SignUpProviderNotSupportedError} from '../types/errors';
 import type {Provider} from '../types/provider';
 import type {User} from '../types/user';
-import {createAuthClient} from '../utils/auth.utils';
+import {createAuthClient, resetAuthClient} from '../utils/auth.utils';
 import {initUser, loadUser} from './_user.services';
 
 let authClient: AuthClient | undefined | null;
@@ -62,6 +62,7 @@ const executeAuth = async ({fn}: {fn: () => Promise<void>}) => {
   const isAuthenticated = await authClient.isAuthenticated();
 
   if (!isAuthenticated) {
+    authClient = await resetAuthClient();
     return;
   }
 

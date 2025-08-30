@@ -130,6 +130,17 @@ describe('auth.services', () => {
 
       expect(resetSpy).toHaveBeenCalledTimes(1);
     });
+
+    it('always re-creates a new AuthClient on every authenticate call', async () => {
+      const createSpy = vi.spyOn(authUtils, 'createAuthClient');
+
+      authClientMock.isAuthenticated.mockResolvedValue(true);
+
+      await loadAuth();
+      await loadAuth();
+
+      expect(createSpy).toHaveBeenCalledTimes(2);
+    });
   });
 
   describe('signIn', () => {

@@ -9,23 +9,26 @@ import {
 } from '@dfinity/identity';
 import {isNullish, uint8ArrayToBase64} from '@dfinity/utils';
 import {
+  type WebAuthnNewCredential,
   type RetrievePublicKeyFn,
   type WebAuthnSignProgressFn,
   WebAuthnIdentity,
-  WebAuthnSignProgressStep, WebAuthnNewCredential
+  WebAuthnSignProgressStep
 } from '@junobuild/ic-client/webauthn';
 import {EnvStore} from '../../core/stores/env.store';
 import {getDoc} from '../../datastore/services/doc.services';
 import {DELEGATION_IDENTITY_EXPIRATION_IN_MILLISECONDS} from '../constants/auth.constants';
+import {createWebAuthnUser} from '../services/user-webauthn.services';
 import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../types/errors';
 import type {AuthProvider, Provider} from '../types/provider';
+import type {User} from '../types/user';
 import {
+  type WebAuthnSignUpOptions,
   type WebAuthnSignInOptions,
   type WebAuthnSignProgressFn as WebAuthnSignProviderProgressFn,
-  WebAuthnSignInProgressStep, WebAuthnSignUpProgressStep, WebAuthnSignUpOptions
+  WebAuthnSignInProgressStep,
+  WebAuthnSignUpProgressStep
 } from '../types/webauthn';
-import {createWebAuthnUser} from '../services/user-webauthn.services';
-import {User} from '../types/user';
 
 interface SessionDelegationIdentity {
   delegationIdentity: DelegationIdentity;
@@ -41,10 +44,19 @@ export class WebAuthnProvider implements AuthProvider {
     return 'webauthn';
   }
 
+  /**
+   * Signs up a user by creating a new passkey.
+   *
+   * @param {Object} params - The sign-up parameters.
+   * @param {WebAuthnSignUpOptions} [params.options] - Optional configuration for the login request.
+   * @param {loadAuth} params.loadAuthWithUser - The function to load the authentication with the user. Provided as a callback to avoid recursive import.
+   *
+   * @returns {Promise<void>} Resolves if the sign-up is successful.
+   */
   async signUp({
-                 options: {onProgress, maxTimeToLiveInMilliseconds} = {},
-                 loadAuthWithUser
-               }: {
+    options: {onProgress, maxTimeToLiveInMilliseconds} = {},
+    loadAuthWithUser
+  }: {
     options?: WebAuthnSignUpOptions;
     loadAuthWithUser: (params: {user: User}) => Promise<void>;
   }) {
@@ -59,36 +71,34 @@ export class WebAuthnProvider implements AuthProvider {
         case WebAuthnSignProgressStep.RequestingUserCredential:
           onProgress?.({
             step: WebAuthnSignUpProgressStep.ValidatingUserCredential,
-            state,
+            state
           });
           break;
         case WebAuthnSignProgressStep.FinalizingCredential:
           onProgress?.({
             step: WebAuthnSignUpProgressStep.FinalizingCredential,
-            state,
+            state
           });
           break;
         case WebAuthnSignProgressStep.Signing:
           onProgress?.({
             step: WebAuthnSignUpProgressStep.Signing,
-            state,
+            state
           });
           break;
       }
     };
 
     // 1. Create passkey
-    const createPasskey = async (): Promise<
-      WebAuthnIdentity<WebAuthnNewCredential>
-    > =>
+    const createPasskey = async (): Promise<WebAuthnIdentity<WebAuthnNewCredential>> =>
       await WebAuthnIdentity.createWithNewCredential({
-        onProgress: onSignProgress,
+        onProgress: onSignProgress
       });
 
     const passkeyIdentity = await this.#execute({
       fn: createPasskey,
       step: WebAuthnSignUpProgressStep.CreatingUserCredential,
-      onProgress,
+      onProgress
     });
 
     // 2. Create session delegation. This will require the user the sign the session using their authenticator.
@@ -102,14 +112,17 @@ export class WebAuthnProvider implements AuthProvider {
     // Note: We create the user before saving the session identity to avoid
     // a race condition where the user would reload the window and the lib
     // would try to retrieve and undefined user for the delegation saved in indexeddb.
-    const register = async () => createWebAuthnUser({
-      delegationIdentity, passkeyIdentity, satelliteId
-    });
+    const register = async () =>
+      createWebAuthnUser({
+        delegationIdentity,
+        passkeyIdentity,
+        satelliteId
+      });
 
     const user = await this.#execute({
       fn: register,
       step: WebAuthnSignUpProgressStep.RegisteringUser,
-      onProgress,
+      onProgress
     });
 
     // 4. Save session identity for loading it with auth client

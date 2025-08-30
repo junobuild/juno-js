@@ -1,7 +1,7 @@
-import {Identity} from '@dfinity/agent';
+import type {Identity} from '@dfinity/agent';
 import {arrayBufferToUint8Array} from '@dfinity/utils';
-import {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
-import {Environment} from '../../core/types/env';
+import type {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
+import type {Environment} from '../../core/types/env';
 import {setManyDocs} from '../../datastore/services/doc.services';
 import type {User} from '../types/user';
 

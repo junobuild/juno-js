@@ -1,44 +1,20 @@
 import {arrayBufferToUint8Array, jsonReviver} from '@dfinity/utils';
-import {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
-import {toArray} from '@junobuild/utils';
 import {MockInstance} from 'vitest';
 import {createWebAuthnUser} from '../../../auth/services/user-webauthn.services';
 import * as actorApi from '../../../core/api/actor.api';
-import {mockIdentity, mockUserIdPrincipal, mockUserIdText} from '../../mocks/core.mock';
+import {mockIdentity, mockSatelliteId, mockUserIdText} from '../../mocks/core.mock';
+import {
+  mockCredentialIdText,
+  mockPasskeyIdentity,
+  mockWebAuthnAaguid,
+  mockWebAuthnDataProvider,
+  mockWebAuthnDocApiObject,
+  mockWebAuthnDocUserApiObject,
+  mockWebAuthnPubDer
+} from '../../mocks/webauthn.mock';
 
 describe('webauthn-user.services', async () => {
-  const pubDer = new Uint8Array([9, 9, 9]).buffer;
-  const aaguid = '550e8400-e29b-41d4-a716-446655440000';
-  const credentialIdText = 'cred-123';
-  const satelliteId = 'aaaaa-aa';
-
   const delegationIdentity = mockIdentity;
-
-  const passkeyIdentity = {
-    ...mockIdentity,
-    getPublicKey: () => ({toDer: () => pubDer}),
-    getCredential: () => ({
-      getCredentialIdText: () => credentialIdText,
-      getAAGUID: () => aaguid
-    })
-  } as unknown as WebAuthnIdentity<WebAuthnNewCredential>;
-
-  const mockData = {provider: 'webauthn'};
-
-  const mockDocApiObject = {
-    owner: mockUserIdPrincipal,
-    data: await toArray(mockData),
-    created_at: 0n
-  };
-
-  const webauthnDocApiObject = {
-    owner: mockUserIdPrincipal,
-    data: await toArray({
-      publicKey: arrayBufferToUint8Array(pubDer),
-      aaguid
-    }),
-    created_at: 0n
-  };
 
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -50,7 +26,11 @@ describe('webauthn-user.services', async () => {
     vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({set_many_docs} as any);
 
     await expect(
-      createWebAuthnUser({delegationIdentity, passkeyIdentity, satelliteId})
+      createWebAuthnUser({
+        delegationIdentity,
+        passkeyIdentity: mockPasskeyIdentity,
+        satelliteId: mockSatelliteId
+      })
     ).rejects.toThrow('boom');
   });
 
@@ -59,14 +39,18 @@ describe('webauthn-user.services', async () => {
 
     beforeEach(() => {
       set_many_docs = vi.fn().mockResolvedValue([
-        [mockUserIdText, mockDocApiObject],
-        [passkeyIdentity.getCredential().getCredentialIdText(), webauthnDocApiObject]
+        [mockUserIdText, mockWebAuthnDocUserApiObject],
+        [mockPasskeyIdentity.getCredential().getCredentialIdText(), mockWebAuthnDocApiObject]
       ]);
       vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({set_many_docs} as any);
     });
 
     it('calls set_many_docs with #user and #user-webauthn entries and correct keys', async () => {
-      await createWebAuthnUser({delegationIdentity, passkeyIdentity, satelliteId});
+      await createWebAuthnUser({
+        delegationIdentity,
+        passkeyIdentity: mockPasskeyIdentity,
+        satelliteId: mockSatelliteId
+      });
 
       expect(set_many_docs).toHaveBeenCalledTimes(1);
       const docsArg = set_many_docs.mock.calls[0][0];
@@ -88,14 +72,18 @@ describe('webauthn-user.services', async () => {
       }
 
       if (Array.isArray(webauthnEntry)) {
-        expect(webauthnEntry[1]).toBe(credentialIdText);
+        expect(webauthnEntry[1]).toBe(mockCredentialIdText);
       } else {
-        expect(webauthnEntry.doc.key).toBe(credentialIdText);
+        expect(webauthnEntry.doc.key).toBe(mockCredentialIdText);
       }
     });
 
     it('serializes #user-webauthn payload with publicKey (DER→Uint8Array) and aaguid', async () => {
-      await createWebAuthnUser({delegationIdentity, passkeyIdentity, satelliteId});
+      await createWebAuthnUser({
+        delegationIdentity,
+        passkeyIdentity: mockPasskeyIdentity,
+        satelliteId: mockSatelliteId
+      });
 
       const docsArg: any[] = set_many_docs.mock.calls[0][0];
       const webauthnEntry = docsArg.find((d) =>
@@ -107,16 +95,20 @@ describe('webauthn-user.services', async () => {
       const parsed = JSON.parse(new TextDecoder().decode(buf), jsonReviver);
 
       expect(parsed).toEqual({
-        publicKey: arrayBufferToUint8Array(pubDer),
-        aaguid
+        publicKey: arrayBufferToUint8Array(mockWebAuthnPubDer),
+        aaguid: mockWebAuthnAaguid
       });
     });
 
     it('returns the first doc from actor response as the created user', async () => {
-      const user = await createWebAuthnUser({delegationIdentity, passkeyIdentity, satelliteId});
+      const user = await createWebAuthnUser({
+        delegationIdentity,
+        passkeyIdentity: mockPasskeyIdentity,
+        satelliteId: mockSatelliteId
+      });
 
       expect(user.key).toBe(mockUserIdText);
-      expect(user.data).toStrictEqual(mockData);
+      expect(user.data).toStrictEqual(mockWebAuthnDataProvider);
     });
   });
 });

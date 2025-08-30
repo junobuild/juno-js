@@ -43,6 +43,6 @@ export type SignInOptions =
  *
  * - `webauthn`: WebAuthn/Passkey options
  */
-export type SignUpOptions = {
+export interface SignUpOptions {
   webauthn: {options?: WebAuthnSignUpOptions; context?: SignInContext};
-};
+}

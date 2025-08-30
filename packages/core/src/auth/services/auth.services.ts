@@ -35,6 +35,7 @@ export const loadAuth = async () => {
  * Executed on sign-up.
  */
 const loadAuthWithUser = async ({user}: {user: User}) => {
+  // eslint-disable-next-line require-await
   const init = async () => {
     AuthStore.getInstance().set(user);
   };

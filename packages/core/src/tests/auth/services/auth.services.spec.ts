@@ -65,6 +65,7 @@ describe('auth.services', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    EnvStore.getInstance().reset();
   });
 
   describe('createAuth', () => {
@@ -284,13 +285,7 @@ describe('auth.services', () => {
   });
 
   describe('signUp', () => {
-    const authClientMock = mock<AuthClient>();
-
     beforeEach(async () => {
-      vi.restoreAllMocks();
-
-      (AuthClient.create as Mock).mockResolvedValue(authClientMock);
-
       authClientMock.isAuthenticated.mockResolvedValue(true);
     });
 

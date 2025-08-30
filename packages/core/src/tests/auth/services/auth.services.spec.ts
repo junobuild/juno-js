@@ -9,7 +9,6 @@ import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as userServices from '../../../auth/services/_user.services';
-import * as userWebAuthnServices from '../../../auth/services/user-webauthn.services';
 import {
   createAuth,
   getIdentity,
@@ -21,6 +20,7 @@ import {
   signUp,
   unsafeIdentity
 } from '../../../auth/services/auth.services';
+import * as userWebAuthnServices from '../../../auth/services/user-webauthn.services';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import {
   SignInError,
@@ -288,9 +288,10 @@ describe('auth.services', () => {
 
     beforeEach(async () => {
       vi.restoreAllMocks();
-      vi.resetModules();
 
       (AuthClient.create as Mock).mockResolvedValue(authClientMock);
+
+      authClientMock.isAuthenticated.mockResolvedValue(true);
     });
 
     it('throws SignUpProviderNotSupportedError when provider is unknown', async () => {
@@ -369,13 +370,13 @@ describe('auth.services', () => {
         expect(chainSpy).toHaveBeenCalledTimes(1);
       });
 
-      it("it should call webauthn provider on signUp", async () => {
+      it('it should call webauthn provider on signUp', async () => {
         const loginSpy = authClientMock.login.mockImplementation(async () => {
           throw new Error('authClient.login must not be called for webauthn signUp');
         });
 
-        const loadSpy = vi.spyOn(userServices, "loadUser");
-        const createSpy = vi.spyOn(userWebAuthnServices, "createWebAuthnUser");
+        const loadSpy = vi.spyOn(userServices, 'loadUser');
+        const createSpy = vi.spyOn(userWebAuthnServices, 'createWebAuthnUser');
 
         await expect(signUp({webauthn: {}})).resolves.toBeUndefined();
 

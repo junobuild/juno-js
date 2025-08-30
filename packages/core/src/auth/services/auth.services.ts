@@ -27,7 +27,7 @@ export const loadAuth = async () => {
     AuthStore.getInstance().set(user ?? null);
   };
 
-  await executeAuth({fn: init});
+  await authenticate({fn: init});
 };
 
 /**
@@ -40,7 +40,7 @@ const loadAuthWithUser = async ({user}: {user: User}) => {
     AuthStore.getInstance().set(user);
   };
 
-  await executeAuth({fn: init});
+  await authenticate({fn: init});
 };
 
 /**
@@ -53,11 +53,25 @@ export const createAuth = async ({provider}: {provider: Provider}) => {
     AuthStore.getInstance().set(user);
   };
 
-  await executeAuth({fn: init});
+  await authenticate({fn: init});
 };
 
-const executeAuth = async ({fn}: {fn: () => Promise<void>}) => {
-  authClient = authClient ?? (await createAuthClient());
+/**
+ * Initializes a new `AuthClient`, checks authentication state,
+ * and executes the provided function if already authenticated.
+ *
+ * - Always creates a fresh `AuthClient` using {@link createAuthClient}.
+ * - If the client is **not authenticated**, it resets the client via {@link resetAuthClient}
+ *   to ensure a clean session.
+ * - If authenticated, it runs the given async function `fn`.
+ *
+ * @param {Object} params
+ * @param {() => Promise<void>} params.fn - The asynchronous function to execute when authenticated.
+ *
+ * @returns {Promise<void>} Resolves when authentication is handled and the provided function is executed (if applicable).
+ */
+const authenticate = async ({fn}: {fn: () => Promise<void>}) => {
+  authClient = await createAuthClient();
 
   const isAuthenticated = await authClient.isAuthenticated();
 

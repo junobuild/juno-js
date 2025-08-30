@@ -24,6 +24,8 @@ import {
   type WebAuthnSignProgressFn as WebAuthnSignProviderProgressFn,
   WebAuthnSignInProgressStep, WebAuthnSignUpProgressStep, WebAuthnSignUpOptions
 } from '../types/webauthn';
+import {createWebAuthnUser} from '../services/user-webauthn.services';
+import {User} from '../types/user';
 
 interface SessionDelegationIdentity {
   delegationIdentity: DelegationIdentity;
@@ -41,10 +43,10 @@ export class WebAuthnProvider implements AuthProvider {
 
   async signUp({
                  options: {onProgress, maxTimeToLiveInMilliseconds} = {},
-                 loadAuth
+                 loadAuthWithUser
                }: {
     options?: WebAuthnSignUpOptions;
-    loadAuth: () => Promise<void>;
+    loadAuthWithUser: (params: {user: User}) => Promise<void>;
   }) {
     const {satelliteId} = EnvStore.getInstance().get() ?? {satelliteId: undefined};
 
@@ -96,7 +98,38 @@ export class WebAuthnProvider implements AuthProvider {
       maxTimeToLiveInMilliseconds
     });
 
+    // 3. Make update calls to create user and save public key.
+    // Note: We create the user before saving the session identity to avoid
+    // a race condition where the user would reload the window and the lib
+    // would try to retrieve and undefined user for the delegation saved in indexeddb.
+    const register = async () => createWebAuthnUser({
+      delegationIdentity, passkeyIdentity, satelliteId
+    });
 
+    const user = await this.#execute({
+      fn: register,
+      step: WebAuthnSignUpProgressStep.RegisteringUser,
+      onProgress,
+    });
+
+    // 4. Save session identity for loading it with auth client
+    const saveSession = async () =>
+      await this.#saveSessionIdentityForAuthClient({delegationIdentity, sessionKey});
+
+    await this.#execute({
+      fn: saveSession,
+      step: WebAuthnSignUpProgressStep.FinalizingSession,
+      onProgress
+    });
+
+    // 5. Load the user for the authentication
+    const loadAuth = async () => await loadAuthWithUser({user});
+
+    await this.#execute({
+      fn: loadAuth,
+      step: WebAuthnSignUpProgressStep.RegisteringUser,
+      onProgress
+    });
   }
 
   /**

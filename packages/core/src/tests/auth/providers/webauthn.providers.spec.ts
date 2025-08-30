@@ -301,7 +301,7 @@ describe('webauthn.providers', async () => {
 
       it('persists session keys and delegation to IndexedDB', async () => {
         vi.spyOn(webAuthnLib.WebAuthnIdentity, 'createWithNewCredential').mockResolvedValue(
-          mockPasskeyIdentity as any
+          mockPasskeyIdentity
         );
         vi.spyOn(identityLib.ECDSAKeyIdentity, 'generate').mockResolvedValue({
           getPublicKey: vi.fn(),

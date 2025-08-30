@@ -1,5 +1,5 @@
 import type {AuthClientSignInOptions, InternetIdentityConfig, NFIDConfig} from './auth-client';
-import type {WebAuthnSignInOptions} from './webauthn';
+import type {WebAuthnSignInOptions, WebAuthnSignUpOptions} from './webauthn';
 
 /**
  * Options for the context of the sign-in flow.
@@ -37,3 +37,12 @@ export type SignInOptions =
   | {
       webauthn: {options?: WebAuthnSignInOptions; context?: SignInContext};
     };
+
+/**
+ * The options for sign-up.
+ *
+ * - `webauthn`: WebAuthn/Passkey options
+ */
+export interface SignUpOptions {
+  webauthn: {options?: WebAuthnSignUpOptions; context?: SignInContext};
+}

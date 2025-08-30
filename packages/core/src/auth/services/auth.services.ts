@@ -12,6 +12,7 @@ import type {SignInOptions} from '../types/auth';
 import type {Provider} from '../types/provider';
 import {createAuthClient} from '../utils/auth.utils';
 import {initUser, loadUser} from './_user.services';
+import {User} from "../types/user";
 
 let authClient: AuthClient | undefined | null;
 
@@ -26,6 +27,18 @@ export const loadAuth = async () => {
   };
 
   await executeAuth({fn: init});
+};
+
+/**
+ * Initialize the authClient, load the user passed as parameter.
+ * Executed on sign-up.
+ */
+const loadAuthWithUser = async ({user}: {user: User}) => {
+    const init = async () => {
+        AuthStore.getInstance().set(user);
+    };
+
+    await executeAuth({fn: init});
 };
 
 /**

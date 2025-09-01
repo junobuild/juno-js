@@ -13,7 +13,9 @@ export const mockWebAuthnDocUserApiObject = {
 
 export const mockWebAuthnPubDer = new Uint8Array([9, 9, 9]).buffer;
 
-export const mockWebAuthnAaguid = '550e8400-e29b-41d4-a716-446655440000';
+export const mockWebAuthnAaguid = [
+  0xde, 0xad, 0xbe, 0xef, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b
+];
 
 export const mockWebAuthnDocApiObject = {
   owner: mockUserIdPrincipal,

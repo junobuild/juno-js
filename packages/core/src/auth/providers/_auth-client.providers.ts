@@ -6,7 +6,18 @@ import {
 } from '../constants/auth.constants';
 import type {AuthClientSignInOptions} from '../types/auth-client';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
-import type {AuthProvider, Provider} from '../types/provider';
+import type {Provider} from '../types/provider';
+
+/**
+ * Common traits for all authentication providers
+ * @interface AuthProvider
+ */
+export interface AuthProvider {
+  /**
+   * The unique identifier of the provider.
+   */
+  readonly id: Provider;
+}
 
 /**
  * Options for signing in with an authentication provider.

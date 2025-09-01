@@ -78,7 +78,33 @@ describe('webauthn-user.services', async () => {
       }
     });
 
-    it('serializes #user-webauthn payload with publicKey (DER→Uint8Array) and aaguid', async () => {
+    it('serializes #user payload with provider and providerData.webauthn.aaguid', async () => {
+      await createWebAuthnUser({
+        delegationIdentity,
+        passkeyIdentity: mockPasskeyIdentity,
+        satelliteId: mockSatelliteId
+      });
+
+      const docsArg: any[] = set_many_docs.mock.calls[0][0];
+      const userEntry = docsArg.find((d) =>
+        Array.isArray(d) ? d[0] === '#user' : d?.collection === '#user'
+      );
+
+      const getDataBuf = (entry: any) => (Array.isArray(entry) ? entry[2]?.data : entry?.doc?.data);
+      const buf: Uint8Array = getDataBuf(userEntry);
+      const parsed = JSON.parse(new TextDecoder().decode(buf), jsonReviver);
+
+      expect(parsed).toEqual({
+        provider: 'webauthn',
+        providerData: {
+          webauthn: {
+            aaguid: mockWebAuthnAaguid
+          }
+        }
+      });
+    });
+
+    it('serializes #user-webauthn payload with publicKey (DER→Uint8Array)', async () => {
       await createWebAuthnUser({
         delegationIdentity,
         passkeyIdentity: mockPasskeyIdentity,
@@ -95,8 +121,7 @@ describe('webauthn-user.services', async () => {
       const parsed = JSON.parse(new TextDecoder().decode(buf), jsonReviver);
 
       expect(parsed).toEqual({
-        publicKey: arrayBufferToUint8Array(mockWebAuthnPubDer),
-        aaguid: mockWebAuthnAaguid
+        publicKey: arrayBufferToUint8Array(mockWebAuthnPubDer)
       });
     });
 

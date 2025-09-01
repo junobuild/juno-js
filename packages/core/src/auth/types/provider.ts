@@ -5,12 +5,30 @@
 export type Provider = 'internet_identity' | 'nfid' | 'webauthn';
 
 /**
- * Common traits for all authentication providers
- * @interface AuthProvider
+ * Metadata for WebAuthn authentication.
+ * @interface ProviderDataWebAuthn
  */
-export interface AuthProvider {
+export interface ProviderDataWebAuthn {
   /**
-   * The unique identifier of the provider.
+   * Authenticator Attestation GUID (AAGUID).
+   *
+   * If available, a 16-byte identifier that uniquely represents the model of the authenticator,
+   * unlesss the provider explicitly set it to zeros.
    */
-  readonly id: Provider;
+  aaguid: Uint8Array | number[];
+}
+
+/**
+ * Container for provider-specific metadata.
+ *
+ * Currently only `webauthn` is supported, but this type
+ * can be extended in the future.
+ *
+ * @interface ProviderData
+ */
+export interface ProviderData {
+  /**
+   * Metadata specific to WebAuthn (passkey) authentication.
+   */
+  webauthn: ProviderDataWebAuthn;
 }

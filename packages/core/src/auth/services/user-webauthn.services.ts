@@ -20,7 +20,8 @@ export const createWebAuthnUser = async ({
         doc: {
           key: delegationIdentity.getPrincipal().toText(),
           data: {
-            provider: 'webauthn'
+            provider: 'webauthn',
+            providerData: {webauthn: {aaguid: passkeyIdentity.getCredential().getAAGUID()}}
           }
         }
       },
@@ -29,8 +30,7 @@ export const createWebAuthnUser = async ({
         doc: {
           key: passkeyIdentity.getCredential().getCredentialIdText(),
           data: {
-            publicKey: arrayBufferToUint8Array(passkeyIdentity.getPublicKey().toDer()),
-            aaguid: passkeyIdentity.getCredential().getAAGUID()
+            publicKey: arrayBufferToUint8Array(passkeyIdentity.getPublicKey().toDer())
           }
         }
       }

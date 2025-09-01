@@ -20,7 +20,7 @@ import {getDoc} from '../../datastore/services/doc.services';
 import {DELEGATION_IDENTITY_EXPIRATION_IN_MILLISECONDS} from '../constants/auth.constants';
 import {createWebAuthnUser} from '../services/user-webauthn.services';
 import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../types/errors';
-import type {AuthProvider, Provider} from '../types/provider';
+import type {Provider} from '../types/provider';
 import type {User} from '../types/user';
 import {
   type WebAuthnSignInOptions,
@@ -29,6 +29,7 @@ import {
   WebAuthnSignInProgressStep,
   WebAuthnSignUpProgressStep
 } from '../types/webauthn';
+import type {AuthProvider} from './_auth-client.providers';
 
 interface SessionDelegationIdentity {
   delegationIdentity: DelegationIdentity;

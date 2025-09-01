@@ -1,4 +1,4 @@
-import {arrayBufferToUint8Array, jsonReviver} from '@dfinity/utils';
+import {arrayBufferToUint8Array, jsonReviver, uint8ArrayToArrayOfNumber} from '@dfinity/utils';
 import type {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
 import {MockInstance} from 'vitest';
 import {createWebAuthnUser} from '../../../auth/services/user-webauthn.services';
@@ -99,7 +99,7 @@ describe('webauthn-user.services', async () => {
         provider: 'webauthn',
         providerData: {
           webauthn: {
-            aaguid: mockWebAuthnAaguid
+            aaguid: uint8ArrayToArrayOfNumber(mockWebAuthnAaguid)
           }
         }
       });

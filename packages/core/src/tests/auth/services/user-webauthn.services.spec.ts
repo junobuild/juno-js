@@ -1,4 +1,5 @@
 import {arrayBufferToUint8Array, jsonReviver} from '@dfinity/utils';
+import type {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
 import {MockInstance} from 'vitest';
 import {createWebAuthnUser} from '../../../auth/services/user-webauthn.services';
 import * as actorApi from '../../../core/api/actor.api';
@@ -99,6 +100,40 @@ describe('webauthn-user.services', async () => {
         providerData: {
           webauthn: {
             aaguid: mockWebAuthnAaguid
+          }
+        }
+      });
+    });
+
+    it('serializes #user payload with provider and providerData.webauthn.aaguid as undefined', async () => {
+      const mockPasskey = {
+        ...mockPasskeyIdentity,
+        getCredential: () => ({
+          getCredentialIdText: () => mockCredentialIdText,
+          getAAGUID: () => undefined
+        })
+      };
+
+      await createWebAuthnUser({
+        delegationIdentity,
+        passkeyIdentity: mockPasskey as WebAuthnIdentity<WebAuthnNewCredential>,
+        satelliteId: mockSatelliteId
+      });
+
+      const docsArg: any[] = set_many_docs.mock.calls[0][0];
+      const userEntry = docsArg.find((d) =>
+        Array.isArray(d) ? d[0] === '#user' : d?.collection === '#user'
+      );
+
+      const getDataBuf = (entry: any) => (Array.isArray(entry) ? entry[2]?.data : entry?.doc?.data);
+      const buf: Uint8Array = getDataBuf(userEntry);
+      const parsed = JSON.parse(new TextDecoder().decode(buf), jsonReviver);
+
+      expect(parsed).toEqual({
+        provider: 'webauthn',
+        providerData: {
+          webauthn: {
+            aaguid: undefined
           }
         }
       });

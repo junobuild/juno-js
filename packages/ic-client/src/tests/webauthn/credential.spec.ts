@@ -51,8 +51,8 @@ describe('WebAuthnCredential', () => {
       const authData = makeAuthData({len: 53, aaguidBytes: aaguidU8});
       const cred = new WebAuthnNewCredential({rawId, cose, authData});
 
-      expect(cred.getAAGUID()).toEqual(Array.from(aaguidU8)); // bytes: number[]
-      expect(cred.getAAGUIDText()).toBe(aaguid); // text
+      expect(cred.getAAGUID()).toEqual(aaguidU8);
+      expect(cred.getAAGUIDText()).toBe(aaguid);
     });
 
     it('should return undefined for zero/unknown AAGUID', () => {

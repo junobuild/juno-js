@@ -15,7 +15,7 @@ import {uint8ArrayToArrayOfNumber} from '@dfinity/utils';
  *
  * @param {Object} params
  * @param {Uint8Array} params.authData - The WebAuthn `authenticatorData` bytes.
- * @returns {{aaguid: string; bytes: number[]} | {invalidAuthData: null} | {unknownProvider: null}}
+ * @returns {{aaguid: string; bytes: Uint8Array} | {invalidAuthData: null} | {unknownProvider: null}}
  * - { aaguidText, aaguidBytes } for valid AAGUID
  * - { unknownProvider: null } for all-zero AAGUID
  * - { invalidAuthData: null } if `authData` is invalid (too short, too long, etc.)
@@ -27,7 +27,7 @@ export const extractAAGUID = ({
 }: {
   authData: Uint8Array;
 }):
-  | {aaguidText: string; aaguidBytes: number[]}
+  | {aaguidText: string; aaguidBytes: Uint8Array}
   | {invalidAuthData: null}
   | {unknownProvider: null} => {
   if (authData.byteLength < 37) {
@@ -38,7 +38,7 @@ export const extractAAGUID = ({
     return {invalidAuthData: null};
   }
 
-  const bytes = [...authData.slice(37, 53)];
+  const bytes = authData.slice(37, 53);
 
   const result = bytesToAAGUID({bytes});
 

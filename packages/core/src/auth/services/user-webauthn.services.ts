@@ -1,5 +1,5 @@
 import type {Identity} from '@dfinity/agent';
-import {arrayBufferToUint8Array} from '@dfinity/utils';
+import {arrayBufferToUint8Array, nonNullish, uint8ArrayToArrayOfNumber} from '@dfinity/utils';
 import type {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
 import type {Environment} from '../../core/types/env';
 import {setManyDocs} from '../../datastore/services/doc.services';
@@ -13,6 +13,11 @@ export const createWebAuthnUser = async ({
   delegationIdentity: Identity;
   passkeyIdentity: WebAuthnIdentity<WebAuthnNewCredential>;
 } & Pick<Environment, 'satelliteId'>): Promise<User> => {
+  // We serialize the AAGUID as number[] instead of Uint8Array because
+  // it results in slightly smaller JSON output with the stringifier.
+  // When reading the data, we support both formats.
+  const aaguid = passkeyIdentity.getCredential().getAAGUID();
+
   const [user, _] = await setManyDocs({
     docs: [
       {
@@ -21,7 +26,11 @@ export const createWebAuthnUser = async ({
           key: delegationIdentity.getPrincipal().toText(),
           data: {
             provider: 'webauthn',
-            providerData: {webauthn: {aaguid: passkeyIdentity.getCredential().getAAGUID()}}
+            providerData: {
+              webauthn: {
+                ...(nonNullish(aaguid) && {aaguid: uint8ArrayToArrayOfNumber(aaguid)})
+              }
+            }
           }
         }
       },

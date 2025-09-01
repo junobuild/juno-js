@@ -70,7 +70,7 @@ export abstract class WebAuthnCredential {
  */
 export class WebAuthnNewCredential extends WebAuthnCredential {
   readonly #aaguidText: string | undefined;
-  readonly #aaguidBytes: number[] | undefined;
+  readonly #aaguidBytes: Uint8Array | undefined;
 
   /**
    * @param args - {@link InitWebAuthnNewCredentialArgs} used to initialize the credential.
@@ -89,7 +89,7 @@ export class WebAuthnNewCredential extends WebAuthnCredential {
   /**
    * Returns AAGUID (Authenticator Attestation GUID).
    */
-  getAAGUID(): number[] | undefined {
+  getAAGUID(): Uint8Array | undefined {
     return this.#aaguidBytes;
   }
 

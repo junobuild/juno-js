@@ -25,7 +25,7 @@ describe('AAGUID', () => {
       const aaguidBytes = hexToBytes({aaguid: aaguidText});
       const authData = makeAuthData({len: 53, aaguidBytes});
       const r = extractAAGUID({authData});
-      expect(r).toEqual({aaguidText, aaguidBytes: Array.from(aaguidBytes)});
+      expect(r).toEqual({aaguidText, aaguidBytes});
     });
 
     it('should extract correctly even when authData is longer than 53 bytes', () => {
@@ -33,7 +33,7 @@ describe('AAGUID', () => {
       const aaguidBytes = hexToBytes({aaguid: aaguidText});
       const authData = makeAuthData({len: 120, aaguidBytes});
       const r = extractAAGUID({authData});
-      expect(r).toEqual({aaguidText, aaguidBytes: Array.from(aaguidBytes)});
+      expect(r).toEqual({aaguidText, aaguidBytes});
     });
 
     it('should produce lowercase hex with hyphens', () => {
@@ -42,7 +42,7 @@ describe('AAGUID', () => {
       const authData = makeAuthData({len: 53, aaguidBytes});
       const r = extractAAGUID({authData});
       expect('aaguidText' in r && r.aaguidText === upper.toLowerCase()).toBe(true);
-      expect('aaguidBytes' in r && r.aaguidBytes).toEqual(Array.from(aaguidBytes));
+      expect('aaguidBytes' in r && r.aaguidBytes).toEqual(aaguidBytes);
     });
   });
 
@@ -60,21 +60,21 @@ describe('AAGUID', () => {
 
     it('formats non-zero bytes to canonical string', () => {
       const aaguid = '00112233-4455-6677-8899-aabbccddeeff';
-      const bytes = Array.from(hexToBytes({aaguid}));
+      const bytes = hexToBytes({aaguid});
       expect(bytesToAAGUID({bytes})).toEqual({aaguid});
     });
 
     it('outputs lowercase hex with hyphens', () => {
       const upper = 'ABCDEF12-3456-7890-ABCD-EF1234567890';
-      const bytes = Array.from(hexToBytes({aaguid: upper}));
+      const bytes = hexToBytes({aaguid: upper});
       const res = bytesToAAGUID({bytes});
       expect('aaguid' in res && res.aaguid === upper.toLowerCase()).toBe(true);
     });
 
-    it('accepts Uint8Array input', () => {
+    it('accepts numbers input', () => {
       const aaguid = 'deadbeef-0001-0203-0405-060708090a0b';
-      const u8 = hexToBytes({aaguid}); // Uint8Array
-      expect(bytesToAAGUID({bytes: u8})).toEqual({aaguid});
+      const n = Array.from(hexToBytes({aaguid}));
+      expect(bytesToAAGUID({bytes: n})).toEqual({aaguid});
     });
 
     it('returns unknownProvider for all-zero Uint8Array', () => {

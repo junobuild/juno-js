@@ -51,17 +51,13 @@ const parseEnv = (userEnv?: UserEnvironment): Environment => {
 };
 
 /**
- * Initializes Juno with the provided optional environment parameters.
- * If no environment is provided, the variables injected by the Vite or NextJS plugins will be used.
  * @deprecated Use {@link initSatellite} instead.
- * @param {UserEnvironment} [userEnv] - The optional user environment configuration.
- * @returns {Promise<Unsubscribe[]>} A promise that resolves to an array of unsubscribe functions.
  */
 export const initJuno = (userEnv?: UserEnvironment): Promise<Unsubscribe[]> =>
   initSatellite(userEnv);
 
 /**
- * Initializes a Juno satellite with the provided optional environment parameters.
+ * Initializes a Satellite with the provided optional environment parameters.
  * If no environment is provided, the variables injected by the Vite or NextJS plugins will be used.
  * @param {UserEnvironment} [userEnv] - The optional user environment configuration.
  * @returns {Promise<Unsubscribe[]>} A promise that resolves to an array of unsubscribe functions.

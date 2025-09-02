@@ -396,6 +396,26 @@ describe('auth.services', () => {
         expect(chainSpy).toHaveBeenCalledTimes(1);
       });
 
+      it('should forward passkey options to WebAuthnProvider.signUp', async () => {
+        const passkeyOptions = {
+          user: {displayName: 'Maria Sanchez', name: 'maria@example.com'},
+          appId: {id: 'example.com'}
+        };
+
+        const spy = vi
+          .spyOn(webAuthnLib.WebAuthnIdentity, 'createWithNewCredential')
+          .mockResolvedValue(mockPasskeyIdentity);
+
+        await signUp({
+          webauthn: {
+            options: {passkey: passkeyOptions}
+          }
+        });
+
+        const arg = spy.mock.calls[0][0];
+        expect(arg?.passkeyOptions).toEqual(passkeyOptions);
+      });
+
       it('it should call webauthn provider on signUp', async () => {
         const loginSpy = authClientMock.login.mockImplementation(async () => {
           throw new Error('authClient.login must not be called for webauthn signUp');

@@ -1,3 +1,5 @@
+import type {CreatePasskeyOptions} from '@junobuild/ic-client/webauthn';
+
 /**
  * Enum representing the different steps of the WebAuthn sign-in flow.
  */
@@ -89,4 +91,12 @@ export interface WebAuthnSignUpOptions extends WebAuthnSignOptions {
    * Useful for showing UI feedback such as loading indicators or status messages.
    */
   onProgress?: WebAuthnSignProgressFn<WebAuthnSignUpProgressStep>;
+
+  /**
+   * Options for creating the passkey credential.
+   *
+   * For example, you can provide a user-friendly display name so the passkey
+   * is easier to recognize later.
+   */
+  passkey?: CreatePasskeyOptions;
 }

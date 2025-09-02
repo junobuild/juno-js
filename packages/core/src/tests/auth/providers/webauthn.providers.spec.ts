@@ -355,6 +355,40 @@ describe('webauthn.providers', async () => {
 
         expect(chainSpy).toHaveBeenCalledTimes(1);
       });
+
+      it('forwards passkey options to createWithNewCredential', async () => {
+        const passkeyOptions = {
+          user: {displayName: 'Maria Sanchez', name: 'maria@example.com'},
+          appId: {id: 'example.com'}
+        };
+
+        const createSpy = vi
+          .spyOn(webAuthnLib.WebAuthnIdentity, 'createWithNewCredential')
+          .mockResolvedValue(mockPasskeyIdentity);
+
+        vi.spyOn(identityLib.ECDSAKeyIdentity, 'generate').mockResolvedValue({
+          getPublicKey: vi.fn(),
+          getKeyPair: vi.fn()
+        } as any);
+        vi.spyOn(identityLib.DelegationChain, 'create').mockResolvedValue({} as any);
+        const fakeDelegation = {foo: 'bar'};
+        vi.spyOn(identityLib.DelegationIdentity, 'fromDelegation').mockReturnValue({
+          getDelegation: () => ({toJSON: () => fakeDelegation}),
+          getPrincipal: () => ({toText: () => mockUserIdText})
+        } as any);
+
+        const loadAuthWithUser = vi.fn().mockResolvedValue(undefined);
+
+        await new WebAuthnProvider().signUp({
+          options: {passkey: passkeyOptions},
+          loadAuthWithUser
+        });
+
+        expect(createSpy).toHaveBeenCalledTimes(1);
+        const arg = createSpy.mock.calls[0][0];
+        expect(arg?.onProgress).toBeTypeOf('function');
+        expect(arg?.passkeyOptions).toEqual(passkeyOptions);
+      });
     });
   });
 });

@@ -18,6 +18,7 @@ import {
 import {EnvStore} from '../../core/stores/env.store';
 import {getDoc} from '../../datastore/services/doc.services';
 import {DELEGATION_IDENTITY_EXPIRATION_IN_MILLISECONDS} from '../constants/auth.constants';
+import {execute} from '../helpers/progress.helpers';
 import {createWebAuthnUser} from '../services/user-webauthn.services';
 import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../types/errors';
 import type {Provider} from '../types/provider';
@@ -29,8 +30,6 @@ import {
   WebAuthnSignUpProgressStep
 } from '../types/webauthn';
 import type {AuthProvider} from './_auth-client.providers';
-import {SignProgressFn} from '../types/progress';
-import {execute} from '../helpers/progress.helpers';
 
 interface SessionDelegationIdentity {
   delegationIdentity: DelegationIdentity;

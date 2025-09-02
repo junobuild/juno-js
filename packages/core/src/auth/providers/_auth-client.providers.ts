@@ -4,7 +4,8 @@ import {
   ALLOW_PIN_AUTHENTICATION,
   DELEGATION_IDENTITY_EXPIRATION
 } from '../constants/auth.constants';
-import type {AuthClientSignInOptions} from '../types/auth-client';
+import {execute} from '../helpers/progress.helpers';
+import {AuthClientSignInOptions, AuthClientSignInProgressStep} from '../types/auth-client';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
 import type {Provider} from '../types/provider';
 
@@ -85,16 +86,30 @@ export abstract class AuthClientProvider implements AuthProvider {
     authClient: AuthClient | undefined | null;
     initAuth: (params: {provider: Provider}) => Promise<void>;
   }): Promise<void> {
-    await this.#loginWithAuthClient({options, authClient});
+    // 1. Sign-in or sign-up with third party provider
+    const login = async () => await this.#loginWithAuthClient({options, authClient});
 
-    await initAuth({provider: this.id});
+    await execute({
+      fn: login,
+      step: AuthClientSignInProgressStep.AuthorizingWithProvider,
+      onProgress: options?.onProgress
+    });
+
+    // 2. Create or load the user for the authentication
+    const runAuth = async () => await initAuth({provider: this.id});
+
+    await execute({
+      fn: runAuth,
+      step: AuthClientSignInProgressStep.CreatingOrRetrievingUser,
+      onProgress: options?.onProgress
+    });
   }
 
   #loginWithAuthClient({
     options,
     authClient
   }: {
-    options?: AuthClientSignInOptions;
+    options?: Omit<AuthClientSignInOptions, 'onProgress'>;
     authClient: AuthClient | undefined | null;
   }): Promise<void> {
     /* eslint-disable no-async-promise-executor */

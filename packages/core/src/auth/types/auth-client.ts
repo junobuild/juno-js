@@ -1,3 +1,15 @@
+import type {SignProgressFn} from './progress';
+
+/**
+ * Enum representing the different steps of the sign-in flow with Internet Identity or NFID.
+ */
+export enum AuthClientSignInProgressStep {
+  /** User is authenticating with the identity provider (II / NFID). */
+  AuthorizingWithProvider,
+  /** App is creating a new user or retrieving an existing one after authorization. */
+  CreatingOrRetrievingUser
+}
+
 /**
  * Interface representing sign-in options when using an AuthClient based provider.
  * @interface AuthClientSignInOptions
@@ -28,6 +40,12 @@ export interface AuthClientSignInOptions {
    * @type {boolean}
    */
   allowPin?: boolean;
+
+  /**
+   * Optional callback to receive progress updates about the sign-in flow.
+   * Useful for showing UI feedback such as loading indicators or status messages.
+   */
+  onProgress?: SignProgressFn<AuthClientSignInProgressStep>;
 }
 
 /**

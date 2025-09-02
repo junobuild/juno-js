@@ -76,7 +76,7 @@ export abstract class AuthClientProvider implements AuthProvider {
    * - {@link SignInUserInterruptError} if the user cancels the login.
    * - {@link SignInError} for other errors during sign-in.
    */
-  signIn({
+  async signIn({
     options,
     authClient,
     initAuth
@@ -84,6 +84,18 @@ export abstract class AuthClientProvider implements AuthProvider {
     options?: AuthClientSignInOptions;
     authClient: AuthClient | undefined | null;
     initAuth: (params: {provider: Provider}) => Promise<void>;
+  }): Promise<void> {
+    await this.#loginWithAuthClient({options, authClient});
+
+    await initAuth({provider: this.id});
+  }
+
+  #loginWithAuthClient({
+    options,
+    authClient
+  }: {
+    options?: AuthClientSignInOptions;
+    authClient: AuthClient | undefined | null;
   }): Promise<void> {
     /* eslint-disable no-async-promise-executor */
     return new Promise<void>(async (resolve, reject) => {
@@ -97,10 +109,7 @@ export abstract class AuthClientProvider implements AuthProvider {
       }
 
       await authClient.login({
-        onSuccess: async () => {
-          await initAuth({provider: this.id});
-          resolve();
-        },
+        onSuccess: resolve,
         onError: (error?: string) => {
           if (error === ERROR_USER_INTERRUPT) {
             reject(new SignInUserInterruptError(error));

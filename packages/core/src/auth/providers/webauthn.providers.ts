@@ -18,13 +18,13 @@ import {
 import {EnvStore} from '../../core/stores/env.store';
 import {getDoc} from '../../datastore/services/doc.services';
 import {DELEGATION_IDENTITY_EXPIRATION_IN_MILLISECONDS} from '../constants/auth.constants';
+import {execute} from '../helpers/progress.helpers';
 import {createWebAuthnUser} from '../services/user-webauthn.services';
 import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../types/errors';
 import type {Provider} from '../types/provider';
 import type {User} from '../types/user';
 import {
   type WebAuthnSignInOptions,
-  type WebAuthnSignProgressFn as WebAuthnSignProviderProgressFn,
   type WebAuthnSignUpOptions,
   WebAuthnSignInProgressStep,
   WebAuthnSignUpProgressStep
@@ -97,7 +97,7 @@ export class WebAuthnProvider implements AuthProvider {
         passkeyOptions
       });
 
-    const passkeyIdentity = await this.#execute({
+    const passkeyIdentity = await execute({
       fn: createPasskey,
       step: WebAuthnSignUpProgressStep.CreatingUserCredential,
       onProgress
@@ -121,7 +121,7 @@ export class WebAuthnProvider implements AuthProvider {
         satelliteId
       });
 
-    const user = await this.#execute({
+    const user = await execute({
       fn: register,
       step: WebAuthnSignUpProgressStep.RegisteringUser,
       onProgress
@@ -131,7 +131,7 @@ export class WebAuthnProvider implements AuthProvider {
     const saveSession = async () =>
       await this.#saveSessionIdentityForAuthClient({delegationIdentity, sessionKey});
 
-    await this.#execute({
+    await execute({
       fn: saveSession,
       step: WebAuthnSignUpProgressStep.FinalizingSession,
       onProgress
@@ -140,7 +140,7 @@ export class WebAuthnProvider implements AuthProvider {
     // 5. Load the user for the authentication
     const loadAuth = async () => await loadAuthWithUser({user});
 
-    await this.#execute({
+    await execute({
       fn: loadAuth,
       step: WebAuthnSignUpProgressStep.RegisteringUser,
       onProgress
@@ -237,14 +237,14 @@ export class WebAuthnProvider implements AuthProvider {
     const saveSession = async () =>
       await this.#saveSessionIdentityForAuthClient({delegationIdentity, sessionKey});
 
-    await this.#execute({
+    await execute({
       fn: saveSession,
       step: WebAuthnSignInProgressStep.FinalizingSession,
       onProgress
     });
 
     // 5. Load the user
-    await this.#execute({
+    await execute({
       fn: loadAuth,
       step: WebAuthnSignInProgressStep.RetrievingUser,
       onProgress
@@ -289,38 +289,5 @@ export class WebAuthnProvider implements AuthProvider {
         JSON.stringify(delegationIdentity.getDelegation().toJSON())
       )
     ]);
-  }
-
-  async #execute<T, Step>({
-    fn,
-    step,
-    onProgress
-  }: {
-    fn: () => Promise<T>;
-    step: Step;
-    onProgress?: WebAuthnSignProviderProgressFn<Step>;
-  }): Promise<T> {
-    onProgress?.({
-      step,
-      state: 'in_progress'
-    });
-
-    try {
-      const result = await fn();
-
-      onProgress?.({
-        step,
-        state: 'success'
-      });
-
-      return result;
-    } catch (err: unknown) {
-      onProgress?.({
-        step,
-        state: 'error'
-      });
-
-      throw err;
-    }
   }
 }

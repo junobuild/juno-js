@@ -1,4 +1,5 @@
 import type {CreatePasskeyOptions} from '@junobuild/ic-client/webauthn';
+import type {SignProgressFn} from './progress';
 
 /**
  * Enum representing the different steps of the WebAuthn sign-in flow.
@@ -35,29 +36,6 @@ export enum WebAuthnSignUpProgressStep {
 }
 
 /**
- * Represents the state of a WebAuthn progress step.
- * - `in_progress`: The step is currently being executed.
- * - `success`: The step completed successfully.
- * - `error`: The step failed.
- */
-export type WebAuthnProgressState = 'in_progress' | 'success' | 'error';
-
-/**
- * Progress event emitted during a WebAuthn sign-in or sign-up flow.
- */
-export interface WebAuthnSignProgress<Step> {
-  /** Current step in the sign-in flow */
-  step: Step;
-  /** State of the current step */
-  state: WebAuthnProgressState;
-}
-
-/**
- * Callback type for receiving progress updates during the WebAuthn sign-in or sign-up process.
- */
-export type WebAuthnSignProgressFn<Step> = (progress: WebAuthnSignProgress<Step>) => void;
-
-/**
  * Interface representing common sign-in and sing-up options when using a WebAuthn (passkey) based provider.
  * @interface WebAuthnSignOptions
  */
@@ -78,7 +56,7 @@ export interface WebAuthnSignInOptions extends WebAuthnSignOptions {
    * Optional callback to receive progress updates about the sign-in flow.
    * Useful for showing UI feedback such as loading indicators or status messages.
    */
-  onProgress?: WebAuthnSignProgressFn<WebAuthnSignInProgressStep>;
+  onProgress?: SignProgressFn<WebAuthnSignInProgressStep>;
 }
 
 /**
@@ -90,7 +68,7 @@ export interface WebAuthnSignUpOptions extends WebAuthnSignOptions {
    * Optional callback to receive progress updates about the sign-up flow.
    * Useful for showing UI feedback such as loading indicators or status messages.
    */
-  onProgress?: WebAuthnSignProgressFn<WebAuthnSignUpProgressStep>;
+  onProgress?: SignProgressFn<WebAuthnSignUpProgressStep>;
 
   /**
    * Options for creating the passkey credential.

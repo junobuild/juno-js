@@ -1,5 +1,5 @@
 import {execute} from '../../../auth/helpers/progress.helpers';
-import {SignProgressFn} from '../../../auth/types/progress';
+import type {SignProgressFn} from '../../../auth/types/progress';
 import {WebAuthnSignInProgressStep} from '../../../auth/types/webauthn';
 
 describe('progress.helpers', () => {
@@ -28,7 +28,7 @@ describe('progress.helpers', () => {
       const onProgress = vi.fn();
       const boom = new Error('boom');
       const fn = vi.fn(async () => {
-        throw boom; // async path
+        throw boom;
       });
 
       await expect(
@@ -64,7 +64,6 @@ describe('progress.helpers', () => {
       };
 
       const fn = vi.fn(async () => {
-        // when fn begins, in_progress should already have been emitted
         expect(started).toBe(true);
         return 'ok';
       });

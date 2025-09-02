@@ -1,5 +1,5 @@
 import type {CreatePasskeyOptions} from '@junobuild/ic-client/webauthn';
-import {SignProgressFn} from './progress';
+import type {SignProgressFn} from './progress';
 
 /**
  * Enum representing the different steps of the WebAuthn sign-in flow.

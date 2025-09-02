@@ -84,5 +84,10 @@ export const initSatellite = async (userEnv?: UserEnvironment): Promise<Unsubscr
  * @param {function(User | null): void} callback - The callback function to execute when the authentication state changes.
  * @returns {Unsubscribe} A function to unsubscribe from the authentication state changes.
  */
-export const authSubscribe = (callback: (authUser: User | null) => void): Unsubscribe =>
+export const onAuthStateChange = (callback: (authUser: User | null) => void): Unsubscribe =>
   AuthStore.getInstance().subscribe(callback);
+
+/**
+ * @deprecated Use {@link onAuthStateChange} instead.
+ */
+export const authSubscribe = onAuthStateChange;

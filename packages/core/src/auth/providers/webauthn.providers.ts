@@ -55,7 +55,7 @@ export class WebAuthnProvider implements AuthProvider {
    * @returns {Promise<void>} Resolves if the sign-up is successful.
    */
   async signUp({
-    options: {onProgress, maxTimeToLiveInMilliseconds} = {},
+    options: {onProgress, maxTimeToLiveInMilliseconds, passkey: passkeyOptions} = {},
     loadAuthWithUser
   }: {
     options?: WebAuthnSignUpOptions;
@@ -93,7 +93,8 @@ export class WebAuthnProvider implements AuthProvider {
     // 1. Create passkey
     const createPasskey = async (): Promise<WebAuthnIdentity<WebAuthnNewCredential>> =>
       await WebAuthnIdentity.createWithNewCredential({
-        onProgress: onSignProgress
+        onProgress: onSignProgress,
+        passkeyOptions
       });
 
     const passkeyIdentity = await this.#execute({

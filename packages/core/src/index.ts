@@ -18,7 +18,7 @@ export {
   unsafeIdentity
 } from './auth/services/auth.services';
 export type * from './auth/types/auth';
-export type * from './auth/types/auth-client';
+export * from './auth/types/auth-client';
 export * from './auth/types/errors';
 export type * from './auth/types/progress';
 export type * from './auth/types/provider';

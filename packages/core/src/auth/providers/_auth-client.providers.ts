@@ -5,7 +5,7 @@ import {
   DELEGATION_IDENTITY_EXPIRATION
 } from '../constants/auth.constants';
 import {execute} from '../helpers/progress.helpers';
-import {AuthClientSignInOptions, AuthClientSignInProgressStep} from '../types/auth-client';
+import {type AuthClientSignInOptions, AuthClientSignInProgressStep} from '../types/auth-client';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
 import type {Provider} from '../types/provider';
 

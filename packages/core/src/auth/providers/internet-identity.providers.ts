@@ -6,13 +6,12 @@ import {
 import {EnvStore} from '../../core/stores/env.store';
 import {II_POPUP, INTERNET_COMPUTER_ORG} from '../constants/auth.constants';
 import type {
-  AuthClientSignInOptions,
-  InternetIdentityConfig,
-  InternetIdentityDomain
+  AuthClientSignInOptions
 } from '../types/auth-client';
 import type {Provider} from '../types/provider';
 import {popupCenter} from '../utils/window.utils';
 import {AuthClientProvider, type AuthProviderSignInOptions} from './_auth-client.providers';
+import {InternetIdentityDomain, InternetIdentityConfig} from '../types/internet-identity';
 
 /**
  * Internet Identity authentication provider.
@@ -26,7 +25,7 @@ export class InternetIdentityProvider extends AuthClientProvider {
    * Creates an instance of InternetIdentityProvider.
    * @param {InternetIdentityConfig} config - The configuration for Internet Identity.
    */
-  constructor({domain}: InternetIdentityConfig = {}) {
+  constructor({domain}: InternetIdentityConfig) {
     super();
 
     this.#domain = domain;

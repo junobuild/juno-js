@@ -48,39 +48,3 @@ export interface AuthClientSignInOptions {
   onProgress?: SignProgressFn<AuthClientSignInProgressStep>;
 }
 
-/**
- * Type representing the available Internet Identity domains.
- * @typedef {('internetcomputer.org' | 'ic0.app')} InternetIdentityDomain
- */
-export type InternetIdentityDomain = 'internetcomputer.org' | 'ic0.app';
-
-/**
- * Interface representing the configuration for Internet Identity.
- * @interface InternetIdentityConfig
- */
-export interface InternetIdentityConfig {
-  /**
-   * The domain for Internet Identity.
-   * @default internetcomputer.org
-   * @type {InternetIdentityDomain}
-   */
-  domain?: InternetIdentityDomain;
-}
-
-/**
- * Interface representing the configuration for NFID.
- * @interface NFIDConfig
- */
-export interface NFIDConfig {
-  /**
-   * The name of the application.
-   * @type {string}
-   */
-  appName: string;
-
-  /**
-   * The URL of the application's logo.
-   * @type {string}
-   */
-  logoUrl: string;
-}

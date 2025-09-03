@@ -138,10 +138,12 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
 
   if ('nfid' in options) {
     const {
-      nfid: {config, options: signInOptions}
+      nfid: {options: nfidOptions},
     } = options;
 
-    await new NFIDProvider(config).signIn({
+    const {appName, logoUrl, ...signInOptions} = nfidOptions ?? {};
+
+    await new NFIDProvider({appName, logoUrl}).signIn({
       options: signInOptions,
       authClient,
       initAuth: createAuth
@@ -150,10 +152,12 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
   }
 
   const {
-    internet_identity: {config, options: signInOptions}
+    internet_identity: {options: iiOptions}
   } = options;
 
-  await new InternetIdentityProvider(config).signIn({
+  const {domain, ...signInOptions} = iiOptions ?? {};
+
+  await new InternetIdentityProvider({domain}).signIn({
     options: signInOptions,
     authClient,
     initAuth: createAuth

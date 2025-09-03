@@ -1,4 +1,5 @@
 import {assertNonNullish} from '@dfinity/utils';
+import {isWebAuthnAvailable} from '@junobuild/ic-client/webauthn';
 import type {Asset, AssetEncoding, AssetKey, EncodingType, Storage} from '@junobuild/storage';
 import {initAuthTimeoutWorker} from './auth/services/auth-timout.services';
 import {loadAuth} from './auth/services/auth.services';
@@ -34,6 +35,7 @@ export type * from './datastore/types/doc';
 export * from './functions/services/functions.services';
 export * from './storage/services/storage.services';
 export type * from './storage/types/storage';
+export {isWebAuthnAvailable};
 export type {Asset, AssetEncoding, AssetKey, EncodingType, Storage};
 
 const parseEnv = (userEnv?: UserEnvironment): Environment => {

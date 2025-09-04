@@ -22,9 +22,11 @@ import {
 } from '../../../auth/services/auth.services';
 import * as userWebAuthnServices from '../../../auth/services/user-webauthn.services';
 import {AuthStore} from '../../../auth/stores/auth.store';
+import type {SignInOptions} from '../../../auth/types/auth';
 import {
   SignInError,
   SignInInitError,
+  SignInProviderNotSupportedError,
   SignInUserInterruptError,
   SignUpProviderNotSupportedError
 } from '../../../auth/types/errors';
@@ -144,8 +146,10 @@ describe('auth.services', () => {
   });
 
   describe('signIn', () => {
+    const mockSignInOptions: SignInOptions = {internet_identity: {}};
+
     it('throws SignInInitError if authClient is null', async () => {
-      await expect(signIn()).rejects.toThrowError(
+      await expect(signIn(mockSignInOptions)).rejects.toThrowError(
         new SignInInitError(
           'No client is ready to perform a sign-in. Have you initialized the Satellite?'
         )
@@ -164,7 +168,15 @@ describe('auth.services', () => {
           options?.onSuccess?.();
         });
 
-        await expect(signIn()).resolves.toBeUndefined();
+        await expect(signIn(mockSignInOptions)).resolves.toBeUndefined();
+      });
+
+      it('throws SignInProviderNotSupportedError when provider is unknown', async () => {
+        await expect(signIn({unknown: {}} as any)).rejects.toThrowError(
+          new SignInProviderNotSupportedError(
+            'An unknown or unsupported provider was provided for sign-in.'
+          )
+        );
       });
 
       it('add and remove window beforeunload guard', async () => {
@@ -179,7 +191,7 @@ describe('auth.services', () => {
           options?.onSuccess?.();
         });
 
-        await signIn();
+        await signIn(mockSignInOptions);
 
         expect(addSpy).toHaveBeenCalledTimes(1);
         expect(removeSpy).toHaveBeenCalledTimes(1);
@@ -298,7 +310,7 @@ describe('auth.services', () => {
           options?.onError?.('UserInterrupt');
         });
 
-        await expect(signIn()).rejects.toSatisfy((error) => {
+        await expect(signIn(mockSignInOptions)).rejects.toSatisfy((error) => {
           return error instanceof SignInUserInterruptError && error.message === 'UserInterrupt';
         });
       });
@@ -309,7 +321,7 @@ describe('auth.services', () => {
           options?.onError?.('AnotherError');
         });
 
-        await expect(signIn()).rejects.toSatisfy((error) => {
+        await expect(signIn(mockSignInOptions)).rejects.toSatisfy((error) => {
           return error instanceof SignInError && error.message === 'AnotherError';
         });
       });
@@ -324,7 +336,7 @@ describe('auth.services', () => {
     it('throws SignUpProviderNotSupportedError when provider is unknown', async () => {
       await expect(signUp({internet_identity: {}} as any)).rejects.toThrowError(
         new SignUpProviderNotSupportedError(
-          'An unknown or unsupported provider was provided for sign-up. Try signing in instead.'
+          'An unknown or unsupported provider was provided for sign-up.'
         )
       );
     });

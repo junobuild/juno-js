@@ -213,9 +213,9 @@ describe('auth.services', () => {
         await expect(
           signIn({
             internet_identity: {
-              config: {domain: 'ic0.app'},
               options: {
-                maxTimeToLiveInNanoseconds: 111n
+                maxTimeToLiveInNanoseconds: 111n,
+                domain: 'ic0.app'
               }
             }
           })
@@ -243,8 +243,9 @@ describe('auth.services', () => {
         await expect(
           signIn({
             nfid: {
-              config: {appName: 'test', logoUrl: 'https://my.com/logo.png'},
               options: {
+                appName: 'test',
+                logoUrl: 'https://my.com/logo.png',
                 maxTimeToLiveInNanoseconds: 222n
               }
             }

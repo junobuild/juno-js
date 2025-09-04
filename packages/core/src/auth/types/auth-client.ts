@@ -47,4 +47,3 @@ export interface AuthClientSignInOptions {
    */
   onProgress?: SignProgressFn<AuthClientSignInProgressStep>;
 }
-

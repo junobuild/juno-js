@@ -1,9 +1,9 @@
 import {NFID_POPUP} from '../constants/auth.constants';
 import type {AuthClientSignInOptions} from '../types/auth-client';
+import type {NFIDConfig} from '../types/nfid';
 import type {Provider} from '../types/provider';
 import {popupCenter} from '../utils/window.utils';
 import {AuthClientProvider, type AuthProviderSignInOptions} from './_auth-client.providers';
-import {NFIDConfig} from '../types/nfid';
 
 /**
  * NFID authentication provider.

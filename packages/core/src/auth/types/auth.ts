@@ -1,5 +1,5 @@
-import {InternetIdentitySignInOptions} from './internet-identity';
-import {NFIDSignInOptions} from './nfid';
+import type {InternetIdentitySignInOptions} from './internet-identity';
+import type {NFIDSignInOptions} from './nfid';
 import type {WebAuthnSignInOptions, WebAuthnSignUpOptions} from './webauthn';
 
 /**

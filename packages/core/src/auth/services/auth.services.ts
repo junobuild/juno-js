@@ -138,7 +138,7 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
 
   if ('nfid' in options) {
     const {
-      nfid: {options: nfidOptions},
+      nfid: {options: nfidOptions}
     } = options;
 
     const {appName, logoUrl, ...signInOptions} = nfidOptions ?? {};

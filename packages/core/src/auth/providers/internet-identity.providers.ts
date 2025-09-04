@@ -5,13 +5,11 @@ import {
 } from '../../core/constants/container.constants';
 import {EnvStore} from '../../core/stores/env.store';
 import {II_POPUP, INTERNET_COMPUTER_ORG} from '../constants/auth.constants';
-import type {
-  AuthClientSignInOptions
-} from '../types/auth-client';
+import type {AuthClientSignInOptions} from '../types/auth-client';
+import type {InternetIdentityConfig, InternetIdentityDomain} from '../types/internet-identity';
 import type {Provider} from '../types/provider';
 import {popupCenter} from '../utils/window.utils';
 import {AuthClientProvider, type AuthProviderSignInOptions} from './_auth-client.providers';
-import {InternetIdentityDomain, InternetIdentityConfig} from '../types/internet-identity';
 
 /**
  * Internet Identity authentication provider.

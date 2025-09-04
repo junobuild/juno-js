@@ -9,7 +9,7 @@ import {NFIDProvider} from '../providers/nfid.providers';
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInOptions, SignUpOptions} from '../types/auth';
-import {SignUpProviderNotSupportedError} from '../types/errors';
+import {SignInProviderNotSupportedError, SignUpProviderNotSupportedError} from '../types/errors';
 import type {Provider} from '../types/provider';
 import type {User} from '../types/user';
 import {createAuthClient, resetAuthClient} from '../utils/auth.utils';
@@ -87,14 +87,13 @@ const authenticate = async ({fn}: {fn: () => Promise<void>}) => {
  * Signs in a user with the specified options.
  *
  * @default Signs in by default with Internet Identity
- * @param {SignInOptions} [options] - The options for signing in.
+ * @param {SignInOptions} [options] - The options for signing in including the provider to use for the process.
  * @returns {Promise<void>} A promise that resolves when the sign-in process is complete and the authenticated user is initialized.
  */
-export const signIn = async (options?: SignInOptions): Promise<void> => {
-  const opts = options ?? {internet_identity: {}};
-  const fn = async () => await signInWithProvider(opts);
+export const signIn = async (options: SignInOptions): Promise<void> => {
+  const fn = async () => await signInWithProvider(options);
 
-  const disableWindowGuard = Object.values(opts)?.[0].context?.windowGuard === false;
+  const disableWindowGuard = Object.values(options)[0].context?.windowGuard === false;
 
   if (disableWindowGuard) {
     await fn();
@@ -151,17 +150,24 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
     return;
   }
 
-  const {
-    internet_identity: {options: iiOptions}
-  } = options;
+  if ('internet_identity' in options) {
+    const {
+      internet_identity: {options: iiOptions}
+    } = options;
 
-  const {domain, ...signInOptions} = iiOptions ?? {};
+    const {domain, ...signInOptions} = iiOptions ?? {};
 
-  await new InternetIdentityProvider({domain}).signIn({
-    options: signInOptions,
-    authClient,
-    initAuth: createAuth
-  });
+    await new InternetIdentityProvider({domain}).signIn({
+      options: signInOptions,
+      authClient,
+      initAuth: createAuth
+    });
+    return;
+  }
+
+  throw new SignInProviderNotSupportedError(
+    'An unknown or unsupported provider was provided for sign-in.'
+  );
 };
 
 const signUpWithProvider = async (options: SignUpOptions): Promise<void> => {
@@ -178,7 +184,7 @@ const signUpWithProvider = async (options: SignUpOptions): Promise<void> => {
   }
 
   throw new SignUpProviderNotSupportedError(
-    'An unknown or unsupported provider was provided for sign-up. Try signing in instead.'
+    'An unknown or unsupported provider was provided for sign-up.'
   );
 };
 

@@ -46,3 +46,16 @@ export type SignInOptions =
 export interface SignUpOptions {
   webauthn: {options?: WebAuthnSignUpOptions; context?: SignInContext};
 }
+
+/**
+ * The options for sign-out.
+ */
+export interface SignOutOptions {
+  /**
+   * Opt out of reloading the window after state and authentication
+   * have been successfully cleared.
+   *
+   * @default true
+   */
+  windowReload?: boolean;
+}

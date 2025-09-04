@@ -8,7 +8,7 @@ import {InternetIdentityProvider} from '../providers/internet-identity.providers
 import {NFIDProvider} from '../providers/nfid.providers';
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthStore} from '../stores/auth.store';
-import type {SignInOptions, SignUpOptions} from '../types/auth';
+import type {SignInOptions, SignOutOptions, SignUpOptions} from '../types/auth';
 import {SignInProviderNotSupportedError, SignUpProviderNotSupportedError} from '../types/errors';
 import type {Provider} from '../types/provider';
 import type {User} from '../types/user';
@@ -192,13 +192,20 @@ const signUpWithProvider = async (options: SignUpOptions): Promise<void> => {
  * Signs out the current user.
  * @returns {Promise<void>} A promise that resolves when the sign-out process is complete.
  */
-export const signOut = async (): Promise<void> => {
+export const signOut = async (options?: SignOutOptions): Promise<void> => {
   await resetAuth();
 
   // Recreate an HttpClient immediately because next sign-in, if window is not reloaded, would fail if the agent is created within the process.
   // For example, Safari blocks the Internet Identity (II) window if the agent is created during the interaction.
   // Agent-js must be created either globally or at least before performing a sign-in.
+  // We proceed with this reset regardless of the window reloading. This way we ensure it is reset not matter what.
   authClient = await createAuthClient();
+
+  if (options?.windowReload === false) {
+    return;
+  }
+
+  window.location.reload();
 };
 
 /**

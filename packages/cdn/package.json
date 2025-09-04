@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/cdn",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A toolkit for working with modules that implement Juno's CDN functionality",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -56,8 +56,8 @@
     "@dfinity/principal": "^2.3.0",
     "@dfinity/utils": "^2",
     "@junobuild/config": "*",
-    "@junobuild/ic-client": "^2",
-    "@junobuild/storage": "^1.2.0",
+    "@junobuild/ic-client": "^3",
+    "@junobuild/storage": "^1.2.1",
     "semver": "7.*"
   }
 }

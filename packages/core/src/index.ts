@@ -90,3 +90,5 @@ export const onAuthStateChange = (callback: (authUser: User | null) => void): Un
  * @deprecated Use {@link onAuthStateChange} instead.
  */
 export const authSubscribe = onAuthStateChange;
+export {InternetIdentityConfig, InternetIdentityDomain} from './auth/types/internet-identity';
+export {NFIDConfig} from './auth/types/nfid';

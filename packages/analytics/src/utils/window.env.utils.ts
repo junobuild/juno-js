@@ -11,8 +11,8 @@ export const envSatelliteId = (): string | undefined => {
         (import.meta as unknown as ImportMeta).env?.PUBLIC_SATELLITE_ID)
       : undefined;
 
-  return typeof process !== 'undefined'
-    ? (process.env?.NEXT_PUBLIC_SATELLITE_ID ?? viteEnvSatelliteId())
+  return typeof process !== 'undefined' && typeof process.env !== 'undefined'
+    ? (process.env.NEXT_PUBLIC_SATELLITE_ID ?? viteEnvSatelliteId())
     : viteEnvSatelliteId();
 };
 
@@ -24,8 +24,8 @@ export const envOrbiterId = (): string | undefined => {
         (import.meta as unknown as ImportMeta).env?.PUBLIC_ORBITER_ID)
       : undefined;
 
-  return typeof process !== 'undefined'
-    ? (process.env?.NEXT_PUBLIC_ORBITER_ID ?? viteEnvOrbiterId())
+  return typeof process !== 'undefined' && typeof process.env !== 'undefined'
+    ? (process.env.NEXT_PUBLIC_ORBITER_ID ?? viteEnvOrbiterId())
     : viteEnvOrbiterId();
 };
 
@@ -37,7 +37,7 @@ export const envContainer = (): string | undefined => {
         (import.meta as unknown as ImportMeta).env?.PUBLIC_CONTAINER)
       : undefined;
 
-  return typeof process !== 'undefined'
-    ? (process.env?.NEXT_PUBLIC_CONTAINER ?? viteEnvContainer())
+  return typeof process !== 'undefined' && typeof process.env !== 'undefined'
+    ? (process.env.NEXT_PUBLIC_CONTAINER ?? viteEnvContainer())
     : viteEnvContainer();
 };

@@ -1,5 +1,5 @@
+import type {CanisterStatus} from '@dfinity/agent';
 import * as agent from '@dfinity/agent';
-import type {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
 import {
   ICManagementCanister,
   type InstallChunkedCodeParams,
@@ -237,7 +237,7 @@ describe('ic.api', () => {
       const metadataMock = vi.fn().mockReturnValue('metadata');
       vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
         get: metadataMock
-      } as unknown as StatusMap);
+      } as unknown as CanisterStatus.StatusMap);
 
       const result = await canisterMetadata({
         canisterId: mockSatelliteIdPrincipal,

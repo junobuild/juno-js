@@ -1,5 +1,5 @@
+import type {CanisterStatus} from '@dfinity/agent';
 import * as agent from '@dfinity/agent';
-import type {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
 import {JUNO_PACKAGE_MISSION_CONTROL_ID, JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
 import type {MissionControlParameters} from '@junobuild/ic-client/actor';
 import * as actor from '@junobuild/ic-client/actor';
@@ -52,7 +52,7 @@ describe('mission-control.version.services', () => {
     );
     vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
       get: metadataMock
-    } as unknown as StatusMap);
+    } as unknown as CanisterStatus.StatusMap);
 
     const result = await missionControlVersion({missionControl});
     expect(result).toBe('0.0.15');
@@ -62,7 +62,7 @@ describe('mission-control.version.services', () => {
     const metadataMock = vi.fn().mockReturnValue(undefined);
     vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
       get: metadataMock
-    } as unknown as StatusMap);
+    } as unknown as CanisterStatus.StatusMap);
 
     mockActor.version.mockResolvedValue('0.11.0');
 
@@ -80,7 +80,7 @@ describe('mission-control.version.services', () => {
     );
     vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
       get: metadataMock
-    } as unknown as StatusMap);
+    } as unknown as CanisterStatus.StatusMap);
 
     await expect(missionControlVersion({missionControl})).rejects.toThrow(
       MissionControlVersionError

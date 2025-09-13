@@ -22,10 +22,7 @@ export const call = async <T>(params: CallParams): Promise<T> => {
 
   const {canisterId: providedCanisterId, method, args: providedArgs, result: resultType} = params;
 
-  const canisterId =
-    providedCanisterId instanceof Principal
-      ? providedCanisterId.toUint8Array()
-      : providedCanisterId;
+  const canisterId = Principal.from(providedCanisterId).toUint8Array();
 
   const [argsTypes, argsValues] = (providedArgs ?? []).reduce<[IDLType[], unknown[]]>(
     ([argsTypes, argsValues], [type, value]) => [

@@ -10,4 +10,4 @@ import type {RawUserId, UserId} from '../../schemas/satellite';
  * @returns {RawUserId} The raw user ID as a `Uint8Array`.
  */
 export const normalizeCaller = (caller: RawUserId | UserId): RawUserId =>
-  caller instanceof Principal ? caller.toUint8Array() : caller;
+  Principal.from(caller).toUint8Array();

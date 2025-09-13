@@ -157,7 +157,7 @@ export const canisterMetadata = async ({
   globalThis.console.warn = (): null => null;
 
   const result = await CanisterStatus.request({
-    canisterId: canisterId instanceof Principal ? canisterId : Principal.fromText(canisterId),
+    canisterId: canisterId instanceof Principal ? canisterId : Principal.from(canisterId),
     agent,
     paths: [
       {

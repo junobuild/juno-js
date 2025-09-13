@@ -48,8 +48,7 @@ export const createSnapshot = async ({cdn}: {cdn: CdnParameters}) => {
         satellite: {satelliteId, ...rest}
       } = cdn;
       return {
-        canisterId:
-          satelliteId instanceof Principal ? satelliteId : Principal.fromText(satelliteId),
+        canisterId: satelliteId instanceof Principal ? satelliteId : Principal.from(satelliteId),
         actor: rest
       };
     }
@@ -58,7 +57,7 @@ export const createSnapshot = async ({cdn}: {cdn: CdnParameters}) => {
       console: {consoleId, ...rest}
     } = cdn;
     return {
-      canisterId: consoleId instanceof Principal ? consoleId : Principal.fromText(consoleId),
+      canisterId: consoleId instanceof Principal ? consoleId : Principal.from(consoleId),
       actor: rest
     };
   };

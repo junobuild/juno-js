@@ -1,5 +1,5 @@
+import type {CanisterStatus} from '@dfinity/agent';
 import * as agent from '@dfinity/agent';
-import type {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
 import type {GetJunoPackageParams} from '../../services/package.services';
 import {
   getJunoPackage,
@@ -41,7 +41,7 @@ describe('package.services', () => {
 
       vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
         get: metadataMock
-      } as unknown as StatusMap);
+      } as unknown as CanisterStatus.StatusMap);
 
       const result = await getJunoPackage(params);
       expect(result).toEqual({
@@ -57,7 +57,7 @@ describe('package.services', () => {
       const metadataMock = vi.fn().mockReturnValue(undefined);
       vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
         get: metadataMock
-      } as unknown as StatusMap);
+      } as unknown as CanisterStatus.StatusMap);
 
       const result = await getJunoPackage(params);
       expect(result).toBeUndefined();
@@ -67,7 +67,7 @@ describe('package.services', () => {
       const metadataMock = vi.fn().mockReturnValue(12345);
       vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
         get: metadataMock
-      } as unknown as StatusMap);
+      } as unknown as CanisterStatus.StatusMap);
 
       await expect(getJunoPackage(params)).rejects.toThrow(
         'Unexpected metadata type to parse public custom section juno:package'
@@ -78,7 +78,7 @@ describe('package.services', () => {
       const metadataMock = vi.fn().mockReturnValue('{ invalid json }');
       vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
         get: metadataMock
-      } as unknown as StatusMap);
+      } as unknown as CanisterStatus.StatusMap);
 
       await expect(getJunoPackage(params)).rejects.toThrow('Invalid JSON');
     });
@@ -96,7 +96,7 @@ describe('package.services', () => {
 
       vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
         get: metadataMock
-      } as unknown as StatusMap);
+      } as unknown as CanisterStatus.StatusMap);
 
       const version = await getJunoPackageVersion({
         moduleId: mockSatelliteIdText,
@@ -123,7 +123,7 @@ describe('package.services', () => {
 
       vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
         get: metadataMock
-      } as unknown as StatusMap);
+      } as unknown as CanisterStatus.StatusMap);
 
       const dependencies = await getJunoPackageDependencies({
         moduleId: mockSatelliteIdText,

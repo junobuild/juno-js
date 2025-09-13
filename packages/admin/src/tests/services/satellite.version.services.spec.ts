@@ -1,5 +1,5 @@
+import type {CanisterStatus} from '@dfinity/agent';
 import * as agent from '@dfinity/agent';
-import type {StatusMap} from '@dfinity/agent/lib/esm/canisterStatus';
 import {JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
 import type {SatelliteParameters} from '@junobuild/ic-client/actor';
 import * as actor from '@junobuild/ic-client/actor';
@@ -52,7 +52,7 @@ describe('satellite.version.services', () => {
 
     vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
       get: metadataMock
-    } as unknown as StatusMap);
+    } as unknown as CanisterStatus.StatusMap);
 
     const result = await satelliteVersion({satellite});
     expect(result).toBe('0.1.5');
@@ -71,7 +71,7 @@ describe('satellite.version.services', () => {
 
     vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
       get: metadataMock
-    } as unknown as StatusMap);
+    } as unknown as CanisterStatus.StatusMap);
 
     const result = await satelliteVersion({satellite});
     expect(result).toBe('0.1.4');
@@ -82,7 +82,7 @@ describe('satellite.version.services', () => {
 
     vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
       get: metadataMock
-    } as unknown as StatusMap);
+    } as unknown as CanisterStatus.StatusMap);
 
     mockActor.version.mockResolvedValue('0.0.21');
 
@@ -101,7 +101,7 @@ describe('satellite.version.services', () => {
 
     vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
       get: metadataMock
-    } as unknown as StatusMap);
+    } as unknown as CanisterStatus.StatusMap);
 
     await expect(satelliteVersion({satellite})).rejects.toThrow(SatelliteMissingDependencyError);
   });
@@ -117,7 +117,7 @@ describe('satellite.version.services', () => {
 
     vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
       get: metadataMock
-    } as unknown as StatusMap);
+    } as unknown as CanisterStatus.StatusMap);
 
     const result = await satelliteBuildType({satellite});
     expect(result).toBe('stock');
@@ -136,7 +136,7 @@ describe('satellite.version.services', () => {
 
     vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
       get: metadataMock
-    } as unknown as StatusMap);
+    } as unknown as CanisterStatus.StatusMap);
 
     const result = await satelliteBuildType({satellite});
     expect(result).toBe('extended');
@@ -147,7 +147,7 @@ describe('satellite.version.services', () => {
 
     vi.spyOn(agent.CanisterStatus, 'request').mockResolvedValue({
       get: metadataMock
-    } as unknown as StatusMap);
+    } as unknown as CanisterStatus.StatusMap);
 
     mockActor.version.mockResolvedValue(undefined);
 

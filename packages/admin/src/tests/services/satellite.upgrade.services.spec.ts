@@ -119,7 +119,7 @@ describe('satellite.upgrade.services', () => {
     const arg = encodeAdminAccessKeysToIDL(mockControllers);
 
     expect(icManagementMock.installCode).toHaveBeenCalledWith({
-      arg: new Uint8Array(arg),
+      arg,
       canisterId: mockSatelliteIdPrincipal,
       mode: {
         upgrade: [

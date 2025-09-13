@@ -2,7 +2,7 @@ import {IDL} from '@dfinity/candid';
 import type {Principal} from '@dfinity/principal';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 
-export const encoreIDLUser = (user: Principal): ArrayBuffer =>
+export const encoreIDLUser = (user: Principal): Uint8Array =>
   IDL.encode(
     [
       IDL.Record({
@@ -14,7 +14,7 @@ export const encoreIDLUser = (user: Principal): ArrayBuffer =>
 
 export const encodeAdminAccessKeysToIDL = (
   controllers: [Principal, SatelliteDid.Controller][]
-): ArrayBuffer =>
+): Uint8Array =>
   IDL.encode(
     [
       IDL.Record({

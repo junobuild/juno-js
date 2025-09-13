@@ -39,7 +39,7 @@ export const upgradeMissionControl = async ({
   await upgrade({
     actor,
     canisterId: toPrincipal(missionControlId),
-    arg: new Uint8Array(arg),
+    arg,
     mode: INSTALL_MODE_UPGRADE,
     ...rest
   });

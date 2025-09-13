@@ -1,4 +1,4 @@
-import {arrayBufferToUint8Array, jsonReviver, uint8ArrayToArrayOfNumber} from '@dfinity/utils';
+import {jsonReviver, uint8ArrayToArrayOfNumber} from '@dfinity/utils';
 import type {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
 import {MockInstance} from 'vitest';
 import {createWebAuthnUser} from '../../../auth/services/user-webauthn.services';
@@ -156,7 +156,7 @@ describe('webauthn-user.services', async () => {
       const parsed = JSON.parse(new TextDecoder().decode(buf), jsonReviver);
 
       expect(parsed).toEqual({
-        publicKey: arrayBufferToUint8Array(mockWebAuthnPubDer)
+        publicKey: mockWebAuthnPubDer
       });
     });
 

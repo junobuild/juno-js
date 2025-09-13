@@ -192,7 +192,7 @@ export class WebAuthnProvider implements AuthProvider {
 
       const {publicKey} = data as {publicKey: Uint8Array};
 
-      return unwrapDER(publicKey.buffer as ArrayBuffer, DER_COSE_OID);
+      return unwrapDER(publicKey, DER_COSE_OID);
     };
 
     const onSignProgress: WebAuthnSignProgressFn = ({step, state}) => {

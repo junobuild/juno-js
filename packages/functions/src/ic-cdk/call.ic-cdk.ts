@@ -36,7 +36,7 @@ export const call = async <T>(params: CallParams): Promise<T> => {
 
   const bytes: Uint8Array<ArrayBuffer> = await __ic_cdk_call_raw(canisterId, method, args);
 
-  const result = IDL.decode(toNullable(resultType), bytes.buffer);
+  const result = IDL.decode(toNullable(resultType), bytes);
 
   // We have no test covering this use case because decode seems to never return more than one element, as we never specify more than one return type.
   if (result.length > 1) {

@@ -1,5 +1,5 @@
 import type {Identity} from '@dfinity/agent';
-import {arrayBufferToUint8Array, nonNullish, uint8ArrayToArrayOfNumber} from '@dfinity/utils';
+import {nonNullish, uint8ArrayToArrayOfNumber} from '@dfinity/utils';
 import type {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
 import type {Environment} from '../../core/types/env';
 import {setManyDocs} from '../../datastore/services/doc.services';
@@ -39,7 +39,7 @@ export const createWebAuthnUser = async ({
         doc: {
           key: passkeyIdentity.getCredential().getCredentialIdText(),
           data: {
-            publicKey: arrayBufferToUint8Array(passkeyIdentity.getPublicKey().toDer())
+            publicKey: new Uint8Array(passkeyIdentity.getPublicKey().toDer()) // Strip __derEncodedPublicKey__
           }
         }
       }

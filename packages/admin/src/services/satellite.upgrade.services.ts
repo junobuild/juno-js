@@ -84,7 +84,7 @@ export const upgradeSatellite = async ({
   await upgrade({
     actor,
     canisterId: toPrincipal(satelliteId),
-    arg: new Uint8Array(arg),
+    arg,
     mode: reset ? INSTALL_MODE_RESET : INSTALL_MODE_UPGRADE,
     reset,
     ...rest

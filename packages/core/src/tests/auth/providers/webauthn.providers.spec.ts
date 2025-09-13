@@ -67,7 +67,6 @@ describe('webauthn.providers', async () => {
         beforeEach(() => {
           const get_doc = vi.fn().mockResolvedValue([mockDocApiObject]);
           vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({get_doc} as any);
-          vi.spyOn(identityLib, 'unwrapDER').mockReturnValue(arrayOfNumberToUint8Array([1, 2, 3]));
         });
 
         it('maps lower-level progress steps to provider-level steps', async () => {

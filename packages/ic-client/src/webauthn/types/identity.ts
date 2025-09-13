@@ -1,6 +1,12 @@
+import type {PublicKey} from '@dfinity/agent';
 import type {CoseEncodedKey} from '../agent-js/cose-key';
 import type {CreatePasskeyOptions, PasskeyOptions} from './passkey';
 import type {WebAuthnSignProgressArgs} from './progress';
+
+/**
+ * We extend the PublicKey type to enforce the presence of the toRaw function.
+ */
+export type PublicKeyWithToRaw = Omit<PublicKey, 'toRaw'> & Required<Pick<PublicKey, 'toRaw'>>;
 
 /**
  * Fetches the COSE-encoded public key for a known credential.

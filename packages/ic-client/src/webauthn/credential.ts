@@ -1,7 +1,7 @@
-import type {PublicKey} from '@dfinity/agent';
 import {uint8ArrayToBase64} from '@dfinity/utils';
 import {extractAAGUID} from './aaguid';
 import {type CoseEncodedKey, CosePublicKey} from './agent-js/cose-key';
+import type {PublicKeyWithToRaw} from './types/identity';
 
 /**
  * Arguments to initialize a WebAuthn object.
@@ -45,7 +45,7 @@ export abstract class WebAuthnCredential {
   /**
    * Returns the public key for this credential.
    */
-  getPublicKey(): PublicKey {
+  getPublicKey(): PublicKeyWithToRaw {
     return this.#publicKey;
   }
 

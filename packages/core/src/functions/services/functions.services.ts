@@ -1,5 +1,4 @@
-import type {ActorSubclass} from '@dfinity/agent';
-import type {ActorMethod} from '@dfinity/agent/lib/esm/actor';
+import type {ActorMethod, ActorSubclass} from '@dfinity/agent';
 import type {IDL} from '@dfinity/candid';
 import {getSatelliteExtendedActor as getSatelliteExtendedActorApi} from '../../core/api/actor.api';
 import {getAnyIdentity} from '../../core/services/identity.services';

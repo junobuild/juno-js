@@ -39,7 +39,7 @@ export const createWebAuthnUser = async ({
         doc: {
           key: passkeyIdentity.getCredential().getCredentialIdText(),
           data: {
-            publicKey: new Uint8Array(passkeyIdentity.getPublicKey().toDer()) // Strip __derEncodedPublicKey__
+            publicKey: passkeyIdentity.getPublicKey().toRaw()
           }
         }
       }

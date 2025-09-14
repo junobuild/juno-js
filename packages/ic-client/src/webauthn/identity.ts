@@ -1,4 +1,4 @@
-import {Cbor, type PublicKey, type Signature, SignIdentity} from '@dfinity/agent';
+import {Cbor, type Signature, SignIdentity} from '@dfinity/agent';
 import {arrayBufferToUint8Array, isNullish, uint8ArraysEqual} from '@dfinity/utils';
 import {AUTHENTICATOR_ABORT_TIMEOUT} from './_constants';
 import {createPasskeyOptions, retrievePasskeyOptions} from './_options';
@@ -23,6 +23,7 @@ import type {
   AuthenticatorOptions,
   CreateWebAuthnIdentityWithExistingCredentialArgs,
   CreateWebAuthnIdentityWithNewCredentialArgs,
+  PublicKeyWithToRaw,
   RetrievePublicKeyFn
 } from './types/identity';
 import type {PasskeyOptions} from './types/passkey';
@@ -227,7 +228,7 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
    * @throws WebAuthnIdentityCredentialNotInitializedError if the identity has not signed
    * any request yet.
    */
-  override getPublicKey(): PublicKey {
+  override getPublicKey(): PublicKeyWithToRaw {
     assertWebAuthnStateInitialized(this.#state);
 
     const {credential} = this.#state;

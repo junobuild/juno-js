@@ -30,7 +30,7 @@ export const mockCredentialIdText = 'cred-123';
 
 export const mockPasskeyIdentity = {
   ...mockIdentity,
-  getPublicKey: () => ({toDer: () => mockWebAuthnPubDer}),
+  getPublicKey: () => ({toDer: () => mockWebAuthnPubDer, toRaw: () => mockWebAuthnPubDer}),
   getCredential: () => ({
     getCredentialIdText: () => mockCredentialIdText,
     getAAGUID: () => mockWebAuthnAaguid

@@ -29,6 +29,6 @@ export class CosePublicKey implements PublicKeyWithToRaw {
   }
 
   public toRaw(): Uint8Array {
-    return new Uint8Array(this._encodedKey);
+    return new Uint8Array(this._encodedKey); // Strip __derEncodedPublicKey__
   }
 }

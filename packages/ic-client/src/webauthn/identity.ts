@@ -192,7 +192,9 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
 
     // We have to parse the attestationObject as CBOR to ultimately retrieve the public key.
     // Similar as what's implemented in AgentJS.
-    const {authData} = Cbor.decode<{authData: Uint8Array}>(attestationObject);
+    const {authData} = Cbor.decode<{authData: Uint8Array}>(
+      arrayBufferToUint8Array(attestationObject)
+    );
 
     const cose = _authDataToCose(authData);
 
@@ -257,11 +259,11 @@ export class WebAuthnIdentity<T extends WebAuthnCredential> extends SignIdentity
    * @param blob Bytes to sign (used as the WebAuthn challenge).
    * @returns {Promise<Signature>} CBOR-encoded signature payload.
    */
-  override async sign(blob: ArrayBuffer): Promise<Signature> {
+  override async sign(blob: Uint8Array): Promise<Signature> {
     // 1. Request user credential (navigator.credentials.get)
     const requestCredential = async (): Promise<PublicKeyCredential> => {
       const credential = await retrieveCredentials({
-        challenge: arrayBufferToUint8Array(blob),
+        challenge: blob,
         ...(this.#state.status === 'initialized' && {
           credentialIds: [this.#state.credential.getCredentialId()]
         })

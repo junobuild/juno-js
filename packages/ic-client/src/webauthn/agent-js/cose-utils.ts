@@ -28,5 +28,5 @@ export function _authDataToCose(authData: Uint8Array): Uint8Array {
 }
 
 export function _coseToDerEncodedBlob(cose: Uint8Array): DerEncodedPublicKey {
-  return wrapDER(cose.buffer as ArrayBuffer, DER_COSE_OID).buffer as DerEncodedPublicKey;
+  return wrapDER(cose, DER_COSE_OID) as DerEncodedPublicKey;
 }

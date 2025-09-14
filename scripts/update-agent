@@ -9,25 +9,25 @@ function rm_agent() {
 function install_agent() {
   local package=$1
 
-  npm i @dfinity/agent@2.3.0 @dfinity/candid@2.3.0 @dfinity/identity@2.3.0 @dfinity/principal@2.3.0 --workspace=packages/"$package"
+  npm i @dfinity/agent@3.2.4 @dfinity/candid@3.2.4 @dfinity/identity@3.2.4 @dfinity/principal@3.2.4 --workspace=packages/"$package"
 }
 
 function install_agent_peer() {
   local package=$1
 
-  npm i @dfinity/agent@2.3.0 @dfinity/candid@2.3.0 @dfinity/identity@2.3.0 @dfinity/principal@2.3.0 --workspace=packages/"$package" --save-peer
+  npm i @dfinity/agent@3.2.4 @dfinity/candid@3.2.4 @dfinity/identity@3.2.4 @dfinity/principal@3.2.4 --workspace=packages/"$package" --save-peer
 }
 
 function install_agent_auth_client() {
   local package=$1
 
-  npm i @dfinity/auth-client@2.3.0 --workspace=packages/"$package"
+  npm i @dfinity/auth-client@3.2.4 --workspace=packages/"$package"
 }
 
 function install_agent_auth_client_peer() {
   local package=$1
 
-  npm i @dfinity/auth-client@2.3.0 --workspace=packages/"$package" --save-peer
+  npm i @dfinity/auth-client@3.2.4 --workspace=packages/"$package" --save-peer
 }
 
 PACKAGES=core-standalone

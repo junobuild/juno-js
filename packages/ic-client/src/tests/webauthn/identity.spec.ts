@@ -50,7 +50,7 @@ describe('WebAuthnIdentity', () => {
     describe('Create WebAuthnIdentity', () => {
       describe('Success', () => {
         const rawIdBytes = new Uint8Array([1, 2, 3]);
-        const attestationObject = new ArrayBuffer(8);
+        const attestationObject = new Uint8Array([8, 7, 6, 4, 3]);
 
         let spyCredentialsCreate: MockInstance;
 
@@ -141,16 +141,14 @@ describe('WebAuthnIdentity', () => {
       });
 
       it('should sign successfully (matching credential id) and emit progress', async () => {
-        vi.spyOn(agent.Cbor, 'encode').mockReturnValue(
-          new ArrayBuffer(16) as unknown as ArrayBuffer
-        );
+        vi.spyOn(agent.Cbor, 'encode').mockReturnValue(new Uint8Array([16, 15, 14]));
 
         vi.spyOn(navigator.credentials, 'get').mockResolvedValue({
           type: 'public-key',
           rawId: rawIdBytes.buffer,
           response: {
             clientDataJSON: uint8ArrayToBuffer(stringToUint8Array('{"type":"webauthn.get"}')),
-            authenticatorData: new ArrayBuffer(4),
+            authenticatorData: new Uint8Array([4, 4, 4, 5, 5, 5]),
             signature: uint8ArrayToBuffer(new Uint8Array([1]))
           }
         } as unknown as PublicKeyCredential);
@@ -159,8 +157,8 @@ describe('WebAuthnIdentity', () => {
 
         const identity = await WebAuthnIdentity.createWithNewCredential({onProgress});
 
-        const signature = await identity.sign(new ArrayBuffer(4));
-        expect(signature).toBeInstanceOf(ArrayBuffer);
+        const signature = await identity.sign(new Uint8Array([4, 4, 4, 5, 5, 5]));
+        expect(signature).toBeInstanceOf(Uint8Array);
 
         const calls = onProgress.mock.calls.map((c) => c[0]);
 
@@ -187,7 +185,7 @@ describe('WebAuthnIdentity', () => {
 
         const identity = await WebAuthnIdentity.createWithNewCredential();
 
-        await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+        await expect(identity.sign(new Uint8Array([1, 2, 3, 444]))).rejects.toBeInstanceOf(
           WebAuthnIdentityInvalidCredentialIdError
         );
       });
@@ -204,7 +202,7 @@ describe('WebAuthnIdentity', () => {
 
         const identity = await WebAuthnIdentity.createWithNewCredential();
 
-        await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+        await expect(identity.sign(new Uint8Array([1, 2, 3, 444]))).rejects.toBeInstanceOf(
           WebAuthnIdentityNoAuthenticatorDataError
         );
       });
@@ -234,7 +232,7 @@ describe('WebAuthnIdentity', () => {
           }
         } as unknown as PublicKeyCredential);
 
-        await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+        await expect(identity.sign(new Uint8Array([1, 2, 3, 444]))).rejects.toBeInstanceOf(
           WebAuthnIdentityNoAuthenticatorDataError
         );
       });
@@ -290,8 +288,8 @@ describe('WebAuthnIdentity', () => {
                 onProgress
               });
 
-              const signature = await identity.sign(new ArrayBuffer(4));
-              expect(signature).toBeInstanceOf(ArrayBuffer);
+              const signature = await identity.sign(new Uint8Array([4, 4, 4, 5, 5, 5]));
+              expect(signature).toBeInstanceOf(Uint8Array);
 
               expect(retrievePublicKey).toHaveBeenCalledTimes(1);
 
@@ -313,7 +311,7 @@ describe('WebAuthnIdentity', () => {
                 onProgress: vi.fn()
               });
 
-              await identity.sign(new ArrayBuffer(4));
+              await identity.sign(new Uint8Array([4, 4, 4, 5, 5, 5]));
 
               expect(identity.getCredential()).toBeInstanceOf(WebAuthnExistingCredential);
             });
@@ -343,7 +341,7 @@ describe('WebAuthnIdentity', () => {
               retrievePublicKey
             });
 
-            await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+            await expect(identity.sign(new Uint8Array([1, 2, 3, 444]))).rejects.toBeInstanceOf(
               WebAuthnIdentityCreateCredentialOnTheDeviceError
             );
           });
@@ -357,7 +355,7 @@ describe('WebAuthnIdentity', () => {
               retrievePublicKey
             });
 
-            await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+            await expect(identity.sign(new Uint8Array([1, 2, 3, 444]))).rejects.toBeInstanceOf(
               WebAuthnIdentityCredentialNotPublicKeyError
             );
           });
@@ -376,7 +374,7 @@ describe('WebAuthnIdentity', () => {
               retrievePublicKey
             });
 
-            await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+            await expect(identity.sign(new Uint8Array([1, 2, 3, 444]))).rejects.toBeInstanceOf(
               WebAuthnIdentityNoAuthenticatorDataError
             );
           });
@@ -395,7 +393,7 @@ describe('WebAuthnIdentity', () => {
               retrievePublicKey
             });
 
-            await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+            await expect(identity.sign(new Uint8Array([1, 2, 3, 444]))).rejects.toBeInstanceOf(
               WebAuthnIdentityNoAuthenticatorDataError
             );
           });
@@ -416,7 +414,7 @@ describe('WebAuthnIdentity', () => {
               retrievePublicKey
             });
 
-            await identity.sign(new ArrayBuffer(1));
+            await identity.sign(new Uint8Array([1, 2, 3, 444]));
 
             firstGet.mockResolvedValueOnce({
               type: 'public-key',
@@ -428,7 +426,7 @@ describe('WebAuthnIdentity', () => {
               }
             } as unknown as PublicKeyCredential);
 
-            await expect(identity.sign(new ArrayBuffer(1))).rejects.toBeInstanceOf(
+            await expect(identity.sign(new Uint8Array([1, 2, 3, 444]))).rejects.toBeInstanceOf(
               WebAuthnIdentityInvalidCredentialIdError
             );
           });
@@ -460,7 +458,7 @@ describe('WebAuthnIdentity', () => {
             onProgress
           });
 
-          await expect(identity.sign(new ArrayBuffer(4))).rejects.toBe(customErr);
+          await expect(identity.sign(new Uint8Array([4, 4, 4, 5, 5, 5]))).rejects.toBe(customErr);
 
           const calls = onProgress.mock.calls.map((c) => c[0]);
 

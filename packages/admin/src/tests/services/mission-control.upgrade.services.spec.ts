@@ -92,7 +92,7 @@ describe('mission-control.upgrade.services', () => {
     const arg = encoreIDLUser(mockUserIdPrincipal);
 
     expect(icManagementMock.installCode).toHaveBeenCalledWith({
-      arg: new Uint8Array(arg),
+      arg,
       canisterId: mockSatelliteIdPrincipal,
       mode: {
         upgrade: [

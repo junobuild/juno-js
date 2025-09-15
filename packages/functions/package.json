@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/functions",
-  "version": "0.2.7",
+  "version": "0.3.0",
   "description": "JavaScript and TypeScript utilities for Juno Serverless Functions",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

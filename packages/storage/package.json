@@ -51,7 +51,7 @@
     "@dfinity/candid": "^3.2.4",
     "@dfinity/identity": "^3.2.4",
     "@dfinity/principal": "^3.2.4",
-    "@dfinity/utils": "^3",
+    "@dfinity/utils": "^3.1",
     "@junobuild/ic-client": "^3",
     "@junobuild/utils": "*"
   }

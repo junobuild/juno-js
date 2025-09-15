@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/ic-client",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Agent and actor with generated bindings for Juno on the Internet Computer",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

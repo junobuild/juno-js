@@ -58,11 +58,11 @@
     "@junobuild/utils": "*"
   },
   "peerDependencies": {
-    "@dfinity/agent": "^3.2.4",
-    "@dfinity/auth-client": "^3.2.4",
-    "@dfinity/candid": "^3.2.4",
-    "@dfinity/identity": "^3.2.4",
-    "@dfinity/principal": "^3.2.4",
+    "@dfinity/agent": "^3.2.6",
+    "@dfinity/auth-client": "^3.2.6",
+    "@dfinity/candid": "^3.2.6",
+    "@dfinity/identity": "^3.2.6",
+    "@dfinity/principal": "^3.2.6",
     "@dfinity/utils": "^3.1"
   }
 }

@@ -4,7 +4,13 @@ import {
   DOCKER_INTERNET_IDENTITY_ID
 } from '../../core/constants/container.constants';
 import {EnvStore} from '../../core/stores/env.store';
-import {IC0_APP, II_POPUP, INTERNET_COMPUTER_ORG} from '../constants/auth.constants';
+import {
+  IC0_APP,
+  ID_AI,
+  II_DESIGN_V1_POPUP,
+  II_DESIGN_V2_POPUP,
+  INTERNET_COMPUTER_ORG
+} from '../constants/auth.constants';
 import type {AuthClientSignInOptions} from '../types/auth-client';
 import type {InternetIdentityConfig, InternetIdentityDomain} from '../types/internet-identity';
 import type {Provider} from '../types/provider';
@@ -81,11 +87,14 @@ export class InternetIdentityProvider extends AuthClientProvider {
         : `${protocol}//${internetIdentityId}.${containerHost.replace('127.0.0.1', 'localhost')}`;
     };
 
+    const identityProvider = identityProviderUrl();
+    const iiDesignV2 = URL.parse(identityProvider)?.hostname?.includes(ID_AI) === true;
+
     return {
       ...(windowed !== false && {
-        windowOpenerFeatures: popupCenter(II_POPUP)
+        windowOpenerFeatures: popupCenter(iiDesignV2 ? II_DESIGN_V2_POPUP : II_DESIGN_V1_POPUP)
       }),
-      identityProvider: identityProviderUrl()
+      identityProvider
     };
   }
 }

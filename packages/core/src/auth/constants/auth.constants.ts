@@ -14,6 +14,7 @@ export const II_POPUP: {width: number; height: number} = {width: 576, height: 57
 export const NFID_POPUP: {width: number; height: number} = {width: 505, height: 705};
 
 export const INTERNET_COMPUTER_ORG = 'internetcomputer.org';
+export const IC0_APP = 'ic0.app';
 
 // Worker
 export const AUTH_TIMER_INTERVAL = 1000;

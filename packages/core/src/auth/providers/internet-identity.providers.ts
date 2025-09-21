@@ -1,10 +1,10 @@
-import {isNullish, nonNullish} from '@dfinity/utils';
+import {isEmptyString, isNullish, nonNullish} from '@dfinity/utils';
 import {
   DOCKER_CONTAINER_URL,
   DOCKER_INTERNET_IDENTITY_ID
 } from '../../core/constants/container.constants';
 import {EnvStore} from '../../core/stores/env.store';
-import {II_POPUP, INTERNET_COMPUTER_ORG} from '../constants/auth.constants';
+import {IC0_APP, II_POPUP, INTERNET_COMPUTER_ORG} from '../constants/auth.constants';
 import type {AuthClientSignInOptions} from '../types/auth-client';
 import type {InternetIdentityConfig, InternetIdentityDomain} from '../types/internet-identity';
 import type {Provider} from '../types/provider';
@@ -50,7 +50,19 @@ export class InternetIdentityProvider extends AuthClientProvider {
 
       // Production
       if (isNullish(container) || container === false) {
-        return `https://identity.${this.#domain ?? INTERNET_COMPUTER_ORG}`;
+        const identityV1Domain = [INTERNET_COMPUTER_ORG, IC0_APP].includes(
+          this.#domain ?? INTERNET_COMPUTER_ORG
+        );
+
+        if (isEmptyString(this.#domain)) {
+          return `https://identity.${INTERNET_COMPUTER_ORG}`;
+        }
+
+        if (identityV1Domain) {
+          return `https://identity.${this.#domain ?? INTERNET_COMPUTER_ORG}`;
+        }
+
+        return `https://${this.#domain}`;
       }
 
       const env = EnvStore.getInstance().get();

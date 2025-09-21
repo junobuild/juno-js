@@ -2,9 +2,9 @@ import type {AuthClientSignInOptions} from './auth-client';
 
 /**
  * Type representing the available Internet Identity domains.
- * @typedef {('internetcomputer.org' | 'ic0.app')} InternetIdentityDomain
+ * @typedef {('internetcomputer.org' | 'ic0.app' | 'id.ai')} InternetIdentityDomain
  */
-export type InternetIdentityDomain = 'internetcomputer.org' | 'ic0.app';
+export type InternetIdentityDomain = 'internetcomputer.org' | 'ic0.app' | 'id.ai';
 
 /**
  * Interface representing the specific configuration for Internet Identity.

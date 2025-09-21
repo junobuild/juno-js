@@ -54,7 +54,11 @@ export class InternetIdentityProvider extends AuthClientProvider {
           this.#domain ?? INTERNET_COMPUTER_ORG
         );
 
-        if (isEmptyString(this.#domain) || identityV1Domain) {
+        if (isEmptyString(this.#domain)) {
+          return `https://identity.${INTERNET_COMPUTER_ORG}`;
+        }
+
+        if (identityV1Domain) {
           return `https://identity.${this.#domain ?? INTERNET_COMPUTER_ORG}`;
         }
 

@@ -37,6 +37,16 @@ describe('internet-identity.providers', () => {
     expect(identityProvider).toBe('https://identity.internetcomputer.org');
   });
 
+  it('returns identityProvider with internetcomputer.org for empty domain', () => {
+    const provider = new InternetIdentityProvider({
+      domain: '' as 'internetcomputer.org'
+    });
+
+    const {identityProvider} = provider.signInOptions({});
+    expect(provider.id).toBe('internet_identity');
+    expect(identityProvider).toBe('https://identity.internetcomputer.org');
+  });
+
   it('returns identityProvider for ic0.app', () => {
     const provider = new InternetIdentityProvider({domain: 'ic0.app'});
 

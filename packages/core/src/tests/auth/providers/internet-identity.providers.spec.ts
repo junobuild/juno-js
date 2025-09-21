@@ -27,7 +27,17 @@ describe('internet-identity.providers', () => {
     expect(windowOpenerFeatures).toEqual(expectedWindowOpenerFeatures);
   });
 
-  it('returns default identityProvider for domain', () => {
+  it('returns identityProvider for internetcomputer.org', () => {
+    const provider = new InternetIdentityProvider({
+      domain: 'internetcomputer.org'
+    });
+
+    const {identityProvider} = provider.signInOptions({});
+    expect(provider.id).toBe('internet_identity');
+    expect(identityProvider).toBe('https://identity.internetcomputer.org');
+  });
+
+  it('returns identityProvider for ic0.app', () => {
     const provider = new InternetIdentityProvider({domain: 'ic0.app'});
 
     const {identityProvider, windowOpenerFeatures} = provider.signInOptions({windowed: true});
@@ -35,6 +45,26 @@ describe('internet-identity.providers', () => {
     expect(provider.id).toBe('internet_identity');
     expect(identityProvider).toBe('https://identity.ic0.app');
     expect(windowOpenerFeatures).toEqual(expectedWindowOpenerFeatures);
+  });
+
+  it('returns identityProvider for id.ai', () => {
+    const provider = new InternetIdentityProvider({
+      domain: 'id.ai'
+    });
+
+    const {identityProvider} = provider.signInOptions({});
+    expect(provider.id).toBe('internet_identity');
+    expect(identityProvider).toBe('https://id.ai');
+  });
+
+  it('returns identityProvider for without suffix for custom domain', () => {
+    const provider = new InternetIdentityProvider({
+      domain: 'yolo.com' as 'id.ai'
+    });
+
+    const {identityProvider} = provider.signInOptions({});
+    expect(provider.id).toBe('internet_identity');
+    expect(identityProvider).toBe('https://yolo.com');
   });
 
   it('returns container URL with docker default', () => {

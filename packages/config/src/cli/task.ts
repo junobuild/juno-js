@@ -9,8 +9,7 @@ export const TaskFnSchema = z.function({
 });
 export type TaskFn = (context: OnTaskEnv) => OnTask;
 
-export const TaskFnOrObjectSchema = () =>
-  z.union([OnTaskSchema, createFunctionSchema(TaskFnSchema)]);
+export const TaskFnOrObjectSchema = z.union([OnTaskSchema, createFunctionSchema(TaskFnSchema)]);
 export type TaskFnOrObject = OnTask | TaskFn;
 
 export function defineTask(task: OnTask): OnTask;

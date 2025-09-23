@@ -1,4 +1,4 @@
-import * as z from 'zod/v4/index';
+import * as z from 'zod/v4';
 import {StrictPrincipalSchema} from './principal.utils';
 
 /**

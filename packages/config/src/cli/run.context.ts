@@ -44,18 +44,19 @@ const RunFunctionSchema = z.function({
 export type RunFunction = (context: OnRunContext) => void | Promise<void>;
 
 /**
- * @see OnTask
+ * @see OnRun
  */
-export const OnTaskSchema = z.strictObject({
+export const OnRunSchema = z.strictObject({
   run: createFunctionSchema(RunFunctionSchema)
 });
 
 /**
- * A task executed with `juno run`.
+ * A runner (job) executed with `juno run`.
  */
-export interface OnTask {
+export interface OnRun {
   /**
-   * The function executed by the task.
+   * The function that will be executed and called with parameters
+   * inherited from your configuration and CLI.
    */
   run: RunFunction;
 }

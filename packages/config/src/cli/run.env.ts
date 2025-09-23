@@ -2,16 +2,16 @@ import * as z from 'zod/v4';
 import {type JunoConfigEnv, JunoConfigEnvSchema} from '../types/juno.env';
 
 /**
- * @see OnTaskEnv
+ * @see OnRunEnv
  */
-export const OnTaskEnvSchema = JunoConfigEnvSchema.extend({
+export const OnRunEnvSchema = JunoConfigEnvSchema.extend({
   profile: z.string().optional()
 });
 
 /**
- * The environment available when running a task with `juno run`.
+ * The environment available when executing `juno run`.
  */
-export type OnTaskEnv = JunoConfigEnv & {
+export type OnRunEnv = JunoConfigEnv & {
   /**
    * Optional profile (e.g. `personal`, `team`) used for execution.
    */

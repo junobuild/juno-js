@@ -1,3 +1,4 @@
+import {Principal} from '@dfinity/principal';
 import {PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
 
@@ -9,3 +10,13 @@ export const StrictPrincipalTextSchema = z
   .refine((val) => PrincipalTextSchema.safeParse(val).success, {
     message: 'Invalid textual representation of a Principal.'
   });
+
+/**
+ * Ensures an unknown type is a Principal.
+ */
+export const StrictPrincipalSchema = z
+  .unknown()
+  .refine((val) => Principal.isPrincipal(val), {
+    message: 'Invalid Principal'
+  })
+  .transform((val) => Principal.from(val));

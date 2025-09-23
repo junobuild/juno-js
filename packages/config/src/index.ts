@@ -1,3 +1,6 @@
+export * from './cli/task';
+export * from './cli/task.context';
+export * from './cli/task.env';
 export * from './console/config';
 export * from './console/console.config';
 export * from './pkg/juno.package';

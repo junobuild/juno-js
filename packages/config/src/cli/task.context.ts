@@ -3,6 +3,7 @@ import type {Principal} from '@dfinity/principal';
 import * as z from 'zod/v4';
 import {StrictIdentitySchema} from '../utils/identity.utils';
 import {StrictPrincipalSchema} from '../utils/principal.utils';
+import {createFunctionSchema} from '../utils/zod.utils';
 
 /**
  * @see OnRunContext
@@ -37,7 +38,6 @@ const RunFunctionSchema = z.function({
   input: z.tuple([OnRunContextSchema]),
   output: z.promise(z.void()).or(z.void())
 });
-
 /**
  * The function executed by a task.
  */
@@ -47,7 +47,7 @@ export type RunFunction = (context: OnRunContext) => void | Promise<void>;
  * @see OnTask
  */
 export const OnTaskSchema = z.strictObject({
-  run: RunFunctionSchema
+  run: createFunctionSchema(RunFunctionSchema)
 });
 
 /**

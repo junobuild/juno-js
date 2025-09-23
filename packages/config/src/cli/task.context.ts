@@ -1,30 +1,27 @@
 import type {Identity} from '@dfinity/agent';
 import type {Principal} from '@dfinity/principal';
-import type {PrincipalText} from '@dfinity/zod-schemas';
-import {PrincipalTextSchema} from '@dfinity/zod-schemas/dist/types/principal';
 import * as z from 'zod/v4';
 import {StrictIdentitySchema} from '../utils/identity.utils';
 import {StrictPrincipalSchema} from '../utils/principal.utils';
 
 /**
- * @see SatelliteContext
+ * @see OnRunContext
  */
-const SatelliteContextSchema = z.strictObject({
-  satelliteId: z.union([PrincipalTextSchema, StrictPrincipalSchema]),
+export const OnRunContextSchema = z.strictObject({
+  satelliteId: StrictPrincipalSchema,
   identity: StrictIdentitySchema
 });
 
 /**
- * Parameters required to call a Satellite from a task.
+ * The context for running a task.
  */
-export interface SatelliteContext {
+export interface OnRunContext {
   /**
    * The Satellite ID as defined in the `juno.config` file.
    *
-   * This can be either a textual representation
-   * or a {@link Principal} instance.
+   * A {@link Principal} instance.
    */
-  satelliteId: PrincipalText | Principal;
+  satelliteId: Principal;
 
   /**
    * The {@link Identity} used by the CLI for this execution,
@@ -34,41 +31,23 @@ export interface SatelliteContext {
 }
 
 /**
- * @see OnTaskRunContext
+ * @see RunFunction
  */
-export const OnTaskRunContextSchema = z.strictObject({
-  satellite: SatelliteContextSchema
-});
-
-/**
- * The context for running a task.
- */
-export interface OnTaskRunContext {
-  /**
-   * Context of the current Satellite, used to perform signed API calls
-   * and feature executions.
-   */
-  satellite: SatelliteContext;
-}
-
-/**
- * @see TaskRunFunction
- */
-const TaskRunFunctionSchema = z.function({
-  input: z.tuple([OnTaskRunContextSchema]),
+const RunFunctionSchema = z.function({
+  input: z.tuple([OnRunContextSchema]),
   output: z.promise(z.void()).or(z.void())
 });
 
 /**
  * The function executed by a task.
  */
-export type TaskRunFunction = (context: OnTaskRunContext) => void | Promise<void>;
+export type RunFunction = (context: OnRunContext) => void | Promise<void>;
 
 /**
  * @see OnTask
  */
 export const OnTaskSchema = z.strictObject({
-  run: TaskRunFunctionSchema
+  run: RunFunctionSchema
 });
 
 /**
@@ -78,5 +57,5 @@ export interface OnTask {
   /**
    * The function executed by the task.
    */
-  run: TaskRunFunction;
+  run: RunFunction;
 }

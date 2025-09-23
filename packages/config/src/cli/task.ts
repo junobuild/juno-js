@@ -1,10 +1,10 @@
 import * as z from 'zod/v4';
 import {createFunctionSchema} from '../utils/zod.utils';
-import {type OnTask, OnTaskRunContextSchema, OnTaskSchema} from './task.context';
+import {type OnTask, OnRunContextSchema, OnTaskSchema} from './task.context';
 import type {OnTaskEnv} from './task.env';
 
 export const TaskFnSchema = z.function({
-  input: z.tuple([OnTaskRunContextSchema]),
+  input: z.tuple([OnRunContextSchema]),
   output: OnTaskSchema
 });
 export type TaskFn = (context: OnTaskEnv) => OnTask;

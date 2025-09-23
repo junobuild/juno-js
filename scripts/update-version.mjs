@@ -44,8 +44,8 @@ const updateVersion = async () => {
 
   // Peer dependencies need to point to wip references - e.g. @junobuild/utils@0.0.1-next
   const peerDependencies = Object.entries(packageJson.peerDependencies ?? {}).reduce(
-    (acc, [key, _value]) => {
-      acc[key] = `*`;
+    (acc, [key, value]) => {
+      acc[key] = key === 'zod' ? value : `*`;
       return acc;
     },
     {}

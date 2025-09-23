@@ -10,7 +10,8 @@ import {createFunctionSchema} from '../utils/zod.utils';
  */
 export const OnRunContextSchema = z.strictObject({
   satelliteId: StrictPrincipalSchema,
-  identity: StrictIdentitySchema
+  identity: StrictIdentitySchema,
+  container: z.union([z.string(), z.boolean()]).optional()
 });
 
 /**
@@ -29,6 +30,13 @@ export interface OnRunContext {
    * resolved according to the selected mode and profile.
    */
   identity: Identity;
+
+  /**
+   * Specifies whether the actor is calling the local development Docker container or provides the container URL.
+   * @type {boolean | string}
+   * @optional
+   */
+  container?: boolean | string;
 }
 
 /**

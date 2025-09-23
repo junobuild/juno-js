@@ -14,9 +14,16 @@ export const StrictPrincipalTextSchema = z
 /**
  * Ensures an unknown type is a Principal.
  */
-export const StrictPrincipalSchema = z
-  .unknown()
-  .refine((val) => Principal.isPrincipal(val), {
-    message: 'Invalid Principal'
-  })
-  .transform((val) => Principal.from(val));
+export const StrictPrincipalSchema = z.unknown().transform((val, ctx): Principal => {
+  if (Principal.isPrincipal(val)) {
+    return Principal.from(val);
+  }
+
+  ctx.issues.push({
+    code: 'custom',
+    message: 'Invalid Principal',
+    input: val
+  });
+
+  return z.NEVER;
+});

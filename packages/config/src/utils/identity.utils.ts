@@ -1,4 +1,3 @@
-import {nonNullish} from '@junobuild/analytics/src/utils/dfinity/nullish.utils';
 import * as z from 'zod/v4/index';
 import {StrictPrincipalSchema} from './principal.utils';
 
@@ -9,7 +8,8 @@ export const StrictIdentitySchema = z
   .unknown()
   .refine(
     (val) =>
-      nonNullish(val) &&
+      val !== undefined &&
+      val !== null &&
       typeof val === 'object' &&
       'transformRequest' in val &&
       typeof val.transformRequest === 'function' &&

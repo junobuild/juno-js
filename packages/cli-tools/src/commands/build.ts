@@ -69,8 +69,8 @@ export const buildFunctions = async ({
  *
  * @throws Will exit the process if `esbuild` is not installed.
  */
-export const buildScript = async ({infile}: {infile: string}): Promise<EsbuildResult> => {
-  return await esbuild({
+export const buildScript = async ({infile}: {infile: string}): Promise<EsbuildResult> =>
+  await esbuild({
     infile,
     platform: 'node',
     treeShaking: false,
@@ -80,15 +80,14 @@ import { resolve } from 'node:path';
 const require = topLevelCreateRequire(resolve(process.cwd(), '.juno-pseudo-require-anchor.mjs'));`
     }
   });
-};
 
-export type EsbuildResult = {
+export interface EsbuildResult {
   metafile: Metafile;
   errors: Message[];
   warnings: Message[];
   version: string;
   outputFiles: OutputFile[] | undefined;
-};
+}
 
 const esbuild = async <T extends BuildOptions>({
   infile,

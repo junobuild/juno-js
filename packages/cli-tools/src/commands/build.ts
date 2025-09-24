@@ -131,7 +131,7 @@ const esbuild = async ({
   return {metafile, errors, warnings, outputFiles, version};
 };
 
-// esbuild-disable-next-line @typescript-eslint/consistent-type-imports
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 const importEsbuildAndExitOnError = (): Promise<typeof import('esbuild')> => {
   try {
     return import('esbuild');

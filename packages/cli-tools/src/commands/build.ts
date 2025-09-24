@@ -1,5 +1,5 @@
 import {nonNullish} from '@dfinity/utils';
-import type {BuildOptions, Message, Metafile, OutputFile} from 'esbuild';
+import type {Message, Metafile, OutputFile} from 'esbuild';
 import {rm} from 'node:fs/promises';
 
 /**
@@ -89,7 +89,7 @@ export interface EsbuildResult {
   outputFiles: OutputFile[] | undefined;
 }
 
-const esbuild = async <T extends BuildOptions>({
+const esbuild = async ({
   infile,
   outfile,
   banner,

@@ -1,4 +1,3 @@
-// A minimal valid OnRun object
 import {defineRun, RunFnOrObjectSchema} from '../../cli/run';
 import {OnRunContextSchema, OnRunSchema} from '../../cli/run.context';
 import {mockIdentity} from '../mocks/identity.mock';

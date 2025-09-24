@@ -14,6 +14,7 @@ export const StrictPrincipalTextSchema = z
 /**
  * Ensures an unknown type is a Principal.
  */
+// eslint-disable-next-line local-rules/prefer-object-params
 export const StrictPrincipalSchema = z.unknown().transform((val, ctx): Principal => {
   if (Principal.isPrincipal(val)) {
     return Principal.from(val);

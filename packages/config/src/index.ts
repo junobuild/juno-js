@@ -1,3 +1,6 @@
+export * from './cli/run';
+export * from './cli/run.context';
+export * from './cli/run.env';
 export * from './console/config';
 export * from './console/console.config';
 export * from './pkg/juno.package';

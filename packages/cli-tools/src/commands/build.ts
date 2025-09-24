@@ -1,10 +1,11 @@
-import type {Message, Metafile} from 'esbuild';
+import {nonNullish} from '@dfinity/utils';
+import type {BuildOptions, Message, Metafile, OutputFile} from 'esbuild';
 import {rm} from 'node:fs/promises';
 
 /**
- * Builds an ECMAScript module (ESM) bundle for browser use using `esbuild`.
+ * Builds the serverless functions using `esbuild`.
  *
- * This function:
+ * This feature:
  * - Ensures `esbuild` is available.
  * - Deletes the existing output file if it exists.
  * - Builds the input file with optimizations: minification, tree-shaking, etc.
@@ -24,7 +25,7 @@ import {rm} from 'node:fs/promises';
  *
  * @throws Will exit the process if `esbuild` is not installed.
  */
-export const buildEsm = async ({
+export const buildFunctions = async ({
   infile,
   outfile,
   banner
@@ -32,44 +33,108 @@ export const buildEsm = async ({
   infile: string;
   outfile: string;
   banner?: {[type: string]: string};
-}): Promise<{
+}): Promise<Omit<EsbuildResult, 'outputFiles'>> => {
+  const {outputFiles: _, ...rest} = await esbuild({
+    infile,
+    outfile,
+    platform: 'browser',
+    treeShaking: true,
+    define: {
+      self: 'globalThis'
+    },
+    banner
+  });
+
+  return rest;
+};
+
+/**
+ * Builds a script using `esbuild` for `juno run`.
+ *
+ * This feature:
+ * - Ensures `esbuild` is available.
+ * - Builds the input file for Node with optimizations: minification, tree-shaking, etc.
+ * - Returns the esbuild output files, `metafile`, version, and any build errors or warnings.
+ *
+ * @param {Object} options - Build configuration.
+ * @param {string} options.infile - The path to the input file to be bundled.
+ *
+ * @returns {Promise<{
+ *   metafile: Metafile,
+ *   errors: Message[],
+ *   warnings: Message[],
+ *   version: string,
+ *   outputFiles: OutputFile[] | undefined;
+ * }>} An object containing the esbuild outputFiles, metafile, build errors/warnings, and the version of esbuild used.
+ *
+ * @throws Will exit the process if `esbuild` is not installed.
+ */
+export const buildScript = async ({infile}: {infile: string}): Promise<EsbuildResult> => {
+  return await esbuild({
+    infile,
+    platform: 'node',
+    treeShaking: false,
+    banner: {
+      js: `import { createRequire as topLevelCreateRequire } from 'node:module';
+import { resolve } from 'node:path';
+const require = topLevelCreateRequire(resolve(process.cwd(), '.juno-pseudo-require-anchor.mjs'));`
+    }
+  });
+};
+
+export type EsbuildResult = {
   metafile: Metafile;
   errors: Message[];
   warnings: Message[];
   version: string;
-}> => {
-  await assertEsbuild();
+  outputFiles: OutputFile[] | undefined;
+};
 
-  const {build, version} = await import('esbuild');
+const esbuild = async <T extends BuildOptions>({
+  infile,
+  outfile,
+  banner,
+  platform,
+  define,
+  treeShaking
+}: {
+  infile: string;
+  outfile?: string;
+  banner?: {[type: string]: string};
+  platform: 'browser' | 'node';
+  define?: {[key: string]: string};
+  treeShaking: boolean;
+}): Promise<EsbuildResult> => {
+  const {build, version} = await importEsbuildAndExitOnError();
 
-  await rm(outfile, {force: true});
+  if (nonNullish(outfile)) {
+    await rm(outfile, {force: true});
+  }
 
-  const {metafile, errors, warnings} = await build({
+  const {metafile, errors, warnings, outputFiles} = await build({
     entryPoints: [infile],
     outfile,
+    write: nonNullish(outfile),
     bundle: true,
     minify: true,
-    treeShaking: true,
+    treeShaking,
     format: 'esm',
-    platform: 'browser',
-    write: true,
+    platform,
     supported: {
       'top-level-await': false,
       'inline-script': false
     },
-    define: {
-      self: 'globalThis'
-    },
+    define,
     metafile: true,
     banner
   });
 
-  return {metafile, errors, warnings, version};
+  return {metafile, errors, warnings, outputFiles, version};
 };
 
-const assertEsbuild = async () => {
+const importEsbuildAndExitOnError = (): Promise<typeof import('esbuild')> => {
   try {
-    await import('esbuild');
+    return import('esbuild');
   } catch (_err: unknown) {
     console.error(
       `Esbuild is required to build your functions. Please install it by running: npm i esbuild`

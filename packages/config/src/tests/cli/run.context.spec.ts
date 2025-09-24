@@ -13,13 +13,13 @@ describe('run.context', () => {
       expect(result.success).toBe(true);
     });
 
-    it('accepts with container as boolean', () => {
+    it('should not accept a container as boolean', () => {
       const result = OnRunContextSchema.safeParse({
         satelliteId: mockUserIdPrincipal,
         identity: mockIdentity,
         container: true
       });
-      expect(result.success).toBe(true);
+      expect(result.success).toBe(false);
     });
 
     it('accepts with container as string (URL)', () => {

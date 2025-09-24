@@ -11,7 +11,7 @@ import {createFunctionSchema} from '../utils/zod.utils';
 export const OnRunContextSchema = z.strictObject({
   satelliteId: StrictPrincipalSchema,
   identity: StrictIdentitySchema,
-  container: z.union([z.string(), z.boolean()]).optional()
+  container: z.string().optional()
 });
 
 /**
@@ -32,11 +32,11 @@ export interface OnRunContext {
   identity: Identity;
 
   /**
-   * Specifies whether the actor is calling the local development Docker container or provides the container URL.
-   * @type {boolean | string}
+   * A custom container URL. Useful when your local emulator runs on a non-default URL or port.
+   * @type {string}
    * @optional
    */
-  container?: boolean | string;
+  container?: string;
 }
 
 /**

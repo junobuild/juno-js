@@ -3,7 +3,6 @@ import type {Principal} from '@dfinity/principal';
 import * as z from 'zod';
 import {StrictIdentitySchema} from '../utils/identity.utils';
 import {StrictPrincipalSchema} from '../utils/principal.utils';
-import {createFunctionSchema} from '../utils/zod.utils';
 
 /**
  * @see OnRunContext
@@ -55,7 +54,7 @@ export type RunFunction = (context: OnRunContext) => void | Promise<void>;
  * @see OnRun
  */
 export const OnRunSchema = z.strictObject({
-  run: createFunctionSchema(RunFunctionSchema)
+  run: RunFunctionSchema
 });
 
 /**

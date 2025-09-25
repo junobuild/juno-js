@@ -1,5 +1,4 @@
 import * as z from 'zod';
-import {createFunctionSchema} from '../utils/zod.utils';
 import {type Collections, CollectionsSchema} from './schemas/collections';
 import {type RunFunction, RunFunctionSchema} from './schemas/context';
 import {
@@ -173,7 +172,7 @@ export const HookFnSchema = <T extends z.ZodTypeAny>(hookSchema: T) =>
 export type HookFn<T extends Hook> = (hook: z.infer<typeof SatelliteEnvSchema>) => T;
 
 export const HookFnOrObjectSchema = <T extends z.ZodTypeAny>(hookSchema: T) =>
-  z.union([hookSchema, createFunctionSchema(HookFnSchema(hookSchema))]);
+  z.union([hookSchema, HookFnSchema(hookSchema)]);
 export type HookFnOrObject<T extends Hook> = T | HookFn<T>;
 
 export function defineHook<T extends Hook>(hook: T): T;

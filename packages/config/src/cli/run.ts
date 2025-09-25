@@ -1,5 +1,4 @@
 import * as z from 'zod';
-import {createFunctionSchema} from '../utils/zod.utils';
 import {type OnRun, OnRunContextSchema, OnRunSchema} from './run.context';
 import type {OnRunEnv} from './run.env';
 
@@ -9,7 +8,7 @@ export const RunFnSchema = z.function({
 });
 export type RunFn = (context: OnRunEnv) => OnRun;
 
-export const RunFnOrObjectSchema = z.union([OnRunSchema, createFunctionSchema(RunFnSchema)]);
+export const RunFnOrObjectSchema = z.union([OnRunSchema, RunFnSchema]);
 export type RunFnOrObject = OnRun | RunFn;
 
 export function defineRun(run: OnRun): OnRun;

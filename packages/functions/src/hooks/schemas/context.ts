@@ -1,6 +1,5 @@
 import * as z from 'zod';
 import {type RawUserId, RawUserIdSchema} from '../../schemas/satellite';
-import {createFunctionSchema} from '../../utils/zod.utils';
 
 /**
  * @see HookContext
@@ -35,7 +34,7 @@ export interface HookContext<T> {
  * @see AssertFunction
  */
 export const AssertFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
-  createFunctionSchema(z.function({input: z.tuple([contextSchema]), output: z.void()}));
+  z.function({input: z.tuple([contextSchema]), output: z.void()});
 
 /**
  * Defines the `assert` function schema for assertions.
@@ -50,9 +49,7 @@ export type AssertFunction<T> = (context: T) => void;
  * @see RunFunction
  */
 export const RunFunctionSchema = <T extends z.ZodTypeAny>(contextSchema: T) =>
-  createFunctionSchema(
-    z.function({input: z.tuple([contextSchema]), output: z.promise(z.void()).or(z.void())})
-  );
+  z.function({input: z.tuple([contextSchema]), output: z.promise(z.void()).or(z.void())});
 
 /**
  * Defines the `run` function schema for hooks.

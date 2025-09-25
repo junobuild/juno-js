@@ -1,4 +1,4 @@
-import * as z from 'zod/v4';
+import * as z from 'zod';
 import {createFunctionSchema} from '../utils/zod.utils';
 import {type Collections, CollectionsSchema} from './schemas/collections';
 import {type AssertFunction, AssertFunctionSchema} from './schemas/context';

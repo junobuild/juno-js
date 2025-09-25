@@ -1,4 +1,4 @@
-import * as z from 'zod/v4';
+import * as z from 'zod';
 import {type RawUserId, RawUserIdSchema} from '../../schemas/satellite';
 import {createFunctionSchema} from '../../utils/zod.utils';
 

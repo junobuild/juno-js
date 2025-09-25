@@ -58,11 +58,8 @@
     "@junobuild/utils": "*"
   },
   "peerDependencies": {
-    "@dfinity/agent": "^3.2.6",
-    "@dfinity/auth-client": "^3.2.6",
-    "@dfinity/candid": "^3.2.6",
-    "@dfinity/identity": "^3.2.6",
-    "@dfinity/principal": "^3.2.6",
-    "@dfinity/utils": "^3.1"
+    "@dfinity/utils": "^3.1.0-beta-2025-09-25",
+    "@icp-sdk/auth": "^4.0.0-beta.1",
+    "@icp-sdk/core": "^4.0.4"
   }
 }

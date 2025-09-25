@@ -18,7 +18,7 @@ import {
 import type {DocUpsert} from '../../hooks/schemas/db/payload';
 
 describe('hooks', () => {
-  const mockFn = vi.fn(async () => {});
+  const mockFn = vi.fn(async (_ctx: unknown) => {});
 
   const mockOnSetDocConfig: OnSetDoc = {
     collections: ['products', 'transactions'],
@@ -98,9 +98,9 @@ describe('hooks', () => {
     });
 
     it('should call onSetManyDocs function when invoked', async () => {
-      const config = OnSetManyDocsSchema.parse(mockOnSetManyDocsConfig);
+      OnSetManyDocsSchema.parse(mockOnSetManyDocsConfig);
 
-      await config.run({
+      await mockOnSetManyDocsConfig.run({
         caller: Principal.anonymous().toUint8Array(),
         data: [
           {
@@ -146,8 +146,8 @@ describe('hooks', () => {
     });
 
     it('should call run when executed', async () => {
-      const parsed = OnDeleteDocSchema.parse(config);
-      await parsed.run({
+      OnDeleteDocSchema.parse(config);
+      await config.run({
         caller: Principal.anonymous().toUint8Array(),
         data: {...baseDoc, data: undefined}
       });
@@ -178,8 +178,8 @@ describe('hooks', () => {
     });
 
     it('should call run when executed', async () => {
-      const parsed = OnDeleteManyDocsSchema.parse(config);
-      await parsed.run({
+      OnDeleteManyDocsSchema.parse(config);
+      await config.run({
         caller: Principal.anonymous().toUint8Array(),
         data: [{...baseDoc, data: undefined}]
       });
@@ -210,8 +210,8 @@ describe('hooks', () => {
     });
 
     it('should call run when executed', async () => {
-      const parsed = OnDeleteFilteredDocsSchema.parse(config);
-      await parsed.run({
+      OnDeleteFilteredDocsSchema.parse(config);
+      await config.run({
         caller: Principal.anonymous().toUint8Array(),
         data: [{...baseDoc, data: undefined}]
       });
@@ -306,8 +306,8 @@ describe('hooks', () => {
     });
 
     it('should call run when executed', async () => {
-      const parsed = OnUploadAssetSchema.parse(config);
-      await parsed.run({
+      OnUploadAssetSchema.parse(config);
+      await config.run({
         caller: Principal.anonymous().toUint8Array(),
         data: baseAsset
       });
@@ -323,8 +323,8 @@ describe('hooks', () => {
     });
 
     it('should call run when executed with undefined data', async () => {
-      const parsed = OnDeleteAssetSchema.parse(config);
-      await parsed.run({
+      OnDeleteAssetSchema.parse(config);
+      await config.run({
         caller: Principal.anonymous().toUint8Array(),
         data: undefined
       });
@@ -332,8 +332,8 @@ describe('hooks', () => {
     });
 
     it('should call run when executed with asset data', async () => {
-      const parsed = OnDeleteAssetSchema.parse(config);
-      await parsed.run({
+      OnDeleteAssetSchema.parse(config);
+      await config.run({
         caller: Principal.anonymous().toUint8Array(),
         data: baseAsset
       });
@@ -349,8 +349,8 @@ describe('hooks', () => {
     });
 
     it('should call run with a mix of undefined and asset data', async () => {
-      const parsed = OnDeleteManyAssetsSchema.parse(config);
-      await parsed.run({
+      OnDeleteManyAssetsSchema.parse(config);
+      await config.run({
         caller: Principal.anonymous().toUint8Array(),
         data: [undefined, baseAsset]
       });
@@ -366,8 +366,8 @@ describe('hooks', () => {
     });
 
     it('should call run with filtered assets', async () => {
-      const parsed = OnDeleteFilteredAssetsSchema.parse(config);
-      await parsed.run({
+      OnDeleteFilteredAssetsSchema.parse(config);
+      await config.run({
         caller: Principal.anonymous().toUint8Array(),
         data: [baseAsset, undefined]
       });

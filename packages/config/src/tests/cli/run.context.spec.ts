@@ -119,8 +119,9 @@ describe('run.context', () => {
         }
       };
 
-      const parsed = OnRunSchema.parse(onRun);
-      await parsed.run({
+      OnRunSchema.parse(onRun);
+
+      await onRun.run({
         satelliteId: Principal.fromText('jx5yt-yyaaa-aaaal-abzbq-cai'),
         identity: mockIdentity
       });

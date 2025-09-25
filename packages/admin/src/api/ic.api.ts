@@ -1,4 +1,3 @@
-import {CanisterStatus} from '@icp-sdk/core/agent';
 import {
   type chunk_hash,
   type InstallChunkedCodeParams,
@@ -10,6 +9,7 @@ import {
 } from '@dfinity/ic-management';
 import type {take_canister_snapshot_result} from '@dfinity/ic-management/dist/candid/ic-management';
 import type {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
+import {CanisterStatus} from '@icp-sdk/core/agent';
 import {Principal} from '@icp-sdk/core/principal';
 import {type ActorParameters, useOrInitAgent} from '@junobuild/ic-client/actor';
 

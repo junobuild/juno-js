@@ -1,5 +1,6 @@
-import {type SignIdentity, AnonymousIdentity} from '@icp-sdk/core/agent';
+import {isNullish, uint8ArrayToBase64} from '@dfinity/utils';
 import {IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@icp-sdk/auth/client';
+import {type SignIdentity, AnonymousIdentity} from '@icp-sdk/core/agent';
 import {
   DelegationChain,
   DelegationIdentity,
@@ -7,7 +8,6 @@ import {
   ECDSAKeyIdentity,
   unwrapDER
 } from '@icp-sdk/core/identity';
-import {isNullish, uint8ArrayToBase64} from '@dfinity/utils';
 import {
   type RetrievePublicKeyFn,
   type WebAuthnNewCredential,

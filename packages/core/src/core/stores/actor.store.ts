@@ -1,6 +1,6 @@
+import {isNullish} from '@dfinity/utils';
 import {Actor, type ActorMethod, type ActorSubclass} from '@icp-sdk/core/agent';
 import type {IDL} from '@icp-sdk/core/candid';
-import {isNullish} from '@dfinity/utils';
 import type {ActorKey} from '../types/actor';
 import type {SatelliteContext} from '../types/satellite';
 import {AgentStore} from './agent.store';

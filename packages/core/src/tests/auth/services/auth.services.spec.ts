@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 
-import {AnonymousIdentity} from '@icp-sdk/core/agent';
 import {AuthClient} from '@icp-sdk/auth/client';
+import {AnonymousIdentity} from '@icp-sdk/core/agent';
 import * as identityLib from '@icp-sdk/core/identity';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock, MockInstance} from 'vitest';

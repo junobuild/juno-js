@@ -1,5 +1,5 @@
-import {type AuthClient, ERROR_USER_INTERRUPT} from '@icp-sdk/auth/client';
 import {isNullish} from '@dfinity/utils';
+import {type AuthClient, ERROR_USER_INTERRUPT} from '@icp-sdk/auth/client';
 import {
   ALLOW_PIN_AUTHENTICATION,
   DELEGATION_IDENTITY_EXPIRATION

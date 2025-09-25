@@ -1,5 +1,5 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
-import * as z from 'zod/v4';
+import * as z from 'zod';
 import {type StorageConfig, StorageConfigSchema} from '../../shared/storage.config';
 import type {CliConfig} from '../../types/cli.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../../types/juno.env';

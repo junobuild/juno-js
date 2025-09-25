@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import {PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod/v4';
 

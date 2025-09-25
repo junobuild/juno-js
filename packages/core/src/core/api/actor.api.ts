@@ -1,5 +1,5 @@
-import type {ActorMethod, ActorSubclass} from '@dfinity/agent';
-import type {IDL} from '@dfinity/candid';
+import type {ActorMethod, ActorSubclass} from '@icp-sdk/core/agent';
+import type {IDL} from '@icp-sdk/core/candid';
 import {assertNonNullish} from '@dfinity/utils';
 import {
   idlCertifiedFactorySatellite,

@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import {toArray} from '@junobuild/utils';
 import {Doc} from '../../../datastore/types/doc';
 import {fromDoc, toDelDoc, toSetDoc} from '../../../datastore/utils/doc.utils';

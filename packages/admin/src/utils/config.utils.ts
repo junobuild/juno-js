@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
 import type {
   AuthenticationConfig,

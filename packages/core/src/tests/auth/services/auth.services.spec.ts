@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 
-import {AnonymousIdentity} from '@dfinity/agent';
-import {AuthClient} from '@dfinity/auth-client';
-import * as identityLib from '@dfinity/identity';
+import {AnonymousIdentity} from '@icp-sdk/core/agent';
+import {AuthClient} from '@icp-sdk/auth/client';
+import * as identityLib from '@icp-sdk/core/identity';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
@@ -40,8 +40,8 @@ import {
   mockWebAuthnDocUserApiObject
 } from '../../mocks/webauthn.mock';
 
-vi.mock('@dfinity/auth-client', async () => {
-  const actual = (await import('@dfinity/auth-client')) as typeof import('@dfinity/auth-client');
+vi.mock('@icp-sdk/auth/client', async () => {
+  const actual = (await import('@icp-sdk/auth/client')) as typeof import('@icp-sdk/auth/client');
 
   return {
     ...actual,

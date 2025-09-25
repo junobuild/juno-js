@@ -1,4 +1,4 @@
-import {type AuthClient, ERROR_USER_INTERRUPT} from '@dfinity/auth-client';
+import {type AuthClient, ERROR_USER_INTERRUPT} from '@icp-sdk/auth/client';
 import {isNullish} from '@dfinity/utils';
 import {
   ALLOW_PIN_AUTHENTICATION,
@@ -36,7 +36,7 @@ export interface AuthProviderSignInOptions {
 }
 
 /**
- * Abstract base class for all authentication providers that integrate with the `@dfinity/auth-client`.
+ * Abstract base class for all authentication providers that integrate with the `@icp-sdk/auth/client`.
  *
  * @abstract
  * @class AuthClientProvider

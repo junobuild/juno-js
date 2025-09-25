@@ -1,5 +1,5 @@
-import type {Identity} from '@dfinity/agent';
-import type {AuthClient} from '@dfinity/auth-client';
+import type {Identity} from '@icp-sdk/core/agent';
+import type {AuthClient} from '@icp-sdk/auth/client';
 import {isNullish} from '@dfinity/utils';
 import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';

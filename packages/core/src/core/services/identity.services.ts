@@ -1,4 +1,4 @@
-import {AnonymousIdentity, type Identity} from '@dfinity/agent';
+import {AnonymousIdentity, type Identity} from '@icp-sdk/core/agent';
 import {nonNullish} from '@dfinity/utils';
 import {getIdentity as getAuthIdentity} from '../../auth/services/auth.services';
 

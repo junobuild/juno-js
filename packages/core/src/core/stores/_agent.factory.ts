@@ -1,4 +1,4 @@
-import {HttpAgent} from '@dfinity/agent';
+import {HttpAgent} from '@icp-sdk/core/agent';
 import {nonNullish} from '@dfinity/utils';
 import {DOCKER_CONTAINER_URL} from '../constants/container.constants';
 import type {SatelliteContext} from '../types/satellite';

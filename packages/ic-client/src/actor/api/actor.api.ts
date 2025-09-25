@@ -1,6 +1,6 @@
-import {Actor, type ActorConfig, type ActorMethod, type ActorSubclass} from '@dfinity/agent';
-import type {IDL} from '@dfinity/candid';
-import type {Principal} from '@dfinity/principal';
+import {Actor, type ActorConfig, type ActorMethod, type ActorSubclass} from '@icp-sdk/core/agent';
+import type {IDL} from '@icp-sdk/core/candid';
+import type {Principal} from '@icp-sdk/core/principal';
 import {isNullish} from '@dfinity/utils';
 import type {
   ActorParameters,

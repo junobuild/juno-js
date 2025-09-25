@@ -3307,7 +3307,7 @@ The parameters required to list documents from the datastore.
 
 #### :gear: IDLType
 
-Custom validation function to verify if a value is an instance of `IDL.Type` from `@dfinity/candid`.
+Custom validation function to verify if a value is an instance of `IDL.Type` from `@icp-sdk/core/candid`.
 
 | Type      | Type                            |
 | --------- | ------------------------------- |

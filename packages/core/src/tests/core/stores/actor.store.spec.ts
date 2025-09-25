@@ -1,4 +1,4 @@
-import {AnonymousIdentity} from '@dfinity/agent';
+import {AnonymousIdentity} from '@icp-sdk/core/agent';
 import {idlFactorySatellite} from '@junobuild/ic-client/actor';
 import {ActorStore} from '../../../core/stores/actor.store';
 import {mockIdentity, mockSatelliteId} from '../../mocks/core.mock';

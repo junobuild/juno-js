@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 
-import {IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@dfinity/auth-client';
-import * as identityLib from '@dfinity/identity';
+import {IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@icp-sdk/auth/client';
+import * as identityLib from '@icp-sdk/core/identity';
 import {arrayOfNumberToUint8Array} from '@dfinity/utils';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import {toArray} from '@junobuild/utils';

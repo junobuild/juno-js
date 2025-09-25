@@ -1,5 +1,5 @@
-import type {CanisterStatus} from '@dfinity/agent';
-import * as agent from '@dfinity/agent';
+import type {CanisterStatus} from '@icp-sdk/core/agent';
+import * as agent from '@icp-sdk/core/agent';
 import {
   ICManagementCanister,
   type InstallChunkedCodeParams,
@@ -29,7 +29,7 @@ vi.mock('@junobuild/ic-client/actor', () => {
   };
 });
 
-vi.mock('@dfinity/agent', () => {
+vi.mock('@icp-sdk/core/agent', () => {
   return {
     CanisterStatus: {
       request: vi.fn()

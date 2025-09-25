@@ -1,4 +1,4 @@
-import {IDL} from '@dfinity/candid';
+import {IDL} from '@icp-sdk/core/candid';
 import {call} from '../../ic-cdk/call.ic-cdk';
 import {CallParams} from '../../ic-cdk/schemas/call';
 import {mockCanisterId} from '../mocks/ic-cdk.mock';

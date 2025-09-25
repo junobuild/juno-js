@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import {isNullish, toNullable} from '@dfinity/utils';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {ListError} from '../../auth/types/errors';

@@ -1,4 +1,4 @@
-import {AnonymousIdentity} from '@dfinity/agent';
+import {AnonymousIdentity} from '@icp-sdk/core/agent';
 import * as authServices from '../../../auth/services/auth.services';
 import {getAnyIdentity} from '../../../core/services/identity.services';
 import {mockIdentity} from '../../mocks/core.mock';

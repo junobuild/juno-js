@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import {createFunctionSchema} from '../utils/zod.utils';
 import {type Collections, CollectionsSchema} from './schemas/collections';
 import {type AssertFunction, AssertFunctionSchema} from './schemas/context';
 import {
@@ -101,7 +102,7 @@ export const AssertFnSchema = <T extends z.ZodTypeAny>(assertSchema: T) =>
 export type AssertFn<T extends Assert> = (assert: z.infer<typeof SatelliteEnvSchema>) => T;
 
 export const AssertFnOrObjectSchema = <T extends z.ZodTypeAny>(assertSchema: T) =>
-  z.union([assertSchema, AssertFnSchema(assertSchema)]);
+  z.union([assertSchema, createFunctionSchema(AssertFnSchema(assertSchema))]);
 export type AssertFnOrObject<T extends Assert> = T | AssertFn<T>;
 
 export function defineAssert<T extends Assert>(assert: T): T;

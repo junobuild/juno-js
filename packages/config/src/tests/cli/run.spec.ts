@@ -29,18 +29,19 @@ describe('run', () => {
     });
 
     it('runtime: call the function form and validate the returned OnRun', async () => {
-      const fn = (_env?: unknown) => ({
+      const fn = (_env: unknown) => ({
         run: async (ctx: unknown) => {
           const parsed = OnRunContextSchema.parse(ctx);
           expect(parsed.satelliteId.toText()).toBe(mockUserIdPrincipal.toText());
         }
       });
 
-      RunFnOrObjectSchema.parse(fn);
+      const parsedUnion = RunFnOrObjectSchema.parse(fn);
+      const onRun = (parsedUnion as typeof fn)({});
 
-      OnRunSchema.parse(fn());
+      const valid = OnRunSchema.parse(onRun);
 
-      await fn().run({
+      await valid.run({
         satelliteId: mockUserIdPrincipal,
         identity: mockIdentity
       });

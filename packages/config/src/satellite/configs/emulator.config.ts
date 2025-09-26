@@ -167,54 +167,47 @@ const NetworkServicesSchema = z.strictObject({
  */
 export interface NetworkServices {
   /**
-   * Registry canister:
-   * Stores network configuration and topology (subnet membership, public keys, feature flags).
+   * Registry canister: Stores network configuration and topology (subnet membership, public keys, feature flags).
    * Acts as the source of truth other system canisters read/write to.
    */
   registry?: boolean;
 
   /**
-   * CMC (Cycles Minting Canister):
-   * Converts ICP to cycles and distributes them; maintains subnet lists and conversion rate.
+   * CMC (Cycles Minting Canister): Converts ICP to cycles and distributes them; maintains subnet lists and conversion rate.
    */
   cmc?: boolean;
 
   /**
-   * ICP token:
-   * Deploys the ICP ledger and index canisters.
+   * ICP token: Deploys the ICP ledger and index canisters.
    */
   icp?: boolean;
 
   /**
-   * Cycles token:
-   * Deploys the cycles ledger and index canisters.
+   * Cycles token: Deploys the cycles ledger and index canisters.
    */
   cycles?: boolean;
 
   /**
-   * NNS governance canisters:
-   * Deploys the governance and root canisters.
+   * NNS governance canisters: Deploys the governance and root canisters.
    * Core governance system (neurons, proposals, voting) and related control logic.
    * Enables managing network-level decisions in an emulated environment.
    */
   nns?: boolean;
 
   /**
-   * SNS canisters:
-   * Deploys the SNS-W and aggregator canisters.
+   * SNS canisters: Deploys the SNS-W and aggregator canisters.
    * Service Nervous System stack used to govern individual dapps.
    */
   sns?: boolean;
 
   /**
-   * Internet Identity (II):
-   * Deploys the II canister for authentication.
+   * Internet Identity: Deploys the II canister for authentication.
    */
   ii?: boolean;
 
   /**
-   * NNS dapp:
-   * Deploys the NNS UI canister and frontend application
+   * NNS dapp: Deploys the NNS UI canister and frontend application
+   * Requires cmc, icp, nns, sns, ii to be enabled.
    */
   nnsDapp?: boolean;
 }

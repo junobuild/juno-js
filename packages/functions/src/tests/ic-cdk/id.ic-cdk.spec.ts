@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import {id} from '../../ic-cdk/id.ic-cdk';
 
 vi.stubGlobal('__ic_cdk_id', vi.fn());

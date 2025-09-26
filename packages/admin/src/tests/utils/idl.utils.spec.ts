@@ -1,5 +1,5 @@
-import {IDL} from '@dfinity/candid';
-import {Principal} from '@dfinity/principal';
+import {IDL} from '@icp-sdk/core/candid';
+import {Principal} from '@icp-sdk/core/principal';
 import {SatelliteDid} from '@junobuild/ic-client/actor';
 import {encodeAdminAccessKeysToIDL, encoreIDLUser} from '../../utils/idl.utils';
 import {mockSatelliteIdText, mockUserIdText} from '../mocks/admin.mock';

@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import {describe, expect, it} from 'vitest';
 import {toPrincipal} from '../../utils/principal.utils';
 

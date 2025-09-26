@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import {ListParams} from '../../../core/types/list';
 import {toListParams} from '../../../core/utils/list.utils';
 

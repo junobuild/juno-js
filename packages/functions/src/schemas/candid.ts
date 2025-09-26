@@ -1,4 +1,4 @@
-import {Principal as CandidPrincipal} from '@dfinity/principal';
+import {Principal as CandidPrincipal} from '@icp-sdk/core/principal';
 import * as z from 'zod';
 
 /**

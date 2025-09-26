@@ -1,5 +1,5 @@
 import type {canister_install_mode} from '@dfinity/ic-management';
-import type {Principal} from '@dfinity/principal';
+import type {Principal} from '@icp-sdk/core/principal';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
 
 export enum UpgradeCodeProgressStep {

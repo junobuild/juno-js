@@ -1,5 +1,5 @@
-import {IDL} from '@dfinity/candid';
-import type {Principal} from '@dfinity/principal';
+import {IDL} from '@icp-sdk/core/candid';
+import type {Principal} from '@icp-sdk/core/principal';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 
 export const encoreIDLUser = (user: Principal): Uint8Array =>

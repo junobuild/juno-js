@@ -61,6 +61,7 @@
         "@dfinity/ic-management",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils",
         "@junobuild/config",
         "@junobuild/ic-client",
@@ -78,6 +79,8 @@
         "@dfinity/identity",
         "@dfinity/principal",
         "@dfinity/auth-client",
+        "@icp-sdk/core",
+        "@icp-sdk/auth",
         "@dfinity/utils"
       ]
     },
@@ -96,6 +99,8 @@
         "@dfinity/identity",
         "@dfinity/principal",
         "@dfinity/auth-client",
+        "@icp-sdk/core",
+        "@icp-sdk/auth",
         "@dfinity/utils"
       ]
     },
@@ -126,6 +131,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils",
         "zod"
       ]
@@ -153,6 +159,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils",
         "@dfinity/ic-management",
         "@junobuild/config",
@@ -170,6 +177,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils",
         "@junobuild/utils",
         "@junobuild/ic-client"
@@ -184,6 +192,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils"
       ]
     },
@@ -196,6 +205,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils"
       ]
     },
@@ -208,6 +218,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils"
       ]
     }

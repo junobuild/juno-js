@@ -1,4 +1,4 @@
-import {DER_COSE_OID, wrapDER, type DerEncodedPublicKey} from '@dfinity/agent';
+import {DER_COSE_OID, wrapDER, type DerEncodedPublicKey} from '@icp-sdk/core/agent';
 
 /**
  * ⚠️ !!!WARNING!!! ⚠️

@@ -1,5 +1,5 @@
-import type {Principal} from '@dfinity/principal';
 import {isNullish} from '@dfinity/utils';
+import type {Principal} from '@icp-sdk/core/principal';
 import {type JunoPackage, JunoPackageSchema} from '@junobuild/config';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
 import * as z from 'zod';

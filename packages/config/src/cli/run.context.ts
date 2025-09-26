@@ -1,6 +1,6 @@
 import type {Identity} from '@icp-sdk/core/agent';
 import type {Principal} from '@icp-sdk/core/principal';
-import * as z from 'zod/v4';
+import * as z from 'zod';
 import {StrictIdentitySchema} from '../utils/identity.utils';
 import {StrictPrincipalSchema} from '../utils/principal.utils';
 import {createFunctionSchema} from '../utils/zod.utils';

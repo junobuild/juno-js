@@ -250,9 +250,9 @@ References:
 
 Normalizes a user ID into a raw `Uint8Array` representation.
 
-| Function          | Type                                           |
-| ----------------- | ---------------------------------------------- |
-| `normalizeCaller` | `(caller: any) => Uint8Array<ArrayBufferLike>` |
+| Function          | Type                                                                                |
+| ----------------- | ----------------------------------------------------------------------------------- |
+| `normalizeCaller` | `(caller: Uint8Array<ArrayBufferLike> or Principal) => Uint8Array<ArrayBufferLike>` |
 
 Parameters:
 
@@ -850,9 +850,9 @@ References:
 
 #### :gear: PrincipalSchema
 
-| Constant          | Type                                          |
-| ----------------- | --------------------------------------------- |
-| `PrincipalSchema` | `ZodCustom<CandidPrincipal, CandidPrincipal>` |
+| Constant          | Type                              |
+| ----------------- | --------------------------------- |
+| `PrincipalSchema` | `ZodCustom<Principal, Principal>` |
 
 References:
 
@@ -898,9 +898,9 @@ References:
 
 #### :gear: UserIdSchema
 
-| Constant       | Type                                          |
-| -------------- | --------------------------------------------- |
-| `UserIdSchema` | `ZodCustom<CandidPrincipal, CandidPrincipal>` |
+| Constant       | Type                              |
+| -------------- | --------------------------------- |
+| `UserIdSchema` | `ZodCustom<Principal, Principal>` |
 
 References:
 
@@ -1666,9 +1666,9 @@ References:
 
 #### :gear: ControllerCheckParamsSchema
 
-| Constant                      | Type                                                                                                                                                                                       |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ControllerCheckParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<CandidPrincipal, CandidPrincipal>]>; controllers: ZodArray<...>; }, $strip>` |
+| Constant                      | Type                                                                                                                                                                           |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ControllerCheckParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<Principal, Principal>]>; controllers: ZodArray<...>; }, $strip>` |
 
 References:
 
@@ -1918,9 +1918,9 @@ References:
 
 #### :gear: IDLTypeSchema
 
-| Constant        | Type                                              |
-| --------------- | ------------------------------------------------- |
-| `IDLTypeSchema` | `ZodCustom<IDL.Type<unknown>, IDL.Type<unknown>>` |
+| Constant        | Type                                      |
+| --------------- | ----------------------------------------- |
+| `IDLTypeSchema` | `ZodCustom<Type<unknown>, Type<unknown>>` |
 
 References:
 
@@ -1930,9 +1930,9 @@ References:
 
 #### :gear: CallArgSchema
 
-| Constant        | Type                                                                            |
-| --------------- | ------------------------------------------------------------------------------- |
-| `CallArgSchema` | `ZodTuple<[ZodCustom<IDL.Type<unknown>, IDL.Type<unknown>>, ZodUnknown], null>` |
+| Constant        | Type                                                                    |
+| --------------- | ----------------------------------------------------------------------- |
+| `CallArgSchema` | `ZodTuple<[ZodCustom<Type<unknown>, Type<unknown>>, ZodUnknown], null>` |
 
 References:
 
@@ -1944,9 +1944,9 @@ References:
 
 Schema for encoding the call arguments.
 
-| Constant         | Type                                                                                      |
-| ---------------- | ----------------------------------------------------------------------------------------- |
-| `CallArgsSchema` | `ZodArray<ZodTuple<[ZodCustom<IDL.Type<unknown>, IDL.Type<unknown>>, ZodUnknown], null>>` |
+| Constant         | Type                                                                              |
+| ---------------- | --------------------------------------------------------------------------------- |
+| `CallArgsSchema` | `ZodArray<ZodTuple<[ZodCustom<Type<unknown>, Type<unknown>>, ZodUnknown], null>>` |
 
 References:
 
@@ -1956,9 +1956,9 @@ References:
 
 #### :gear: CallResultSchema
 
-| Constant           | Type                                              |
-| ------------------ | ------------------------------------------------- |
-| `CallResultSchema` | `ZodCustom<IDL.Type<unknown>, IDL.Type<unknown>>` |
+| Constant           | Type                                      |
+| ------------------ | ----------------------------------------- |
+| `CallResultSchema` | `ZodCustom<Type<unknown>, Type<unknown>>` |
 
 References:
 
@@ -1968,9 +1968,9 @@ References:
 
 #### :gear: CallParamsSchema
 
-| Constant           | Type                                                                                                                                                                                                                                    |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<CandidPrincipal, CandidPrincipal>]>; method: ZodString; args: ZodOptional<...>; result: ZodOptional<...>; }, $strip>` |
+| Constant           | Type                                                                                                                                                                                                                        |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<Principal, Principal>]>; method: ZodString; args: ZodOptional<...>; result: ZodOptional<...>; }, $strip>` |
 
 References:
 
@@ -2286,7 +2286,7 @@ Represents the parameters required to perform controller checks.
 
 | Property      | Type                                                                                                                                                                                  | Description                                                       |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `caller`      | `any`                                                                                                                                                                                 | The identity of the caller to verify against the controller list. |
+| `caller`      | `Uint8Array<ArrayBufferLike> or Principal`                                                                                                                                            | The identity of the caller to verify against the controller list. |
 | `controllers` | `[Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; }][]` | The list of controllers to check against.                         |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L107)
@@ -2329,12 +2329,12 @@ The parameters required to retrieve a specific chunk from an asset.
 
 Type representing the parameters required to make a canister call.
 
-| Property     | Type                                          | Description                                                       |
-| ------------ | --------------------------------------------- | ----------------------------------------------------------------- |
-| `canisterId` | `any`                                         | The target canister's ID.                                         |
-| `method`     | `string`                                      | The name of the method to call. Minimum one character.            |
-| `args`       | `[IDL.Type<unknown>, unknown][] or undefined` | The arguments, including types and values, for the canister call. |
-| `result`     | `any`                                         | The expected result type used for decoding the response.          |
+| Property     | Type                                       | Description                                                       |
+| ------------ | ------------------------------------------ | ----------------------------------------------------------------- |
+| `canisterId` | `Uint8Array<ArrayBufferLike> or Principal` | The target canister's ID.                                         |
+| `method`     | `string`                                   | The name of the method to call. Minimum one character.            |
+| `args`       | `[Type<unknown>, unknown][] or undefined`  | The arguments, including types and values, for the canister call. |
+| `result`     | `Type<unknown> or undefined`               | The expected result type used for decoding the response.          |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L69)
 
@@ -3327,7 +3327,7 @@ The parameters required to list documents from the datastore.
 
 #### :gear: IDLType
 
-Custom validation function to verify if a value is an instance of `IDL.Type` from `@icp-sdk/core/candid`.
+Custom validation function to verify if a value is an instance of `IDL.Type` from `@dfinity/candid`.
 
 | Type      | Type                            |
 | --------- | ------------------------------- |

@@ -1,6 +1,6 @@
 import {PrincipalTextSchema} from '@dfinity/zod-schemas';
 import {Principal} from '@icp-sdk/core/principal';
-import * as z from 'zod/v4';
+import * as z from 'zod';
 
 /**
  * Ensures reliable validation of PrincipalTextSchema inside z.record.

@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/functions",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "JavaScript and TypeScript utilities for Juno Serverless Functions",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -46,8 +46,8 @@
   },
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/utils": "^3.1.0-beta-2025-09-25",
+    "@dfinity/utils": "^3.1",
     "@icp-sdk/core": "^4.0.4",
-    "zod": "^3.25"
+    "zod": "^4"
   }
 }

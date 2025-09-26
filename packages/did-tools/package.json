@@ -52,6 +52,6 @@
     "@babel/preset-typescript": "7.27.1",
     "@babel/traverse": "7.28.4",
     "@babel/types": "7.28.4",
-    "@dfinity/utils": "^3.1.0-beta-2025-09-25"
+    "@dfinity/utils": "^3.1"
   }
 }

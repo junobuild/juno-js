@@ -11,6 +11,17 @@ describe('emulator.config', () => {
       }
     };
 
+    const validServices = {
+      registry: true,
+      cmc: true,
+      icp: true,
+      cycles: false,
+      nns: true,
+      sns: false,
+      ii: true,
+      nnsDapp: false
+    };
+
     it('accepts a valid Skylab config', () => {
       const result = EmulatorConfigSchema.safeParse({
         ...validBase,
@@ -225,6 +236,96 @@ describe('emulator.config', () => {
             type: 'unknown'
           },
           satellite: {}
+        });
+        expect(result.success).toBe(false);
+      });
+    });
+
+    it('accepts a valid Skylab config with network services', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        network: {
+          services: validServices
+        },
+        skylab: {
+          ports: {server: 1234, admin: 5678, console: 9000}
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts a valid Console config with network services', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        network: {services: validServices},
+        console: {
+          ports: {server: 1111, admin: 2222}
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts a valid Satellite config with network services', () => {
+      const result = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        network: {services: validServices},
+        satellite: {
+          ports: {server: 7777}
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts configs without a network block', () => {
+      const skylab = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        skylab: {}
+      });
+      const console = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        console: {}
+      });
+      const satellite = EmulatorConfigSchema.safeParse({
+        ...validBase,
+        satellite: {}
+      });
+
+      expect(skylab.success && console.success && satellite.success).toBe(true);
+    });
+
+    describe('network type', () => {
+      it('rejects non-boolean values in network.services', () => {
+        const result = EmulatorConfigSchema.safeParse({
+          ...validBase,
+          network: {services: {...validServices, icp: 'yes'}},
+          skylab: {}
+        });
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects unknown field under network.services', () => {
+        const result = EmulatorConfigSchema.safeParse({
+          ...validBase,
+          network: {services: {...validServices, extraFlag: true}},
+          console: {}
+        });
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects unknown field under network', () => {
+        const result = EmulatorConfigSchema.safeParse({
+          ...validBase,
+          network: {services: validServices, extra: 1},
+          skylab: {}
+        });
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects a network block without services', () => {
+        const result = EmulatorConfigSchema.safeParse({
+          ...validBase,
+          network: {},
+          skylab: {}
         });
         expect(result.success).toBe(false);
       });

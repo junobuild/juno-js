@@ -219,6 +219,16 @@ describe('emulator.config', () => {
         expect(result.success).toBe(true);
       });
 
+      it('accepts runner with type container', () => {
+        const result = EmulatorConfigSchema.safeParse({
+          runner: {
+            type: 'container'
+          },
+          console: {}
+        });
+        expect(result.success).toBe(true);
+      });
+
       it('rejects runner with invalid type value', () => {
         const result = EmulatorConfigSchema.safeParse({
           runner: {

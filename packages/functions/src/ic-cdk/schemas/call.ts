@@ -1,6 +1,6 @@
 import {IDL} from '@icp-sdk/core/candid';
 import type {Principal} from '@icp-sdk/core/principal';
-import * as z from 'zod/v4';
+import * as z from 'zod';
 import {PrincipalSchema, type RawPrincipal, RawPrincipalSchema} from '../../schemas/candid';
 
 /**

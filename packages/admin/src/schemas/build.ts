@@ -1,4 +1,4 @@
-import * as z from 'zod/v4';
+import * as z from 'zod';
 
 /**
  * Represents the type of build, stock or extended.

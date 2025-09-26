@@ -1,4 +1,4 @@
-import * as z from 'zod/v4';
+import * as z from 'zod';
 import {createFunctionSchema} from '../utils/zod.utils';
 import {type OnRun, OnRunContextSchema, OnRunSchema} from './run.context';
 import type {OnRunEnv} from './run.env';

@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/admin",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "A library for interfacing with admin features of Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -56,6 +56,6 @@
     "@junobuild/config": "*",
     "@junobuild/ic-client": "^3",
     "semver": "7.*",
-    "zod": "^3.25"
+    "zod": "^4"
   }
 }

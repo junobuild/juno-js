@@ -62,11 +62,31 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 
 #### :gear: createFunctionSchema
 
-| Function               | Type                                                                                                                    |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `createFunctionSchema` | `<T extends z.core.$ZodFunction>(schema: T) => ZodCustom<Parameters<T["implement"]>[0], Parameters<T["implement"]>[0]>` |
+Wraps a Zod function schema so that parsing returns the **original function**
+instead of Zod's wrapped validator.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/utils/zod.utils.ts#L4)
+## Why?
+
+In Zod v4, `z.function({...})` normally returns a wrapper that validates
+both arguments and the return value **every time the function is called**.
+If your function's return type is `void | Promise<void>`, Zod tries to
+validate it synchronously, which can throw
+"Encountered Promise during synchronous parse"
+when the implementation is async.
+
+By using `.implement`, we tell Zod: “this is the function that satisfies
+the schema.” That way the schema still validates the function shape at
+parse time, but the returned value is the **original function** you passed
+in — no runtime wrapper, no sync/async mismatch.
+
+Reference:
+https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912*
+
+| Function               | Type                                                                                                              |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `createFunctionSchema` | `<T extends z.ZodFunction>(schema: T) => ZodCustom<Parameters<T["implement"]>[0], Parameters<T["implement"]>[0]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/utils/zod.utils.ts#L24)
 
 #### :gear: HookContextSchema
 
@@ -118,9 +138,9 @@ References:
 
 #### :gear: AssertFnSchema
 
-| Function         | Type                                                                                                              |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `AssertFnSchema` | `<T extends z.ZodTypeAny>(assertSchema: T) => $ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>` |
+| Function         | Type                                                                                                             |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `AssertFnSchema` | `<T extends z.ZodTypeAny>(assertSchema: T) => ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/assertions.ts#L97)
 
@@ -166,9 +186,9 @@ References:
 
 #### :gear: HookFnSchema
 
-| Function       | Type                                                                                                            |
-| -------------- | --------------------------------------------------------------------------------------------------------------- |
-| `HookFnSchema` | `<T extends z.ZodTypeAny>(hookSchema: T) => $ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>` |
+| Function       | Type                                                                                                           |
+| -------------- | -------------------------------------------------------------------------------------------------------------- |
+| `HookFnSchema` | `<T extends z.ZodTypeAny>(hookSchema: T) => ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/hooks.ts#L171)
 
@@ -1190,9 +1210,9 @@ References:
 
 #### :gear: AssetNoContentSchema
 
-| Constant               | Type                                                                                                                                                                                                                                                                                                                               |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AssetNoContentSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; created_at: ZodBigInt; updated_at: ZodBigInt; key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<...>; collection: ZodString; owner: ZodCustom<...>; description: ZodOptional<...>; }, $strict>; headers: ZodArray<...>; encodings: ZodArray<...>; }, $s...` |
+| Constant               | Type                                                                                                                                                                                                                                                                                          |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AssetNoContentSchema` | `ZodObject<{ key: ZodObject<{ name: ZodString; full_path: ZodString; token: ZodOptional<ZodString>; collection: ZodString; owner: ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<...>>; description: ZodOptional<...>; }, $strict>; ... 4 more ...; encodings: ZodArray<...>; }, $strict>` |
 
 References:
 

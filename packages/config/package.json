@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/config",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Configuration options for Juno CLI",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -41,7 +41,7 @@
   },
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/zod-schemas": "^1.1.0",
-    "zod": "^3.25"
+    "@dfinity/zod-schemas": "^2",
+    "zod": "^4"
   }
 }

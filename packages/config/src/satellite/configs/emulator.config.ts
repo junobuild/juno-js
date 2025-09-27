@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import {refineEmulatorConfig} from '../validators/emulator.validators';
 
 const EmulatorPortsSchema = z.strictObject({
   /**
@@ -174,6 +175,7 @@ export interface NetworkServices {
 
   /**
    * CMC (Cycles Minting Canister): Converts ICP to cycles and distributes them; maintains subnet lists and conversion rate.
+   * Requires icp and nns to not be enabled.
    */
   cmc?: boolean;
 
@@ -233,23 +235,25 @@ export interface Network {
 /**
  * @see EmulatorConfig
  */
-export const EmulatorConfigSchema = z.union([
-  z.strictObject({
-    runner: EmulatorRunnerSchema.optional(),
-    network: NetworkSchema.optional(),
-    skylab: EmulatorSkylabSchema
-  }),
-  z.strictObject({
-    runner: EmulatorRunnerSchema.optional(),
-    network: NetworkSchema.optional(),
-    console: EmulatorConsoleSchema
-  }),
-  z.strictObject({
-    runner: EmulatorRunnerSchema.optional(),
-    network: NetworkSchema.optional(),
-    satellite: EmulatorSatelliteSchema
-  })
-]);
+export const EmulatorConfigSchema = z
+  .union([
+    z.strictObject({
+      runner: EmulatorRunnerSchema.optional(),
+      network: NetworkSchema.optional(),
+      skylab: EmulatorSkylabSchema
+    }),
+    z.strictObject({
+      runner: EmulatorRunnerSchema.optional(),
+      network: NetworkSchema.optional(),
+      console: EmulatorConsoleSchema
+    }),
+    z.strictObject({
+      runner: EmulatorRunnerSchema.optional(),
+      network: NetworkSchema.optional(),
+      satellite: EmulatorSatelliteSchema
+    })
+  ])
+  .superRefine(refineEmulatorConfig);
 
 /**
  * The configuration for running the Juno emulator.

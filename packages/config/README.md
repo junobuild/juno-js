@@ -207,13 +207,13 @@ References:
 
 | Constant               | Type                                                                                                                                                                                                                                                                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; podman: "podman"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; }, $strict>>; skylab: ZodObject<...>; }, $strict>, ZodObj...` |
+| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; podman: "podman"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; }, $strict>>; network: ZodOptional<...>; skylab: ZodObjec...` |
 
 References:
 
 - EmulatorConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L151)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L236)
 
 #### :gear: ModuleLogVisibilitySchema
 
@@ -444,6 +444,8 @@ References:
 - [EmulatorConsole](#gear-emulatorconsole)
 - [EmulatorSatellite](#gear-emulatorsatellite)
 - [EmulatorRunner](#gear-emulatorrunner)
+- [NetworkServices](#gear-networkservices)
+- [Network](#gear-network)
 - [ModuleSettings](#gear-modulesettings)
 - [JunoConfigEnv](#gear-junoconfigenv)
 - [OrbiterId](#gear-orbiterid)
@@ -612,6 +614,37 @@ Shared options for all runner variants.
 | `platform` | `"linux/amd64" or "linux/arm64" or undefined` | The platform to use when running the emulator container.                                              |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L113)
+
+#### :gear: NetworkServices
+
+Network services that can be enabled in the emulator.
+
+Each flag corresponds to a system canister or application that can be included
+in the local Internet Computer network when the emulator starts.
+
+| Property            | Type                   | Description                                                                                                                                                                                                              |
+| ------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `registry`          | `boolean or undefined` | Registry canister: Stores network configuration and topology (subnet membership, public keys, feature flags). Acts as the source of truth other system canisters read/write to.                                          |
+| `cmc`               | `boolean or undefined` | CMC (Cycles Minting Canister): Converts ICP to cycles and distributes them; maintains subnet lists and conversion rate.                                                                                                  |
+| `icp`               | `boolean or undefined` | ICP token: Deploys the ICP ledger and index canisters.                                                                                                                                                                   |
+| `cycles`            | `boolean or undefined` | Cycles token: Deploys the cycles ledger and index canisters.                                                                                                                                                             |
+| `nns`               | `boolean or undefined` | NNS governance canisters: Deploys the governance and root canisters. Core governance system (neurons, proposals, voting) and related control logic. Enables managing network-level decisions in an emulated environment. |
+| `sns`               | `boolean or undefined` | SNS canisters: Deploys the SNS-W and aggregator canisters. Service Nervous System stack used to govern individual dapps.                                                                                                 |
+| `internet_identity` | `boolean or undefined` | Internet Identity: Deploys the II canister for authentication.                                                                                                                                                           |
+| `nns_dapp`          | `boolean or undefined` | NNS dapp: Deploys the NNS UI canister and frontend application Requires cmc, icp, nns, sns, internet_identity to be enabled.                                                                                             |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L168)
+
+#### :gear: Network
+
+Configuration for customizing the Internet Computer network bootstrapped
+by the emulator.
+
+| Property   | Type              | Description                                                 |
+| ---------- | ----------------- | ----------------------------------------------------------- |
+| `services` | `NetworkServices` | System canisters and applications available in the network. |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L226)
 
 #### :gear: ModuleSettings
 
@@ -839,10 +872,10 @@ changes, typically through CLI commands (e.g., `juno config`).
 The configuration for running the Juno emulator.
 
 | Type             | Type |
-| ---------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfig` | `    | {runner?: EmulatorRunner; skylab: EmulatorSkylab} or {runner?: EmulatorRunner; console: EmulatorConsole} or {runner?: EmulatorRunner; satellite: EmulatorSatellite}` |
+| ---------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EmulatorConfig` | `    | {runner?: EmulatorRunner; network?: Network; skylab: EmulatorSkylab} or {runner?: EmulatorRunner; network?: Network; console: EmulatorConsole} or {runner?: EmulatorRunner; network?: Network; satellite: EmulatorSatellite}` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L169)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L257)
 
 #### :gear: ModuleLogVisibility
 

@@ -213,7 +213,7 @@ References:
 
 - EmulatorConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L237)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L238)
 
 #### :gear: ModuleLogVisibilitySchema
 
@@ -625,7 +625,7 @@ in the local Internet Computer network when the emulator starts.
 | Property            | Type                   | Description                                                                                                                                                                                                              |
 | ------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `registry`          | `boolean or undefined` | Registry canister: Stores network configuration and topology (subnet membership, public keys, feature flags). Acts as the source of truth other system canisters read/write to.                                          |
-| `cmc`               | `boolean or undefined` | CMC (Cycles Minting Canister): Converts ICP to cycles and distributes them; maintains subnet lists and conversion rate.                                                                                                  |
+| `cmc`               | `boolean or undefined` | CMC (Cycles Minting Canister): Converts ICP to cycles and distributes them; maintains subnet lists and conversion rate. Requires icp and nns to not be enabled.                                                          |
 | `icp`               | `boolean or undefined` | ICP token: Deploys the ICP ledger and index canisters.                                                                                                                                                                   |
 | `cycles`            | `boolean or undefined` | Cycles token: Deploys the cycles ledger and index canisters.                                                                                                                                                             |
 | `nns`               | `boolean or undefined` | NNS governance canisters: Deploys the governance and root canisters. Core governance system (neurons, proposals, voting) and related control logic. Enables managing network-level decisions in an emulated environment. |
@@ -644,7 +644,7 @@ by the emulator.
 | ---------- | ----------------- | ----------------------------------------------------------- |
 | `services` | `NetworkServices` | System canisters and applications available in the network. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L227)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L228)
 
 #### :gear: ModuleSettings
 
@@ -875,7 +875,7 @@ The configuration for running the Juno emulator.
 | ---------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `EmulatorConfig` | `    | {runner?: EmulatorRunner; network?: Network; skylab: EmulatorSkylab} or {runner?: EmulatorRunner; network?: Network; console: EmulatorConsole} or {runner?: EmulatorRunner; network?: Network; satellite: EmulatorSatellite}` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L260)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L261)
 
 #### :gear: ModuleLogVisibility
 

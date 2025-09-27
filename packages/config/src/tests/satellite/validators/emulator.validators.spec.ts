@@ -1,3 +1,4 @@
+import {describe} from 'vitest';
 import * as z from 'zod';
 import {EmulatorConfigSchema} from '../../../satellite/configs/emulator.config';
 import {refineEmulatorConfig} from '../../../satellite/validators/emulator.validators';
@@ -31,95 +32,78 @@ describe('refineEmulatorConfig', () => {
   });
 
   describe('skylab variant', () => {
-    it('fails if nns_dapp = true and cmc = false', () => {
-      const issues = runRefinement({
-        skylab: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: false,
-            icp: true,
-            nns: true,
-            sns: true,
-            internet_identity: true
+    describe('nns_dapp', () => {
+      it('fails if nns_dapp = true and cmc = false', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: false,
+              icp: true,
+              nns: true,
+              sns: true,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
+        expect(issues[0].message).toBe(ERR_MSG);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-      expect(issues[0].message).toBe(ERR_MSG);
-    });
 
-    it('fails if nns_dapp = true and icp = false', () => {
-      const issues = runRefinement({
-        skylab: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: false,
-            nns: true,
-            sns: true,
-            internet_identity: true
+      it('fails if nns_dapp = true and icp = false', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: true,
+              icp: false,
+              nns: true,
+              sns: true,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and nns = false', () => {
-      const issues = runRefinement({
-        skylab: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: true,
-            nns: false,
-            sns: true,
-            internet_identity: true
+      it('fails if nns_dapp = true and nns = false', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: true,
+              icp: true,
+              nns: false,
+              sns: true,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and sns = false', () => {
-      const issues = runRefinement({
-        skylab: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: true,
-            nns: true,
-            sns: false,
-            internet_identity: true
+      it('fails if nns_dapp = true and sns = false', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: true,
+              icp: true,
+              nns: true,
+              sns: false,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and internet_identity = false', () => {
-      const issues = runRefinement({
-        skylab: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: true,
-            nns: true,
-            sns: true,
-            internet_identity: false
-          }
-        }
-      });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
-
-    it('passes if nns_dapp = true and all required are true', () => {
-      expect(
-        runRefinement({
+      it('fails if nns_dapp = true and internet_identity = false', () => {
+        const issues = runRefinement({
           skylab: {ports: {}},
           network: {
             services: {
@@ -128,121 +112,169 @@ describe('refineEmulatorConfig', () => {
               icp: true,
               nns: true,
               sns: true,
-              internet_identity: true
-            }
-          }
-        })
-      ).toHaveLength(0);
-    });
-
-    it('passes if nns_dapp = false regardless of other flags', () => {
-      expect(
-        runRefinement({
-          skylab: {ports: {}},
-          network: {
-            services: {
-              nns_dapp: false,
-              cmc: false,
-              icp: false,
-              nns: false,
-              sns: false,
               internet_identity: false
             }
           }
-        })
-      ).toHaveLength(0);
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
+      });
+
+      it('passes if nns_dapp = true and all required are true', () => {
+        expect(
+          runRefinement({
+            skylab: {ports: {}},
+            network: {
+              services: {
+                nns_dapp: true,
+                cmc: true,
+                icp: true,
+                nns: true,
+                sns: true,
+                internet_identity: true
+              }
+            }
+          })
+        ).toHaveLength(0);
+      });
+
+      it('passes if nns_dapp = false regardless of other flags', () => {
+        expect(
+          runRefinement({
+            skylab: {ports: {}},
+            network: {
+              services: {
+                nns_dapp: false,
+                cmc: false,
+                icp: false,
+                nns: false,
+                sns: false,
+                internet_identity: false
+              }
+            }
+          })
+        ).toHaveLength(0);
+      });
+    });
+
+    describe('cmc', () => {
+      it('fails if cmc = true and icp = false', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cmc: true, icp: false, nns: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+        expect(issues[0].message).toBe('cmc requires: icp, nns');
+      });
+
+      it('fails if cmc = true and nns = false', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cmc: true, icp: true, nns: false}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+      });
+
+      it('passes if cmc = true and icp & nns are true', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cmc: true, icp: true, nns: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('passes if cmc = false regardless of icp/nns', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cmc: false, icp: false, nns: false}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('omitting icp/nns uses skylab defaults (true) → passes', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cmc: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
     });
   });
 
   describe('console variant', () => {
-    it('fails if nns_dapp = true and cmc = false', () => {
-      const issues = runRefinement({
-        console: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: false,
-            icp: true,
-            nns: true,
-            sns: true,
-            internet_identity: true
+    describe('nns_dapp', () => {
+      it('fails if nns_dapp = true and cmc = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: false,
+              icp: true,
+              nns: true,
+              sns: true,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and icp = false', () => {
-      const issues = runRefinement({
-        console: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: false,
-            nns: true,
-            sns: true,
-            internet_identity: true
+      it('fails if nns_dapp = true and icp = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: true,
+              icp: false,
+              nns: true,
+              sns: true,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and nns = false', () => {
-      const issues = runRefinement({
-        console: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: true,
-            nns: false,
-            sns: true,
-            internet_identity: true
+      it('fails if nns_dapp = true and nns = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: true,
+              icp: true,
+              nns: false,
+              sns: true,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and sns = false', () => {
-      const issues = runRefinement({
-        console: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: true,
-            nns: true,
-            sns: false,
-            internet_identity: true
+      it('fails if nns_dapp = true and sns = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: true,
+              icp: true,
+              nns: true,
+              sns: false,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and internet_identity = false', () => {
-      const issues = runRefinement({
-        console: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: true,
-            nns: true,
-            sns: true,
-            internet_identity: false
-          }
-        }
-      });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
-
-    it('passes if nns_dapp = true and all required are true', () => {
-      expect(
-        runRefinement({
+      it('fails if nns_dapp = true and internet_identity = false', () => {
+        const issues = runRefinement({
           console: {ports: {}},
           network: {
             services: {
@@ -251,121 +283,169 @@ describe('refineEmulatorConfig', () => {
               icp: true,
               nns: true,
               sns: true,
-              internet_identity: true
-            }
-          }
-        })
-      ).toHaveLength(0);
-    });
-
-    it('passes if nns_dapp = false regardless of other flags', () => {
-      expect(
-        runRefinement({
-          console: {ports: {}},
-          network: {
-            services: {
-              nns_dapp: false,
-              cmc: false,
-              icp: false,
-              nns: false,
-              sns: false,
               internet_identity: false
             }
           }
-        })
-      ).toHaveLength(0);
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
+      });
+
+      it('passes if nns_dapp = true and all required are true', () => {
+        expect(
+          runRefinement({
+            console: {ports: {}},
+            network: {
+              services: {
+                nns_dapp: true,
+                cmc: true,
+                icp: true,
+                nns: true,
+                sns: true,
+                internet_identity: true
+              }
+            }
+          })
+        ).toHaveLength(0);
+      });
+
+      it('passes if nns_dapp = false regardless of other flags', () => {
+        expect(
+          runRefinement({
+            console: {ports: {}},
+            network: {
+              services: {
+                nns_dapp: false,
+                cmc: false,
+                icp: false,
+                nns: false,
+                sns: false,
+                internet_identity: false
+              }
+            }
+          })
+        ).toHaveLength(0);
+      });
+    });
+
+    describe('cmc', () => {
+      it('fails if cmc = true and icp = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cmc: true, icp: false, nns: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+        expect(issues[0].message).toBe('cmc requires: icp, nns');
+      });
+
+      it('fails if cmc = true and nns = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cmc: true, icp: true, nns: false}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+      });
+
+      it('passes if cmc = true and icp & nns are true', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cmc: true, icp: true, nns: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('passes if cmc = false regardless of icp/nns', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cmc: false, icp: false, nns: false}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('omitting icp/nns uses console defaults (true) → passes', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cmc: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
     });
   });
 
   describe('satellite variant', () => {
-    it('fails if nns_dapp = true and cmc = false', () => {
-      const issues = runRefinement({
-        satellite: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: false,
-            icp: true,
-            nns: true,
-            sns: true,
-            internet_identity: true
+    describe('nns_dapp', () => {
+      it('fails if nns_dapp = true and cmc = false', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: false,
+              icp: true,
+              nns: true,
+              sns: true,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and icp = false', () => {
-      const issues = runRefinement({
-        satellite: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: false,
-            nns: true,
-            sns: true,
-            internet_identity: true
+      it('fails if nns_dapp = true and icp = false', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: true,
+              icp: false,
+              nns: true,
+              sns: true,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and nns = false', () => {
-      const issues = runRefinement({
-        satellite: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: true,
-            nns: false,
-            sns: true,
-            internet_identity: true
+      it('fails if nns_dapp = true and nns = false', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: true,
+              icp: true,
+              nns: false,
+              sns: true,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and sns = false', () => {
-      const issues = runRefinement({
-        satellite: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: true,
-            nns: true,
-            sns: false,
-            internet_identity: true
+      it('fails if nns_dapp = true and sns = false', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {
+            services: {
+              nns_dapp: true,
+              cmc: true,
+              icp: true,
+              nns: true,
+              sns: false,
+              internet_identity: true
+            }
           }
-        }
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
       });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
 
-    it('fails if nns_dapp = true and internet_identity = false', () => {
-      const issues = runRefinement({
-        satellite: {ports: {}},
-        network: {
-          services: {
-            nns_dapp: true,
-            cmc: true,
-            icp: true,
-            nns: true,
-            sns: true,
-            internet_identity: false
-          }
-        }
-      });
-      expect(issues[0].path).toEqual(ERR_PATH);
-    });
-
-    it('passes if nns_dapp = true and all required are true', () => {
-      expect(
-        runRefinement({
+      it('fails if nns_dapp = true and internet_identity = false', () => {
+        const issues = runRefinement({
           satellite: {ports: {}},
           network: {
             services: {
@@ -374,29 +454,103 @@ describe('refineEmulatorConfig', () => {
               icp: true,
               nns: true,
               sns: true,
-              internet_identity: true
-            }
-          }
-        })
-      ).toHaveLength(0);
-    });
-
-    it('passes if nns_dapp = false regardless of other flags', () => {
-      expect(
-        runRefinement({
-          satellite: {ports: {}},
-          network: {
-            services: {
-              nns_dapp: false,
-              cmc: false,
-              icp: false,
-              nns: false,
-              sns: false,
               internet_identity: false
             }
           }
-        })
-      ).toHaveLength(0);
+        });
+        expect(issues[0].path).toEqual(ERR_PATH);
+      });
+
+      it('passes if nns_dapp = true and all required are true', () => {
+        expect(
+          runRefinement({
+            satellite: {ports: {}},
+            network: {
+              services: {
+                nns_dapp: true,
+                cmc: true,
+                icp: true,
+                nns: true,
+                sns: true,
+                internet_identity: true
+              }
+            }
+          })
+        ).toHaveLength(0);
+      });
+
+      it('passes if nns_dapp = false regardless of other flags', () => {
+        expect(
+          runRefinement({
+            satellite: {ports: {}},
+            network: {
+              services: {
+                nns_dapp: false,
+                cmc: false,
+                icp: false,
+                nns: false,
+                sns: false,
+                internet_identity: false
+              }
+            }
+          })
+        ).toHaveLength(0);
+      });
+    });
+
+    describe('cmc', () => {
+      it('fails if cmc = true and icp = false', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cmc: true, icp: false, nns: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+        expect(issues[0].message).toBe('cmc requires: icp, nns');
+      });
+
+      it('fails if cmc = true and nns = false', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cmc: true, icp: true, nns: false}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+      });
+
+      it('passes if cmc = true and icp & nns are true', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cmc: true, icp: true, nns: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('passes if cmc = false regardless of icp/nns', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cmc: false, icp: false, nns: false}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('omitting nns uses satellite default (false) with cmc=true → fails', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cmc: true, icp: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+      });
+
+      it('omitting icp uses satellite default (true) with cmc=true → passes', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cmc: true, nns: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
     });
   });
 });

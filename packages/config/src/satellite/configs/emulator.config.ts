@@ -175,6 +175,7 @@ export interface NetworkServices {
 
   /**
    * CMC (Cycles Minting Canister): Converts ICP to cycles and distributes them; maintains subnet lists and conversion rate.
+   * Requires icp and nns to not be enabled.
    */
   cmc?: boolean;
 

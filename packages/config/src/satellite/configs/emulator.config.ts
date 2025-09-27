@@ -156,7 +156,7 @@ const NetworkServicesSchema = z.strictObject({
   nns: z.boolean().optional(),
   sns: z.boolean().optional(),
   ii: z.boolean().optional(),
-  nnsDapp: z.boolean().optional()
+  nns_dapp: z.boolean().optional()
 });
 
 /**
@@ -209,7 +209,7 @@ export interface NetworkServices {
    * NNS dapp: Deploys the NNS UI canister and frontend application
    * Requires cmc, icp, nns, sns, ii to be enabled.
    */
-  nnsDapp?: boolean;
+  nns_dapp?: boolean;
 }
 
 /**

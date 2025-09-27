@@ -19,7 +19,7 @@ describe('emulator.config', () => {
       nns: true,
       sns: false,
       ii: true,
-      nnsDapp: false
+      nns_dapp: false
     };
 
     it('accepts a valid Skylab config', () => {

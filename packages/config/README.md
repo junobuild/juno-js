@@ -631,7 +631,7 @@ in the local Internet Computer network when the emulator starts.
 | `nns`      | `boolean or undefined` | NNS governance canisters: Deploys the governance and root canisters. Core governance system (neurons, proposals, voting) and related control logic. Enables managing network-level decisions in an emulated environment. |
 | `sns`      | `boolean or undefined` | SNS canisters: Deploys the SNS-W and aggregator canisters. Service Nervous System stack used to govern individual dapps.                                                                                                 |
 | `ii`       | `boolean or undefined` | Internet Identity (II): Deploys the II canister for authentication.                                                                                                                                                      |
-| `nnsDapp`  | `boolean or undefined` | NNS dapp: Deploys the NNS UI canister and frontend application                                                                                                                                                           |
+| `nns_dapp`  | `boolean or undefined` | NNS dapp: Deploys the NNS UI canister and frontend application                                                                                                                                                           |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L168)
 

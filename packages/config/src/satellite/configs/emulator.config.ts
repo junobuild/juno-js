@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import {refineEmulatorConfig} from '../validators/emulator.validators';
 
 const EmulatorPortsSchema = z.strictObject({
   /**
@@ -233,23 +234,25 @@ export interface Network {
 /**
  * @see EmulatorConfig
  */
-export const EmulatorConfigSchema = z.union([
-  z.strictObject({
-    runner: EmulatorRunnerSchema.optional(),
-    network: NetworkSchema.optional(),
-    skylab: EmulatorSkylabSchema
-  }),
-  z.strictObject({
-    runner: EmulatorRunnerSchema.optional(),
-    network: NetworkSchema.optional(),
-    console: EmulatorConsoleSchema
-  }),
-  z.strictObject({
-    runner: EmulatorRunnerSchema.optional(),
-    network: NetworkSchema.optional(),
-    satellite: EmulatorSatelliteSchema
-  })
-]);
+export const EmulatorConfigSchema = z
+  .union([
+    z.strictObject({
+      runner: EmulatorRunnerSchema.optional(),
+      network: NetworkSchema.optional(),
+      skylab: EmulatorSkylabSchema
+    }),
+    z.strictObject({
+      runner: EmulatorRunnerSchema.optional(),
+      network: NetworkSchema.optional(),
+      console: EmulatorConsoleSchema
+    }),
+    z.strictObject({
+      runner: EmulatorRunnerSchema.optional(),
+      network: NetworkSchema.optional(),
+      satellite: EmulatorSatelliteSchema
+    })
+  ])
+  .superRefine(refineEmulatorConfig);
 
 /**
  * The configuration for running the Juno emulator.

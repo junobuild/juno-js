@@ -331,4 +331,113 @@ describe('emulator.config', () => {
       });
     });
   });
+
+  describe('refine validators', () => {
+    const ERR_MSG = 'nns_dapp requires: cmc, icp, nns, sns, internet_identity';
+
+    it('skylab: fails if nns_dapp = true and sns = false', () => {
+      const res = EmulatorConfigSchema.safeParse({
+        skylab: {},
+        network: {
+          services: {
+            nns_dapp: true,
+            cmc: true,
+            icp: true,
+            nns: true,
+            sns: false, // <- breaks it
+            internet_identity: true
+          }
+        }
+      });
+      expect(res.success).toBe(false);
+      if (!res.success) expect(res.error.issues[0].message).toBe(ERR_MSG);
+    });
+
+    it('skylab: passes if all required are true', () => {
+      const res = EmulatorConfigSchema.safeParse({
+        skylab: {},
+        network: {
+          services: {
+            nns_dapp: true,
+            cmc: true,
+            icp: true,
+            nns: true,
+            sns: true,
+            internet_identity: true
+          }
+        }
+      });
+      expect(res.success).toBe(true);
+    });
+
+    it('console: fails if nns_dapp = true and sns = false', () => {
+      const res = EmulatorConfigSchema.safeParse({
+        console: {},
+        network: {
+          services: {
+            nns_dapp: true,
+            cmc: true,
+            icp: true,
+            nns: true,
+            sns: false, // <- breaks it
+            internet_identity: true
+          }
+        }
+      });
+      expect(res.success).toBe(false);
+      if (!res.success) expect(res.error.issues[0].message).toBe(ERR_MSG);
+    });
+
+    it('console: passes if all required are true', () => {
+      const res = EmulatorConfigSchema.safeParse({
+        console: {},
+        network: {
+          services: {
+            nns_dapp: true,
+            cmc: true,
+            icp: true,
+            nns: true,
+            sns: true,
+            internet_identity: true
+          }
+        }
+      });
+      expect(res.success).toBe(true);
+    });
+
+    it('satellite: fails if nns_dapp = true and sns = false', () => {
+      const res = EmulatorConfigSchema.safeParse({
+        satellite: {},
+        network: {
+          services: {
+            nns_dapp: true,
+            cmc: true,
+            icp: true,
+            nns: true,
+            sns: false, // <- breaks it
+            internet_identity: true
+          }
+        }
+      });
+      expect(res.success).toBe(false);
+      if (!res.success) expect(res.error.issues[0].message).toBe(ERR_MSG);
+    });
+
+    it('satellite: passes if all required are true', () => {
+      const res = EmulatorConfigSchema.safeParse({
+        satellite: {},
+        network: {
+          services: {
+            nns_dapp: true,
+            cmc: true,
+            icp: true,
+            nns: true,
+            sns: true,
+            internet_identity: true
+          }
+        }
+      });
+      expect(res.success).toBe(true);
+    });
+  });
 });

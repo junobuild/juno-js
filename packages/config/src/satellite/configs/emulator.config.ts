@@ -155,7 +155,7 @@ const NetworkServicesSchema = z.strictObject({
   cycles: z.boolean().optional(),
   nns: z.boolean().optional(),
   sns: z.boolean().optional(),
-  ii: z.boolean().optional(),
+  internet_identity: z.boolean().optional(),
   nns_dapp: z.boolean().optional()
 });
 
@@ -203,11 +203,11 @@ export interface NetworkServices {
   /**
    * Internet Identity: Deploys the II canister for authentication.
    */
-  ii?: boolean;
+  internet_identity?: boolean;
 
   /**
    * NNS dapp: Deploys the NNS UI canister and frontend application
-   * Requires cmc, icp, nns, sns, ii to be enabled.
+   * Requires cmc, icp, nns, sns, internet_identity to be enabled.
    */
   nns_dapp?: boolean;
 }

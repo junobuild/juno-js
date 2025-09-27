@@ -18,7 +18,7 @@ describe('emulator.config', () => {
       cycles: false,
       nns: true,
       sns: false,
-      ii: true,
+      internet_identity: true,
       nns_dapp: false
     };
 

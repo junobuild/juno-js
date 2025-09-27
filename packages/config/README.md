@@ -207,7 +207,7 @@ References:
 
 | Constant               | Type                                                                                                                                                                                                                                                                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; podman: "podman"; container: "container"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; }, $strict>>; skylab: ZodObject<....` |
+| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; podman: "podman"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; }, $strict>>; skylab: ZodObject<...>; }, $strict>, ZodObj...` |
 
 References:
 
@@ -604,7 +604,7 @@ Shared options for all runner variants.
 
 | Property   | Type                                          | Description                                                                                           |
 | ---------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `type`     | `"docker" or "podman" or "container"`         | The containerization tool to run the emulator.                                                        |
+| `type`     | `"docker" or "podman"`                        | The containerization tool to run the emulator.                                                        |
 | `image`    | `string or undefined`                         | Image reference. default: depends on emulator type, e.g. "junobuild/skylab:latest"                    |
 | `name`     | `string or undefined`                         | Optional container name to use for the emulator. Useful for reusing or managing a specific container. |
 | `volume`   | `string or undefined`                         | Persistent volume to store internal state. default: "juno"                                            |

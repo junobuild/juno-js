@@ -213,7 +213,7 @@ References:
 
 - EmulatorConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L236)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L237)
 
 #### :gear: ModuleLogVisibilitySchema
 
@@ -568,7 +568,7 @@ Represents the ports exposed by an emulator container.
 | `server` | `number or undefined` | The port of the server used to simulate execution. This is the port your app connects to. Also known as the "local Internet Computer replica" or the "Pocket-IC port". default: 5987 |
 | `admin`  | `number or undefined` | The port of the admin server used for tasks like transferring ICP from the ledger. default: 5999                                                                                     |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L26)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L27)
 
 #### :gear: EmulatorSkylab
 
@@ -578,7 +578,7 @@ Configuration for the Skylab emulator.
 | -------- | ------------------------------------------------------- | -------------------------------------- |
 | `ports`  | `(EmulatorPorts and { console: number; }) or undefined` | Ports exposed by the Skylab container. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L51)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L52)
 
 #### :gear: EmulatorConsole
 
@@ -588,7 +588,7 @@ Configuration for the Console emulator.
 | -------- | ---------------------------- | --------------------------------------- |
 | `ports`  | `EmulatorPorts or undefined` | Ports exposed by the Console container. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L74)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L75)
 
 #### :gear: EmulatorSatellite
 
@@ -598,7 +598,7 @@ Configuration for the Satellite emulator.
 | -------- | ---------------------------- | ----------------------------------------- |
 | `ports`  | `EmulatorPorts or undefined` | Ports exposed by the Satellite container. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L91)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L92)
 
 #### :gear: EmulatorRunner
 
@@ -613,7 +613,7 @@ Shared options for all runner variants.
 | `target`   | `string or undefined`                         | Shared folder for deploying and hot-reloading serverless functions.                                   |
 | `platform` | `"linux/amd64" or "linux/arm64" or undefined` | The platform to use when running the emulator container.                                              |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L113)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L114)
 
 #### :gear: NetworkServices
 
@@ -633,7 +633,7 @@ in the local Internet Computer network when the emulator starts.
 | `internet_identity` | `boolean or undefined` | Internet Identity: Deploys the II canister for authentication.                                                                                                                                                           |
 | `nns_dapp`          | `boolean or undefined` | NNS dapp: Deploys the NNS UI canister and frontend application Requires cmc, icp, nns, sns, internet_identity to be enabled.                                                                                             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L168)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L169)
 
 #### :gear: Network
 
@@ -644,7 +644,7 @@ by the emulator.
 | ---------- | ----------------- | ----------------------------------------------------------- |
 | `services` | `NetworkServices` | System canisters and applications available in the network. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L226)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L227)
 
 #### :gear: ModuleSettings
 
@@ -875,7 +875,7 @@ The configuration for running the Juno emulator.
 | ---------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `EmulatorConfig` | `    | {runner?: EmulatorRunner; network?: Network; skylab: EmulatorSkylab} or {runner?: EmulatorRunner; network?: Network; console: EmulatorConsole} or {runner?: EmulatorRunner; network?: Network; satellite: EmulatorSatellite}` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L257)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L260)
 
 #### :gear: ModuleLogVisibility
 

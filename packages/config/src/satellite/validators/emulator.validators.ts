@@ -5,6 +5,7 @@ import {
   DEFAULT_SATELLITE_NETWORK_SERVICES
 } from '../constants/emulator.constants';
 
+const NNS_REQUIRED_SERVICES = ['icp'] as const;
 const CMC_REQUIRED_SERVICES = ['icp', 'nns'] as const;
 const NNS_DAPP_REQUIRED_SERVICES = ['cmc', 'icp', 'nns', 'sns', 'internet_identity'] as const;
 
@@ -20,7 +21,10 @@ const refineNetworkServices = (cfg: EmulatorConfigInput, ctx: z.RefinementCtx) =
     requiredServices,
     key
   }: {
-    requiredServices: typeof NNS_DAPP_REQUIRED_SERVICES | typeof CMC_REQUIRED_SERVICES;
+    requiredServices:
+      | typeof NNS_DAPP_REQUIRED_SERVICES
+      | typeof CMC_REQUIRED_SERVICES
+      | typeof NNS_REQUIRED_SERVICES;
     key: string;
   }) => {
     const hasMissingServices =
@@ -47,6 +51,13 @@ const refineNetworkServices = (cfg: EmulatorConfigInput, ctx: z.RefinementCtx) =
     assertServices({
       requiredServices: CMC_REQUIRED_SERVICES,
       key: 'cmc'
+    });
+  }
+
+  if (mergedServices.nns) {
+    assertServices({
+      requiredServices: NNS_REQUIRED_SERVICES,
+      key: 'nns'
     });
   }
 };

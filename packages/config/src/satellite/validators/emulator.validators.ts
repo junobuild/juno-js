@@ -1,23 +1,9 @@
 import type * as z from 'zod';
-import type {EmulatorConfigSchema, NetworkServices} from '../configs/emulator.config';
-
-const DEFAULT_NETWORK_SERVICES: NetworkServices = {
-  registry: false,
-  cmc: true,
-  icp: true,
-  cycles: true,
-  nns: true,
-  sns: false,
-  internet_identity: true,
-  nns_dapp: false
-} as const;
-
-const SATELLITE_NETWORK_SERVICES: NetworkServices = {
-  ...DEFAULT_NETWORK_SERVICES,
-  cmc: false,
-  cycles: false,
-  nns: false
-} as const;
+import type {EmulatorConfigSchema} from '../configs/emulator.config';
+import {
+  DEFAULT_NETWORK_SERVICES,
+  DEFAULT_SATELLITE_NETWORK_SERVICES
+} from '../constants/emulator.constants';
 
 const CMC_REQUIRED_SERVICES = ['icp', 'nns'] as const;
 const NNS_DAPP_REQUIRED_SERVICES = ['cmc', 'icp', 'nns', 'sns', 'internet_identity'] as const;
@@ -27,7 +13,7 @@ type EmulatorConfigInput = z.input<typeof EmulatorConfigSchema>;
 // eslint-disable-next-line local-rules/prefer-object-params
 const refineNetworkServices = (cfg: EmulatorConfigInput, ctx: z.RefinementCtx) => {
   const defaultServices =
-    'satellite' in cfg ? SATELLITE_NETWORK_SERVICES : DEFAULT_NETWORK_SERVICES;
+    'satellite' in cfg ? DEFAULT_SATELLITE_NETWORK_SERVICES : DEFAULT_NETWORK_SERVICES;
   const mergedServices = {...defaultServices, ...(cfg.network?.services ?? {})};
 
   const assertServices = ({

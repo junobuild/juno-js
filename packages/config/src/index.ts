@@ -15,6 +15,7 @@ export * from './satellite/configs/module.settings';
 export * from './satellite/configs/orbiter.config';
 export * from './satellite/configs/rules';
 export * from './satellite/configs/satellite.config';
+export * from './satellite/constants/emulator.constants';
 export * from './satellite/juno.config';
 export * from './shared/feature.config';
 export * from './shared/storage.config';

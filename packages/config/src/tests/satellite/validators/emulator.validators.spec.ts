@@ -162,10 +162,13 @@ describe('refineEmulatorConfig', () => {
           skylab: {ports: {}},
           network: {services: {cmc: true, icp: false, nns: true}}
         });
-        expect(issues).toHaveLength(1);
+        expect(issues).toHaveLength(2);
         expect(issues[0].code).toBe('custom');
         expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
         expect(issues[0].message).toBe('cmc requires: icp, nns');
+        expect(issues[1].code).toBe('custom');
+        expect(issues[1].path).toEqual(['network', 'services', 'nns']);
+        expect(issues[1].message).toBe('nns requires: icp');
       });
 
       it('fails if cmc = true and nns = false', () => {
@@ -175,6 +178,17 @@ describe('refineEmulatorConfig', () => {
         });
         expect(issues).toHaveLength(1);
         expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+      });
+
+      it('fails if nns = true and icp = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cmc: false, icp: false, nns: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'nns']);
+        expect(issues[0].message).toBe('nns requires: icp');
       });
 
       it('passes if cmc = true and icp & nns are true', () => {
@@ -333,10 +347,13 @@ describe('refineEmulatorConfig', () => {
           console: {ports: {}},
           network: {services: {cmc: true, icp: false, nns: true}}
         });
-        expect(issues).toHaveLength(1);
+        expect(issues).toHaveLength(2);
         expect(issues[0].code).toBe('custom');
         expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
         expect(issues[0].message).toBe('cmc requires: icp, nns');
+        expect(issues[1].code).toBe('custom');
+        expect(issues[1].path).toEqual(['network', 'services', 'nns']);
+        expect(issues[1].message).toBe('nns requires: icp');
       });
 
       it('fails if cmc = true and nns = false', () => {
@@ -346,6 +363,17 @@ describe('refineEmulatorConfig', () => {
         });
         expect(issues).toHaveLength(1);
         expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+      });
+
+      it('fails if nns = true and icp = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cmc: false, icp: false, nns: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'nns']);
+        expect(issues[0].message).toBe('nns requires: icp');
       });
 
       it('passes if cmc = true and icp & nns are true', () => {
@@ -504,10 +532,13 @@ describe('refineEmulatorConfig', () => {
           satellite: {ports: {}},
           network: {services: {cmc: true, icp: false, nns: true}}
         });
-        expect(issues).toHaveLength(1);
+        expect(issues).toHaveLength(2);
         expect(issues[0].code).toBe('custom');
         expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
         expect(issues[0].message).toBe('cmc requires: icp, nns');
+        expect(issues[1].code).toBe('custom');
+        expect(issues[1].path).toEqual(['network', 'services', 'nns']);
+        expect(issues[1].message).toBe('nns requires: icp');
       });
 
       it('fails if cmc = true and nns = false', () => {
@@ -517,6 +548,17 @@ describe('refineEmulatorConfig', () => {
         });
         expect(issues).toHaveLength(1);
         expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+      });
+
+      it('fails if nns = true and icp = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cmc: false, icp: false, nns: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'nns']);
+        expect(issues[0].message).toBe('nns requires: icp');
       });
 
       it('passes if cmc = true and icp & nns are true', () => {

@@ -60,19 +60,46 @@ export class MetamaskProvider implements AuthProvider {
     options: MetamaskSignInOptions;
     initAuth: (params: {provider: Provider}) => Promise<void>;
   }) {
-    const {signer, onProgress} = options;
+    const {signer, appName, onProgress} = options;
 
     if (!signer) {
       throw new SignInInitError('A signer must be provided for Metamask sign-in.');
     }
 
+    if (!appName) {
+      throw new SignInInitError('An appName must be provided for Metamask sign-in.');
+    }
+
     // 1. Sign message to get a seed for the master identity
     const getSeed = async (): Promise<Uint8Array> => {
+      if (typeof window === 'undefined' || !window.location?.origin) {
+        throw new SignInInitError(
+          'Cannot determine the origin for signing. This operation is only supported in a browser environment.'
+        );
+      }
+
+      const domain = {
+        name: appName,
+        version: '1',
+      };
+
+      const types = {
+        SignIn: [
+          {name: 'statement', type: 'string'},
+          {name: 'address', type: 'string'},
+          {name: 'domain', type: 'string'}
+        ]
+      };
+
       const address = await signer.getAddress();
-      const message = `Sign this message to generate your identity for Juno.\n\nAddress:\n${address}`;
+      const value = {
+        statement: `Sign this message to generate your identity for ${appName}.`,
+        address,
+        domain: window.location.origin
+      };
 
       try {
-        const signature = await signer.signMessage(message);
+        const signature = await signer.signTypedData(domain, types, value);
         const signatureBytes = hexToBytes(signature);
 
         // Hash the signature to get a 32-byte seed.

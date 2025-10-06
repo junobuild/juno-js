@@ -1,8 +1,8 @@
 import type {SignProgressFn} from './progress';
 
 /**
- * A generic interface for an Ethereum-compatible signer.
- * This allows for compatibility with libraries like ethers.js, viem, etc.
+ * A generic interface for an Ethereum-compatible signer that supports EIP-712.
+ * This allows for compatibility with libraries like ethers.js (v6+) and viem.
  *
  * The developer is responsible for connecting to the wallet and providing an
  * object that implements this interface.
@@ -15,11 +15,17 @@ export interface EthSigner {
   getAddress(): Promise<string>;
 
   /**
-   * Signs a message.
-   * @param {string} message The message to sign.
+   * Signs typed data according to EIP-712.
+   * @param {object} domain The EIP-712 domain separator.
+   * @param {object} types The EIP-712 type definitions.
+   * @param {object} value The message object to sign.
    * @returns {Promise<string>} A promise that resolves to the signature as a hex string.
    */
-  signMessage(message: string): Promise<string>;
+  signTypedData(
+    domain: Record<string, unknown>,
+    types: Record<string, {name: string; type: string}[]>,
+    value: Record<string, unknown>
+  ): Promise<string>;
 }
 
 /**
@@ -40,10 +46,16 @@ export enum MetamaskSignInProgressStep {
  */
 export interface MetamaskSignInOptions {
   /**
-   * An EIP-1193 compatible signer instance from a library like ethers.js or viem.
+   * An EIP-712 compatible signer instance from a library like ethers.js or viem.
    * The developer is responsible for handling the wallet connection.
    */
   signer: EthSigner;
+
+  /**
+   * The name of your application. This will be shown to the user in the
+   * wallet's signature request dialog to prevent phishing.
+   */
+  appName: string;
 
   /**
    * Maximum time to live for the session in milliseconds. Cannot be extended.

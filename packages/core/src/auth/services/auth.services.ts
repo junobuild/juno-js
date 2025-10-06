@@ -5,6 +5,7 @@ import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';
 import {executeWithWindowGuard} from '../helpers/window.helpers';
 import {InternetIdentityProvider} from '../providers/internet-identity.providers';
+import {MetamaskProvider} from '../providers/metamask.providers';
 import {NFIDProvider} from '../providers/nfid.providers';
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthStore} from '../stores/auth.store';
@@ -145,6 +146,18 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
     await new NFIDProvider({appName, logoUrl}).signIn({
       options: signInOptions,
       authClient,
+      initAuth: createAuth
+    });
+    return;
+  }
+
+  if ('metamask' in options) {
+    const {
+      metamask: {options: signInOptions}
+    } = options;
+
+    await new MetamaskProvider().signIn({
+      options: signInOptions,
       initAuth: createAuth
     });
     return;

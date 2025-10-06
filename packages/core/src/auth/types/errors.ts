@@ -5,6 +5,8 @@ export class SignInProviderNotSupportedError extends Error {}
 
 export class WebAuthnSignInRetrievePublicKeyError extends Error {}
 
+export class MetamaskUserInterruptError extends Error {}
+
 export class SignUpProviderNotSupportedError extends Error {}
 
 export class InitError extends Error {}

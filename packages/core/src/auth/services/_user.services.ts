@@ -18,7 +18,11 @@ export const initUser = async ({provider}: {provider: Provider}): Promise<User> 
   }
 
   try {
-    return await createUser({userId, provider});
+    return await createUser({
+      userId,
+      provider,
+      ...(provider === 'webauthn' ? { providerData: {webauthn: {aaguid: Array(16).fill(0)}} } : {})
+    });
   } catch (error: unknown) {
     // It's unlikely, but since updating a user is restricted to the controller,
     // we want to guard against a rare race condition where a user attempts

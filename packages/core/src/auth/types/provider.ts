@@ -2,7 +2,7 @@
  * Type representing the available authentication providers.
  * @typedef {('internet_identity' | 'nfid' | 'webauthn')} Provider
  */
-export type Provider = 'internet_identity' | 'nfid' | 'webauthn';
+export type Provider = 'internet_identity' | 'nfid' | 'webauthn' | 'metamask';
 
 /**
  * Metadata for WebAuthn authentication.

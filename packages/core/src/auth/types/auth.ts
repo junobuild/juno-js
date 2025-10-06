@@ -1,4 +1,5 @@
 import type {InternetIdentitySignInOptions} from './internet-identity';
+import type {MetamaskSignInOptions} from './metamask';
 import type {NFIDSignInOptions} from './nfid';
 import type {WebAuthnSignInOptions, WebAuthnSignUpOptions} from './webauthn';
 
@@ -23,6 +24,7 @@ export interface SignInContext {
  * - `internetIdentity`: Internet Identity options
  * - `nfid`: NFID options
  * - `webauthn`: WebAuthn/Passkey options
+ * - `metamask`: MetaMask / Ethereum Signer options
  */
 export type SignInOptions =
   | {
@@ -36,6 +38,9 @@ export type SignInOptions =
     }
   | {
       webauthn: {options?: WebAuthnSignInOptions; context?: SignInContext};
+    }
+  | {
+      metamask: {options: MetamaskSignInOptions; context?: SignInContext};
     };
 
 /**

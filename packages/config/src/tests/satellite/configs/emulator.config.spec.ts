@@ -345,7 +345,7 @@ describe('emulator.config', () => {
               cmc: true,
               icp: true,
               nns: true,
-              sns: false, // <- breaks it
+              sns: false,
               internet_identity: true
             }
           }
@@ -380,7 +380,7 @@ describe('emulator.config', () => {
               cmc: true,
               icp: true,
               nns: true,
-              sns: false, // <- breaks it
+              sns: false,
               internet_identity: true
             }
           }
@@ -415,7 +415,7 @@ describe('emulator.config', () => {
               cmc: true,
               icp: true,
               nns: true,
-              sns: false, // <- breaks it
+              sns: false,
               internet_identity: true
             }
           }
@@ -452,7 +452,7 @@ describe('emulator.config', () => {
             services: {
               cmc: true,
               icp: true,
-              nns: false // <- breaks it
+              nns: false
             }
           }
         });
@@ -480,7 +480,7 @@ describe('emulator.config', () => {
           network: {
             services: {
               cmc: true,
-              icp: false, // <- breaks it
+              icp: false,
               nns: true
             }
           }

@@ -330,6 +330,65 @@ describe('emulator.config', () => {
         expect(result.success).toBe(false);
       });
     });
+
+    describe('ports timeout', () => {
+      it('accepts timeoutInSeconds on Skylab ports', () => {
+        const res = EmulatorConfigSchema.safeParse({
+          skylab: {ports: {server: 1234, admin: 5678, console: 9000, timeoutInSeconds: 45}}
+        });
+        expect(res.success).toBe(true);
+      });
+
+      it('accepts timeoutInSeconds on Console ports', () => {
+        const res = EmulatorConfigSchema.safeParse({
+          console: {ports: {server: 1111, admin: 2222, timeoutInSeconds: 60}}
+        });
+        expect(res.success).toBe(true);
+      });
+
+      it('accepts timeoutInSeconds on Satellite ports', () => {
+        const res = EmulatorConfigSchema.safeParse({
+          satellite: {ports: {server: 7777, timeoutInSeconds: 15}}
+        });
+        expect(res.success).toBe(true);
+      });
+
+      it('rejects non-integer timeoutInSeconds', () => {
+        const res = EmulatorConfigSchema.safeParse({
+          skylab: {ports: {timeoutInSeconds: 30.5}}
+        });
+        expect(res.success).toBe(false);
+      });
+
+      it('rejects non-positive timeoutInSeconds', () => {
+        const resZero = EmulatorConfigSchema.safeParse({
+          console: {ports: {timeoutInSeconds: 0}}
+        });
+        expect(resZero.success).toBe(false);
+
+        const resNeg = EmulatorConfigSchema.safeParse({
+          satellite: {ports: {timeoutInSeconds: -10}}
+        });
+        expect(resNeg.success).toBe(false);
+      });
+
+      it('rejects timeoutInSeconds outside of ports', () => {
+        const res = EmulatorConfigSchema.safeParse({
+          skylab: {},
+          timeoutInSeconds: 30
+        });
+        expect(res.success).toBe(false);
+      });
+
+      it('still accepts configs without timeoutInSeconds', () => {
+        const skylab = EmulatorConfigSchema.safeParse({
+          skylab: {ports: {server: 1234, console: 9000}}
+        });
+        const console = EmulatorConfigSchema.safeParse({console: {ports: {admin: 5999}}});
+        const satellite = EmulatorConfigSchema.safeParse({satellite: {}});
+        expect(skylab.success && console.success && satellite.success).toBe(true);
+      });
+    });
   });
 
   describe('refine validators', () => {

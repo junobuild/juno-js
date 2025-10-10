@@ -45,22 +45,29 @@ export const uploadAssetWithProposal = async ({
 }: {
   asset: UploadAsset;
 } & UploadWithProposalParams): Promise<void> => {
-  const {init_proposal_asset_upload, upload_proposal_asset_chunk, commit_proposal_asset_upload} =
-    actor;
+  const {
+    init_proposal_many_assets_upload,
+    upload_proposal_asset_chunk,
+    commit_proposal_many_assets_upload
+  } = actor;
 
   progress?.onInitiatedBatch();
 
-  const {batch_id: batchId} = await init_proposal_asset_upload(
-    mapInitAssetUploadParams(restAsset),
+  const [initData] = await init_proposal_many_assets_upload(
+    [mapInitAssetUploadParams(restAsset)],
     proposalId
   );
+
+  const batchId = initData?.[1].batch_id;
+  assertNonNullish(batchId, 'Unexpected undefined batchId on proposal init.');
 
   const {chunkIds} = await uploadChunks({data, uploadFn: upload_proposal_asset_chunk, batchId});
 
   progress?.onUploadedFileChunks(restAsset.fullPath);
 
   await commitAsset({
-    commitFn: commit_proposal_asset_upload,
+    commitFn: (commitBatch: CommitBatch): Promise<void> =>
+      commit_proposal_many_assets_upload([commitBatch]),
     batchId,
     data,
     headers,

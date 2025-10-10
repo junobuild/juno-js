@@ -1,6 +1,5 @@
 import {fromNullable} from '@dfinity/utils';
 import {ConsoleDid} from '@junobuild/ic-client/actor';
-import {UploadChunk} from '@junobuild/ic-client/dist/declarations/console/console.did';
 import type {MockInstance} from 'vitest';
 import {mockDeep} from 'vitest-mock-extended';
 import {UPLOAD_CHUNK_SIZE} from '../../constants/upload.constants';
@@ -39,12 +38,14 @@ describe('upload.services', () => {
     init_asset_upload: MockInstance;
     upload_asset_chunk: MockInstance;
     commit_asset_upload: MockInstance;
-    init_proposal_asset_upload: MockInstance;
+    init_proposal_many_assets_upload: MockInstance;
     upload_proposal_asset_chunk: MockInstance;
-    commit_proposal_asset_upload: MockInstance;
+    commit_proposal_many_assets_upload: MockInstance;
   } => {
     const init_asset_upload = vi.fn().mockResolvedValue({batch_id: 1n});
-    const init_proposal_asset_upload = vi.fn().mockResolvedValue({batch_id: 2n});
+    const init_proposal_many_assets_upload = vi
+      .fn()
+      .mockResolvedValue([['full_path', {batch_id: 2n}]]);
 
     // We want unique chunk_ids in order of calls
     let nextChunkId = 100n;
@@ -58,15 +59,15 @@ describe('upload.services', () => {
     }));
 
     const commit_asset_upload = vi.fn().mockResolvedValue(undefined);
-    const commit_proposal_asset_upload = vi.fn().mockResolvedValue(undefined);
+    const commit_proposal_many_assets_upload = vi.fn().mockResolvedValue(undefined);
 
     const actor = {
       init_asset_upload,
       upload_asset_chunk,
       commit_asset_upload,
-      init_proposal_asset_upload,
+      init_proposal_many_assets_upload,
       upload_proposal_asset_chunk,
-      commit_proposal_asset_upload
+      commit_proposal_many_assets_upload
     } as unknown as UploadAssetActor;
 
     return {
@@ -74,9 +75,9 @@ describe('upload.services', () => {
       commit_asset_upload,
       upload_asset_chunk,
       init_asset_upload,
-      init_proposal_asset_upload,
+      init_proposal_many_assets_upload,
       upload_proposal_asset_chunk,
-      commit_proposal_asset_upload
+      commit_proposal_many_assets_upload
     };
   };
 
@@ -262,9 +263,9 @@ describe('upload.services', () => {
         expect(actor.upload_asset_chunk).toHaveBeenCalledTimes(expectedChunks);
         expect(actor.commit_asset_upload).toHaveBeenCalledTimes(1);
 
-        expect(actor.init_proposal_asset_upload).not.toHaveBeenCalled();
+        expect(actor.init_proposal_many_assets_upload).not.toHaveBeenCalled();
         expect(actor.upload_proposal_asset_chunk).not.toHaveBeenCalled();
-        expect(actor.commit_proposal_asset_upload).not.toHaveBeenCalled();
+        expect(actor.commit_proposal_many_assets_upload).not.toHaveBeenCalled();
 
         const expectedTimeline = [
           'init',
@@ -343,18 +344,18 @@ describe('upload.services', () => {
     });
 
     describe('uploadAssetWithProposal', () => {
-      it('calls init_proposal_asset_upload once, upload_proposal_asset_chunk N times, and commit_proposal_asset_upload once — in that order', async () => {
+      it('calls init_proposal_many_assets_upload once, upload_proposal_asset_chunk N times, and commit_proposal_many_assets_upload once — in that order', async () => {
         const actor = mockDeep<UploadAssetWithProposalActor>();
 
         const proposalId = 999n;
 
         const timeline: string[] = [];
 
-        actor.init_proposal_asset_upload.mockImplementation(
-          async (_initArgs: ConsoleDid.InitAssetKey, proposal_id: bigint) => {
+        actor.init_proposal_many_assets_upload.mockImplementation(
+          async (_initArgs: ConsoleDid.InitAssetKey[], proposal_id: bigint) => {
             timeline.push('init:proposal');
             expect(proposal_id).toBe(proposalId);
-            return {batch_id: 42n};
+            return [['full_path', {batch_id: 42n}]];
           }
         );
         actor.upload_proposal_asset_chunk.mockImplementation(
@@ -363,7 +364,7 @@ describe('upload.services', () => {
             return {chunk_id: 500n + (args.order_id[0] ?? 0n)};
           }
         );
-        actor.commit_proposal_asset_upload.mockImplementation(async () => {
+        actor.commit_proposal_many_assets_upload.mockImplementation(async () => {
           timeline.push('commit:proposal');
         });
 
@@ -371,10 +372,9 @@ describe('upload.services', () => {
 
         const expectedChunks = Math.ceil(asset.data.size / UPLOAD_CHUNK_SIZE);
 
-        // Counts
-        expect(actor.init_proposal_asset_upload).toHaveBeenCalledTimes(1);
+        expect(actor.init_proposal_many_assets_upload).toHaveBeenCalledTimes(1);
         expect(actor.upload_proposal_asset_chunk).toHaveBeenCalledTimes(expectedChunks);
-        expect(actor.commit_proposal_asset_upload).toHaveBeenCalledTimes(1);
+        expect(actor.commit_proposal_many_assets_upload).toHaveBeenCalledTimes(1);
 
         // Order
         const expectedTimeline = [
@@ -385,16 +385,18 @@ describe('upload.services', () => {
         expect(timeline).toEqual(expectedTimeline);
 
         // Exact init args (first param) mapping
-        const [initArg, pid] = actor.init_proposal_asset_upload.mock.calls[0];
+        const [initArg, pid] = actor.init_proposal_many_assets_upload.mock.calls[0];
         expect(pid).toBe(proposalId);
-        expect(initArg).toEqual({
-          collection: asset.collection,
-          full_path: asset.fullPath,
-          name: asset.filename,
-          token: [],
-          encoding_type: [],
-          description: []
-        });
+        expect(initArg).toEqual([
+          {
+            collection: asset.collection,
+            full_path: asset.fullPath,
+            name: asset.filename,
+            token: [],
+            encoding_type: [],
+            description: []
+          }
+        ]);
 
         // First and last upload chunk args
         const firstUploadArg = actor.upload_proposal_asset_chunk.mock.calls[0][0];
@@ -409,12 +411,12 @@ describe('upload.services', () => {
         expect((lastUploadArg.content as Uint8Array).length).toBe(expectedLastSize);
 
         // Commit args
-        const commitArg = actor.commit_proposal_asset_upload.mock.calls[0][0];
-        expect(commitArg.batch_id).toBe(42n);
-        expect(commitArg.chunk_ids).toEqual(
+        const commitArg = actor.commit_proposal_many_assets_upload.mock.calls[0][0];
+        expect(commitArg[0].batch_id).toBe(42n);
+        expect(commitArg[0].chunk_ids).toEqual(
           Array.from({length: expectedChunks}, (_, i) => 500n + BigInt(i))
         );
-        expect(commitArg.headers).toEqual(
+        expect(commitArg[0].headers).toEqual(
           expect.arrayContaining([
             ['Cache-Control', 'no-cache'],
             ['Content-Type', 'application/pdf']
@@ -449,11 +451,11 @@ describe('upload.services', () => {
         const asset = makeUploadAsset();
         const proposalId = 123n;
 
-        actor.init_proposal_asset_upload.mockResolvedValue({batch_id: 42n});
+        actor.init_proposal_many_assets_upload.mockResolvedValue([['full_path', {batch_id: 42n}]]);
         actor.upload_proposal_asset_chunk.mockImplementation(async (args: any) => ({
           chunk_id: 500n + (args.order_id?.[0] ?? 0n)
         }));
-        actor.commit_proposal_asset_upload.mockResolvedValue(undefined);
+        actor.commit_proposal_many_assets_upload.mockResolvedValue(undefined);
 
         await uploadAssetWithProposal({asset, proposalId, actor, progress});
 
@@ -489,10 +491,12 @@ describe('upload.services', () => {
             [assetB.fullPath, {batch_id: 22n}]
           ]);
 
-          actor.upload_proposal_asset_chunk.mockImplementation(async (args: UploadChunk) => {
-            const order = args.order_id?.[0] ?? 0n;
-            return {chunk_id: args.batch_id * 1000n + order};
-          });
+          actor.upload_proposal_asset_chunk.mockImplementation(
+            async (args: ConsoleDid.UploadChunk) => {
+              const order = args.order_id?.[0] ?? 0n;
+              return {chunk_id: args.batch_id * 1000n + order};
+            }
+          );
 
           actor.commit_proposal_many_assets_upload.mockImplementation(async () => undefined);
 
@@ -551,9 +555,6 @@ describe('upload.services', () => {
               ['Content-Type', 'application/pdf']
             ])
           );
-
-          expect(actor.init_proposal_asset_upload).not.toHaveBeenCalled();
-          expect(actor.commit_proposal_asset_upload).not.toHaveBeenCalled();
         });
 
         it('handles single-chunk assets and respects existing (case-insensitive) Content-Type headers', async () => {
@@ -581,10 +582,12 @@ describe('upload.services', () => {
             [assetD.fullPath, {batch_id: 44n}]
           ]);
 
-          actor.upload_proposal_asset_chunk.mockImplementation(async (args: UploadChunk) => {
-            const order = args.order_id?.[0] ?? 0n;
-            return {chunk_id: args.batch_id * 1000n + order};
-          });
+          actor.upload_proposal_asset_chunk.mockImplementation(
+            async (args: ConsoleDid.UploadChunk) => {
+              const order = args.order_id?.[0] ?? 0n;
+              return {chunk_id: args.batch_id * 1000n + order};
+            }
+          );
 
           actor.commit_proposal_many_assets_upload.mockImplementation(async () => undefined);
 

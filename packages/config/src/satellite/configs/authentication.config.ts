@@ -31,6 +31,34 @@ export interface AuthenticationConfigInternetIdentity {
 }
 
 /**
+ * @see AuthenticationConfigGoogle
+ */
+export const AuthenticationConfigGoogleSchema = z.strictObject({
+  clientId: z
+    .string()
+    .trim()
+    .regex(/^[0-9]+-[a-z0-9]+\.apps\.googleusercontent\.com$/, 'Invalid Google client ID format')
+    .max(128, 'Google clientId too long')
+});
+
+/**
+ * Configure the sign-in with Google.
+ *
+ * @interface AuthenticationConfigGoogle
+ */
+export interface AuthenticationConfigGoogle {
+  /**
+   * The OAuth 2.0 client ID from your
+   * [Google Cloud Console](https://console.cloud.google.com/apis/credentials).
+   *
+   * Example: `"1234567890-abcdefg.apps.googleusercontent.com"`
+   *
+   * @type {string}
+   */
+  clientId: string;
+}
+
+/**
  * @see AuthenticationConfigRules
  */
 export const AuthenticationConfigRulesSchema = z.strictObject({
@@ -58,6 +86,7 @@ export interface AuthenticationConfigRules {
  */
 export const AuthenticationConfigSchema = z.strictObject({
   internetIdentity: AuthenticationConfigInternetIdentitySchema.optional(),
+  google: AuthenticationConfigGoogleSchema.optional(),
   rules: AuthenticationConfigRulesSchema.optional(),
   version: z.bigint().optional()
 });
@@ -73,6 +102,13 @@ export interface AuthenticationConfig {
    * @optional
    */
   internetIdentity?: AuthenticationConfigInternetIdentity;
+
+  /**
+   * Optional configuration for enabling Google authentication method.
+   * @type {AuthenticationConfigGoogle}
+   * @optional
+   */
+  google?: AuthenticationConfigGoogle;
 
   /**
    * Optional configuration for the rules of the authentication.

@@ -122,6 +122,7 @@ export const toDatastoreConfig = ({
 
 export const fromAuthenticationConfig = ({
   internetIdentity,
+  google,
   rules,
   version
 }: AuthenticationConfig): SatelliteDid.SetAuthenticationConfig => ({
@@ -131,6 +132,13 @@ export const fromAuthenticationConfig = ({
         {
           derivation_origin: toNullable(internetIdentity?.derivationOrigin),
           external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
+        }
+      ],
+  openid: isNullish(google)
+    ? []
+    : [
+        {
+          providers: [[{Google: null}, {client_id: google.clientId}]]
         }
       ],
   rules: isNullish(rules)
@@ -146,6 +154,7 @@ export const fromAuthenticationConfig = ({
 export const toAuthenticationConfig = ({
   version,
   internet_identity,
+  openid: openIdDid,
   rules: rulesDid
 }: SatelliteDid.AuthenticationConfig): AuthenticationConfig => {
   const internetIdentity = fromNullable(internet_identity);
@@ -154,6 +163,9 @@ export const toAuthenticationConfig = ({
     internetIdentity?.external_alternative_origins ?? []
   );
 
+  const openId = fromNullable(openIdDid);
+  const google = openId?.providers.find(([key]) => 'Google' in key)?.[1];
+
   const rules = fromNullable(rulesDid);
 
   return {
@@ -161,6 +173,11 @@ export const toAuthenticationConfig = ({
       internetIdentity: {
         ...(nonNullish(derivationOrigin) && {derivationOrigin}),
         ...(nonNullish(externalAlternativeOrigins) && {externalAlternativeOrigins})
+      }
+    }),
+    ...(nonNullish(google) && {
+      google: {
+        clientId: google.client_id
       }
     }),
     ...(nonNullish(rules) && {

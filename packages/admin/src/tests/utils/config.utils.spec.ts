@@ -7,6 +7,7 @@ import type {
   StorageConfigRedirect,
   StorageConfigRewrite
 } from '@junobuild/config';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {
   fromAuthenticationConfig,
   fromDatastoreConfig,
@@ -238,6 +239,34 @@ describe('config.utils', () => {
       expect(result.version).toEqual([7n]);
     });
 
+    it('maps google -> openid providers Google', () => {
+      const config: AuthenticationConfig = {
+        internetIdentity: undefined,
+        google: {clientId: '1234567890-abcdef.apps.googleusercontent.com'},
+        rules: undefined,
+        version: undefined
+      };
+
+      const result = fromAuthenticationConfig(config);
+
+      expect(result.openid).toEqual([
+        {
+          providers: [[{Google: null}, {client_id: '1234567890-abcdef.apps.googleusercontent.com'}]]
+        }
+      ]);
+    });
+
+    it('omits openid when google is undefined', () => {
+      const result = fromAuthenticationConfig({
+        internetIdentity: undefined,
+        google: undefined,
+        rules: undefined,
+        version: undefined
+      });
+
+      expect(result.openid).toEqual([]);
+    });
+
     it('handles nullish internetIdentity and rules in fromAuthenticationConfig', () => {
       const result = fromAuthenticationConfig({
         internetIdentity: undefined,
@@ -269,6 +298,11 @@ describe('config.utils', () => {
   });
 
   describe('toAuthenticationConfig', () => {
+    const mockClientId = '1234567890-abcdef.apps.googleusercontent.com';
+    const mockOpenId: SatelliteDid.AuthenticationConfigOpenId = {
+      providers: [[{Google: null}, {client_id: mockClientId}]]
+    };
+
     it('maps AuthenticationConfigDid correctly', () => {
       const result = toAuthenticationConfig({
         internet_identity: [
@@ -277,6 +311,7 @@ describe('config.utils', () => {
             external_alternative_origins: [['https://alt.icp0.io']]
           }
         ],
+        openid: [mockOpenId],
         rules: [
           {
             allowed_callers: [
@@ -294,6 +329,7 @@ describe('config.utils', () => {
         derivationOrigin: 'https://baz.icp0.io',
         externalAlternativeOrigins: ['https://alt.icp0.io']
       });
+      expect(result.google).toEqual({clientId: mockClientId});
       expect(result.rules).toEqual({
         allowedCallers: [mockUserIdText, mockSatelliteIdText]
       });
@@ -303,6 +339,7 @@ describe('config.utils', () => {
     it('handles empty nested fields in toAuthenticationConfig', () => {
       const result = toAuthenticationConfig({
         internet_identity: [],
+        openid: [],
         rules: [],
         version: [],
         created_at: [],
@@ -310,6 +347,7 @@ describe('config.utils', () => {
       });
 
       expect(result.internetIdentity).toBeUndefined();
+      expect(result.google).toBeUndefined();
       expect(result.rules).toBeUndefined();
       expect(result.version).toBeUndefined();
     });
@@ -322,6 +360,7 @@ describe('config.utils', () => {
             external_alternative_origins: [[]]
           }
         ],
+        openid: [],
         rules: [
           {
             allowed_callers: []
@@ -340,6 +379,34 @@ describe('config.utils', () => {
         allowedCallers: []
       });
       expect(result.version).toBe(0n);
+    });
+
+    it('maps openid providers (Google) -> google in toAuthenticationConfig', () => {
+      const result = toAuthenticationConfig({
+        internet_identity: [],
+        openid: [mockOpenId],
+        rules: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.google).toEqual({
+        clientId: mockClientId
+      });
+    });
+
+    it('omits google when openid is empty', () => {
+      const result = toAuthenticationConfig({
+        internet_identity: [],
+        openid: [],
+        rules: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.google).toBeUndefined();
     });
   });
 });

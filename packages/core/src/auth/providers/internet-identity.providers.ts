@@ -88,11 +88,19 @@ export class InternetIdentityProvider extends AuthClientProvider {
     };
 
     const identityProvider = identityProviderUrl();
-    const iiDesignV2 = URL.parse(identityProvider)?.hostname?.includes(ID_AI) === true;
+
+    const iiDesignV2 = (): boolean => {
+      try {
+        const {hostname} = new URL(identityProvider);
+        return hostname.includes(ID_AI);
+      } catch {
+        return false;
+      }
+    };
 
     return {
       ...(windowed !== false && {
-        windowOpenerFeatures: popupCenter(iiDesignV2 ? II_DESIGN_V2_POPUP : II_DESIGN_V1_POPUP)
+        windowOpenerFeatures: popupCenter(iiDesignV2() ? II_DESIGN_V2_POPUP : II_DESIGN_V1_POPUP)
       }),
       identityProvider
     };

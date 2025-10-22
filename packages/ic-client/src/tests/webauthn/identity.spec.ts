@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import * as agent from '@dfinity/agent';
+import * as agent from '@icp-sdk/core/agent';
 import type {Mock, MockInstance} from 'vitest';
 import * as agentClone from '../../webauthn/agent-js/cose-utils';
 import {WebAuthnExistingCredential, WebAuthnNewCredential} from '../../webauthn/credential';

@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import {StrictPrincipalSchema, StrictPrincipalTextSchema} from '../../utils/principal.utils';
 import {mockModuleIdText, mockUserIdPrincipal, mockUserIdText} from '../mocks/principal.mock';
 

@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import {ListParams} from '../../../schemas/list';
 import {CollectionParamsSchema, ListStoreParamsSchema} from '../../../sdk/schemas/params';
 

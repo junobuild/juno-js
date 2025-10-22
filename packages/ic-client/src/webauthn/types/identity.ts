@@ -1,4 +1,4 @@
-import type {PublicKey} from '@dfinity/agent';
+import type {PublicKey} from '@icp-sdk/core/agent';
 import type {CoseEncodedKey} from '../agent-js/cose-key';
 import type {CreatePasskeyOptions, PasskeyOptions} from './passkey';
 import type {WebAuthnSignProgressArgs} from './progress';

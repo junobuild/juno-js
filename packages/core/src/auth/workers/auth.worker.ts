@@ -1,5 +1,5 @@
-import {IdbStorage, KEY_STORAGE_DELEGATION} from '@dfinity/auth-client';
-import {DelegationChain, isDelegationValid} from '@dfinity/identity';
+import {IdbStorage, KEY_STORAGE_DELEGATION} from '@icp-sdk/auth/client';
+import {DelegationChain, isDelegationValid} from '@icp-sdk/core/identity';
 import {AUTH_TIMER_INTERVAL} from '../constants/auth.constants';
 import type {PostMessage, PostMessageDataRequest} from '../types/post-message';
 import {createAuthClient} from '../utils/auth.utils';

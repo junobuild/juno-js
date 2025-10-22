@@ -1,5 +1,5 @@
-import type {Agent, HttpAgent} from '@dfinity/agent';
 import {isNullish} from '@dfinity/utils';
+import type {Agent, HttpAgent} from '@icp-sdk/core/agent';
 import {type CreateAgentParams, createAgent} from './_agent.factory';
 
 export class AgentStore {

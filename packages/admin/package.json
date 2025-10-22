@@ -52,7 +52,7 @@
   "peerDependencies": {
     "@dfinity/ic-management": "^7",
     "@dfinity/utils": "^3.1",
-    "@icp-sdk/core": "^4.0.4",
+    "@icp-sdk/core": "^4.1.1",
     "@junobuild/config": "*",
     "@junobuild/ic-client": "^3",
     "semver": "7.*",

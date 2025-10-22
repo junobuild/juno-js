@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/analytics",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Tracker for Juno analytics",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

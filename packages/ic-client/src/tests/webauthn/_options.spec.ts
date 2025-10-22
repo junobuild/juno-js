@@ -86,14 +86,16 @@ describe('_options', () => {
       expect(onlyDisplay.user.name).toBe('Alex Chen');
     });
 
-    it('should throws WebAuthnHostnameError when URL.parse fails', () => {
-      const spy = vi
-        .spyOn(URL as unknown as {parse(href: string): URL | null}, 'parse')
-        .mockReturnValue(null as unknown as URL);
+    it('should throws WebAuthnHostnameError when new URL fails', () => {
+      const originalURL = global.URL;
+
+      global.URL = vi.fn(() => {
+        throw new TypeError('Invalid URL');
+      }) as unknown as typeof URL;
 
       expect(() => createPasskeyOptions({})).toThrow(WebAuthnIdentityHostnameError);
 
-      spy.mockRestore();
+      global.URL = originalURL;
     });
   });
 
@@ -113,14 +115,16 @@ describe('_options', () => {
       expect(opts.rpId).toBe('myapp.com');
     });
 
-    it('throws WebAuthnHostnameError when URL.parse fails', () => {
-      const spy = vi
-        .spyOn(URL as unknown as {parse(href: string): URL | null}, 'parse')
-        .mockReturnValue(null as unknown as URL);
+    it('throws WebAuthnHostnameError when new URL fails', () => {
+      const originalURL = global.URL;
+
+      global.URL = vi.fn(() => {
+        throw new TypeError('Invalid URL');
+      }) as unknown as typeof URL;
 
       expect(() => retrievePasskeyOptions({})).toThrow(WebAuthnIdentityHostnameError);
 
-      spy.mockRestore();
+      global.URL = originalURL;
     });
   });
 });

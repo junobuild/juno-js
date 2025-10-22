@@ -105,16 +105,16 @@ export const setPageView = async () => {
       return href;
     }
 
-    const url = URL.parse(href);
+    try {
+      const url = new URL(href);
 
-    // Unlikely to happen
-    if (isNullish(url)) {
+      Object.keys(campaignData ?? {}).forEach((key) => url.searchParams.delete(key));
+
+      return url.href;
+    } catch {
+      // Unlikely to happen
       return href;
     }
-
-    Object.keys(campaignData ?? {}).forEach((key) => url.searchParams.delete(key));
-
-    return url.href;
   };
 
   const page_view: SetPageViewPayload = {

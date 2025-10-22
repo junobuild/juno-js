@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import {refineEmulatorConfig} from '../validators/emulator.validators';
 
 const EmulatorPortsSchema = z.strictObject({
   /**
@@ -9,7 +10,12 @@ const EmulatorPortsSchema = z.strictObject({
   /**
    * @default 5999
    */
-  admin: z.number().optional()
+  admin: z.number().optional(),
+
+  /**
+   * @default 30
+   */
+  timeoutInSeconds: z.number().int().positive().optional()
 });
 
 const ConsolePortSchema = z.strictObject({
@@ -36,6 +42,12 @@ export interface EmulatorPorts {
    * @default 5999
    */
   admin?: number;
+
+  /**
+   * Max number of seconds to wait for emulator ports to become ready.
+   * @default 30
+   */
+  timeoutInSeconds?: number;
 }
 
 /**
@@ -146,27 +158,118 @@ export interface EmulatorRunner {
 }
 
 /**
+ * @see NetworkServices
+ */
+const NetworkServicesSchema = z.strictObject({
+  registry: z.boolean().optional(),
+  cmc: z.boolean().optional(),
+  icp: z.boolean().optional(),
+  cycles: z.boolean().optional(),
+  nns: z.boolean().optional(),
+  sns: z.boolean().optional(),
+  internet_identity: z.boolean().optional(),
+  nns_dapp: z.boolean().optional()
+});
+
+/**
+ * Network services that can be enabled in the emulator.
+ *
+ * Each flag corresponds to a system canister or application that can be included
+ * in the local Internet Computer network when the emulator starts.
+ */
+export interface NetworkServices {
+  /**
+   * Registry canister: Stores network configuration and topology (subnet membership, public keys, feature flags).
+   * Acts as the source of truth other system canisters read/write to.
+   */
+  registry?: boolean;
+
+  /**
+   * CMC (Cycles Minting Canister): Converts ICP to cycles and distributes them; maintains subnet lists and conversion rate.
+   * Requires icp and nns to not be enabled.
+   */
+  cmc?: boolean;
+
+  /**
+   * ICP token: Deploys the ICP ledger and index canisters.
+   */
+  icp?: boolean;
+
+  /**
+   * Cycles token: Deploys the cycles ledger and index canisters.
+   */
+  cycles?: boolean;
+
+  /**
+   * NNS governance canisters: Deploys the governance and root canisters.
+   * Core governance system (neurons, proposals, voting) and related control logic.
+   * Enables managing network-level decisions in an emulated environment.
+   */
+  nns?: boolean;
+
+  /**
+   * SNS canisters: Deploys the SNS-W and aggregator canisters.
+   * Service Nervous System stack used to govern individual dapps.
+   */
+  sns?: boolean;
+
+  /**
+   * Internet Identity: Deploys the II canister for authentication.
+   */
+  internet_identity?: boolean;
+
+  /**
+   * NNS dapp: Deploys the NNS UI canister and frontend application
+   * Requires cmc, icp, nns, sns, internet_identity to be enabled.
+   */
+  nns_dapp?: boolean;
+}
+
+/**
+ * @see Network
+ */
+const NetworkSchema = z.strictObject({
+  services: NetworkServicesSchema
+});
+
+/**
+ * Configuration for customizing the Internet Computer network bootstrapped
+ * by the emulator.
+ */
+export interface Network {
+  /**
+   * System canisters and applications available in the network.
+   */
+  services: NetworkServices;
+}
+
+/**
  * @see EmulatorConfig
  */
-export const EmulatorConfigSchema = z.union([
-  z.strictObject({
-    runner: EmulatorRunnerSchema.optional(),
-    skylab: EmulatorSkylabSchema
-  }),
-  z.strictObject({
-    runner: EmulatorRunnerSchema.optional(),
-    console: EmulatorConsoleSchema
-  }),
-  z.strictObject({
-    runner: EmulatorRunnerSchema.optional(),
-    satellite: EmulatorSatelliteSchema
-  })
-]);
+export const EmulatorConfigSchema = z
+  .union([
+    z.strictObject({
+      runner: EmulatorRunnerSchema.optional(),
+      network: NetworkSchema.optional(),
+      skylab: EmulatorSkylabSchema
+    }),
+    z.strictObject({
+      runner: EmulatorRunnerSchema.optional(),
+      network: NetworkSchema.optional(),
+      console: EmulatorConsoleSchema
+    }),
+    z.strictObject({
+      runner: EmulatorRunnerSchema.optional(),
+      network: NetworkSchema.optional(),
+      satellite: EmulatorSatelliteSchema
+    })
+  ])
+  .superRefine(refineEmulatorConfig);
 
 /**
  * The configuration for running the Juno emulator.
  */
 export type EmulatorConfig =
-  | {runner?: EmulatorRunner; skylab: EmulatorSkylab}
-  | {runner?: EmulatorRunner; console: EmulatorConsole}
-  | {runner?: EmulatorRunner; satellite: EmulatorSatellite};
+  | {runner?: EmulatorRunner; network?: Network; skylab: EmulatorSkylab}
+  | {runner?: EmulatorRunner; network?: Network; console: EmulatorConsole}
+  | {runner?: EmulatorRunner; network?: Network; satellite: EmulatorSatellite};

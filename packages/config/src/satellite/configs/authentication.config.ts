@@ -31,6 +31,44 @@ export interface AuthenticationConfigInternetIdentity {
 }
 
 /**
+ * @see AuthenticationConfigDelegation
+ */
+export const AuthenticationConfigDelegationSchema = z.strictObject({
+  targets: z.array(PrincipalTextSchema).nullable().optional(),
+  maxTimeToLive: z
+    .bigint()
+    .max(
+      30n * 24n * 60n * 60n * 1_000_000_000n,
+      'The maximal length of a defined session duration - maxTimeToLive - cannot exceed 30 days'
+    )
+    .optional()
+});
+
+/**
+ * Configure the delegation behavior for authentication.
+ *
+ * @interface AuthenticationConfigDelegation
+ */
+export interface AuthenticationConfigDelegation {
+  /**
+   * By default, and for security reasons, the delegation/identities created by the
+   * authentication module are restricted to interact only with your Satellite.
+   *
+   * Setting this to `null` explicitly removes the restriction, allowing identities
+   * to interact with any canister on the Internet Computer, including ledgers.
+   *
+   * ⚠️ Process with attention.
+   */
+  targets?: PrincipalText[] | null;
+
+  /**
+   * Maximum validity of the delegation, in nanoseconds.
+   * Defaults to 1 day. Cannot exceed 30 days.
+   */
+  maxTimeToLive?: bigint;
+}
+
+/**
  * @see AuthenticationConfigGoogle
  */
 export const AuthenticationConfigGoogleSchema = z.strictObject({
@@ -38,7 +76,8 @@ export const AuthenticationConfigGoogleSchema = z.strictObject({
     .string()
     .trim()
     .regex(/^[0-9]+-[a-z0-9]+\.apps\.googleusercontent\.com$/, 'Invalid Google client ID format')
-    .max(128, 'Google clientId too long')
+    .max(128, 'Google clientId too long'),
+  delegation: AuthenticationConfigDelegationSchema.optional()
 });
 
 /**
@@ -56,6 +95,12 @@ export interface AuthenticationConfigGoogle {
    * @type {string}
    */
   clientId: string;
+
+  /**
+   * Optional delegation settings for authentication.
+   * If omitted, the default delegation behavior applies.
+   */
+  delegation?: AuthenticationConfigDelegation;
 }
 
 /**

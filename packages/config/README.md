@@ -16,6 +16,8 @@ Configuration options for [Juno] CLI.
 
 - [SatelliteAssertionsSchema](#gear-satelliteassertionsschema)
 - [AuthenticationConfigInternetIdentitySchema](#gear-authenticationconfiginternetidentityschema)
+- [AuthenticationConfigDelegationSchema](#gear-authenticationconfigdelegationschema)
+- [AuthenticationConfigGoogleSchema](#gear-authenticationconfiggoogleschema)
 - [AuthenticationConfigRulesSchema](#gear-authenticationconfigrulesschema)
 - [AuthenticationConfigSchema](#gear-authenticationconfigschema)
 - [PermissionTextSchema](#gear-permissiontextschema)
@@ -71,6 +73,30 @@ References:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L7)
 
+#### :gear: AuthenticationConfigDelegationSchema
+
+| Constant                               | Type                                                                                                                     |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `AuthenticationConfigDelegationSchema` | `ZodObject<{ targets: ZodOptional<ZodNullable<ZodArray<ZodString>>>; maxTimeToLive: ZodOptional<ZodBigInt>; }, $strict>` |
+
+References:
+
+- AuthenticationConfigDelegation
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L36)
+
+#### :gear: AuthenticationConfigGoogleSchema
+
+| Constant                           | Type                                                                                                                                                                                            |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AuthenticationConfigGoogleSchema` | `ZodObject<{ clientId: ZodString; delegation: ZodOptional<ZodObject<{ targets: ZodOptional<ZodNullable<ZodArray<ZodString>>>; maxTimeToLive: ZodOptional<ZodBigInt>; }, $strict>>; }, $strict>` |
+
+References:
+
+- AuthenticationConfigGoogle
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L74)
+
 #### :gear: AuthenticationConfigRulesSchema
 
 | Constant                          | Type                                                           |
@@ -81,19 +107,19 @@ References:
 
 - AuthenticationConfigRules
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L36)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L109)
 
 #### :gear: AuthenticationConfigSchema
 
-| Constant                     | Type                                                                                                                                                                                                                                    |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>>; rules: ZodOptional<...>; version: ZodOptional<...>; }, $strict>` |
+| Constant                     | Type                                                                                                                                                                                                                                                              |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>>; google: ZodOptional<...>; rules: ZodOptional<...>; version: ZodOptional<...>; }, $strict>` |
 
 References:
 
 - AuthenticationConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L59)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L132)
 
 #### :gear: PermissionTextSchema
 
@@ -433,6 +459,8 @@ References:
 
 - [SatelliteAssertions](#gear-satelliteassertions)
 - [AuthenticationConfigInternetIdentity](#gear-authenticationconfiginternetidentity)
+- [AuthenticationConfigDelegation](#gear-authenticationconfigdelegation)
+- [AuthenticationConfigGoogle](#gear-authenticationconfiggoogle)
 - [AuthenticationConfigRules](#gear-authenticationconfigrules)
 - [AuthenticationConfig](#gear-authenticationconfig)
 - [Rule](#gear-rule)
@@ -481,6 +509,28 @@ Configure the behavior of Internet Identity.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L16)
 
+#### :gear: AuthenticationConfigDelegation
+
+Configure the delegation behavior for authentication.
+
+| Property        | Type                            | Description                                                                                                                                                                                                                                                                                                                                    |
+| --------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `targets`       | `string[] or null or undefined` | By default, and for security reasons, the delegation/identities created by the authentication module are restricted to interact only with your Satellite. Setting this to `null` explicitly removes the restriction, allowing identities to interact with any canister on the Internet Computer, including ledgers. ⚠️ Process with attention. |
+| `maxTimeToLive` | `bigint or undefined`           | Maximum validity of the delegation, in nanoseconds. Defaults to 1 day. Cannot exceed 30 days.                                                                                                                                                                                                                                                  |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L52)
+
+#### :gear: AuthenticationConfigGoogle
+
+Configure the sign-in with Google.
+
+| Property     | Type                                          | Description                                                                                                                                                                            |
+| ------------ | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `clientId`   | `string`                                      | The OAuth 2.0 client ID from your [Google Cloud Console](https://console.cloud.google.com/apis/credentials). Example: `"1234567890-abcdefg.apps.googleusercontent.com"` type: {string} |
+| `delegation` | `AuthenticationConfigDelegation or undefined` | Optional delegation settings for authentication. If omitted, the default delegation behavior applies.                                                                                  |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L88)
+
 #### :gear: AuthenticationConfigRules
 
 Configure the rules of the authentication.
@@ -489,7 +539,7 @@ Configure the rules of the authentication.
 | ---------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `allowedCallers` | `string[]` | This option defines who's allowed to use your app. If you enable this, only the identities you list (in user key, format, like `bj4r4-5cdop-...`) will be allowed to sign in or use any features like Datastore or Storage. type: {PrincipalText[]}optional |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L44)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L117)
 
 #### :gear: AuthenticationConfig
 
@@ -498,10 +548,11 @@ Configures the Authentication options of a Satellite.
 | Property           | Type                                                | Description                                                                                                                                                                                                                                             |
 | ------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `internetIdentity` | `AuthenticationConfigInternetIdentity or undefined` | Optional configuration of Internet Identity authentication method. type: {AuthenticationConfigInternetIdentity}optional                                                                                                                                 |
+| `google`           | `AuthenticationConfigGoogle or undefined`           | Optional configuration for enabling Google authentication method. type: {AuthenticationConfigGoogle}optional                                                                                                                                            |
 | `rules`            | `AuthenticationConfigRules or undefined`            | Optional configuration for the rules of the authentication. type: {AuthenticationConfigRules}optional                                                                                                                                                   |
 | `version`          | `bigint or undefined`                               | The current version of the config. Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite. You can provide it if you want to manage versioning manually within your config file. type: {bigint}optional |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L69)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L143)
 
 #### :gear: Rule
 

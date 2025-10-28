@@ -1,4 +1,3 @@
-import {isNullish} from '@dfinity/utils';
 import {PUBLIC_KEY_COSE_ALGORITHMS} from './_constants';
 import {WebAuthnIdentityHostnameError} from './errors';
 import type {CreatePasskeyOptions, PasskeyOptions} from './types/passkey';
@@ -29,15 +28,12 @@ const hostname = (): string => {
     location: {href}
   } = window;
 
-  const url = URL.parse(href);
-
-  if (isNullish(url)) {
+  try {
+    const {hostname} = new URL(href);
+    return hostname;
+  } catch {
     throw new WebAuthnIdentityHostnameError();
   }
-
-  const {hostname} = url;
-
-  return hostname;
 };
 
 const relyingPartyId = ({appId}: Pick<PasskeyOptions, 'appId'>): string => appId?.id ?? hostname();

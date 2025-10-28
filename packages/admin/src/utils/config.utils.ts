@@ -133,6 +133,8 @@ export const fromAuthenticationConfig = ({
           external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
         }
       ],
+  // TODO: from and to mappers for OpenID
+  openid: [],
   rules: isNullish(rules)
     ? []
     : [

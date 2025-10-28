@@ -43,7 +43,13 @@ export interface AuthenticationConfigInternetIdentity {
 	external_alternative_origins: [] | [Array<string>];
 }
 export interface AuthenticationConfigOpenId {
+	observatory_id: [] | [Principal];
+	delegation: [] | [AuthenticationConfigOpenIdDelegation];
 	providers: Array<[OpenIdProvider, OpenIdProviderConfig]>;
+}
+export interface AuthenticationConfigOpenIdDelegation {
+	targets: [] | [Array<Principal>];
+	max_time_to_live: [] | [bigint];
 }
 export interface AuthenticationRules {
 	allowed_callers: Array<Principal>;

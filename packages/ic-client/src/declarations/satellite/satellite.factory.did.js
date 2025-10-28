@@ -6,6 +6,64 @@ export const idlFactory = ({IDL}) => {
     controllers: IDL.Vec(IDL.Principal),
     storage: IDL.Opt(InitStorageArgs)
   });
+  const OpenIdPrepareDelegationArgs = IDL.Record({
+    jwt: IDL.Text,
+    session_key: IDL.Vec(IDL.Nat8),
+    salt: IDL.Vec(IDL.Nat8)
+  });
+  const AuthenticateUserArgs = IDL.Variant({
+    OpenId: OpenIdPrepareDelegationArgs
+  });
+  const Doc = IDL.Record({
+    updated_at: IDL.Nat64,
+    owner: IDL.Principal,
+    data: IDL.Vec(IDL.Nat8),
+    description: IDL.Opt(IDL.Text),
+    created_at: IDL.Nat64,
+    version: IDL.Opt(IDL.Nat64)
+  });
+  const AuthenticatedUser = IDL.Record({
+    doc: Doc,
+    public_key: IDL.Vec(IDL.Nat8)
+  });
+  const JwtFindProviderError = IDL.Variant({
+    BadClaim: IDL.Text,
+    BadSig: IDL.Text,
+    NoMatchingProvider: IDL.Null
+  });
+  const JwtVerifyError = IDL.Variant({
+    WrongKeyType: IDL.Null,
+    MissingKid: IDL.Null,
+    BadClaim: IDL.Text,
+    BadSig: IDL.Text,
+    NoKeyForKid: IDL.Null
+  });
+  const GetOrRefreshJwksError = IDL.Variant({
+    InvalidConfig: IDL.Text,
+    MissingKid: IDL.Null,
+    BadClaim: IDL.Text,
+    KeyNotFoundCooldown: IDL.Null,
+    CertificateNotFound: IDL.Null,
+    BadSig: IDL.Text,
+    MissingLastAttempt: IDL.Text,
+    KeyNotFound: IDL.Null,
+    FetchFailed: IDL.Text
+  });
+  const PrepareDelegationError = IDL.Variant({
+    JwtFindProvider: JwtFindProviderError,
+    GetCachedJwks: IDL.Null,
+    JwtVerify: JwtVerifyError,
+    GetOrFetchJwks: GetOrRefreshJwksError,
+    DeriveSeedFailed: IDL.Text
+  });
+  const AuthenticateUserError = IDL.Variant({
+    PrepareDelegation: PrepareDelegationError,
+    RegisterUser: IDL.Text
+  });
+  const AuthenticateUserResultResponse = IDL.Variant({
+    Ok: AuthenticatedUser,
+    Err: AuthenticateUserError
+  });
   const CommitBatch = IDL.Record({
     batch_id: IDL.Nat,
     headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
@@ -89,9 +147,15 @@ export const idlFactory = ({IDL}) => {
     created_at: IDL.Nat64,
     version: IDL.Opt(IDL.Nat64)
   });
+  const AuthenticationConfigOpenIdDelegation = IDL.Record({
+    targets: IDL.Opt(IDL.Vec(IDL.Principal)),
+    max_time_to_live: IDL.Opt(IDL.Nat64)
+  });
   const OpenIdProvider = IDL.Variant({Google: IDL.Null});
   const OpenIdProviderConfig = IDL.Record({client_id: IDL.Text});
   const AuthenticationConfigOpenId = IDL.Record({
+    observatory_id: IDL.Opt(IDL.Principal),
+    delegation: IDL.Opt(AuthenticationConfigOpenIdDelegation),
     providers: IDL.Vec(IDL.Tuple(OpenIdProvider, OpenIdProviderConfig))
   });
   const AuthenticationConfigInternetIdentity = IDL.Record({
@@ -148,13 +212,32 @@ export const idlFactory = ({IDL}) => {
     authentication: IDL.Opt(AuthenticationConfig),
     storage: StorageConfig
   });
-  const Doc = IDL.Record({
-    updated_at: IDL.Nat64,
-    owner: IDL.Principal,
-    data: IDL.Vec(IDL.Nat8),
-    description: IDL.Opt(IDL.Text),
-    created_at: IDL.Nat64,
-    version: IDL.Opt(IDL.Nat64)
+  const OpenIdGetDelegationArgs = IDL.Record({
+    jwt: IDL.Text,
+    session_key: IDL.Vec(IDL.Nat8),
+    salt: IDL.Vec(IDL.Nat8)
+  });
+  const GetDelegationArgs = IDL.Variant({OpenId: OpenIdGetDelegationArgs});
+  const Delegation = IDL.Record({
+    pubkey: IDL.Vec(IDL.Nat8),
+    targets: IDL.Opt(IDL.Vec(IDL.Principal)),
+    expiration: IDL.Nat64
+  });
+  const SignedDelegation = IDL.Record({
+    signature: IDL.Vec(IDL.Nat8),
+    delegation: Delegation
+  });
+  const GetDelegationError = IDL.Variant({
+    JwtFindProvider: JwtFindProviderError,
+    GetCachedJwks: IDL.Null,
+    NoSuchDelegation: IDL.Null,
+    JwtVerify: JwtVerifyError,
+    GetOrFetchJwks: GetOrRefreshJwksError,
+    DeriveSeedFailed: IDL.Text
+  });
+  const GetDelegationResultResponse = IDL.Variant({
+    Ok: SignedDelegation,
+    Err: GetDelegationError
   });
   const ProposalStatus = IDL.Variant({
     Initialized: IDL.Null,
@@ -344,6 +427,7 @@ export const idlFactory = ({IDL}) => {
   });
   const UploadChunkResult = IDL.Record({chunk_id: IDL.Nat});
   return IDL.Service({
+    authenticate_user: IDL.Func([AuthenticateUserArgs], [AuthenticateUserResultResponse], []),
     commit_asset_upload: IDL.Func([CommitBatch], [], []),
     commit_proposal: IDL.Func([CommitProposal], [IDL.Null], []),
     commit_proposal_asset_upload: IDL.Func([CommitBatch], [], []),
@@ -374,6 +458,7 @@ export const idlFactory = ({IDL}) => {
     get_auth_config: IDL.Func([], [IDL.Opt(AuthenticationConfig)], ['query']),
     get_config: IDL.Func([], [Config], []),
     get_db_config: IDL.Func([], [IDL.Opt(DbConfig)], ['query']),
+    get_delegation: IDL.Func([GetDelegationArgs], [GetDelegationResultResponse], ['query']),
     get_doc: IDL.Func([IDL.Text, IDL.Text], [IDL.Opt(Doc)], ['query']),
     get_many_assets: IDL.Func(
       [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))],

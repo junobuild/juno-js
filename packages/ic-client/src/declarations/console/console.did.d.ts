@@ -30,6 +30,30 @@ export interface AssetNoContent {
 export interface AssetsUpgradeOptions {
 	clear_existing_assets: [] | [boolean];
 }
+export interface AuthenticationConfig {
+	updated_at: [] | [bigint];
+	openid: [] | [AuthenticationConfigOpenId];
+	created_at: [] | [bigint];
+	version: [] | [bigint];
+	internet_identity: [] | [AuthenticationConfigInternetIdentity];
+	rules: [] | [AuthenticationRules];
+}
+export interface AuthenticationConfigInternetIdentity {
+	derivation_origin: [] | [string];
+	external_alternative_origins: [] | [Array<string>];
+}
+export interface AuthenticationConfigOpenId {
+	observatory_id: [] | [Principal];
+	delegation: [] | [AuthenticationConfigOpenIdDelegation];
+	providers: Array<[OpenIdProvider, OpenIdProviderConfig]>;
+}
+export interface AuthenticationConfigOpenIdDelegation {
+	targets: [] | [Array<Principal>];
+	max_time_to_live: [] | [bigint];
+}
+export interface AuthenticationRules {
+	allowed_callers: Array<Principal>;
+}
 export interface CommitBatch {
 	batch_id: bigint;
 	headers: Array<[string, string]>;
@@ -40,6 +64,7 @@ export interface CommitProposal {
 	proposal_id: bigint;
 }
 export interface Config {
+	authentication: [] | [AuthenticationConfig];
 	storage: StorageConfig;
 }
 export interface ConfigMaxMemorySize {
@@ -160,6 +185,10 @@ export interface MissionControl {
 	owner: Principal;
 	created_at: bigint;
 }
+export type OpenIdProvider = { Google: null };
+export interface OpenIdProviderConfig {
+	client_id: string;
+}
 export interface Payment {
 	status: PaymentStatus;
 	updated_at: bigint;
@@ -201,6 +230,12 @@ export interface SegmentsDeploymentOptions {
 	orbiter: [] | [string];
 	mission_control_version: [] | [string];
 	satellite_version: [] | [string];
+}
+export interface SetAuthenticationConfig {
+	openid: [] | [AuthenticationConfigOpenId];
+	version: [] | [bigint];
+	internet_identity: [] | [AuthenticationConfigInternetIdentity];
+	rules: [] | [AuthenticationRules];
 }
 export interface SetController {
 	metadata: Array<[string, string]>;
@@ -285,6 +320,7 @@ export interface _SERVICE {
 	del_controllers: ActorMethod<[DeleteControllersArgs], undefined>;
 	del_custom_domain: ActorMethod<[string], undefined>;
 	delete_proposal_assets: ActorMethod<[DeleteProposalAssets], undefined>;
+	get_auth_config: ActorMethod<[], [] | [AuthenticationConfig]>;
 	get_config: ActorMethod<[], Config>;
 	get_create_orbiter_fee: ActorMethod<[GetCreateCanisterFeeArgs], [] | [Tokens]>;
 	get_create_satellite_fee: ActorMethod<[GetCreateCanisterFeeArgs], [] | [Tokens]>;
@@ -311,6 +347,7 @@ export interface _SERVICE {
 	list_proposals: ActorMethod<[ListProposalsParams], ListProposalResults>;
 	list_user_mission_control_centers: ActorMethod<[], Array<[Principal, MissionControl]>>;
 	reject_proposal: ActorMethod<[CommitProposal], null>;
+	set_auth_config: ActorMethod<[SetAuthenticationConfig], AuthenticationConfig>;
 	set_controllers: ActorMethod<[SetControllersArgs], undefined>;
 	set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;
 	set_fee: ActorMethod<[SegmentKind, Tokens], undefined>;

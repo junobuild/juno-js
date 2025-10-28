@@ -138,7 +138,23 @@ export const fromAuthenticationConfig = ({
     ? []
     : [
         {
-          providers: [[{Google: null}, {client_id: google.clientId}]]
+          providers: [
+            [
+              {Google: null},
+              {
+                client_id: google.clientId
+              }
+            ]
+          ],
+          observatory_id: [],
+          delegation: isNullish(google.delegation)
+            ? []
+            : [
+                {
+                  targets: google.delegation.targets?.map((target) => Principal.fromText(target)),
+                  max_time_to_live: []
+                }
+              ]
         }
       ],
   rules: isNullish(rules)

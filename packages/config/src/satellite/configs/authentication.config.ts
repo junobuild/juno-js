@@ -56,6 +56,7 @@ export interface AuthenticationConfigDelegation {
    *
    * Setting this to `null` explicitly removes the restriction, allowing identities
    * to interact with any canister on the Internet Computer, including ledgers.
+   *
    * ⚠️ Process with attention.
    */
   targets?: PrincipalText[] | null;

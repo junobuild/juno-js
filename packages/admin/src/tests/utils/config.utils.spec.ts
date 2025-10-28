@@ -251,7 +251,11 @@ describe('config.utils', () => {
 
       expect(result.openid).toEqual([
         {
-          providers: [[{Google: null}, {client_id: '1234567890-abcdef.apps.googleusercontent.com'}]]
+          providers: [
+            [{Google: null}, {client_id: '1234567890-abcdef.apps.googleusercontent.com'}]
+          ],
+          observatory_id: [],
+          delegation: []
         }
       ]);
     });
@@ -295,12 +299,93 @@ describe('config.utils', () => {
       expect(result.rules).toEqual([{allowed_callers: []}]);
       expect(result.version).toEqual([0n]);
     });
+
+    it('encodes delegation: targets = null (unrestricted)', () => {
+      const config: AuthenticationConfig = {
+        google: {
+          clientId: '1234567890-abcdef.apps.googleusercontent.com',
+          delegation: {
+            targets: null
+          }
+        }
+      };
+
+      const result = fromAuthenticationConfig(config);
+
+      expect(result.openid).toEqual([
+        {
+          providers: [
+            [{Google: null}, {client_id: '1234567890-abcdef.apps.googleusercontent.com'}]
+          ],
+          observatory_id: [],
+          delegation: [
+            {
+              targets: [],
+              max_time_to_live: []
+            }
+          ]
+        }
+      ]);
+    });
+
+    it('encodes delegation: targets = undefined (default/self)', () => {
+      const config: AuthenticationConfig = {
+        google: {
+          clientId: '1234567890-abcdef.apps.googleusercontent.com',
+          delegation: {
+            // targets omitted
+          }
+        }
+      };
+
+      const result = fromAuthenticationConfig(config);
+
+      expect(result.openid?.[0]?.delegation?.[0]?.targets).toEqual([[]]);
+      expect(result.openid?.[0]?.delegation?.[0]?.max_time_to_live).toEqual([]);
+    });
+
+    it('encodes delegation: explicit targets', () => {
+      const config: AuthenticationConfig = {
+        google: {
+          clientId: '1234567890-abcdef.apps.googleusercontent.com',
+          delegation: {
+            targets: [mockUserIdText, mockSatelliteIdText]
+          }
+        }
+      };
+
+      const result = fromAuthenticationConfig(config);
+
+      expect(result.openid?.[0]?.delegation?.[0]?.targets?.[0]).toEqual([
+        Principal.fromText(mockUserIdText),
+        Principal.fromText(mockSatelliteIdText)
+      ]);
+    });
+
+    it('encodes delegation: maxTimeToLive present', () => {
+      const ttl = 24n * 60n * 60n * 1_000_000_000n; // 1 day ns
+      const config: AuthenticationConfig = {
+        google: {
+          clientId: '1234567890-abcdef.apps.googleusercontent.com',
+          delegation: {
+            targets: [mockUserIdText],
+            maxTimeToLive: ttl
+          }
+        }
+      };
+
+      const result = fromAuthenticationConfig(config);
+
+      expect(result.openid?.[0]?.delegation?.[0]?.max_time_to_live).toEqual([ttl]);
+    });
   });
 
   describe('toAuthenticationConfig', () => {
     const mockClientId = '1234567890-abcdef.apps.googleusercontent.com';
     const mockOpenId: SatelliteDid.AuthenticationConfigOpenId = {
-      providers: [[{Google: null}, {client_id: mockClientId}]]
+      providers: [[{Google: null}, {client_id: mockClientId}]],
+      delegation: [],
+      observatory_id: []
     };
 
     it('maps AuthenticationConfigDid correctly', () => {
@@ -407,6 +492,114 @@ describe('config.utils', () => {
       });
 
       expect(result.google).toBeUndefined();
+    });
+
+    it('decodes delegation: targets None -> targets = null (unrestricted)', () => {
+      const mockClientId = '1234567890-abcdef.apps.googleusercontent.com';
+      const result = toAuthenticationConfig({
+        internet_identity: [],
+        openid: [
+          {
+            providers: [[{Google: null}, {client_id: mockClientId}]],
+            observatory_id: [],
+            delegation: [
+              {
+                targets: [],
+                max_time_to_live: []
+              }
+            ]
+          }
+        ],
+        rules: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.google?.delegation?.targets).toBeNull();
+      expect(result.google?.delegation?.maxTimeToLive).toBeUndefined();
+    });
+
+    it('decodes delegation: targets Some(empty) -> targets = undefined (default/self)', () => {
+      const mockClientId = '1234567890-abcdef.apps.googleusercontent.com';
+      const result = toAuthenticationConfig({
+        internet_identity: [],
+        openid: [
+          {
+            providers: [[{Google: null}, {client_id: mockClientId}]],
+            observatory_id: [],
+            delegation: [
+              {
+                targets: [[]],
+                max_time_to_live: []
+              }
+            ]
+          }
+        ],
+        rules: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      // delegation omitted entirely because targets=undefined and no TTL
+      expect(result.google?.delegation).toBeUndefined();
+    });
+
+    it('decodes delegation: explicit targets -> array of text principals', () => {
+      const mockClientId = '1234567890-abcdef.apps.googleusercontent.com';
+      const result = toAuthenticationConfig({
+        internet_identity: [],
+        openid: [
+          {
+            providers: [[{Google: null}, {client_id: mockClientId}]],
+            observatory_id: [],
+            delegation: [
+              {
+                targets: [
+                  [Principal.fromText(mockUserIdText), Principal.fromText(mockSatelliteIdText)]
+                ],
+                max_time_to_live: []
+              }
+            ]
+          }
+        ],
+        rules: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.google?.delegation?.targets).toEqual([mockUserIdText, mockSatelliteIdText]);
+      expect(result.google?.delegation?.maxTimeToLive).toBeUndefined();
+    });
+
+    it('decodes delegation: ttl present -> keeps delegation even if targets undefined', () => {
+      const mockClientId = '1234567890-abcdef.apps.googleusercontent.com';
+      const ttl = 24n * 60n * 60n * 1_000_000_000n;
+
+      const result = toAuthenticationConfig({
+        internet_identity: [],
+        openid: [
+          {
+            providers: [[{Google: null}, {client_id: mockClientId}]],
+            observatory_id: [],
+            delegation: [
+              {
+                targets: [[]],
+                max_time_to_live: [ttl]
+              }
+            ]
+          }
+        ],
+        rules: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.google?.delegation?.targets).toBeUndefined();
+      expect(result.google?.delegation?.maxTimeToLive).toBe(ttl);
     });
   });
 });

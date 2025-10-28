@@ -151,8 +151,15 @@ export const fromAuthenticationConfig = ({
             ? []
             : [
                 {
-                  targets: google.delegation.targets?.map((target) => Principal.fromText(target)),
-                  max_time_to_live: []
+                  targets:
+                    google.delegation.targets === null
+                      ? []
+                      : [
+                          (google.delegation.targets ?? [])?.map((target) =>
+                            Principal.fromText(target)
+                          )
+                        ],
+                  max_time_to_live: toNullable(google.delegation.maxTimeToLive)
                 }
               ]
         }
@@ -182,6 +189,16 @@ export const toAuthenticationConfig = ({
   const openId = fromNullable(openIdDid);
   const google = openId?.providers.find(([key]) => 'Google' in key)?.[1];
 
+  const delegation = fromNullable(openId?.delegation ?? []);
+  const targets =
+    nonNullish(delegation) && nonNullish(delegation.targets) && delegation.targets.length === 0
+      ? null
+      : (fromNullable(delegation?.targets ?? []) ?? []).length === 0
+        ? undefined
+        : (fromNullable(delegation?.targets ?? []) ?? []).map((p) => p.toText());
+  const maxTimeToLive = fromNullable(delegation?.max_time_to_live ?? []);
+  const withDelegation = targets !== undefined || nonNullish(maxTimeToLive);
+
   const rules = fromNullable(rulesDid);
 
   return {
@@ -193,7 +210,13 @@ export const toAuthenticationConfig = ({
     }),
     ...(nonNullish(google) && {
       google: {
-        clientId: google.client_id
+        clientId: google.client_id,
+        ...(withDelegation && {
+          delegation: {
+            ...(targets !== undefined && {targets}),
+            ...(nonNullish(maxTimeToLive) && {maxTimeToLive})
+          }
+        })
       }
     }),
     ...(nonNullish(rules) && {

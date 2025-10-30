@@ -46,22 +46,20 @@ export const JUNO_DATASTORE_ERROR_USER_PROVIDER_INVALID_DATA =
 export const JUNO_DATASTORE_ERROR_USER_PROVIDER_WEBAUTHN_INVALID_DATA =
   'juno.datastore.error.user.webauthn.provider_webauthn_invalid_data';
 
-export const JUNO_DATASTORE_ERROR_USER_PROVIDER_GOOGLE_INVALID_DATA =
-  'juno.datastore.error.user.google.provider_google_invalid_data';
-export const JUNO_DATASTORE_ERROR_USER_EMAIL_INVALID_LENGTH =
-  'juno.datastore.error.user.data.email_invalid_length';
-export const JUNO_DATASTORE_ERROR_USER_NAME_INVALID_LENGTH =
-  'juno.datastore.error.user.data.name_invalid_length';
-export const JUNO_DATASTORE_ERROR_USER_GIVEN_NAME_INVALID_LENGTH =
-  'juno.datastore.error.user.data.given_name_invalid_length';
-export const JUNO_DATASTORE_ERROR_USER_FAMILY_NAME_INVALID_LENGTH =
-  'juno.datastore.error.user.data.family_name_invalid_length';
-export const JUNO_DATASTORE_ERROR_USER_LOCALE_INVALID_LENGTH =
-  'juno.datastore.error.user.data.locale_invalid_length';
-export const JUNO_DATASTORE_ERROR_USER_PICTURE_INVALID_URL =
-  'juno.datastore.error.user.data.picture_invalid_url';
-export const JUNO_DATASTORE_ERROR_USER_PICTURE_INVALID_SCHEME =
-  'juno.datastore.error.user.data.picture_invalid_scheme';
+export const JUNO_AUTH_ERROR_PROFILE_EMAIL_INVALID_LENGTH =
+  "juno.auth.error.profile.data.email_invalid_length";
+export const JUNO_AUTH_ERROR_PROFILE_NAME_INVALID_LENGTH =
+  "juno.auth.error.profile.data.name_invalid_length";
+export const JUNO_AUTH_ERROR_PROFILE_GIVEN_NAME_INVALID_LENGTH =
+  "juno.auth.error.profile.data.given_name_invalid_length";
+export const JUNO_AUTH_ERROR_PROFILE_FAMILY_NAME_INVALID_LENGTH =
+  "juno.auth.error.profile.data.family_name_invalid_length";
+export const JUNO_AUTH_ERROR_PROFILE_LOCALE_INVALID_LENGTH =
+  "juno.auth.error.profile.data.locale_invalid_length";
+export const JUNO_AUTH_ERROR_PROFILE_PICTURE_INVALID_URL =
+  "juno.auth.error.profile.data.picture_invalid_url";
+export const JUNO_AUTH_ERROR_PROFILE_PICTURE_INVALID_SCHEME =
+  "juno.auth.error.profile.data.picture_invalid_scheme";
 
 export const JUNO_DATASTORE_ERROR_USER_USAGE_CHANGE_LIMIT_REACHED =
   'juno.datastore.error.user.usage.change_limit_reached';

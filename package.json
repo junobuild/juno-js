@@ -32,7 +32,8 @@
     "packages/cli-tools",
     "packages/did-tools",
     "packages/config-loader",
-    "packages/functions"
+    "packages/functions",
+    "packages/auth"
   ],
   "devDependencies": {
     "@dfinity/eslint-config-oisy-wallet": "^0.2.2",

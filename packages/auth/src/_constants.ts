@@ -1,1 +1,1 @@
-export const SESSION_KEY = "juno:auth:openid";
+export const SESSION_KEY = 'juno:auth:openid';

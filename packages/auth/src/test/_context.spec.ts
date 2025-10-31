@@ -6,17 +6,17 @@ import {Ed25519KeyIdentity, JsonnableEd25519KeyIdentity} from '@dfinity/identity
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish, base64ToUint8Array} from '@dfinity/utils';
 import {SESSION_KEY} from '../_constants';
-import {initSession} from '../_session';
-import {parseSessionData} from '../utils/session.utils';
+import {initContext} from '../_context';
+import {parseContext} from '../utils/session-storage.utils';
 
-describe('_session', () => {
-  describe('initSession', () => {
+describe('_context', () => {
+  describe('initContext', () => {
     beforeEach(() => {
       sessionStorage.clear();
     });
 
     it('should return nonce and state', async () => {
-      const {nonce, state} = await initSession();
+      const {nonce, state} = await initContext();
 
       expect(typeof nonce).toBe('string');
       expect(typeof state).toBe('string');
@@ -25,14 +25,14 @@ describe('_session', () => {
     });
 
     it('should store a single SESSION_KEY entry', async () => {
-      await initSession();
+      await initContext();
 
       expect(sessionStorage.length).toBe(1);
       expect(sessionStorage.getItem(SESSION_KEY)).not.toBeNull();
     });
 
     it('should store caller, salt and state in SESSION_KEY payload', async () => {
-      await initSession();
+      await initContext();
 
       const raw = sessionStorage.getItem(SESSION_KEY);
       assertNonNullish(raw);
@@ -45,18 +45,18 @@ describe('_session', () => {
     });
 
     it('should return same state as stored', async () => {
-      const {state} = await initSession();
+      const {state} = await initContext();
 
       const raw = sessionStorage.getItem(SESSION_KEY);
       assertNonNullish(raw);
 
-      const stored = parseSessionData(raw);
+      const stored = parseContext(raw);
 
       expect(state).toBe(stored.state);
     });
 
     it('should store salt as base64 that decodes to 32 bytes', async () => {
-      await initSession();
+      await initContext();
 
       const raw = sessionStorage.getItem(SESSION_KEY);
       assertNonNullish(raw);
@@ -70,7 +70,7 @@ describe('_session', () => {
     });
 
     it('should store a valid caller JSON', async () => {
-      await initSession();
+      await initContext();
 
       const raw = sessionStorage.getItem(SESSION_KEY);
       assertNonNullish(raw);
@@ -82,8 +82,8 @@ describe('_session', () => {
     });
 
     it('should generate new values on each call', async () => {
-      const first = await initSession();
-      const second = await initSession();
+      const first = await initContext();
+      const second = await initContext();
 
       expect(first.nonce).not.toBe(second.nonce);
       expect(first.state).not.toBe(second.state);

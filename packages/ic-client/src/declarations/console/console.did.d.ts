@@ -30,6 +30,11 @@ export interface AssetNoContent {
 export interface AssetsUpgradeOptions {
 	clear_existing_assets: [] | [boolean];
 }
+export interface Authentication {
+	delegation: PreparedDelegation;
+	mission_control: MissionControl;
+}
+export type AuthenticationArgs = { OpenId: OpenIdPrepareDelegationArgs };
 export interface AuthenticationConfig {
 	updated_at: [] | [bigint];
 	openid: [] | [AuthenticationConfigOpenId];
@@ -44,13 +49,13 @@ export interface AuthenticationConfigInternetIdentity {
 }
 export interface AuthenticationConfigOpenId {
 	observatory_id: [] | [Principal];
-	delegation: [] | [AuthenticationConfigOpenIdDelegation];
 	providers: Array<[OpenIdProvider, OpenIdProviderConfig]>;
 }
-export interface AuthenticationConfigOpenIdDelegation {
-	targets: [] | [Array<Principal>];
-	max_time_to_live: [] | [bigint];
-}
+export type AuthenticationError =
+	| {
+			PrepareDelegation: PrepareDelegationError;
+	  }
+	| { RegisterUser: string };
 export interface AuthenticationRules {
 	allowed_callers: Array<Principal>;
 }
@@ -96,6 +101,11 @@ export interface CustomDomain {
 	version: [] | [bigint];
 	bn_id: [] | [string];
 }
+export interface Delegation {
+	pubkey: Uint8Array | number[];
+	targets: [] | [Array<Principal>];
+	expiration: bigint;
+}
 export interface DeleteControllersArgs {
 	controllers: Array<Principal>;
 }
@@ -105,6 +115,24 @@ export interface DeleteProposalAssets {
 export interface GetCreateCanisterFeeArgs {
 	user: Principal;
 }
+export type GetDelegationArgs = { OpenId: OpenIdGetDelegationArgs };
+export type GetDelegationError =
+	| { JwtFindProvider: JwtFindProviderError }
+	| { GetCachedJwks: null }
+	| { NoSuchDelegation: null }
+	| { JwtVerify: JwtVerifyError }
+	| { GetOrFetchJwks: GetOrRefreshJwksError }
+	| { DeriveSeedFailed: string };
+export type GetOrRefreshJwksError =
+	| { InvalidConfig: string }
+	| { MissingKid: null }
+	| { BadClaim: string }
+	| { KeyNotFoundCooldown: null }
+	| { CertificateNotFound: null }
+	| { BadSig: string }
+	| { MissingLastAttempt: string }
+	| { KeyNotFound: null }
+	| { FetchFailed: string };
 export interface HttpRequest {
 	url: string;
 	method: string;
@@ -133,6 +161,16 @@ export type InitStorageMemory = { Heap: null } | { Stable: null };
 export interface InitUploadResult {
 	batch_id: bigint;
 }
+export type JwtFindProviderError =
+	| { BadClaim: string }
+	| { BadSig: string }
+	| { NoMatchingProvider: null };
+export type JwtVerifyError =
+	| { WrongKeyType: null }
+	| { MissingKid: null }
+	| { BadClaim: string }
+	| { BadSig: string }
+	| { NoKeyForKid: null };
 export interface ListMatcher {
 	key: [] | [string];
 	updated_at: [] | [TimestampMatcher];
@@ -182,12 +220,41 @@ export interface MissionControl {
 	updated_at: bigint;
 	credits: Tokens;
 	mission_control_id: [] | [Principal];
+	provider: [] | [Provider];
 	owner: Principal;
 	created_at: bigint;
 }
+export interface OpenId {
+	provider: OpenIdProvider;
+	data: OpenIdData;
+}
+export interface OpenIdData {
+	name: [] | [string];
+	locale: [] | [string];
+	family_name: [] | [string];
+	email: [] | [string];
+	picture: [] | [string];
+	given_name: [] | [string];
+}
+export interface OpenIdGetDelegationArgs {
+	jwt: string;
+	session_key: Uint8Array | number[];
+	salt: Uint8Array | number[];
+	expiration: bigint;
+}
+export interface OpenIdPrepareDelegationArgs {
+	jwt: string;
+	session_key: Uint8Array | number[];
+	salt: Uint8Array | number[];
+}
 export type OpenIdProvider = { Google: null };
 export interface OpenIdProviderConfig {
+	delegation: [] | [OpenIdProviderDelegationConfig];
 	client_id: string;
+}
+export interface OpenIdProviderDelegationConfig {
+	targets: [] | [Array<Principal>];
+	max_time_to_live: [] | [bigint];
 }
 export interface Payment {
 	status: PaymentStatus;
@@ -198,6 +265,18 @@ export interface Payment {
 	block_index_refunded: [] | [bigint];
 }
 export type PaymentStatus = { Refunded: null } | { Acknowledged: null } | { Completed: null };
+export type PrepareDelegationError =
+	| {
+			JwtFindProvider: JwtFindProviderError;
+	  }
+	| { GetCachedJwks: null }
+	| { JwtVerify: JwtVerifyError }
+	| { GetOrFetchJwks: GetOrRefreshJwksError }
+	| { DeriveSeedFailed: string };
+export interface PreparedDelegation {
+	user_key: Uint8Array | number[];
+	expiration: bigint;
+}
 export interface Proposal {
 	status: ProposalStatus;
 	updated_at: bigint;
@@ -221,10 +300,13 @@ export type ProposalStatus =
 export type ProposalType =
 	| { AssetsUpgrade: AssetsUpgradeOptions }
 	| { SegmentsDeployment: SegmentsDeploymentOptions };
+export type Provider = { InternetIdentity: null } | { OpenId: OpenId };
 export interface RateConfig {
 	max_tokens: bigint;
 	time_per_token_ns: bigint;
 }
+export type Result = { Ok: Authentication } | { Err: AuthenticationError };
+export type Result_1 = { Ok: SignedDelegation } | { Err: GetDelegationError };
 export type SegmentKind = { Orbiter: null } | { MissionControl: null } | { Satellite: null };
 export interface SegmentsDeploymentOptions {
 	orbiter: [] | [string];
@@ -254,6 +336,10 @@ export interface SetStorageConfig {
 	max_memory_size: [] | [ConfigMaxMemorySize];
 	raw_access: [] | [StorageConfigRawAccess];
 	redirects: [] | [Array<[string, StorageConfigRedirect]>];
+}
+export interface SignedDelegation {
+	signature: Uint8Array | number[];
+	delegation: Delegation;
 }
 export interface StorageConfig {
 	iframe: [] | [StorageConfigIFrame];
@@ -311,6 +397,7 @@ export interface _SERVICE {
 	add_credits: ActorMethod<[Principal, Tokens], undefined>;
 	add_invitation_code: ActorMethod<[string], undefined>;
 	assert_mission_control_center: ActorMethod<[AssertMissionControlCenterArgs], undefined>;
+	authenticate: ActorMethod<[AuthenticationArgs], Result>;
 	commit_proposal: ActorMethod<[CommitProposal], null>;
 	commit_proposal_asset_upload: ActorMethod<[CommitBatch], undefined>;
 	commit_proposal_many_assets_upload: ActorMethod<[Array<CommitBatch>], undefined>;
@@ -325,6 +412,7 @@ export interface _SERVICE {
 	get_create_orbiter_fee: ActorMethod<[GetCreateCanisterFeeArgs], [] | [Tokens]>;
 	get_create_satellite_fee: ActorMethod<[GetCreateCanisterFeeArgs], [] | [Tokens]>;
 	get_credits: ActorMethod<[], Tokens>;
+	get_delegation: ActorMethod<[GetDelegationArgs], Result_1>;
 	get_proposal: ActorMethod<[bigint], [] | [Proposal]>;
 	get_storage_config: ActorMethod<[], StorageConfig>;
 	get_user_mission_control_center: ActorMethod<[], [] | [MissionControl]>;

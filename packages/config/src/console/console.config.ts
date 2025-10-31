@@ -1,6 +1,9 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod';
-import {type AuthenticationConfig, AuthenticationConfigSchema} from '../shared/authentication.config';
+import {
+  type AuthenticationConfig,
+  AuthenticationConfigSchema
+} from '../shared/authentication.config';
 import {type StorageConfig, StorageConfigSchema} from '../shared/storage.config';
 import {type CliConfig, CliConfigSchema} from '../types/cli.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../types/juno.env';

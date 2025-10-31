@@ -31,7 +31,7 @@ function install_utils_peer() {
 }
 
 PACKAGES_IC_MGMT_PEER=admin,cdn
-PACKAGES_UTILS_PEER=admin,cdn,functions,core,core-peer,cli-tools,did-tools,utils,storage,ic-client
+PACKAGES_UTILS_PEER=admin,auth,cdn,functions,core,core-peer,cli-tools,did-tools,utils,storage,ic-client
 PACKAGES_UTILS=core-standalone
 
 for package in $(echo $PACKAGES_IC_MGMT_PEER | sed "s/,/ /g"); do

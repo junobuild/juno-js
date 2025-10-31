@@ -1,4 +1,5 @@
 import {Principal} from '@dfinity/principal';
+import {assertNonNullish} from '@dfinity/utils';
 import type {
   AuthenticationConfig,
   DatastoreConfig,
@@ -252,10 +253,12 @@ describe('config.utils', () => {
       expect(result.openid).toEqual([
         {
           providers: [
-            [{Google: null}, {client_id: '1234567890-abcdef.apps.googleusercontent.com'}]
+            [
+              {Google: null},
+              {client_id: '1234567890-abcdef.apps.googleusercontent.com', delegation: []}
+            ]
           ],
-          observatory_id: [],
-          delegation: []
+          observatory_id: []
         }
       ]);
     });
@@ -315,15 +318,20 @@ describe('config.utils', () => {
       expect(result.openid).toEqual([
         {
           providers: [
-            [{Google: null}, {client_id: '1234567890-abcdef.apps.googleusercontent.com'}]
+            [
+              {Google: null},
+              {
+                client_id: '1234567890-abcdef.apps.googleusercontent.com',
+                delegation: [
+                  {
+                    targets: [],
+                    max_time_to_live: []
+                  }
+                ]
+              }
+            ]
           ],
-          observatory_id: [],
-          delegation: [
-            {
-              targets: [],
-              max_time_to_live: []
-            }
-          ]
+          observatory_id: []
         }
       ]);
     });
@@ -340,8 +348,14 @@ describe('config.utils', () => {
 
       const result = fromAuthenticationConfig(config);
 
-      expect(result.openid?.[0]?.delegation?.[0]?.targets).toEqual([[]]);
-      expect(result.openid?.[0]?.delegation?.[0]?.max_time_to_live).toEqual([]);
+      const google = result.openid?.[0]?.providers[0];
+
+      assertNonNullish(google);
+
+      const [_, googleConfig] = google;
+
+      expect(googleConfig.delegation?.[0]?.targets).toEqual([[]]);
+      expect(googleConfig.delegation?.[0]?.max_time_to_live).toEqual([]);
     });
 
     it('encodes delegation: explicit targets', () => {
@@ -356,7 +370,13 @@ describe('config.utils', () => {
 
       const result = fromAuthenticationConfig(config);
 
-      expect(result.openid?.[0]?.delegation?.[0]?.targets?.[0]).toEqual([
+      const google = result.openid?.[0]?.providers[0];
+
+      assertNonNullish(google);
+
+      const [_, googleConfig] = google;
+
+      expect(googleConfig.delegation?.[0]?.targets?.[0]).toEqual([
         Principal.fromText(mockUserIdText),
         Principal.fromText(mockSatelliteIdText)
       ]);
@@ -376,15 +396,20 @@ describe('config.utils', () => {
 
       const result = fromAuthenticationConfig(config);
 
-      expect(result.openid?.[0]?.delegation?.[0]?.max_time_to_live).toEqual([ttl]);
+      const google = result.openid?.[0]?.providers[0];
+
+      assertNonNullish(google);
+
+      const [_, googleConfig] = google;
+
+      expect(googleConfig.delegation?.[0]?.max_time_to_live).toEqual([ttl]);
     });
   });
 
   describe('toAuthenticationConfig', () => {
     const mockClientId = '1234567890-abcdef.apps.googleusercontent.com';
     const mockOpenId: SatelliteDid.AuthenticationConfigOpenId = {
-      providers: [[{Google: null}, {client_id: mockClientId}]],
-      delegation: [],
+      providers: [[{Google: null}, {client_id: mockClientId, delegation: []}]],
       observatory_id: []
     };
 
@@ -500,14 +525,21 @@ describe('config.utils', () => {
         internet_identity: [],
         openid: [
           {
-            providers: [[{Google: null}, {client_id: mockClientId}]],
-            observatory_id: [],
-            delegation: [
-              {
-                targets: [],
-                max_time_to_live: []
-              }
-            ]
+            providers: [
+              [
+                {Google: null},
+                {
+                  client_id: mockClientId,
+                  delegation: [
+                    {
+                      targets: [],
+                      max_time_to_live: []
+                    }
+                  ]
+                }
+              ]
+            ],
+            observatory_id: []
           }
         ],
         rules: [],
@@ -526,14 +558,21 @@ describe('config.utils', () => {
         internet_identity: [],
         openid: [
           {
-            providers: [[{Google: null}, {client_id: mockClientId}]],
-            observatory_id: [],
-            delegation: [
-              {
-                targets: [[]],
-                max_time_to_live: []
-              }
-            ]
+            providers: [
+              [
+                {Google: null},
+                {
+                  client_id: mockClientId,
+                  delegation: [
+                    {
+                      targets: [[]],
+                      max_time_to_live: []
+                    }
+                  ]
+                }
+              ]
+            ],
+            observatory_id: []
           }
         ],
         rules: [],
@@ -552,16 +591,26 @@ describe('config.utils', () => {
         internet_identity: [],
         openid: [
           {
-            providers: [[{Google: null}, {client_id: mockClientId}]],
-            observatory_id: [],
-            delegation: [
-              {
-                targets: [
-                  [Principal.fromText(mockUserIdText), Principal.fromText(mockSatelliteIdText)]
-                ],
-                max_time_to_live: []
-              }
-            ]
+            providers: [
+              [
+                {Google: null},
+                {
+                  client_id: mockClientId,
+                  delegation: [
+                    {
+                      targets: [
+                        [
+                          Principal.fromText(mockUserIdText),
+                          Principal.fromText(mockSatelliteIdText)
+                        ]
+                      ],
+                      max_time_to_live: []
+                    }
+                  ]
+                }
+              ]
+            ],
+            observatory_id: []
           }
         ],
         rules: [],
@@ -582,14 +631,21 @@ describe('config.utils', () => {
         internet_identity: [],
         openid: [
           {
-            providers: [[{Google: null}, {client_id: mockClientId}]],
-            observatory_id: [],
-            delegation: [
-              {
-                targets: [[]],
-                max_time_to_live: [ttl]
-              }
-            ]
+            providers: [
+              [
+                {Google: null},
+                {
+                  client_id: mockClientId,
+                  delegation: [
+                    {
+                      targets: [[]],
+                      max_time_to_live: [ttl]
+                    }
+                  ]
+                }
+              ]
+            ],
+            observatory_id: []
           }
         ],
         rules: [],

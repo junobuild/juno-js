@@ -142,26 +142,26 @@ export const fromAuthenticationConfig = ({
             [
               {Google: null},
               {
-                client_id: google.clientId
+                client_id: google.clientId,
+                delegation: isNullish(google.delegation)
+                  ? []
+                  : [
+                      {
+                        targets:
+                          google.delegation.targets === null
+                            ? []
+                            : [
+                                (google.delegation.targets ?? [])?.map((target) =>
+                                  Principal.fromText(target)
+                                )
+                              ],
+                        max_time_to_live: toNullable(google.delegation.maxTimeToLive)
+                      }
+                    ]
               }
             ]
           ],
-          observatory_id: [],
-          delegation: isNullish(google.delegation)
-            ? []
-            : [
-                {
-                  targets:
-                    google.delegation.targets === null
-                      ? []
-                      : [
-                          (google.delegation.targets ?? [])?.map((target) =>
-                            Principal.fromText(target)
-                          )
-                        ],
-                  max_time_to_live: toNullable(google.delegation.maxTimeToLive)
-                }
-              ]
+          observatory_id: []
         }
       ],
   rules: isNullish(rules)
@@ -189,7 +189,7 @@ export const toAuthenticationConfig = ({
   const openId = fromNullable(openIdDid);
   const google = openId?.providers.find(([key]) => 'Google' in key)?.[1];
 
-  const delegation = fromNullable(openId?.delegation ?? []);
+  const delegation = fromNullable(google?.delegation ?? []);
   const targets =
     nonNullish(delegation) && nonNullish(delegation.targets) && delegation.targets.length === 0
       ? null

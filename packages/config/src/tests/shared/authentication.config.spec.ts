@@ -137,87 +137,87 @@ describe('authentication.config', () => {
         expect(result.success).toBe(true);
       });
 
-      it('accepts valid targets array', () => {
+      it('accepts valid allowedTargets array', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({
-          targets: [mockModuleIdText, mockUserIdText]
+          allowedTargets: [mockModuleIdText, mockUserIdText]
         });
         expect(result.success).toBe(true);
       });
 
-      it('accepts null targets (explicitly removing restriction)', () => {
+      it('accepts null allowedTargets (explicitly removing restriction)', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({
-          targets: null
+          allowedTargets: null
         });
         expect(result.success).toBe(true);
       });
 
-      it('accepts empty targets array (no-op restriction)', () => {
+      it('accepts empty allowedTargets array (no-op restriction)', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({
-          targets: []
+          allowedTargets: []
         });
         expect(result.success).toBe(true);
       });
 
-      it('rejects invalid principal inside targets', () => {
+      it('rejects invalid principal inside allowedTargets', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({
-          targets: ['not-a-principal']
+          allowedTargets: ['not-a-principal']
         });
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.issues[0].path).toEqual(['targets', 0]);
+          expect(result.error.issues[0].path).toEqual(['allowedTargets', 0]);
         }
       });
 
-      it('rejects non-array, non-null targets', () => {
+      it('rejects non-array, non-null allowedTargets', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({
-          targets: 'not-an-array'
+          allowedTargets: 'not-an-array'
         });
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.issues[0].path).toEqual(['targets']);
+          expect(result.error.issues[0].path).toEqual(['allowedTargets']);
         }
       });
 
-      it('accepts maxTimeToLive within limit (1 day)', () => {
+      it('accepts sessionDuration within limit (1 day)', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({
-          maxTimeToLive: ONE_DAY_NS
+          sessionDuration: ONE_DAY_NS
         });
         expect(result.success).toBe(true);
       });
 
-      it('accepts maxTimeToLive at exact limit (30 days)', () => {
+      it('accepts sessionDuration at exact limit (30 days)', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({
-          maxTimeToLive: THIRTY_DAYS_NS
+          sessionDuration: THIRTY_DAYS_NS
         });
         expect(result.success).toBe(true);
       });
 
-      it('rejects maxTimeToLive above 30 days', () => {
+      it('rejects sessionDuration above 30 days', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({
-          maxTimeToLive: THIRTY_DAYS_PLUS_1_NS
+          sessionDuration: THIRTY_DAYS_PLUS_1_NS
         });
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.issues[0].path).toEqual(['maxTimeToLive']);
+          expect(result.error.issues[0].path).toEqual(['sessionDuration']);
           expect(result.error.issues[0].code).toBe('too_big');
         }
       });
 
-      it('rejects non-bigint maxTimeToLive', () => {
+      it('rejects non-bigint sessionDuration', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({
-          maxTimeToLive: Number(ONE_DAY_NS)
+          sessionDuration: Number(ONE_DAY_NS)
         });
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.issues[0].path).toEqual(['maxTimeToLive']);
+          expect(result.error.issues[0].path).toEqual(['sessionDuration']);
           expect(result.error.issues[0].code).toBe('invalid_type');
         }
       });
 
       it('rejects unknown keys (strictObject)', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({
-          targets: [mockUserIdText],
-          maxTimeToLive: ONE_DAY_NS,
+          allowedTargets: [mockUserIdText],
+          sessionDuration: ONE_DAY_NS,
           extra: true
         });
         expect(result.success).toBe(false);
@@ -232,29 +232,29 @@ describe('authentication.config', () => {
         const result = AuthenticationConfigGoogleSchema.safeParse({
           clientId: '1234567890-abcdef.apps.googleusercontent.com',
           delegation: {
-            targets: [mockUserIdText, mockModuleIdText],
-            maxTimeToLive: ONE_DAY_NS
+            allowedTargets: [mockUserIdText, mockModuleIdText],
+            sessionDuration: ONE_DAY_NS
           }
         });
         expect(result.success).toBe(true);
       });
 
-      it('accepts google config with delegation.targets = null', () => {
+      it('accepts google config with delegation.allowedTargets = null', () => {
         const result = AuthenticationConfigGoogleSchema.safeParse({
           clientId: '1234567890-abcdef.apps.googleusercontent.com',
-          delegation: {targets: null}
+          delegation: {allowedTargets: null}
         });
         expect(result.success).toBe(true);
       });
 
-      it('rejects google config when delegation.maxTimeToLive > 30 days', () => {
+      it('rejects google config when delegation.sessionDuration > 30 days', () => {
         const result = AuthenticationConfigGoogleSchema.safeParse({
           clientId: '1234567890-abcdef.apps.googleusercontent.com',
-          delegation: {maxTimeToLive: THIRTY_DAYS_PLUS_1_NS}
+          delegation: {sessionDuration: THIRTY_DAYS_PLUS_1_NS}
         });
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.issues[0].path).toEqual(['delegation', 'maxTimeToLive']);
+          expect(result.error.issues[0].path).toEqual(['delegation', 'sessionDuration']);
         }
       });
 
@@ -262,7 +262,7 @@ describe('authentication.config', () => {
         const result = AuthenticationConfigGoogleSchema.safeParse({
           clientId: '1234567890-abcdef.apps.googleusercontent.com',
           delegation: {
-            targets: [mockUserIdText],
+            allowedTargets: [mockUserIdText],
             extra: 'nope'
           }
         });
@@ -279,8 +279,8 @@ describe('authentication.config', () => {
           google: {
             clientId: '1234567890-abcdef.apps.googleusercontent.com',
             delegation: {
-              targets: [mockUserIdText],
-              maxTimeToLive: ONE_DAY_NS
+              allowedTargets: [mockUserIdText],
+              sessionDuration: ONE_DAY_NS
             }
           }
         });
@@ -292,13 +292,18 @@ describe('authentication.config', () => {
           google: {
             clientId: '1234567890-abcdef.apps.googleusercontent.com',
             delegation: {
-              targets: ['not-a-principal']
+              allowedTargets: ['not-a-principal']
             }
           }
         });
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.issues[0].path).toEqual(['google', 'delegation', 'targets', 0]);
+          expect(result.error.issues[0].path).toEqual([
+            'google',
+            'delegation',
+            'allowedTargets',
+            0
+          ]);
         }
       });
 
@@ -307,13 +312,13 @@ describe('authentication.config', () => {
           google: {
             clientId: '1234567890-abcdef.apps.googleusercontent.com',
             delegation: {
-              maxTimeToLive: THIRTY_DAYS_PLUS_1_NS
+              sessionDuration: THIRTY_DAYS_PLUS_1_NS
             }
           }
         });
         expect(result.success).toBe(false);
         if (!result.success) {
-          expect(result.error.issues[0].path).toEqual(['google', 'delegation', 'maxTimeToLive']);
+          expect(result.error.issues[0].path).toEqual(['google', 'delegation', 'sessionDuration']);
         }
       });
     });

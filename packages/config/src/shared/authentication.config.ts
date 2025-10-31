@@ -34,8 +34,8 @@ export interface AuthenticationConfigInternetIdentity {
  * @see AuthenticationConfigDelegation
  */
 export const AuthenticationConfigDelegationSchema = z.strictObject({
-  targets: z.array(PrincipalTextSchema).nullable().optional(),
-  maxTimeToLive: z
+  allowedTargets: z.array(PrincipalTextSchema).nullable().optional(),
+  sessionDuration: z
     .bigint()
     .max(
       30n * 24n * 60n * 60n * 1_000_000_000n,
@@ -51,21 +51,26 @@ export const AuthenticationConfigDelegationSchema = z.strictObject({
  */
 export interface AuthenticationConfigDelegation {
   /**
-   * By default, and for security reasons, the delegation/identities created by the
-   * authentication module are restricted to interact only with your Satellite.
+   * List of allowed targets (backend modules) that authenticated users
+   * may call using the issued session.
    *
-   * Setting this to `null` explicitly removes the restriction, allowing identities
-   * to interact with any canister on the Internet Computer, including ledgers.
+   * - Omit this value to restrict access to this Satellite only (default).
+   * - Provide an array to explicitly allow only those targets.
+   * - Set to `null` to allow calling any backend.
    *
-   * ⚠️ Process with attention.
+   * ⚠️ Setting to `null` removes all restrictions — use with caution.
    */
-  targets?: PrincipalText[] | null;
+  allowedTargets?: PrincipalText[] | null;
 
   /**
-   * Maximum validity of the delegation, in nanoseconds.
+   * Duration for which a session remains valid, expressed in nanoseconds.
+   *
    * Defaults to 1 day. Cannot exceed 30 days.
+   *
+   * Once issued, a session cannot be extended or shortened.
+   * New settings only apply to future logins.
    */
-  maxTimeToLive?: bigint;
+  sessionDuration?: bigint;
 }
 
 /**

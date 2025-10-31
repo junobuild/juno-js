@@ -148,14 +148,14 @@ export const fromAuthenticationConfig = ({
                   : [
                       {
                         targets:
-                          google.delegation.targets === null
+                          google.delegation.allowedTargets === null
                             ? []
                             : [
-                                (google.delegation.targets ?? [])?.map((target) =>
+                                (google.delegation.allowedTargets ?? [])?.map((target) =>
                                   Principal.fromText(target)
                                 )
                               ],
-                        max_time_to_live: toNullable(google.delegation.maxTimeToLive)
+                        max_time_to_live: toNullable(google.delegation.sessionDuration)
                       }
                     ]
               }
@@ -213,8 +213,8 @@ export const toAuthenticationConfig = ({
         clientId: google.client_id,
         ...(withDelegation && {
           delegation: {
-            ...(targets !== undefined && {targets}),
-            ...(nonNullish(maxTimeToLive) && {maxTimeToLive})
+            ...(targets !== undefined && {allowedTargets: targets}),
+            ...(nonNullish(maxTimeToLive) && {sessionDuration: maxTimeToLive})
           }
         })
       }

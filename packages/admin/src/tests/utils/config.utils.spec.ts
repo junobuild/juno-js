@@ -308,7 +308,7 @@ describe('config.utils', () => {
         google: {
           clientId: '1234567890-abcdef.apps.googleusercontent.com',
           delegation: {
-            targets: null
+            allowedTargets: null
           }
         }
       };
@@ -363,7 +363,7 @@ describe('config.utils', () => {
         google: {
           clientId: '1234567890-abcdef.apps.googleusercontent.com',
           delegation: {
-            targets: [mockUserIdText, mockSatelliteIdText]
+            allowedTargets: [mockUserIdText, mockSatelliteIdText]
           }
         }
       };
@@ -388,8 +388,8 @@ describe('config.utils', () => {
         google: {
           clientId: '1234567890-abcdef.apps.googleusercontent.com',
           delegation: {
-            targets: [mockUserIdText],
-            maxTimeToLive: ttl
+            allowedTargets: [mockUserIdText],
+            sessionDuration: ttl
           }
         }
       };
@@ -548,8 +548,8 @@ describe('config.utils', () => {
         updated_at: []
       });
 
-      expect(result.google?.delegation?.targets).toBeNull();
-      expect(result.google?.delegation?.maxTimeToLive).toBeUndefined();
+      expect(result.google?.delegation?.allowedTargets).toBeNull();
+      expect(result.google?.delegation?.sessionDuration).toBeUndefined();
     });
 
     it('decodes delegation: targets Some(empty) -> targets = undefined (default/self)', () => {
@@ -619,8 +619,11 @@ describe('config.utils', () => {
         updated_at: []
       });
 
-      expect(result.google?.delegation?.targets).toEqual([mockUserIdText, mockSatelliteIdText]);
-      expect(result.google?.delegation?.maxTimeToLive).toBeUndefined();
+      expect(result.google?.delegation?.allowedTargets).toEqual([
+        mockUserIdText,
+        mockSatelliteIdText
+      ]);
+      expect(result.google?.delegation?.sessionDuration).toBeUndefined();
     });
 
     it('decodes delegation: ttl present -> keeps delegation even if targets undefined', () => {
@@ -654,8 +657,8 @@ describe('config.utils', () => {
         updated_at: []
       });
 
-      expect(result.google?.delegation?.targets).toBeUndefined();
-      expect(result.google?.delegation?.maxTimeToLive).toBe(ttl);
+      expect(result.google?.delegation?.allowedTargets).toBeUndefined();
+      expect(result.google?.delegation?.sessionDuration).toBe(ttl);
     });
   });
 });

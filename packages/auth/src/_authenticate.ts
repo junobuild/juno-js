@@ -126,10 +126,12 @@ const retryGetDelegation = async ({
       const {Err} = result;
 
       if ('NoSuchDelegation' in Err) {
+        // eslint-disable-next-line no-continue
         continue;
       }
 
       if ('GetCachedJwks' in Err) {
+        // eslint-disable-next-line no-continue
         continue;
       }
 

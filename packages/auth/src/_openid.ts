@@ -76,7 +76,7 @@ export const requestWithCredentials = async ({
   nonce,
   loginHint,
   domainHint
-}: RequestJwtWithCredentials): Promise<string> => {
+}: RequestJwtWithCredentials): Promise<{jwt: string}> => {
   const identityCredential = await navigator.credentials.get({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -114,6 +114,6 @@ export const requestWithCredentials = async ({
     });
   }
 
-  const {token} = identityCredential;
-  return token;
+  const {token: jwt} = identityCredential;
+  return {jwt};
 };

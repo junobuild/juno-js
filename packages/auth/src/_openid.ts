@@ -13,7 +13,7 @@ import type {RequestJwtWithCredentials, RequestJwtWithRedirect} from './types/op
  *  - OAuth 2.0 (Google): https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow
  *  - OpenID Connect: https://developers.google.com/identity/openid-connect/openid-connect
  */
-export const requestJwtWithRedirect = async ({
+export const requestJwtWithRedirect = ({
   authUrl,
   clientId,
   nonce,
@@ -21,7 +21,7 @@ export const requestJwtWithRedirect = async ({
   authScopes,
   state,
   redirectUrl
-}: RequestJwtWithRedirect): Promise<void> => {
+}: RequestJwtWithRedirect) => {
   const parseAuthUrl = (): URL => {
     try {
       // Use the URL constructor, for backwards compatibility with older Android/WebView.

@@ -38,16 +38,16 @@ describe('_openid', () => {
     });
 
     it('throws AuthInvalidUrlError when authUrl is invalid', async () => {
-      await expect(
+      expect(() =>
         requestJwtWithRedirect({
           ...mockRequest,
           authUrl: '::not-a-url::'
         })
-      ).rejects.toBeInstanceOf(AuthInvalidUrlError);
+      ).toThrow(AuthInvalidUrlError);
     });
 
     it('navigates to provider with all expected params; defaults redirect_uri to current origin', async () => {
-      await requestJwtWithRedirect({
+      requestJwtWithRedirect({
         ...mockRequest,
         loginHint: 'me@example.com'
       });
@@ -67,7 +67,7 @@ describe('_openid', () => {
     });
 
     it('uses provided redirectUrl when given', async () => {
-      await requestJwtWithRedirect({
+      requestJwtWithRedirect({
         ...mockRequest,
         redirectUrl: 'https://my.app/callback'
       });
@@ -77,7 +77,7 @@ describe('_openid', () => {
     });
 
     it('sets prompt=select_account when loginHint is empty/falsey per notEmptyString', async () => {
-      await requestJwtWithRedirect(mockRequest);
+      requestJwtWithRedirect(mockRequest);
 
       const url = new URL(window.location.href);
       expect(url.searchParams.get('login_hint')).toBeNull();

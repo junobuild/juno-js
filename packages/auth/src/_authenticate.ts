@@ -8,7 +8,10 @@ import type {AuthenticatedIdentity, Delegations} from './types/authenticate';
 import type {OpenIdAuthContext} from './types/context';
 import {generateIdentity} from './utils/authenticate.utils';
 
-interface AuthContext {context: Omit<OpenIdAuthContext, 'state'>; auth: AuthParameters}
+interface AuthContext {
+  context: Omit<OpenIdAuthContext, 'state'>;
+  auth: AuthParameters;
+}
 type AuthenticationArgs = {jwt: string} & AuthContext;
 
 export const authenticate = async ({

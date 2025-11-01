@@ -20,7 +20,10 @@ export type AuthParameters =
         Required<Pick<SatelliteParameters, 'satelliteId'>>;
     };
 
-export interface ActorParameters {auth: AuthParameters; identity: Identity}
+export interface ActorParameters {
+  auth: AuthParameters;
+  identity: Identity;
+}
 
 export type AuthenticationArgs = SatelliteDid.AuthenticationArgs | ConsoleDid.AuthenticationArgs;
 export type GetDelegationArgs = SatelliteDid.GetDelegationArgs | ConsoleDid.GetDelegationArgs;

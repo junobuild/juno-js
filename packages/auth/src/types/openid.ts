@@ -16,17 +16,18 @@ export interface IdentityProvider {
   redirectUrl: string;
 }
 
-type RequestJwt = Pick<OpenIdAuthContext, 'state'> & {
+interface RequestJwt {
   nonce: Nonce;
-};
+}
 
 // https://developers.google.com/identity/protocols/oauth2/web-server#creatingclient
-type RequestJwtRedirect = RequestJwt & {
-  // If your application knows which user is trying to authenticate, it can use this parameter to provide a hint to the Google Authentication Server.
-  // The server uses the hint to simplify the login flow either by prefilling the email field in the sign-in form or by selecting the appropriate multi-login session.
-  // Set the parameter value to an email address or sub identifier, which is equivalent to the user's Google ID
-  loginHint?: string;
-};
+type RequestJwtRedirect = RequestJwt &
+  Pick<OpenIdAuthContext, 'state'> & {
+    // If your application knows which user is trying to authenticate, it can use this parameter to provide a hint to the Google Authentication Server.
+    // The server uses the hint to simplify the login flow either by prefilling the email field in the sign-in form or by selecting the appropriate multi-login session.
+    // Set the parameter value to an email address or sub identifier, which is equivalent to the user's Google ID
+    loginHint?: string;
+  };
 
 // https://www.w3.org/TR/fedcm/#browser-api-credential-request-options
 type RequestJwtCredentials = RequestJwt & {
@@ -39,7 +40,8 @@ type RequestJwtCredentials = RequestJwt & {
 };
 
 export type RequestJwtWithRedirect = RequestJwtRedirect &
-  Pick<IdentityProvider, 'clientId' | 'authUrl' | 'authScopes' | 'redirectUrl'>;
+  Pick<IdentityProvider, 'clientId' | 'authUrl' | 'authScopes'> &
+  Partial<Pick<IdentityProvider, 'redirectUrl'>>;
 
 export type RequestJwtWithCredentials = RequestJwtCredentials &
   Pick<IdentityProvider, 'clientId' | 'configUrl'>;

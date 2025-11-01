@@ -24,28 +24,34 @@ describe('getAuthActor', () => {
   });
 
   it('should return a Satellite actor when cdn has "satellite"', async () => {
-    const params: AuthParameters = {
-      satellite: {satelliteId: mockSatelliteIdPrincipal, identity: mockIdentity}
+    const auth: AuthParameters = {
+      satellite: {satelliteId: mockSatelliteIdPrincipal}
     };
 
-    const actor = await getAuthActor(params);
+    const actor = await getAuthActor({auth, identity: mockIdentity});
 
     expect(icClient.getSatelliteActor).toHaveBeenCalledOnce();
-    expect(icClient.getSatelliteActor).toHaveBeenCalledWith(params.satellite);
+    expect(icClient.getSatelliteActor).toHaveBeenCalledWith({
+      ...auth.satellite,
+      identity: mockIdentity
+    });
     expect(icClient.getConsoleActor).not.toHaveBeenCalled();
 
     expect(actor).toBe(mockSatelliteActor);
   });
 
   it('should return a Console actor when cdn has "console"', async () => {
-    const params: AuthParameters = {
-      console: {consoleId: mockSatelliteIdPrincipal, identity: mockIdentity}
+    const auth: AuthParameters = {
+      console: {consoleId: mockSatelliteIdPrincipal}
     };
 
-    const actor = await getAuthActor(params);
+    const actor = await getAuthActor({auth, identity: mockIdentity});
 
     expect(icClient.getConsoleActor).toHaveBeenCalledOnce();
-    expect(icClient.getConsoleActor).toHaveBeenCalledWith(params.console);
+    expect(icClient.getConsoleActor).toHaveBeenCalledWith({
+      ...auth.console,
+      identity: mockIdentity
+    });
     expect(icClient.getSatelliteActor).not.toHaveBeenCalled();
 
     expect(actor).toBe(mockConsoleActor);

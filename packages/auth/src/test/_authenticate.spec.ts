@@ -50,13 +50,15 @@ describe('_authenticate', () => {
   let generateSpy: MockInstance;
   let genReturn: AuthenticatedIdentity;
 
+  const mockPublicKey = new Uint8Array([0xaa, 0xbb, 0xcc]);
+
   beforeEach(() => {
     vi.useFakeTimers();
     vi.restoreAllMocks();
 
     vi.spyOn(ECDSAKeyIdentity, 'generate').mockResolvedValue({
       getPublicKey: () => ({
-        toDer: () => new Uint8Array([0xaa, 0xbb, 0xcc])
+        toDer: () => mockPublicKey
       })
     } as ECDSAKeyIdentity);
 
@@ -108,7 +110,7 @@ describe('_authenticate', () => {
       args: {
         OpenId: {
           jwt,
-          session_key: new Uint8Array([0xaa, 0xbb, 0xcc]),
+          session_key: mockPublicKey,
           salt
         }
       },
@@ -120,7 +122,7 @@ describe('_authenticate', () => {
     const expectedArgs: GetDelegationArgs = {
       OpenId: {
         jwt,
-        session_key: new Uint8Array([0xaa, 0xbb, 0xcc]),
+        session_key: mockPublicKey,
         salt,
         expiration
       }
@@ -222,7 +224,7 @@ describe('_authenticate', () => {
 
     const p = authenticate(authArgs);
 
-    const guarded = p.catch(e => e);
+    const guarded = p.catch((e) => e);
 
     await vi.advanceTimersByTimeAsync(0);
 
@@ -239,7 +241,7 @@ describe('_authenticate', () => {
 
     const p = authenticate(authArgs);
 
-    const guarded = p.catch(e => e);
+    const guarded = p.catch((e) => e);
 
     // backoffs: i = 0,1,2,3,4 (0ms, 1000ms, 2000ms, 3000ms, 4000ms)
     await vi.advanceTimersByTimeAsync(0);

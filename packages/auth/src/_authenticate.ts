@@ -1,14 +1,12 @@
 import type {Signature} from '@dfinity/agent';
 import {Delegation, ECDSAKeyIdentity} from '@dfinity/identity';
 import {fromNullable} from '@dfinity/utils';
-import type {ConsoleDid, SatelliteDid} from '@junobuild/ic-client/actor';
+import {authenticate as authenticateApi, getDelegation as getDelegationApi} from './api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from './errors';
+import {GetDelegationArgs, SignedDelegation} from './types/actor';
 import type {AuthenticatedIdentity, Delegations} from './types/authenticate';
 import type {OpenIdAuthContext} from './types/context';
 import {generateIdentity} from './utils/authenticate.utils';
-
-type SignedDelegation = SatelliteDid.SignedDelegation | ConsoleDid.SignedDelegation;
-type GetDelegationArgs = SatelliteDid.GetDelegationArgs | ConsoleDid.GetDelegationArgs;
 
 type AuthContext = Omit<OpenIdAuthContext, 'state'>;
 
@@ -40,7 +38,7 @@ const authenticateSession = async ({
   publicKey: Uint8Array;
   context: AuthContext;
 }): Promise<Delegations> => {
-  const result = await authenticateUser({
+  const result = await authenticateApi({
     args: {
       OpenId: {
         jwt,
@@ -112,7 +110,7 @@ const retryGetDelegation = async ({
       }
     };
 
-    const result = await getDelegation({
+    const result = await getDelegationApi({
       args,
       caller
     });

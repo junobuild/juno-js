@@ -4,7 +4,7 @@
 
 import {requestJwtWithRedirect, requestWithCredentials} from '../_openid';
 import {
-  AuthInvalidUrlError,
+  InvalidUrlError,
   FedCMIdentityCredentialInvalidError,
   FedCMIdentityCredentialUndefinedError
 } from '../errors';
@@ -43,7 +43,7 @@ describe('_openid', () => {
           ...mockRequest,
           authUrl: '::not-a-url::'
         })
-      ).toThrow(AuthInvalidUrlError);
+      ).toThrow(InvalidUrlError);
     });
 
     it('navigates to provider with all expected params; defaults redirect_uri to current origin', async () => {

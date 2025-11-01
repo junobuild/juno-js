@@ -4,7 +4,7 @@ import {
   getConsoleActor,
   getSatelliteActor
 } from '@junobuild/ic-client/actor';
-import {ActorParameters} from '../types/actor';
+import type {ActorParameters} from '../types/actor';
 
 export const getAuthActor = ({
   auth,

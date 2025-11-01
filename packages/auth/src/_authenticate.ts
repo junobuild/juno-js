@@ -3,12 +3,12 @@ import {Delegation, ECDSAKeyIdentity} from '@dfinity/identity';
 import {fromNullable} from '@dfinity/utils';
 import {authenticate as authenticateApi, getDelegation as getDelegationApi} from './api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from './errors';
-import {AuthParameters, GetDelegationArgs, SignedDelegation} from './types/actor';
+import type {AuthParameters, GetDelegationArgs, SignedDelegation} from './types/actor';
 import type {AuthenticatedIdentity, Delegations} from './types/authenticate';
 import type {OpenIdAuthContext} from './types/context';
 import {generateIdentity} from './utils/authenticate.utils';
 
-type AuthContext = {context: Omit<OpenIdAuthContext, 'state'>; auth: AuthParameters};
+interface AuthContext {context: Omit<OpenIdAuthContext, 'state'>; auth: AuthParameters}
 type AuthenticationArgs = {jwt: string} & AuthContext;
 
 export const authenticate = async ({

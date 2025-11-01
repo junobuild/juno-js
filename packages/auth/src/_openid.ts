@@ -1,8 +1,8 @@
 import {isNullish, notEmptyString} from '@dfinity/utils';
 import {
-  InvalidUrlError,
   FedCMIdentityCredentialInvalidError,
-  FedCMIdentityCredentialUndefinedError
+  FedCMIdentityCredentialUndefinedError,
+  InvalidUrlError
 } from './errors';
 import type {RequestJwtWithCredentials, RequestJwtWithRedirect} from './types/openid';
 

@@ -1,5 +1,5 @@
 import {DelegationChain, DelegationIdentity, type ECDSAKeyIdentity} from '@dfinity/identity';
-import {AuthenticatedIdentity, Delegations} from '../types/authenticate';
+import type {AuthenticatedIdentity, Delegations} from '../types/authenticate';
 
 export const generateIdentity = ({
   delegations,

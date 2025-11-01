@@ -4,9 +4,9 @@
 
 import {requestJwtWithRedirect, requestWithCredentials} from '../_openid';
 import {
-  InvalidUrlError,
   FedCMIdentityCredentialInvalidError,
-  FedCMIdentityCredentialUndefinedError
+  FedCMIdentityCredentialUndefinedError,
+  InvalidUrlError
 } from '../errors';
 import {RequestJwtWithCredentials, RequestJwtWithRedirect} from '../types/openid';
 

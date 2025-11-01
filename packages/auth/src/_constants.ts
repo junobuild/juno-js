@@ -1,9 +1,9 @@
-import type {IdentityProvider} from './types/openid';
+import type {OpenIdProvider} from './types/provider';
 
 export const CONTEXT_KEY = 'juno:auth:openid';
 
 // Create client_id: https://developers.google.com/identity/openid-connect/openid-connect#authenticationuriparameters
-export const GOOGLE_PROVIDER: Omit<IdentityProvider, 'clientId' | 'redirectUrl'> = {
+export const GOOGLE_PROVIDER: Omit<OpenIdProvider, 'clientId' | 'redirectUrl'> = {
   authUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
   authScopes: ['openid', 'profile', 'email'],
   configUrl: 'https://accounts.google.com/gsi/fedcm.json'

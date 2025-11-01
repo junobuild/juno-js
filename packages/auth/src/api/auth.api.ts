@@ -1,30 +1,30 @@
 import {
+  ActorParameters,
   AuthenticationArgs,
   AuthenticationResult,
-  AuthParameters,
   GetDelegationArgs,
   GetDelegationResult
 } from '../types/actor';
 import {getAuthActor} from './_actor.api';
 
 export const authenticate = async ({
-  auth,
+  actorParams,
   args
 }: {
   args: AuthenticationArgs;
-  auth: AuthParameters;
+  actorParams: ActorParameters;
 }): Promise<AuthenticationResult> => {
-  const {authenticate} = await getAuthActor(auth);
+  const {authenticate} = await getAuthActor(actorParams);
   return await authenticate(args);
 };
 
 export const getDelegation = async ({
-  auth,
+  actorParams,
   args
 }: {
   args: GetDelegationArgs;
-  auth: AuthParameters;
+  actorParams: ActorParameters;
 }): Promise<GetDelegationResult> => {
-  const {get_delegation} = await getAuthActor(auth);
+  const {get_delegation} = await getAuthActor(actorParams);
   return await get_delegation(args);
 };

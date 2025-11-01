@@ -3,25 +3,24 @@ import {Delegation, ECDSAKeyIdentity} from '@dfinity/identity';
 import {fromNullable} from '@dfinity/utils';
 import {authenticate as authenticateApi, getDelegation as getDelegationApi} from './api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from './errors';
-import {GetDelegationArgs, SignedDelegation} from './types/actor';
+import {AuthParameters, GetDelegationArgs, SignedDelegation} from './types/actor';
 import type {AuthenticatedIdentity, Delegations} from './types/authenticate';
 import type {OpenIdAuthContext} from './types/context';
 import {generateIdentity} from './utils/authenticate.utils';
 
-type AuthContext = Omit<OpenIdAuthContext, 'state'>;
+type AuthContext = {context: Omit<OpenIdAuthContext, 'state'>; auth: AuthParameters};
+type AuthenticationArgs = {jwt: string} & AuthContext;
 
 export const authenticate = async ({
   jwt,
-  context
-}: {
-  jwt: string;
-  context: AuthContext;
-}): Promise<AuthenticatedIdentity> => {
+  context,
+  auth
+}: AuthenticationArgs): Promise<AuthenticatedIdentity> => {
   const sessionKey = await ECDSAKeyIdentity.generate({extractable: false});
 
   const publicKey = new Uint8Array(sessionKey.getPublicKey().toDer());
 
-  const delegations = await authenticateSession({jwt, context, publicKey});
+  const delegations = await authenticateSession({jwt, publicKey, context, auth});
 
   return generateIdentity({
     sessionKey,
@@ -32,12 +31,11 @@ export const authenticate = async ({
 const authenticateSession = async ({
   jwt,
   publicKey,
-  context: {caller, salt}
+  context: {caller, salt},
+  auth
 }: {
-  jwt: string;
   publicKey: Uint8Array;
-  context: AuthContext;
-}): Promise<Delegations> => {
+} & AuthenticationArgs): Promise<Delegations> => {
   const result = await authenticateApi({
     args: {
       OpenId: {
@@ -46,7 +44,10 @@ const authenticateSession = async ({
         salt
       }
     },
-    caller
+    actorParams: {
+      auth,
+      identity: caller
+    }
   });
 
   if ('Err' in result) {
@@ -60,6 +61,7 @@ const authenticateSession = async ({
   const signedDelegation = await retryGetDelegation({
     jwt,
     context: {caller, salt},
+    auth,
     publicKey,
     expiration
   });
@@ -86,15 +88,14 @@ const retryGetDelegation = async ({
   jwt,
   publicKey,
   context: {salt, caller},
+  auth,
   expiration,
   maxRetries = 5
 }: {
-  jwt: string;
   publicKey: Uint8Array;
-  context: AuthContext;
   expiration: bigint;
   maxRetries?: number;
-}): Promise<SignedDelegation> => {
+} & AuthenticationArgs): Promise<SignedDelegation> => {
   for (let i = 0; i < maxRetries; i++) {
     // Linear backoff
     await new Promise((resolve) => {
@@ -112,7 +113,10 @@ const retryGetDelegation = async ({
 
     const result = await getDelegationApi({
       args,
-      caller
+      actorParams: {
+        auth,
+        identity: caller
+      }
     });
 
     if ('Err' in result) {

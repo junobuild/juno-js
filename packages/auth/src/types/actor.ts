@@ -1,3 +1,4 @@
+import type {Identity} from '@dfinity/agent';
 import type {
   ConsoleDid,
   ConsoleParameters,
@@ -10,11 +11,16 @@ import type {
  * Use discriminated unions to pass the correct parameters depending on the authentication to target.
  */
 export type AuthParameters =
-  | {console: Omit<ConsoleParameters, 'consoleId'> & Required<Pick<ConsoleParameters, 'consoleId'>>}
   | {
-      satellite: Omit<SatelliteParameters, 'satelliteId'> &
+      console: Omit<ConsoleParameters, 'consoleId' | 'identity'> &
+        Required<Pick<ConsoleParameters, 'consoleId'>>;
+    }
+  | {
+      satellite: Omit<SatelliteParameters, 'satelliteId' | 'identity'> &
         Required<Pick<SatelliteParameters, 'satelliteId'>>;
     };
+
+export type ActorParameters = {auth: AuthParameters, identity: Identity};
 
 export type AuthenticationArgs = SatelliteDid.AuthenticationArgs | ConsoleDid.AuthenticationArgs;
 export type GetDelegationArgs = SatelliteDid.GetDelegationArgs | ConsoleDid.GetDelegationArgs;

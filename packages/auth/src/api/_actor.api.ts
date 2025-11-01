@@ -4,7 +4,12 @@ import {
   getConsoleActor,
   getSatelliteActor
 } from '@junobuild/ic-client/actor';
-import {AuthParameters} from '../types/actor';
+import {ActorParameters} from '../types/actor';
 
-export const getAuthActor = (auth: AuthParameters): Promise<ConsoleActor | SatelliteActor> =>
-  'satellite' in auth ? getSatelliteActor(auth.satellite) : getConsoleActor(auth.console);
+export const getAuthActor = ({
+  auth,
+  identity
+}: ActorParameters): Promise<ConsoleActor | SatelliteActor> =>
+  'satellite' in auth
+    ? getSatelliteActor({...auth.satellite, identity})
+    : getConsoleActor({...auth.console, identity});

@@ -5,7 +5,7 @@
 import {Ed25519KeyIdentity, JsonnableEd25519KeyIdentity} from '@dfinity/identity';
 import {Principal} from '@dfinity/principal';
 import {assertNonNullish, base64ToUint8Array} from '@dfinity/utils';
-import {SESSION_KEY} from '../_constants';
+import {CONTEXT_KEY} from '../_constants';
 import {initContext} from '../_context';
 import {parseContext} from '../utils/session-storage.utils';
 
@@ -28,13 +28,13 @@ describe('_context', () => {
       await initContext();
 
       expect(sessionStorage.length).toBe(1);
-      expect(sessionStorage.getItem(SESSION_KEY)).not.toBeNull();
+      expect(sessionStorage.getItem(CONTEXT_KEY)).not.toBeNull();
     });
 
     it('should store caller, salt and state in SESSION_KEY payload', async () => {
       await initContext();
 
-      const raw = sessionStorage.getItem(SESSION_KEY);
+      const raw = sessionStorage.getItem(CONTEXT_KEY);
       assertNonNullish(raw);
 
       const parsed = JSON.parse(raw) as Record<string, unknown>;
@@ -47,7 +47,7 @@ describe('_context', () => {
     it('should return same state as stored', async () => {
       const {state} = await initContext();
 
-      const raw = sessionStorage.getItem(SESSION_KEY);
+      const raw = sessionStorage.getItem(CONTEXT_KEY);
       assertNonNullish(raw);
 
       const stored = parseContext(raw);
@@ -58,7 +58,7 @@ describe('_context', () => {
     it('should store salt as base64 that decodes to 32 bytes', async () => {
       await initContext();
 
-      const raw = sessionStorage.getItem(SESSION_KEY);
+      const raw = sessionStorage.getItem(CONTEXT_KEY);
       assertNonNullish(raw);
 
       const {__salt__} = JSON.parse(raw) as {__salt__: string};
@@ -72,7 +72,7 @@ describe('_context', () => {
     it('should store a valid caller JSON', async () => {
       await initContext();
 
-      const raw = sessionStorage.getItem(SESSION_KEY);
+      const raw = sessionStorage.getItem(CONTEXT_KEY);
       assertNonNullish(raw);
 
       const {__caller__} = JSON.parse(raw) as {__caller__: JsonnableEd25519KeyIdentity};

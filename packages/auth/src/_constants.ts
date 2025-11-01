@@ -1,6 +1,6 @@
 import type {IdentityProvider} from './types/openid';
 
-export const SESSION_KEY = 'juno:auth:openid';
+export const CONTEXT_KEY = 'juno:auth:openid';
 
 // Create client_id: https://developers.google.com/identity/openid-connect/openid-connect#authenticationuriparameters
 export const GOOGLE_PROVIDER: Omit<IdentityProvider, 'clientId' | 'redirectUrl'> = {

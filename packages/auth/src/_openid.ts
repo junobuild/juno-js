@@ -1,8 +1,8 @@
 import {isNullish, notEmptyString} from '@dfinity/utils';
 import {
-  AuthInvalidUrlError,
   FedCMIdentityCredentialInvalidError,
-  FedCMIdentityCredentialUndefinedError
+  FedCMIdentityCredentialUndefinedError,
+  InvalidUrlError
 } from './errors';
 import type {RequestJwtWithCredentials, RequestJwtWithRedirect} from './types/openid';
 
@@ -27,7 +27,7 @@ export const requestJwtWithRedirect = ({
       // Use the URL constructor, for backwards compatibility with older Android/WebView.
       return new URL(authUrl);
     } catch (error: unknown) {
-      throw new AuthInvalidUrlError('Cannot parse authURL', {cause: error});
+      throw new InvalidUrlError('Cannot parse authURL', {cause: error});
     }
   };
 

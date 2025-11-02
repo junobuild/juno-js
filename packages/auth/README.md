@@ -1,14 +1,14 @@
 [![npm][npm-badge]][npm-badge-url]
 [![license][npm-license]][npm-license-url]
 
-[npm-badge]: https://img.shields.io/npm/v/@junobuild/cdn
-[npm-badge-url]: https://www.npmjs.com/package/@junobuild/cdn
-[npm-license]: https://img.shields.io/npm/l/@junobuild/cdn
+[npm-badge]: https://img.shields.io/npm/v/@junobuild/auth
+[npm-badge-url]: https://www.npmjs.com/package/@junobuild/auth
+[npm-license]: https://img.shields.io/npm/l/@junobuild/auth
 [npm-license-url]: https://github.com/junobuild/juno-js/blob/main/LICENSE
 
-# Juno JavaScript CDN Toolkit
+# Juno JavaScript Authentication SDK
 
-A toolkit for working with modules that implement [Juno]'s CDN functionality.
+A SDK for working with [Juno] authentication modules..
 
 ## License
 

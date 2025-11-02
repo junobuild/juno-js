@@ -1,6 +1,6 @@
 import {Delegation, ECDSAKeyIdentity} from '@dfinity/identity';
 import {MockInstance} from 'vitest';
-import {authenticate} from '../_authenticate';
+import {authenticate} from '../_session';
 import * as authApi from '../api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from '../errors';
 import {
@@ -9,9 +9,9 @@ import {
   GetDelegationArgs,
   type GetDelegationResult
 } from '../types/actor';
-import {AuthenticatedIdentity} from '../types/authenticate';
 import {OpenIdAuthContext} from '../types/context';
-import * as authenticateUtils from '../utils/authenticate.utils';
+import {AuthenticatedIdentity} from '../types/session';
+import * as authenticateUtils from '../utils/session.utils';
 import {mockIdentity} from './mocks/identity.mock';
 import {mockSatelliteIdText} from './mocks/principal.mock';
 
@@ -28,7 +28,7 @@ vi.mock('../utils/authenticate.utils', async (importOriginal) => {
   };
 });
 
-describe('_authenticate', () => {
+describe('_session', () => {
   const jwt = '123456778';
   const caller = mockIdentity;
   const salt = new Uint8Array([1, 2, 3, 4]);

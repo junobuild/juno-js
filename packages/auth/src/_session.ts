@@ -4,9 +4,9 @@ import {fromNullable} from '@dfinity/utils';
 import {authenticate as authenticateApi, getDelegation as getDelegationApi} from './api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from './errors';
 import type {AuthParameters, GetDelegationArgs, SignedDelegation} from './types/actor';
-import type {AuthenticatedIdentity, Delegations} from './types/authenticate';
 import type {OpenIdAuthContext} from './types/context';
-import {generateIdentity} from './utils/authenticate.utils';
+import type {AuthenticatedIdentity, Delegations} from './types/session';
+import {generateIdentity} from './utils/session.utils';
 
 interface AuthContext {
   context: Omit<OpenIdAuthContext, 'state'>;

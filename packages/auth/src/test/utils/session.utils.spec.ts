@@ -6,10 +6,10 @@ import {
   type SignedDelegation
 } from '@dfinity/identity';
 import {Principal} from '@dfinity/principal';
-import {Delegations} from '../../types/authenticate';
-import {generateIdentity} from '../../utils/authenticate.utils';
+import {Delegations} from '../../types/session';
+import {generateIdentity} from '../../utils/session.utils';
 
-describe('authenticate.utils', () => {
+describe('session.utils', () => {
   describe('generateIdentity', () => {
     let sessionKey: ECDSAKeyIdentity;
     let signedDelegations: SignedDelegation[];

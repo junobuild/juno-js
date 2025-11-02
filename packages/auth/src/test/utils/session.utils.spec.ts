@@ -56,7 +56,7 @@ describe('session.utils', () => {
       expect(DelegationIdentity.fromDelegation).toHaveBeenCalledTimes(1);
       expect(DelegationIdentity.fromDelegation).toHaveBeenCalledWith(sessionKey, mockChain);
 
-      expect(result).toEqual({identity: mockIdentity, delegationChain: mockChain});
+      expect(result).toEqual({identity: mockIdentity, delegationChain: mockChain, sessionKey});
     });
 
     it('creates identity from number[] userKey', () => {

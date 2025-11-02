@@ -7,7 +7,7 @@ import {
   AuthenticationUrlHashError
 } from './errors';
 import type {AuthParameters} from './types/actor';
-import type { AuthenticationParams,AuthenticatedIdentity} from './types/authenticate';
+import type {AuthenticatedIdentity, AuthenticationParams} from './types/authenticate';
 import type {OpenIdAuthContext} from './types/context';
 
 export const authenticate = async (

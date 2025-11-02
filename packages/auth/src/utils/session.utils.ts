@@ -18,5 +18,5 @@ export const generateIdentity = ({
 
   const identity = DelegationIdentity.fromDelegation(sessionKey, delegationChain);
 
-  return {identity, delegationChain};
+  return {identity, delegationChain, sessionKey};
 };

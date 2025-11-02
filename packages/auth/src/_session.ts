@@ -15,7 +15,7 @@ interface AuthContext {
 }
 type AuthenticationArgs = {jwt: string} & AuthContext;
 
-export const authenticate = async ({
+export const authenticateSession = async ({
   jwt,
   context,
   auth
@@ -24,7 +24,7 @@ export const authenticate = async ({
 
   const publicKey = new Uint8Array(sessionKey.getPublicKey().toDer());
 
-  const delegations = await authenticateSession({jwt, publicKey, context, auth});
+  const delegations = await authenticate({jwt, publicKey, context, auth});
 
   return generateIdentity({
     sessionKey,
@@ -32,7 +32,7 @@ export const authenticate = async ({
   });
 };
 
-const authenticateSession = async ({
+const authenticate = async ({
   jwt,
   publicKey,
   context: {caller, salt},

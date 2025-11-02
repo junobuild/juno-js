@@ -1,6 +1,6 @@
 import {Delegation, ECDSAKeyIdentity} from '@dfinity/identity';
 import {MockInstance} from 'vitest';
-import {authenticate} from '../_session';
+import {authenticateSession} from '../_session';
 import * as authApi from '../api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from '../errors';
 import {
@@ -97,7 +97,7 @@ describe('_session', () => {
       }
     } as GetDelegationResult);
 
-    const resultPromise = authenticate(authArgs);
+    const resultPromise = authenticateSession(authArgs);
 
     await vi.runAllTimersAsync();
 
@@ -170,7 +170,7 @@ describe('_session', () => {
         }
       } as GetDelegationResult);
 
-    const p = authenticate(authArgs);
+    const p = authenticateSession(authArgs);
 
     await vi.advanceTimersByTimeAsync(0);
     await vi.advanceTimersByTimeAsync(1000);
@@ -193,7 +193,7 @@ describe('_session', () => {
         Ok: {delegation: {pubkey, expiration, targets: targetsNone}, signature}
       } as GetDelegationResult);
 
-    const p = authenticate(authArgs);
+    const p = authenticateSession(authArgs);
 
     await vi.advanceTimersByTimeAsync(0);
     await vi.advanceTimersByTimeAsync(1000);
@@ -209,7 +209,7 @@ describe('_session', () => {
       Err: {RegisterUser: 'Error'}
     });
 
-    await expect(authenticate(authArgs)).rejects.toBeInstanceOf(AuthenticationError);
+    await expect(authenticateSession(authArgs)).rejects.toBeInstanceOf(AuthenticationError);
     expect(authApi.getDelegation).not.toHaveBeenCalled();
     expect(generateSpy).not.toHaveBeenCalled();
   });
@@ -223,7 +223,7 @@ describe('_session', () => {
       Err: {DeriveSeedFailed: 'Error'}
     });
 
-    const p = authenticate(authArgs);
+    const p = authenticateSession(authArgs);
 
     const guarded = p.catch((e) => e);
 
@@ -240,7 +240,7 @@ describe('_session', () => {
 
     vi.mocked(authApi.getDelegation).mockResolvedValue({Err: {NoSuchDelegation: null}});
 
-    const p = authenticate(authArgs);
+    const p = authenticateSession(authArgs);
 
     const guarded = p.catch((e) => e);
 

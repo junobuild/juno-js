@@ -1,6 +1,6 @@
 import {isEmptyString} from '@dfinity/utils';
 import {loadContext} from './_context';
-import {authenticate as authenticateSession} from './_session';
+import {authenticateSession} from './_session';
 import {
   AuthenticationInvalidStateError,
   AuthenticationUndefinedJwtError,

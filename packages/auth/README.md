@@ -8,7 +8,7 @@
 
 # Juno JavaScript Authentication SDK
 
-A SDK for working with [Juno] authentication modules..
+A SDK for working with [Juno] authentication modules.
 
 ## License
 

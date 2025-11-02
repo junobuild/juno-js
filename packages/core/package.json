@@ -40,13 +40,15 @@
     "url": "https://github.com/junobuild/juno-js"
   },
   "keywords": [
-    "blockchain-as-a-service",
-    "baas",
-    "dapps",
-    "dapps-development",
-    "internet computer",
-    "smart-contracts",
-    "web3"
+    "serverless",
+    "serverless-functions",
+    "wasm",
+    "self-hosted",
+    "cloud",
+    "auth",
+    "storage",
+    "database",
+    "hosting"
   ],
   "homepage": "https://juno.build",
   "dependencies": {

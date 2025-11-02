@@ -39,17 +39,6 @@
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"
   },
-  "keywords": [
-    "blockchain-as-a-service",
-    "baas",
-    "dapps",
-    "dapps-development",
-    "internet computer",
-    "smart-contracts",
-    "web3",
-    "utilities",
-    "utils"
-  ],
   "homepage": "https://juno.build",
   "peerDependencies": {
     "@dfinity/utils": "^3.1"

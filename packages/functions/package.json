@@ -44,6 +44,17 @@
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"
   },
+  "keywords": [
+    "serverless",
+    "serverless-functions",
+    "wasm",
+    "self-hosted",
+    "cloud",
+    "auth",
+    "storage",
+    "database",
+    "hosting"
+  ],
   "homepage": "https://juno.build",
   "peerDependencies": {
     "@dfinity/agent": "^3.2.6",

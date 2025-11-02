@@ -9,8 +9,8 @@ import {
   GetDelegationArgs,
   type GetDelegationResult
 } from '../types/actor';
+import {AuthenticatedIdentity} from '../types/authenticate';
 import {OpenIdAuthContext} from '../types/context';
-import {AuthenticatedIdentity} from '../types/session';
 import * as authenticateUtils from '../utils/session.utils';
 import {mockIdentity} from './mocks/identity.mock';
 import {mockSatelliteIdText} from './mocks/principal.mock';

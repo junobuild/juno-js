@@ -23,6 +23,16 @@ export type RequestJwtCredentials = RequestJwt & {
   domainHint?: string | 'any';
 };
 
-export type RequestJwtParams =
-  | {redirect: RequestJwtRedirect}
-  | {credentials: RequestJwtCredentials};
+export interface RequestJwtRedirectParams {
+  redirect: RequestJwtRedirect;
+}
+
+export interface RequestJwtCredentialsParams {
+  credentials: RequestJwtCredentials;
+}
+
+export interface RequestJwtCredentialsResult {
+  jwt: string;
+}
+
+export type RequestJwtParams = RequestJwtRedirectParams | RequestJwtCredentialsParams;

@@ -78,7 +78,7 @@ describe('request', () => {
         }
       });
 
-      await expect(p).rejects.toThrow('Unreachable');
+      await expect(p).resolves.toBeUndefined();
 
       const url = new URL(window.location.href);
       expect(url.origin + url.pathname).toBe(GOOGLE_PROVIDER.authUrl);

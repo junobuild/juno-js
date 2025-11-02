@@ -1,9 +1,24 @@
 import {GOOGLE_PROVIDER} from './_constants';
 import {initContext} from './_context';
 import {requestJwtWithRedirect, requestWithCredentials} from './_openid';
-import type {RequestJwtParams} from './types/request';
+import type {
+  RequestJwtCredentialsParams,
+  RequestJwtCredentialsResult,
+  RequestJwtParams,
+  RequestJwtRedirectParams
+} from './types/request';
 
-export const requestJwt = async ({google}: {google: RequestJwtParams}): Promise<{jwt: string}> => {
+export function requestJwt(args: {
+  google: RequestJwtCredentialsParams;
+}): Promise<RequestJwtCredentialsResult>;
+
+export function requestJwt(args: {google: RequestJwtRedirectParams}): Promise<void>;
+
+export async function requestJwt({
+  google
+}: {
+  google: RequestJwtParams;
+}): Promise<RequestJwtCredentialsResult | void> {
   const context = await initContext();
 
   if ('credentials' in google) {
@@ -26,6 +41,4 @@ export const requestJwt = async ({google}: {google: RequestJwtParams}): Promise<
     authUrl,
     authScopes
   });
-
-  throw new Error('Unreachable');
-};
+}

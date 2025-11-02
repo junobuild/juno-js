@@ -122,7 +122,7 @@ describe('_openid', () => {
         domainHint: 'example.com'
       });
 
-      expect(token).toBe('idtoken-123');
+      expect(token).toBe({jwt: 'idtoken-123'});
 
       expect(mockGet).toHaveBeenCalledTimes(1);
       const arg = mockGet.mock.calls[0][0];

@@ -26,7 +26,7 @@ export const requestJwtWithRedirect = ({
     try {
       // Use the URL constructor, for backwards compatibility with older Android/WebView.
       return new URL(authUrl);
-    } catch (error: unknown) {
+    } catch (_error: unknown) {
       throw new InvalidUrlError('Cannot parse authURL', {cause: authUrl});
     }
   };

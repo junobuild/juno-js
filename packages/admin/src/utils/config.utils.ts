@@ -191,8 +191,10 @@ export const toAuthenticationConfig = ({
 
   const delegation = fromNullable(google?.delegation ?? []);
   const targets =
+    // delegation.targets===[] (exactly equals because delegation is undefined by default)
     nonNullish(delegation) && nonNullish(delegation.targets) && delegation.targets.length === 0
       ? null
+      // delegation.targets===[[]]
       : (fromNullable(delegation?.targets ?? []) ?? []).length === 0
         ? undefined
         : (fromNullable(delegation?.targets ?? []) ?? []).map((p) => p.toText());

@@ -1,4 +1,4 @@
-import {DelegationChain, DelegationIdentity, type ECDSAKeyIdentity} from '@dfinity/identity';
+import {DelegationChain, DelegationIdentity, type ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import type {AuthenticatedIdentity} from '../types/authenticate';
 import type {Delegations} from '../types/session';
 

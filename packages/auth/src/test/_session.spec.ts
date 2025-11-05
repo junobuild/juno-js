@@ -1,4 +1,4 @@
-import {Delegation, ECDSAKeyIdentity} from '@dfinity/identity';
+import {Delegation, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import {MockInstance} from 'vitest';
 import {authenticateSession} from '../_session';
 import * as authApi from '../api/auth.api';

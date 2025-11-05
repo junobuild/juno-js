@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 
-import {Ed25519KeyIdentity, JsonnableEd25519KeyIdentity} from '@dfinity/identity';
-import {Principal} from '@dfinity/principal';
 import {assertNonNullish, base64ToUint8Array} from '@dfinity/utils';
+import {Ed25519KeyIdentity, JsonnableEd25519KeyIdentity} from '@icp-sdk/core/identity';
+import {Principal} from '@icp-sdk/core/principal';
 import {CONTEXT_KEY} from '../_constants';
 import {initContext} from '../_context';
 import {parseContext} from '../utils/session-storage.utils';

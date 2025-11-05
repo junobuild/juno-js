@@ -4,8 +4,8 @@ import {
   ECDSAKeyIdentity,
   Ed25519KeyIdentity,
   type SignedDelegation
-} from '@dfinity/identity';
-import {Principal} from '@dfinity/principal';
+} from '@icp-sdk/core/identity';
+import {Principal} from '@icp-sdk/core/principal';
 import {Delegations} from '../../types/session';
 import {generateIdentity} from '../../utils/session.utils';
 

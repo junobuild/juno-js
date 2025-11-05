@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {ECDSAKeyIdentity, Ed25519KeyIdentity} from '@dfinity/identity';
+import {ECDSAKeyIdentity, Ed25519KeyIdentity} from '@icp-sdk/core/identity';
 import {CONTEXT_KEY} from '../_constants';
 import * as authApi from '../api/auth.api';
 import {authenticate} from '../authenticate';

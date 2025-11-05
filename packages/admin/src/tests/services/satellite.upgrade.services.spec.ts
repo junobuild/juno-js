@@ -1,6 +1,6 @@
-import type {CanisterStatusResponse} from '@dfinity/ic-management';
-import {ICManagementCanister} from '@dfinity/ic-management';
 import {hexStringToUint8Array} from '@dfinity/utils';
+import type {CanisterStatusResponse} from '@icp-sdk/canisters/ic-management';
+import {ICManagementCanister} from '@icp-sdk/canisters/ic-management';
 import * as actor from '@junobuild/ic-client/actor';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
 import {UpgradeCodeUnchangedError} from '../../errors/upgrade.errors';

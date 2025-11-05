@@ -1,4 +1,4 @@
-import {ICManagementCanister} from '@dfinity/ic-management';
+import {ICManagementCanister} from '@icp-sdk/canisters/ic-management';
 import {mockDeep} from 'vitest-mock-extended';
 import {createSnapshot} from '../../api/ic.api';
 import {CdnParameters} from '../../types/actor.params';

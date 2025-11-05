@@ -1,4 +1,4 @@
-import type {canister_install_mode} from '@dfinity/ic-management';
+import type {canister_install_mode} from '@icp-sdk/canisters/ic-management';
 import type {Principal} from '@icp-sdk/core/principal';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
 

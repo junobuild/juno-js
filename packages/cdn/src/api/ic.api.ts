@@ -3,7 +3,7 @@ import {
   type snapshot_id,
   type take_canister_snapshot_result,
   ICManagementCanister
-} from '@dfinity/ic-management';
+} from '@icp-sdk/canisters/ic-management';
 import {Principal} from '@icp-sdk/core/principal';
 import {type ActorParameters, useOrInitAgent} from '@junobuild/ic-client/actor';
 import type {CdnParameters} from '../types/actor.params';

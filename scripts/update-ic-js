@@ -3,13 +3,13 @@
 function rm_ic_mgmt() {
   local package=$1
 
-  npm rm @dfinity/ic-management --workspace=packages/"$package"
+  npm rm @icp-sdk/canisters --workspace=packages/"$package"
 }
 
 function install_ic_mgmt_peer() {
   local package=$1
 
-  npm i @dfinity/ic-management --workspace=packages/"$package" --save-peer
+  npm i @icp-sdk/canisters --workspace=packages/"$package" --save-peer
 }
 
 function rm_utils() {

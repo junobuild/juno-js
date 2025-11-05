@@ -1,4 +1,4 @@
-import type {Ed25519KeyIdentity} from '@dfinity/identity';
+import type {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
 import {mockUserIdPrincipal} from './principal.mock';
 
 const transformRequest = () => {

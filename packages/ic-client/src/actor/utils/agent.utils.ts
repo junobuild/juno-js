@@ -1,4 +1,4 @@
-import {HttpAgent} from '@dfinity/agent';
+import {HttpAgent} from '@icp-sdk/core/agent';
 import type {ActorParameters} from '../types/actor';
 
 // We have this in a utils because we want to mock it for test purposes.

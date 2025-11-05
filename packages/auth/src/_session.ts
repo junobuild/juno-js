@@ -1,6 +1,6 @@
-import type {Signature} from '@dfinity/agent';
-import {Delegation, ECDSAKeyIdentity} from '@dfinity/identity';
 import {fromNullable} from '@dfinity/utils';
+import type {Signature} from '@icp-sdk/core/agent';
+import {Delegation, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import {authenticate as authenticateApi, getDelegation as getDelegationApi} from './api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from './errors';
 import type {AuthParameters, GetDelegationArgs, SignedDelegation} from './types/actor';

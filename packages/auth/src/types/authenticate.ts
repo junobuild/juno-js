@@ -1,4 +1,4 @@
-import type {DelegationChain, DelegationIdentity, ECDSAKeyIdentity} from '@dfinity/identity';
+import type {DelegationChain, DelegationIdentity, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import type {AuthParameters} from './actor';
 
 export interface AuthenticationCredentials {

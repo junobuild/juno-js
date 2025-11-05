@@ -1,5 +1,5 @@
-import {Principal} from '@dfinity/principal';
 import {assertNonNullish} from '@dfinity/utils';
+import {Principal} from '@icp-sdk/core/principal';
 import type {
   AuthenticationConfig,
   DatastoreConfig,

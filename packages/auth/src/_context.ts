@@ -1,5 +1,5 @@
-import {Ed25519KeyIdentity} from '@dfinity/identity';
 import {isNullish} from '@dfinity/utils';
+import {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
 import {CONTEXT_KEY} from './_constants';
 import {ContextUndefinedError} from './errors';
 import type {OpenIdAuthContext} from './types/context';

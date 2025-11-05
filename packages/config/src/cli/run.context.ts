@@ -1,5 +1,5 @@
-import type {Identity} from '@dfinity/agent';
-import type {Principal} from '@dfinity/principal';
+import type {Identity} from '@icp-sdk/core/agent';
+import type {Principal} from '@icp-sdk/core/principal';
 import * as z from 'zod';
 import {StrictIdentitySchema} from '../utils/identity.utils';
 import {StrictPrincipalSchema} from '../utils/principal.utils';

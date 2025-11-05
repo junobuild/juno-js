@@ -1,10 +1,10 @@
-import {AuthClient, IdbStorage, KEY_STORAGE_KEY} from '@dfinity/auth-client';
-import {ECDSAKeyIdentity} from '@dfinity/identity';
+import {AuthClient, IdbStorage, KEY_STORAGE_KEY} from '@icp-sdk/auth/client';
+import {ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import {beforeEach, Mock} from 'vitest';
 import {createAuthClient, resetAuthClient} from '../../../auth/utils/auth.utils';
 
-vi.mock('@dfinity/auth-client', async () => {
-  const actual = (await import('@dfinity/auth-client')) as typeof import('@dfinity/auth-client');
+vi.mock('@icp-sdk/auth/client', async () => {
+  const actual = (await import('@icp-sdk/auth/client')) as typeof import('@icp-sdk/auth/client');
 
   return {
     ...actual,

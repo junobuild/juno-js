@@ -1,4 +1,4 @@
-import type {DerEncodedPublicKey} from '@dfinity/agent';
+import type {DerEncodedPublicKey} from '@icp-sdk/core/agent';
 import type {PublicKeyWithToRaw} from '../types/identity';
 import {_coseToDerEncodedBlob} from './cose-utils';
 

@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import {OnRun, OnRunContextSchema, OnRunSchema} from '../../cli/run.context';
 import {mockIdentity} from '../mocks/identity.mock';
 import {mockUserIdPrincipal} from '../mocks/principal.mock';

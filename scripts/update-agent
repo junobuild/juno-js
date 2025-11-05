@@ -3,31 +3,31 @@
 function rm_agent() {
   local package=$1
 
-  npm rm @dfinity/agent @dfinity/candid @dfinity/identity @dfinity/principal @dfinity/auth-client --workspace=packages/"$package"
+  npm rm @icp-sdk/core @icp-sdk/auth --workspace=packages/"$package"
 }
 
 function install_agent() {
   local package=$1
 
-  npm i @dfinity/agent@latest @dfinity/candid@latest @dfinity/identity@latest @dfinity/principal@latest --workspace=packages/"$package"
+  npm i @icp-sdk/core@latest --workspace=packages/"$package"
 }
 
 function install_agent_peer() {
   local package=$1
 
-  npm i @dfinity/agent@latest @dfinity/candid@latest @dfinity/identity@latest @dfinity/principal@latest --workspace=packages/"$package" --save-peer
+  npm i @icp-sdk/core@latest --workspace=packages/"$package" --save-peer
 }
 
 function install_agent_auth_client() {
   local package=$1
 
-  npm i @dfinity/auth-client@latest --workspace=packages/"$package"
+  npm i @icp-sdk/auth@latest --workspace=packages/"$package"
 }
 
 function install_agent_auth_client_peer() {
   local package=$1
 
-  npm i @dfinity/auth-client@latest --workspace=packages/"$package" --save-peer
+  npm i @icp-sdk/auth@latest --workspace=packages/"$package" --save-peer
 }
 
 PACKAGES=core-standalone

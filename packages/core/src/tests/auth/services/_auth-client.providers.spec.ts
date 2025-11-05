@@ -1,16 +1,16 @@
 /**
  * @vitest-environment jsdom
  */
-import type {AuthClient} from '@dfinity/auth-client';
-import {ERROR_USER_INTERRUPT} from '@dfinity/auth-client';
+import type {AuthClient} from '@icp-sdk/auth/client';
+import {ERROR_USER_INTERRUPT} from '@icp-sdk/auth/client';
 import {mock} from 'vitest-mock-extended';
 import {AuthClientProvider} from '../../../auth/providers/_auth-client.providers';
 import {AuthClientSignInProgressStep} from '../../../auth/types/auth-client';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../../../auth/types/errors';
 import {Provider} from '../../../auth/types/provider';
 
-vi.mock('@dfinity/auth-client', async () => {
-  const actual = (await import('@dfinity/auth-client')) as typeof import('@dfinity/auth-client');
+vi.mock('@icp-sdk/auth/client', async () => {
+  const actual = (await import('@icp-sdk/auth/client')) as typeof import('@icp-sdk/auth/client');
   return {
     ...actual,
     AuthClient: {

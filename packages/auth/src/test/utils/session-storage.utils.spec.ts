@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {Ed25519KeyIdentity} from '@dfinity/identity';
+import {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
 import {parseContext, stringifyContext} from '../../utils/session-storage.utils';
 import {generateRandomState} from '../../utils/state.utils';
 

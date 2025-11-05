@@ -1,9 +1,9 @@
 import {
+  type CanisterStatusResponse,
   ICManagementCanister,
   type InstallChunkedCodeParams,
   InstallCodeParams,
-  type UploadChunkParams,
-  type CanisterStatusResponse
+  type UploadChunkParams
 } from '@icp-sdk/canisters/ic-management';
 import type {CanisterStatus} from '@icp-sdk/core/agent';
 import * as agent from '@icp-sdk/core/agent';

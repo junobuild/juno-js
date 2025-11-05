@@ -1,13 +1,13 @@
 import {
+  type CanisterStatusResponse,
   type chunk_hash,
+  ICManagementCanister,
   type InstallChunkedCodeParams,
   type InstallCodeParams,
   type list_canister_snapshots_result,
   type snapshot_id,
-  type UploadChunkParams,
-  ICManagementCanister,
   type take_canister_snapshot_result,
-  type CanisterStatusResponse
+  type UploadChunkParams
 } from '@icp-sdk/canisters/ic-management';
 import {CanisterStatus} from '@icp-sdk/core/agent';
 import {Principal} from '@icp-sdk/core/principal';

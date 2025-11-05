@@ -41,7 +41,7 @@
   },
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/zod-schemas": "^2",
+    "@dfinity/zod-schemas": "^3",
     "zod": "^4"
   }
 }

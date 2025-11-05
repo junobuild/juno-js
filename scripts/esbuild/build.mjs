@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import {NodeModulesPolyfillPlugin} from '@esbuild-plugins/node-modules-polyfill';
 import esbuild from 'esbuild';
 import {join} from 'path';
 import {externalPeerDependencies} from './pkg.mjs';
@@ -22,7 +21,6 @@ const buildBrowser = ({multi} = {multi: false}) => {
       target: ['esnext'],
       platform: 'browser',
       conditions: ['worker', 'browser'],
-      plugins: [NodeModulesPolyfillPlugin()],
       external: externalPeerDependencies
     })
     .catch(() => process.exit(1));
@@ -32,7 +30,6 @@ const buildNode = ({multi} = {multi: false}) => {
   // esm output bundle for Node
   esbuild
     .build({
-      entryPoints: ['src/index.ts'],
       ...(multi === true
         ? {entryPoints, outdir: process.cwd(), outExtension: {'.js': '.mjs'}}
         : {entryPoints: ['src/index.ts'], outfile: join(DIST, 'node', 'index.mjs')}),

@@ -1,5 +1,5 @@
-import type {CanisterStatus} from '@dfinity/agent';
-import * as agent from '@dfinity/agent';
+import type {CanisterStatus} from '@icp-sdk/core/agent';
+import * as agent from '@icp-sdk/core/agent';
 import type {GetJunoPackageParams} from '../../services/package.services';
 import {
   getJunoPackage,
@@ -8,7 +8,7 @@ import {
 } from '../../services/package.services';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
-vi.mock('@dfinity/agent', () => {
+vi.mock('@icp-sdk/core/agent', () => {
   return {
     CanisterStatus: {
       request: vi.fn()

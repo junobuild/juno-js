@@ -10,10 +10,18 @@ export const DELEGATION_IDENTITY_EXPIRATION = BigInt(
 // That's why we disable it by default.
 export const ALLOW_PIN_AUTHENTICATION = false;
 
-export const II_POPUP: {width: number; height: number} = {width: 576, height: 576};
-export const NFID_POPUP: {width: number; height: number} = {width: 505, height: 705};
+interface PopupSize {
+  width: number;
+  height: number;
+}
+
+export const II_DESIGN_V1_POPUP: PopupSize = {width: 576, height: 576};
+export const II_DESIGN_V2_POPUP: PopupSize = {width: 424, height: 576};
+export const NFID_POPUP: PopupSize = {width: 505, height: 705};
 
 export const INTERNET_COMPUTER_ORG = 'internetcomputer.org';
+export const IC0_APP = 'ic0.app';
+export const ID_AI = 'id.ai';
 
 // Worker
 export const AUTH_TIMER_INTERVAL = 1000;

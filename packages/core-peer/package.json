@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/core-peer",
-  "version": "2.1.0",
+  "version": "2.2.1",
   "description": "JavaScript core client for Juno minus DFINITY agent-js dependencies",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -42,13 +42,15 @@
     "url": "https://github.com/junobuild/juno-js"
   },
   "keywords": [
-    "blockchain-as-a-service",
-    "baas",
-    "dapps",
-    "dapps-development",
-    "internet computer",
-    "smart-contracts",
-    "web3"
+    "serverless",
+    "serverless-functions",
+    "wasm",
+    "self-hosted",
+    "cloud",
+    "auth",
+    "storage",
+    "database",
+    "hosting"
   ],
   "homepage": "https://juno.build",
   "dependencies": {
@@ -58,11 +60,8 @@
     "@junobuild/utils": "*"
   },
   "peerDependencies": {
-    "@dfinity/agent": "^3.2.4",
-    "@dfinity/auth-client": "^3.2.4",
-    "@dfinity/candid": "^3.2.4",
-    "@dfinity/identity": "^3.2.4",
-    "@dfinity/principal": "^3.2.4",
-    "@dfinity/utils": "^3.1"
+    "@dfinity/utils": "^4",
+    "@icp-sdk/auth": "^4.2",
+    "@icp-sdk/core": "^4.2"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/utils",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A collection of utilities and constants for Juno JS libs.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -39,19 +39,8 @@
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"
   },
-  "keywords": [
-    "blockchain-as-a-service",
-    "baas",
-    "dapps",
-    "dapps-development",
-    "internet computer",
-    "smart-contracts",
-    "web3",
-    "utilities",
-    "utils"
-  ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/utils": "^3.1"
+    "@dfinity/utils": "^4.0"
   }
 }

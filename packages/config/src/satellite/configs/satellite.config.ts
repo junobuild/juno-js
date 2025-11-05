@@ -1,12 +1,15 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
-import * as z from 'zod/v4';
+import * as z from 'zod';
+import {
+  type AuthenticationConfig,
+  AuthenticationConfigSchema
+} from '../../shared/authentication.config';
 import {type StorageConfig, StorageConfigSchema} from '../../shared/storage.config';
 import type {CliConfig} from '../../types/cli.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../../types/juno.env';
 import type {Either} from '../../types/utility.types';
 import {StrictPrincipalTextSchema} from '../../utils/principal.utils';
 import {type SatelliteAssertions, SatelliteAssertionsSchema} from './assertions.config';
-import {type AuthenticationConfig, AuthenticationConfigSchema} from './authentication.config';
 import {type Collections, CollectionsSchema} from './collections';
 import {type DatastoreConfig, DatastoreConfigSchema} from './datastore.config';
 import {type ModuleSettings, ModuleSettingsSchema} from './module.settings';

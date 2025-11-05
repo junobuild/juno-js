@@ -32,6 +32,9 @@ export type SignInOptions =
       };
     }
   | {
+      /**
+       * @deprecated Support for sign-in with NFID is deprecated and will be removed in a future release of the library.
+       */
       nfid: {options: NFIDSignInOptions; context?: SignInContext};
     }
   | {

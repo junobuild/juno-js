@@ -1,4 +1,4 @@
-import * as z from 'zod/v4';
+import * as z from 'zod';
 
 /**
  * A schema for validating a version string in `x.y.z` format.

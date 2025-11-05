@@ -1,5 +1,5 @@
-import {Principal} from '@dfinity/principal';
-import {ZodError} from 'zod/v4';
+import {Principal} from '@icp-sdk/core/principal';
+import {ZodError} from 'zod';
 import {
   type Asset,
   AssetEncodingSchema,

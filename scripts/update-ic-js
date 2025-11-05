@@ -3,13 +3,13 @@
 function rm_ic_mgmt() {
   local package=$1
 
-  npm rm @dfinity/ic-management --workspace=packages/"$package"
+  npm rm @icp-sdk/canisters --workspace=packages/"$package"
 }
 
 function install_ic_mgmt_peer() {
   local package=$1
 
-  npm i @dfinity/ic-management --workspace=packages/"$package" --save-peer
+  npm i @icp-sdk/canisters --workspace=packages/"$package" --save-peer
 }
 
 function rm_utils() {
@@ -31,7 +31,7 @@ function install_utils_peer() {
 }
 
 PACKAGES_IC_MGMT_PEER=admin,cdn
-PACKAGES_UTILS_PEER=admin,cdn,functions,core,core-peer,cli-tools,did-tools,utils,storage,ic-client
+PACKAGES_UTILS_PEER=admin,auth,cdn,functions,core,core-peer,cli-tools,did-tools,utils,storage,ic-client
 PACKAGES_UTILS=core-standalone
 
 for package in $(echo $PACKAGES_IC_MGMT_PEER | sed "s/,/ /g"); do

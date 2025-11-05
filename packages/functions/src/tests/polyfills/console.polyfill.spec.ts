@@ -1,5 +1,5 @@
-import {Principal} from '@dfinity/principal';
 import {jsonReplacer} from '@dfinity/utils';
+import {Principal} from '@icp-sdk/core/principal';
 import '../../polyfills/console.polyfill';
 
 globalThis.__ic_cdk_print = vi.fn();

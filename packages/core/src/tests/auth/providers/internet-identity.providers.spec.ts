@@ -15,8 +15,11 @@ describe('internet-identity.providers', () => {
     EnvStore.getInstance().reset();
   });
 
-  const expectedWindowOpenerFeatures =
+  const expectedWindowOpenerFeaturesDesignV1 =
     'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=576, height=576, top=96, left=224';
+
+  const expectedWindowOpenerFeaturesDesignV2 =
+    'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=424, height=576, top=96, left=300';
 
   it('returns default identityProvider', () => {
     const provider = new InternetIdentityProvider({});
@@ -24,17 +27,59 @@ describe('internet-identity.providers', () => {
     const {identityProvider, windowOpenerFeatures} = provider.signInOptions({windowed: true});
     expect(provider.id).toBe('internet_identity');
     expect(identityProvider).toBe('https://identity.internetcomputer.org');
-    expect(windowOpenerFeatures).toEqual(expectedWindowOpenerFeatures);
+    expect(windowOpenerFeatures).toEqual(expectedWindowOpenerFeaturesDesignV1);
   });
 
-  it('returns default identityProvider for domain', () => {
+  it('returns identityProvider for internetcomputer.org', () => {
+    const provider = new InternetIdentityProvider({
+      domain: 'internetcomputer.org'
+    });
+
+    const {identityProvider} = provider.signInOptions({});
+    expect(provider.id).toBe('internet_identity');
+    expect(identityProvider).toBe('https://identity.internetcomputer.org');
+  });
+
+  it('returns identityProvider with internetcomputer.org for empty domain', () => {
+    const provider = new InternetIdentityProvider({
+      domain: '' as 'internetcomputer.org'
+    });
+
+    const {identityProvider} = provider.signInOptions({});
+    expect(provider.id).toBe('internet_identity');
+    expect(identityProvider).toBe('https://identity.internetcomputer.org');
+  });
+
+  it('returns identityProvider for ic0.app', () => {
     const provider = new InternetIdentityProvider({domain: 'ic0.app'});
 
     const {identityProvider, windowOpenerFeatures} = provider.signInOptions({windowed: true});
 
     expect(provider.id).toBe('internet_identity');
     expect(identityProvider).toBe('https://identity.ic0.app');
-    expect(windowOpenerFeatures).toEqual(expectedWindowOpenerFeatures);
+    expect(windowOpenerFeatures).toEqual(expectedWindowOpenerFeaturesDesignV1);
+  });
+
+  it('returns identityProvider for id.ai', () => {
+    const provider = new InternetIdentityProvider({
+      domain: 'id.ai'
+    });
+
+    const {identityProvider, windowOpenerFeatures} = provider.signInOptions({windowed: true});
+
+    expect(provider.id).toBe('internet_identity');
+    expect(identityProvider).toBe('https://id.ai');
+    expect(windowOpenerFeatures).toEqual(expectedWindowOpenerFeaturesDesignV2);
+  });
+
+  it('returns identityProvider for without suffix for custom domain', () => {
+    const provider = new InternetIdentityProvider({
+      domain: 'yolo.com' as 'id.ai'
+    });
+
+    const {identityProvider} = provider.signInOptions({});
+    expect(provider.id).toBe('internet_identity');
+    expect(identityProvider).toBe('https://yolo.com');
   });
 
   it('returns container URL with docker default', () => {

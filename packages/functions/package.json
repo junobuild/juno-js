@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/functions",
-  "version": "0.3.0",
+  "version": "0.3.3",
   "description": "JavaScript and TypeScript utilities for Juno Serverless Functions",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -44,13 +44,21 @@
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"
   },
+  "keywords": [
+    "serverless",
+    "serverless-functions",
+    "wasm",
+    "self-hosted",
+    "cloud",
+    "auth",
+    "storage",
+    "database",
+    "hosting"
+  ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/agent": "^3.2.4",
-    "@dfinity/candid": "^3.2.4",
-    "@dfinity/identity": "^3.2.4",
-    "@dfinity/principal": "^3.2.4",
-    "@dfinity/utils": "^3.1",
-    "zod": "^3.25"
+    "@dfinity/utils": "^4",
+    "@icp-sdk/core": "^4.2",
+    "zod": "^4"
   }
 }

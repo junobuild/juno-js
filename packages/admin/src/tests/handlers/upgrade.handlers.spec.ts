@@ -1,5 +1,4 @@
-import {ICManagementCanister} from '@dfinity/ic-management';
-import {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
+import {ICManagementCanister, type CanisterStatusResponse} from '@icp-sdk/canisters/ic-management';
 import {hexStringToUint8Array} from '@dfinity/utils';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
 import {mockDeep} from 'vitest-mock-extended';

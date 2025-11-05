@@ -2,9 +2,9 @@ import {
   ICManagementCanister,
   type InstallChunkedCodeParams,
   InstallCodeParams,
-  type UploadChunkParams
-} from '@dfinity/ic-management';
-import {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
+  type UploadChunkParams,
+  type CanisterStatusResponse
+} from '@icp-sdk/canisters/ic-management';
 import type {CanisterStatus} from '@icp-sdk/core/agent';
 import * as agent from '@icp-sdk/core/agent';
 import {mockDeep} from 'vitest-mock-extended';

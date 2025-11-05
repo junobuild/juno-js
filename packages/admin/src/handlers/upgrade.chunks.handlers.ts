@@ -1,4 +1,4 @@
-import type {chunk_hash} from '@dfinity/ic-management';
+import type {chunk_hash} from '@icp-sdk/canisters/ic-management';
 import {isNullish, nonNullish, uint8ArrayToHexString} from '@dfinity/utils';
 import {
   clearChunkStore,

@@ -194,8 +194,8 @@ export const toAuthenticationConfig = ({
     // delegation.targets===[] (exactly equals because delegation is undefined by default)
     nonNullish(delegation) && nonNullish(delegation.targets) && delegation.targets.length === 0
       ? null
-      // delegation.targets===[[]]
-      : (fromNullable(delegation?.targets ?? []) ?? []).length === 0
+      : // delegation.targets===[[]]
+        (fromNullable(delegation?.targets ?? []) ?? []).length === 0
         ? undefined
         : (fromNullable(delegation?.targets ?? []) ?? []).map((p) => p.toText());
   const maxTimeToLive = fromNullable(delegation?.max_time_to_live ?? []);

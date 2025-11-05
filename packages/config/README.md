@@ -15,9 +15,6 @@ Configuration options for [Juno] CLI.
 ### :wrench: Constants
 
 - [SatelliteAssertionsSchema](#gear-satelliteassertionsschema)
-- [AuthenticationConfigInternetIdentitySchema](#gear-authenticationconfiginternetidentityschema)
-- [AuthenticationConfigRulesSchema](#gear-authenticationconfigrulesschema)
-- [AuthenticationConfigSchema](#gear-authenticationconfigschema)
 - [PermissionTextSchema](#gear-permissiontextschema)
 - [MemoryTextSchema](#gear-memorytextschema)
 - [RulesTypeSchema](#gear-rulestypeschema)
@@ -58,42 +55,6 @@ References:
 - SatelliteAssertions
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/assertions.config.ts#L6)
-
-#### :gear: AuthenticationConfigInternetIdentitySchema
-
-| Constant                                     | Type                                                                                                                        |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `AuthenticationConfigInternetIdentitySchema` | `ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>` |
-
-References:
-
-- AuthenticationConfigInternetIdentity
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L7)
-
-#### :gear: AuthenticationConfigRulesSchema
-
-| Constant                          | Type                                                           |
-| --------------------------------- | -------------------------------------------------------------- |
-| `AuthenticationConfigRulesSchema` | `ZodObject<{ allowedCallers: ZodArray<ZodString>; }, $strict>` |
-
-References:
-
-- AuthenticationConfigRules
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L36)
-
-#### :gear: AuthenticationConfigSchema
-
-| Constant                     | Type                                                                                                                                                                                                                                    |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `AuthenticationConfigSchema` | `ZodObject<{ internetIdentity: ZodOptional<ZodObject<{ derivationOrigin: ZodOptional<ZodURL>; externalAlternativeOrigins: ZodOptional<ZodArray<ZodURL>>; }, $strict>>; rules: ZodOptional<...>; version: ZodOptional<...>; }, $strict>` |
-
-References:
-
-- AuthenticationConfig
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L59)
 
 #### :gear: PermissionTextSchema
 
@@ -145,9 +106,9 @@ References:
 
 #### :gear: DatastoreCollectionSchema
 
-| Constant                    | Type                                                                                                                                                                                                                                     |
-| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DatastoreCollectionSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
+| Constant                    | Type                                                                                                                                                                                                                                                                                                               |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DatastoreCollectionSchema` | `ZodObject<{ collection: ZodString; read: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; write: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
 
 References:
 
@@ -157,9 +118,9 @@ References:
 
 #### :gear: StorageCollectionSchema
 
-| Constant                  | Type                                                                                                                                                                                                                                     |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `StorageCollectionSchema` | `ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
+| Constant                  | Type                                                                                                                                                                                                                                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `StorageCollectionSchema` | `ZodObject<{ collection: ZodString; read: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; write: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>` |
 
 References:
 
@@ -169,9 +130,9 @@ References:
 
 #### :gear: CollectionsSchema
 
-| Constant            | Type                                                                                                                                                                                                                                                                                                                           |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `CollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ version: ZodOptional<ZodBigInt>; collection: ZodString; read: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; ... 5 more ...; maxTokens: ZodOptional<...>; }, $strict>>>; storage: ZodOptional<...>; }, $strict>` |
+| Constant            | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CollectionsSchema` | `ZodObject<{ datastore: ZodOptional<ZodArray<ZodObject<{ collection: ZodString; read: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; write: ZodEnum<{ public: "public"; private: "private"; managed: "managed"; controllers: "controllers"; }>; ... 5 more ...; maxTokens...` |
 
 References:
 
@@ -403,7 +364,7 @@ References:
 
 - SatelliteId
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L17)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L20)
 
 #### :gear: SatelliteIdsSchema
 
@@ -415,7 +376,7 @@ References:
 
 - SatelliteIds
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L36)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L39)
 
 #### :gear: SatelliteConfigOptionsSchema
 
@@ -427,14 +388,11 @@ References:
 
 - JunoConsoleConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L75)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L78)
 
 ### :tropical_drink: Interfaces
 
 - [SatelliteAssertions](#gear-satelliteassertions)
-- [AuthenticationConfigInternetIdentity](#gear-authenticationconfiginternetidentity)
-- [AuthenticationConfigRules](#gear-authenticationconfigrules)
-- [AuthenticationConfig](#gear-authenticationconfig)
 - [Rule](#gear-rule)
 - [Collections](#gear-collections)
 - [MaxMemorySizeConfig](#gear-maxmemorysizeconfig)
@@ -469,39 +427,6 @@ Configuration for satellite assertions.
 | `heapMemory` | `bigint or boolean or undefined` | Configuration for the heap memory size check, which can be: - `true` to enable the check with a default threshold of 900MB, - `false` to disable the heap memory size check, - A `bigint` to specify a custom threshold in MB (megabytes) for the heap memory size check. If not specified, then `true` is used as the default value. type: {bigint or boolean} |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/assertions.config.ts#L14)
-
-#### :gear: AuthenticationConfigInternetIdentity
-
-Configure the behavior of Internet Identity.
-
-| Property                     | Type                    | Description                                                                                                                                                                                                                                                                                                                      |
-| ---------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `derivationOrigin`           | `string or undefined`   | This setting ensures that users are recognized on your app, regardless of whether they use the default URL or any other custom domain. For example, if set to hello.com, a user signing on at https://hello.com will receive the same identifier (principal) as when signing on at https://www.hello.com. type: {string}optional |
-| `externalAlternativeOrigins` | `string[] or undefined` | An optional list of external alternative origins allowed for authentication, which can be useful if you want to reuse the same derivation origin across multiple Satellites. type: {string[]}optional                                                                                                                            |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L16)
-
-#### :gear: AuthenticationConfigRules
-
-Configure the rules of the authentication.
-
-| Property         | Type       | Description                                                                                                                                                                                                                                                 |
-| ---------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `allowedCallers` | `string[]` | This option defines who's allowed to use your app. If you enable this, only the identities you list (in user key, format, like `bj4r4-5cdop-...`) will be allowed to sign in or use any features like Datastore or Storage. type: {PrincipalText[]}optional |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L44)
-
-#### :gear: AuthenticationConfig
-
-Configures the Authentication options of a Satellite.
-
-| Property           | Type                                                | Description                                                                                                                                                                                                                                             |
-| ------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `internetIdentity` | `AuthenticationConfigInternetIdentity or undefined` | Optional configuration of Internet Identity authentication method. type: {AuthenticationConfigInternetIdentity}optional                                                                                                                                 |
-| `rules`            | `AuthenticationConfigRules or undefined`            | Optional configuration for the rules of the authentication. type: {AuthenticationConfigRules}optional                                                                                                                                                   |
-| `version`          | `bigint or undefined`                               | The current version of the config. Optional. The CLI will automatically resolve the version and warn you if there's a potential overwrite. You can provide it if you want to manage versioning manually within your config file. type: {bigint}optional |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/authentication.config.ts#L69)
 
 #### :gear: Rule
 
@@ -781,7 +706,7 @@ Represents the unique identifier for a satellite.
 | -------- | -------- | -------------------------------------------------------------------------------- |
 | `id`     | `string` | The unique identifier (ID) of the satellite for this application. type: {string} |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L28)
 
 #### :gear: SatelliteIds
 
@@ -791,7 +716,7 @@ Represents a mapping of satellite identifiers to different configurations based 
 | -------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ids`    | `Record<string, string>` | A mapping of satellite identifiers (IDs) to different configurations based on the mode of the application. This allows the application to use different satellite IDs, such as production, staging, etc. Example: { "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai" } type: {Record<JunoConfigMode, string>} |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L44)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L47)
 
 #### :gear: SatelliteConfigOptions
 
@@ -811,7 +736,7 @@ changes, typically through CLI commands (e.g., `juno config`).
 | `settings`       | `ModuleSettings or undefined`       | Optional configuration parameters for the Satellite. These settings control various aspects of the module's behavior and resource usage. type: {ModuleSettings}optional                                                                                                     |
 | `collections`    | `Collections or undefined`          | Optional configuration for the Datastore and Storage collections. type: {Collections}optional                                                                                                                                                                               |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L106)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L109)
 
 ### :cocktail: Types
 
@@ -924,7 +849,7 @@ The configuration for running the Juno emulator.
 | ----------------- | ---------------------------------------------------------------------------- |
 | `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> and CliConfig and SatelliteConfigOptions` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L162)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L165)
 
 <!-- TSDOC_END -->
 

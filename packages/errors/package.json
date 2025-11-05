@@ -39,23 +39,5 @@
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"
   },
-  "keywords": [
-    "juno",
-    "junobuild",
-    "errors",
-    "error-handling",
-    "constants",
-    "datastore",
-    "storage",
-    "authentication",
-    "auth",
-    "validation",
-    "exceptions",
-    "typescript",
-    "javascript",
-    "library",
-    "utilities",
-    "developer-tools"
-  ],
   "homepage": "https://juno.build"
 }

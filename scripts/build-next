@@ -8,6 +8,7 @@ node ./scripts/update-version.mjs config
 node ./scripts/update-version.mjs ic-client
 node ./scripts/update-version.mjs storage
 node ./scripts/update-version.mjs cdn
+node ./scripts/update-version.mjs auth
 node ./scripts/update-version.mjs cli-tools
 node ./scripts/update-version.mjs did-tools
 node ./scripts/update-version.mjs config-loader

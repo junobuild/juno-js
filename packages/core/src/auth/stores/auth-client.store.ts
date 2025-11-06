@@ -1,6 +1,11 @@
 import {isNullish} from '@dfinity/utils';
-import {AuthClient, IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@icp-sdk/auth/client';
-import {DelegationChain, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
+import {
+  AuthClient,
+  IdbStorage,
+  KEY_STORAGE_DELEGATION,
+  KEY_STORAGE_KEY
+} from '@icp-sdk/auth/client';
+import type {DelegationChain, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 
 export class AuthClientStore {
   static #instance: AuthClientStore | undefined;

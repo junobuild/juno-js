@@ -1,7 +1,6 @@
 import {JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE} from '@junobuild/errors';
 import {toArray} from '@junobuild/utils';
 import * as userServices from '../../../auth/services/_user.services';
-import * as authServices from '../../../auth/services/auth.services';
 import * as identityServices from '../../../auth/services/identity.services';
 import {InitError} from '../../../auth/types/errors';
 import type {Provider} from '../../../auth/types/provider';

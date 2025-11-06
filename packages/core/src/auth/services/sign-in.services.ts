@@ -4,7 +4,7 @@ import {InternetIdentityProvider} from '../providers/internet-identity.providers
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthClientStore} from '../stores/auth-client.store';
 import {AuthStore} from '../stores/auth.store';
-import {SignInContext, SignInOptions} from '../types/auth';
+import type {SignInContext, SignInOptions} from '../types/auth';
 import {SignInProviderNotSupportedError} from '../types/errors';
 import type {Provider} from '../types/provider';
 import {authenticateWithAuthClient} from './_auth-client.services';

@@ -11,6 +11,7 @@ import type {Unsubscribe} from './core/types/subscription';
 import {envContainer, envSatelliteId} from './core/utils/window.env.utils';
 export * from './auth/providers/internet-identity.providers';
 export {getIdentityOnce, unsafeIdentity} from './auth/services/identity.services';
+export {handleRedirectCallback} from './auth/services/redirect.services';
 export {signIn} from './auth/services/sign-in.services';
 export {signOut} from './auth/services/sign-out.services';
 export {signUp} from './auth/services/sign-up.services';

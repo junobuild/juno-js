@@ -4,7 +4,7 @@ import {InternetIdentityProvider} from '../providers/internet-identity.providers
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthClientStore} from '../stores/auth-client.store';
 import {AuthStore} from '../stores/auth.store';
-import type {SignInOptions} from '../types/auth';
+import {SignInContext, SignInOptions} from '../types/auth';
 import {SignInProviderNotSupportedError} from '../types/errors';
 import type {Provider} from '../types/provider';
 import {authenticateWithAuthClient} from './_auth-client.services';
@@ -34,9 +34,71 @@ export const createAuth = async ({provider}: {provider: Provider}) => {
  * @returns {Promise<void>} A promise that resolves when the sign-in process is complete and the authenticated user is initialized.
  */
 export const signIn = async (options: SignInOptions): Promise<void> => {
-  const fn = async () => await signInWithProvider(options);
+  if ('google' in options) {
+    const {
+      google: {options: signInOptions}
+    } = options;
 
-  const disableWindowGuard = Object.values(options)[0].context?.windowGuard === false;
+    const fn = (): Promise<void> =>
+      new GoogleProvider().signIn({
+        options: signInOptions
+      });
+
+    await signInWithContext({
+      fn
+    });
+
+    return;
+  }
+
+  if ('webauthn' in options) {
+    const {
+      webauthn: {options: signInOptions, context}
+    } = options;
+
+    const fn = (): Promise<void> =>
+      new WebAuthnProvider().signIn({
+        options: signInOptions,
+        loadAuth
+      });
+
+    await signInWithContext({fn, context});
+
+    return;
+  }
+
+  if ('internet_identity' in options) {
+    const {
+      internet_identity: {options: iiOptions, context}
+    } = options;
+
+    const {domain, ...signInOptions} = iiOptions ?? {};
+
+    const fn = (): Promise<void> =>
+      new InternetIdentityProvider({domain}).signIn({
+        options: signInOptions,
+        authClient: AuthClientStore.getInstance().getAuthClient(),
+        initAuth: createAuth
+      });
+
+    await signInWithContext({fn, context});
+
+    return;
+  }
+
+  throw new SignInProviderNotSupportedError(
+    'An unknown or unsupported provider was provided for sign-in.'
+  );
+};
+
+const signInWithContext = async ({
+  fn,
+  context
+}: {
+  fn: () => Promise<void>;
+  context?: SignInContext;
+}): Promise<void> => {
+  const disableWindowGuard = context?.windowGuard === false;
 
   if (disableWindowGuard) {
     await fn();
@@ -44,48 +106,4 @@ export const signIn = async (options: SignInOptions): Promise<void> => {
   }
 
   await executeWithWindowGuard({fn});
-};
-
-const signInWithProvider = async (options: SignInOptions): Promise<void> => {
-  if ('google' in options) {
-    const {
-      google: {options: signInOptions}
-    } = options;
-
-    await new GoogleProvider().signIn({
-      options: signInOptions
-    });
-    return;
-  }
-
-  if ('webauthn' in options) {
-    const {
-      webauthn: {options: signInOptions}
-    } = options;
-
-    await new WebAuthnProvider().signIn({
-      options: signInOptions,
-      loadAuth
-    });
-    return;
-  }
-
-  if ('internet_identity' in options) {
-    const {
-      internet_identity: {options: iiOptions}
-    } = options;
-
-    const {domain, ...signInOptions} = iiOptions ?? {};
-
-    await new InternetIdentityProvider({domain}).signIn({
-      options: signInOptions,
-      authClient: AuthClientStore.getInstance().getAuthClient(),
-      initAuth: createAuth
-    });
-    return;
-  }
-
-  throw new SignInProviderNotSupportedError(
-    'An unknown or unsupported provider was provided for sign-in.'
-  );
 };

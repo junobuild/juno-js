@@ -10,13 +10,8 @@ import type {Environment, UserEnvironment} from './core/types/env';
 import type {Unsubscribe} from './core/types/subscription';
 import {envContainer, envSatelliteId} from './core/utils/window.env.utils';
 export * from './auth/providers/internet-identity.providers';
-export {
-  getIdentityOnce,
-  signIn,
-  signOut,
-  signUp,
-  unsafeIdentity
-} from './auth/services/auth.services';
+export {signIn, signOut, signUp} from './auth/services/auth.services';
+export {getIdentityOnce, unsafeIdentity} from './auth/services/identity.services';
 export type * from './auth/types/auth';
 export * from './auth/types/auth-client';
 export * from './auth/types/errors';

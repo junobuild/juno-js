@@ -3,7 +3,6 @@
  */
 
 import {AuthClient} from '@icp-sdk/auth/client';
-import {AnonymousIdentity} from '@icp-sdk/core/agent';
 import * as identityLib from '@icp-sdk/core/identity';
 import * as authLib from '@junobuild/auth';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
@@ -12,14 +11,11 @@ import {mock} from 'vitest-mock-extended';
 import * as userServices from '../../../auth/services/_user.services';
 import {
   createAuth,
-  getIdentity,
-  getIdentityOnce,
   loadAuth,
   resetAuth,
   signIn,
   signOut,
-  signUp,
-  unsafeIdentity
+  signUp
 } from '../../../auth/services/auth.services';
 import * as userWebAuthnServices from '../../../auth/services/user-webauthn.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
@@ -35,7 +31,7 @@ import {
 import type {GoogleSignInOptions} from '../../../auth/types/google';
 import * as actorApi from '../../../core/api/actor.api';
 import {EnvStore} from '../../../core/stores/env.store';
-import {mockIdentity, mockSatelliteId, mockUser, mockUserIdText} from '../../mocks/core.mock';
+import {mockSatelliteId, mockUser, mockUserIdText} from '../../mocks/core.mock';
 import {
   mockPasskeyIdentity,
   mockWebAuthnDocApiObject,
@@ -520,80 +516,6 @@ describe('auth.services', () => {
       await expect(signOut()).rejects.toThrow('create client failed');
 
       expect(reloadSpy).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('getIdentity', () => {
-    it('returns undefined if authClient is null', () => {
-      const identity = getIdentity();
-
-      expect(identity).toBeUndefined();
-    });
-
-    it('returns identity if available', async () => {
-      authClientMock.getIdentity.mockReturnValue(mockIdentity);
-
-      await loadAuth();
-
-      const identity = getIdentity();
-
-      expect(identity?.getPrincipal().toText()).toBe(mockIdentity.getPrincipal().toText());
-    });
-  });
-
-  describe('unsafeIdentity', () => {
-    const anonymous = new AnonymousIdentity();
-
-    it('returns an identity', async () => {
-      authClientMock.getIdentity.mockReturnValue(anonymous);
-
-      const identity = await unsafeIdentity();
-
-      expect(identity?.getPrincipal().toText()).toBe(anonymous.getPrincipal().toText());
-    });
-
-    it('creates authClient if not initialized and returns identity', async () => {
-      authClientMock.getIdentity.mockReturnValue(anonymous);
-
-      const createSpy = vi.spyOn(AuthClientStore.getInstance(), 'createAuthClient');
-
-      const identity = await unsafeIdentity();
-
-      expect(identity?.getPrincipal().toText()).toBe(anonymous.getPrincipal().toText());
-      expect(createSpy).toHaveBeenCalled();
-    });
-  });
-
-  describe('getIdentityOnce', () => {
-    it('returns null if no user in AuthStore', async () => {
-      AuthStore.getInstance().reset();
-
-      const identity = await getIdentityOnce();
-
-      expect(identity).toBeNull();
-    });
-
-    it('returns null if not authenticated', async () => {
-      AuthStore.getInstance().set(mockUser);
-
-      authClientMock.isAuthenticated.mockResolvedValue(false);
-
-      const identity = await getIdentityOnce();
-
-      expect(identity).toBeNull();
-    });
-
-    it('returns identity if authenticated', async () => {
-      AuthStore.getInstance().set(mockUser);
-
-      await loadAuth();
-
-      authClientMock.isAuthenticated.mockResolvedValue(true);
-      authClientMock.getIdentity.mockReturnValue(mockIdentity);
-
-      const identity = await getIdentityOnce();
-
-      expect(identity?.getPrincipal().toText()).toBe(mockIdentity.getPrincipal().toText());
     });
   });
 });

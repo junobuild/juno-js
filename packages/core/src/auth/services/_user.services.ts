@@ -4,7 +4,8 @@ import {getDoc, setDoc} from '../../datastore/services/doc.services';
 import {InitError} from '../types/errors';
 import type {Provider} from '../types/provider';
 import type {User, UserData} from '../types/user';
-import {getIdentity} from './auth.services';
+
+import {getIdentity} from './identity.services';
 
 type UserId = string;
 

@@ -1,6 +1,6 @@
 import type {Mock} from 'vitest';
 import {initAuthTimeoutWorker} from '../../../auth/services/auth-timout.services';
-import * as authServices from '../../../auth/services/auth.services';
+import * as signOutServices from '../../../auth/services/sign-out.services';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import * as eventsUtils from '../../../auth/utils/events.utils';
 import {mockUser} from '../../mocks/core.mock';
@@ -43,7 +43,7 @@ describe('auth-timeout.services', () => {
   });
 
   it('handles junoSignOutAuthTimer message', async () => {
-    const mockSignOut = vi.spyOn(authServices, 'signOut').mockResolvedValue(undefined);
+    const mockSignOut = vi.spyOn(signOutServices, 'signOut').mockResolvedValue(undefined);
     const mockEmit = vi.spyOn(eventsUtils, 'emit').mockImplementation(() => {});
 
     initAuthTimeoutWorker('./mock-worker.js');

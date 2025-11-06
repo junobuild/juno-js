@@ -5,9 +5,9 @@ export type DeprecatedNfid = 'nfid';
 
 /**
  * Type representing the authentication providers.
- * @typedef {('internet_identity' | 'nfid' | 'webauthn')} Provider
+ * @typedef {('internet_identity' | 'nfid' | 'webauthn' | 'google')} Provider
  */
-export type Provider = 'internet_identity' | DeprecatedNfid | 'webauthn';
+export type Provider = 'internet_identity' | DeprecatedNfid | 'webauthn' | 'google';
 
 /**
  * Metadata for WebAuthn authentication.

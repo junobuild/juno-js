@@ -4,6 +4,7 @@ import type {Identity} from '@icp-sdk/core/agent';
 import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';
 import {executeWithWindowGuard} from '../helpers/window.helpers';
+import {GoogleProvider} from '../providers/google.providers';
 import {InternetIdentityProvider} from '../providers/internet-identity.providers';
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthStore} from '../stores/auth.store';
@@ -122,6 +123,17 @@ export const signUp = async (options: SignUpOptions): Promise<void> => {
 };
 
 const signInWithProvider = async (options: SignInOptions): Promise<void> => {
+  if ('google' in options) {
+    const {
+      google: {options: signInOptions}
+    } = options;
+
+    await new GoogleProvider().signIn({
+      options: signInOptions
+    });
+    return;
+  }
+
   if ('webauthn' in options) {
     const {
       webauthn: {options: signInOptions}

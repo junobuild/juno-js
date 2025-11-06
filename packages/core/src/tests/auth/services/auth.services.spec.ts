@@ -5,6 +5,7 @@
 import {AuthClient} from '@icp-sdk/auth/client';
 import {AnonymousIdentity} from '@icp-sdk/core/agent';
 import * as identityLib from '@icp-sdk/core/identity';
+import * as authLib from '@junobuild/auth';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
@@ -30,6 +31,7 @@ import {
   SignInUserInterruptError,
   SignUpProviderNotSupportedError
 } from '../../../auth/types/errors';
+import type {GoogleSignInOptions} from '../../../auth/types/google';
 import * as authUtils from '../../../auth/utils/auth.utils';
 import * as actorApi from '../../../core/api/actor.api';
 import {EnvStore} from '../../../core/stores/env.store';
@@ -270,6 +272,35 @@ describe('auth.services', () => {
 
         expect(loginSpy).not.toHaveBeenCalled();
         expect(userServices.loadUser).toHaveBeenCalled();
+      });
+
+      it('should call google provider with options', async () => {
+        await loadAuth();
+
+        const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
+
+        const options: GoogleSignInOptions = {
+          redirect: {
+            clientId: 'client-abc',
+            authScopes: ['openid', 'profile'],
+            redirectUrl: 'https://app.example.com/auth/callback',
+            loginHint: 'dev@example.com'
+          }
+        };
+
+        await expect(
+          signIn({
+            google: {
+              options
+            }
+          })
+        ).resolves.toBeUndefined();
+
+        expect(requestSpy).toHaveBeenCalledExactlyOnceWith({
+          google: {
+            redirect: options.redirect
+          }
+        });
       });
 
       it('rejects with SignInUserInterruptError if interrupted', async () => {

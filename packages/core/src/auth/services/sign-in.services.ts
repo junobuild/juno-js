@@ -4,12 +4,12 @@ import {InternetIdentityProvider} from '../providers/internet-identity.providers
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthClientStore} from '../stores/auth-client.store';
 import {AuthStore} from '../stores/auth.store';
-import type {SignInOptions, SignUpOptions} from '../types/auth';
-import {SignInProviderNotSupportedError, SignUpProviderNotSupportedError} from '../types/errors';
+import type {SignInOptions} from '../types/auth';
+import {SignInProviderNotSupportedError} from '../types/errors';
 import type {Provider} from '../types/provider';
 import {authenticateWithAuthClient} from './_auth-client.services';
 import {initUser} from './_user.services';
-import {loadAuth, loadAuthWithUser} from './load.services';
+import {loadAuth} from './load.services';
 
 /**
  * Initialize the authClient, load or create a new user.
@@ -37,25 +37,6 @@ export const signIn = async (options: SignInOptions): Promise<void> => {
   const fn = async () => await signInWithProvider(options);
 
   const disableWindowGuard = Object.values(options)[0].context?.windowGuard === false;
-
-  if (disableWindowGuard) {
-    await fn();
-    return;
-  }
-
-  await executeWithWindowGuard({fn});
-};
-
-/**
- * Signs up to create a new user with the specified options.
- *
- * @param {SignUpOptions} [options] - The options for signing up including the provider to use for the process.
- * @returns {Promise<void>} A promise that resolves when the sign-up process is complete and the user is authenticated.
- */
-export const signUp = async (options: SignUpOptions): Promise<void> => {
-  const fn = async () => await signUpWithProvider(options);
-
-  const disableWindowGuard = Object.values(options)?.[0].context?.windowGuard === false;
 
   if (disableWindowGuard) {
     await fn();
@@ -106,23 +87,5 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
 
   throw new SignInProviderNotSupportedError(
     'An unknown or unsupported provider was provided for sign-in.'
-  );
-};
-
-const signUpWithProvider = async (options: SignUpOptions): Promise<void> => {
-  if ('webauthn' in options) {
-    const {
-      webauthn: {options: signUpOptions}
-    } = options;
-
-    await new WebAuthnProvider().signUp({
-      options: signUpOptions,
-      loadAuthWithUser
-    });
-    return;
-  }
-
-  throw new SignUpProviderNotSupportedError(
-    'An unknown or unsupported provider was provided for sign-up.'
   );
 };

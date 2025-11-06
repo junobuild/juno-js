@@ -1,5 +1,4 @@
 import type {InternetIdentitySignInOptions} from './internet-identity';
-import type {NFIDSignInOptions} from './nfid';
 import type {WebAuthnSignInOptions, WebAuthnSignUpOptions} from './webauthn';
 
 /**
@@ -21,7 +20,6 @@ export interface SignInContext {
  * The options for sign-in.
  *
  * - `internetIdentity`: Internet Identity options
- * - `nfid`: NFID options
  * - `webauthn`: WebAuthn/Passkey options
  */
 export type SignInOptions =
@@ -30,12 +28,6 @@ export type SignInOptions =
         options?: InternetIdentitySignInOptions;
         context?: SignInContext;
       };
-    }
-  | {
-      /**
-       * @deprecated Support for sign-in with NFID is deprecated and will be removed in a future release of the library.
-       */
-      nfid: {options: NFIDSignInOptions; context?: SignInContext};
     }
   | {
       webauthn: {options?: WebAuthnSignInOptions; context?: SignInContext};

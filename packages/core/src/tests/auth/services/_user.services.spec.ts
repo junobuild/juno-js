@@ -57,7 +57,7 @@ describe('user.services', async () => {
       expect(user?.key).toBe(mockUserIdText);
     });
 
-    it.each(['internet_identity', 'nfid'])('creates user with provider %s', async (provider) => {
+    it.each(['internet_identity'])('creates user with provider %s', async (provider) => {
       vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
 
       const mockGetDoc = vi.fn().mockResolvedValue(undefined);

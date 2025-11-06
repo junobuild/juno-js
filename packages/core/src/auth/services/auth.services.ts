@@ -5,7 +5,6 @@ import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';
 import {executeWithWindowGuard} from '../helpers/window.helpers';
 import {InternetIdentityProvider} from '../providers/internet-identity.providers';
-import {NFIDProvider} from '../providers/nfid.providers';
 import {WebAuthnProvider} from '../providers/webauthn.providers';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInOptions, SignOutOptions, SignUpOptions} from '../types/auth';
@@ -131,21 +130,6 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
     await new WebAuthnProvider().signIn({
       options: signInOptions,
       loadAuth
-    });
-    return;
-  }
-
-  if ('nfid' in options) {
-    const {
-      nfid: {options: nfidOptions}
-    } = options;
-
-    const {appName, logoUrl, ...signInOptions} = nfidOptions ?? {};
-
-    await new NFIDProvider({appName, logoUrl}).signIn({
-      options: signInOptions,
-      authClient,
-      initAuth: createAuth
     });
     return;
   }

@@ -1,7 +1,10 @@
+import {isNullish} from '@dfinity/utils';
+import {requestJwt} from '@junobuild/auth';
+import {envGoogleClientId} from '../../core/utils/window.env.utils';
+import {SignInMissingClientIdError} from '../types/errors';
+import type {GoogleSignInOptions} from '../types/google';
 import type {Provider} from '../types/provider';
-import type {WebAuthnSignInOptions} from '../types/webauthn';
 import type {AuthProvider} from './_auth.providers';
-import {GoogleSignInOptions} from '../types/google';
 
 export class GoogleProvider implements AuthProvider {
   /**
@@ -13,21 +16,33 @@ export class GoogleProvider implements AuthProvider {
   }
 
   /**
-   * Signs in a user with Google.
+   * Initiates a Google sign-in flow.
    *
-   * @param {Object} params - The sign-in parameters.
-   * @param {GoogleSignInOptions} [params.options] - Optional configuration for the login request.
-   * @param {loadAuth} params.loadAuth - The function to load the user. Provided as a callback to avoid recursive import.
+   * Depending on the environment or configuration, this may redirect the user
+   * to Google's authentication screen or trigger a browser-native sign-in flow
+   * (such as FedCM in the future).
    *
-   * @returns {Promise<void>} Resolves if the sign-in is successful.
+   * @param {Object} params - Parameters for the sign-in request.
+   * @param {GoogleSignInOptions} [params.options] - Optional configuration for the sign-in request.
+   *
+   * @returns {Promise<void>} Resolves once the sign-in flow has been initiated.
    */
-  async signIn({
-    options: {} = {},
-    loadAuth
-  }: {
-    options?: GoogleSignInOptions;
-    loadAuth: () => Promise<void>;
-  }) {
+  async signIn({options = {}}: {options?: GoogleSignInOptions}) {
+    const clientId = options?.clientId ?? envGoogleClientId();
 
+    if (isNullish(clientId)) {
+      throw new SignInMissingClientIdError();
+    }
+
+    const {redirect} = options;
+
+    await requestJwt({
+      google: {
+        redirect: {
+          clientId,
+          ...(redirect ?? {})
+        }
+      }
+    });
   }
 }

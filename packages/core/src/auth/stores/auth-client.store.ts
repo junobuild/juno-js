@@ -1,5 +1,6 @@
 import {isNullish} from '@dfinity/utils';
-import {AuthClient, IdbStorage, KEY_STORAGE_KEY} from '@icp-sdk/auth/client';
+import {AuthClient, IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@icp-sdk/auth/client';
+import {DelegationChain, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 
 export class AuthClientStore {
   static #instance: AuthClientStore | undefined;
@@ -46,5 +47,20 @@ export class AuthClientStore {
     // Reset local object otherwise next sign in (sign in - sign out - sign in) might not work out - i.e. agent-js might not recreate the delegation or identity if not resetted
     // Technically we do not need this since we recreate the agent below. We just keep it to make the reset explicit.
     this.#authClient = null;
+  };
+
+  setAuthClientStorage = async ({
+    delegationChain,
+    sessionKey
+  }: {
+    delegationChain: DelegationChain;
+    sessionKey: ECDSAKeyIdentity;
+  }) => {
+    const storage = new IdbStorage();
+
+    await Promise.all([
+      storage.set(KEY_STORAGE_KEY, sessionKey.getKeyPair()),
+      storage.set(KEY_STORAGE_DELEGATION, JSON.stringify(delegationChain.toJSON()))
+    ]);
   };
 }

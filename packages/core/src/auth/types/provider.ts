@@ -1,5 +1,7 @@
 /**
- * Type representing the available authentication providers.
+ * Type representing the authentication providers.
+ *
+ * @deprecated The support for `nfid` provider is deprecated.
  * @typedef {('internet_identity' | 'nfid' | 'webauthn')} Provider
  */
 export type Provider = 'internet_identity' | 'nfid' | 'webauthn';

@@ -245,38 +245,6 @@ describe('auth.services', () => {
         );
       });
 
-      it('call auth client with nfid options', async () => {
-        authClientMock.isAuthenticated.mockResolvedValue(false);
-        const spy = authClientMock.login.mockImplementation(async (options) => {
-          // @ts-ignore
-          options?.onSuccess?.();
-        });
-
-        await expect(
-          signIn({
-            nfid: {
-              options: {
-                appName: 'test',
-                logoUrl: 'https://my.com/logo.png',
-                maxTimeToLiveInNanoseconds: 222n
-              }
-            }
-          })
-        ).resolves.toBeUndefined();
-
-        expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy).toHaveBeenCalledWith(
-          expect.objectContaining({
-            allowPinAuthentication: false,
-            identityProvider:
-              'https://nfid.one/authenticate/?applicationName=test&applicationLogo=https://my.com/logo.png',
-            maxTimeToLive: 222n,
-            windowOpenerFeatures:
-              'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=505, height=705, top=31.5, left=259.5'
-          })
-        );
-      });
-
       it('should call webauthn provider with options', async () => {
         EnvStore.getInstance().set({satelliteId: mockSatelliteId});
 

@@ -10,7 +10,6 @@ import type {Environment, UserEnvironment} from './core/types/env';
 import type {Unsubscribe} from './core/types/subscription';
 import {envContainer, envSatelliteId} from './core/utils/window.env.utils';
 export * from './auth/providers/internet-identity.providers';
-export * from './auth/providers/nfid.providers';
 export {
   getIdentityOnce,
   signIn,
@@ -91,4 +90,3 @@ export const onAuthStateChange = (callback: (authUser: User | null) => void): Un
  */
 export const authSubscribe = onAuthStateChange;
 export {InternetIdentityConfig, InternetIdentityDomain} from './auth/types/internet-identity';
-export {NFIDConfig} from './auth/types/nfid';

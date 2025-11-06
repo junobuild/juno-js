@@ -1,5 +1,5 @@
 import {AnonymousIdentity} from '@icp-sdk/core/agent';
-import * as authServices from '../../../auth/services/auth.services';
+import * as identityServices from '../../../auth/services/identity.services';
 import {getAnyIdentity} from '../../../core/services/identity.services';
 import {mockIdentity} from '../../mocks/core.mock';
 
@@ -15,7 +15,7 @@ describe('identity.services', () => {
   });
 
   it('returns auth identity if available', () => {
-    vi.spyOn(authServices, 'getIdentity').mockReturnValue(mockIdentity);
+    vi.spyOn(identityServices, 'getIdentity').mockReturnValue(mockIdentity);
 
     const identity = getAnyIdentity();
 
@@ -23,7 +23,7 @@ describe('identity.services', () => {
   });
 
   it('returns AnonymousIdentity if no identity', () => {
-    vi.spyOn(authServices, 'getIdentity').mockReturnValue(undefined);
+    vi.spyOn(identityServices, 'getIdentity').mockReturnValue(undefined);
 
     const identity = getAnyIdentity();
 

@@ -22,6 +22,7 @@ import {
   unsafeIdentity
 } from '../../../auth/services/auth.services';
 import * as userWebAuthnServices from '../../../auth/services/user-webauthn.services';
+import {AuthClientStore} from '../../../auth/stores/auth-client.store';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import type {SignInOptions} from '../../../auth/types/auth';
 import {
@@ -32,7 +33,6 @@ import {
   SignUpProviderNotSupportedError
 } from '../../../auth/types/errors';
 import type {GoogleSignInOptions} from '../../../auth/types/google';
-import * as authUtils from '../../../auth/utils/auth.utils';
 import * as actorApi from '../../../core/api/actor.api';
 import {EnvStore} from '../../../core/stores/env.store';
 import {mockIdentity, mockSatelliteId, mockUser, mockUserIdText} from '../../mocks/core.mock';
@@ -118,7 +118,7 @@ describe('auth.services', () => {
     it('should not reset the AuthClient if authenticated', async () => {
       authClientMock.isAuthenticated.mockResolvedValue(true);
 
-      const resetSpy = vi.spyOn(authUtils, 'resetAuthClient');
+      const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
 
       await loadAuth();
 
@@ -128,7 +128,7 @@ describe('auth.services', () => {
     it('resets the AuthClient when not authenticated', async () => {
       authClientMock.isAuthenticated.mockResolvedValue(false);
 
-      const resetSpy = vi.spyOn(authUtils, 'resetAuthClient');
+      const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
 
       await loadAuth();
 
@@ -136,7 +136,7 @@ describe('auth.services', () => {
     });
 
     it('always re-creates a new AuthClient on every authenticate call', async () => {
-      const createSpy = vi.spyOn(authUtils, 'createAuthClient');
+      const createSpy = vi.spyOn(AuthClientStore.getInstance(), 'createAuthClient');
 
       authClientMock.isAuthenticated.mockResolvedValue(true);
 
@@ -461,7 +461,7 @@ describe('auth.services', () => {
       await loadAuth();
 
       createAuthClientSpy = vi
-        .spyOn(authUtils, 'createAuthClient')
+        .spyOn(AuthClientStore.getInstance(), 'createAuthClient')
         .mockResolvedValue(authClientMock);
 
       Object.defineProperty(window, 'location', {
@@ -555,10 +555,12 @@ describe('auth.services', () => {
     it('creates authClient if not initialized and returns identity', async () => {
       authClientMock.getIdentity.mockReturnValue(anonymous);
 
+      const createSpy = vi.spyOn(AuthClientStore.getInstance(), 'createAuthClient');
+
       const identity = await unsafeIdentity();
 
       expect(identity?.getPrincipal().toText()).toBe(anonymous.getPrincipal().toText());
-      expect(authUtils.createAuthClient).toHaveBeenCalled();
+      expect(createSpy).toHaveBeenCalled();
     });
   });
 

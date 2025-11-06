@@ -1,5 +1,4 @@
 import {isNullish} from '@dfinity/utils';
-import type {AuthClient} from '@icp-sdk/auth/client';
 import type {Identity} from '@icp-sdk/core/agent';
 import {ActorStore} from '../../core/stores/actor.store';
 import {AgentStore} from '../../core/stores/agent.store';
@@ -7,16 +6,13 @@ import {executeWithWindowGuard} from '../helpers/window.helpers';
 import {GoogleProvider} from '../providers/google.providers';
 import {InternetIdentityProvider} from '../providers/internet-identity.providers';
 import {WebAuthnProvider} from '../providers/webauthn.providers';
+import {AuthClientStore} from '../stores/auth-client.store';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInOptions, SignOutOptions, SignUpOptions} from '../types/auth';
 import {SignInProviderNotSupportedError, SignUpProviderNotSupportedError} from '../types/errors';
 import type {Provider} from '../types/provider';
 import type {User} from '../types/user';
-import {createAuthClient, resetAuthClient} from '../utils/auth.utils';
 import {initUser, loadUser} from './_user.services';
-
-let authClient: AuthClient | undefined | null;
-
 /**
  * Initialize the authClient and load the existing user.
  * Executed when the library is initialized through initSatellite.
@@ -61,7 +57,7 @@ export const createAuth = async ({provider}: {provider: Provider}) => {
  * and executes the provided function if already authenticated.
  *
  * - Always creates a fresh `AuthClient` using {@link createAuthClient}.
- * - If the client is **not authenticated**, it resets the client via {@link resetAuthClient}
+ * - If the client is **not authenticated**, it resets the client via {@link safeCreateAuthClient}
  *   to ensure a clean session.
  * - If authenticated, it runs the given async function `fn`.
  *
@@ -71,12 +67,14 @@ export const createAuth = async ({provider}: {provider: Provider}) => {
  * @returns {Promise<void>} Resolves when authentication is handled and the provided function is executed (if applicable).
  */
 const authenticate = async ({fn}: {fn: () => Promise<void>}) => {
-  authClient = await createAuthClient();
+  const {createAuthClient, safeCreateAuthClient} = AuthClientStore.getInstance();
+
+  const authClient = await createAuthClient();
 
   const isAuthenticated = await authClient.isAuthenticated();
 
   if (!isAuthenticated) {
-    authClient = await resetAuthClient();
+    await safeCreateAuthClient();
     return;
   }
 
@@ -155,7 +153,7 @@ const signInWithProvider = async (options: SignInOptions): Promise<void> => {
 
     await new InternetIdentityProvider({domain}).signIn({
       options: signInOptions,
-      authClient,
+      authClient: AuthClientStore.getInstance().getAuthClient(),
       initAuth: createAuth
     });
     return;
@@ -195,7 +193,7 @@ export const signOut = async (options?: SignOutOptions): Promise<void> => {
   // For example, Safari blocks the Internet Identity (II) window if the agent is created during the interaction.
   // Agent-js must be created either globally or at least before performing a sign-in.
   // We proceed with this reset regardless of the window reloading. This way we ensure it is reset not matter what.
-  authClient = await createAuthClient();
+  await AuthClientStore.getInstance().createAuthClient();
 
   if (options?.windowReload === false) {
     return;
@@ -208,11 +206,7 @@ export const signOut = async (options?: SignOutOptions): Promise<void> => {
  * ℹ️ Exposed for testing purpose only. Should not be leaked to consumer or used by the library.
  */
 export const resetAuth = async () => {
-  await authClient?.logout();
-
-  // Reset local object otherwise next sign in (sign in - sign out - sign in) might not work out - i.e. agent-js might not recreate the delegation or identity if not resetted
-  // Technically we do not need this since we recreate the agent below. We just keep it to make the reset explicit.
-  authClient = null;
+  await AuthClientStore.getInstance().logout();
 
   AuthStore.getInstance().reset();
 
@@ -220,7 +214,8 @@ export const resetAuth = async () => {
   AgentStore.getInstance().reset();
 };
 
-export const getIdentity = (): Identity | undefined => authClient?.getIdentity();
+export const getIdentity = (): Identity | undefined =>
+  AuthClientStore.getInstance().getAuthClient()?.getIdentity();
 
 /**
  * Returns the identity of a signed-in user or an anonymous identity.
@@ -228,8 +223,11 @@ export const getIdentity = (): Identity | undefined => authClient?.getIdentity()
  * Used to imperatively get the identity. Please be certain before using it.
  * @returns {Promise<Identity>} A promise that resolves to the identity of the user or an anonymous identity.
  */
-export const unsafeIdentity = async (): Promise<Identity> =>
-  (authClient ?? (await createAuthClient())).getIdentity();
+export const unsafeIdentity = async (): Promise<Identity> => {
+  const {getAuthClient, createAuthClient} = AuthClientStore.getInstance();
+
+  return (getAuthClient() ?? (await createAuthClient())).getIdentity();
+};
 
 /**
  * Returns the current identity if the user is authenticated.
@@ -249,6 +247,8 @@ export const getIdentityOnce = async (): Promise<Identity | null> => {
   if (isNullish(user)) {
     return null;
   }
+
+  const authClient = AuthClientStore.getInstance().getAuthClient();
 
   const authenticated = (await authClient?.isAuthenticated()) ?? false;
 

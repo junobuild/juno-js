@@ -3,7 +3,7 @@
  */
 import {AuthClient, IdbStorage, KEY_STORAGE_KEY} from '@icp-sdk/auth/client';
 import {ECDSAKeyIdentity} from '@icp-sdk/core/identity';
-import {afterEach, beforeEach, describe, expect, it, vi, type Mock} from 'vitest';
+import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
 

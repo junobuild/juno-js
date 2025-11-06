@@ -1,4 +1,3 @@
-import {describe} from 'vitest';
 import * as z from 'zod';
 import {EmulatorConfigSchema} from '../../../satellite/configs/emulator.config';
 import {refineEmulatorConfig} from '../../../satellite/validators/emulator.validators';

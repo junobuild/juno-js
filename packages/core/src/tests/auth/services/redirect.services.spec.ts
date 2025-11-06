@@ -12,7 +12,6 @@ import {Principal} from '@icp-sdk/core/principal';
 import * as authLib from '@junobuild/auth';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {toArray} from '@junobuild/utils';
-import {expect} from 'vitest';
 import * as loadSvc from '../../../auth/services/load.services';
 import {handleRedirectCallback} from '../../../auth/services/redirect.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';

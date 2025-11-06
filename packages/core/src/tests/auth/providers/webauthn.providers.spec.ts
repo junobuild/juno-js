@@ -7,7 +7,7 @@ import {IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@icp-sdk/auth
 import * as identityLib from '@icp-sdk/core/identity';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import {toArray} from '@junobuild/utils';
-import {beforeEach, MockInstance} from 'vitest';
+import {MockInstance} from 'vitest';
 import {WebAuthnProvider} from '../../../auth/providers/webauthn.providers';
 import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../../../auth/types/errors';
 import {WebAuthnSignInProgressStep, WebAuthnSignUpProgressStep} from '../../../auth/types/webauthn';

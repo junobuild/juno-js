@@ -7,12 +7,10 @@ import {
   AuthenticationUrlHashError
 } from './errors';
 import type {AuthParameters} from './types/actor';
-import type {AuthenticatedIdentity, AuthenticationParams} from './types/authenticate';
+import type {AuthenticatedSession, AuthenticationParams} from './types/authenticate';
 import type {OpenIdAuthContext} from './types/context';
 
-export const authenticate = async (
-  params: AuthenticationParams
-): Promise<AuthenticatedIdentity> => {
+export const authenticate = async (params: AuthenticationParams): Promise<AuthenticatedSession> => {
   const context = loadContext();
 
   if ('credentials' in params) {
@@ -37,7 +35,7 @@ const authenticateWithRedirect = async ({
 }: {
   auth: AuthParameters;
   context: OpenIdAuthContext;
-}): Promise<AuthenticatedIdentity> => {
+}): Promise<AuthenticatedSession> => {
   const {
     location: {hash}
   } = window;

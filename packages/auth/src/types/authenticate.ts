@@ -1,5 +1,5 @@
 import type {DelegationChain, DelegationIdentity, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
-import type {AuthParameters} from './actor';
+import type {AuthenticationData, AuthParameters} from './actor';
 
 export interface AuthenticationCredentials {
   jwt: string;
@@ -13,4 +13,9 @@ export interface AuthenticatedIdentity {
   identity: DelegationIdentity;
   delegationChain: DelegationChain;
   sessionKey: ECDSAKeyIdentity;
+}
+
+export interface AuthenticatedSession {
+  identity: AuthenticatedIdentity;
+  data: AuthenticationData;
 }

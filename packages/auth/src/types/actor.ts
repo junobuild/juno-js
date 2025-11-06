@@ -28,5 +28,8 @@ export interface ActorParameters {
 export type AuthenticationArgs = SatelliteDid.AuthenticationArgs | ConsoleDid.AuthenticationArgs;
 export type GetDelegationArgs = SatelliteDid.GetDelegationArgs | ConsoleDid.GetDelegationArgs;
 export type AuthenticationResult = SatelliteDid.AuthenticateResultResponse | ConsoleDid.Result;
+export type AuthenticationData =
+  | Pick<SatelliteDid.Authentication, 'doc'>
+  | Pick<ConsoleDid.Authentication, 'mission_control'>;
 export type GetDelegationResult = SatelliteDid.GetDelegationResultResponse | ConsoleDid.Result_1;
 export type SignedDelegation = SatelliteDid.SignedDelegation | ConsoleDid.SignedDelegation;

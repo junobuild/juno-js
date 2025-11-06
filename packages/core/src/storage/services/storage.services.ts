@@ -2,7 +2,7 @@ import {fromNullable, nonNullish} from '@dfinity/utils';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import type {Asset, AssetEncoding, AssetKey, Storage} from '@junobuild/storage';
 import {DEFAULT_READ_OPTIONS} from '../../core/constants/call-options.constants';
-import {getAnyIdentity} from '../../core/services/identity.services';
+import {getAnyIdentity} from '../../core/services/any-identity.services';
 import type {ReadOptions} from '../../core/types/call-options';
 import type {ListParams} from '../../core/types/list';
 import type {SatelliteOptions} from '../../core/types/satellite';

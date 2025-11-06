@@ -1,9 +1,9 @@
 import {AnonymousIdentity} from '@icp-sdk/core/agent';
 import * as identityServices from '../../../auth/services/identity.services';
-import {getAnyIdentity} from '../../../core/services/identity.services';
+import {getAnyIdentity} from '../../../core/services/any-identity.services';
 import {mockIdentity} from '../../mocks/core.mock';
 
-describe('identity.services', () => {
+describe('any-identity.services', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });

@@ -280,8 +280,8 @@ describe('auth.services', () => {
         const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
 
         const options: GoogleSignInOptions = {
-          clientId: 'client-abc',
           redirect: {
+            clientId: 'client-abc',
             authScopes: ['openid', 'profile'],
             redirectUrl: 'https://app.example.com/auth/callback',
             loginHint: 'dev@example.com'
@@ -298,10 +298,7 @@ describe('auth.services', () => {
 
         expect(requestSpy).toHaveBeenCalledExactlyOnceWith({
           google: {
-            redirect: {
-              clientId: options.clientId,
-              ...options.redirect
-            }
+            redirect: options.redirect
           }
         });
       });

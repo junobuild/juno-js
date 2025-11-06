@@ -28,7 +28,7 @@ export class GoogleProvider implements AuthProvider {
    * @returns {Promise<void>} Resolves once the sign-in flow has been initiated.
    */
   async signIn({options = {}}: {options?: GoogleSignInOptions}) {
-    const clientId = options?.clientId ?? envGoogleClientId();
+    const clientId = options?.redirect?.clientId ?? envGoogleClientId();
 
     if (isNullish(clientId)) {
       throw new SignInMissingClientIdError();
@@ -39,8 +39,8 @@ export class GoogleProvider implements AuthProvider {
     await requestJwt({
       google: {
         redirect: {
-          clientId,
-          ...(redirect ?? {})
+          ...(redirect ?? {}),
+          clientId
         }
       }
     });

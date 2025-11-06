@@ -29,7 +29,7 @@ import {
   WebAuthnSignInProgressStep,
   WebAuthnSignUpProgressStep
 } from '../types/webauthn';
-import type {AuthProvider} from './_auth-client.providers';
+import type {AuthProvider} from './_auth.providers';
 
 interface SessionDelegationIdentity {
   delegationIdentity: DelegationIdentity;

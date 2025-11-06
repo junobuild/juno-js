@@ -8,17 +8,7 @@ import {execute} from '../helpers/progress.helpers';
 import {type AuthClientSignInOptions, AuthClientSignInProgressStep} from '../types/auth-client';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
 import type {Provider} from '../types/provider';
-
-/**
- * Common traits for all authentication providers
- * @interface AuthProvider
- */
-export interface AuthProvider {
-  /**
-   * The unique identifier of the provider.
-   */
-  readonly id: Provider;
-}
+import type {AuthProvider} from './_auth.providers';
 
 /**
  * Options for signing in with an authentication provider.

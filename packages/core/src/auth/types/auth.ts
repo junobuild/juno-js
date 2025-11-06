@@ -1,4 +1,4 @@
-import {GoogleSignInOptions} from './google';
+import type {GoogleSignInOptions} from './google';
 import type {InternetIdentitySignInOptions} from './internet-identity';
 import type {WebAuthnSignInOptions, WebAuthnSignUpOptions} from './webauthn';
 

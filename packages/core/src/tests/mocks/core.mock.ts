@@ -8,6 +8,8 @@ export const mockUserIdPrincipal = Principal.fromText(mockUserIdText);
 
 export const mockSatelliteId = 'jx5yt-yyaaa-aaaal-abzbq-cai';
 
+export const mockGoogleClientId = '1234567890-abcdef.apps.googleusercontent.com';
+
 const transformRequest = () => {
   console.error(
     'It looks like the agent is trying to make a request that should have been mocked at',

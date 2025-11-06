@@ -12,7 +12,10 @@ export const handleRedirectCallback = async () => {
 
   const container = EnvStore.getInstance().get()?.container;
 
-  const {identity: {delegationChain, sessionKey, identity}, data} = await authenticate({
+  const {
+    identity: {delegationChain, sessionKey, identity},
+    data
+  } = await authenticate({
     redirect: null,
     auth: {
       satellite: {
@@ -22,5 +25,5 @@ export const handleRedirectCallback = async () => {
     }
   });
 
-
+  console.log(data.doc);
 };

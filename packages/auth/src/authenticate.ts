@@ -6,11 +6,16 @@ import {
   AuthenticationUndefinedJwtError,
   AuthenticationUrlHashError
 } from './errors';
-import type {AuthParameters} from './types/actor';
-import type {AuthenticatedSession, AuthenticationParams} from './types/authenticate';
+import type {
+  AuthenticatedSession,
+  AuthenticationParams,
+  AuthParameters
+} from './types/authenticate';
 import type {OpenIdAuthContext} from './types/context';
 
-export const authenticate = async (params: AuthenticationParams): Promise<AuthenticatedSession> => {
+export const authenticate = async <T extends AuthParameters>(
+  params: AuthenticationParams<T>
+): Promise<AuthenticatedSession<T>> => {
   const context = loadContext();
 
   if ('credentials' in params) {
@@ -26,16 +31,16 @@ export const authenticate = async (params: AuthenticationParams): Promise<Authen
     });
   }
 
-  return await authenticateWithRedirect({...params, context});
+  return await authenticateWithRedirect<T>({...params, context});
 };
 
-const authenticateWithRedirect = async ({
+const authenticateWithRedirect = async <T extends AuthParameters>({
   auth,
   context
 }: {
   auth: AuthParameters;
   context: OpenIdAuthContext;
-}): Promise<AuthenticatedSession> => {
+}): Promise<AuthenticatedSession<T>> => {
   const {
     location: {hash}
   } = window;

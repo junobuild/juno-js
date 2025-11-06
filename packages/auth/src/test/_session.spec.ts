@@ -1,19 +1,17 @@
 import {Delegation, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
-import {Principal} from '@icp-sdk/core/principal';
-import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {MockInstance} from 'vitest';
 import {authenticateSession} from '../_session';
 import * as authApi from '../api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from '../errors';
 import {
   type AuthenticationResult,
-  AuthParameters,
   GetDelegationArgs,
   type GetDelegationResult
 } from '../types/actor';
-import {AuthenticatedIdentity, AuthenticatedSession} from '../types/authenticate';
+import {AuthenticatedIdentity, AuthenticatedSession, AuthParameters} from '../types/authenticate';
 import {OpenIdAuthContext} from '../types/context';
 import * as authenticateUtils from '../utils/session.utils';
+import {mockUserDoc} from './mocks/doc.mock';
 import {mockIdentity} from './mocks/identity.mock';
 import {mockSatelliteIdText} from './mocks/principal.mock';
 
@@ -49,17 +47,8 @@ describe('_session', () => {
   const signature = [1, 2, 3];
   const targetsNone: [] = [];
 
-  const mockUser: SatelliteDid.Doc = {
-    updated_at: 1n,
-    owner: Principal.anonymous(),
-    data: new Uint8Array([4, 5, 6]),
-    description: [],
-    created_at: 2n,
-    version: []
-  };
-
   let generateSpy: MockInstance;
-  let genReturn: AuthenticatedSession;
+  let genReturn: AuthenticatedSession<AuthParameters>;
 
   const mockPublicKey = new Uint8Array([0xaa, 0xbb, 0xcc]);
 
@@ -84,7 +73,7 @@ describe('_session', () => {
 
     genReturn = {
       identity,
-      data: {doc: mockUser}
+      data: {doc: mockUserDoc}
     };
     generateSpy = vi.spyOn(authenticateUtils, 'generateIdentity').mockReturnValue(identity);
   });
@@ -99,7 +88,7 @@ describe('_session', () => {
     vi.mocked(authApi.authenticate).mockResolvedValue({
       Ok: {
         delegation: {user_key, expiration},
-        doc: mockUser
+        doc: mockUserDoc
       }
     } as AuthenticationResult);
 
@@ -173,7 +162,7 @@ describe('_session', () => {
 
   it('should retry on NoSuchDelegation and succeeds later', async () => {
     vi.mocked(authApi.authenticate).mockResolvedValue({
-      Ok: {delegation: {user_key, expiration}, doc: mockUser}
+      Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
     } as AuthenticationResult);
 
     // First two attempts Err.NoSuchDelegation, third attempt Ok
@@ -201,7 +190,7 @@ describe('_session', () => {
 
   it('should continue retrying on GetCachedJwks and then succeeds', async () => {
     vi.mocked(authApi.authenticate).mockResolvedValue({
-      Ok: {delegation: {user_key, expiration}, doc: mockUser}
+      Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
     } as AuthenticationResult);
 
     vi.mocked(authApi.getDelegation)
@@ -233,7 +222,7 @@ describe('_session', () => {
 
   it('should throw GetDelegationError when getDelegation returns other Err', async () => {
     vi.mocked(authApi.authenticate).mockResolvedValue({
-      Ok: {delegation: {user_key, expiration}, doc: mockUser}
+      Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
     } as AuthenticationResult);
 
     vi.mocked(authApi.getDelegation).mockResolvedValue({
@@ -252,7 +241,7 @@ describe('_session', () => {
 
   it('throws GetDelegationRetryError after exhausting retries', async () => {
     vi.mocked(authApi.authenticate).mockResolvedValue({
-      Ok: {delegation: {user_key, expiration}, doc: mockUser}
+      Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
     } as AuthenticationResult);
 
     vi.mocked(authApi.getDelegation).mockResolvedValue({Err: {NoSuchDelegation: null}});

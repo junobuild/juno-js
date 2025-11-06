@@ -5,13 +5,13 @@ import * as authApi from '../api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from '../errors';
 import {
   type AuthenticationResult,
-  AuthParameters,
   GetDelegationArgs,
   type GetDelegationResult
 } from '../types/actor';
-import {AuthenticatedIdentity} from '../types/authenticate';
+import {AuthenticatedIdentity, AuthenticatedSession, AuthParameters} from '../types/authenticate';
 import {OpenIdAuthContext} from '../types/context';
 import * as authenticateUtils from '../utils/session.utils';
+import {mockUserDoc} from './mocks/doc.mock';
 import {mockIdentity} from './mocks/identity.mock';
 import {mockSatelliteIdText} from './mocks/principal.mock';
 
@@ -48,7 +48,7 @@ describe('_session', () => {
   const targetsNone: [] = [];
 
   let generateSpy: MockInstance;
-  let genReturn: AuthenticatedIdentity;
+  let genReturn: AuthenticatedSession<AuthParameters>;
 
   const mockPublicKey = new Uint8Array([0xaa, 0xbb, 0xcc]);
 
@@ -66,11 +66,16 @@ describe('_session', () => {
       return setTimeout(cb, ms);
     });
 
-    genReturn = {
+    const identity = {
       identity: {tag: 'id'},
       delegationChain: {tag: 'chain'}
     } as unknown as AuthenticatedIdentity;
-    generateSpy = vi.spyOn(authenticateUtils, 'generateIdentity').mockReturnValue(genReturn);
+
+    genReturn = {
+      identity,
+      data: {doc: mockUserDoc}
+    };
+    generateSpy = vi.spyOn(authenticateUtils, 'generateIdentity').mockReturnValue(identity);
   });
 
   afterEach(() => {
@@ -82,7 +87,8 @@ describe('_session', () => {
   it('should build delegations and returns generateIdentity result', async () => {
     vi.mocked(authApi.authenticate).mockResolvedValue({
       Ok: {
-        delegation: {user_key, expiration}
+        delegation: {user_key, expiration},
+        doc: mockUserDoc
       }
     } as AuthenticationResult);
 
@@ -103,7 +109,7 @@ describe('_session', () => {
 
     const result = await resultPromise;
 
-    expect(result).toBe(genReturn);
+    expect(result).toStrictEqual(genReturn);
 
     // authenticate called with expected args
     expect(authApi.authenticate).toHaveBeenCalledTimes(1);
@@ -156,7 +162,7 @@ describe('_session', () => {
 
   it('should retry on NoSuchDelegation and succeeds later', async () => {
     vi.mocked(authApi.authenticate).mockResolvedValue({
-      Ok: {delegation: {user_key, expiration}}
+      Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
     } as AuthenticationResult);
 
     // First two attempts Err.NoSuchDelegation, third attempt Ok
@@ -178,13 +184,13 @@ describe('_session', () => {
 
     const result = await p;
 
-    expect(result).toBe(genReturn);
+    expect(result).toStrictEqual(genReturn);
     expect(authApi.getDelegation).toHaveBeenCalledTimes(3);
   });
 
   it('should continue retrying on GetCachedJwks and then succeeds', async () => {
     vi.mocked(authApi.authenticate).mockResolvedValue({
-      Ok: {delegation: {user_key, expiration}}
+      Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
     } as AuthenticationResult);
 
     vi.mocked(authApi.getDelegation)
@@ -199,7 +205,7 @@ describe('_session', () => {
     await vi.advanceTimersByTimeAsync(1000);
     await vi.runOnlyPendingTimersAsync();
 
-    await expect(p).resolves.toBe(genReturn);
+    await expect(p).resolves.toStrictEqual(genReturn);
 
     expect(authApi.getDelegation).toHaveBeenCalledTimes(2);
   });
@@ -216,7 +222,7 @@ describe('_session', () => {
 
   it('should throw GetDelegationError when getDelegation returns other Err', async () => {
     vi.mocked(authApi.authenticate).mockResolvedValue({
-      Ok: {delegation: {user_key, expiration}}
+      Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
     } as AuthenticationResult);
 
     vi.mocked(authApi.getDelegation).mockResolvedValue({
@@ -235,7 +241,7 @@ describe('_session', () => {
 
   it('throws GetDelegationRetryError after exhausting retries', async () => {
     vi.mocked(authApi.authenticate).mockResolvedValue({
-      Ok: {delegation: {user_key, expiration}}
+      Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
     } as AuthenticationResult);
 
     vi.mocked(authApi.getDelegation).mockResolvedValue({Err: {NoSuchDelegation: null}});

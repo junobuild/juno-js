@@ -9,14 +9,8 @@ import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock, MockInstance} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as userServices from '../../../auth/services/_user.services';
-import {
-  createAuth,
-  loadAuth,
-  resetAuth,
-  signIn,
-  signOut,
-  signUp
-} from '../../../auth/services/auth.services';
+import {createAuth, resetAuth, signIn, signOut, signUp} from '../../../auth/services/auth.services';
+import {loadAuth} from '../../../auth/services/load.services';
 import * as userWebAuthnServices from '../../../auth/services/user-webauthn.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
 import {AuthStore} from '../../../auth/stores/auth.store';
@@ -87,59 +81,6 @@ describe('auth.services', () => {
 
       expect(authClientMock.isAuthenticated).toHaveBeenCalled();
       expect(authStore.get()).not.toBeNull();
-    });
-  });
-
-  describe('loadAuth', () => {
-    it('does nothing if not authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(false);
-
-      await loadAuth();
-
-      expect(authClientMock.isAuthenticated).toHaveBeenCalled();
-    });
-
-    it('loads user if authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
-
-      const authStore = AuthStore.getInstance();
-      authStore.reset();
-
-      await loadAuth();
-
-      expect(authClientMock.isAuthenticated).toHaveBeenCalled();
-      expect(authStore.get()).not.toBeNull();
-    });
-
-    it('should not reset the AuthClient if authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
-
-      const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
-
-      await loadAuth();
-
-      expect(resetSpy).not.toHaveBeenCalledTimes(1);
-    });
-
-    it('resets the AuthClient when not authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(false);
-
-      const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
-
-      await loadAuth();
-
-      expect(resetSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it('always re-creates a new AuthClient on every authenticate call', async () => {
-      const createSpy = vi.spyOn(AuthClientStore.getInstance(), 'createAuthClient');
-
-      authClientMock.isAuthenticated.mockResolvedValue(true);
-
-      await loadAuth();
-      await loadAuth();
-
-      expect(createSpy).toHaveBeenCalledTimes(2);
     });
   });
 

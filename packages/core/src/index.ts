@@ -2,7 +2,7 @@ import {assertNonNullish} from '@dfinity/utils';
 import {isWebAuthnAvailable} from '@junobuild/ic-client/webauthn';
 import type {Asset, AssetEncoding, AssetKey, EncodingType, Storage} from '@junobuild/storage';
 import {initAuthTimeoutWorker} from './auth/services/auth-timout.services';
-import {loadAuth} from './auth/services/auth.services';
+import {loadAuth} from './auth/services/load.services';
 import {AuthStore} from './auth/stores/auth.store';
 import type {User} from './auth/types/user';
 import {EnvStore} from './core/stores/env.store';

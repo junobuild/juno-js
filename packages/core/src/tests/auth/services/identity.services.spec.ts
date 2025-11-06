@@ -7,12 +7,13 @@ import {AnonymousIdentity} from '@icp-sdk/core/agent';
 import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as userServices from '../../../auth/services/_user.services';
-import {loadAuth, resetAuth} from '../../../auth/services/auth.services';
+import {resetAuth} from '../../../auth/services/auth.services';
 import {
   getIdentity,
   getIdentityOnce,
   unsafeIdentity
 } from '../../../auth/services/identity.services';
+import {loadAuth} from '../../../auth/services/load.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import {EnvStore} from '../../../core/stores/env.store';

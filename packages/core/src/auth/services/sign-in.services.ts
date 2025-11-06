@@ -45,7 +45,8 @@ export const signIn = async (options: SignInOptions): Promise<void> => {
       });
 
     await signInWithContext({
-      fn
+      fn,
+      context: {windowGuard: false}
     });
 
     return;

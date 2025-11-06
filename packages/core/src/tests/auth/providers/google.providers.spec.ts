@@ -5,7 +5,7 @@
 import * as authLib from '@junobuild/auth';
 import {GoogleProvider} from '../../../auth/providers/google.providers';
 import {SignInMissingClientIdError} from '../../../auth/types/errors';
-import {GoogleSignInRedirectOptions} from '../../../auth/types/google';
+import {GoogleRedirectOptions} from '../../../auth/types/google';
 import * as envUtils from '../../../core/utils/window.env.utils';
 
 describe('google.providers', () => {
@@ -28,7 +28,7 @@ describe('google.providers', () => {
     vi.spyOn(envUtils, 'envGoogleClientId').mockReturnValue(undefined);
     const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
 
-    const redirect: GoogleSignInRedirectOptions = {
+    const redirect: GoogleRedirectOptions = {
       clientId: 'client-123',
       authScopes: ['openid', 'email'],
       redirectUrl: 'https://app.example.com/callback',

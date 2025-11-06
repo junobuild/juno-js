@@ -20,7 +20,7 @@ import {
   SignInProviderNotSupportedError,
   SignInUserInterruptError
 } from '../../../auth/types/errors';
-import type {GoogleSignInOptions} from '../../../auth/types/google';
+import type {GoogleSignInRedirectOptions} from '../../../auth/types/google';
 import {EnvStore} from '../../../core/stores/env.store';
 import {mockSatelliteId, mockUser, mockUserIdText} from '../../mocks/core.mock';
 
@@ -146,6 +146,30 @@ describe('sign-in.services', () => {
         expect(removeSpy).not.toHaveBeenCalled();
       });
 
+      it('should not add and remove window beforeunload guard for Google redirect', async () => {
+        const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
+        const removeSpy = vi
+          .spyOn(window, 'removeEventListener')
+          .mockImplementation(() => undefined);
+
+        authClientMock.isAuthenticated.mockResolvedValue(false);
+        authClientMock.login.mockImplementation(async (options) => {
+          // @ts-ignore
+          options?.onSuccess?.();
+        });
+
+        vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
+
+        await signIn({
+          google: {
+            options: {redirect: {clientId: '123'}}
+          }
+        });
+
+        expect(addSpy).not.toHaveBeenCalled();
+        expect(removeSpy).not.toHaveBeenCalled();
+      });
+
       it('call auth client with internet identity options', async () => {
         authClientMock.isAuthenticated.mockResolvedValue(false);
         const spy = authClientMock.login.mockImplementation(async (options) => {
@@ -208,7 +232,7 @@ describe('sign-in.services', () => {
 
         const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
 
-        const options: GoogleSignInOptions = {
+        const options: GoogleSignInRedirectOptions = {
           redirect: {
             clientId: 'client-abc',
             authScopes: ['openid', 'profile'],

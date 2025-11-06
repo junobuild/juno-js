@@ -17,20 +17,20 @@ export type GoogleAuthScopes =
   | ['openid', 'profile', 'email'];
 
 /**
- * Sign-in options for the Google provider.
- * @interface GoogleSignInOptions
+ * Sign-in options for the Google provider using a redirect flow.
+ * @interface GoogleSignInRedirectOptions
  */
-export interface GoogleSignInOptions {
+export interface GoogleSignInRedirectOptions {
   /**
    * Redirect configuration.
    */
-  redirect?: GoogleSignInRedirectOptions;
+  redirect?: GoogleRedirectOptions;
 }
 
 /**
  * Redirect options for Google sign-in.
  */
-export interface GoogleSignInRedirectOptions {
+export interface GoogleRedirectOptions {
   /**
    * Google OAuth client ID.
    * If omitted, the library attempts to read it from `juno.config`.

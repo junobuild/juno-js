@@ -2,7 +2,7 @@ import {isNullish} from '@dfinity/utils';
 import {requestJwt} from '@junobuild/auth';
 import {envGoogleClientId} from '../../core/utils/window.env.utils';
 import {SignInMissingClientIdError} from '../types/errors';
-import type {GoogleSignInOptions} from '../types/google';
+import type {GoogleSignInRedirectOptions} from '../types/google';
 import type {Provider} from '../types/provider';
 import type {AuthProvider} from './_auth.providers';
 
@@ -23,11 +23,11 @@ export class GoogleProvider implements AuthProvider {
    * (such as FedCM in the future).
    *
    * @param {Object} params - Parameters for the sign-in request.
-   * @param {GoogleSignInOptions} [params.options] - Optional configuration for the sign-in request.
+   * @param {GoogleSignInRedirectOptions} [params.options] - Optional configuration for the sign-in request.
    *
    * @returns {Promise<void>} Resolves once the sign-in flow has been initiated.
    */
-  async signIn({options = {}}: {options?: GoogleSignInOptions}) {
+  async signIn({options = {}}: {options?: GoogleSignInRedirectOptions}) {
     const clientId = options?.redirect?.clientId ?? envGoogleClientId();
 
     if (isNullish(clientId)) {

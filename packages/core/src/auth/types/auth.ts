@@ -1,4 +1,4 @@
-import type {GoogleSignInOptions} from './google';
+import type {GoogleSignInRedirectOptions} from './google';
 import type {InternetIdentitySignInOptions} from './internet-identity';
 import type {WebAuthnSignInOptions, WebAuthnSignUpOptions} from './webauthn';
 
@@ -27,8 +27,7 @@ export interface SignInContext {
 export type SignInOptions =
   | {
       google: {
-        options?: GoogleSignInOptions;
-        context?: SignInContext;
+        options?: GoogleSignInRedirectOptions;
       };
     }
   | {

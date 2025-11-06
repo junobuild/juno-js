@@ -1,3 +1,4 @@
+import {GoogleSignInOptions} from './google';
 import type {InternetIdentitySignInOptions} from './internet-identity';
 import type {WebAuthnSignInOptions, WebAuthnSignUpOptions} from './webauthn';
 
@@ -19,10 +20,17 @@ export interface SignInContext {
 /**
  * The options for sign-in.
  *
+ * - `google`: Google options
  * - `internetIdentity`: Internet Identity options
  * - `webauthn`: WebAuthn/Passkey options
  */
 export type SignInOptions =
+  | {
+      google: {
+        options?: GoogleSignInOptions;
+        context?: SignInContext;
+      };
+    }
   | {
       internet_identity: {
         options?: InternetIdentitySignInOptions;

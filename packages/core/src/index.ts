@@ -2,7 +2,7 @@ import {assertNonNullish} from '@dfinity/utils';
 import {isWebAuthnAvailable} from '@junobuild/ic-client/webauthn';
 import type {Asset, AssetEncoding, AssetKey, EncodingType, Storage} from '@junobuild/storage';
 import {initAuthTimeoutWorker} from './auth/services/auth-timout.services';
-import {loadAuth} from './auth/services/auth.services';
+import {loadAuth} from './auth/services/load.services';
 import {AuthStore} from './auth/stores/auth.store';
 import type {User} from './auth/types/user';
 import {EnvStore} from './core/stores/env.store';
@@ -10,13 +10,10 @@ import type {Environment, UserEnvironment} from './core/types/env';
 import type {Unsubscribe} from './core/types/subscription';
 import {envContainer, envSatelliteId} from './core/utils/window.env.utils';
 export * from './auth/providers/internet-identity.providers';
-export {
-  getIdentityOnce,
-  signIn,
-  signOut,
-  signUp,
-  unsafeIdentity
-} from './auth/services/auth.services';
+export {getIdentityOnce, unsafeIdentity} from './auth/services/identity.services';
+export {signIn} from './auth/services/sign-in.services';
+export {signOut} from './auth/services/sign-out.services';
+export {signUp} from './auth/services/sign-up.services';
 export type * from './auth/types/auth';
 export * from './auth/types/auth-client';
 export * from './auth/types/errors';

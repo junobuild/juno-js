@@ -18,11 +18,11 @@ export interface SignInContext {
 }
 
 /**
- * The options for sign-in.
+ * Defines which provider to use for signing in and its associated options.
  *
- * - `google`: Google options
- * - `internetIdentity`: Internet Identity options
- * - `webauthn`: WebAuthn/Passkey options
+ * - `google` — Google sign-in
+ * - `internet_identity` — Internet Identity
+ * - `webauthn` — WebAuthn/Passkeys
  */
 export type SignInOptions =
   | {
@@ -42,9 +42,9 @@ export type SignInOptions =
     };
 
 /**
- * The options for sign-up.
+ * Defines which provider to use for signing up and its associated options.
  *
- * - `webauthn`: WebAuthn/Passkey options
+ * - `webauthn`: WebAuthn/Passkeys
  */
 export interface SignUpOptions {
   webauthn: {options?: WebAuthnSignUpOptions; context?: SignInContext};

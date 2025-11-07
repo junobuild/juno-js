@@ -12,6 +12,7 @@ import {Principal} from '@icp-sdk/core/principal';
 import * as authLib from '@junobuild/auth';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {toArray} from '@junobuild/utils';
+import {MockInstance} from 'vitest';
 import * as loadSvc from '../../../auth/services/load.services';
 import {handleRedirectCallback} from '../../../auth/services/redirect.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
@@ -52,7 +53,9 @@ describe('handleRedirectCallback', async () => {
   };
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
+
     EnvStore.getInstance().reset();
   });
 
@@ -60,57 +63,89 @@ describe('handleRedirectCallback', async () => {
     await expect(handleRedirectCallback()).rejects.toThrow(SignInInitError);
   });
 
-  it('calls authenticate with satellite params, stores session, loads user', async () => {
-    EnvStore.getInstance().set({satelliteId: 'sat-123', container: true});
+  describe('Authenticate', () => {
+    let authenticateSpy: MockInstance;
+    let setStorageSpy: MockInstance;
+    let fromDocSpy: MockInstance;
+    let loadAuthWithUserSpy: MockInstance;
 
-    const delegationChain = await mockDelegationChain();
+    let delegationChain: DelegationChain;
+    let sessionKey: ECDSAKeyIdentity;
 
-    const sessionKey = await ECDSAKeyIdentity.generate({extractable: false});
+    beforeEach(async () => {
+      EnvStore.getInstance().set({satelliteId: 'sat-123', container: true});
 
-    const authenticateSpy = vi.spyOn(authLib, 'authenticate').mockResolvedValue({
-      identity: {delegationChain, sessionKey, identity: mockIdentity as DelegationIdentity},
-      data: {doc: mockUserDoc}
+      delegationChain = await mockDelegationChain();
+
+      sessionKey = await ECDSAKeyIdentity.generate({extractable: false});
+
+      authenticateSpy = vi.spyOn(authLib, 'authenticate').mockResolvedValue({
+        identity: {delegationChain, sessionKey, identity: mockIdentity as DelegationIdentity},
+        data: {doc: mockUserDoc}
+      });
+
+      setStorageSpy = vi.spyOn(AuthClientStore.getInstance(), 'setAuthClientStorage');
+
+      fromDocSpy = vi.spyOn(docUtils, 'fromDoc');
+
+      loadAuthWithUserSpy = vi.spyOn(loadSvc, 'loadAuthWithUser');
     });
 
-    const setStorageSpy = vi.spyOn(AuthClientStore.getInstance(), 'setAuthClientStorage');
+    it('calls authenticate with satellite params, stores session, loads user', async () => {
+      await expect(handleRedirectCallback()).resolves.toBeUndefined();
 
-    const fromDocSpy = vi.spyOn(docUtils, 'fromDoc');
-
-    const loadAuthWithUserSpy = vi.spyOn(loadSvc, 'loadAuthWithUser');
-
-    await expect(handleRedirectCallback()).resolves.toBeUndefined();
-
-    expect(authenticateSpy).toHaveBeenCalledTimes(1);
-    expect(authenticateSpy).toHaveBeenCalledWith({
-      redirect: null,
-      auth: {
-        satellite: {
-          satelliteId: 'sat-123',
-          container: true
+      expect(authenticateSpy).toHaveBeenCalledTimes(1);
+      expect(authenticateSpy).toHaveBeenCalledWith({
+        redirect: null,
+        auth: {
+          satellite: {
+            satelliteId: 'sat-123',
+            container: true
+          }
         }
-      }
+      });
+
+      expect(setStorageSpy).toHaveBeenCalledTimes(1);
+      expect(setStorageSpy).toHaveBeenCalledWith({
+        delegationChain,
+        sessionKey
+      });
+
+      expect(fromDocSpy).toHaveBeenCalledTimes(1);
+      expect(fromDocSpy).toHaveBeenCalledWith({
+        doc: mockUserDoc,
+        key: mockIdentity.getPrincipal().toText()
+      });
+
+      const userFromDoc = await fromDoc({
+        doc: mockUserDoc,
+        key: mockIdentity.getPrincipal().toText()
+      });
+
+      expect(loadAuthWithUserSpy).toHaveBeenCalledTimes(1);
+      expect(loadAuthWithUserSpy).toHaveBeenCalledWith({user: userFromDoc});
+
+      expect(AuthStore.getInstance().get()).toStrictEqual(userFromDoc);
     });
 
-    expect(setStorageSpy).toHaveBeenCalledTimes(1);
-    expect(setStorageSpy).toHaveBeenCalledWith({
-      delegationChain,
-      sessionKey
+    it('add and remove window beforeunload guard', async () => {
+      const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
+      const removeSpy = vi.spyOn(window, 'removeEventListener').mockImplementation(() => undefined);
+
+      await handleRedirectCallback();
+
+      expect(addSpy).toHaveBeenCalledTimes(1);
+      expect(removeSpy).toHaveBeenCalledTimes(1);
     });
 
-    expect(fromDocSpy).toHaveBeenCalledTimes(1);
-    expect(fromDocSpy).toHaveBeenCalledWith({
-      doc: mockUserDoc,
-      key: mockIdentity.getPrincipal().toText()
+    it('should not add and remove window beforeunload guard if opted-out', async () => {
+      const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
+      const removeSpy = vi.spyOn(window, 'removeEventListener').mockImplementation(() => undefined);
+
+      await handleRedirectCallback({context: {windowGuard: false}});
+
+      expect(addSpy).not.toHaveBeenCalled();
+      expect(removeSpy).not.toHaveBeenCalled();
     });
-
-    const userFromDoc = await fromDoc({
-      doc: mockUserDoc,
-      key: mockIdentity.getPrincipal().toText()
-    });
-
-    expect(loadAuthWithUserSpy).toHaveBeenCalledTimes(1);
-    expect(loadAuthWithUserSpy).toHaveBeenCalledWith({user: userFromDoc});
-
-    expect(AuthStore.getInstance().get()).toStrictEqual(userFromDoc);
   });
 });

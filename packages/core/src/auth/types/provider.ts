@@ -24,16 +24,44 @@ export interface ProviderDataWebAuthn {
 }
 
 /**
+ * Metadata for OpenID (e.g. Google) authentication.
+ * @interface ProviderDataOpenId
+ */
+export interface ProviderDataOpenId {
+  /**
+   * Email address of the authenticated user.
+   */
+  email?: string;
+
+  /**
+   * Full name of the authenticated user.
+   */
+  name?: string;
+
+  /**
+   * Given name of the authenticated user.
+   */
+  givenName?: string;
+
+  /**
+   * Family name of the authenticated user.
+   */
+  familyName?: string;
+
+  /**
+   * Profile picture URL of the authenticated user.
+   */
+  picture?: string;
+
+  /**
+   * Locale of the authenticated user.
+   */
+  locale?: string;
+}
+
+/**
  * Container for provider-specific metadata.
  *
- * Currently only `webauthn` is supported, but this type
- * can be extended in the future.
- *
- * @interface ProviderData
+ * @typedef {({ webauthn: ProviderDataWebAuthn } | { openid: ProviderDataOpenId })} ProviderData
  */
-export interface ProviderData {
-  /**
-   * Metadata specific to WebAuthn (passkey) authentication.
-   */
-  webauthn: ProviderDataWebAuthn;
-}
+export type ProviderData = {webauthn: ProviderDataWebAuthn} | {openid: ProviderDataOpenId};

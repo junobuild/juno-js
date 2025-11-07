@@ -1,26 +1,13 @@
 import {isNullish} from '@dfinity/utils';
-import {authenticate as authenticateApi} from '@junobuild/auth';
+import {authenticate} from '@junobuild/auth';
 import {EnvStore} from '../../core/stores/env.store';
 import {fromDoc} from '../../datastore/utils/doc.utils';
-import {executeWithWindowGuard} from '../helpers/window.helpers';
 import {AuthClientStore} from '../stores/auth-client.store';
-import type {SignInContext} from '../types/auth';
 import {SignInInitError} from '../types/errors';
 import type {UserData} from '../types/user';
 import {loadAuthWithUser} from './load.services';
 
-export const handleRedirectCallback = async ({context}: {context?: SignInContext} = {}) => {
-  const disableWindowGuard = context?.windowGuard === false;
-
-  if (disableWindowGuard) {
-    await authenticate();
-    return;
-  }
-
-  await executeWithWindowGuard({fn: authenticate});
-};
-
-const authenticate = async () => {
+export const handleRedirectCallback = async () => {
   const {satelliteId} = EnvStore.getInstance().get() ?? {satelliteId: undefined};
 
   if (isNullish(satelliteId)) {
@@ -32,7 +19,7 @@ const authenticate = async () => {
   const {
     identity: {delegationChain, sessionKey, identity},
     data: {doc}
-  } = await authenticateApi({
+  } = await authenticate({
     redirect: null,
     auth: {
       satellite: {

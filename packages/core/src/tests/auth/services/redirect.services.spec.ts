@@ -127,25 +127,5 @@ describe('handleRedirectCallback', async () => {
 
       expect(AuthStore.getInstance().get()).toStrictEqual(userFromDoc);
     });
-
-    it('add and remove window beforeunload guard', async () => {
-      const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
-      const removeSpy = vi.spyOn(window, 'removeEventListener').mockImplementation(() => undefined);
-
-      await handleRedirectCallback();
-
-      expect(addSpy).toHaveBeenCalledTimes(1);
-      expect(removeSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it('should not add and remove window beforeunload guard if opted-out', async () => {
-      const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
-      const removeSpy = vi.spyOn(window, 'removeEventListener').mockImplementation(() => undefined);
-
-      await handleRedirectCallback({context: {windowGuard: false}});
-
-      expect(addSpy).not.toHaveBeenCalled();
-      expect(removeSpy).not.toHaveBeenCalled();
-    });
   });
 });

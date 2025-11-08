@@ -17,7 +17,7 @@ export type UserData =
        * Sign-in via Google.
        */
       provider: 'google';
-      providerData: ProviderData<'google'>;
+      providerData: ProviderData<'openid'>;
     }
   | {
       /**

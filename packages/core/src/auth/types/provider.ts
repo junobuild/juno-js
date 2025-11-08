@@ -64,12 +64,12 @@ export interface ProviderDataOpenId {
  *
  * For example:
  * - `'webauthn'` → WebAuthn attestation details
- * - `'google'` → OpenID profile information
+ * - `'openid'` → OpenID profile information (e.g. Google)
  *
  * Other providers have no associated metadata.
  */
-export type ProviderData<P extends Provider> = P extends 'webauthn'
+export type ProviderData<P extends 'webauthn' | 'openid'> = P extends 'webauthn'
   ? {webauthn: ProviderDataWebAuthn}
-  : P extends 'google'
+  : P extends 'openid'
     ? {openid: ProviderDataOpenId}
     : never;

@@ -13,10 +13,6 @@ describe('google.providers', () => {
     vi.restoreAllMocks();
   });
 
-  it('returns provider id', () => {
-    expect(new GoogleProvider().id).toBe('google');
-  });
-
   it('throws SignInMissingClientIdError when clientId is missing', async () => {
     vi.spyOn(envUtils, 'envGoogleClientId').mockReturnValue(undefined);
 

@@ -1,5 +1,5 @@
 import type {Doc} from '../../datastore/types/doc';
-import type {DeprecatedNfid, ProviderData} from './provider';
+import type {DeprecatedNfid, ProviderData, ProviderWithoutData} from './provider';
 
 /**
  * Data about the signed-in user.
@@ -27,6 +27,12 @@ export type UserData =
       provider?: 'internet_identity' | DeprecatedNfid | undefined;
       providerData?: never;
     };
+
+/**
+ *  A simplified version of {@link UserData} for users signed in with providers
+ *  that don't include any extra metadata.
+ */
+export type UserDataWithoutProviderData = Extract<UserData, {provider?: ProviderWithoutData}>;
 
 /**
  * Type representing a user document.

@@ -13,14 +13,13 @@ import {
 } from '../constants/auth.constants';
 import type {AuthClientSignInOptions} from '../types/auth-client';
 import type {InternetIdentityConfig, InternetIdentityDomain} from '../types/internet-identity';
-import type {Provider} from '../types/provider';
+import type {ProviderWithoutData} from '../types/provider';
 import {popupCenter} from '../utils/window.utils';
 import {AuthClientProvider, type AuthProviderSignInOptions} from './_auth-client.providers';
 
 /**
  * Internet Identity authentication provider.
  * @class InternetIdentityProvider
- * @implements {AuthProvider}
  */
 export class InternetIdentityProvider extends AuthClientProvider {
   #domain?: InternetIdentityDomain;
@@ -39,7 +38,7 @@ export class InternetIdentityProvider extends AuthClientProvider {
    * Gets the identifier of the provider.
    * @returns {Provider} The identifier of the provider - `internet_identity`.
    */
-  override get id(): Provider {
+  override get id(): ProviderWithoutData {
     return 'internet_identity';
   }
 

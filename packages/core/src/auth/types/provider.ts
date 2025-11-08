@@ -10,6 +10,13 @@ export type DeprecatedNfid = 'nfid';
 export type Provider = 'internet_identity' | DeprecatedNfid | 'webauthn' | 'google';
 
 /**
+ * Subset of authentication providers that do not include any provider-specific metadata.
+ */
+export type ProviderWithoutData =
+  | Extract<Provider, 'internet_identity' | DeprecatedNfid>
+  | undefined;
+
+/**
  * Metadata for WebAuthn authentication.
  * @interface ProviderDataWebAuthn
  */
@@ -60,8 +67,16 @@ export interface ProviderDataOpenId {
 }
 
 /**
- * Container for provider-specific metadata.
+ * Metadata associated with a given authentication provider.
  *
- * @typedef {({ webauthn: ProviderDataWebAuthn } | { openid: ProviderDataOpenId })} ProviderData
+ * For example:
+ * - `'webauthn'` → WebAuthn attestation details
+ * - `'openid'` → OpenID profile information (e.g. Google)
+ *
+ * Other providers have no associated metadata.
  */
-export type ProviderData = {webauthn: ProviderDataWebAuthn} | {openid: ProviderDataOpenId};
+export type ProviderData<P extends 'webauthn' | 'openid'> = P extends 'webauthn'
+  ? {webauthn: ProviderDataWebAuthn}
+  : P extends 'openid'
+    ? {openid: ProviderDataOpenId}
+    : never;

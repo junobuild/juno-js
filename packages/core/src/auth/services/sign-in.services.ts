@@ -6,7 +6,7 @@ import {AuthClientStore} from '../stores/auth-client.store';
 import {AuthStore} from '../stores/auth.store';
 import type {SignInContext, SignInOptions} from '../types/auth';
 import {SignInProviderNotSupportedError} from '../types/errors';
-import type {Provider} from '../types/provider';
+import type {ProviderWithoutData} from '../types/provider';
 import {authenticateWithAuthClient} from './_auth-client.services';
 import {initUser} from './_user.services';
 import {loadAuth} from './load.services';
@@ -17,7 +17,7 @@ import {loadAuth} from './load.services';
  *
  * ℹ️ Exposed for testing purpose only.
  */
-export const createAuth = async ({provider}: {provider: Provider}) => {
+export const createAuth = async ({provider}: {provider: ProviderWithoutData}) => {
   const init = async () => {
     const user = await initUser({provider});
     AuthStore.getInstance().set(user);

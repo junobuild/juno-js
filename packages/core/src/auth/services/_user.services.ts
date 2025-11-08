@@ -2,14 +2,14 @@ import {isNullish, nonNullish} from '@dfinity/utils';
 import {isSatelliteError, JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE} from '@junobuild/errors';
 import {getDoc, setDoc} from '../../datastore/services/doc.services';
 import {InitError} from '../types/errors';
-import type {Provider} from '../types/provider';
-import type {User, UserData} from '../types/user';
+import type {ProviderWithoutData} from '../types/provider';
+import type {User, UserData, UserDataWithoutProviderData} from '../types/user';
 
 import {getIdentity} from './identity.services';
 
 type UserId = string;
 
-export const initUser = async ({provider}: {provider: Provider}): Promise<User> => {
+export const initUser = async ({provider}: {provider: ProviderWithoutData}): Promise<User> => {
   const {user, userId} = await loadUser();
 
   // For returning users we do not need to create a user entry.
@@ -70,7 +70,7 @@ const createUser = ({
   ...rest
 }: {
   userId: string;
-} & UserData): Promise<User> =>
+} & UserDataWithoutProviderData): Promise<User> =>
   setDoc<UserData>({
     collection: `#user`,
     doc: {

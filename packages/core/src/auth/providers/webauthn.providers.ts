@@ -21,7 +21,6 @@ import {DELEGATION_IDENTITY_EXPIRATION_IN_MILLISECONDS} from '../constants/auth.
 import {execute} from '../helpers/progress.helpers';
 import {createWebAuthnUser} from '../services/user-webauthn.services';
 import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../types/errors';
-import type {Provider} from '../types/provider';
 import type {User} from '../types/user';
 import {
   type WebAuthnSignInOptions,
@@ -29,22 +28,13 @@ import {
   WebAuthnSignInProgressStep,
   WebAuthnSignUpProgressStep
 } from '../types/webauthn';
-import type {AuthProvider} from './_auth.providers';
 
 interface SessionDelegationIdentity {
   delegationIdentity: DelegationIdentity;
   sessionKey: ECDSAKeyIdentity;
 }
 
-export class WebAuthnProvider implements AuthProvider {
-  /**
-   * Gets the identifier of the provider.
-   * @returns {Provider} The identifier of the provider is webauthn.
-   */
-  get id(): Provider {
-    return 'webauthn';
-  }
-
+export class WebAuthnProvider {
   /**
    * Signs up a user by creating a new passkey.
    *

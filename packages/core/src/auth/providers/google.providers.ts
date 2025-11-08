@@ -3,18 +3,8 @@ import {requestJwt} from '@junobuild/auth';
 import {envGoogleClientId} from '../../core/utils/window.env.utils';
 import {SignInMissingClientIdError} from '../types/errors';
 import type {GoogleSignInRedirectOptions} from '../types/google';
-import type {Provider} from '../types/provider';
-import type {AuthProvider} from './_auth.providers';
 
-export class GoogleProvider implements AuthProvider {
-  /**
-   * Gets the identifier of the provider.
-   * @returns {Provider} The identifier of the provider is google.
-   */
-  get id(): Provider {
-    return 'google';
-  }
-
+export class GoogleProvider {
   /**
    * Initiates a Google sign-in flow.
    *

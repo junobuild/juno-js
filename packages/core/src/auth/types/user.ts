@@ -5,7 +5,7 @@ import type {DeprecatedNfid, Provider, ProviderData, ProviderWithoutData} from '
  * All supported authentication providers, plus `undefined` for providers
  * that do not include any associated metadata (see {@link ProviderWithoutData}).
  */
-type UserProvider = Provider | undefined;
+export type UserProvider = Provider | undefined;
 
 /**
  * Data about the signed-in user.

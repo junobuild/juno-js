@@ -1,23 +1,32 @@
 import type {Doc} from '../../datastore/types/doc';
-import type {Provider, ProviderData} from './provider';
+import type {DeprecatedNfid, ProviderData} from './provider';
 
 /**
- * Interface representing user data.
- * @interface UserData
+ * Data about the signed-in user.
  */
-export interface UserData {
-  /**
-   * The potential provider used to sign-in. There is no absolute guarantee that the information can be set by the browser during the sign-in flow, therefore it is optional.
-   * @type {Provider}
-   */
-  provider?: Provider;
-
-  /**
-   * The optional provider-specific metadata. This is only set if the frontend was able to supply it during the sign-in flow.
-   * @type {ProviderData}
-   */
-  providerData?: ProviderData;
-}
+export type UserData =
+  | {
+      /**
+       * Sign-in via WebAuthn.
+       */
+      provider: 'webauthn';
+      providerData: ProviderData<'webauthn'>;
+    }
+  | {
+      /**
+       * Sign-in via Google.
+       */
+      provider: 'google';
+      providerData: ProviderData<'google'>;
+    }
+  | {
+      /**
+       * Sign-in via another provider. There is no absolute guarantee that the information can be set by the browser
+       * during the sign-in flow, therefore it is optional.
+       */
+      provider?: 'internet_identity' | DeprecatedNfid | undefined;
+      providerData?: never;
+    };
 
 /**
  * Type representing a user document.

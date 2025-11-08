@@ -60,8 +60,16 @@ export interface ProviderDataOpenId {
 }
 
 /**
- * Container for provider-specific metadata.
+ * Metadata associated with a given authentication provider.
  *
- * @typedef {({ webauthn: ProviderDataWebAuthn } | { openid: ProviderDataOpenId })} ProviderData
+ * For example:
+ * - `'webauthn'` → WebAuthn attestation details
+ * - `'google'` → OpenID profile information
+ *
+ * Other providers have no associated metadata.
  */
-export type ProviderData = {webauthn: ProviderDataWebAuthn} | {openid: ProviderDataOpenId};
+export type ProviderData<P extends Provider> = P extends 'webauthn'
+  ? {webauthn: ProviderDataWebAuthn}
+  : P extends 'google'
+    ? {openid: ProviderDataOpenId}
+    : never;

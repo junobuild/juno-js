@@ -1,5 +1,5 @@
 import {DEFAULT_READ_OPTIONS} from '../../core/constants/call-options.constants';
-import {getAnyIdentity} from '../../core/services/identity.services';
+import {getAnyIdentity} from '../../core/services/any-identity.services';
 import type {ReadOptions} from '../../core/types/call-options';
 import type {ListParams, ListResults} from '../../core/types/list';
 import type {SatelliteOptions} from '../../core/types/satellite';

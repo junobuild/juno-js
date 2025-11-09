@@ -1,5 +1,5 @@
-import type {CanisterStatus} from '@dfinity/agent';
-import * as agent from '@dfinity/agent';
+import type {CanisterStatus} from '@icp-sdk/core/agent';
+import * as agent from '@icp-sdk/core/agent';
 import {JUNO_PACKAGE_ORBITER_ID, JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
 import * as actor from '@junobuild/ic-client/actor';
 import {OrbiterParameters} from '@junobuild/ic-client/actor';
@@ -7,7 +7,7 @@ import {OrbiterVersionError} from '../../errors/version.errors';
 import {orbiterVersion} from '../../services/orbiter.version.services';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.mock';
 
-vi.mock('@dfinity/agent', () => {
+vi.mock('@icp-sdk/core/agent', () => {
   return {
     CanisterStatus: {
       request: vi.fn()

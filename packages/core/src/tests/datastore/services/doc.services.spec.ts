@@ -1,5 +1,5 @@
 import {toArray} from '@junobuild/utils';
-import {beforeEach, describe, expect, MockInstance} from 'vitest';
+import {MockInstance} from 'vitest';
 import * as actorApi from '../../../core/api/actor.api';
 import {
   countDocs,

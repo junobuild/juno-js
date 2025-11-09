@@ -1,13 +1,13 @@
-import {type SignIdentity, AnonymousIdentity} from '@dfinity/agent';
-import {IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@dfinity/auth-client';
+import {isNullish, uint8ArrayToBase64} from '@dfinity/utils';
+import {IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@icp-sdk/auth/client';
+import {type SignIdentity, AnonymousIdentity} from '@icp-sdk/core/agent';
 import {
   DelegationChain,
   DelegationIdentity,
   DER_COSE_OID,
   ECDSAKeyIdentity,
   unwrapDER
-} from '@dfinity/identity';
-import {isNullish, uint8ArrayToBase64} from '@dfinity/utils';
+} from '@icp-sdk/core/identity';
 import {
   type RetrievePublicKeyFn,
   type WebAuthnNewCredential,
@@ -21,7 +21,6 @@ import {DELEGATION_IDENTITY_EXPIRATION_IN_MILLISECONDS} from '../constants/auth.
 import {execute} from '../helpers/progress.helpers';
 import {createWebAuthnUser} from '../services/user-webauthn.services';
 import {SignInInitError, WebAuthnSignInRetrievePublicKeyError} from '../types/errors';
-import type {Provider} from '../types/provider';
 import type {User} from '../types/user';
 import {
   type WebAuthnSignInOptions,
@@ -29,22 +28,13 @@ import {
   WebAuthnSignInProgressStep,
   WebAuthnSignUpProgressStep
 } from '../types/webauthn';
-import type {AuthProvider} from './_auth-client.providers';
 
 interface SessionDelegationIdentity {
   delegationIdentity: DelegationIdentity;
   sessionKey: ECDSAKeyIdentity;
 }
 
-export class WebAuthnProvider implements AuthProvider {
-  /**
-   * Gets the identifier of the provider.
-   * @returns {Provider} The identifier of the provider is webauthn.
-   */
-  get id(): Provider {
-    return 'webauthn';
-  }
-
+export class WebAuthnProvider {
   /**
    * Signs up a user by creating a new passkey.
    *

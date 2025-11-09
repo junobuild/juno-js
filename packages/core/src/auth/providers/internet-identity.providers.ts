@@ -13,14 +13,13 @@ import {
 } from '../constants/auth.constants';
 import type {AuthClientSignInOptions} from '../types/auth-client';
 import type {InternetIdentityConfig, InternetIdentityDomain} from '../types/internet-identity';
-import type {Provider} from '../types/provider';
+import type {ProviderWithoutData} from '../types/provider';
 import {popupCenter} from '../utils/window.utils';
 import {AuthClientProvider, type AuthProviderSignInOptions} from './_auth-client.providers';
 
 /**
  * Internet Identity authentication provider.
  * @class InternetIdentityProvider
- * @implements {AuthProvider}
  */
 export class InternetIdentityProvider extends AuthClientProvider {
   #domain?: InternetIdentityDomain;
@@ -39,7 +38,7 @@ export class InternetIdentityProvider extends AuthClientProvider {
    * Gets the identifier of the provider.
    * @returns {Provider} The identifier of the provider - `internet_identity`.
    */
-  override get id(): Provider {
+  override get id(): ProviderWithoutData {
     return 'internet_identity';
   }
 
@@ -88,11 +87,19 @@ export class InternetIdentityProvider extends AuthClientProvider {
     };
 
     const identityProvider = identityProviderUrl();
-    const iiDesignV2 = URL.parse(identityProvider)?.hostname?.includes(ID_AI) === true;
+
+    const iiDesignV2 = (): boolean => {
+      try {
+        const {hostname} = new URL(identityProvider);
+        return hostname.includes(ID_AI);
+      } catch {
+        return false;
+      }
+    };
 
     return {
       ...(windowed !== false && {
-        windowOpenerFeatures: popupCenter(iiDesignV2 ? II_DESIGN_V2_POPUP : II_DESIGN_V1_POPUP)
+        windowOpenerFeatures: popupCenter(iiDesignV2() ? II_DESIGN_V2_POPUP : II_DESIGN_V1_POPUP)
       }),
       identityProvider
     };

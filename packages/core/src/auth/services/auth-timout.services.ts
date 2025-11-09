@@ -5,7 +5,7 @@ import {AuthStore} from '../stores/auth.store';
 import type {PostMessage, PostMessageDataResponseAuth} from '../types/post-message';
 import type {User} from '../types/user';
 import {emit} from '../utils/events.utils';
-import {signOut} from './auth.services';
+import {signOut} from './sign-out.services';
 
 export const initAuthTimeoutWorker = (auth: EnvironmentWorker): Unsubscribe => {
   const workerUrl = auth === true ? './workers/auth.worker.js' : auth;

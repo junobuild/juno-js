@@ -1,5 +1,5 @@
-import {Principal} from '@dfinity/principal';
 import {jsonReplacer} from '@dfinity/utils';
+import {Principal} from '@icp-sdk/core/principal';
 import {RawData} from '../../schemas/db';
 import {decodeDocData, encodeDocData} from '../../sdk/serializer.sdk';
 

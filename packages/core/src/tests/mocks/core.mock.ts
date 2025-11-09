@@ -1,5 +1,5 @@
-import type {Identity} from '@dfinity/agent';
-import {Principal} from '@dfinity/principal';
+import type {Identity} from '@icp-sdk/core/agent';
+import {Principal} from '@icp-sdk/core/principal';
 
 import {User} from '../../auth/types/user';
 
@@ -7,6 +7,8 @@ export const mockUserIdText = 'xlmdg-vkosz-ceopx-7wtgu-g3xmd-koiyc-awqaq-7modz-z
 export const mockUserIdPrincipal = Principal.fromText(mockUserIdText);
 
 export const mockSatelliteId = 'jx5yt-yyaaa-aaaal-abzbq-cai';
+
+export const mockGoogleClientId = '1234567890-abcdef.apps.googleusercontent.com';
 
 const transformRequest = () => {
   console.error(

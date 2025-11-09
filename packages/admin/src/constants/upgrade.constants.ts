@@ -1,4 +1,4 @@
-import type {canister_install_mode} from '@dfinity/ic-management';
+import type {canister_install_mode} from '@icp-sdk/canisters/ic-management';
 
 export const SIMPLE_INSTALL_MAX_WASM_SIZE = 2_000_000;
 export const INSTALL_MAX_CHUNK_SIZE = 1_000_000;

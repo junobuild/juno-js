@@ -1,4 +1,4 @@
-import {Principal} from '@dfinity/principal';
+import {Principal} from '@icp-sdk/core/principal';
 import * as actor from '@junobuild/ic-client/actor';
 import {MissionControlDid} from '@junobuild/ic-client/actor';
 import {

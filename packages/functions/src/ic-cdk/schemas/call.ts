@@ -1,5 +1,5 @@
-import {IDL} from '@dfinity/candid';
-import type {Principal} from '@dfinity/principal';
+import {IDL} from '@icp-sdk/core/candid';
+import type {Principal} from '@icp-sdk/core/principal';
 import * as z from 'zod';
 import {PrincipalSchema, type RawPrincipal, RawPrincipalSchema} from '../../schemas/candid';
 
@@ -11,7 +11,7 @@ export const IDLTypeSchema = z.custom<IDL.Type<unknown>>((val) => val instanceof
 });
 
 /**
- * Custom validation function to verify if a value is an instance of `IDL.Type` from `@dfinity/candid`.
+ * Custom validation function to verify if a value is an instance of `IDL.Type` from `@icp-sdk/core/candid`.
  */
 export type IDLType = z.infer<typeof IDLTypeSchema>;
 

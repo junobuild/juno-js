@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/admin",
-  "version": "2.3.0",
+  "version": "3.0.1",
   "description": "A library for interfacing with admin features of Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -40,24 +40,23 @@
     "url": "https://github.com/junobuild/juno-js"
   },
   "keywords": [
-    "blockchain-as-a-service",
-    "baas",
-    "dapps",
-    "dapps-development",
-    "internet computer",
-    "smart-contracts",
-    "web3"
+    "serverless",
+    "serverless-functions",
+    "wasm",
+    "self-hosted",
+    "cloud",
+    "auth",
+    "storage",
+    "database",
+    "hosting"
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/agent": "^3.2.6",
-    "@dfinity/candid": "^3.2.6",
-    "@dfinity/ic-management": "^7",
-    "@dfinity/identity": "^3.2.6",
-    "@dfinity/principal": "^3.2.6",
-    "@dfinity/utils": "^3.1",
+    "@dfinity/utils": "^4",
+    "@icp-sdk/canisters": "^1.1.1",
+    "@icp-sdk/core": "^4.2",
     "@junobuild/config": "*",
-    "@junobuild/ic-client": "^3",
+    "@junobuild/ic-client": "^4",
     "semver": "7.*",
     "zod": "^4"
   }

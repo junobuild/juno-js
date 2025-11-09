@@ -1,5 +1,5 @@
-import {Principal} from '@dfinity/principal';
 import {isNullish, toNullable} from '@dfinity/utils';
+import {Principal} from '@icp-sdk/core/principal';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {ListError} from '../../auth/types/errors';
 import type {ListParams, ListTimestampMatcher} from '../types/list';

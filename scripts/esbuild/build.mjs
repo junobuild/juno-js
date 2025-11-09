@@ -30,7 +30,6 @@ const buildNode = ({multi} = {multi: false}) => {
   // esm output bundle for Node
   esbuild
     .build({
-      entryPoints: ['src/index.ts'],
       ...(multi === true
         ? {entryPoints, outdir: process.cwd(), outExtension: {'.js': '.mjs'}}
         : {entryPoints: ['src/index.ts'], outfile: join(DIST, 'node', 'index.mjs')}),

@@ -1,4 +1,4 @@
-import type {HttpAgent} from '@dfinity/agent';
+import type {HttpAgent} from '@icp-sdk/core/agent';
 import type {MockInstance} from 'vitest';
 import {useOrInitAgent} from '../../../actor/api/agent.api';
 import * as agent from '../../../actor/utils/agent.utils';

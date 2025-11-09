@@ -31,6 +31,84 @@ export interface AuthenticationConfigInternetIdentity {
 }
 
 /**
+ * @see AuthenticationConfigDelegation
+ */
+export const AuthenticationConfigDelegationSchema = z.strictObject({
+  allowedTargets: z.array(PrincipalTextSchema).nullable().optional(),
+  sessionDuration: z
+    .bigint()
+    .max(
+      30n * 24n * 60n * 60n * 1_000_000_000n,
+      'The maximal length of a defined session duration - maxTimeToLive - cannot exceed 30 days'
+    )
+    .optional()
+});
+
+/**
+ * Configure the delegation behavior for authentication.
+ *
+ * @interface AuthenticationConfigDelegation
+ */
+export interface AuthenticationConfigDelegation {
+  /**
+   * List of allowed targets (backend modules) that authenticated users
+   * may call using the issued session.
+   *
+   * - Omit this value to restrict access to this Satellite only (default).
+   * - Provide an array to explicitly allow only those targets.
+   * - Set to `null` to allow calling any backend.
+   *
+   * ⚠️ Setting to `null` removes all restrictions — use with caution.
+   */
+  allowedTargets?: PrincipalText[] | null;
+
+  /**
+   * Duration for which a session remains valid, expressed in nanoseconds.
+   *
+   * Defaults to 1 day. Cannot exceed 30 days.
+   *
+   * Once issued, a session cannot be extended or shortened.
+   * New settings only apply to future logins.
+   */
+  sessionDuration?: bigint;
+}
+
+/**
+ * @see AuthenticationConfigGoogle
+ */
+export const AuthenticationConfigGoogleSchema = z.strictObject({
+  clientId: z
+    .string()
+    .trim()
+    .regex(/^[0-9]+-[a-z0-9]+\.apps\.googleusercontent\.com$/, 'Invalid Google client ID format')
+    .max(128, 'Google clientId too long'),
+  delegation: AuthenticationConfigDelegationSchema.optional()
+});
+
+/**
+ * Configure the sign-in with Google.
+ *
+ * @interface AuthenticationConfigGoogle
+ */
+export interface AuthenticationConfigGoogle {
+  /**
+   * The OAuth 2.0 client ID from your
+   * [Google Cloud Console](https://console.cloud.google.com/apis/credentials).
+   *
+   * Example: `"1234567890-abcdefg.apps.googleusercontent.com"`
+   *
+   * @type {string}
+   */
+  clientId: string;
+
+  /**
+   * Optional delegation settings for authentication.
+   * If omitted, the default delegation behavior applies.
+   */
+  delegation?: AuthenticationConfigDelegation;
+}
+
+/**
  * @see AuthenticationConfigRules
  */
 export const AuthenticationConfigRulesSchema = z.strictObject({
@@ -58,6 +136,7 @@ export interface AuthenticationConfigRules {
  */
 export const AuthenticationConfigSchema = z.strictObject({
   internetIdentity: AuthenticationConfigInternetIdentitySchema.optional(),
+  google: AuthenticationConfigGoogleSchema.optional(),
   rules: AuthenticationConfigRulesSchema.optional(),
   version: z.bigint().optional()
 });
@@ -73,6 +152,13 @@ export interface AuthenticationConfig {
    * @optional
    */
   internetIdentity?: AuthenticationConfigInternetIdentity;
+
+  /**
+   * Optional configuration for enabling Google authentication method.
+   * @type {AuthenticationConfigGoogle}
+   * @optional
+   */
+  google?: AuthenticationConfigGoogle;
 
   /**
    * Optional configuration for the rules of the authentication.

@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/juno-js",
-  "version": "0.0.198",
+  "version": "202",
   "description": "JavaScript libraries for interfacing with Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "packages/config",
     "packages/ic-client",
     "packages/storage",
+    "packages/auth",
     "packages/cdn",
     "packages/core",
     "packages/admin",
@@ -39,16 +40,20 @@
     "@size-limit/esbuild": "^11.2.0",
     "@size-limit/preset-small-lib": "^11.2.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.3.1",
-    "esbuild": "^0.25.9",
-    "fake-indexeddb": "^6.2.2",
-    "jsdom": "^26.1.0",
+    "@types/node": "^24.10.0",
+    "esbuild": "^0.25.12",
+    "fake-indexeddb": "^6.2.4",
+    "jsdom": "^27.1.0",
     "prettier": "^3.6.2",
-    "prettier-plugin-organize-imports": "^4.2.0",
+    "prettier-plugin-organize-imports": "^4.3.0",
     "tsdoc-markdown": "^1.4.1",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4",
     "vitest-mock-extended": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=24",
+    "npm": ">=11.5.1 <12.0.0"
   },
   "size-limit": [
     {
@@ -61,6 +66,7 @@
         "@dfinity/ic-management",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils",
         "@junobuild/config",
         "@junobuild/ic-client",
@@ -71,13 +77,15 @@
     {
       "name": "@junobuild/core",
       "path": "./packages/core/dist/index.js",
-      "limit": "10 kB",
+      "limit": "15 kB",
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
         "@dfinity/auth-client",
+        "@icp-sdk/core",
+        "@icp-sdk/auth",
         "@dfinity/utils"
       ]
     },
@@ -89,13 +97,15 @@
     {
       "name": "@junobuild/core-peer",
       "path": "./packages/core-peer/dist/index.js",
-      "limit": "10 kB",
+      "limit": "15 kB",
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
         "@dfinity/auth-client",
+        "@icp-sdk/core",
+        "@icp-sdk/auth",
         "@dfinity/utils"
       ]
     },
@@ -126,6 +136,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils",
         "zod"
       ]
@@ -145,6 +156,19 @@
       ]
     },
     {
+      "name": "@junobuild/auth",
+      "path": "./packages/auth/dist/index.js",
+      "limit": "5 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/identity",
+        "@dfinity/principal",
+        "@dfinity/utils",
+        "@junobuild/ic-client"
+      ]
+    },
+    {
       "name": "@junobuild/cdn",
       "path": "./packages/cdn/dist/index.js",
       "limit": "5 kB",
@@ -153,6 +177,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils",
         "@dfinity/ic-management",
         "@junobuild/config",
@@ -170,6 +195,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils",
         "@junobuild/utils",
         "@junobuild/ic-client"
@@ -184,6 +210,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils"
       ]
     },
@@ -196,6 +223,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils"
       ]
     },
@@ -208,6 +236,7 @@
         "@dfinity/candid",
         "@dfinity/identity",
         "@dfinity/principal",
+        "@icp-sdk/core",
         "@dfinity/utils"
       ]
     }

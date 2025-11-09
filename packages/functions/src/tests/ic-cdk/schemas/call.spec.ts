@@ -1,5 +1,4 @@
-import {IDL} from '@dfinity/candid';
-import {describe, expect} from 'vitest';
+import {IDL} from '@icp-sdk/core/candid';
 import {
   CallArgSchema,
   CallArgsSchema,

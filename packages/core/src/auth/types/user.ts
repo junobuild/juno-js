@@ -1,26 +1,60 @@
 import type {Doc} from '../../datastore/types/doc';
-import type {Provider, ProviderData} from './provider';
+import type {DeprecatedNfid, Provider, ProviderData, ProviderWithoutData} from './provider';
 
 /**
- * Interface representing user data.
- * @interface UserData
+ * All supported authentication providers, plus `undefined` for providers
+ * that do not include any associated metadata (see {@link ProviderWithoutData}).
  */
-export interface UserData {
-  /**
-   * The potential provider used to sign-in. There is no absolute guarantee that the information can be set by the browser during the sign-in flow, therefore it is optional.
-   * @type {Provider}
-   */
-  provider?: Provider;
-
-  /**
-   * The optional provider-specific metadata. This is only set if the frontend was able to supply it during the sign-in flow.
-   * @type {ProviderData}
-   */
-  providerData?: ProviderData;
-}
+export type UserProvider = Provider | undefined;
 
 /**
- * Type representing a user document.
- * @typedef {Doc<UserData>} User
+ * Data about the signed-in user.
+ *
+ * Resolves to the appropriate structure based on the provider:
+ * - `webauthn` → includes WebAuthn metadata.
+ * - `google` → includes OpenID profile metadata.
+ * - `internet_identity` / `nfid` / `undefined` → no provider-specific metadata.
+ *
+ * @template P Authentication provider (defaults to all).
  */
-export type User = Doc<UserData>;
+export type UserData<P extends UserProvider = UserProvider> = P extends 'webauthn'
+  ? {
+      /**
+       * Sign-in via WebAuthn.
+       */
+      provider: 'webauthn';
+      providerData: ProviderData<'webauthn'>;
+    }
+  : P extends 'google'
+    ? {
+        /**
+         * Sign-in via Google.
+         */
+        provider: 'google';
+        providerData: ProviderData<'openid'>;
+      }
+    : {
+        /**
+         * Sign-in via another provider. There is no absolute guarantee that the information can be set by the browser
+         * during the sign-in flow, therefore it is optional.
+         */
+        provider?: 'internet_identity' | DeprecatedNfid | undefined;
+        providerData?: never;
+      };
+
+/**
+ *  A simplified version of {@link UserData} for users signed in with providers
+ *  that don't include any extra metadata.
+ */
+export type UserDataWithoutProviderData<P extends UserProvider = UserProvider> = Extract<
+  UserData<P>,
+  {provider?: ProviderWithoutData}
+>;
+
+/**
+ * Represents a user's profile, including authentication provider
+ * and any associated metadata.
+ *
+ * @template P Authentication provider (defaults to all).
+ */
+export type User<P extends UserProvider = UserProvider> = Doc<UserData<P>>;

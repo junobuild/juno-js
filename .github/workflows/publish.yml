@@ -29,8 +29,6 @@ jobs:
       - run: npm run build --workspaces
       - name: Publish
         run: ./scripts/publish-npm.sh
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
   publish-next:
     if: github.event_name == 'workflow_dispatch'
@@ -50,5 +48,3 @@ jobs:
         run: ./scripts/build-next
       - name: Publish
         run: ./scripts/publish-npm-next.sh
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

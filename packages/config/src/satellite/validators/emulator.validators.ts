@@ -1,24 +1,11 @@
 import type * as z from 'zod';
-import type {EmulatorConfigSchema, NetworkServices} from '../configs/emulator.config';
+import type {EmulatorConfigSchema} from '../configs/emulator.config';
+import {
+  DEFAULT_NETWORK_SERVICES,
+  DEFAULT_SATELLITE_NETWORK_SERVICES
+} from '../constants/emulator.constants';
 
-const DEFAULT_NETWORK_SERVICES: NetworkServices = {
-  registry: false,
-  cmc: true,
-  icp: true,
-  cycles: true,
-  nns: true,
-  sns: false,
-  internet_identity: true,
-  nns_dapp: false
-} as const;
-
-const SATELLITE_NETWORK_SERVICES: NetworkServices = {
-  ...DEFAULT_NETWORK_SERVICES,
-  cmc: false,
-  cycles: false,
-  nns: false
-} as const;
-
+const NNS_REQUIRED_SERVICES = ['icp'] as const;
 const CMC_REQUIRED_SERVICES = ['icp', 'nns'] as const;
 const NNS_DAPP_REQUIRED_SERVICES = ['cmc', 'icp', 'nns', 'sns', 'internet_identity'] as const;
 
@@ -27,14 +14,17 @@ type EmulatorConfigInput = z.input<typeof EmulatorConfigSchema>;
 // eslint-disable-next-line local-rules/prefer-object-params
 const refineNetworkServices = (cfg: EmulatorConfigInput, ctx: z.RefinementCtx) => {
   const defaultServices =
-    'satellite' in cfg ? SATELLITE_NETWORK_SERVICES : DEFAULT_NETWORK_SERVICES;
+    'satellite' in cfg ? DEFAULT_SATELLITE_NETWORK_SERVICES : DEFAULT_NETWORK_SERVICES;
   const mergedServices = {...defaultServices, ...(cfg.network?.services ?? {})};
 
   const assertServices = ({
     requiredServices,
     key
   }: {
-    requiredServices: typeof NNS_DAPP_REQUIRED_SERVICES | typeof CMC_REQUIRED_SERVICES;
+    requiredServices:
+      | typeof NNS_DAPP_REQUIRED_SERVICES
+      | typeof CMC_REQUIRED_SERVICES
+      | typeof NNS_REQUIRED_SERVICES;
     key: string;
   }) => {
     const hasMissingServices =
@@ -61,6 +51,13 @@ const refineNetworkServices = (cfg: EmulatorConfigInput, ctx: z.RefinementCtx) =
     assertServices({
       requiredServices: CMC_REQUIRED_SERVICES,
       key: 'cmc'
+    });
+  }
+
+  if (mergedServices.nns) {
+    assertServices({
+      requiredServices: NNS_REQUIRED_SERVICES,
+      key: 'nns'
     });
   }
 };

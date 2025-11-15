@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/ic-client",
-  "version": "3.1.2",
+  "version": "4.0.0",
   "description": "Agent and actor with generated bindings for Juno on the Internet Computer",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -72,10 +72,7 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/agent": "^3.2.6",
-    "@dfinity/candid": "^3.2.6",
-    "@dfinity/identity": "^3.2.6",
-    "@dfinity/principal": "^3.2.6",
-    "@dfinity/utils": "^3.1"
+    "@dfinity/utils": "^4",
+    "@icp-sdk/core": "^4.2"
   }
 }

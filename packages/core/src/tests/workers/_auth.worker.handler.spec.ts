@@ -1,13 +1,13 @@
-import {AuthClient, IdbStorage, KEY_STORAGE_DELEGATION} from '@dfinity/auth-client';
-import {DelegationChain, Ed25519KeyIdentity} from '@dfinity/identity';
-import {Principal} from '@dfinity/principal';
+import {AuthClient, IdbStorage, KEY_STORAGE_DELEGATION} from '@icp-sdk/auth/client';
+import {DelegationChain, Ed25519KeyIdentity} from '@icp-sdk/core/identity';
+import {Principal} from '@icp-sdk/core/principal';
 import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as workerModule from '../../auth/workers/auth.worker';
 
-vi.mock('@dfinity/auth-client', async () => {
+vi.mock('@icp-sdk/auth/client', async () => {
   const actual =
-    await vi.importActual<typeof import('@dfinity/auth-client')>('@dfinity/auth-client');
+    await vi.importActual<typeof import('@icp-sdk/auth/client')>('@icp-sdk/auth/client');
   return {
     ...actual,
     AuthClient: {

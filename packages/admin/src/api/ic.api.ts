@@ -1,16 +1,16 @@
-import {CanisterStatus} from '@dfinity/agent';
 import {
+  type CanisterStatusResponse,
   type chunk_hash,
+  ICManagementCanister,
   type InstallChunkedCodeParams,
   type InstallCodeParams,
   type list_canister_snapshots_result,
   type snapshot_id,
-  type UploadChunkParams,
-  ICManagementCanister
-} from '@dfinity/ic-management';
-import type {take_canister_snapshot_result} from '@dfinity/ic-management/dist/candid/ic-management';
-import type {CanisterStatusResponse} from '@dfinity/ic-management/dist/types/types/ic-management.responses';
-import {Principal} from '@dfinity/principal';
+  type take_canister_snapshot_result,
+  type UploadChunkParams
+} from '@icp-sdk/canisters/ic-management';
+import {CanisterStatus} from '@icp-sdk/core/agent';
+import {Principal} from '@icp-sdk/core/principal';
 import {type ActorParameters, useOrInitAgent} from '@junobuild/ic-client/actor';
 
 export const canisterStop = async ({

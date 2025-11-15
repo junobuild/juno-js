@@ -1,8 +1,8 @@
-import {IdbStorage, KEY_STORAGE_DELEGATION} from '@dfinity/auth-client';
-import {DelegationChain, isDelegationValid} from '@dfinity/identity';
+import {IdbStorage, KEY_STORAGE_DELEGATION} from '@icp-sdk/auth/client';
+import {DelegationChain, isDelegationValid} from '@icp-sdk/core/identity';
 import {AUTH_TIMER_INTERVAL} from '../constants/auth.constants';
+import {AuthClientStore} from '../stores/auth-client.store';
 import type {PostMessage, PostMessageDataRequest} from '../types/post-message';
-import {createAuthClient} from '../utils/auth.utils';
 
 export const onAuthMessage = ({data}: MessageEvent<PostMessage<PostMessageDataRequest>>) => {
   const {msg} = data;
@@ -55,7 +55,7 @@ export const onTimerSignOut = async () => {
  * @returns true if authenticated
  */
 const checkAuthentication = async (): Promise<boolean> => {
-  const authClient = await createAuthClient();
+  const authClient = await AuthClientStore.getInstance().createAuthClient();
   return authClient.isAuthenticated();
 };
 

@@ -1,4 +1,4 @@
-import type {Principal} from '@dfinity/principal';
+import type {Principal} from '@icp-sdk/core/principal';
 import type {OrbiterDid} from '@junobuild/ic-client/actor';
 import {mockUserIdPrincipal} from './admin.mock';
 

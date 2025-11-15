@@ -51,6 +51,21 @@ describe('console.config', () => {
       expect(result.success).toBe(true);
     });
 
+    it('accepts full config with ids and authentication config', () => {
+      const result = JunoConsoleConfigSchema.safeParse({
+        ids: {
+          local: mockModuleIdText,
+          production: mockModuleIdText
+        },
+        authentication: {
+          google: {
+            clientId: '1234567890-abcdef.apps.googleusercontent.com'
+          }
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
     it('rejects config missing both id and ids', () => {
       const result = JunoConsoleConfigSchema.safeParse({
         source: 'dist'

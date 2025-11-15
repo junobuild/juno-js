@@ -10,7 +10,12 @@ const EmulatorPortsSchema = z.strictObject({
   /**
    * @default 5999
    */
-  admin: z.number().optional()
+  admin: z.number().optional(),
+
+  /**
+   * @default 30
+   */
+  timeoutInSeconds: z.number().int().positive().optional()
 });
 
 const ConsolePortSchema = z.strictObject({
@@ -37,6 +42,12 @@ export interface EmulatorPorts {
    * @default 5999
    */
   admin?: number;
+
+  /**
+   * Max number of seconds to wait for emulator ports to become ready.
+   * @default 30
+   */
+  timeoutInSeconds?: number;
 }
 
 /**

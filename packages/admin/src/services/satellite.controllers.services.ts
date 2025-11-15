@@ -1,4 +1,4 @@
-import type {Principal} from '@dfinity/principal';
+import type {Principal} from '@icp-sdk/core/principal';
 import type {SatelliteDid, SatelliteParameters} from '@junobuild/ic-client/actor';
 import {
   listControllers,

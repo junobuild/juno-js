@@ -30,6 +30,8 @@ export const JUNO_AUTH_ERROR_INVALID_ORIGIN = 'juno.auth.error.invalid_origin';
 export const JUNO_AUTH_ERROR_NOT_WRITE_CONTROLLER = 'juno.auth.error.not_write_controller';
 export const JUNO_AUTH_ERROR_NOT_CONTROLLER = 'juno.auth.error.not_controller';
 export const JUNO_AUTH_ERROR_CALLER_NOT_ALLOWED = 'juno.auth.error.caller.not_allowed';
+export const JUNO_AUTH_ERROR_NOT_CONFIGURED = 'juno.auth.error.not_configured';
+export const JUNO_AUTH_ERROR_OPENID_DISABLED = 'juno.auth.error.openid_disabled';
 
 export const JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE = 'juno.datastore.error.user.cannot_update';
 export const JUNO_DATASTORE_ERROR_USER_INVALID_DATA = 'juno.datastore.error.user.invalid_data';
@@ -43,6 +45,24 @@ export const JUNO_DATASTORE_ERROR_USER_PROVIDER_INVALID_DATA =
   'juno.datastore.error.user.webauthn.provider_invalid_data';
 export const JUNO_DATASTORE_ERROR_USER_PROVIDER_WEBAUTHN_INVALID_DATA =
   'juno.datastore.error.user.webauthn.provider_webauthn_invalid_data';
+
+export const JUNO_DATASTORE_ERROR_USER_REGISTER_PROVIDER_INVALID_DATA =
+  'juno.datastore.error.user.register.provider_invalid_data';
+
+export const JUNO_AUTH_ERROR_PROFILE_EMAIL_INVALID_LENGTH =
+  'juno.auth.error.profile.data.email_invalid_length';
+export const JUNO_AUTH_ERROR_PROFILE_NAME_INVALID_LENGTH =
+  'juno.auth.error.profile.data.name_invalid_length';
+export const JUNO_AUTH_ERROR_PROFILE_GIVEN_NAME_INVALID_LENGTH =
+  'juno.auth.error.profile.data.given_name_invalid_length';
+export const JUNO_AUTH_ERROR_PROFILE_FAMILY_NAME_INVALID_LENGTH =
+  'juno.auth.error.profile.data.family_name_invalid_length';
+export const JUNO_AUTH_ERROR_PROFILE_LOCALE_INVALID_LENGTH =
+  'juno.auth.error.profile.data.locale_invalid_length';
+export const JUNO_AUTH_ERROR_PROFILE_PICTURE_INVALID_URL =
+  'juno.auth.error.profile.data.picture_invalid_url';
+export const JUNO_AUTH_ERROR_PROFILE_PICTURE_INVALID_SCHEME =
+  'juno.auth.error.profile.data.picture_invalid_scheme';
 
 export const JUNO_DATASTORE_ERROR_USER_USAGE_CHANGE_LIMIT_REACHED =
   'juno.datastore.error.user.usage.change_limit_reached';

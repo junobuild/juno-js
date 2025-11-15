@@ -1,4 +1,4 @@
-import type {chunk_hash} from '@dfinity/ic-management';
+import type {chunk_hash} from '@icp-sdk/canisters/ic-management';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
 import * as icApi from '../../api/ic.api';

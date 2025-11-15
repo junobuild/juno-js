@@ -1,5 +1,5 @@
+import type {GoogleSignInRedirectOptions} from './google';
 import type {InternetIdentitySignInOptions} from './internet-identity';
-import type {NFIDSignInOptions} from './nfid';
 import type {WebAuthnSignInOptions, WebAuthnSignUpOptions} from './webauthn';
 
 /**
@@ -18,13 +18,18 @@ export interface SignInContext {
 }
 
 /**
- * The options for sign-in.
+ * Defines which provider to use for signing in and its associated options.
  *
- * - `internetIdentity`: Internet Identity options
- * - `nfid`: NFID options
- * - `webauthn`: WebAuthn/Passkey options
+ * - `google` — Google sign-in
+ * - `internet_identity` — Internet Identity
+ * - `webauthn` — WebAuthn/Passkeys
  */
 export type SignInOptions =
+  | {
+      google: {
+        options?: GoogleSignInRedirectOptions;
+      };
+    }
   | {
       internet_identity: {
         options?: InternetIdentitySignInOptions;
@@ -32,16 +37,13 @@ export type SignInOptions =
       };
     }
   | {
-      nfid: {options: NFIDSignInOptions; context?: SignInContext};
-    }
-  | {
       webauthn: {options?: WebAuthnSignInOptions; context?: SignInContext};
     };
 
 /**
- * The options for sign-up.
+ * Defines which provider to use for signing up and its associated options.
  *
- * - `webauthn`: WebAuthn/Passkey options
+ * - `webauthn`: WebAuthn/Passkeys
  */
 export interface SignUpOptions {
   webauthn: {options?: WebAuthnSignUpOptions; context?: SignInContext};

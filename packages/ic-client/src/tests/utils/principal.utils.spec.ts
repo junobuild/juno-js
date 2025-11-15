@@ -1,5 +1,4 @@
-import {Principal} from '@dfinity/principal';
-import {describe, expect, it} from 'vitest';
+import {Principal} from '@icp-sdk/core/principal';
 import {toPrincipal} from '../../utils/principal.utils';
 
 describe('toPrincipal', () => {

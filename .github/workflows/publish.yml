@@ -7,7 +7,7 @@ on:
 
 run-name: >-
   ${{
-    github.event_name == 'release' && 'Publish Release'
+    github.event_name == 'release' && format('Publish {0}', github.event.release.tag_name)
     || github.event_name == 'workflow_dispatch' && 'Publish Next'
     || 'Publish Release' }}
 

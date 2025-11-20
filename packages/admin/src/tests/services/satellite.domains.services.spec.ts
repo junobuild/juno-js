@@ -27,6 +27,7 @@ describe('satellite.domains.services', () => {
   };
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
     // @ts-ignore
     vi.mocked(actor.getSatelliteActor).mockResolvedValue(mockActor);

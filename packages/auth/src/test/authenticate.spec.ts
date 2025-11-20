@@ -67,6 +67,7 @@ describe('authenticate', () => {
   };
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.useFakeTimers();
     vi.restoreAllMocks();
 

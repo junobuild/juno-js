@@ -211,7 +211,7 @@ describe('ic.api', () => {
         canisterId: mockSatelliteIdPrincipal
       });
 
-      expect(canisterStatusMock).toHaveBeenCalledWith(mockSatelliteIdPrincipal);
+      expect(canisterStatusMock).toHaveBeenCalledWith({canisterId: mockSatelliteIdPrincipal});
       expect(result).toEqual(response);
     });
 

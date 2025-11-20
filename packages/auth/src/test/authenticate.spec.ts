@@ -15,13 +15,13 @@ import {
 } from '../errors';
 import {
   type AuthenticationResult,
-  type AuthParameters,
   type GetDelegationArgs,
   type GetDelegationResult
 } from '../types/actor';
-import type {AuthenticatedIdentity} from '../types/authenticate';
+import {AuthenticatedIdentity, AuthParameters} from '../types/authenticate';
 import {stringifyContext} from '../utils/session-storage.utils';
 import * as sessionUtils from '../utils/session.utils';
+import {mockUserDoc} from './mocks/doc.mock';
 import {mockSatelliteIdText} from './mocks/principal.mock';
 
 vi.mock('../api/auth.api', () => ({
@@ -53,6 +53,11 @@ describe('authenticate', () => {
     delegationChain: {tag: 'chain'}
   } as unknown as AuthenticatedIdentity;
 
+  const mockAuthenticatedSession = {
+    identity: mockGenerateIdentityReturn,
+    data: {doc: mockUserDoc}
+  };
+
   const seedContext = (state: string) => {
     const caller = Ed25519KeyIdentity.generate();
     const salt = new Uint8Array([1, 2, 3, 4]);
@@ -62,6 +67,7 @@ describe('authenticate', () => {
   };
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.useFakeTimers();
     vi.restoreAllMocks();
 
@@ -106,7 +112,7 @@ describe('authenticate', () => {
       const {salt} = seedContext('STATE123');
 
       vi.mocked(authApi.authenticate).mockResolvedValue({
-        Ok: {delegation: {user_key, expiration}}
+        Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
       } as AuthenticationResult);
 
       vi.mocked(authApi.getDelegation).mockResolvedValue({
@@ -121,7 +127,7 @@ describe('authenticate', () => {
       await vi.runAllTimersAsync();
       const result = await p;
 
-      expect(result).toBe(mockGenerateIdentityReturn);
+      expect(result).toStrictEqual(mockAuthenticatedSession);
 
       expect(authApi.authenticate).toHaveBeenCalledWith({
         args: {OpenId: {jwt: 'jwt-123', session_key: mockPublicKey, salt}},
@@ -143,7 +149,7 @@ describe('authenticate', () => {
       const {salt} = seedContext('SAVED_STATE');
 
       vi.mocked(authApi.authenticate).mockResolvedValue({
-        Ok: {delegation: {user_key, expiration}}
+        Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
       } as AuthenticationResult);
 
       vi.mocked(authApi.getDelegation).mockResolvedValue({
@@ -159,7 +165,7 @@ describe('authenticate', () => {
 
       const res = await p;
 
-      expect(res).toBe(mockGenerateIdentityReturn);
+      expect(res).toStrictEqual(mockAuthenticatedSession);
 
       expect(authApi.authenticate).toHaveBeenCalledWith({
         args: {OpenId: {jwt: 'IDTOKEN_ABC', session_key: mockPublicKey, salt}},

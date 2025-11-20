@@ -3,9 +3,18 @@ name: Publish
 on:
   release:
     types: [released]
+  workflow_dispatch:
+
+run-name: >-
+  ${{
+    github.event_name == 'release' && format('Publish {0}', github.event.release.tag_name)
+    || github.event_name == 'workflow_dispatch' && 'Publish Next'
+    || 'Publish Release' }}
 
 jobs:
-  build:
+  publish-release:
+    if: github.event_name == 'release'
+
     runs-on: ubuntu-latest
 
     permissions:
@@ -20,5 +29,22 @@ jobs:
       - run: npm run build --workspaces
       - name: Publish
         run: ./scripts/publish-npm.sh
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+  publish-next:
+    if: github.event_name == 'workflow_dispatch'
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Prepare
+        uses: ./.github/actions/prepare
+      - name: Build next version
+        run: ./scripts/build-next
+      - name: Publish
+        run: ./scripts/publish-npm-next.sh

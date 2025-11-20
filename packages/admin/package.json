@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/admin",
-  "version": "2.3.1",
+  "version": "3.0.1",
   "description": "A library for interfacing with admin features of Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -53,10 +53,10 @@
   "homepage": "https://juno.build",
   "peerDependencies": {
     "@dfinity/utils": "^4",
-    "@icp-sdk/canisters": "^1",
+    "@icp-sdk/canisters": "^2",
     "@icp-sdk/core": "^4.2",
     "@junobuild/config": "*",
-    "@junobuild/ic-client": "^3",
+    "@junobuild/ic-client": "^4",
     "semver": "7.*",
     "zod": "^4"
   }

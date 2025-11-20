@@ -1,8 +1,8 @@
 import {Principal} from '@icp-sdk/core/principal';
+import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {toArray} from '@junobuild/utils';
 import {Doc} from '../../../datastore/types/doc';
 import {fromDoc, toDelDoc, toSetDoc} from '../../../datastore/utils/doc.utils';
-import {Doc as DocDid} from '../../../declarations/satellite/satellite.did';
 import {mockUserIdPrincipal, mockUserIdText} from '../../mocks/core.mock';
 
 describe('doc.utils', () => {
@@ -36,7 +36,7 @@ describe('doc.utils', () => {
 
     const encoded = await toArray(data);
 
-    const docApi: DocDid = {
+    const docApi: SatelliteDid.Doc = {
       owner: Principal.anonymous(),
       data: encoded,
       description: ['Description'],

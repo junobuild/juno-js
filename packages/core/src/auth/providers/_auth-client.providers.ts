@@ -7,18 +7,7 @@ import {
 import {execute} from '../helpers/progress.helpers';
 import {type AuthClientSignInOptions, AuthClientSignInProgressStep} from '../types/auth-client';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../types/errors';
-import type {Provider} from '../types/provider';
-
-/**
- * Common traits for all authentication providers
- * @interface AuthProvider
- */
-export interface AuthProvider {
-  /**
-   * The unique identifier of the provider.
-   */
-  readonly id: Provider;
-}
+import type {ProviderWithoutData} from '../types/provider';
 
 /**
  * Options for signing in with an authentication provider.
@@ -40,16 +29,15 @@ export interface AuthProviderSignInOptions {
  *
  * @abstract
  * @class AuthClientProvider
- * @implements {AuthProvider}
  */
-export abstract class AuthClientProvider implements AuthProvider {
+export abstract class AuthClientProvider {
   /**
    * The unique identifier of the provider.
    *
    * @abstract
    * @type {Provider}
    */
-  abstract get id(): Provider;
+  abstract get id(): ProviderWithoutData;
 
   /**
    * Returns the sign-in options for the provider.
@@ -84,7 +72,7 @@ export abstract class AuthClientProvider implements AuthProvider {
   }: {
     options?: AuthClientSignInOptions;
     authClient: AuthClient | undefined | null;
-    initAuth: (params: {provider: Provider}) => Promise<void>;
+    initAuth: (params: {provider: ProviderWithoutData}) => Promise<void>;
   }): Promise<void> {
     // 1. Sign-in or sign-up with third party provider
     const login = async () => await this.#loginWithAuthClient({options, authClient});

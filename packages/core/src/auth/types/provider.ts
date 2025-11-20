@@ -1,8 +1,20 @@
 /**
- * Type representing the available authentication providers.
- * @typedef {('internet_identity' | 'nfid' | 'webauthn')} Provider
+ * @deprecated The support for `nfid` provider is deprecated.
  */
-export type Provider = 'internet_identity' | 'nfid' | 'webauthn';
+export type DeprecatedNfid = 'nfid';
+
+/**
+ * Type representing the authentication providers.
+ * @typedef {('internet_identity' | 'nfid' | 'webauthn' | 'google')} Provider
+ */
+export type Provider = 'internet_identity' | DeprecatedNfid | 'webauthn' | 'google';
+
+/**
+ * Subset of authentication providers that do not include any provider-specific metadata.
+ */
+export type ProviderWithoutData =
+  | Extract<Provider, 'internet_identity' | DeprecatedNfid>
+  | undefined;
 
 /**
  * Metadata for WebAuthn authentication.
@@ -19,16 +31,52 @@ export interface ProviderDataWebAuthn {
 }
 
 /**
- * Container for provider-specific metadata.
- *
- * Currently only `webauthn` is supported, but this type
- * can be extended in the future.
- *
- * @interface ProviderData
+ * Metadata for OpenID (e.g. Google) authentication.
+ * @interface ProviderDataOpenId
  */
-export interface ProviderData {
+export interface ProviderDataOpenId {
   /**
-   * Metadata specific to WebAuthn (passkey) authentication.
+   * Email address of the authenticated user.
    */
-  webauthn: ProviderDataWebAuthn;
+  email?: string;
+
+  /**
+   * Full name of the authenticated user.
+   */
+  name?: string;
+
+  /**
+   * Given name of the authenticated user.
+   */
+  givenName?: string;
+
+  /**
+   * Family name of the authenticated user.
+   */
+  familyName?: string;
+
+  /**
+   * Profile picture URL of the authenticated user.
+   */
+  picture?: string;
+
+  /**
+   * Locale of the authenticated user.
+   */
+  locale?: string;
 }
+
+/**
+ * Metadata associated with a given authentication provider.
+ *
+ * For example:
+ * - `'webauthn'` → WebAuthn attestation details
+ * - `'openid'` → OpenID profile information (e.g. Google)
+ *
+ * Other providers have no associated metadata.
+ */
+export type ProviderData<P extends 'webauthn' | 'openid'> = P extends 'webauthn'
+  ? {webauthn: ProviderDataWebAuthn}
+  : P extends 'openid'
+    ? {openid: ProviderDataOpenId}
+    : never;

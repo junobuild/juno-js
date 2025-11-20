@@ -16,6 +16,7 @@ describe('upgrade.handlers', () => {
   const icManagementMock = mockDeep<ICManagementCanister>();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
     vi.spyOn(ICManagementCanister, 'create').mockReturnValue(icManagementMock);
   });

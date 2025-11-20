@@ -43,6 +43,7 @@ describe('storage.api', () => {
     };
 
     beforeEach(() => {
+      vi.clearAllMocks();
       vi.restoreAllMocks();
 
       // @ts-ignore – we only need to return our mockActor
@@ -135,6 +136,7 @@ describe('storage.api', () => {
     ];
 
     beforeEach(() => {
+      vi.clearAllMocks();
       vi.restoreAllMocks();
 
       // @ts-ignore – we only need to return our mockActor

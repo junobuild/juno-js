@@ -51,6 +51,7 @@ describe('satellite.upgrade.services', () => {
   const icManagementMock = mockDeep<ICManagementCanister>();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
     mockReset(icManagementMock);
 

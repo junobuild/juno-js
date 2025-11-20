@@ -28,3 +28,16 @@ export const envContainer = (): string | undefined => {
     ? (process.env.NEXT_PUBLIC_CONTAINER ?? viteEnvContainer())
     : viteEnvContainer();
 };
+
+export const envGoogleClientId = (): string | undefined => {
+  const viteEnvGoogleClientId = (): string | undefined =>
+    typeof import.meta !== 'undefined' &&
+    typeof (import.meta as unknown as ImportMeta).env !== 'undefined'
+      ? ((import.meta as unknown as ImportMeta).env?.VITE_GOOGLE_CLIENT_ID ??
+        (import.meta as unknown as ImportMeta).env?.PUBLIC_GOOGLE_CLIENT_ID)
+      : undefined;
+
+  return typeof process !== 'undefined' && typeof process.env !== 'undefined'
+    ? (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? viteEnvGoogleClientId())
+    : viteEnvGoogleClientId();
+};

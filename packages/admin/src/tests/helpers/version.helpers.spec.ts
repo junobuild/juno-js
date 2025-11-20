@@ -25,6 +25,14 @@ describe('version.helpers', () => {
     expect(result).toEqual({canUpgrade: true});
   });
 
+  it('should allow upgrade when selected version is a minor upgrade and major is zero', () => {
+    const result = checkUpgradeVersion({
+      currentVersion: '0.1.4',
+      selectedVersion: '0.2.0'
+    });
+    expect(result).toEqual({canUpgrade: true});
+  });
+
   it('should allow upgrade when selected version is a major upgrade', () => {
     const result = checkUpgradeVersion({
       currentVersion: '1.0.0',

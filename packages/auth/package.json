@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/auth",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "A SDK for working with Juno authentication modules",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -47,12 +47,8 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/agent": "^3.2.6",
-    "@dfinity/candid": "^3.2.6",
-    "@dfinity/identity": "^3.2.6",
-    "@dfinity/principal": "^3.2.6",
     "@dfinity/utils": "^4",
     "@icp-sdk/core": "^4.2",
-    "@junobuild/ic-client": "^3"
+    "@junobuild/ic-client": "^4"
   }
 }

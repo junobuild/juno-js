@@ -7,7 +7,7 @@ import {mock} from 'vitest-mock-extended';
 import {AuthClientProvider} from '../../../auth/providers/_auth-client.providers';
 import {AuthClientSignInProgressStep} from '../../../auth/types/auth-client';
 import {SignInError, SignInInitError, SignInUserInterruptError} from '../../../auth/types/errors';
-import {Provider} from '../../../auth/types/provider';
+import {ProviderWithoutData} from '../../../auth/types/provider';
 
 vi.mock('@icp-sdk/auth/client', async () => {
   const actual = (await import('@icp-sdk/auth/client')) as typeof import('@icp-sdk/auth/client');
@@ -21,7 +21,7 @@ vi.mock('@icp-sdk/auth/client', async () => {
 });
 
 class TestProvider extends AuthClientProvider {
-  get id(): Provider {
+  get id(): ProviderWithoutData {
     return 'internet_identity';
   }
 

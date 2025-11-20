@@ -3,8 +3,8 @@ import type {Signature} from '@icp-sdk/core/agent';
 import {Delegation, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import {authenticate as authenticateApi, getDelegation as getDelegationApi} from './api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from './errors';
-import type {AuthParameters, GetDelegationArgs, SignedDelegation} from './types/actor';
-import type {AuthenticatedIdentity} from './types/authenticate';
+import type {AuthenticationData, GetDelegationArgs, SignedDelegation} from './types/actor';
+import type {AuthenticatedSession, AuthParameters} from './types/authenticate';
 import type {OpenIdAuthContext} from './types/context';
 import type {Delegations} from './types/session';
 import {generateIdentity} from './utils/session.utils';
@@ -15,31 +15,38 @@ interface AuthContext {
 }
 type AuthenticationArgs = {jwt: string} & AuthContext;
 
-export const authenticateSession = async ({
+export const authenticateSession = async <T extends AuthParameters>({
   jwt,
   context,
   auth
-}: AuthenticationArgs): Promise<AuthenticatedIdentity> => {
+}: AuthenticationArgs): Promise<AuthenticatedSession<T>> => {
   const sessionKey = await ECDSAKeyIdentity.generate({extractable: false});
 
   const publicKey = new Uint8Array(sessionKey.getPublicKey().toDer());
 
-  const delegations = await authenticate({jwt, publicKey, context, auth});
+  const {delegations, data} = await authenticate<T>({
+    jwt,
+    publicKey,
+    context,
+    auth
+  });
 
-  return generateIdentity({
+  const identity = generateIdentity({
     sessionKey,
     delegations
   });
+
+  return {identity, data};
 };
 
-const authenticate = async ({
+const authenticate = async <T extends AuthParameters>({
   jwt,
   publicKey,
   context: {caller, salt},
   auth
 }: {
   publicKey: Uint8Array;
-} & AuthenticationArgs): Promise<Delegations> => {
+} & AuthenticationArgs): Promise<{delegations: Delegations; data: AuthenticationData<T>}> => {
   const result = await authenticateApi({
     args: {
       OpenId: {
@@ -59,7 +66,8 @@ const authenticate = async ({
   }
 
   const {
-    delegation: {user_key: userKey, expiration}
+    delegation: {user_key: userKey, expiration},
+    ...rest
   } = result.Ok;
 
   const signedDelegation = await retryGetDelegation({
@@ -73,7 +81,7 @@ const authenticate = async ({
   const {delegation, signature} = signedDelegation;
   const {pubkey, expiration: signedExpiration, targets} = delegation;
 
-  return [
+  const delegations: Delegations = [
     userKey,
     [
       {
@@ -86,6 +94,8 @@ const authenticate = async ({
       }
     ]
   ];
+
+  return {delegations, data: rest as AuthenticationData<T>};
 };
 
 const retryGetDelegation = async ({

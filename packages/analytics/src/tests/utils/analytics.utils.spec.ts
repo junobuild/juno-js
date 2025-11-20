@@ -2,7 +2,6 @@
  * @vitest-environment jsdom
  */
 
-import {beforeEach} from 'vitest';
 import {campaign, timestamp, userAgent} from '../../utils/analytics.utils';
 
 describe('analytics.utils', () => {

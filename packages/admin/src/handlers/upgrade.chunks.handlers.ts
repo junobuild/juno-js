@@ -85,7 +85,7 @@ export const upgradeChunkedCode = async ({
 const wasmToChunks = async ({
   wasmModule
 }: Pick<UpgradeCodeParams, 'wasmModule'>): Promise<UploadChunkParams[]> => {
-  const blob = new Blob([wasmModule]);
+  const blob = new Blob([wasmModule as Uint8Array<ArrayBuffer>]);
 
   const uploadChunks: UploadChunkParams[] = [];
 

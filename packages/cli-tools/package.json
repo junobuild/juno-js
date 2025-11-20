@@ -50,7 +50,7 @@
     "@junobuild/cdn": "^2",
     "@junobuild/config": "^2.6",
     "@junobuild/storage": "^2",
-    "esbuild": "^0.25.1",
+    "esbuild": "^0.27.0",
     "ora": "^8"
   },
   "dependencies": {

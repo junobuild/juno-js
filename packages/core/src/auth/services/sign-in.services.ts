@@ -23,7 +23,7 @@ export const createAuth = async ({provider}: {provider: ProviderWithoutData}) =>
     AuthStore.getInstance().set(user);
   };
 
-  await authenticateWithAuthClient({fn: init});
+  await authenticateWithAuthClient({fn: init, syncTabsOnSuccess: true});
 };
 
 /**
@@ -60,7 +60,7 @@ export const signIn = async (options: SignInOptions): Promise<void> => {
     const fn = (): Promise<void> =>
       new WebAuthnProvider().signIn({
         options: signInOptions,
-        loadAuth
+        loadAuth: (): Promise<void> => loadAuth({syncTabsOnSuccess: true})
       });
 
     await signInWithContext({fn, context});

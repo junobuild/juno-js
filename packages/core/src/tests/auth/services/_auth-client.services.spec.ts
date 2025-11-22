@@ -1,8 +1,8 @@
 import type {AuthClient} from '@icp-sdk/auth/client';
 import {mock} from 'vitest-mock-extended';
+import {AuthBroadcastChannel} from '../../../auth/providers/_auth-broadcast.providers';
 import {authenticateWithAuthClient} from '../../../auth/services/_auth-client.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
-import {AuthBroadcastChannel} from '../../../auth/providers/_auth-broadcast.providers';
 
 describe('_auth-client.services', () => {
   const authClientMock = mock<AuthClient>();

@@ -12,27 +12,31 @@ import {AuthClientStore} from '../stores/auth-client.store';
  *
  * @param {Object} params
  * @param {() => Promise<void>} params.fn - The asynchronous function to execute when authenticated.
- * @param {boolean} params.broadcast - Broadcast the successful authentication to other tabs.
+ * @param {boolean} params.syncTabsOnSuccess - Broadcast the successful authentication to other tabs.
  *
  * @returns {Promise<void>} Resolves when authentication is handled and the provided function is executed (if applicable).
  */
 export const authenticateWithAuthClient = async ({
   fn,
-  broadcast
+  syncTabsOnSuccess
 }: {
   fn: () => Promise<void>;
-  broadcast: boolean;
+  syncTabsOnSuccess: boolean;
 }) => {
-  await authenticate({fn});
+  const {authenticated} = await authenticate({fn});
 
-  if (!broadcast) {
+  if (!authenticated) {
+    return;
+  }
+
+  if (!syncTabsOnSuccess) {
     return;
   }
 
   broadCastAuth();
 };
 
-const authenticate = async ({fn}: {fn: () => Promise<void>}) => {
+const authenticate = async ({fn}: {fn: () => Promise<void>}): Promise<{authenticated: boolean}> => {
   const {createAuthClient, safeCreateAuthClient} = AuthClientStore.getInstance();
 
   const authClient = await createAuthClient();
@@ -41,10 +45,12 @@ const authenticate = async ({fn}: {fn: () => Promise<void>}) => {
 
   if (!isAuthenticated) {
     await safeCreateAuthClient();
-    return;
+    return {authenticated: false};
   }
 
   await fn();
+
+  return {authenticated: true};
 };
 
 const broadCastAuth = () => {

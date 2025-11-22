@@ -5,6 +5,7 @@
 import {AuthClient} from '@icp-sdk/auth/client';
 import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
+import {AuthBroadcastChannel} from '../../../auth/providers/_auth-broadcast.providers';
 import * as userServices from '../../../auth/services/_user.services';
 import {loadAuth, loadAuthWithUser} from '../../../auth/services/load.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
@@ -33,6 +34,10 @@ describe('load.services', () => {
     (AuthClient.create as Mock).mockResolvedValue(authClientMock);
     vi.spyOn(userServices, 'initUser').mockResolvedValue(mockUser);
     vi.spyOn(userServices, 'loadUser').mockResolvedValue({user: mockUser, userId: mockUserIdText});
+
+    vi.spyOn(AuthBroadcastChannel, 'getInstance').mockReturnValue({
+      postLoginSuccess: vi.fn()
+    } as unknown as AuthBroadcastChannel);
   });
 
   afterEach(() => {
@@ -91,6 +96,26 @@ describe('load.services', () => {
 
       expect(createSpy).toHaveBeenCalledTimes(2);
     });
+
+    it('does not broadcast when syncTabsOnSuccess=false', async () => {
+      authClientMock.isAuthenticated.mockResolvedValue(true);
+
+      const postSpy = vi.spyOn(AuthBroadcastChannel.getInstance(), 'postLoginSuccess');
+
+      await loadAuth({syncTabsOnSuccess: false});
+
+      expect(postSpy).not.toHaveBeenCalled();
+    });
+
+    it('broadcasts when syncTabsOnSuccess=true', async () => {
+      authClientMock.isAuthenticated.mockResolvedValue(true);
+
+      const postSpy = vi.spyOn(AuthBroadcastChannel.getInstance(), 'postLoginSuccess');
+
+      await loadAuth({syncTabsOnSuccess: true});
+
+      expect(postSpy).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('loadAuthWithUser', () => {
@@ -101,10 +126,13 @@ describe('load.services', () => {
 
       authClientMock.isAuthenticated.mockResolvedValue(false);
 
+      const postSpy = vi.spyOn(AuthBroadcastChannel.getInstance(), 'postLoginSuccess');
+
       await loadAuthWithUser({user: userParam});
 
       expect(authClientMock.isAuthenticated).toHaveBeenCalled();
       expect(authStore.get()).toBeNull();
+      expect(postSpy).not.toHaveBeenCalled();
     });
 
     it('loads the user passed as parameter when authenticated', async () => {
@@ -152,6 +180,16 @@ describe('load.services', () => {
       await loadAuthWithUser({user: mockUser});
 
       expect(createSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it('always broadcasts when authenticated', async () => {
+      authClientMock.isAuthenticated.mockResolvedValue(true);
+
+      const postSpy = vi.spyOn(AuthBroadcastChannel.getInstance(), 'postLoginSuccess');
+
+      await loadAuthWithUser({user: mockUser});
+
+      expect(postSpy).toHaveBeenCalledTimes(1);
     });
   });
 });

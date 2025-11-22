@@ -27,7 +27,7 @@ describe('_auth-client.services', () => {
 
     const fn = vi.fn();
 
-    await authenticateWithAuthClient({fn, broadcast: false});
+    await authenticateWithAuthClient({fn, syncTabsOnSuccess: false});
 
     expect(authClientMock.isAuthenticated).toHaveBeenCalled();
     expect(resetSpy).toHaveBeenCalledTimes(1);
@@ -39,7 +39,7 @@ describe('_auth-client.services', () => {
     const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
     const fn = vi.fn().mockResolvedValue(undefined);
 
-    await authenticateWithAuthClient({fn, broadcast: false});
+    await authenticateWithAuthClient({fn, syncTabsOnSuccess: false});
 
     expect(authClientMock.isAuthenticated).toHaveBeenCalled();
     expect(resetSpy).not.toHaveBeenCalled();
@@ -52,31 +52,48 @@ describe('_auth-client.services', () => {
 
     const fn = vi.fn().mockResolvedValue(undefined);
 
-    await authenticateWithAuthClient({fn, broadcast: false});
-    await authenticateWithAuthClient({fn, broadcast: false});
+    await authenticateWithAuthClient({fn, syncTabsOnSuccess: false});
+    await authenticateWithAuthClient({fn, syncTabsOnSuccess: false});
 
     expect(createSpy).toHaveBeenCalledTimes(2);
   });
 
-  it('does not broadcast when broadcast=false', async () => {
+  it('does not broadcast when syncTabsOnSuccess=false', async () => {
     authClientMock.isAuthenticated.mockResolvedValue(true);
 
     const broadcaster = AuthBroadcastChannel.getInstance();
     const postSpy = vi.spyOn(broadcaster, 'postLoginSuccess');
 
-    await authenticateWithAuthClient({fn: vi.fn(), broadcast: false});
+    await authenticateWithAuthClient({fn: vi.fn(), syncTabsOnSuccess: false});
 
     expect(postSpy).not.toHaveBeenCalled();
   });
 
-  it('broadcasts when broadcast=true', async () => {
+  it('broadcasts when syncTabsOnSuccess=true', async () => {
     authClientMock.isAuthenticated.mockResolvedValue(true);
 
     const broadcaster = AuthBroadcastChannel.getInstance();
     const postSpy = vi.spyOn(broadcaster, 'postLoginSuccess');
 
-    await authenticateWithAuthClient({fn: vi.fn(), broadcast: true});
+    await authenticateWithAuthClient({fn: vi.fn(), syncTabsOnSuccess: true});
 
     expect(postSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not broadcast when not authenticated even if syncTabsOnSuccess=true', async () => {
+    authClientMock.isAuthenticated.mockResolvedValue(false);
+
+    const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
+    const broadcaster = AuthBroadcastChannel.getInstance();
+    const postSpy = vi.spyOn(broadcaster, 'postLoginSuccess');
+
+    const fn = vi.fn();
+
+    await authenticateWithAuthClient({fn, syncTabsOnSuccess: true});
+
+    expect(authClientMock.isAuthenticated).toHaveBeenCalled();
+    expect(resetSpy).toHaveBeenCalledTimes(1);
+    expect(fn).not.toHaveBeenCalled();
+    expect(postSpy).not.toHaveBeenCalled();
   });
 });

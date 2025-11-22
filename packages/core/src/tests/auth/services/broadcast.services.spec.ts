@@ -1,13 +1,17 @@
+/**
+ * @vitest-environment jsdom
+ */
+
 import {AuthBroadcastChannel} from '../../../auth/providers/_auth-broadcast.providers';
 import {initAuthBroadcastListener} from '../../../auth/services/broadcast.services';
-import {reloadAuth} from '../../../auth/services/load.services';
+import * as loadServices from '../../../auth/services/load.services';
 
 describe('initAuthBroadcastListener', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('registers reloadAuth as login success handler and returns unsubscribe that destroys the channel', () => {
+  it('registers a login handler that reloads auth and emits junoSignInReload, and returns unsubscribe that destroys the channel', async () => {
     const onLoginSuccess = vi.fn();
     const destroy = vi.fn();
 
@@ -16,15 +20,29 @@ describe('initAuthBroadcastListener', () => {
       destroy
     } as unknown as AuthBroadcastChannel);
 
+    const reloadSpy = vi.spyOn(loadServices, 'reloadAuth').mockResolvedValue(undefined as any);
+
+    const dispatchSpy = vi.spyOn(document, 'dispatchEvent');
+
     const unsubscribe = initAuthBroadcastListener();
 
     expect(onLoginSuccess).toHaveBeenCalledTimes(1);
-    expect(onLoginSuccess).toHaveBeenCalledWith(reloadAuth);
+    const handler = onLoginSuccess.mock.calls[0][0] as () => Promise<void>;
+    expect(typeof handler).toBe('function');
+
+    await handler();
+
+    expect(reloadSpy).toHaveBeenCalledTimes(1);
+    expect(dispatchSpy).toHaveBeenCalledTimes(1);
+
+    const eventArg = dispatchSpy.mock.calls[0][0] as CustomEvent<unknown>;
+    expect(eventArg).toBeInstanceOf(CustomEvent);
+    expect(eventArg.type).toBe('junoSignInReload');
+    expect(eventArg.detail).toBeNull();
+    expect(eventArg.bubbles).toBe(true);
 
     expect(typeof unsubscribe).toBe('function');
-
     unsubscribe?.();
-
     expect(destroy).toHaveBeenCalledTimes(1);
   });
 

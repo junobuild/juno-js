@@ -1,12 +1,18 @@
 import type {Unsubscribe} from '../../core/types/subscription';
 import {AuthBroadcastChannel} from '../providers/_auth-broadcast.providers';
+import {emit} from '../utils/events.utils';
 import {reloadAuth} from './load.services';
 
 export const initAuthBroadcastListener = (): Unsubscribe | undefined => {
   try {
     const bc = AuthBroadcastChannel.getInstance();
 
-    bc.onLoginSuccess(reloadAuth);
+    const onLogin = async () => {
+      await reloadAuth();
+      emit({message: 'junoSignInReload'});
+    };
+
+    bc.onLoginSuccess(onLogin);
 
     return () => {
       bc?.destroy();

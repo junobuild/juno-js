@@ -33,7 +33,7 @@ export const authenticateWithAuthClient = async ({
     return;
   }
 
-  broadCastAuth();
+  syncTabs();
 };
 
 const authenticate = async ({fn}: {fn: () => Promise<void>}): Promise<{authenticated: boolean}> => {
@@ -53,7 +53,7 @@ const authenticate = async ({fn}: {fn: () => Promise<void>}): Promise<{authentic
   return {authenticated: true};
 };
 
-const broadCastAuth = () => {
+const syncTabs = () => {
   try {
     // If the user has more than one tab open in the same browser,
     // there could be a mismatch of the cached delegation chain vs the identity key of the `authClient` object.

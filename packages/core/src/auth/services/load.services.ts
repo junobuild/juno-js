@@ -6,14 +6,17 @@ import {loadUser} from './_user.services';
 /**
  * Initialize the authClient and load the existing user.
  * Executed when the library is initialized through initSatellite.
+ *
+ * @param {Object} params
+ * @param {boolean} params.broadcast - Broadcast the successful authentication to other tabs.
  */
-export const loadAuth = async () => {
+export const loadAuth = async ({broadcast}: {broadcast: boolean} = {broadcast: false}) => {
   const init = async () => {
     const {user} = await loadUser();
     AuthStore.getInstance().set(user ?? null);
   };
 
-  await authenticateWithAuthClient({fn: init});
+  await authenticateWithAuthClient({fn: init, broadcast});
 };
 
 /**
@@ -26,5 +29,5 @@ export const loadAuthWithUser = async ({user}: {user: User}) => {
     AuthStore.getInstance().set(user);
   };
 
-  await authenticateWithAuthClient({fn: init});
+  await authenticateWithAuthClient({fn: init, broadcast: true});
 };

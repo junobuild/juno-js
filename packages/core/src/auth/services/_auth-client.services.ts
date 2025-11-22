@@ -1,6 +1,6 @@
+import {EnvStore} from '../../core/stores/env.store';
 import {AuthBroadcastChannel} from '../providers/_auth-broadcast.providers';
 import {AuthClientStore} from '../stores/auth-client.store';
-import {EnvStore} from '../../core/stores/env.store';
 
 /**
  * Initializes a new `AuthClient`, checks authentication state,

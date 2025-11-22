@@ -7,7 +7,7 @@ import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import {AuthBroadcastChannel} from '../../../auth/providers/_auth-broadcast.providers';
 import * as userServices from '../../../auth/services/_user.services';
-import {loadAuth, loadAuthWithUser} from '../../../auth/services/load.services';
+import {loadAuth, loadAuthWithUser, reloadAuth} from '../../../auth/services/load.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import {EnvStore} from '../../../core/stores/env.store';
@@ -115,6 +115,38 @@ describe('load.services', () => {
       await loadAuth({syncTabsOnSuccess: true});
 
       expect(postSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('reloadAuth', () => {
+    it('clears user if not authenticated', async () => {
+      const authStore = AuthStore.getInstance();
+      authStore.set(mockUser);
+
+      authClientMock.isAuthenticated.mockResolvedValue(false);
+
+      const loadUserSpy = vi.spyOn(userServices, 'loadUser');
+
+      await reloadAuth();
+
+      expect(authClientMock.isAuthenticated).toHaveBeenCalled();
+      expect(loadUserSpy).not.toHaveBeenCalled();
+      expect(authStore.get()).toBeNull();
+    });
+
+    it('reloads user if authenticated', async () => {
+      const authStore = AuthStore.getInstance();
+      authStore.reset();
+
+      authClientMock.isAuthenticated.mockResolvedValue(true);
+
+      const loadUserSpy = vi.spyOn(userServices, 'loadUser');
+
+      await reloadAuth();
+
+      expect(authClientMock.isAuthenticated).toHaveBeenCalled();
+      expect(loadUserSpy).toHaveBeenCalledTimes(1);
+      expect(authStore.get()).toEqual(mockUser);
     });
   });
 

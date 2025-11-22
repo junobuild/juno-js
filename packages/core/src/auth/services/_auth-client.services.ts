@@ -36,6 +36,34 @@ export const authenticateWithAuthClient = async ({
   syncTabs();
 };
 
+/**
+ * Creates a new `AuthClient` instance and checks authentication state,
+ * then forwards the result to the provided callback function.
+ *
+ * Unlike {@link authenticateWithAuthClient}, this function does **not**
+ * reuse or reset the existing `AuthClient`, and does **not** perform broadcast logic.
+ * It simply ensures a fresh client is always created and reports whether it is authenticated.
+ *
+ * @param {Object} params
+ * @param {(params: {authenticated: boolean}) => Promise<void>} params.fn
+ *   The function to execute with the result of the authentication status.
+ *
+ * @returns {Promise<void>} Resolves once the callback has been invoked.
+ */
+export const authenticateWithNewAuthClient = async ({
+  fn
+}: {
+  fn: (params: {authenticated: boolean}) => Promise<void>;
+}) => {
+  const {createAuthClient} = AuthClientStore.getInstance();
+
+  const authClient = await createAuthClient();
+
+  const isAuthenticated = await authClient.isAuthenticated();
+
+  await fn({authenticated: isAuthenticated});
+};
+
 const authenticate = async ({fn}: {fn: () => Promise<void>}): Promise<{authenticated: boolean}> => {
   const {createAuthClient, safeCreateAuthClient} = AuthClientStore.getInstance();
 

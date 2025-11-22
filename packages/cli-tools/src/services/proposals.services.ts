@@ -48,7 +48,7 @@ export const proposeChanges = async ({
 
   await executeChanges(proposalId);
 
-  const submit = async (): Promise<{sha256: Uint8Array | number[]}> => {
+  const submit = async (): Promise<{sha256: Uint8Array}> => {
     console.log('');
     const spinner = ora('Submitting proposal...').start();
 

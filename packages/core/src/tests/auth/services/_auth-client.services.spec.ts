@@ -1,7 +1,10 @@
 import type {AuthClient} from '@icp-sdk/auth/client';
 import {mock} from 'vitest-mock-extended';
 import {AuthBroadcastChannel} from '../../../auth/providers/_auth-broadcast.providers';
-import {authenticateWithAuthClient, authenticateWithNewAuthClient} from '../../../auth/services/_auth-client.services';
+import {
+  authenticateWithAuthClient,
+  authenticateWithNewAuthClient
+} from '../../../auth/services/_auth-client.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
 
 describe('_auth-client.services', () => {

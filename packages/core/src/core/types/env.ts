@@ -29,12 +29,14 @@ export interface EnvironmentWorkers {
  * @typedef {Object} Environment
  * @property {string} [internetIdentityId] - The optional Internet Identity ID. Generally not provided.
  * @property {EnvironmentWorkers} [workers] - The optional web workers configuration.
+ * @property {boolean} [syncTabs] - Whether to keep authentication state in sync across tabs. Default to true.
  * @property {string} satelliteId - The satellite ID (required).
  * @property {string} [container] - The container. Commonly true to use local development with Docker.
  */
 export type Environment = {
   internetIdentityId?: string;
   workers?: EnvironmentWorkers;
+  syncTabs?: boolean;
 } & Required<Pick<SatelliteContext, 'satelliteId'>> &
   Pick<SatelliteContext, 'container'>;
 

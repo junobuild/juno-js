@@ -6,6 +6,7 @@ import {
   authenticateWithNewAuthClient
 } from '../../../auth/services/_auth-client.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
+import {EnvStore} from '../../../core/stores/env.store';
 
 describe('_auth-client.services', () => {
   const authClientMock = mock<AuthClient>();
@@ -98,6 +99,27 @@ describe('_auth-client.services', () => {
       expect(authClientMock.isAuthenticated).toHaveBeenCalled();
       expect(resetSpy).toHaveBeenCalledTimes(1);
       expect(fn).not.toHaveBeenCalled();
+      expect(postSpy).not.toHaveBeenCalled();
+    });
+
+    it('does not broadcast when env.syncTabs === false even if syncTabsOnSuccess=true', async () => {
+      authClientMock.isAuthenticated.mockResolvedValue(true);
+
+      EnvStore.getInstance().set({
+        satelliteId: 'sat-123',
+        container: true,
+        internetIdentityId: undefined,
+        workers: undefined,
+        syncTabs: false
+      });
+
+      const broadcaster = AuthBroadcastChannel.getInstance();
+      const postSpy = vi.spyOn(broadcaster, 'postLoginSuccess');
+      const fn = vi.fn().mockResolvedValue(undefined);
+
+      await authenticateWithAuthClient({fn, syncTabsOnSuccess: true});
+
+      expect(fn).toHaveBeenCalledTimes(1);
       expect(postSpy).not.toHaveBeenCalled();
     });
   });

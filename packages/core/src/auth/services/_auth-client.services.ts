@@ -1,5 +1,6 @@
 import {AuthBroadcastChannel} from '../providers/_auth-broadcast.providers';
 import {AuthClientStore} from '../stores/auth-client.store';
+import {EnvStore} from '../../core/stores/env.store';
 
 /**
  * Initializes a new `AuthClient`, checks authentication state,
@@ -30,6 +31,14 @@ export const authenticateWithAuthClient = async ({
   }
 
   if (!syncTabsOnSuccess) {
+    return;
+  }
+
+  // Even though the parameter is called syncTabsOnSuccess we perform the check
+  // on the environment variable here. This way we do not have to duplicate the code.
+  const env = EnvStore.getInstance().get();
+
+  if (env?.syncTabs === false) {
     return;
   }
 

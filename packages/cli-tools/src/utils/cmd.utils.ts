@@ -26,7 +26,6 @@ export const spawn = async ({
   // eslint-disable-next-line no-async-promise-executor
   await new Promise<number | null>(async (resolve, reject) => {
     const [escapedCommand, escapedArgs, options] = await applyForceShell(command, args ?? [], {
-      shell: true,
       ...(nonNullish(cwd) && {cwd}),
       ...(nonNullish(env) && {env})
     });

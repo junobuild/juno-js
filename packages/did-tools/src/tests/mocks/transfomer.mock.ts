@@ -2,6 +2,7 @@ export const mockTransformedCoreTS = `// This file was automatically generated b
 // Any modifications may be overwritten.
 
 import type {_SERVICE as SatelliteActor} from './satellite.did';
+import type { Principal } from '@icp-sdk/core/principal';
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
 

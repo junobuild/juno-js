@@ -34,12 +34,10 @@ export class CMCCanister extends Canister {
     args
   }: {
     args: CmcDid.NotifyTopUpArg;
-  }): Promise<CmcDid.NotifyTopUpResult> => {
-    return await call<CmcDid.NotifyTopUpResult>({
+  }): Promise<CmcDid.NotifyTopUpResult> => await call<CmcDid.NotifyTopUpResult>({
       canisterId: this.canisterId,
       method: 'notify_top_up',
       args: [[CmcIdl.NotifyTopUpArg, args]],
       result: CmcIdl.NotifyTopUpResult
     });
-  };
 }

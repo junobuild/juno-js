@@ -30,11 +30,8 @@ export class CMCCanister extends Canister {
    * @param {CmcDid.NotifyTopUpArg} args - Arguments containing the ledger block index and the canister ID that should receive the cycles.
    * @returns {Promise<CmcDid.NotifyTopUpResult>} The result of the CMC conversion and deposit.
    */
-  notifyTopUp = async ({
-    args
-  }: {
-    args: CmcDid.NotifyTopUpArg;
-  }): Promise<CmcDid.NotifyTopUpResult> => await call<CmcDid.NotifyTopUpResult>({
+  notifyTopUp = async ({args}: {args: CmcDid.NotifyTopUpArg}): Promise<CmcDid.NotifyTopUpResult> =>
+    await call<CmcDid.NotifyTopUpResult>({
       canisterId: this.canisterId,
       method: 'notify_top_up',
       args: [[CmcIdl.NotifyTopUpArg, args]],

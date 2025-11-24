@@ -2,7 +2,7 @@ import {IDL} from '@icp-sdk/core/candid';
 import {Principal} from '@icp-sdk/core/principal';
 import {CMC_ID} from '../../../canisters/_constants';
 import {CMCCanister} from '../../../canisters/cmc';
-import {type CmcDid, CmdIdl} from '../../../canisters/declarations';
+import {type CmcDid, CmcIdl} from '../../../canisters/declarations';
 import {mockCanisterId} from '../../mocks/ic-cdk.mock';
 
 describe('CMCCanister', () => {
@@ -42,7 +42,7 @@ describe('CMCCanister', () => {
       vi.stubGlobal(
         '__ic_cdk_call_raw',
         vi.fn(async () => {
-          return new Uint8Array(IDL.encode([CmdIdl.NotifyTopUpResult], [mockResponse]));
+          return new Uint8Array(IDL.encode([CmcIdl.NotifyTopUpResult], [mockResponse]));
         })
       );
 
@@ -77,7 +77,7 @@ describe('CMCCanister', () => {
       vi.stubGlobal(
         '__ic_cdk_call_raw',
         vi.fn(async () => {
-          return new Uint8Array(IDL.encode([CmdIdl.NotifyTopUpResult], [mockError]));
+          return new Uint8Array(IDL.encode([CmcIdl.NotifyTopUpResult], [mockError]));
         })
       );
 
@@ -107,7 +107,7 @@ describe('CMCCanister', () => {
       vi.stubGlobal(
         '__ic_cdk_call_raw',
         vi.fn(async () => {
-          return new Uint8Array(IDL.encode([CmdIdl.NotifyTopUpResult], [mockError]));
+          return new Uint8Array(IDL.encode([CmcIdl.NotifyTopUpResult], [mockError]));
         })
       );
 
@@ -129,7 +129,7 @@ describe('CMCCanister', () => {
       vi.stubGlobal(
         '__ic_cdk_call_raw',
         vi.fn(async () => {
-          return new Uint8Array(IDL.encode([CmdIdl.NotifyTopUpResult], [mockError]));
+          return new Uint8Array(IDL.encode([CmcIdl.NotifyTopUpResult], [mockError]));
         })
       );
 
@@ -152,7 +152,7 @@ describe('CMCCanister', () => {
       vi.stubGlobal(
         '__ic_cdk_call_raw',
         vi.fn(async () => {
-          return new Uint8Array(IDL.encode([CmdIdl.NotifyTopUpResult], [mockError]));
+          return new Uint8Array(IDL.encode([CmcIdl.NotifyTopUpResult], [mockError]));
         })
       );
 
@@ -182,7 +182,7 @@ describe('CMCCanister', () => {
       vi.stubGlobal(
         '__ic_cdk_call_raw',
         vi.fn(async () => {
-          return new Uint8Array(IDL.encode([CmdIdl.NotifyTopUpResult], [mockError]));
+          return new Uint8Array(IDL.encode([CmcIdl.NotifyTopUpResult], [mockError]));
         })
       );
 
@@ -222,7 +222,7 @@ describe('CMCCanister', () => {
 
     it('should pass correct arguments to call function', async () => {
       const mockCallRaw = vi.fn(async () => {
-        return new Uint8Array(IDL.encode([CmdIdl.NotifyTopUpResult], [{Ok: 1000000n}]));
+        return new Uint8Array(IDL.encode([CmcIdl.NotifyTopUpResult], [{Ok: 1000000n}]));
       });
 
       vi.stubGlobal('__ic_cdk_call_raw', mockCallRaw);
@@ -244,7 +244,7 @@ describe('CMCCanister', () => {
       vi.stubGlobal(
         '__ic_cdk_call_raw',
         vi.fn(async () => {
-          return new Uint8Array(IDL.encode([CmdIdl.NotifyTopUpResult], [mockResponse]));
+          return new Uint8Array(IDL.encode([CmcIdl.NotifyTopUpResult], [mockResponse]));
         })
       );
 

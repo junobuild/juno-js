@@ -1,3 +1,3 @@
-import * as CmdIdl from './cmc/cmc.did.idl';
+import * as CmcIdl from './cmc/cmc.did.idl';
 
-export {CmdIdl};
+export {CmcIdl};

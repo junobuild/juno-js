@@ -1,4 +1,4 @@
-import {Principal} from '@icp-sdk/core/principal';
+import type {Principal} from '@icp-sdk/core/principal';
 import * as z from 'zod';
 import {PrincipalSchema} from '../schemas/candid';
 

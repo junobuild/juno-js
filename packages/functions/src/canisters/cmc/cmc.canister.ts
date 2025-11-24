@@ -1,9 +1,9 @@
-import {Principal} from '@icp-sdk/core/principal';
+import type {Principal} from '@icp-sdk/core/principal';
 import {call} from '../../ic-cdk/call.ic-cdk';
-import {CanisterOptions, CanisterOptionsSchema} from '../_types';
 import {Canister} from '../_canister';
 import {CMC_ID} from '../_constants';
-import {CmcDid, CmdIdl} from '../declarations';
+import {type CanisterOptions, CanisterOptionsSchema} from '../_types';
+import {type CmcDid, CmdIdl} from '../declarations';
 
 export class CMCCanister extends Canister {
   constructor(options: CanisterOptions = {}) {

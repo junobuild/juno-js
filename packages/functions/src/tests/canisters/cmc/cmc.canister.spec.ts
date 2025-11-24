@@ -48,8 +48,10 @@ describe('CMCCanister', () => {
 
       const cmc = new CMCCanister();
       const result = await cmc.notifyTopUp({
-        blockIndex: mockBlockIndex,
-        targetCanisterId: mockTargetCanisterId
+        args: {
+          block_index: mockBlockIndex,
+          canister_id: mockTargetCanisterId
+        }
       });
 
       expect(result).toEqual(mockResponse);
@@ -83,8 +85,10 @@ describe('CMCCanister', () => {
 
       const cmc = new CMCCanister();
       const result = await cmc.notifyTopUp({
-        blockIndex: mockBlockIndex,
-        targetCanisterId: mockTargetCanisterId
+        args: {
+          block_index: mockBlockIndex,
+          canister_id: mockTargetCanisterId
+        }
       });
 
       expect(result).toEqual(mockError);
@@ -113,8 +117,10 @@ describe('CMCCanister', () => {
 
       const cmc = new CMCCanister();
       const result = await cmc.notifyTopUp({
-        blockIndex: mockBlockIndex,
-        targetCanisterId: mockTargetCanisterId
+        args: {
+          block_index: mockBlockIndex,
+          canister_id: mockTargetCanisterId
+        }
       });
 
       expect(result).toEqual(mockError);
@@ -135,8 +141,10 @@ describe('CMCCanister', () => {
 
       const cmc = new CMCCanister();
       const result = await cmc.notifyTopUp({
-        blockIndex: mockBlockIndex,
-        targetCanisterId: mockTargetCanisterId
+        args: {
+          block_index: mockBlockIndex,
+          canister_id: mockTargetCanisterId
+        }
       });
 
       expect(result).toEqual(mockError);
@@ -158,8 +166,10 @@ describe('CMCCanister', () => {
 
       const cmc = new CMCCanister();
       const result = await cmc.notifyTopUp({
-        blockIndex: mockBlockIndex,
-        targetCanisterId: mockTargetCanisterId
+        args: {
+          block_index: mockBlockIndex,
+          canister_id: mockTargetCanisterId
+        }
       });
 
       expect(result).toEqual(mockError);
@@ -188,8 +198,10 @@ describe('CMCCanister', () => {
 
       const cmc = new CMCCanister();
       const result = await cmc.notifyTopUp({
-        blockIndex: mockBlockIndex,
-        targetCanisterId: mockTargetCanisterId
+        args: {
+          block_index: mockBlockIndex,
+          canister_id: mockTargetCanisterId
+        }
       });
 
       expect(result).toEqual(mockError);
@@ -214,8 +226,10 @@ describe('CMCCanister', () => {
 
       await expect(
         cmc.notifyTopUp({
-          blockIndex: mockBlockIndex,
-          targetCanisterId: mockTargetCanisterId
+          args: {
+            block_index: mockBlockIndex,
+            canister_id: mockTargetCanisterId
+          }
         })
       ).rejects.toThrow('Network error');
     });
@@ -229,8 +243,10 @@ describe('CMCCanister', () => {
 
       const cmc = new CMCCanister({canisterId: mockCanisterId});
       await cmc.notifyTopUp({
-        blockIndex: mockBlockIndex,
-        targetCanisterId: mockTargetCanisterId
+        args: {
+          block_index: mockBlockIndex,
+          canister_id: mockTargetCanisterId
+        }
       });
 
       expect(mockCallRaw).toHaveBeenCalled();
@@ -251,13 +267,17 @@ describe('CMCCanister', () => {
       const cmc = new CMCCanister();
 
       const result1 = await cmc.notifyTopUp({
-        blockIndex: mockBlockIndex,
-        targetCanisterId: canisterId1
+        args: {
+          block_index: mockBlockIndex,
+          canister_id: canisterId1
+        }
       });
 
       const result2 = await cmc.notifyTopUp({
-        blockIndex: mockBlockIndex + 1n,
-        targetCanisterId: canisterId2
+        args: {
+          block_index: mockBlockIndex + 1n,
+          canister_id: canisterId2
+        }
       });
 
       expect(result1).toEqual(mockResponse);

@@ -25,9 +25,21 @@
       "types": "./canisters/index.d.ts",
       "import": "./canisters/index.js"
     },
+    "./canisters/ckbtc": {
+      "types": "./canisters/ckbtc/index.d.ts",
+      "import": "./canisters/ckbtc/index.js"
+    },
+    "./canisters/cketh": {
+      "types": "./canisters/cketh/index.d.ts",
+      "import": "./canisters/cketh/index.js"
+    },
     "./canisters/cmc": {
       "types": "./canisters/cmc/index.d.ts",
       "import": "./canisters/cmc/index.js"
+    },
+    "./canisters/ic-management": {
+      "types": "./canisters/ic-management/index.d.ts",
+      "import": "./canisters/ic-management/index.js"
     },
     "./canisters/ledger/icp": {
       "types": "./canisters/ledger/icp/index.d.ts",
@@ -36,6 +48,14 @@
     "./canisters/ledger/icrc": {
       "types": "./canisters/ledger/icrc/index.d.ts",
       "import": "./canisters/ledger/icrc/index.js"
+    },
+    "./canisters/nns": {
+      "types": "./canisters/nns/index.d.ts",
+      "import": "./canisters/nns/index.js"
+    },
+    "./canisters/sns": {
+      "types": "./canisters/sns/index.d.ts",
+      "import": "./canisters/sns/index.js"
     }
   },
   "files": [

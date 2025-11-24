@@ -5,7 +5,7 @@
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "scripts": {
-    "declarations": "node ./scripts/declarations.mjs && npm run format",
+    "declarations": "node ./scripts/declarations.mjs && ./scripts/functions.idl.sh && npm run format",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint --max-warnings 0 .",
@@ -37,6 +37,7 @@
   ],
   "devDependencies": {
     "@dfinity/eslint-config-oisy-wallet": "^0.2.3",
+    "@icp-sdk/bindgen": "^0.2.0",
     "@size-limit/esbuild": "^11.2.0",
     "@size-limit/preset-small-lib": "^11.2.0",
     "@types/jest": "^30.0.0",

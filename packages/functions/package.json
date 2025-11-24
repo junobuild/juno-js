@@ -20,6 +20,22 @@
     "./ic-cdk": {
       "types": "./ic-cdk.d.ts",
       "import": "./ic-cdk.js"
+    },
+    "./canisters": {
+      "types": "./canisters/index.d.ts",
+      "import": "./canisters/index.js"
+    },
+    "./canisters/cmc": {
+      "types": "./canisters/cmc/index.d.ts",
+      "import": "./canisters/cmc/index.js"
+    },
+    "./canisters/ledger/icp": {
+      "types": "./canisters/ledger/icp/index.d.ts",
+      "import": "./canisters/ledger/icp/index.js"
+    },
+    "./canisters/ledger/icrc": {
+      "types": "./canisters/ledger/icrc/index.d.ts",
+      "import": "./canisters/ledger/icrc/index.js"
     }
   },
   "files": [

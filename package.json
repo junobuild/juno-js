@@ -5,7 +5,7 @@
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "scripts": {
-    "declarations": "node ./scripts/declarations.mjs && npm run format",
+    "declarations": "node ./scripts/declarations.mjs && ./scripts/functions.idl.sh && npm run format",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint --max-warnings 0 .",

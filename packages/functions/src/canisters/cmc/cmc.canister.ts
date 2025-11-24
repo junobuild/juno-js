@@ -3,7 +3,7 @@ import {call} from '../../ic-cdk/call.ic-cdk';
 import {Canister} from '../_canister';
 import {CMC_ID} from '../_constants';
 import {type CanisterOptions, CanisterOptionsSchema} from '../_schemas';
-import {type CmcDid, CmdIdl} from '../declarations';
+import {type CmcDid, CmcIdl} from '../declarations';
 
 /**
  * Provides a simple interface to interact with the Cycle Minting Canister,
@@ -48,8 +48,8 @@ export class CMCCanister extends Canister {
     return await call<CmcDid.NotifyTopUpResult>({
       canisterId: this.canisterId,
       method: 'notify_top_up',
-      args: [[CmdIdl.NotifyTopUpArg, args]],
-      result: CmdIdl.NotifyTopUpResult
+      args: [[CmcIdl.NotifyTopUpArg, args]],
+      result: CmcIdl.NotifyTopUpResult
     });
   };
 }

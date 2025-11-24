@@ -1,2 +1,2 @@
-export type {CmcDid} from '../declarations';
+export {CmcIdl, type CmcDid} from '../declarations';
 export {CMCCanister} from './cmc.canister';

@@ -1,4 +1,3 @@
-import type {Principal} from '@icp-sdk/core/principal';
 import {call} from '../../ic-cdk/call.ic-cdk';
 import {Canister} from '../_canister';
 import {CMC_ID} from '../_constants';
@@ -28,28 +27,14 @@ export class CMCCanister extends Canister {
    * The CMC will then convert the ICP from the given ledger block into cycles and add
    * them to the specified canister.
    *
-   * @param {bigint} blockIndex - The ledger block index where the ICP transfer was recorded.
-   * @param {Principal} targetCanisterId - The canister that should receive the cycles.
-   *
+   * @param {CmcDid.NotifyTopUpArg} args - Arguments containing the ledger block index and the canister ID that should receive the cycles.
    * @returns {Promise<CmcDid.NotifyTopUpResult>} The result of the CMC conversion and deposit.
    */
-  notifyTopUp = async ({
-    blockIndex,
-    targetCanisterId
-  }: {
-    blockIndex: bigint;
-    targetCanisterId: Principal;
-  }): Promise<CmcDid.NotifyTopUpResult> => {
-    const args: CmcDid.NotifyTopUpArg = {
-      block_index: blockIndex,
-      canister_id: targetCanisterId
-    };
-
-    return await call<CmcDid.NotifyTopUpResult>({
+  notifyTopUp = async ({args}: {args: CmcDid.NotifyTopUpArg}): Promise<CmcDid.NotifyTopUpResult> =>
+    await call<CmcDid.NotifyTopUpResult>({
       canisterId: this.canisterId,
       method: 'notify_top_up',
       args: [[CmcIdl.NotifyTopUpArg, args]],
       result: CmcIdl.NotifyTopUpResult
     });
-  };
 }

@@ -17,6 +17,15 @@ export class IcpLedgerCanister extends Canister {
     super({canisterId: options?.canisterId ?? ICP_LEDGER_ID});
   }
 
+  /**
+   * Sends ICP using the Ledger canister `transfer` method.
+   *
+   * Use this to transfer ICP from one account to another when writing
+   * Juno Serverless Functions in TypeScript.
+   *
+   * @param {IcpLedgerDid.TransferArgs} args - The ledger transfer arguments (amount, destination account, memo, fee, etc.).
+   * @returns {Promise<IcpLedgerDid.TransferResult>} The result of the ICP transfer.
+   */
   transfer = async ({
     args
   }: {

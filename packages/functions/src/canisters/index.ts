@@ -1,1 +1,1 @@
-export * from './_schemas';
+export * from './schemas';

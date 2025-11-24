@@ -1,8 +1,8 @@
 import {call} from '../../../ic-cdk/call.ic-cdk';
 import {Canister} from '../../_canister';
 import {ICP_LEDGER_ID} from '../../_constants';
-import {type CanisterOptions, CanisterOptionsSchema} from '../../_schemas';
 import {type IcpLedgerDid, IcpLedgerIdl} from '../../declarations';
+import {type CanisterOptions, CanisterOptionsSchema} from '../../schemas';
 
 /**
  * Provides a simple interface to interact with the ICP Ledger,

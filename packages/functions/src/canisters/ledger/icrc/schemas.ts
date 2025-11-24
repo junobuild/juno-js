@@ -1,5 +1,5 @@
 import type * as z from 'zod';
-import {CanisterOptionsSchema} from '../../_schemas';
+import {CanisterOptionsSchema} from '../../schemas';
 
 /**
  * @see CanisterOptions

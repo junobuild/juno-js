@@ -68,7 +68,8 @@
   ],
   "scripts": {
     "clean": "git ls-files --others --ignored --exclude-standard | grep -v \"LICENSE\" | xargs rm -rf",
-    "ts-declaration": "tsc --emitDeclarationOnly -outDir . && cp -R src/*.d.ts ./",
+    "copy-did-d-ts": "rsync -a --include='*/' --include='*.d.ts' --exclude='*' src/canisters/declarations/ canisters/declarations/",
+    "ts-declaration": "tsc --emitDeclarationOnly -outDir . && cp -R src/*.d.ts ./ && npm run copy-did-d-ts",
     "build": "npm run clean && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },

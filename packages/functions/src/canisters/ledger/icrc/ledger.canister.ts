@@ -27,7 +27,7 @@ export class IcrcLedgerCanister extends Canister {
   }: {
     account: IcrcLedgerDid.Account;
   }): Promise<IcrcLedgerDid.Tokens> =>
-    await call<bigint>({
+    await call<IcrcLedgerDid.Tokens>({
       canisterId: this.canisterId,
       method: 'icrc1_balance_of',
       args: [[IcrcLedgerIdl.Account, account]],

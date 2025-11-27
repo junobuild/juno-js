@@ -66,6 +66,29 @@ describe('run.context', () => {
       }
     });
 
+    it('accepts a valid context with orbiterId', () => {
+      const orbiterId = Principal.fromText('ot5tb-nqaaa-aaaal-ac2sa-cai');
+      const result = OnRunContextSchema.safeParse({
+        satelliteId: mockUserIdPrincipal,
+        orbiterId,
+        identity: mockIdentity
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('rejects if orbiterId is not a Principal', () => {
+      const result = OnRunContextSchema.safeParse({
+        satelliteId: mockUserIdPrincipal,
+        orbiterId: 'not-a-principal',
+        identity: mockIdentity
+      });
+      expect(result.success).toBe(false);
+
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['orbiterId']);
+      }
+    });
+
     it('is strict: rejects unknown keys', () => {
       const result = OnRunContextSchema.safeParse({
         satelliteId: mockUserIdPrincipal,

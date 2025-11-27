@@ -10,6 +10,7 @@ import {createFunctionSchema} from '../utils/zod.utils';
  */
 export const OnRunContextSchema = z.strictObject({
   satelliteId: StrictPrincipalSchema,
+  orbiterId: StrictPrincipalSchema.optional(),
   identity: StrictIdentitySchema,
   container: z.string().optional()
 });
@@ -24,6 +25,13 @@ export interface OnRunContext {
    * A {@link Principal} instance.
    */
   satelliteId: Principal;
+
+  /**
+   * The Orbiter ID as defined in the `juno.config` file (if defined).
+   *
+   * A {@link Principal} instance.
+   */
+  orbiterId?: Principal;
 
   /**
    * The {@link Identity} used by the CLI for this execution,

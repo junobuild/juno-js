@@ -78,6 +78,9 @@ export const buildScript = async ({infile}: {infile: string}): Promise<EsbuildRe
       js: `import { createRequire as topLevelCreateRequire } from 'node:module';
 import { resolve } from 'node:path';
 const require = topLevelCreateRequire(resolve(process.cwd(), '.juno-pseudo-require-anchor.mjs'));`
+    },
+    define: {
+      'import.meta.url': JSON.stringify('file:///virtual/juno-pseudo-module.js')
     }
   });
 

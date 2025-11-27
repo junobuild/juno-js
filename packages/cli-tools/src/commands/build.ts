@@ -123,6 +123,7 @@ const esbuild = async ({
       'top-level-await': false,
       'inline-script': false
     },
+    external: ["esbuild"],
     define,
     metafile: true,
     banner

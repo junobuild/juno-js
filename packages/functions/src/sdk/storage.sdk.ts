@@ -18,7 +18,9 @@ import {
   type ListAssetsStoreParams,
   ListAssetsStoreParamsSchema,
   type SetAssetHandlerParams,
-  SetAssetHandlerParamsSchema
+  SetAssetHandlerParamsSchema,
+  type SetAssetTokenStoreParams,
+  SetAssetTokenStoreParamsSchema
 } from './schemas/storage';
 import {normalizeCaller} from './utils/caller.utils';
 
@@ -132,6 +134,24 @@ export const deleteFilteredAssetsStore = (
   const caller = normalizeCaller(providedCaller);
 
   return __juno_satellite_storage_delete_filtered_assets_store(caller, collection, listParams);
+};
+
+/**
+ * Set or update an access token for an asset in a collection's store.
+ *
+ * @param {SetAssetTokenStoreParams} params - The parameters required to set the token of the asset.
+ *
+ *@throws {z.ZodError} If the provided parameters do not match the expected schema.
+ * @throws {Error} If the Satellite fails to validate the request or the token cannot be set.
+ */
+export const setAssetTokenStore = (params: SetAssetTokenStoreParams): void => {
+  SetAssetTokenStoreParamsSchema.parse(params);
+
+  const {caller: providedCaller, collection, full_path, token} = params;
+
+  const caller = normalizeCaller(providedCaller);
+
+  __juno_satellite_storage_set_asset_token_store(caller, collection, full_path, token);
 };
 
 /**

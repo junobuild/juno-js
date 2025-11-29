@@ -1,11 +1,13 @@
 import * as z from 'zod';
 import {type RawUserId, type UserId, RawUserIdSchema, UserIdSchema} from '../../schemas/satellite';
 import {
+  type AssetAccessToken,
   type AssetEncoding,
   type AssetKey,
   type Blob,
   type FullPath,
   type HeaderFields,
+  AssetAccessTokenSchema,
   AssetEncodingSchema,
   AssetKeySchema,
   BlobSchema,
@@ -123,6 +125,24 @@ export const DeleteAssetStoreParamsSchema = GetAssetStoreParamsSchema;
  * Represents the parameters required to delete an asset.
  */
 export type DeleteAssetStoreParams = GetAssetStoreParams;
+
+/**
+ * @see SetAssetTokenStoreParams
+ */
+export const SetAssetTokenStoreParamsSchema = GetAssetStoreParamsSchema.extend({
+  token: AssetAccessTokenSchema
+});
+
+/**
+ * Represents the parameters required to delete an asset.
+ */
+export type SetAssetTokenStoreParams = GetAssetStoreParams & {
+  /**
+   * The token to apply to the asset.
+   * Setting `undefined` removes the protection and makes the asset public.
+   */
+  token: AssetAccessToken;
+};
 
 /**
  * @see ListAssetsStoreParams

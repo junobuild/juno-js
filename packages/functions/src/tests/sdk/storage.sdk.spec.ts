@@ -9,7 +9,8 @@ import {
   GetAssetStoreParams,
   GetContentChunksStoreParams,
   ListAssetsStoreParams,
-  SetAssetHandlerParams
+  SetAssetHandlerParams,
+  SetAssetTokenStoreParams
 } from '../../sdk/schemas/storage';
 import {
   countAssetsStore,
@@ -20,7 +21,8 @@ import {
   getAssetStore,
   getContentChunksStore,
   listAssetsStore,
-  setAssetHandler
+  setAssetHandler,
+  setAssetTokenStore
 } from '../../sdk/storage.sdk';
 
 const mockCount = 669n;
@@ -66,6 +68,10 @@ vi.stubGlobal(
   '__juno_satellite_storage_delete_filtered_assets_store',
   mockDeleteFilteredAssetsHandler
 );
+
+const mockSetAssetTokenHandler = vi.fn();
+
+vi.stubGlobal('__juno_satellite_storage_set_asset_token_store', mockSetAssetTokenHandler);
 
 const mockAsset = {
   key: {
@@ -378,6 +384,89 @@ describe('storage.sdk', () => {
       expect(() => deleteFilteredAssetsStore(baseParamsWithUint8Array)).toThrow(
         'filtered delete failed'
       );
+    });
+  });
+
+  describe('setAssetTokenStore', () => {
+    const paramsWithUint8Array: SetAssetTokenStoreParams = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection,
+      full_path,
+      token: 'super-secret-token-123'
+    };
+
+    const paramsWithPrincipal: SetAssetTokenStoreParams = {
+      caller: Principal.anonymous(),
+      collection,
+      full_path,
+      token: 'another-token-456'
+    };
+
+    const paramsWithUndefinedToken: SetAssetTokenStoreParams = {
+      caller: Principal.anonymous(),
+      collection,
+      full_path,
+      token: undefined
+    };
+
+    it('should call __juno_satellite_storage_set_asset_token_store with Uint8Array caller', () => {
+      setAssetTokenStore(paramsWithUint8Array);
+      expect(mockSetAssetTokenHandler).toHaveBeenCalledWith(
+        paramsWithUint8Array.caller,
+        collection,
+        full_path,
+        'super-secret-token-123'
+      );
+    });
+
+    it('should call __juno_satellite_storage_set_asset_token_store with Principal caller converted to Uint8Array', () => {
+      setAssetTokenStore(paramsWithPrincipal);
+      expect(mockSetAssetTokenHandler).toHaveBeenCalledWith(
+        (paramsWithPrincipal.caller as Principal).toUint8Array(),
+        collection,
+        full_path,
+        'another-token-456'
+      );
+    });
+
+    it('should call __juno_satellite_storage_set_asset_token_store with undefined token', () => {
+      setAssetTokenStore(paramsWithUndefinedToken);
+      expect(mockSetAssetTokenHandler).toHaveBeenCalledWith(
+        (paramsWithUndefinedToken.caller as Principal).toUint8Array(),
+        collection,
+        full_path,
+        undefined
+      );
+    });
+
+    it('should throw ZodError if params are invalid', () => {
+      const invalidParams = {
+        caller: 123,
+        collection,
+        full_path,
+        token: 'token'
+      } as unknown as SetAssetTokenStoreParams;
+
+      expect(() => setAssetTokenStore(invalidParams)).toThrow(ZodError);
+    });
+
+    it('should throw ZodError if token is not a string or undefined', () => {
+      const invalidParams = {
+        caller: Principal.anonymous(),
+        collection,
+        full_path,
+        token: 123
+      } as unknown as SetAssetTokenStoreParams;
+
+      expect(() => setAssetTokenStore(invalidParams)).toThrow(ZodError);
+    });
+
+    it('should throw if Satellite throws', () => {
+      mockSetAssetTokenHandler.mockImplementationOnce(() => {
+        throw new Error('set token failed');
+      });
+
+      expect(() => setAssetTokenStore(paramsWithUint8Array)).toThrow('set token failed');
     });
   });
 

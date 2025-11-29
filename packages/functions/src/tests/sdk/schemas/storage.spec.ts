@@ -9,7 +9,8 @@ import {
   GetAssetStoreParamsSchema,
   GetContentChunksStoreParamsSchema,
   SetAssetHandlerParams,
-  SetAssetHandlerParamsSchema
+  SetAssetHandlerParamsSchema,
+  SetAssetTokenStoreParamsSchema
 } from '../../../sdk/schemas/storage';
 
 describe('sdk > storage', () => {
@@ -182,6 +183,85 @@ describe('sdk > storage', () => {
     it('should throw if collection is missing', () => {
       const {collection, ...rest} = valid as any;
       expect(() => DeleteAssetStoreParamsSchema.parse(rest)).toThrow();
+    });
+  });
+
+  describe('SetAssetTokenStoreParamsSchema', () => {
+    const baseParamsWithUint8Array = {
+      caller: Principal.anonymous().toUint8Array(),
+      collection: 'images',
+      full_path: '/images/logo.png',
+      token: 'a-super-long-unguessable-token'
+    };
+
+    const baseParamsWithPrincipal = {
+      caller: Principal.anonymous(),
+      collection: 'images',
+      full_path: '/images/logo.png',
+      token: 'another-secure-token'
+    };
+
+    it('should validate with caller as Uint8Array and token as string', () => {
+      expect(() => SetAssetTokenStoreParamsSchema.parse(baseParamsWithUint8Array)).not.toThrow();
+    });
+
+    it('should validate with caller as Principal and token as string', () => {
+      expect(() => SetAssetTokenStoreParamsSchema.parse(baseParamsWithPrincipal)).not.toThrow();
+    });
+
+    it('should validate with token as undefined', () => {
+      const paramsWithUndefinedToken = {
+        ...baseParamsWithPrincipal,
+        token: undefined
+      };
+      expect(() => SetAssetTokenStoreParamsSchema.parse(paramsWithUndefinedToken)).not.toThrow();
+    });
+
+    it('should reject if collection is missing', () => {
+      const {collection, ...invalid} = baseParamsWithUint8Array;
+      expect(() => SetAssetTokenStoreParamsSchema.parse(invalid)).toThrow(ZodError);
+    });
+
+    it('should reject if full_path is missing', () => {
+      const {full_path, ...invalid} = baseParamsWithUint8Array;
+      expect(() => SetAssetTokenStoreParamsSchema.parse(invalid)).toThrow(ZodError);
+    });
+
+    it('should reject if caller is missing', () => {
+      const {caller, ...invalid} = baseParamsWithUint8Array;
+      expect(() => SetAssetTokenStoreParamsSchema.parse(invalid)).toThrow(ZodError);
+    });
+
+    it('should reject if token is not a string or undefined', () => {
+      const invalid = {
+        ...baseParamsWithUint8Array,
+        token: 123
+      };
+      expect(() => SetAssetTokenStoreParamsSchema.parse(invalid)).toThrow(ZodError);
+    });
+
+    it('should reject if token is null', () => {
+      const invalid = {
+        ...baseParamsWithUint8Array,
+        token: null
+      };
+      expect(() => SetAssetTokenStoreParamsSchema.parse(invalid)).toThrow(ZodError);
+    });
+
+    it('should reject unknown fields', () => {
+      const invalid = {
+        ...baseParamsWithPrincipal,
+        unexpected: 'nope'
+      };
+      expect(() => SetAssetTokenStoreParamsSchema.parse(invalid)).toThrow(ZodError);
+    });
+
+    it('should reject if caller is invalid type', () => {
+      const invalid = {
+        ...baseParamsWithUint8Array,
+        caller: 'not-valid'
+      };
+      expect(() => SetAssetTokenStoreParamsSchema.parse(invalid)).toThrow(ZodError);
     });
   });
 

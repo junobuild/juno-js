@@ -2,6 +2,7 @@ import {Principal} from '@icp-sdk/core/principal';
 import {ZodError} from 'zod';
 import {
   type Asset,
+  AssetAccessTokenSchema,
   AssetEncodingSchema,
   AssetKeySchema,
   type AssetNoContent,
@@ -204,6 +205,41 @@ describe('storage', () => {
     it('should accept nested paths', () => {
       const nested = '/static/assets/icons/logo.svg';
       expect(() => FullPathSchema.parse(nested)).not.toThrow();
+    });
+  });
+
+  describe('AssetAccessTokenSchema', () => {
+    it('should validate a valid token string', () => {
+      const validToken = 'a-super-long-unguessable-not-shared-id';
+      expect(() => AssetAccessTokenSchema.parse(validToken)).not.toThrow();
+    });
+
+    it('should validate an empty string', () => {
+      const emptyToken = '';
+      expect(() => AssetAccessTokenSchema.parse(emptyToken)).not.toThrow();
+    });
+
+    it('should validate undefined', () => {
+      expect(() => AssetAccessTokenSchema.parse(undefined)).not.toThrow();
+    });
+
+    it('should reject null', () => {
+      expect(() => AssetAccessTokenSchema.parse(null)).toThrow();
+    });
+
+    it('should reject a non-string value', () => {
+      const invalid = 123;
+      expect(() => AssetAccessTokenSchema.parse(invalid)).toThrow();
+    });
+
+    it('should reject an object', () => {
+      const invalid = {token: 'value'};
+      expect(() => AssetAccessTokenSchema.parse(invalid)).toThrow();
+    });
+
+    it('should reject an array', () => {
+      const invalid = ['token'];
+      expect(() => AssetAccessTokenSchema.parse(invalid)).toThrow();
     });
   });
 

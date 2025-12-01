@@ -1,4 +1,4 @@
-import {fromNullable} from '@dfinity/utils';
+import {fromNullable, toNullable} from '@dfinity/utils';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {
   uploadAsset as uploadAssetStorage,
@@ -102,6 +102,21 @@ export const deleteFilteredAssets = async ({
   const {del_filtered_assets} = await getSatelliteActor(rest);
 
   return del_filtered_assets(collection, toListParams(filter));
+};
+
+export const setAssetToken = async ({
+  collection,
+  fullPath,
+  token,
+  ...rest
+}: {
+  collection: string;
+  token: string | null;
+} & ActorUpdateParams &
+  Pick<AssetKey, 'fullPath'>): Promise<void> => {
+  const {set_asset_token} = await getSatelliteActor(rest);
+
+  return set_asset_token(collection, fullPath, toNullable(token));
 };
 
 export const getAsset = async ({

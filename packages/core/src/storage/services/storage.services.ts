@@ -15,6 +15,7 @@ import {
   getAsset as getAssetApi,
   getManyAssets as getManyAssetsApi,
   listAssets as listAssetsApi,
+  setAssetToken as setAssetTokenApi,
   uploadAsset as uploadAssetApi
 } from '../api/storage.api';
 import type {Assets} from '../types/storage';
@@ -87,6 +88,7 @@ const uploadAssetIC = async ({
       }
     }),
     fullPath,
+    ...(nonNullish(token) && {token}),
     name: filename
   };
 };
@@ -217,6 +219,34 @@ export const deleteAsset = ({
   deleteAssetApi({
     collection,
     fullPath,
+    satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)},
+    options: {certified: true}
+  });
+
+/**
+ * Set an access token for an asset of the storage.
+ *
+ * @param {Object} params - The parameters for setting the access token.
+ * @param {string} params.collection - The name of the collection.
+ * @param {string} params.fullPath - The full path of the asset.
+ * @param {string | null} params.token - The access token. Providing undined removes any existing protection and makes the asset accessible without access token.
+ * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
+ * @returns {Promise<void>} A promise that resolves when the access token has been set to the asset.
+ */
+export const setAssetToken = ({
+  collection,
+  fullPath,
+  token,
+  satellite
+}: {
+  collection: string;
+  token: string | null;
+  satellite?: SatelliteOptions;
+} & Pick<AssetKey, 'fullPath'>): Promise<void> =>
+  setAssetTokenApi({
+    collection,
+    fullPath,
+    token,
     satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)},
     options: {certified: true}
   });
@@ -356,7 +386,7 @@ export const downloadUrl = ({
   assetKey: {fullPath, token},
   satellite: satelliteOptions
 }: {
-  assetKey: Pick<Asset, 'fullPath' | 'token'>;
+  assetKey: Pick<AssetKey, 'fullPath' | 'token'>;
 } & {satellite?: SatelliteOptions}): string => {
   const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
 

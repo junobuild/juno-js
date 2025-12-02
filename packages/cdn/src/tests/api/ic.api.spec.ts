@@ -24,6 +24,7 @@ describe('ic.api', () => {
     const mockSnapshot = {id: mockSnapshotId, total_size: 123n, taken_at_timestamp: 456n};
 
     beforeEach(() => {
+      vi.clearAllMocks();
       vi.restoreAllMocks();
 
       vi.spyOn(ICManagementCanister, 'create').mockReturnValue(icManagementMock);

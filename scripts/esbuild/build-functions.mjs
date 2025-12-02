@@ -2,10 +2,10 @@
 
 import esbuild from 'esbuild';
 import {externalPeerDependencies} from './pkg.mjs';
-import {collectEntryPoints} from './utils.mjs';
+import {collectMultiPathsLibEntryPoints} from './utils.mjs';
 
 const build = () => {
-  const entryPoints = collectEntryPoints();
+  const entryPoints = collectMultiPathsLibEntryPoints();
 
   esbuild
     .build({

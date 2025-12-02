@@ -1,3 +1,4 @@
+import {toNullable} from '@dfinity/utils';
 import * as storageModule from '@junobuild/storage';
 import type {MockInstance} from 'vitest';
 import * as actorApi from '../../../core/api/actor.api';
@@ -10,6 +11,7 @@ import {
   getAsset,
   getManyAssets,
   listAssets,
+  setAssetToken,
   uploadAsset
 } from '../../../storage/api/storage.api';
 import {mockReadOptions, mockSatellite, mockUpdateOptions} from '../../mocks/core.mock';
@@ -261,6 +263,43 @@ describe('storage.api', async () => {
 
       await expect(
         deleteFilteredAssets({collection, filter, satellite: mockSatellite, ...mockUpdateOptions})
+      ).rejects.toThrow('fail');
+    });
+  });
+
+  describe('setAssetToken', () => {
+    it.each([null, '1234'])('calls set_asset_token with token %s', async (token) => {
+      const mockSetAssetToken = vi.fn().mockResolvedValue(undefined);
+      const spy = vi
+        .spyOn(actorApi, 'getSatelliteActor')
+        .mockResolvedValue({set_asset_token: mockSetAssetToken} as any);
+
+      await setAssetToken({
+        collection,
+        fullPath,
+        token,
+        satellite: mockSatellite,
+        ...mockUpdateOptions
+      });
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
+
+      expect(mockSetAssetToken).toHaveBeenCalledOnce();
+      expect(mockSetAssetToken).toHaveBeenCalledWith(collection, fullPath, toNullable(token));
+    });
+
+    it('bubbles error', async () => {
+      vi.spyOn(actorApi, 'getSatelliteActor').mockRejectedValue(new Error('fail'));
+
+      await expect(
+        setAssetToken({
+          collection,
+          fullPath,
+          token: null,
+          satellite: mockSatellite,
+          ...mockUpdateOptions
+        })
       ).rejects.toThrow('fail');
     });
   });

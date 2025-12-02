@@ -16,6 +16,7 @@ describe('getCdnActor', () => {
   const mockSatelliteActor = {} as unknown as SatelliteActor;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
 
     vi.mocked(icClient.getConsoleActor).mockResolvedValue(mockConsoleActor);

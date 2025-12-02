@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/analytics",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Tracker for Juno analytics",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -53,10 +53,10 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
-    "isbot": "^5.1.28",
-    "nanoid": "^5.1.5",
-    "ua-parser-js": "^1.0.40",
-    "web-vitals": "^5.0.3"
+    "isbot": "^5.1.32",
+    "nanoid": "^5.1.6",
+    "ua-parser-js": "1.0.41",
+    "web-vitals": "^5.1.0"
   },
   "devDependencies": {
     "@types/ua-parser-js": "^0.7.39"

@@ -82,7 +82,7 @@ const customSection = async ({
   sectionName: string;
   wasm: Uint8Array;
 }): Promise<string | undefined> => {
-  const wasmModule = await WebAssembly.compile(wasm);
+  const wasmModule = await WebAssembly.compile(wasm as Uint8Array<ArrayBuffer>);
 
   const pkgSections = WebAssembly.Module.customSections(wasmModule, sectionName);
 

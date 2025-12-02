@@ -138,7 +138,7 @@ export const canisterStatus = async ({
     agent
   });
 
-  return canisterStatus(canisterId);
+  return canisterStatus({canisterId});
 };
 
 export const canisterMetadata = async ({

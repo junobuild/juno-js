@@ -54,6 +54,7 @@ describe('_session', () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
 
     vi.spyOn(ECDSAKeyIdentity, 'generate').mockResolvedValue({

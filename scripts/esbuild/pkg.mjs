@@ -6,12 +6,15 @@ export const PACKAGE_JSON = 'package.json';
 const readPackageJson = () => {
   const packageJson = join(process.cwd(), PACKAGE_JSON);
   const json = readFileSync(packageJson, 'utf8');
-  const {peerDependencies, files} = JSON.parse(json);
+  const {peerDependencies, exports} = JSON.parse(json);
   return {
-    workspacePeerDependencies: peerDependencies ?? {}
+    peerDependencies: peerDependencies ?? {},
+    exports: exports ?? {}
   };
 };
 
-const {workspacePeerDependencies} = readPackageJson();
+const {peerDependencies, exports} = readPackageJson();
 
-export const externalPeerDependencies = [...Object.keys(workspacePeerDependencies)];
+export const externalPeerDependencies = [...Object.keys(peerDependencies)];
+
+export const workspaceExports = exports;

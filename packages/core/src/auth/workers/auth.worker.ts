@@ -13,7 +13,6 @@ export const onAuthMessage = ({data}: MessageEvent<PostMessage<PostMessageDataRe
       return;
     case 'junoStopAuthTimer':
       stopTimer();
-      return;
   }
 };
 

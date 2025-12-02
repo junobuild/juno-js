@@ -27,7 +27,8 @@ const methodTemplateJavaScript = `export const %METHOD_NAME% = async (%CALL_PARA
 }`;
 
 const importTemplateTypeScript = `
-import type {_SERVICE as SatelliteActor%IMPORTS%} from './satellite.did';`;
+import type {_SERVICE as SatelliteActor%IMPORTS%} from './satellite.did';
+import type { Principal } from '@icp-sdk/core/principal';`;
 
 export const parseApi = ({
   methods: signatures,

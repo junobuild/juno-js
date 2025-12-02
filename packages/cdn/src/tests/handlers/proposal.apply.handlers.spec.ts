@@ -36,6 +36,7 @@ describe('executeApplyProposal', () => {
   const ok = Promise.resolve();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
 
     vi.mocked(ic.createSnapshot).mockResolvedValue(undefined);

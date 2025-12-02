@@ -17,6 +17,7 @@ describe('upgrade.chunks.handlers', () => {
   const apiMock = mockDeep<typeof icApi>();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     mockReset(apiMock);
 
     vi.spyOn(icApi, 'clearChunkStore').mockImplementation(apiMock.clearChunkStore);

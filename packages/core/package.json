@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/core",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "JavaScript core client for Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -54,7 +54,7 @@
   "dependencies": {
     "@junobuild/auth": "^1",
     "@junobuild/errors": "*",
-    "@junobuild/ic-client": "^4",
+    "@junobuild/ic-client": "^5",
     "@junobuild/storage": "^2",
     "@junobuild/utils": "*"
   },

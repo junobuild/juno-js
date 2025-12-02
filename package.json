@@ -1,11 +1,11 @@
 {
   "name": "@junobuild/juno-js",
-  "version": "202",
+  "version": "208",
   "description": "JavaScript libraries for interfacing with Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "scripts": {
-    "declarations": "node ./scripts/declarations.mjs && npm run format",
+    "declarations": "node ./scripts/declarations.mjs && ./scripts/functions.idl.sh && npm run format",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint --max-warnings 0 .",
@@ -36,19 +36,20 @@
     "packages/functions"
   ],
   "devDependencies": {
-    "@dfinity/eslint-config-oisy-wallet": "^0.2.2",
+    "@dfinity/eslint-config-oisy-wallet": "^0.2.3",
+    "@icp-sdk/bindgen": "^0.2.0",
     "@size-limit/esbuild": "^11.2.0",
     "@size-limit/preset-small-lib": "^11.2.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.10.0",
-    "esbuild": "^0.25.12",
-    "fake-indexeddb": "^6.2.4",
-    "jsdom": "^27.1.0",
+    "@types/node": "^24.10.1",
+    "esbuild": "^0.27.0",
+    "fake-indexeddb": "^6.2.5",
+    "jsdom": "^27.2.0",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.3.0",
     "tsdoc-markdown": "^1.4.1",
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.4",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.12",
     "vitest-mock-extended": "^3.1.0"
   },
   "engines": {

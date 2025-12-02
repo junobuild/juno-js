@@ -8,6 +8,7 @@ import * as authLib from '@junobuild/auth';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
+import * as authClientServices from '../../../auth/services/_auth-client.services';
 import * as userServices from '../../../auth/services/_user.services';
 import {loadAuth} from '../../../auth/services/load.services';
 import {createAuth, signIn} from '../../../auth/services/sign-in.services';
@@ -73,6 +74,19 @@ describe('sign-in.services', () => {
 
       expect(authClientMock.isAuthenticated).toHaveBeenCalled();
       expect(authStore.get()).not.toBeNull();
+    });
+
+    it('calls authenticateWithAuthClient with syncTabsOnSuccess=true on createAuth', async () => {
+      const spy = vi.spyOn(authClientServices, 'authenticateWithAuthClient');
+
+      await createAuth({provider: 'internet_identity'});
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          syncTabsOnSuccess: true
+        })
+      );
     });
   });
 

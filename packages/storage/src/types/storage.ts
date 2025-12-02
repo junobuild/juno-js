@@ -40,6 +40,12 @@ export interface AssetKey {
   name: string;
 
   /**
+   * An optional token associated with the asset. Tokens are used to protect assets on the web. If a token is provided, the asset is delivered on the web only if the query parameter `token` is provided with a matching value.
+   * @type {string}
+   */
+  token?: string;
+
+  /**
    * The download URL of the asset.
    * @type {string}
    */
@@ -63,12 +69,6 @@ export interface Asset extends AssetKey {
    * @type {string}
    */
   description?: string;
-
-  /**
-   * An optional token associated with the asset. Tokens are used to protect assets on the web. If a token is provided, the asset is delivered on the web only if the query parameter `token` is provided with a matching value.
-   * @type {string}
-   */
-  token?: string;
 
   /**
    * The headers associated with the asset.
@@ -137,7 +137,7 @@ export interface Storage {
   headers?: [string, string][];
 
   /**
-   * An optional token associated with the asset.  Tokens are used to protect assets on the web. If a token is provided, the asset is delivered on the web only if the query parameter `token` is provided with a matching value.
+   * An optional access token associated with the asset. Tokens are used to protect assets on the web. If a token is provided, the asset is delivered on the web only if the query parameter `token` is provided with a matching value.
    * @type {string}
    */
   token?: string;

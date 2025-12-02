@@ -347,6 +347,19 @@ export const FullPathSchema = z.string();
 export type FullPath = string;
 
 /**
+ * @see AssetAccessToken
+ */
+export const AssetAccessTokenSchema = z.string().optional();
+
+/**
+ * An optional access token that can be used to make an asset private on the web.
+ * Private as in practically unguessable (if complex enough and not shared of course).
+ *
+ * Example: `/images/a-sun-above-the-mountains.png?token=a-super-long-unguessable-not-shared-id`
+ */
+export type AssetAccessToken = string | undefined;
+
+/**
  * @see OptionAsset
  */
 export const OptionAssetSchema = AssetSchema.optional();

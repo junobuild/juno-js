@@ -14,4 +14,4 @@ export type GetDelegationResult = SatelliteDid.GetDelegationResultResponse | Con
 export type SignedDelegation = SatelliteDid.SignedDelegation | ConsoleDid.SignedDelegation;
 export type AuthenticationData<T extends AuthParameters> = T extends {satellite: unknown}
   ? Pick<SatelliteDid.Authentication, 'doc'>
-  : Pick<ConsoleDid.Authentication, 'mission_control'>;
+  : Pick<ConsoleDid.Authentication, 'account'>;

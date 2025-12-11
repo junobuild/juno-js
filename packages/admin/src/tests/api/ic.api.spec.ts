@@ -1,6 +1,6 @@
 import {
   type CanisterStatusResponse,
-  ICManagementCanister,
+  IcManagementCanister,
   type InstallChunkedCodeParams,
   InstallCodeParams,
   type UploadChunkParams
@@ -38,11 +38,11 @@ vi.mock('@icp-sdk/core/agent', () => {
 });
 
 describe('ic.api', () => {
-  const icManagementMock = mockDeep<ICManagementCanister>();
+  const icManagementMock = mockDeep<IcManagementCanister>();
 
   beforeEach(() => {
     vi.restoreAllMocks();
-    vi.spyOn(ICManagementCanister, 'create').mockReturnValue(icManagementMock);
+    vi.spyOn(IcManagementCanister, 'create').mockReturnValue(icManagementMock);
   });
 
   describe('canisterStop', () => {

@@ -64,7 +64,7 @@
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
-        "@dfinity/ic-management",
+        "@icp-sdk/canisters",
         "@dfinity/identity",
         "@dfinity/principal",
         "@icp-sdk/core",
@@ -180,7 +180,7 @@
         "@dfinity/principal",
         "@icp-sdk/core",
         "@dfinity/utils",
-        "@dfinity/ic-management",
+        "@icp-sdk/canisters",
         "@junobuild/config",
         "@junobuild/storage",
         "@junobuild/ic-client",

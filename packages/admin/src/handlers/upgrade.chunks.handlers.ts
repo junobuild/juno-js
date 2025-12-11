@@ -1,5 +1,5 @@
 import {isNullish, nonNullish, uint8ArrayToHexString} from '@dfinity/utils';
-import type {chunk_hash} from '@icp-sdk/canisters/ic-management';
+import type {IcManagementDid} from '@icp-sdk/canisters/ic-management';
 import {
   clearChunkStore,
   installChunkedCode,
@@ -20,7 +20,7 @@ interface UploadChunkParams extends UploadChunkOrderId {
 }
 
 interface UploadChunkResult extends UploadChunkOrderId {
-  chunkHash: chunk_hash;
+  chunkHash: IcManagementDid.chunk_hash;
 }
 
 export const upgradeChunkedCode = async ({

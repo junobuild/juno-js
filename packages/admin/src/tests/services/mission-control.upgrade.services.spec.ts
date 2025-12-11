@@ -1,6 +1,6 @@
 import {hexStringToUint8Array} from '@dfinity/utils';
 import type {CanisterStatusResponse} from '@icp-sdk/canisters/ic-management';
-import {ICManagementCanister} from '@icp-sdk/canisters/ic-management';
+import {IcManagementCanister} from '@icp-sdk/canisters/ic-management';
 import * as actor from '@junobuild/ic-client/actor';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
 import {UpgradeCodeUnchangedError} from '../../errors/upgrade.errors';
@@ -36,7 +36,7 @@ describe('mission-control.upgrade.services', () => {
     missionControlId: mockSatelliteIdText
   };
 
-  const icManagementMock = mockDeep<ICManagementCanister>();
+  const icManagementMock = mockDeep<IcManagementCanister>();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -47,7 +47,7 @@ describe('mission-control.upgrade.services', () => {
     vi.mocked(actor.getMissionControlActor).mockResolvedValue(mockActor);
 
     // @ts-ignore
-    vi.spyOn(ICManagementCanister, 'create').mockReturnValue(icManagementMock);
+    vi.spyOn(IcManagementCanister, 'create').mockReturnValue(icManagementMock);
 
     mockActor.get_user.mockResolvedValue(mockUserIdPrincipal);
 

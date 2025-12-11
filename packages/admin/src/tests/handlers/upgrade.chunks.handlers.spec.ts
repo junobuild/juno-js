@@ -1,4 +1,4 @@
-import type {chunk_hash} from '@icp-sdk/canisters/ic-management';
+import type {IcManagementDid} from '@icp-sdk/canisters/ic-management';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
 import * as icApi from '../../api/ic.api';
@@ -12,7 +12,7 @@ describe('upgrade.chunks.handlers', () => {
 
   const actor: ActorParameters = {identity: mockIdentity, agent: mockHttpAgent};
 
-  const mockChunkHash: chunk_hash = {hash: Uint8Array.from([1, 2, 3])};
+  const mockChunkHash: IcManagementDid.chunk_hash = {hash: Uint8Array.from([1, 2, 3])};
 
   const apiMock = mockDeep<typeof icApi>();
 
@@ -85,7 +85,7 @@ describe('upgrade.chunks.handlers', () => {
     const sha256Hex = await blobSha256(chunkBlob);
     const sha256Bytes = Uint8Array.from(Buffer.from(sha256Hex, 'hex'));
 
-    const storedChunk: chunk_hash = {hash: sha256Bytes};
+    const storedChunk: IcManagementDid.chunk_hash = {hash: sha256Bytes};
     vi.spyOn(icApi, 'storedChunks').mockResolvedValue([{hash: storedChunk.hash}]);
 
     const uploadSpy = vi.spyOn(icApi, 'uploadChunk');

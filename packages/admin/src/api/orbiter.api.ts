@@ -25,6 +25,17 @@ export const listControllers = async ({
   return list_controllers();
 };
 
+export const setControllers = async ({
+  args,
+  orbiter
+}: {
+  args: OrbiterDid.SetControllersArgs;
+  orbiter: OrbiterParameters;
+}): Promise<[Principal, OrbiterDid.Controller][]> => {
+  const {set_controllers} = await getOrbiterActor(orbiter);
+  return set_controllers(args);
+};
+
 export const memorySize = async ({
   orbiter
 }: {

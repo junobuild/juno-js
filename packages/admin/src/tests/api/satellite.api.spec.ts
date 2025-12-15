@@ -144,6 +144,7 @@ describe('satellite.api', () => {
   };
 
   const mockAuthenticationConfig: SatelliteDid.AuthenticationConfig = {
+    openid: [],
     internet_identity: [
       {
         derivation_origin: ['https://hello.com'],

@@ -52,8 +52,8 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/utils": "^4",
-    "@icp-sdk/canisters": "^3",
+    "@dfinity/utils": "4.0.2",
+    "@icp-sdk/canisters": "3.0.0",
     "@icp-sdk/core": "^4.2",
     "@junobuild/config": "*",
     "@junobuild/ic-client": "^7",

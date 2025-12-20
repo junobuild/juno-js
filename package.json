@@ -13,6 +13,7 @@
     "build": "npm run build --workspaces",
     "size": "size-limit --json",
     "update:agent": "./scripts/update-agent",
+    "update:ic-js": "./scripts/update-ic-js",
     "docs": "node scripts/docs.js && prettier --write packages/**/README.md",
     "test": "vitest",
     "clean": "npm run clean --workspaces --if-present"

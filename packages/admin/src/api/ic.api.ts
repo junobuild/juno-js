@@ -158,7 +158,6 @@ export const canisterMetadata = async ({
     agent,
     paths: [
       {
-        kind: 'metadata',
         key: path,
         path,
         decodeStrategy: 'utf-8'

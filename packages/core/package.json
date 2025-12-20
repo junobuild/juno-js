@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/core",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "description": "JavaScript core client for Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -59,8 +59,8 @@
     "@junobuild/utils": "*"
   },
   "peerDependencies": {
-    "@dfinity/utils": "^4.1",
-    "@icp-sdk/auth": "^5",
-    "@icp-sdk/core": "^5"
+    "@dfinity/utils": "4.0.2",
+    "@icp-sdk/auth": "^4.2",
+    "@icp-sdk/core": "^4.2"
   }
 }

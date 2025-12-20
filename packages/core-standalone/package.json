@@ -54,9 +54,9 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
-    "@dfinity/utils": "4.0.2",
-    "@icp-sdk/auth": "^4.2",
-    "@icp-sdk/core": "^4.2",
+    "@dfinity/utils": "^4.1.0",
+    "@icp-sdk/auth": "^5.0.0",
+    "@icp-sdk/core": "^5.0.0",
     "@junobuild/errors": "*",
     "@junobuild/ic-client": "^7",
     "@junobuild/storage": "^2",

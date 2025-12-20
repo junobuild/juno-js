@@ -156,13 +156,7 @@ export const canisterMetadata = async ({
   const result = await CanisterStatus.request({
     canisterId: canisterId instanceof Principal ? canisterId : Principal.from(canisterId),
     agent,
-    paths: [
-      {
-        key: path,
-        path,
-        decodeStrategy: 'utf-8'
-      }
-    ]
+    paths: [new CanisterStatus.CustomPath(path, path, 'utf-8')]
   });
 
   // Redo console.warn

@@ -72,7 +72,7 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/utils": "^4",
-    "@icp-sdk/core": "^4.2"
+    "@dfinity/utils": "^4.1",
+    "@icp-sdk/core": "^5"
   }
 }

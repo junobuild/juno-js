@@ -46,7 +46,7 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/utils": "^4",
+    "@dfinity/utils": "4.0.2",
     "@junobuild/cdn": "^2",
     "@junobuild/config": "^2.7",
     "@junobuild/storage": "^2",

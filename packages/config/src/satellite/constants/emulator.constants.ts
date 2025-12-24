@@ -4,7 +4,7 @@ export const DEFAULT_NETWORK_SERVICES: NetworkServices = {
   registry: false,
   cmc: true,
   icp: true,
-  cycles: false,
+  cycles: true,
   nns: true,
   sns: false,
   internet_identity: true,
@@ -13,6 +13,7 @@ export const DEFAULT_NETWORK_SERVICES: NetworkServices = {
 
 export const DEFAULT_SATELLITE_NETWORK_SERVICES: NetworkServices = {
   ...DEFAULT_NETWORK_SERVICES,
+  cycles: false,
   cmc: false,
   nns: false
 } as const;

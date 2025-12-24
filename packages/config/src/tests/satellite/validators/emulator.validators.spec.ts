@@ -147,7 +147,8 @@ describe('refineEmulatorConfig', () => {
                 icp: false,
                 nns: false,
                 sns: false,
-                internet_identity: false
+                internet_identity: false,
+                cycles: false
               }
             }
           })
@@ -159,7 +160,7 @@ describe('refineEmulatorConfig', () => {
       it('fails if cmc = true and icp = false', () => {
         const issues = runRefinement({
           skylab: {ports: {}},
-          network: {services: {cmc: true, icp: false, nns: true}}
+          network: {services: {cmc: true, icp: false, nns: true, cycles: false}}
         });
         expect(issues).toHaveLength(2);
         expect(issues[0].code).toBe('custom');
@@ -173,7 +174,7 @@ describe('refineEmulatorConfig', () => {
       it('fails if cmc = true and nns = false', () => {
         const issues = runRefinement({
           skylab: {ports: {}},
-          network: {services: {cmc: true, icp: true, nns: false}}
+          network: {services: {cmc: true, icp: true, nns: false, cycles: false}}
         });
         expect(issues).toHaveLength(1);
         expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
@@ -182,7 +183,7 @@ describe('refineEmulatorConfig', () => {
       it('fails if nns = true and icp = false', () => {
         const issues = runRefinement({
           console: {ports: {}},
-          network: {services: {cmc: false, icp: false, nns: true}}
+          network: {services: {cmc: false, icp: false, nns: true, cycles: false}}
         });
         expect(issues).toHaveLength(1);
         expect(issues[0].code).toBe('custom');
@@ -201,7 +202,7 @@ describe('refineEmulatorConfig', () => {
       it('passes if cmc = false regardless of icp/nns', () => {
         const issues = runRefinement({
           skylab: {ports: {}},
-          network: {services: {cmc: false, icp: false, nns: false}}
+          network: {services: {cmc: false, icp: false, nns: false, cycles: false}}
         });
         expect(issues).toHaveLength(0);
       });
@@ -210,6 +211,74 @@ describe('refineEmulatorConfig', () => {
         const issues = runRefinement({
           skylab: {ports: {}},
           network: {services: {cmc: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+    });
+
+    describe('cycles', () => {
+      it('fails if cycles = true and cmc = false', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cycles: true, cmc: false, icp: true, nns: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[0].message).toBe('cycles requires: cmc, icp, nns');
+      });
+
+      it('fails if cycles = true and icp = false', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cycles: true, cmc: true, icp: false, nns: true}}
+        });
+        expect(issues).toHaveLength(3);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+        expect(issues[0].message).toBe('cmc requires: icp, nns');
+        expect(issues[1].code).toBe('custom');
+        expect(issues[1].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[1].message).toBe('cycles requires: cmc, icp, nns');
+        expect(issues[2].code).toBe('custom');
+        expect(issues[2].path).toEqual(['network', 'services', 'nns']);
+        expect(issues[2].message).toBe('nns requires: icp');
+      });
+
+      it('fails if cycles = true and nns = false', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cycles: true, cmc: true, icp: true, nns: false}}
+        });
+        expect(issues).toHaveLength(2);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+        expect(issues[0].message).toBe('cmc requires: icp, nns');
+        expect(issues[1].code).toBe('custom');
+        expect(issues[1].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[1].message).toBe('cycles requires: cmc, icp, nns');
+      });
+
+      it('passes if cycles = true and all required (cmc, icp, nns) are true', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cycles: true, cmc: true, icp: true, nns: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('passes if cycles = false regardless of cmc/icp/nns', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cycles: false, cmc: false, icp: false, nns: false}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('omitting cmc/icp/nns uses skylab defaults (true) → passes', () => {
+        const issues = runRefinement({
+          skylab: {ports: {}},
+          network: {services: {cycles: true}}
         });
         expect(issues).toHaveLength(0);
       });
@@ -332,7 +401,8 @@ describe('refineEmulatorConfig', () => {
                 icp: false,
                 nns: false,
                 sns: false,
-                internet_identity: false
+                internet_identity: false,
+                cycles: false
               }
             }
           })
@@ -344,7 +414,7 @@ describe('refineEmulatorConfig', () => {
       it('fails if cmc = true and icp = false', () => {
         const issues = runRefinement({
           console: {ports: {}},
-          network: {services: {cmc: true, icp: false, nns: true}}
+          network: {services: {cmc: true, icp: false, nns: true, cycles: false}}
         });
         expect(issues).toHaveLength(2);
         expect(issues[0].code).toBe('custom');
@@ -358,7 +428,7 @@ describe('refineEmulatorConfig', () => {
       it('fails if cmc = true and nns = false', () => {
         const issues = runRefinement({
           console: {ports: {}},
-          network: {services: {cmc: true, icp: true, nns: false}}
+          network: {services: {cmc: true, icp: true, nns: false, cycles: false}}
         });
         expect(issues).toHaveLength(1);
         expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
@@ -367,7 +437,7 @@ describe('refineEmulatorConfig', () => {
       it('fails if nns = true and icp = false', () => {
         const issues = runRefinement({
           console: {ports: {}},
-          network: {services: {cmc: false, icp: false, nns: true}}
+          network: {services: {cmc: false, icp: false, nns: true, cycles: false}}
         });
         expect(issues).toHaveLength(1);
         expect(issues[0].code).toBe('custom');
@@ -386,7 +456,7 @@ describe('refineEmulatorConfig', () => {
       it('passes if cmc = false regardless of icp/nns', () => {
         const issues = runRefinement({
           console: {ports: {}},
-          network: {services: {cmc: false, icp: false, nns: false}}
+          network: {services: {cmc: false, icp: false, nns: false, cycles: false}}
         });
         expect(issues).toHaveLength(0);
       });
@@ -395,6 +465,74 @@ describe('refineEmulatorConfig', () => {
         const issues = runRefinement({
           console: {ports: {}},
           network: {services: {cmc: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+    });
+
+    describe('cycles', () => {
+      it('fails if cycles = true and cmc = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cycles: true, cmc: false, icp: true, nns: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[0].message).toBe('cycles requires: cmc, icp, nns');
+      });
+
+      it('fails if cycles = true and icp = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cycles: true, cmc: true, icp: false, nns: true}}
+        });
+        expect(issues).toHaveLength(3);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+        expect(issues[0].message).toBe('cmc requires: icp, nns');
+        expect(issues[1].code).toBe('custom');
+        expect(issues[1].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[1].message).toBe('cycles requires: cmc, icp, nns');
+        expect(issues[2].code).toBe('custom');
+        expect(issues[2].path).toEqual(['network', 'services', 'nns']);
+        expect(issues[2].message).toBe('nns requires: icp');
+      });
+
+      it('fails if cycles = true and nns = false', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cycles: true, cmc: true, icp: true, nns: false}}
+        });
+        expect(issues).toHaveLength(2);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+        expect(issues[0].message).toBe('cmc requires: icp, nns');
+        expect(issues[1].code).toBe('custom');
+        expect(issues[1].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[1].message).toBe('cycles requires: cmc, icp, nns');
+      });
+
+      it('passes if cycles = true and all required (cmc, icp, nns) are true', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cycles: true, cmc: true, icp: true, nns: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('passes if cycles = false regardless of cmc/icp/nns', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cycles: false, cmc: false, icp: false, nns: false}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('omitting cmc/icp/nns uses console defaults (true) → passes', () => {
+        const issues = runRefinement({
+          console: {ports: {}},
+          network: {services: {cycles: true}}
         });
         expect(issues).toHaveLength(0);
       });
@@ -517,7 +655,8 @@ describe('refineEmulatorConfig', () => {
                 icp: false,
                 nns: false,
                 sns: false,
-                internet_identity: false
+                internet_identity: false,
+                cycles: false
               }
             }
           })
@@ -529,7 +668,7 @@ describe('refineEmulatorConfig', () => {
       it('fails if cmc = true and icp = false', () => {
         const issues = runRefinement({
           satellite: {ports: {}},
-          network: {services: {cmc: true, icp: false, nns: true}}
+          network: {services: {cmc: true, icp: false, nns: true, cycles: false}}
         });
         expect(issues).toHaveLength(2);
         expect(issues[0].code).toBe('custom');
@@ -543,7 +682,7 @@ describe('refineEmulatorConfig', () => {
       it('fails if cmc = true and nns = false', () => {
         const issues = runRefinement({
           satellite: {ports: {}},
-          network: {services: {cmc: true, icp: true, nns: false}}
+          network: {services: {cmc: true, icp: true, nns: false, cycles: false}}
         });
         expect(issues).toHaveLength(1);
         expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
@@ -551,8 +690,8 @@ describe('refineEmulatorConfig', () => {
 
       it('fails if nns = true and icp = false', () => {
         const issues = runRefinement({
-          console: {ports: {}},
-          network: {services: {cmc: false, icp: false, nns: true}}
+          satellite: {ports: {}},
+          network: {services: {cmc: false, icp: false, nns: true, cycles: false}}
         });
         expect(issues).toHaveLength(1);
         expect(issues[0].code).toBe('custom');
@@ -571,7 +710,7 @@ describe('refineEmulatorConfig', () => {
       it('passes if cmc = false regardless of icp/nns', () => {
         const issues = runRefinement({
           satellite: {ports: {}},
-          network: {services: {cmc: false, icp: false, nns: false}}
+          network: {services: {cmc: false, icp: false, nns: false, cycles: false}}
         });
         expect(issues).toHaveLength(0);
       });
@@ -579,7 +718,7 @@ describe('refineEmulatorConfig', () => {
       it('omitting nns uses satellite default (false) with cmc=true → fails', () => {
         const issues = runRefinement({
           satellite: {ports: {}},
-          network: {services: {cmc: true, icp: true}}
+          network: {services: {cmc: true, icp: true, cycles: false}}
         });
         expect(issues).toHaveLength(1);
         expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
@@ -591,6 +730,100 @@ describe('refineEmulatorConfig', () => {
           network: {services: {cmc: true, nns: true}}
         });
         expect(issues).toHaveLength(0);
+      });
+    });
+
+    describe('cycles', () => {
+      it('fails if cycles = true and cmc = false', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cycles: true, cmc: false, icp: true, nns: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[0].message).toBe('cycles requires: cmc, icp, nns');
+      });
+
+      it('fails if cycles = true and icp = false', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cycles: true, cmc: true, icp: false, nns: true}}
+        });
+        expect(issues).toHaveLength(3);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+        expect(issues[0].message).toBe('cmc requires: icp, nns');
+        expect(issues[1].code).toBe('custom');
+        expect(issues[1].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[1].message).toBe('cycles requires: cmc, icp, nns');
+        expect(issues[2].code).toBe('custom');
+        expect(issues[2].path).toEqual(['network', 'services', 'nns']);
+        expect(issues[2].message).toBe('nns requires: icp');
+      });
+
+      it('fails if cycles = true and nns = false', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cycles: true, cmc: true, icp: true, nns: false}}
+        });
+        expect(issues).toHaveLength(2);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+        expect(issues[0].message).toBe('cmc requires: icp, nns');
+        expect(issues[1].code).toBe('custom');
+        expect(issues[1].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[1].message).toBe('cycles requires: cmc, icp, nns');
+      });
+
+      it('passes if cycles = true and all required (cmc, icp, nns) are true', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cycles: true, cmc: true, icp: true, nns: true}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('passes if cycles = false regardless of cmc/icp/nns', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cycles: false, cmc: false, icp: false, nns: false}}
+        });
+        expect(issues).toHaveLength(0);
+      });
+
+      it('omitting cmc/nns uses satellite defaults (false) → fails', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cycles: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[0].message).toBe('cycles requires: cmc, icp, nns');
+      });
+
+      it('omitting cmc uses satellite default (false) with cycles=true → fails', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cycles: true, icp: true, nns: true}}
+        });
+        expect(issues).toHaveLength(1);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cycles']);
+        expect(issues[0].message).toBe('cycles requires: cmc, icp, nns');
+      });
+
+      it('omitting nns uses satellite default (false) with cycles=true → fails', () => {
+        const issues = runRefinement({
+          satellite: {ports: {}},
+          network: {services: {cycles: true, cmc: true, icp: true}}
+        });
+        expect(issues).toHaveLength(2);
+        expect(issues[0].code).toBe('custom');
+        expect(issues[0].path).toEqual(['network', 'services', 'cmc']);
+        expect(issues[1].code).toBe('custom');
+        expect(issues[1].path).toEqual(['network', 'services', 'cycles']);
       });
     });
   });

@@ -10,7 +10,14 @@ import {mockHttpAgent, mockIdentity, mockSatelliteIdText} from '../mocks/admin.m
 vi.mock('@icp-sdk/core/agent', () => {
   return {
     CanisterStatus: {
-      request: vi.fn()
+      request: vi.fn(),
+      CustomPath: class CustomPath {
+        constructor(
+          public key: string,
+          public path: string,
+          public decodeStrategy: string
+        ) {}
+      }
     }
   };
 });

@@ -60,7 +60,7 @@
   },
   "peerDependencies": {
     "@dfinity/utils": "^4.1",
-    "@icp-sdk/auth": "^5.0.0",
-    "@icp-sdk/core": "^5.0.0"
+    "@icp-sdk/auth": "^5",
+    "@icp-sdk/core": "^5"
   }
 }

@@ -6,13 +6,13 @@ import * as CmcIdl from './cmc/cmc.did.idl';
 import * as IcManagementIdl from './ic-management/ic-management.did.idl';
 import * as IcpIndexIdl from './ledger-icp/index.did.idl';
 import * as IcpLedgerIdl from './ledger-icp/ledger.did.idl';
-import * as IcrcIndexNgIdl from './ledger-icrc/icrc_index-ng.did.idl';
+import * as IcrcIndexIdl from './ledger-icrc/icrc_index.did.idl';
 import * as IcrcLedgerIdl from './ledger-icrc/icrc_ledger.did.idl';
 import * as NnsGovernanceIdl from './nns/governance.did.idl';
 import * as NnsSnsWasmIdl from './nns/sns_wasm.did.idl';
-import * as SnsGovernanceIdl from './sns/sns_governance.did.idl';
-import * as SnsRootIdl from './sns/sns_root.did.idl';
-import * as SnsSwapIdl from './sns/sns_swap.did.idl';
+import * as SnsGovernanceIdl from './sns/governance.did.idl';
+import * as SnsRootIdl from './sns/root.did.idl';
+import * as SnsSwapIdl from './sns/swap.did.idl';
 
 export {
   CkBTCBitcoinIdl,
@@ -23,7 +23,7 @@ export {
   IcManagementIdl,
   IcpIndexIdl,
   IcpLedgerIdl,
-  IcrcIndexNgIdl,
+  IcrcIndexIdl,
   IcrcLedgerIdl,
   NnsGovernanceIdl,
   NnsSnsWasmIdl,

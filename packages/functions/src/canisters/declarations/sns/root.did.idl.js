@@ -93,6 +93,20 @@ export const ChangeCanisterRequest = IDL.Record({
   canister_id: IDL.Principal,
   chunked_canister_wasm: IDL.Opt(ChunkedCanisterWasm)
 });
+export const CleanUpFailedRegisterExtensionRequest = IDL.Record({
+  canister_id: IDL.Opt(IDL.Principal)
+});
+export const CanisterCallError = IDL.Record({
+  code: IDL.Opt(IDL.Int32),
+  description: IDL.Text
+});
+export const CleanUpFailedRegisterExtensionResult = IDL.Variant({
+  Ok: IDL.Record({}),
+  Err: CanisterCallError
+});
+export const CleanUpFailedRegisterExtensionResponse = IDL.Record({
+  result: IDL.Opt(CleanUpFailedRegisterExtensionResult)
+});
 export const GetSnsCanistersSummaryRequest = IDL.Record({
   update_canister_list: IDL.Opt(IDL.Bool)
 });
@@ -160,10 +174,6 @@ export const RegisterDappCanistersRequest = IDL.Record({
 export const RegisterExtensionRequest = IDL.Record({
   canister_id: IDL.Opt(IDL.Principal)
 });
-export const CanisterCallError = IDL.Record({
-  code: IDL.Opt(IDL.Int32),
-  description: IDL.Text
-});
 export const RegisterExtensionResult = IDL.Variant({
   Ok: IDL.Record({}),
   Err: CanisterCallError
@@ -186,6 +196,11 @@ export const SetDappControllersResponse = IDL.Record({
 export const idlService = IDL.Service({
   canister_status: IDL.Func([CanisterIdRecord], [CanisterStatusResult], []),
   change_canister: IDL.Func([ChangeCanisterRequest], [], []),
+  clean_up_failed_register_extension: IDL.Func(
+    [CleanUpFailedRegisterExtensionRequest],
+    [CleanUpFailedRegisterExtensionResponse],
+    []
+  ),
   get_build_metadata: IDL.Func([], [IDL.Text], ['query']),
   get_sns_canisters_summary: IDL.Func(
     [GetSnsCanistersSummaryRequest],
@@ -294,6 +309,20 @@ export const idlFactory = ({IDL}) => {
     canister_id: IDL.Principal,
     chunked_canister_wasm: IDL.Opt(ChunkedCanisterWasm)
   });
+  const CleanUpFailedRegisterExtensionRequest = IDL.Record({
+    canister_id: IDL.Opt(IDL.Principal)
+  });
+  const CanisterCallError = IDL.Record({
+    code: IDL.Opt(IDL.Int32),
+    description: IDL.Text
+  });
+  const CleanUpFailedRegisterExtensionResult = IDL.Variant({
+    Ok: IDL.Record({}),
+    Err: CanisterCallError
+  });
+  const CleanUpFailedRegisterExtensionResponse = IDL.Record({
+    result: IDL.Opt(CleanUpFailedRegisterExtensionResult)
+  });
   const GetSnsCanistersSummaryRequest = IDL.Record({
     update_canister_list: IDL.Opt(IDL.Bool)
   });
@@ -361,10 +390,6 @@ export const idlFactory = ({IDL}) => {
   const RegisterExtensionRequest = IDL.Record({
     canister_id: IDL.Opt(IDL.Principal)
   });
-  const CanisterCallError = IDL.Record({
-    code: IDL.Opt(IDL.Int32),
-    description: IDL.Text
-  });
   const RegisterExtensionResult = IDL.Variant({
     Ok: IDL.Record({}),
     Err: CanisterCallError
@@ -387,6 +412,11 @@ export const idlFactory = ({IDL}) => {
   return IDL.Service({
     canister_status: IDL.Func([CanisterIdRecord], [CanisterStatusResult], []),
     change_canister: IDL.Func([ChangeCanisterRequest], [], []),
+    clean_up_failed_register_extension: IDL.Func(
+      [CleanUpFailedRegisterExtensionRequest],
+      [CleanUpFailedRegisterExtensionResponse],
+      []
+    ),
     get_build_metadata: IDL.Func([], [IDL.Text], ['query']),
     get_sns_canisters_summary: IDL.Func(
       [GetSnsCanistersSummaryRequest],

@@ -10,6 +10,7 @@ import {IDL} from '@icp-sdk/core/candid';
 
 export const ManageNeuronRequest = IDL.Rec();
 export const Proposal = IDL.Rec();
+export const SelfDescribingValue = IDL.Rec();
 export const NeuronId = IDL.Record({id: IDL.Nat64});
 export const Followees = IDL.Record({followees: IDL.Vec(NeuronId)});
 export const DateUtc = IDL.Record({
@@ -42,6 +43,7 @@ export const XdrConversionRate = IDL.Record({
   timestamp_seconds: IDL.Opt(IDL.Nat64)
 });
 export const MonthlyNodeProviderRewards = IDL.Record({
+  algorithm_version: IDL.Opt(IDL.Nat32),
   minimum_xdr_permyriad_per_icp: IDL.Opt(IDL.Nat64),
   end_date: IDL.Opt(DateUtc),
   registry_version: IDL.Opt(IDL.Nat64),
@@ -375,7 +377,7 @@ export const Disburse = IDL.Record({
   to_account: IDL.Opt(AccountIdentifier),
   amount: IDL.Opt(Amount)
 });
-export const Command = IDL.Variant({
+export const ManageNeuronProposalCommand = IDL.Variant({
   Spawn: Spawn,
   Split: Split,
   Follow: Follow,
@@ -396,9 +398,9 @@ export const NeuronIdOrSubaccount = IDL.Variant({
   Subaccount: IDL.Vec(IDL.Nat8),
   NeuronId: NeuronId
 });
-export const ManageNeuron = IDL.Record({
+export const ManageNeuronProposal = IDL.Record({
   id: IDL.Opt(NeuronId),
-  command: IDL.Opt(Command),
+  command: IDL.Opt(ManageNeuronProposalCommand),
   neuron_id_or_subaccount: IDL.Opt(NeuronIdOrSubaccount)
 });
 export const Controllers = IDL.Record({
@@ -564,7 +566,7 @@ export const Motion = IDL.Record({motion_text: IDL.Text});
 export const Action = IDL.Variant({
   RegisterKnownNeuron: KnownNeuron,
   FulfillSubnetRentalRequest: FulfillSubnetRentalRequest,
-  ManageNeuron: ManageNeuron,
+  ManageNeuron: ManageNeuronProposal,
   UpdateCanisterSettings: UpdateCanisterSettings,
   InstallCode: InstallCode,
   DeregisterKnownNeuron: DeregisterKnownNeuron,
@@ -581,12 +583,28 @@ export const Action = IDL.Variant({
   AddOrRemoveNodeProvider: AddOrRemoveNodeProvider,
   Motion: Motion
 });
+SelfDescribingValue.fill(
+  IDL.Variant({
+    Int: IDL.Int,
+    Map: IDL.Vec(IDL.Tuple(IDL.Text, SelfDescribingValue)),
+    Nat: IDL.Nat,
+    Blob: IDL.Vec(IDL.Nat8),
+    Text: IDL.Text,
+    Array: IDL.Vec(SelfDescribingValue)
+  })
+);
+export const SelfDescribingProposalAction = IDL.Record({
+  type_description: IDL.Opt(IDL.Text),
+  type_name: IDL.Opt(IDL.Text),
+  value: IDL.Opt(SelfDescribingValue)
+});
 Proposal.fill(
   IDL.Record({
     url: IDL.Text,
     title: IDL.Opt(IDL.Text),
     action: IDL.Opt(Action),
-    summary: IDL.Text
+    summary: IDL.Text,
+    self_describing_action: IDL.Opt(SelfDescribingProposalAction)
   })
 );
 export const WaitForQuietState = IDL.Record({
@@ -759,6 +777,9 @@ export const Result_7 = IDL.Variant({
   Ok: NodeProvider,
   Err: GovernanceError
 });
+export const GetPendingProposalsRequest = IDL.Record({
+  return_self_describing_action: IDL.Opt(IDL.Bool)
+});
 export const ProposalInfo = IDL.Record({
   id: IDL.Opt(ProposalId),
   status: IDL.Int32,
@@ -834,6 +855,7 @@ export const ListNodeProvidersResponse = IDL.Record({
   node_providers: IDL.Vec(NodeProvider)
 });
 export const ListProposalInfoRequest = IDL.Record({
+  return_self_describing_action: IDL.Opt(IDL.Bool),
   include_reward_status: IDL.Vec(IDL.Int32),
   omit_large_fields: IDL.Opt(IDL.Bool),
   before_proposal: IDL.Opt(ProposalId),
@@ -1025,7 +1047,11 @@ export const idlService = IDL.Service({
     ['query']
   ),
   get_node_provider_by_caller: IDL.Func([IDL.Null], [Result_7], ['query']),
-  get_pending_proposals: IDL.Func([], [IDL.Vec(ProposalInfo)], ['query']),
+  get_pending_proposals: IDL.Func(
+    [IDL.Opt(GetPendingProposalsRequest)],
+    [IDL.Vec(ProposalInfo)],
+    ['query']
+  ),
   get_proposal_info: IDL.Func([IDL.Nat64], [IDL.Opt(ProposalInfo)], ['query']),
   get_restore_aging_summary: IDL.Func([], [RestoreAgingSummary], ['query']),
   list_known_neurons: IDL.Func([], [ListKnownNeuronsResponse], ['query']),
@@ -1056,6 +1082,7 @@ export const idlInitArgs = [Governance];
 export const idlFactory = ({IDL}) => {
   const ManageNeuronRequest = IDL.Rec();
   const Proposal = IDL.Rec();
+  const SelfDescribingValue = IDL.Rec();
   const NeuronId = IDL.Record({id: IDL.Nat64});
   const Followees = IDL.Record({followees: IDL.Vec(NeuronId)});
   const DateUtc = IDL.Record({
@@ -1086,6 +1113,7 @@ export const idlFactory = ({IDL}) => {
     timestamp_seconds: IDL.Opt(IDL.Nat64)
   });
   const MonthlyNodeProviderRewards = IDL.Record({
+    algorithm_version: IDL.Opt(IDL.Nat32),
     minimum_xdr_permyriad_per_icp: IDL.Opt(IDL.Nat64),
     end_date: IDL.Opt(DateUtc),
     registry_version: IDL.Opt(IDL.Nat64),
@@ -1416,7 +1444,7 @@ export const idlFactory = ({IDL}) => {
     to_account: IDL.Opt(AccountIdentifier),
     amount: IDL.Opt(Amount)
   });
-  const Command = IDL.Variant({
+  const ManageNeuronProposalCommand = IDL.Variant({
     Spawn: Spawn,
     Split: Split,
     Follow: Follow,
@@ -1437,9 +1465,9 @@ export const idlFactory = ({IDL}) => {
     Subaccount: IDL.Vec(IDL.Nat8),
     NeuronId: NeuronId
   });
-  const ManageNeuron = IDL.Record({
+  const ManageNeuronProposal = IDL.Record({
     id: IDL.Opt(NeuronId),
-    command: IDL.Opt(Command),
+    command: IDL.Opt(ManageNeuronProposalCommand),
     neuron_id_or_subaccount: IDL.Opt(NeuronIdOrSubaccount)
   });
   const Controllers = IDL.Record({controllers: IDL.Vec(IDL.Principal)});
@@ -1601,7 +1629,7 @@ export const idlFactory = ({IDL}) => {
   const Action = IDL.Variant({
     RegisterKnownNeuron: KnownNeuron,
     FulfillSubnetRentalRequest: FulfillSubnetRentalRequest,
-    ManageNeuron: ManageNeuron,
+    ManageNeuron: ManageNeuronProposal,
     UpdateCanisterSettings: UpdateCanisterSettings,
     InstallCode: InstallCode,
     DeregisterKnownNeuron: DeregisterKnownNeuron,
@@ -1618,12 +1646,28 @@ export const idlFactory = ({IDL}) => {
     AddOrRemoveNodeProvider: AddOrRemoveNodeProvider,
     Motion: Motion
   });
+  SelfDescribingValue.fill(
+    IDL.Variant({
+      Int: IDL.Int,
+      Map: IDL.Vec(IDL.Tuple(IDL.Text, SelfDescribingValue)),
+      Nat: IDL.Nat,
+      Blob: IDL.Vec(IDL.Nat8),
+      Text: IDL.Text,
+      Array: IDL.Vec(SelfDescribingValue)
+    })
+  );
+  const SelfDescribingProposalAction = IDL.Record({
+    type_description: IDL.Opt(IDL.Text),
+    type_name: IDL.Opt(IDL.Text),
+    value: IDL.Opt(SelfDescribingValue)
+  });
   Proposal.fill(
     IDL.Record({
       url: IDL.Text,
       title: IDL.Opt(IDL.Text),
       action: IDL.Opt(Action),
-      summary: IDL.Text
+      summary: IDL.Text,
+      self_describing_action: IDL.Opt(SelfDescribingProposalAction)
     })
   );
   const WaitForQuietState = IDL.Record({
@@ -1793,6 +1837,9 @@ export const idlFactory = ({IDL}) => {
     Ok: NodeProvider,
     Err: GovernanceError
   });
+  const GetPendingProposalsRequest = IDL.Record({
+    return_self_describing_action: IDL.Opt(IDL.Bool)
+  });
   const ProposalInfo = IDL.Record({
     id: IDL.Opt(ProposalId),
     status: IDL.Int32,
@@ -1866,6 +1913,7 @@ export const idlFactory = ({IDL}) => {
     node_providers: IDL.Vec(NodeProvider)
   });
   const ListProposalInfoRequest = IDL.Record({
+    return_self_describing_action: IDL.Opt(IDL.Bool),
     include_reward_status: IDL.Vec(IDL.Int32),
     omit_large_fields: IDL.Opt(IDL.Bool),
     before_proposal: IDL.Opt(ProposalId),
@@ -2051,7 +2099,11 @@ export const idlFactory = ({IDL}) => {
       ['query']
     ),
     get_node_provider_by_caller: IDL.Func([IDL.Null], [Result_7], ['query']),
-    get_pending_proposals: IDL.Func([], [IDL.Vec(ProposalInfo)], ['query']),
+    get_pending_proposals: IDL.Func(
+      [IDL.Opt(GetPendingProposalsRequest)],
+      [IDL.Vec(ProposalInfo)],
+      ['query']
+    ),
     get_proposal_info: IDL.Func([IDL.Nat64], [IDL.Opt(ProposalInfo)], ['query']),
     get_restore_aging_summary: IDL.Func([], [RestoreAgingSummary], ['query']),
     list_known_neurons: IDL.Func([], [ListKnownNeuronsResponse], ['query']),
@@ -2080,6 +2132,7 @@ export const idlFactory = ({IDL}) => {
 
 export const init = ({IDL}) => {
   const Proposal = IDL.Rec();
+  const SelfDescribingValue = IDL.Rec();
   const NeuronId = IDL.Record({id: IDL.Nat64});
   const Followees = IDL.Record({followees: IDL.Vec(NeuronId)});
   const DateUtc = IDL.Record({
@@ -2110,6 +2163,7 @@ export const init = ({IDL}) => {
     timestamp_seconds: IDL.Opt(IDL.Nat64)
   });
   const MonthlyNodeProviderRewards = IDL.Record({
+    algorithm_version: IDL.Opt(IDL.Nat32),
     minimum_xdr_permyriad_per_icp: IDL.Opt(IDL.Nat64),
     end_date: IDL.Opt(DateUtc),
     registry_version: IDL.Opt(IDL.Nat64),
@@ -2440,7 +2494,7 @@ export const init = ({IDL}) => {
     to_account: IDL.Opt(AccountIdentifier),
     amount: IDL.Opt(Amount)
   });
-  const Command = IDL.Variant({
+  const ManageNeuronProposalCommand = IDL.Variant({
     Spawn: Spawn,
     Split: Split,
     Follow: Follow,
@@ -2461,9 +2515,9 @@ export const init = ({IDL}) => {
     Subaccount: IDL.Vec(IDL.Nat8),
     NeuronId: NeuronId
   });
-  const ManageNeuron = IDL.Record({
+  const ManageNeuronProposal = IDL.Record({
     id: IDL.Opt(NeuronId),
-    command: IDL.Opt(Command),
+    command: IDL.Opt(ManageNeuronProposalCommand),
     neuron_id_or_subaccount: IDL.Opt(NeuronIdOrSubaccount)
   });
   const Controllers = IDL.Record({controllers: IDL.Vec(IDL.Principal)});
@@ -2625,7 +2679,7 @@ export const init = ({IDL}) => {
   const Action = IDL.Variant({
     RegisterKnownNeuron: KnownNeuron,
     FulfillSubnetRentalRequest: FulfillSubnetRentalRequest,
-    ManageNeuron: ManageNeuron,
+    ManageNeuron: ManageNeuronProposal,
     UpdateCanisterSettings: UpdateCanisterSettings,
     InstallCode: InstallCode,
     DeregisterKnownNeuron: DeregisterKnownNeuron,
@@ -2642,12 +2696,28 @@ export const init = ({IDL}) => {
     AddOrRemoveNodeProvider: AddOrRemoveNodeProvider,
     Motion: Motion
   });
+  SelfDescribingValue.fill(
+    IDL.Variant({
+      Int: IDL.Int,
+      Map: IDL.Vec(IDL.Tuple(IDL.Text, SelfDescribingValue)),
+      Nat: IDL.Nat,
+      Blob: IDL.Vec(IDL.Nat8),
+      Text: IDL.Text,
+      Array: IDL.Vec(SelfDescribingValue)
+    })
+  );
+  const SelfDescribingProposalAction = IDL.Record({
+    type_description: IDL.Opt(IDL.Text),
+    type_name: IDL.Opt(IDL.Text),
+    value: IDL.Opt(SelfDescribingValue)
+  });
   Proposal.fill(
     IDL.Record({
       url: IDL.Text,
       title: IDL.Opt(IDL.Text),
       action: IDL.Opt(Action),
-      summary: IDL.Text
+      summary: IDL.Text,
+      self_describing_action: IDL.Opt(SelfDescribingProposalAction)
     })
   );
   const WaitForQuietState = IDL.Record({

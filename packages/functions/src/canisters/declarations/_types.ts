@@ -6,13 +6,13 @@ import type * as CmcDid from './cmc/cmc.did';
 import type * as IcManagementDid from './ic-management/ic-management.did';
 import type * as IcpIndexDid from './ledger-icp/index.did';
 import type * as IcpLedgerDid from './ledger-icp/ledger.did';
-import type * as IcrcIndexNgDid from './ledger-icrc/icrc_index-ng.did';
+import type * as IcrcIndexDid from './ledger-icrc/icrc_index.did';
 import type * as IcrcLedgerDid from './ledger-icrc/icrc_ledger.did';
 import type * as NnsGovernanceDid from './nns/governance.did';
 import type * as NnsSnsWasmDid from './nns/sns_wasm.did';
-import type * as SnsGovernanceDid from './sns/sns_governance.did';
-import type * as SnsRootDid from './sns/sns_root.did';
-import type * as SnsSwapDid from './sns/sns_swap.did';
+import type * as SnsGovernanceDid from './sns/governance.did';
+import type * as SnsRootDid from './sns/root.did';
+import type * as SnsSwapDid from './sns/swap.did';
 
 export type {
   CkBTCBitcoinDid,
@@ -23,7 +23,7 @@ export type {
   IcManagementDid,
   IcpIndexDid,
   IcpLedgerDid,
-  IcrcIndexNgDid,
+  IcrcIndexDid,
   IcrcLedgerDid,
   NnsGovernanceDid,
   NnsSnsWasmDid,

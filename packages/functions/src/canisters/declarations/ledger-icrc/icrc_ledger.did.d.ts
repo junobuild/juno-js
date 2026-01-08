@@ -120,6 +120,11 @@ export interface DataCertificate {
  */
 export type Duration = bigint;
 export interface FeatureFlags { 'icrc2' : boolean }
+export interface FeeCollector {
+  'ts' : [] | [bigint],
+  'fee_collector' : [] | [Account],
+  'caller' : [] | [Principal],
+}
 export interface FieldsDisplay {
   'fields' : Array<[string, Icrc21Value]>,
   'intent' : string,
@@ -396,6 +401,7 @@ export interface Transaction {
   'kind' : string,
   'mint' : [] | [Mint],
   'approve' : [] | [Approve],
+  'fee_collector' : [] | [FeeCollector],
   'timestamp' : Timestamp,
   'transfer' : [] | [Transfer],
 }

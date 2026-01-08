@@ -1,7 +1,7 @@
 export {
-  IcrcIndexNgIdl,
+  IcrcIndexIdl,
   IcrcLedgerIdl,
-  type IcrcIndexNgDid,
+  type IcrcIndexDid,
   type IcrcLedgerDid
 } from '../../declarations';
 export {IcrcLedgerCanister} from './ledger.canister';

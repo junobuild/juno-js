@@ -42,7 +42,7 @@ function generate_idl() {
 function generate_did_idl() {
   local canister=$1
 
-  local candid_dir="node_modules/@dfinity/${canister}/dist/candid"
+  local candid_dir="node_modules/@icp-sdk/canisters/declarations/${canister}"
 
   if [ ! -d "$candid_dir" ]; then
     echo "❌  No candid directory for ${canister} at ${candid_dir}"

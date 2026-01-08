@@ -17,7 +17,7 @@ export interface Account {
 export interface AccountIdentifier { 'hash' : Uint8Array }
 export type Action = { 'RegisterKnownNeuron' : KnownNeuron } |
   { 'FulfillSubnetRentalRequest' : FulfillSubnetRentalRequest } |
-  { 'ManageNeuron' : ManageNeuron } |
+  { 'ManageNeuron' : ManageNeuronProposal } |
   { 'UpdateCanisterSettings' : UpdateCanisterSettings } |
   { 'InstallCode' : InstallCode } |
   { 'DeregisterKnownNeuron' : DeregisterKnownNeuron } |
@@ -84,24 +84,6 @@ export interface ClaimOrRefreshNeuronFromAccountResponse {
 export interface ClaimOrRefreshResponse {
   'refreshed_neuron_id' : [] | [NeuronId],
 }
-/**
- * KEEP THIS IN SYNC WITH ManageNeuronCommandRequest!
- */
-export type Command = { 'Spawn' : Spawn } |
-  { 'Split' : Split } |
-  { 'Follow' : Follow } |
-  { 'DisburseMaturity' : DisburseMaturity } |
-  { 'RefreshVotingPower' : RefreshVotingPower } |
-  { 'ClaimOrRefresh' : ClaimOrRefresh } |
-  { 'Configure' : Configure } |
-  { 'RegisterVote' : RegisterVote } |
-  { 'Merge' : Merge } |
-  { 'DisburseToNeuron' : DisburseToNeuron } |
-  { 'SetFollowing' : SetFollowing } |
-  { 'MakeProposal' : Proposal } |
-  { 'StakeMaturity' : StakeMaturity } |
-  { 'MergeMaturity' : MergeMaturity } |
-  { 'Disburse' : Disburse };
 export type Command_1 = { 'Error' : GovernanceError } |
   { 'Spawn' : SpawnResponse } |
   { 'Split' : SpawnResponse } |
@@ -245,6 +227,9 @@ export interface GetNeuronsFundAuditInfoRequest {
   'nns_proposal_id' : [] | [ProposalId],
 }
 export interface GetNeuronsFundAuditInfoResponse { 'result' : [] | [Result_6] }
+export interface GetPendingProposalsRequest {
+  'return_self_describing_action' : [] | [boolean],
+}
 export interface GlobalTimeOfDay {
   'seconds_after_utc_midnight' : [] | [bigint],
 }
@@ -370,12 +355,16 @@ export interface KnownNeuron {
 export interface KnownNeuronData {
   'name' : string,
   /**
-   * The first `opt` makes it so that the field can be renamed/deprecated in the future, and
-   * the second `opt` makes it so that an older client not recognizing a new variant can still
-   * get the rest of the `vec`.
+   * Topics that the known neuron is committed to always vote on.
+   * Note regarding the type: the first `opt` makes it so that the field can be renamed/deprecated
+   * in the future, and the second `opt` makes it so that an older client not recognizing a new
+   * variant can still get the rest of the `vec`.
    */
   'committed_topics' : [] | [Array<[] | [TopicToFollow]>],
   'description' : [] | [string],
+  /**
+   * Links related to the known neuron. Can be links to social URLs (OpenChat, X, etc.), or a homepage.
+   */
   'links' : [] | [Array<string>],
 }
 export interface LedgerParameters {
@@ -472,6 +461,7 @@ export interface ListNodeProvidersResponse {
   'node_providers' : Array<NodeProvider>,
 }
 export interface ListProposalInfoRequest {
+  'return_self_describing_action' : [] | [boolean],
   'include_reward_status' : Int32Array,
   'omit_large_fields' : [] | [boolean],
   'before_proposal' : [] | [ProposalId],
@@ -494,15 +484,6 @@ export interface MakeProposalResponse {
   'proposal_id' : [] | [ProposalId],
 }
 /**
- * Not to be confused with ManageNeuronRequest. (Yes, this is very structurally
- * similar to that, but not actually exactly equivalent.)
- */
-export interface ManageNeuron {
-  'id' : [] | [NeuronId],
-  'command' : [] | [Command],
-  'neuron_id_or_subaccount' : [] | [NeuronIdOrSubaccount],
-}
-/**
  * KEEP THIS IN SYNC WITH COMMAND!
  */
 export type ManageNeuronCommandRequest = { 'Spawn' : Spawn } |
@@ -517,6 +498,33 @@ export type ManageNeuronCommandRequest = { 'Spawn' : Spawn } |
   { 'DisburseToNeuron' : DisburseToNeuron } |
   { 'SetFollowing' : SetFollowing } |
   { 'MakeProposal' : MakeProposalRequest } |
+  { 'StakeMaturity' : StakeMaturity } |
+  { 'MergeMaturity' : MergeMaturity } |
+  { 'Disburse' : Disburse };
+/**
+ * Not to be confused with ManageNeuronRequest. This is only used to represent a manage neuron proposal.
+ * (Yes, this is very structurally similar to that, but not actually exactly equivalent)
+ */
+export interface ManageNeuronProposal {
+  'id' : [] | [NeuronId],
+  'command' : [] | [ManageNeuronProposalCommand],
+  'neuron_id_or_subaccount' : [] | [NeuronIdOrSubaccount],
+}
+/**
+ * KEEP THIS IN SYNC WITH ManageNeuronCommandRequest!
+ */
+export type ManageNeuronProposalCommand = { 'Spawn' : Spawn } |
+  { 'Split' : Split } |
+  { 'Follow' : Follow } |
+  { 'DisburseMaturity' : DisburseMaturity } |
+  { 'RefreshVotingPower' : RefreshVotingPower } |
+  { 'ClaimOrRefresh' : ClaimOrRefresh } |
+  { 'Configure' : Configure } |
+  { 'RegisterVote' : RegisterVote } |
+  { 'Merge' : Merge } |
+  { 'DisburseToNeuron' : DisburseToNeuron } |
+  { 'SetFollowing' : SetFollowing } |
+  { 'MakeProposal' : Proposal } |
   { 'StakeMaturity' : StakeMaturity } |
   { 'MergeMaturity' : MergeMaturity } |
   { 'Disburse' : Disburse };
@@ -567,6 +575,7 @@ export interface MergeResponse {
   'source_neuron_info' : [] | [NeuronInfo],
 }
 export interface MonthlyNodeProviderRewards {
+  'algorithm_version' : [] | [number],
   'minimum_xdr_permyriad_per_icp' : [] | [bigint],
   'end_date' : [] | [DateUtc],
   'registry_version' : [] | [bigint],
@@ -878,6 +887,7 @@ export interface Proposal {
   'title' : [] | [string],
   'action' : [] | [Action],
   'summary' : string,
+  'self_describing_action' : [] | [SelfDescribingProposalAction],
 }
 export type ProposalActionRequest = { 'RegisterKnownNeuron' : KnownNeuron } |
   { 'FulfillSubnetRentalRequest' : FulfillSubnetRentalRequest } |
@@ -1002,6 +1012,17 @@ export interface RewardNodeProviders {
 }
 export interface RewardToAccount { 'to_account' : [] | [AccountIdentifier] }
 export interface RewardToNeuron { 'dissolve_delay_seconds' : bigint }
+export interface SelfDescribingProposalAction {
+  'type_description' : [] | [string],
+  'type_name' : [] | [string],
+  'value' : [] | [SelfDescribingValue],
+}
+export type SelfDescribingValue = { 'Int' : bigint } |
+  { 'Map' : Array<[string, SelfDescribingValue]> } |
+  { 'Nat' : bigint } |
+  { 'Blob' : Uint8Array } |
+  { 'Text' : string } |
+  { 'Array' : Array<SelfDescribingValue> };
 export interface SetDefaultFollowees {
   'default_followees' : Array<[number, Followees]>,
 }
@@ -1214,7 +1235,10 @@ export interface _SERVICE {
     GetNeuronsFundAuditInfoResponse
   >,
   'get_node_provider_by_caller' : ActorMethod<[null], Result_7>,
-  'get_pending_proposals' : ActorMethod<[], Array<ProposalInfo>>,
+  'get_pending_proposals' : ActorMethod<
+    [[] | [GetPendingProposalsRequest]],
+    Array<ProposalInfo>
+  >,
   'get_proposal_info' : ActorMethod<[bigint], [] | [ProposalInfo]>,
   'get_restore_aging_summary' : ActorMethod<[], RestoreAgingSummary>,
   'list_known_neurons' : ActorMethod<[], ListKnownNeuronsResponse>,

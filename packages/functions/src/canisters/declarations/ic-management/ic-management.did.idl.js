@@ -417,7 +417,9 @@ export const subnet_info_result = IDL.Record({
 });
 export const take_canister_snapshot_args = IDL.Record({
   replace_snapshot: IDL.Opt(snapshot_id),
-  canister_id: canister_id
+  canister_id: canister_id,
+  uninstall_code: IDL.Opt(IDL.Bool),
+  sender_canister_version: IDL.Opt(IDL.Nat64)
 });
 export const take_canister_snapshot_result = snapshot;
 export const uninstall_code_args = IDL.Record({
@@ -989,7 +991,9 @@ export const idlFactory = ({IDL}) => {
   });
   const take_canister_snapshot_args = IDL.Record({
     replace_snapshot: IDL.Opt(snapshot_id),
-    canister_id: canister_id
+    canister_id: canister_id,
+    uninstall_code: IDL.Opt(IDL.Bool),
+    sender_canister_version: IDL.Opt(IDL.Nat64)
   });
   const take_canister_snapshot_result = snapshot;
   const uninstall_code_args = IDL.Record({

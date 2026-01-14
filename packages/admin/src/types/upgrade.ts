@@ -20,7 +20,6 @@ export interface UpgradeCodeProgress {
 export interface UpgradeCodeParams {
   actor: ActorParameters;
   canisterId: Principal;
-  missionControlId?: Principal;
   wasmModule: Uint8Array;
   arg: Uint8Array;
   mode: IcManagementDid.canister_install_mode;

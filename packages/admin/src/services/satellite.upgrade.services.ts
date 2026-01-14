@@ -16,7 +16,6 @@ import {encodeAdminAccessKeysToIDL} from '../utils/idl.utils';
  * Upgrades a satellite with the provided WASM module.
  * @param {Object} params - The parameters for upgrading the satellite.
  * @param {SatelliteParameters} params.satellite - The satellite parameters, including the actor and satellite ID.
- * @param {Principal} [params.missionControlId] - Optional. The Mission Control ID to potentially store WASM chunks, enabling reuse across installations.
  * @param {Uint8Array} params.wasmModule - The WASM module to be installed during the upgrade.
  * @param {boolean} params.deprecated - Indicates whether the upgrade is deprecated.
  * @param {boolean} params.deprecatedNoScope - Indicates whether the upgrade is deprecated and has no scope.
@@ -40,7 +39,7 @@ export const upgradeSatellite = async ({
   reset?: boolean;
 } & Pick<
   UpgradeCodeParams,
-  'wasmModule' | 'missionControlId' | 'preClearChunks' | 'takeSnapshot' | 'onProgress'
+  'wasmModule' | 'preClearChunks' | 'takeSnapshot' | 'onProgress'
 >): Promise<void> => {
   const {satelliteId, ...actor} = satellite;
 

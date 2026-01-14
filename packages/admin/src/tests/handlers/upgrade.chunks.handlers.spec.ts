@@ -31,11 +31,10 @@ describe('upgrade.chunks.handlers', () => {
     apiMock.installChunkedCode.mockResolvedValue();
   });
 
-  it('clears chunks pre and post if required', async () => {
+  it('clears chunks pre and post', async () => {
     await upgradeChunkedCode({
       actor,
       canisterId: mockSatelliteIdPrincipal,
-      missionControlId: undefined,
       wasmModule: wasmBytes,
       mode: {install: null},
       arg: new Uint8Array(),
@@ -47,28 +46,11 @@ describe('upgrade.chunks.handlers', () => {
     expect(apiMock.installChunkedCode).toHaveBeenCalled();
   });
 
-  it('skips post-clear if missionControlId is provided', async () => {
-    await upgradeChunkedCode({
-      actor,
-      canisterId: mockSatelliteIdPrincipal,
-      missionControlId: mockSatelliteIdPrincipal,
-      wasmModule: wasmBytes,
-      mode: {reinstall: null},
-      arg: new Uint8Array(),
-      preClearChunks: false
-    });
-
-    expect(apiMock.clearChunkStore).toHaveBeenCalledTimes(0);
-    expect(apiMock.uploadChunk).toHaveBeenCalled();
-    expect(apiMock.installChunkedCode).toHaveBeenCalled();
-  });
-
   it('uploads all wasm chunks', async () => {
     const largeWasm = new Uint8Array(INSTALL_MAX_CHUNK_SIZE * 2 + 1);
     await upgradeChunkedCode({
       actor,
       canisterId: mockSatelliteIdPrincipal,
-      missionControlId: undefined,
       wasmModule: largeWasm,
       mode: {install: null},
       arg: new Uint8Array(),
@@ -93,7 +75,6 @@ describe('upgrade.chunks.handlers', () => {
     await upgradeChunkedCode({
       actor,
       canisterId: mockSatelliteIdPrincipal,
-      missionControlId: undefined,
       wasmModule: chunkBytes,
       mode: {reinstall: null},
       arg: new Uint8Array(),

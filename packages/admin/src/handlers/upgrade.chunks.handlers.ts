@@ -142,6 +142,7 @@ const prepareUpload = async ({
     // Furthermore, note that the canister holding the chunks must live on the same subnet
     // as the canister that downloads them for the upgrade. The IC does not support this
     // process across subnets ⚠️.
+    // See documentation: https://docs.internetcomputer.org/references/ic-interface-spec#ic-install_chunked_code
     canisterId
   });
 

@@ -4,7 +4,8 @@ import {
   FedCMIdentityCredentialUndefinedError,
   InvalidUrlError
 } from './errors';
-import type {RequestJwtWithCredentials, RequestJwtWithRedirect} from './types/openid';
+import type {RequestGoogleJwtWithCredentials, RequestGoogleJwtWithRedirect} from './types/openid.google';
+import {parseUrl} from './utils/url.utils';
 
 /**
  * Initiates an OpenID Connect authorization request by redirecting the browser.
@@ -13,7 +14,7 @@ import type {RequestJwtWithCredentials, RequestJwtWithRedirect} from './types/op
  *  - OAuth 2.0 (Google): https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow
  *  - OpenID Connect: https://developers.google.com/identity/openid-connect/openid-connect
  */
-export const requestJwtWithRedirect = ({
+export const requestGoogleJwtWithRedirect = ({
   authUrl,
   clientId,
   nonce,
@@ -21,17 +22,8 @@ export const requestJwtWithRedirect = ({
   authScopes,
   state,
   redirectUrl
-}: RequestJwtWithRedirect) => {
-  const parseAuthUrl = (): URL => {
-    try {
-      // Use the URL constructor, for backwards compatibility with older Android/WebView.
-      return new URL(authUrl);
-    } catch (_error: unknown) {
-      throw new InvalidUrlError('Cannot parse authURL', {cause: authUrl});
-    }
-  };
-
-  const requestUrl = parseAuthUrl();
+}: RequestGoogleJwtWithRedirect) => {
+  const requestUrl = parseUrl({url: authUrl});
 
   requestUrl.searchParams.set('client_id', clientId);
 
@@ -70,13 +62,13 @@ export const requestJwtWithRedirect = ({
  * - https://privacysandbox.google.com/cookies/fedcm/implement/identity-provider
  * - https://privacysandbox.google.com/cookies/fedcm/why
  */
-export const requestWithCredentials = async ({
+export const requestGoogleJwtWithCredentials = async ({
   configUrl: configURL,
   clientId,
   nonce,
   loginHint,
   domainHint
-}: RequestJwtWithCredentials): Promise<{jwt: string}> => {
+}: RequestGoogleJwtWithCredentials): Promise<{jwt: string}> => {
   const identityCredential = await navigator.credentials.get({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

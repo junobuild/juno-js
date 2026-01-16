@@ -1,18 +1,18 @@
 import type {OpenIdAuthContext} from './context';
 import type {Nonce} from './nonce';
 import type {OpenIdProvider} from './provider';
-import type {RequestJwtCredentials, RequestJwtRedirect} from './request';
+import type {RequestGoogleJwtCredentials, RequestGoogleJwtRedirect} from './request.google';
 
 interface RequestOpenIdJwt {
   nonce: Nonce;
 }
 
-export type RequestJwtWithRedirect = RequestOpenIdJwt &
+export type RequestGoogleJwtWithRedirect = RequestOpenIdJwt &
   Pick<OpenIdAuthContext, 'state'> &
-  RequestJwtRedirect &
+  RequestGoogleJwtRedirect &
   Pick<OpenIdProvider, 'clientId' | 'authUrl' | 'authScopes'> &
   Partial<Pick<OpenIdProvider, 'redirectUrl'>>;
 
-export type RequestJwtWithCredentials = RequestOpenIdJwt &
-  RequestJwtCredentials &
+export type RequestGoogleJwtWithCredentials = RequestOpenIdJwt &
+  RequestGoogleJwtCredentials &
   Pick<OpenIdProvider, 'clientId' | 'configUrl'>;

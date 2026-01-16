@@ -20,11 +20,13 @@ export const handleRedirectCallback = async () => {
     identity: {delegationChain, sessionKey, identity},
     data: {doc}
   } = await authenticate({
-    redirect: null,
-    auth: {
-      satellite: {
-        satelliteId,
-        container
+    google: {
+      redirect: null,
+      auth: {
+        satellite: {
+          satelliteId,
+          container
+        }
       }
     }
   });

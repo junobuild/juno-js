@@ -4,7 +4,7 @@ import {parseUrl} from './utils/url.utils';
 
 export const buildGenerateState = ({initUrl}: Pick<OpenIdGitHubProvider, 'initUrl'>) => {
   const generateState = async ({nonce}: {nonce: Nonce}): Promise<string> => {
-    const requestUrl = parseUrl({url: initStateUrl});
+    const requestUrl = parseUrl({url: initUrl});
     requestUrl.searchParams.set('nonce', nonce);
 
     // TODO: handle error

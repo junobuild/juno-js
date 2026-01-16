@@ -2,7 +2,7 @@ import type {Nonce} from './types/nonce';
 import {OpenIdGitHubProvider} from './types/provider.github';
 import {parseUrl} from './utils/url.utils';
 
-export const buildGenerateState = ({initStateUrl}: Pick<OpenIdGitHubProvider, 'initStateUrl'>) => {
+export const buildGenerateState = ({initUrl}: Pick<OpenIdGitHubProvider, 'initUrl'>) => {
   const generateState = async ({nonce}: {nonce: Nonce}): Promise<string> => {
     const requestUrl = parseUrl({url: initStateUrl});
     requestUrl.searchParams.set('nonce', nonce);

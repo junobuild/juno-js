@@ -1,11 +1,10 @@
 import type {OpenIdProvider} from './provider';
-import type {GitHubAuthScope} from './provider.github';
+import {OpenIdGitHubProvider} from './provider.github';
 import type {RequestJwt} from './request';
 
 export type RequestGitHubJwtRedirect = RequestJwt &
-  Partial<Pick<OpenIdProvider, 'redirectUrl'>> & {
-    authScopes: GitHubAuthScope[];
-  };
+  Partial<Pick<OpenIdProvider, 'redirectUrl'>> &
+  Partial<Pick<OpenIdGitHubProvider, 'authScopes' | 'initUrl'>>;
 
 export interface RequestGitHubJwtRedirectParams {
   redirect: RequestGitHubJwtRedirect;

@@ -5,5 +5,5 @@ import {RequestGitHubJwtRedirect} from './request.github';
 
 export type RequestGitHubJwtWithRedirect = Pick<OpenIdAuthContext, 'state'> &
   RequestGitHubJwtRedirect &
-  Omit<OpenIdGitHubProvider, 'redirectUrl' | 'initStateUrl'> &
+  Omit<OpenIdGitHubProvider, 'redirectUrl' | 'initUrl' | 'finalizeUrl'> &
   Partial<Pick<OpenIdProvider, 'redirectUrl'>>;

@@ -1,14 +1,14 @@
 import type {DelegationChain, DelegationIdentity, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import type {ConsoleParameters, SatelliteParameters} from '@junobuild/ic-client/actor';
 import type {AuthenticationData} from './actor';
-
-export interface AuthenticationCredentials {
-  jwt: string;
-}
+import {AuthenticationGitHubRedirect} from './authenticate.github';
+import {AuthenticationGoogleCredentials} from './authenticate.google';
 
 export type AuthenticationParams<T extends AuthParameters = AuthParameters> =
-  | {redirect: null; auth: T}
-  | {credentials: AuthenticationCredentials; auth: T};
+  | {
+      google: {redirect: null; auth: T} | {credentials: AuthenticationGoogleCredentials; auth: T};
+    }
+  | {github: {redirect: AuthenticationGitHubRedirect; auth: T}};
 
 export interface AuthenticatedIdentity {
   identity: DelegationIdentity;

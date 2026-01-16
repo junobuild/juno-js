@@ -31,12 +31,16 @@ export async function requestJwt(
     const {github} = args;
 
     const {redirect} = github;
-    const {authUrl, authScopes, initStateUrl} = GITHUB_PROVIDER;
+    const {initUrl: userInitUrl, ...restRedirect} = redirect;
 
-    const context = await initContext({generateState: buildGenerateState({initStateUrl})});
+    const {authUrl, authScopes, initUrl} = GITHUB_PROVIDER;
+
+    const context = await initContext({
+      generateState: buildGenerateState({initUrl: userInitUrl ?? initUrl})
+    });
 
     requestGitHubJwtWithRedirect({
-      ...redirect,
+      ...restRedirect,
       ...context,
       authUrl,
       authScopes

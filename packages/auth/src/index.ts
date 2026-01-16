@@ -6,3 +6,4 @@ export type * from './types/provider';
 export type * from './types/request';
 export type * from './types/request.google';
 export * from './utils/openid.utils';
+export {AuthenticationGoogleCredentials} from './types/authenticate.google';

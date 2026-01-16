@@ -7,5 +7,7 @@ export interface OpenIdGitHubProvider extends Omit<OpenIdProvider, 'authScopes' 
   // OAuth authentication scope
   authScopes: GitHubAuthScope[];
   // Init Url use to generate state and nonce from proxy
-  initStateUrl: string;
+  initUrl: string;
+  // The Url to finalize the OAuth process with the proxy and get a JWT token
+  finalizeUrl: string;
 }

@@ -13,5 +13,5 @@ export const GOOGLE_PROVIDER: Omit<OpenIdProvider, 'clientId' | 'redirectUrl'> =
 export const GITHUB_PROVIDER: Omit<OpenIdGitHubProvider, 'clientId' | 'redirectUrl'> = {
   authUrl: 'http://accounts.google.com/o/o/oauth2/v2/auth',
   authScopes: ['read:user', 'repo'],
-  initStateUrl: 'http://localhost:3000/v1/auth/init/github'
+  initUrl: 'http://localhost:3000/v1/auth/init/github'
 };

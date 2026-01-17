@@ -12,8 +12,8 @@ import type {
   AuthenticationParams,
   AuthParameters
 } from './types/authenticate';
+import {AuthenticationGitHubRedirect} from './types/authenticate.github';
 import type {OpenIdAuthContext} from './types/context';
-import {OpenIdGitHubProvider} from './types/provider.github';
 
 export const authenticate = async <T extends AuthParameters>(
   params: AuthenticationParams<T>
@@ -22,16 +22,13 @@ export const authenticate = async <T extends AuthParameters>(
 
   if ('github' in params) {
     const {
-      github: {
-        redirect: {finalizeUrl: userFinalizeUrl},
-        auth
-      }
+      github: {redirect, auth}
     } = params;
 
     const {finalizeUrl} = GITHUB_PROVIDER;
 
     return await authenticateGitHubWithRedirect<T>({
-      finalizeUrl: userFinalizeUrl ?? finalizeUrl,
+      redirect: redirect ?? {finalizeUrl},
       auth,
       context
     });
@@ -95,11 +92,12 @@ const authenticateGoogleWithRedirect = async <T extends AuthParameters>({
 const authenticateGitHubWithRedirect = async <T extends AuthParameters>({
   auth,
   context,
-  finalizeUrl
+  redirect: {finalizeUrl}
 }: {
   auth: AuthParameters;
   context: Omit<OpenIdAuthContext, 'state'>;
-} & Pick<OpenIdGitHubProvider, 'finalizeUrl'>): Promise<AuthenticatedSession<T>> => {
+  redirect: AuthenticationGitHubRedirect;
+}): Promise<AuthenticatedSession<T>> => {
   const {
     location: {search}
   } = window;

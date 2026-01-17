@@ -8,7 +8,7 @@ export type AuthenticationParams<T extends AuthParameters = AuthParameters> =
   | {
       google: {redirect: null; auth: T} | {credentials: AuthenticationGoogleCredentials; auth: T};
     }
-  | {github: {redirect: AuthenticationGitHubRedirect; auth: T}};
+  | {github: {redirect: AuthenticationGitHubRedirect | null; auth: T}};
 
 export interface AuthenticatedIdentity {
   identity: DelegationIdentity;

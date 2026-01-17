@@ -1,3 +1,3 @@
 import {OpenIdGitHubProvider} from './provider.github';
 
-export type AuthenticationGitHubRedirect = Pick<OpenIdGitHubProvider, "finalizeUrl">;
+export type AuthenticationGitHubRedirect = Partial<Pick<OpenIdGitHubProvider, 'finalizeUrl'>>;

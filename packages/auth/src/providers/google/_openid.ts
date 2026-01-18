@@ -3,8 +3,8 @@ import {
   FedCMIdentityCredentialInvalidError,
   FedCMIdentityCredentialUndefinedError,
   InvalidUrlError
-} from './errors';
-import type {RequestJwtWithCredentials, RequestJwtWithRedirect} from './types/openid';
+} from '../../errors';
+import type {RequestGoogleJwtWithCredentials, RequestGoogleJwtWithRedirect} from './types/openid';
 
 /**
  * Initiates an OpenID Connect authorization request by redirecting the browser.
@@ -13,7 +13,7 @@ import type {RequestJwtWithCredentials, RequestJwtWithRedirect} from './types/op
  *  - OAuth 2.0 (Google): https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow
  *  - OpenID Connect: https://developers.google.com/identity/openid-connect/openid-connect
  */
-export const requestJwtWithRedirect = ({
+export const requestGoogleJwtWithRedirect = ({
   authUrl,
   clientId,
   nonce,
@@ -21,7 +21,7 @@ export const requestJwtWithRedirect = ({
   authScopes,
   state,
   redirectUrl
-}: RequestJwtWithRedirect) => {
+}: RequestGoogleJwtWithRedirect) => {
   const parseAuthUrl = (): URL => {
     try {
       // Use the URL constructor, for backwards compatibility with older Android/WebView.
@@ -70,13 +70,13 @@ export const requestJwtWithRedirect = ({
  * - https://privacysandbox.google.com/cookies/fedcm/implement/identity-provider
  * - https://privacysandbox.google.com/cookies/fedcm/why
  */
-export const requestWithCredentials = async ({
+export const requestGoogleJwtWithCredentials = async ({
   configUrl: configURL,
   clientId,
   nonce,
   loginHint,
   domainHint
-}: RequestJwtWithCredentials): Promise<{jwt: string}> => {
+}: RequestGoogleJwtWithCredentials): Promise<{jwt: string}> => {
   const identityCredential = await navigator.credentials.get({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

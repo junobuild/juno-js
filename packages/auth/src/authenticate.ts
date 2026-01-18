@@ -31,10 +31,10 @@ export const authenticate = async <T extends AuthParameters>(
     });
   }
 
-  return await authenticateWithRedirect<T>({...params, context});
+  return await authenticateGoogleWithRedirect<T>({...params, context});
 };
 
-const authenticateWithRedirect = async <T extends AuthParameters>({
+const authenticateGoogleWithRedirect = async <T extends AuthParameters>({
   auth,
   context
 }: {

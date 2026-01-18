@@ -1,9 +1,9 @@
 import {isNullish, notEmptyString} from '@dfinity/utils';
 import {
   FedCMIdentityCredentialInvalidError,
-  FedCMIdentityCredentialUndefinedError,
-  InvalidUrlError
+  FedCMIdentityCredentialUndefinedError
 } from '../../errors';
+import {parseUrl} from '../../utils/url.utils';
 import type {RequestGoogleJwtWithCredentials, RequestGoogleJwtWithRedirect} from './types/openid';
 
 /**
@@ -22,16 +22,7 @@ export const requestGoogleJwtWithRedirect = ({
   state,
   redirectUrl
 }: RequestGoogleJwtWithRedirect) => {
-  const parseAuthUrl = (): URL => {
-    try {
-      // Use the URL constructor, for backwards compatibility with older Android/WebView.
-      return new URL(authUrl);
-    } catch (_error: unknown) {
-      throw new InvalidUrlError('Cannot parse authURL', {cause: authUrl});
-    }
-  };
-
-  const requestUrl = parseAuthUrl();
+  const requestUrl = parseUrl({url: authUrl});
 
   requestUrl.searchParams.set('client_id', clientId);
 

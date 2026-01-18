@@ -1,5 +1,6 @@
 import {GOOGLE_PROVIDER} from './_constants';
 import {initContext} from './_context';
+import {generateGoogleState} from './providers/google/_context';
 import {
   requestGoogleJwtWithCredentials,
   requestGoogleJwtWithRedirect
@@ -22,7 +23,7 @@ export async function requestJwt({
 }: {
   google: RequestGoogleJwtParams;
 }): Promise<RequestJwtCredentialsResult | void> {
-  const context = await initContext();
+  const context = await initContext({generateState: generateGoogleState});
 
   if ('credentials' in google) {
     const {credentials} = google;

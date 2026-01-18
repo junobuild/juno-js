@@ -3,7 +3,7 @@ import {initContext} from './_context';
 import {buildGenerateState} from './providers/github/_context';
 import {requestGitHubJwtWithRedirect} from './providers/github/_openid';
 import type {RequestGitHubJwtRedirectParams} from './providers/github/types/request';
-import {generateState} from './providers/google/_context';
+import {generateGoogleState} from './providers/google/_context';
 import {
   requestGoogleJwtWithCredentials,
   requestGoogleJwtWithRedirect
@@ -51,7 +51,7 @@ export async function requestJwt(
     return;
   }
 
-  const context = await initContext({generateState});
+  const context = await initContext({generateState: generateGoogleState});
 
   const {google} = args;
 

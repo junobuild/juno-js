@@ -6,21 +6,21 @@ import {
   FedCMIdentityCredentialInvalidError,
   FedCMIdentityCredentialUndefinedError,
   InvalidUrlError
-} from '../errors';
+} from '../../../errors';
 import {
   requestGoogleJwtWithCredentials,
   requestGoogleJwtWithRedirect
-} from '../providers/google/_openid';
+} from '../../../providers/google/_openid';
 import {
   RequestGoogleJwtWithCredentials,
   RequestGoogleJwtWithRedirect
-} from '../providers/google/types/openid';
+} from '../../../providers/google/types/openid';
 
-describe('_openid', () => {
+describe('providers > google > _openid', () => {
   const mockState = {state: '123456'};
   const mockNonce = {nonce: 'abc'};
 
-  describe('requestJwtWithRedirect', () => {
+  describe('requestGoogleJwtWithRedirect', () => {
     const mockUrl = 'https://app.example';
 
     const mockRequest: RequestGoogleJwtWithRedirect = {

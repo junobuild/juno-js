@@ -96,11 +96,13 @@ describe('handleRedirectCallback', async () => {
 
       expect(authenticateSpy).toHaveBeenCalledTimes(1);
       expect(authenticateSpy).toHaveBeenCalledWith({
-        redirect: null,
-        auth: {
-          satellite: {
-            satelliteId: 'sat-123',
-            container: true
+        google: {
+          redirect: null,
+          auth: {
+            satellite: {
+              satelliteId: 'sat-123',
+              container: true
+            }
           }
         }
       });

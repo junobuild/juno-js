@@ -2,12 +2,9 @@ import {isEmptyString} from '@dfinity/utils';
 import {GITHUB_PROVIDER} from './_constants';
 import {loadContext} from './_context';
 import {authenticateSession} from './_session';
-import {
-  AuthenticationInvalidStateError,
-  AuthenticationUndefinedJwtError,
-  AuthenticationUrlHashError
-} from './errors';
+import {AuthenticationUndefinedJwtError} from './errors';
 import type {AuthenticationGitHubRedirect} from './providers/github/types/authenticate';
+import {authenticateGoogleWithRedirect} from './providers/google/authenticate';
 import type {
   AuthenticatedSession,
   AuthenticationParams,
@@ -50,43 +47,6 @@ export const authenticate = async <T extends AuthParameters>(
   }
 
   return await authenticateGoogleWithRedirect<T>({...google, context});
-};
-
-const authenticateGoogleWithRedirect = async <T extends AuthParameters>({
-  auth,
-  context
-}: {
-  auth: AuthParameters;
-  context: OpenIdAuthContext;
-}): Promise<AuthenticatedSession<T>> => {
-  const {
-    location: {hash}
-  } = window;
-
-  if (isEmptyString(hash) || !hash.startsWith('#')) {
-    throw new AuthenticationUrlHashError('No hash found in the current location URL');
-  }
-
-  const params = new URLSearchParams(hash.slice(1));
-  const state = params.get('state');
-  const idToken = params.get('id_token');
-
-  const {state: savedState} = context;
-
-  if (isEmptyString(savedState) || state !== savedState) {
-    throw new AuthenticationInvalidStateError('The provided state is invalid', {cause: state});
-  }
-
-  // id_token === jwt
-  if (isEmptyString(idToken)) {
-    throw new AuthenticationUndefinedJwtError();
-  }
-
-  return await authenticateSession({
-    jwt: idToken,
-    auth,
-    context
-  });
 };
 
 const authenticateGitHubWithRedirect = async <T extends AuthParameters>({

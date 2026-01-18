@@ -43,7 +43,7 @@ describe('authenticate', () => {
   const user_key = new Uint8Array([9, 9, 9]);
   const expiration = 123456789n;
   const pubkey = new Uint8Array([7, 7]);
-  const signature = [1, 2, 3];
+  const signature = new Uint8Array([1, 2, 3]);
   const targetsNone: [] = [];
 
   const mockPublicKey = new Uint8Array([0xaa, 0xbb, 0xcc]);

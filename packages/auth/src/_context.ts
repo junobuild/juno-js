@@ -6,12 +6,16 @@ import type {OpenIdAuthContext} from './types/context';
 import type {Nonce} from './types/nonce';
 import {generateNonce} from './utils/auth.utils';
 import {parseContext, stringifyContext} from './utils/session-storage.utils';
-import {generateRandomState} from './utils/state.utils';
 
-export const initContext = async (): Promise<{nonce: Nonce} & Pick<OpenIdAuthContext, 'state'>> => {
+export const initContext = async ({
+  generateState
+}: {
+  generateState: (params: {nonce: Nonce}) => Promise<string>;
+}): Promise<{nonce: Nonce} & Pick<OpenIdAuthContext, 'state'>> => {
   const caller = Ed25519KeyIdentity.generate();
   const {nonce, salt} = await generateNonce({caller});
-  const state = generateRandomState();
+
+  const state = await generateState({nonce});
 
   const storedData = stringifyContext({
     caller,

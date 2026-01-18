@@ -7,6 +7,7 @@ import {Ed25519KeyIdentity, JsonnableEd25519KeyIdentity} from '@icp-sdk/core/ide
 import {Principal} from '@icp-sdk/core/principal';
 import {CONTEXT_KEY} from '../_constants';
 import {initContext} from '../_context';
+import {generateGoogleState} from '../providers/google/_context';
 import {parseContext} from '../utils/session-storage.utils';
 
 describe('_context', () => {
@@ -16,7 +17,7 @@ describe('_context', () => {
     });
 
     it('should return nonce and state', async () => {
-      const {nonce, state} = await initContext();
+      const {nonce, state} = await initContext({generateState: generateGoogleState});
 
       expect(typeof nonce).toBe('string');
       expect(typeof state).toBe('string');
@@ -25,14 +26,14 @@ describe('_context', () => {
     });
 
     it('should store a single SESSION_KEY entry', async () => {
-      await initContext();
+      await initContext({generateState: generateGoogleState});
 
       expect(sessionStorage.length).toBe(1);
       expect(sessionStorage.getItem(CONTEXT_KEY)).not.toBeNull();
     });
 
     it('should store caller, salt and state in SESSION_KEY payload', async () => {
-      await initContext();
+      await initContext({generateState: generateGoogleState});
 
       const raw = sessionStorage.getItem(CONTEXT_KEY);
       assertNonNullish(raw);
@@ -45,7 +46,7 @@ describe('_context', () => {
     });
 
     it('should return same state as stored', async () => {
-      const {state} = await initContext();
+      const {state} = await initContext({generateState: generateGoogleState});
 
       const raw = sessionStorage.getItem(CONTEXT_KEY);
       assertNonNullish(raw);
@@ -56,7 +57,7 @@ describe('_context', () => {
     });
 
     it('should store salt as base64 that decodes to 32 bytes', async () => {
-      await initContext();
+      await initContext({generateState: generateGoogleState});
 
       const raw = sessionStorage.getItem(CONTEXT_KEY);
       assertNonNullish(raw);
@@ -70,7 +71,7 @@ describe('_context', () => {
     });
 
     it('should store a valid caller JSON', async () => {
-      await initContext();
+      await initContext({generateState: generateGoogleState});
 
       const raw = sessionStorage.getItem(CONTEXT_KEY);
       assertNonNullish(raw);
@@ -82,8 +83,8 @@ describe('_context', () => {
     });
 
     it('should generate new values on each call', async () => {
-      const first = await initContext();
-      const second = await initContext();
+      const first = await initContext({generateState: generateGoogleState});
+      const second = await initContext({generateState: generateGoogleState});
 
       expect(first.nonce).not.toBe(second.nonce);
       expect(first.state).not.toBe(second.state);

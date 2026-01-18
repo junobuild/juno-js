@@ -1,16 +1,19 @@
 import {GITHUB_PROVIDER, GOOGLE_PROVIDER} from './_constants';
 import {initContext} from './_context';
-import {buildGenerateState} from './_context.github';
-import {generateState} from './_context.google';
-import {requestGitHubJwtWithRedirect} from './_openid.github';
-import {requestGoogleJwtWithCredentials, requestGoogleJwtWithRedirect} from './_openid.google';
-import {RequestJwtCredentialsResult} from './types/request';
-import {RequestGitHubJwtRedirectParams} from './types/request.github';
+import {buildGenerateState} from './providers/github/_context';
+import {requestGitHubJwtWithRedirect} from './providers/github/_openid';
+import type {RequestGitHubJwtRedirectParams} from './providers/github/types/request';
+import {generateState} from './providers/google/_context';
+import {
+  requestGoogleJwtWithCredentials,
+  requestGoogleJwtWithRedirect
+} from './providers/google/_openid';
 import type {
   RequestGoogleJwtCredentialsParams,
   RequestGoogleJwtParams,
   RequestGoogleJwtRedirectParams
-} from './types/request.google';
+} from './providers/google/types/request';
+import type {RequestJwtCredentialsResult} from './types/request';
 
 export function requestJwt(args: {
   google: RequestGoogleJwtCredentialsParams;

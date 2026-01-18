@@ -2,13 +2,19 @@
  * @vitest-environment jsdom
  */
 
-import {requestGoogleJwtWithRedirect, requestGoogleJwtWithCredentials} from '../_openid.google';
 import {
   FedCMIdentityCredentialInvalidError,
   FedCMIdentityCredentialUndefinedError,
   InvalidUrlError
 } from '../errors';
-import {RequestGoogleJwtWithCredentials, RequestGoogleJwtWithRedirect} from '../types/openid.google';
+import {
+  requestGoogleJwtWithCredentials,
+  requestGoogleJwtWithRedirect
+} from '../providers/google/_openid';
+import {
+  RequestGoogleJwtWithCredentials,
+  RequestGoogleJwtWithRedirect
+} from '../providers/google/types/openid';
 
 describe('_openid', () => {
   const mockState = {state: '123456'};

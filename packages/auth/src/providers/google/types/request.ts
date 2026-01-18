@@ -1,5 +1,5 @@
-import type {OpenIdProvider} from './provider';
-import type {RequestJwt} from './request';
+import type {OpenIdProvider} from '../../../types/provider';
+import type {RequestJwt} from '../../../types/request';
 
 // https://developers.google.com/identity/protocols/oauth2/web-server#creatingclient
 export type RequestGoogleJwtRedirect = RequestJwt &
@@ -28,4 +28,6 @@ export interface RequestGoogleJwtCredentialsParams {
   credentials: RequestGoogleJwtCredentials;
 }
 
-export type RequestGoogleJwtParams = RequestGoogleJwtRedirectParams | RequestGoogleJwtCredentialsParams;
+export type RequestGoogleJwtParams =
+  | RequestGoogleJwtRedirectParams
+  | RequestGoogleJwtCredentialsParams;

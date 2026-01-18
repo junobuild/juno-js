@@ -1,11 +1,10 @@
 import {isNullish, notEmptyString} from '@dfinity/utils';
 import {
   FedCMIdentityCredentialInvalidError,
-  FedCMIdentityCredentialUndefinedError,
-  InvalidUrlError
-} from './errors';
-import type {RequestGoogleJwtWithCredentials, RequestGoogleJwtWithRedirect} from './types/openid.google';
-import {parseUrl} from './utils/url.utils';
+  FedCMIdentityCredentialUndefinedError
+} from '../../errors';
+import {parseUrl} from '../../utils/url.utils';
+import type {RequestGoogleJwtWithCredentials, RequestGoogleJwtWithRedirect} from './types/openid';
 
 /**
  * Initiates an OpenID Connect authorization request by redirecting the browser.

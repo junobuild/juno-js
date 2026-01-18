@@ -1,5 +1,5 @@
+import type {OpenIdGitHubProvider} from './providers/github/types/provider';
 import type {OpenIdProvider} from './types/provider';
-import {OpenIdGitHubProvider} from './types/provider.github';
 
 export const CONTEXT_KEY = 'juno:auth:openid';
 

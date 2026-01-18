@@ -1,7 +1,7 @@
-import type {OpenIdAuthContext} from './context';
-import type {Nonce} from './nonce';
-import type {OpenIdProvider} from './provider';
-import type {RequestGoogleJwtCredentials, RequestGoogleJwtRedirect} from './request.google';
+import type {OpenIdAuthContext} from '../../../types/context';
+import type {Nonce} from '../../../types/nonce';
+import type {OpenIdProvider} from '../../../types/provider';
+import type {RequestGoogleJwtCredentials, RequestGoogleJwtRedirect} from './request';
 
 interface RequestOpenIdJwt {
   nonce: Nonce;

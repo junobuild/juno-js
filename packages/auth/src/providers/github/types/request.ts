@@ -1,6 +1,6 @@
-import type {OpenIdProvider} from './provider';
-import {OpenIdGitHubProvider} from './provider.github';
-import type {RequestJwt} from './request';
+import type {OpenIdProvider} from '../../../types/provider';
+import type {RequestJwt} from '../../../types/request';
+import type {OpenIdGitHubProvider} from './provider';
 
 export type RequestGitHubJwtRedirect = RequestJwt &
   Partial<Pick<OpenIdProvider, 'redirectUrl'>> &

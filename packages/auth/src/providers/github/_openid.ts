@@ -1,5 +1,5 @@
-import {RequestGitHubJwtWithRedirect} from './types/openid.github';
-import {parseUrl} from './utils/url.utils';
+import {parseUrl} from '../../utils/url.utils';
+import type {RequestGitHubJwtWithRedirect} from './types/openid';
 
 // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps#1-request-a-users-github-identity
 

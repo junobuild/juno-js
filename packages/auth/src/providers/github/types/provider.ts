@@ -1,5 +1,5 @@
 // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
-import {OpenIdProvider} from './provider';
+import type {OpenIdProvider} from '../../../types/provider';
 
 export type GitHubAuthScope = 'read:user' | 'repo';
 

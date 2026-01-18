@@ -7,12 +7,12 @@ import {
   AuthenticationUndefinedJwtError,
   AuthenticationUrlHashError
 } from './errors';
+import type {AuthenticationGitHubRedirect} from './providers/github/types/authenticate';
 import type {
   AuthenticatedSession,
   AuthenticationParams,
   AuthParameters
 } from './types/authenticate';
-import {AuthenticationGitHubRedirect} from './types/authenticate.github';
 import type {OpenIdAuthContext} from './types/context';
 
 export const authenticate = async <T extends AuthParameters>(

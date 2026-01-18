@@ -1,9 +1,9 @@
 export * from './authenticate';
 export * from './errors';
+export {AuthenticationGoogleCredentials} from './providers/google/types/authenticate';
+export type * from './providers/google/types/request';
 export * from './request';
 export type * from './types/authenticate';
 export type * from './types/provider';
 export type * from './types/request';
-export type * from './types/request.google';
 export * from './utils/openid.utils';
-export {AuthenticationGoogleCredentials} from './types/authenticate.google';

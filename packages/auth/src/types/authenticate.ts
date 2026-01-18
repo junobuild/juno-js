@@ -1,8 +1,8 @@
 import type {DelegationChain, DelegationIdentity, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import type {ConsoleParameters, SatelliteParameters} from '@junobuild/ic-client/actor';
+import type {AuthenticationGitHubRedirect} from '../providers/github/types/authenticate';
+import type {AuthenticationGoogleCredentials} from '../providers/google/types/authenticate';
 import type {AuthenticationData} from './actor';
-import {AuthenticationGitHubRedirect} from './authenticate.github';
-import {AuthenticationGoogleCredentials} from './authenticate.google';
 
 export type AuthenticationParams<T extends AuthParameters = AuthParameters> =
   | {

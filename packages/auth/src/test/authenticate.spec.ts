@@ -120,8 +120,10 @@ describe('authenticate', () => {
       } as GetDelegationResult);
 
       const p = authenticate({
-        credentials: {jwt: 'jwt-123'},
-        auth
+        google: {
+          credentials: {jwt: 'jwt-123'},
+          auth
+        }
       });
 
       await vi.runAllTimersAsync();
@@ -158,7 +160,7 @@ describe('authenticate', () => {
 
       window.location.hash = '#id_token=IDTOKEN_ABC&state=SAVED_STATE';
 
-      const p = authenticate({redirect: null, auth});
+      const p = authenticate({google: {redirect: null, auth}});
 
       await vi.advanceTimersByTimeAsync(0);
       await vi.runOnlyPendingTimersAsync();
@@ -177,7 +179,7 @@ describe('authenticate', () => {
       seedContext('SAVED_STATE');
       window.location.hash = '';
 
-      await expect(authenticate({redirect: null, auth})).rejects.toBeInstanceOf(
+      await expect(authenticate({google: {redirect: null, auth}})).rejects.toBeInstanceOf(
         AuthenticationUrlHashError
       );
     });
@@ -186,7 +188,7 @@ describe('authenticate', () => {
       seedContext('SAVED_STATE');
       window.location.hash = '#id_token=JWT123&state=OTHER_STATE';
 
-      await expect(authenticate({redirect: null, auth})).rejects.toBeInstanceOf(
+      await expect(authenticate({google: {redirect: null, auth}})).rejects.toBeInstanceOf(
         AuthenticationInvalidStateError
       );
     });
@@ -195,7 +197,7 @@ describe('authenticate', () => {
       seedContext('SAVED_STATE');
       window.location.hash = '#state=SAVED_STATE';
 
-      await expect(authenticate({redirect: null, auth})).rejects.toBeInstanceOf(
+      await expect(authenticate({google: {redirect: null, auth}})).rejects.toBeInstanceOf(
         AuthenticationUndefinedJwtError
       );
     });
@@ -213,7 +215,7 @@ describe('authenticate', () => {
 
       window.location.hash = '#id_token=IDTOKEN_ABC&state=SAVED_STATE';
 
-      const p = authenticate({redirect: null, auth});
+      const p = authenticate({google: {redirect: null, auth}});
       const guarded = p.catch((e) => e);
 
       await vi.advanceTimersByTimeAsync(0);
@@ -232,7 +234,7 @@ describe('authenticate', () => {
 
       window.location.hash = '#id_token=IDTOKEN_ABC&state=SAVED_STATE';
 
-      const p = authenticate({redirect: null, auth});
+      const p = authenticate({google: {redirect: null, auth}});
       const guarded = p.catch((e) => e);
 
       await vi.advanceTimersByTimeAsync(0);

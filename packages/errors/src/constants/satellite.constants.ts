@@ -57,6 +57,8 @@ export const JUNO_AUTH_ERROR_PROFILE_GIVEN_NAME_INVALID_LENGTH =
   'juno.auth.error.profile.data.given_name_invalid_length';
 export const JUNO_AUTH_ERROR_PROFILE_FAMILY_NAME_INVALID_LENGTH =
   'juno.auth.error.profile.data.family_name_invalid_length';
+export const JUNO_AUTH_ERROR_PROFILE_PREFERRED_USERNAME_INVALID_LENGTH =
+  'juno.auth.error.profile.data.preferred_username_invalid_length';
 export const JUNO_AUTH_ERROR_PROFILE_LOCALE_INVALID_LENGTH =
   'juno.auth.error.profile.data.locale_invalid_length';
 export const JUNO_AUTH_ERROR_PROFILE_PICTURE_INVALID_URL =

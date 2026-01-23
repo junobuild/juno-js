@@ -60,10 +60,11 @@ describe('handleRedirectCallback', async () => {
   });
 
   it('throws if satelliteId is missing', async () => {
-    await expect(handleRedirectCallback()).rejects.toThrow(SignInInitError);
+    await expect(handleRedirectCallback({google: null})).rejects.toThrow(SignInInitError);
+    await expect(handleRedirectCallback({github: null})).rejects.toThrow(SignInInitError);
   });
 
-  describe('Authenticate', () => {
+  describe('Google', () => {
     let authenticateSpy: MockInstance;
     let setStorageSpy: MockInstance;
     let fromDocSpy: MockInstance;
@@ -92,7 +93,7 @@ describe('handleRedirectCallback', async () => {
     });
 
     it('calls authenticate with satellite params, stores session, loads user', async () => {
-      await expect(handleRedirectCallback()).resolves.toBeUndefined();
+      await expect(handleRedirectCallback({google: null})).resolves.toBeUndefined();
 
       expect(authenticateSpy).toHaveBeenCalledTimes(1);
       expect(authenticateSpy).toHaveBeenCalledWith({
@@ -128,6 +129,101 @@ describe('handleRedirectCallback', async () => {
       expect(loadAuthWithUserSpy).toHaveBeenCalledWith({user: userFromDoc});
 
       expect(AuthStore.getInstance().get()).toStrictEqual(userFromDoc);
+    });
+  });
+
+  describe('GitHub', () => {
+    let authenticateSpy: MockInstance;
+    let setStorageSpy: MockInstance;
+    let fromDocSpy: MockInstance;
+    let loadAuthWithUserSpy: MockInstance;
+
+    let delegationChain: DelegationChain;
+    let sessionKey: ECDSAKeyIdentity;
+
+    beforeEach(async () => {
+      EnvStore.getInstance().set({satelliteId: 'sat-123', container: true});
+
+      delegationChain = await mockDelegationChain();
+
+      sessionKey = await ECDSAKeyIdentity.generate({extractable: false});
+
+      authenticateSpy = vi.spyOn(authLib, 'authenticate').mockResolvedValue({
+        identity: {delegationChain, sessionKey, identity: mockIdentity as DelegationIdentity},
+        data: {doc: mockUserDoc}
+      });
+
+      setStorageSpy = vi.spyOn(AuthClientStore.getInstance(), 'setAuthClientStorage');
+
+      fromDocSpy = vi.spyOn(docUtils, 'fromDoc');
+
+      loadAuthWithUserSpy = vi.spyOn(loadSvc, 'loadAuthWithUser');
+    });
+
+    it('calls authenticate with satellite params, stores session, loads user', async () => {
+      await expect(handleRedirectCallback({github: null})).resolves.toBeUndefined();
+
+      expect(authenticateSpy).toHaveBeenCalledTimes(1);
+      expect(authenticateSpy).toHaveBeenCalledWith({
+        github: {
+          redirect: null,
+          auth: {
+            satellite: {
+              satelliteId: 'sat-123',
+              container: true
+            }
+          }
+        }
+      });
+
+      expect(setStorageSpy).toHaveBeenCalledTimes(1);
+      expect(setStorageSpy).toHaveBeenCalledWith({
+        delegationChain,
+        sessionKey
+      });
+
+      expect(fromDocSpy).toHaveBeenCalledTimes(1);
+      expect(fromDocSpy).toHaveBeenCalledWith({
+        doc: mockUserDoc,
+        key: mockIdentity.getPrincipal().toText()
+      });
+
+      const userFromDoc = await fromDoc({
+        doc: mockUserDoc,
+        key: mockIdentity.getPrincipal().toText()
+      });
+
+      expect(loadAuthWithUserSpy).toHaveBeenCalledTimes(1);
+      expect(loadAuthWithUserSpy).toHaveBeenCalledWith({user: userFromDoc});
+
+      expect(AuthStore.getInstance().get()).toStrictEqual(userFromDoc);
+    });
+
+    it('calls authenticate with custom finalizeUrl when provided', async () => {
+      const customFinalizeUrl = 'https://custom.api.com/oauth/finalize';
+
+      await expect(
+        handleRedirectCallback({
+          github: {
+            options: {
+              finalizeUrl: customFinalizeUrl
+            }
+          }
+        })
+      ).resolves.toBeUndefined();
+
+      expect(authenticateSpy).toHaveBeenCalledTimes(1);
+      expect(authenticateSpy).toHaveBeenCalledWith({
+        github: {
+          redirect: {finalizeUrl: customFinalizeUrl},
+          auth: {
+            satellite: {
+              satelliteId: 'sat-123',
+              container: true
+            }
+          }
+        }
+      });
     });
   });
 });

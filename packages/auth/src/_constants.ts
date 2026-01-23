@@ -12,7 +12,7 @@ export const GOOGLE_PROVIDER: Omit<OpenIdProvider, 'clientId' | 'redirectUrl'> =
 
 export const GITHUB_PROVIDER: Omit<OpenIdGitHubProvider, 'clientId' | 'redirectUrl'> = {
   authUrl: 'https://github.com/login/oauth/authorize',
-  authScopes: ['read:user', 'repo'],
+  authScopes: ['read:user', 'read:user'],
   initUrl: 'https://api.juno.build/v1/auth/init/github',
   finalizeUrl: 'https://api.juno.build/v1/auth/finalize/github'
 };

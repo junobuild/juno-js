@@ -1,3 +1,4 @@
+import {nonNullish} from '@dfinity/utils';
 import {parseUrl} from '../../utils/url.utils';
 import type {RequestGitHubJwtWithRedirect} from './types/openid';
 
@@ -20,7 +21,9 @@ export const requestGitHubJwtWithRedirect = ({
 
   requestUrl.searchParams.set('redirect_uri', redirectUrl ?? currentUrl);
 
-  requestUrl.searchParams.set('scope', authScopes.join(' '));
+  if (nonNullish(authScopes)) {
+    requestUrl.searchParams.set('scope', authScopes.join(' '));
+  }
 
   // Used for security reasons. When the provider redirects to the application,
   // the state will be compared by the proxy backend with the value it initiated.

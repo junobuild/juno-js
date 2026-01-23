@@ -1,8 +1,9 @@
-import {isNullish} from '@dfinity/utils';
+import {isEmptyString, isNullish, notEmptyString} from '@dfinity/utils';
 import {requestJwt} from '@junobuild/auth';
-import {envGitHubClientId} from '../../core/utils/window.env.utils';
+import {envApiUrl, envGitHubClientId} from '../../core/utils/window.env.utils';
 import {SignInMissingClientIdError} from '../types/errors';
 import type {GitHubSignInRedirectOptions} from '../types/github';
+import {parseOptionalUrl} from '../utils/url.utils';
 
 export class GitHubProvider {
   /**
@@ -22,11 +23,28 @@ export class GitHubProvider {
 
     const {redirect} = options;
 
+    const initUrl = (): string | undefined => {
+      const initUrl = options?.redirect?.initUrl;
+
+      if (notEmptyString(initUrl)) {
+        return initUrl;
+      }
+
+      const apiUrl = envApiUrl();
+
+      if (isEmptyString(apiUrl)) {
+        return undefined;
+      }
+
+      return parseOptionalUrl({url: `${apiUrl}/v1/auth/init/github`})?.toString();
+    };
+
     await requestJwt({
       github: {
         redirect: {
           ...(redirect ?? {}),
-          clientId
+          clientId,
+          initUrl: initUrl()
         }
       }
     });

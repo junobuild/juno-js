@@ -1,11 +1,13 @@
-import {isNullish, nonNullish, notEmptyString} from '@dfinity/utils';
+import {isEmptyString, isNullish, nonNullish, notEmptyString} from '@dfinity/utils';
 import {authenticate} from '@junobuild/auth';
 import {EnvStore} from '../../core/stores/env.store';
+import {envApiUrl} from '../../core/utils/window.env.utils';
 import {fromDoc} from '../../datastore/utils/doc.utils';
 import {AuthClientStore} from '../stores/auth-client.store';
 import type {HandleRedirectCallbackOptions} from '../types/auth';
 import {SignInInitError} from '../types/errors';
 import type {UserData} from '../types/user';
+import {parseOptionalUrl} from '../utils/url.utils';
 import {loadAuthWithUser} from './load.services';
 
 export const handleRedirectCallback = async (options: HandleRedirectCallbackOptions) => {
@@ -26,10 +28,23 @@ export const handleRedirectCallback = async (options: HandleRedirectCallbackOpti
     }
   };
 
-  const finalizeUrl =
-    'github' in options && notEmptyString(options?.github?.options?.finalizeUrl)
-      ? options.github.options.finalizeUrl
-      : null;
+  const buildFinalizeUrl = (): string | null => {
+    const finalizeUrl = 'github' in options ? options?.github?.options?.finalizeUrl : undefined;
+
+    if (notEmptyString(finalizeUrl)) {
+      return finalizeUrl;
+    }
+
+    const apiUrl = envApiUrl();
+
+    if (isEmptyString(apiUrl)) {
+      return null;
+    }
+
+    return parseOptionalUrl({url: `${apiUrl}/v1/auth/finalize/github`})?.toString() ?? null;
+  };
+
+  const finalizeUrl = buildFinalizeUrl();
 
   const {
     identity: {delegationChain, sessionKey, identity},

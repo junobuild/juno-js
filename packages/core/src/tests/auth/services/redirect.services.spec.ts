@@ -19,6 +19,7 @@ import {AuthClientStore} from '../../../auth/stores/auth-client.store';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import {SignInInitError} from '../../../auth/types/errors';
 import {EnvStore} from '../../../core/stores/env.store';
+import * as envUtils from '../../../core/utils/window.env.utils';
 import * as docUtils from '../../../datastore/utils/doc.utils';
 import {fromDoc} from '../../../datastore/utils/doc.utils';
 import {mockIdentity} from '../../mocks/core.mock';
@@ -160,7 +161,9 @@ describe('handleRedirectCallback', async () => {
       loadAuthWithUserSpy = vi.spyOn(loadSvc, 'loadAuthWithUser');
     });
 
-    it('calls authenticate with satellite params, stores session, loads user', async () => {
+    it('calls authenticate with satellite params and null redirect when no envApiUrl', async () => {
+      vi.spyOn(envUtils, 'envApiUrl').mockReturnValue(undefined);
+
       await expect(handleRedirectCallback({github: null})).resolves.toBeUndefined();
 
       expect(authenticateSpy).toHaveBeenCalledTimes(1);
@@ -199,7 +202,27 @@ describe('handleRedirectCallback', async () => {
       expect(AuthStore.getInstance().get()).toStrictEqual(userFromDoc);
     });
 
-    it('calls authenticate with custom finalizeUrl when provided', async () => {
+    it('builds finalizeUrl from envApiUrl when custom finalizeUrl not provided', async () => {
+      vi.spyOn(envUtils, 'envApiUrl').mockReturnValue('https://api.juno.build');
+
+      await expect(handleRedirectCallback({github: null})).resolves.toBeUndefined();
+
+      expect(authenticateSpy).toHaveBeenCalledTimes(1);
+      expect(authenticateSpy).toHaveBeenCalledWith({
+        github: {
+          redirect: {finalizeUrl: 'https://api.juno.build/v1/auth/finalize/github'},
+          auth: {
+            satellite: {
+              satelliteId: 'sat-123',
+              container: true
+            }
+          }
+        }
+      });
+    });
+
+    it('uses custom finalizeUrl when provided', async () => {
+      vi.spyOn(envUtils, 'envApiUrl').mockReturnValue('https://api.juno.build');
       const customFinalizeUrl = 'https://custom.api.com/oauth/finalize';
 
       await expect(
@@ -216,6 +239,25 @@ describe('handleRedirectCallback', async () => {
       expect(authenticateSpy).toHaveBeenCalledWith({
         github: {
           redirect: {finalizeUrl: customFinalizeUrl},
+          auth: {
+            satellite: {
+              satelliteId: 'sat-123',
+              container: true
+            }
+          }
+        }
+      });
+    });
+
+    it('returns null finalizeUrl when envApiUrl is empty', async () => {
+      vi.spyOn(envUtils, 'envApiUrl').mockReturnValue('');
+
+      await expect(handleRedirectCallback({github: null})).resolves.toBeUndefined();
+
+      expect(authenticateSpy).toHaveBeenCalledTimes(1);
+      expect(authenticateSpy).toHaveBeenCalledWith({
+        github: {
+          redirect: null,
           auth: {
             satellite: {
               satelliteId: 'sat-123',

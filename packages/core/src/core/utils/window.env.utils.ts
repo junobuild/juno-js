@@ -54,3 +54,16 @@ export const envGitHubClientId = (): string | undefined => {
     ? (process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID ?? viteEnvGitHubClientId())
     : viteEnvGitHubClientId();
 };
+
+export const envApiUrl = (): string | undefined => {
+  const viteEnvApiUrl = (): string | undefined =>
+    typeof import.meta !== 'undefined' &&
+    typeof (import.meta as unknown as ImportMeta).env !== 'undefined'
+      ? ((import.meta as unknown as ImportMeta).env?.VITE_JUNO_API_URL ??
+        (import.meta as unknown as ImportMeta).env?.PUBLIC_JUNO_API_URL)
+      : undefined;
+
+  return typeof process !== 'undefined' && typeof process.env !== 'undefined'
+    ? (process.env.NEXT_PUBLIC_JUNO_API_URL ?? viteEnvApiUrl())
+    : viteEnvApiUrl();
+};

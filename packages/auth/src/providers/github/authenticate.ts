@@ -3,6 +3,7 @@ import {authenticateSession} from '../../_session';
 import {AuthenticationUndefinedJwtError} from '../../errors';
 import type {AuthenticatedSession, AuthParameters} from '../../types/authenticate';
 import type {OpenIdAuthContext} from '../../types/context';
+import {finalizeOAuth} from './_api';
 import type {AuthenticationGitHubRedirect} from './types/authenticate';
 
 export const authenticateGitHubWithRedirect = async <T extends AuthParameters>({
@@ -22,13 +23,18 @@ export const authenticateGitHubWithRedirect = async <T extends AuthParameters>({
   const code = urlParams.get('code');
   const state = urlParams.get('state');
 
-  // TODO: handle error
-  const {token: idToken} = await fetch(finalizeUrl, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({code, state})
-  }).then((r) => r.json());
+  const result = await finalizeOAuth({
+    url: finalizeUrl,
+    body: {code, state}
+  });
+
+  if ('error' in result) {
+    throw result.error;
+  }
+
+  const {
+    success: {token: idToken}
+  } = result;
 
   // id_token === jwt
   if (isEmptyString(idToken)) {

@@ -20,7 +20,7 @@ describe('github.providers', () => {
     await expect(provider.signIn({options: {}})).rejects.toThrow(SignInMissingClientIdError);
   });
 
-  it('uses options.clientId and forwards redirect options', async () => {
+  it('uses options.clientId and forwards redirect options including custom initUrl', async () => {
     vi.spyOn(envUtils, 'envGitHubClientId').mockReturnValue(undefined);
     const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
 
@@ -48,6 +48,7 @@ describe('github.providers', () => {
 
   it('falls back to env client id when not provided in options', async () => {
     vi.spyOn(envUtils, 'envGitHubClientId').mockReturnValue('env-client-abc');
+    vi.spyOn(envUtils, 'envApiUrl').mockReturnValue(undefined);
     const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
 
     const provider = new GitHubProvider();
@@ -64,7 +65,8 @@ describe('github.providers', () => {
       github: {
         redirect: {
           clientId: 'env-client-abc',
-          authScopes: ['read:user']
+          authScopes: ['read:user'],
+          initUrl: undefined
         }
       }
     });
@@ -72,6 +74,7 @@ describe('github.providers', () => {
 
   it('passes only clientId when redirect options are omitted', async () => {
     vi.spyOn(envUtils, 'envGitHubClientId').mockReturnValue('env-client-xyz');
+    vi.spyOn(envUtils, 'envApiUrl').mockReturnValue(undefined);
     const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
 
     const provider = new GitHubProvider();
@@ -81,7 +84,71 @@ describe('github.providers', () => {
     expect(requestSpy).toHaveBeenCalledWith({
       github: {
         redirect: {
-          clientId: 'env-client-xyz'
+          clientId: 'env-client-xyz',
+          initUrl: undefined
+        }
+      }
+    });
+  });
+
+  it('builds initUrl from envApiUrl when custom initUrl not provided', async () => {
+    vi.spyOn(envUtils, 'envGitHubClientId').mockReturnValue('client-abc');
+    vi.spyOn(envUtils, 'envApiUrl').mockReturnValue('https://api.juno.build');
+    const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
+
+    const provider = new GitHubProvider();
+    await provider.signIn({options: {}});
+
+    expect(requestSpy).toHaveBeenCalledTimes(1);
+    expect(requestSpy).toHaveBeenCalledWith({
+      github: {
+        redirect: {
+          clientId: 'client-abc',
+          initUrl: 'https://api.juno.build/v1/auth/init/github'
+        }
+      }
+    });
+  });
+
+  it('uses custom initUrl over envApiUrl when both are available', async () => {
+    vi.spyOn(envUtils, 'envGitHubClientId').mockReturnValue('client-abc');
+    vi.spyOn(envUtils, 'envApiUrl').mockReturnValue('https://api.juno.build');
+    const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
+
+    const provider = new GitHubProvider();
+    await provider.signIn({
+      options: {
+        redirect: {
+          initUrl: 'https://custom.api.com/oauth/init'
+        }
+      }
+    });
+
+    expect(requestSpy).toHaveBeenCalledTimes(1);
+    expect(requestSpy).toHaveBeenCalledWith({
+      github: {
+        redirect: {
+          clientId: 'client-abc',
+          initUrl: 'https://custom.api.com/oauth/init'
+        }
+      }
+    });
+  });
+
+  it('returns undefined initUrl when envApiUrl is empty', async () => {
+    vi.spyOn(envUtils, 'envGitHubClientId').mockReturnValue('client-abc');
+    vi.spyOn(envUtils, 'envApiUrl').mockReturnValue('');
+    const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
+
+    const provider = new GitHubProvider();
+    await provider.signIn({options: {}});
+
+    expect(requestSpy).toHaveBeenCalledTimes(1);
+    expect(requestSpy).toHaveBeenCalledWith({
+      github: {
+        redirect: {
+          clientId: 'client-abc',
+          initUrl: undefined
         }
       }
     });

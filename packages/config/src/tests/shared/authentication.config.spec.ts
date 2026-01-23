@@ -1,5 +1,6 @@
 import {
   AuthenticationConfigDelegationSchema,
+  AuthenticationConfigGitHubSchema,
   AuthenticationConfigGoogleSchema,
   AuthenticationConfigInternetIdentitySchema,
   AuthenticationConfigRulesSchema,
@@ -8,6 +9,10 @@ import {
 import {mockModuleIdText, mockUserIdText} from '../mocks/principal.mock';
 
 describe('authentication.config', () => {
+  const ONE_DAY_NS = 24n * 60n * 60n * 1_000_000_000n;
+  const THIRTY_DAYS_NS = 30n * ONE_DAY_NS;
+  const THIRTY_DAYS_PLUS_1_NS = THIRTY_DAYS_NS + 1n;
+
   describe('AuthenticationConfigInternetIdentitySchema', () => {
     it('accepts an empty object', () => {
       const result = AuthenticationConfigInternetIdentitySchema.safeParse({});
@@ -126,11 +131,53 @@ describe('authentication.config', () => {
     });
   });
 
-  describe('AuthenticationConfigDelegationSchema', () => {
-    const ONE_DAY_NS = 24n * 60n * 60n * 1_000_000_000n;
-    const THIRTY_DAYS_NS = 30n * ONE_DAY_NS;
-    const THIRTY_DAYS_PLUS_1_NS = THIRTY_DAYS_NS + 1n;
+  describe('AuthenticationConfigGitHubSchema', () => {
+    it('accepts valid clientId', () => {
+      const result = AuthenticationConfigGitHubSchema.safeParse({
+        clientId: 'Ov99aa88ijrrJJfwXsqW'
+      });
+      expect(result.success).toBe(true);
+    });
 
+    it('trims whitespace before validating', () => {
+      const result = AuthenticationConfigGitHubSchema.safeParse({
+        clientId: '   Ov99aa88ijrrJJfwXsqW   '
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('rejects missing clientId', () => {
+      const result = AuthenticationConfigGitHubSchema.safeParse({});
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['clientId']);
+        expect(result.error.issues[0].code).toBe('invalid_type');
+      }
+    });
+
+    it('rejects unknown keys', () => {
+      const result = AuthenticationConfigGitHubSchema.safeParse({
+        clientId: 'Ov99aa88ijrrJJfwXsqW',
+        extra: true
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].code).toBe('unrecognized_keys');
+      }
+    });
+
+    it('accepts github config with valid delegation', () => {
+      const result = AuthenticationConfigGitHubSchema.safeParse({
+        clientId: 'Ov99aa88ijrrJJfwXsqW',
+        delegation: {
+          allowedTargets: [mockUserIdText, mockModuleIdText]
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+  });
+
+  describe('AuthenticationConfigDelegationSchema', () => {
     describe('AuthenticationConfigDelegationSchema', () => {
       it('accepts an empty object (both fields optional)', () => {
         const result = AuthenticationConfigDelegationSchema.safeParse({});
@@ -406,6 +453,15 @@ describe('authentication.config', () => {
       expect(result.success).toBe(true);
     });
 
+    it('accepts valid github config', () => {
+      const result = AuthenticationConfigSchema.safeParse({
+        github: {
+          clientId: 'Ov99aa88ijrrJJfwXsqW'
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
     it('rejects invalid google clientId', () => {
       const result = AuthenticationConfigSchema.safeParse({
         google: {
@@ -415,6 +471,69 @@ describe('authentication.config', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].path).toEqual(['google', 'clientId']);
+      }
+    });
+
+    it('accepts valid full config with github', () => {
+      const result = AuthenticationConfigSchema.safeParse({
+        internetIdentity: {
+          derivationOrigin: 'https://hello.com',
+          externalAlternativeOrigins: ['https://a.com']
+        },
+        google: {
+          clientId: '1234567890-abcdef.apps.googleusercontent.com'
+        },
+        github: {
+          clientId: 'Ov99aa88ijrrJJfwXsqW'
+        },
+        rules: {
+          allowedCallers: [mockUserIdText, mockModuleIdText]
+        },
+        version: BigInt(1)
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts github config with valid delegation', () => {
+      const result = AuthenticationConfigSchema.safeParse({
+        github: {
+          clientId: 'Ov99aa88ijrrJJfwXsqW',
+          delegation: {
+            allowedTargets: [mockUserIdText, mockModuleIdText],
+            sessionDuration: ONE_DAY_NS
+          }
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('bubbles up errors from github delegation (invalid principal)', () => {
+      const result = AuthenticationConfigSchema.safeParse({
+        github: {
+          clientId: 'Ov99aa88ijrrJJfwXsqW',
+          delegation: {
+            allowedTargets: ['not-a-principal']
+          }
+        }
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['github', 'delegation', 'allowedTargets', 0]);
+      }
+    });
+
+    it('bubbles up errors from github delegation (ttl > 30 days)', () => {
+      const result = AuthenticationConfigSchema.safeParse({
+        github: {
+          clientId: 'Ov99aa88ijrrJJfwXsqW',
+          delegation: {
+            sessionDuration: THIRTY_DAYS_PLUS_1_NS
+          }
+        }
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['github', 'delegation', 'sessionDuration']);
       }
     });
 
@@ -478,6 +597,36 @@ describe('authentication.config', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].code).toBe('unrecognized_keys');
+      }
+    });
+
+    it('bubbles up errors from nested delegation (invalid principal)', () => {
+      const result = AuthenticationConfigSchema.safeParse({
+        google: {
+          clientId: '1234567890-abcdef.apps.googleusercontent.com',
+          delegation: {
+            allowedTargets: ['not-a-principal']
+          }
+        }
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['google', 'delegation', 'allowedTargets', 0]);
+      }
+    });
+
+    it('bubbles up errors from nested delegation (ttl > 30 days)', () => {
+      const result = AuthenticationConfigSchema.safeParse({
+        google: {
+          clientId: '1234567890-abcdef.apps.googleusercontent.com',
+          delegation: {
+            sessionDuration: THIRTY_DAYS_PLUS_1_NS
+          }
+        }
+      });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['google', 'delegation', 'sessionDuration']);
       }
     });
   });

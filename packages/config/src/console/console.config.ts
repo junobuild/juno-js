@@ -1,5 +1,6 @@
 import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod';
+import {type ApiConfig, ApiConfigSchema} from '../shared/api.config';
 import {
   type AuthenticationConfig,
   AuthenticationConfigSchema
@@ -53,7 +54,8 @@ export interface ConsoleIds {
 const JunoConsoleConfigBaseSchema = z.object({
   ...CliConfigSchema.shape,
   storage: StorageConfigSchema.optional(),
-  authentication: AuthenticationConfigSchema.optional()
+  authentication: AuthenticationConfigSchema.optional(),
+  api: ApiConfigSchema.optional()
 });
 
 /**
@@ -93,4 +95,11 @@ export type JunoConsoleConfig = Either<ConsoleId, ConsoleIds> &
      * @optional
      */
     authentication?: AuthenticationConfig;
+
+    /**
+     * Optional configuration for the Juno API.
+     * @type {ApiConfig}
+     * @optional
+     */
+    api?: ApiConfig;
   };

@@ -66,6 +66,39 @@ describe('console.config', () => {
       expect(result.success).toBe(true);
     });
 
+    it('accepts full config with ids and authentication config with github', () => {
+      const result = JunoConsoleConfigSchema.safeParse({
+        ids: {
+          local: mockModuleIdText,
+          production: mockModuleIdText
+        },
+        authentication: {
+          github: {
+            clientId: 'Ov99aa88ijrrJJfwXsqW'
+          }
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts full config with ids and authentication config with both google and github', () => {
+      const result = JunoConsoleConfigSchema.safeParse({
+        ids: {
+          local: mockModuleIdText,
+          production: mockModuleIdText
+        },
+        authentication: {
+          google: {
+            clientId: '1234567890-abcdef.apps.googleusercontent.com'
+          },
+          github: {
+            clientId: 'Ov99aa88ijrrJJfwXsqW'
+          }
+        }
+      });
+      expect(result.success).toBe(true);
+    });
+
     it('rejects config missing both id and ids', () => {
       const result = JunoConsoleConfigSchema.safeParse({
         source: 'dist'

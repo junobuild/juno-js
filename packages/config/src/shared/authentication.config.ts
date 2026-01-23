@@ -109,6 +109,41 @@ export interface AuthenticationConfigGoogle {
 }
 
 /**
+ * @see AuthenticationConfigGitHub
+ */
+export const AuthenticationConfigGitHubSchema = z.strictObject({
+  clientId: z
+    .string()
+    .trim()
+    .min(1, 'GitHub clientId cannot be empty')
+    .max(128, 'GitHub clientId too long'),
+  delegation: AuthenticationConfigDelegationSchema.optional()
+});
+
+/**
+ * Configure the sign-in with GitHub.
+ *
+ * @interface AuthenticationConfigGitHub
+ */
+export interface AuthenticationConfigGitHub {
+  /**
+   * The OAuth client ID from your
+   * [GitHub OAuth apps](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps).
+   *
+   * Example: `"Ov99aa88ijrrJJfwXsqW"`
+   *
+   * @type {string}
+   */
+  clientId: string;
+
+  /**
+   * Optional delegation settings for authentication.
+   * If omitted, the default delegation behavior applies.
+   */
+  delegation?: AuthenticationConfigDelegation;
+}
+
+/**
  * @see AuthenticationConfigRules
  */
 export const AuthenticationConfigRulesSchema = z.strictObject({
@@ -137,6 +172,7 @@ export interface AuthenticationConfigRules {
 export const AuthenticationConfigSchema = z.strictObject({
   internetIdentity: AuthenticationConfigInternetIdentitySchema.optional(),
   google: AuthenticationConfigGoogleSchema.optional(),
+  github: AuthenticationConfigGitHubSchema.optional(),
   rules: AuthenticationConfigRulesSchema.optional(),
   version: z.bigint().optional()
 });
@@ -159,6 +195,13 @@ export interface AuthenticationConfig {
    * @optional
    */
   google?: AuthenticationConfigGoogle;
+
+  /**
+   * Optional configuration for enabling GitHub authentication method.
+   * @type {AuthenticationConfigGitHub}
+   * @optional
+   */
+  github?: AuthenticationConfigGitHub;
 
   /**
    * Optional configuration for the rules of the authentication.

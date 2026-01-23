@@ -143,7 +143,7 @@ describe('authenticateGoogleWithRedirect', () => {
     const context = createContext('SAVED_STATE');
     window.location.hash = '';
 
-    expect(authenticateGoogleWithRedirect({auth, context})).rejects.toThrow(
+    await expect(authenticateGoogleWithRedirect({auth, context})).rejects.toThrow(
       AuthenticationUrlHashError
     );
   });
@@ -152,7 +152,7 @@ describe('authenticateGoogleWithRedirect', () => {
     const context = createContext('SAVED_STATE');
     window.location.hash = '#id_token=JWT123&state=OTHER_STATE';
 
-    expect(authenticateGoogleWithRedirect({auth, context})).rejects.toThrow(
+    await expect(authenticateGoogleWithRedirect({auth, context})).rejects.toThrow(
       AuthenticationInvalidStateError
     );
   });
@@ -161,7 +161,7 @@ describe('authenticateGoogleWithRedirect', () => {
     const context = createContext('SAVED_STATE');
     window.location.hash = '#state=SAVED_STATE';
 
-    expect(authenticateGoogleWithRedirect({auth, context})).rejects.toThrow(
+    await expect(authenticateGoogleWithRedirect({auth, context})).rejects.toThrow(
       AuthenticationUndefinedJwtError
     );
   });
@@ -184,7 +184,7 @@ describe('authenticateGoogleWithRedirect', () => {
 
     await vi.advanceTimersByTimeAsync(0);
 
-    expect(guarded).resolves.toBeInstanceOf(GetDelegationError);
+    await expect(guarded).resolves.toBeInstanceOf(GetDelegationError);
     expect(authApi.authenticate).toHaveBeenCalled();
   });
 
@@ -208,7 +208,7 @@ describe('authenticateGoogleWithRedirect', () => {
     await vi.advanceTimersByTimeAsync(3000);
     await vi.advanceTimersByTimeAsync(4000);
 
-    expect(guarded).resolves.toBeInstanceOf(GetDelegationRetryError);
+    await expect(guarded).resolves.toBeInstanceOf(GetDelegationRetryError);
     expect(authApi.getDelegation).toHaveBeenCalledTimes(5);
   });
 });

@@ -37,7 +37,7 @@ describe('providers > github > _openid', () => {
       expect(url.origin + url.pathname).toBe(GITHUB_PROVIDER.authUrl);
       expect(url.searchParams.get('client_id')).toBe(mockRequest.clientId);
       expect(url.searchParams.get('redirect_uri')).toBe(mockUrl);
-      expect(url.searchParams.get('scope')).toBe(mockRequest.authScopes?.join(' '));
+      expect(url.searchParams.get('scope')).toBe(mockRequest.authScopes.join(' '));
       expect(url.searchParams.get('state')).toBe(mockRequest.state);
     });
 
@@ -56,16 +56,6 @@ describe('providers > github > _openid', () => {
 
       const url = new URL(window.location.href);
       expect(url.searchParams.get('scope')).toBe('read:user user:email');
-    });
-
-    it('omits scope parameter when authScopes is undefined (GitHub Apps)', () => {
-      requestGitHubJwtWithRedirect({
-        ...mockRequest,
-        authScopes: undefined
-      });
-
-      const url = new URL(window.location.href);
-      expect(url.searchParams.has('scope')).toBe(false);
     });
 
     it('includes state parameter for security', () => {

@@ -39,6 +39,41 @@ describe('juno.config', () => {
       expect(result.success).toBe(true);
     });
 
+    it('accepts valid satellite + api config', () => {
+      const result = JunoConfigSchema.safeParse({
+        satellite: {
+          id: mockModuleIdText
+        },
+        api: {
+          url: 'https://custom-api.example.com'
+        }
+      });
+
+      expect(result.success).toBe(true);
+    });
+
+    it('accepts full config with satellite, orbiter, emulator and api', () => {
+      const result = JunoConfigSchema.safeParse({
+        satellite: {
+          id: mockModuleIdText
+        },
+        orbiter: {
+          id: mockModuleIdText
+        },
+        emulator: {
+          runner: {
+            type: 'docker'
+          },
+          console: {}
+        },
+        api: {
+          url: 'http://localhost:3000'
+        }
+      });
+
+      expect(result.success).toBe(true);
+    });
+
     it('rejects when satellite is missing', () => {
       const result = JunoConfigSchema.safeParse({});
       expect(result.success).toBe(false);
@@ -57,6 +92,22 @@ describe('juno.config', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].code).toBe('invalid_union');
+      }
+    });
+
+    it('rejects when api url is invalid', () => {
+      const result = JunoConfigSchema.safeParse({
+        satellite: {
+          id: mockModuleIdText
+        },
+        api: {
+          url: 'not-a-valid-url'
+        }
+      });
+
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues[0].path).toEqual(['api', 'url']);
       }
     });
 

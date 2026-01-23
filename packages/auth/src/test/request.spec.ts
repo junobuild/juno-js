@@ -2,8 +2,13 @@
  * @vitest-environment jsdom
  */
 
-import {GOOGLE_PROVIDER} from '../_constants';
+import {GITHUB_PROVIDER, GOOGLE_PROVIDER} from '../_constants';
+import * as githubApiModule from '../providers/github/_api';
 import {requestJwt} from '../request';
+
+vi.mock('../providers/github/_api', () => ({
+  initOAuth: vi.fn()
+}));
 
 describe('request', () => {
   describe('requestJwt', () => {
@@ -12,6 +17,7 @@ describe('request', () => {
     beforeEach(() => {
       vi.restoreAllMocks();
       vi.unstubAllGlobals();
+      vi.clearAllMocks();
 
       vi.stubGlobal('crypto', {
         getRandomValues: (arr: Uint8Array) => {
@@ -44,54 +50,141 @@ describe('request', () => {
       vi.unstubAllGlobals();
     });
 
-    it('should credentials branch: returns { jwt } using requestWithCredentials flow', async () => {
-      const mockGet = navigator.credentials.get as ReturnType<typeof vi.fn>;
-      mockGet.mockResolvedValue({type: 'identity', token: 'idtoken-123'});
+    describe('Google', () => {
+      it('should credentials branch: returns { jwt } using requestWithCredentials flow', async () => {
+        const mockGet = navigator.credentials.get as ReturnType<typeof vi.fn>;
+        mockGet.mockResolvedValue({type: 'identity', token: 'idtoken-123'});
 
-      const res = await requestJwt({
-        google: {
-          credentials: {
-            clientId: 'my-client',
-            loginHint: 'me@example.com',
-            domainHint: 'example.com'
+        const res = await requestJwt({
+          google: {
+            credentials: {
+              clientId: 'my-client',
+              loginHint: 'me@example.com',
+              domainHint: 'example.com'
+            }
           }
-        }
+        });
+
+        expect(res).toEqual({jwt: 'idtoken-123'});
+
+        expect(mockGet).toHaveBeenCalledTimes(1);
+
+        const opts = mockGet.mock.calls[0][0];
+        expect(opts.identity.providers[0].clientId).toBe('my-client');
+        expect(typeof opts.identity.providers[0].nonce).toBe('string');
+        expect(opts.identity.providers[0].nonce.length).toBeGreaterThan(0);
       });
 
-      expect(res).toEqual({jwt: 'idtoken-123'});
+      it('should redirect branch: sets window.location.href to provider URL with merged params', async () => {
+        const p = requestJwt({
+          google: {
+            redirect: {
+              clientId: 'my-client',
+              loginHint: 'user@example.com'
+            }
+          }
+        });
 
-      expect(mockGet).toHaveBeenCalledTimes(1);
+        await expect(p).resolves.toBeUndefined();
 
-      const opts = mockGet.mock.calls[0][0];
-      expect(opts.identity.providers[0].clientId).toBe('my-client');
-      expect(typeof opts.identity.providers[0].nonce).toBe('string');
-      expect(opts.identity.providers[0].nonce.length).toBeGreaterThan(0);
+        const url = new URL(window.location.href);
+        expect(url.origin + url.pathname).toBe(GOOGLE_PROVIDER.authUrl);
+
+        expect(url.searchParams.get('client_id')).toBe('my-client');
+        expect(url.searchParams.get('nonce')).toBe('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqo');
+        expect(url.searchParams.get('login_hint')).toBe('user@example.com');
+        expect(url.searchParams.get('scope')).toBe(GOOGLE_PROVIDER.authScopes.join(' '));
+        expect(url.searchParams.get('response_type')).toBe('code id_token');
+
+        expect(url.searchParams.get('redirect_uri')).toBe(mockUrl);
+
+        expect(url.searchParams.get('state')).toBeTruthy();
+      });
     });
 
-    it('should redirect branch: sets window.location.href to provider URL with merged params and then throws', async () => {
-      const p = requestJwt({
-        google: {
-          redirect: {
-            clientId: 'my-client',
-            loginHint: 'user@example.com'
+    describe('GitHub', () => {
+      it('should redirect branch: sets window.location.href to provider URL with merged params', async () => {
+        vi.mocked(githubApiModule.initOAuth).mockResolvedValue({
+          success: {state: 'state_abc123'}
+        });
+
+        const p = requestJwt({
+          github: {
+            redirect: {
+              clientId: 'github-client-id'
+            }
           }
-        }
+        });
+
+        await expect(p).resolves.toBeUndefined();
+
+        const url = new URL(window.location.href);
+        expect(url.origin + url.pathname).toBe(GITHUB_PROVIDER.authUrl);
+
+        expect(url.searchParams.get('client_id')).toBe('github-client-id');
+        expect(url.searchParams.get('scope')).toBe(GITHUB_PROVIDER.authScopes.join(' '));
+        expect(url.searchParams.get('redirect_uri')).toBe(mockUrl);
+        expect(url.searchParams.get('state')).toBe('state_abc123');
       });
 
-      await expect(p).resolves.toBeUndefined();
+      it('should call initOAuth with nonce parameter', async () => {
+        vi.mocked(githubApiModule.initOAuth).mockResolvedValue({
+          success: {state: 'state_xyz'}
+        });
 
-      const url = new URL(window.location.href);
-      expect(url.origin + url.pathname).toBe(GOOGLE_PROVIDER.authUrl);
+        await requestJwt({
+          github: {
+            redirect: {
+              clientId: 'github-client-id'
+            }
+          }
+        });
 
-      expect(url.searchParams.get('client_id')).toBe('my-client');
-      expect(url.searchParams.get('nonce')).toBe('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqo');
-      expect(url.searchParams.get('login_hint')).toBe('user@example.com');
-      expect(url.searchParams.get('scope')).toBe(GOOGLE_PROVIDER.authScopes.join(' '));
-      expect(url.searchParams.get('response_type')).toBe('code id_token');
+        expect(githubApiModule.initOAuth).toHaveBeenCalledTimes(1);
 
-      expect(url.searchParams.get('redirect_uri')).toBe(mockUrl);
+        const callUrl = vi.mocked(githubApiModule.initOAuth).mock.calls[0][0].url;
+        const url = new URL(callUrl);
 
-      expect(url.searchParams.get('state')).toBeTruthy();
+        expect(url.searchParams.get('nonce')).toBeTruthy();
+        expect(url.searchParams.get('nonce')).toBe('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqo');
+      });
+
+      it('should use custom initUrl when provided', async () => {
+        const customInitUrl = 'https://custom.api.com/oauth/init';
+
+        vi.mocked(githubApiModule.initOAuth).mockResolvedValue({
+          success: {state: 'state_custom'}
+        });
+
+        await requestJwt({
+          github: {
+            redirect: {
+              clientId: 'github-client-id',
+              initUrl: customInitUrl
+            }
+          }
+        });
+
+        const callUrl = vi.mocked(githubApiModule.initOAuth).mock.calls[0][0].url;
+        expect(callUrl).toContain(customInitUrl);
+      });
+
+      it('should use default initUrl when not provided', async () => {
+        vi.mocked(githubApiModule.initOAuth).mockResolvedValue({
+          success: {state: 'state_default'}
+        });
+
+        await requestJwt({
+          github: {
+            redirect: {
+              clientId: 'github-client-id'
+            }
+          }
+        });
+
+        const callUrl = vi.mocked(githubApiModule.initOAuth).mock.calls[0][0].url;
+        expect(callUrl).toContain(GITHUB_PROVIDER.initUrl);
+      });
     });
   });
 });

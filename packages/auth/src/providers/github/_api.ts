@@ -14,7 +14,8 @@ export const initOAuth = async ({
       return {error: new Error(`Failed to fetch ${url} (${result.status})`)};
     }
 
-    return await result.json();
+    const data: {state: string} = await result.json();
+    return {success: data};
   } catch (error: unknown) {
     return {error: new ApiGitHubInitError({cause: error})};
   }
@@ -39,7 +40,8 @@ export const finalizeOAuth = async ({
       return {error: new Error(`Failed to fetch ${url} (${result.status})`)};
     }
 
-    return await result.json();
+    const data: {token: string} = await result.json();
+    return {success: data};
   } catch (error: unknown) {
     return {error: new ApiGitHubFinalizeError({cause: error})};
   }

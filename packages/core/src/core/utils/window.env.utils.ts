@@ -41,3 +41,16 @@ export const envGoogleClientId = (): string | undefined => {
     ? (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? viteEnvGoogleClientId())
     : viteEnvGoogleClientId();
 };
+
+export const envGitHubClientId = (): string | undefined => {
+  const viteEnvGitHubClientId = (): string | undefined =>
+    typeof import.meta !== 'undefined' &&
+    typeof (import.meta as unknown as ImportMeta).env !== 'undefined'
+      ? ((import.meta as unknown as ImportMeta).env?.VITE_GITHUB_CLIENT_ID ??
+        (import.meta as unknown as ImportMeta).env?.PUBLIC_GITHUB_CLIENT_ID)
+      : undefined;
+
+  return typeof process !== 'undefined' && typeof process.env !== 'undefined'
+    ? (process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID ?? viteEnvGitHubClientId())
+    : viteEnvGitHubClientId();
+};

@@ -19,6 +19,7 @@ export {signUp} from './auth/services/sign-up.services';
 export type * from './auth/types/auth';
 export * from './auth/types/auth-client';
 export * from './auth/types/errors';
+export type * from './auth/types/github';
 export type * from './auth/types/google';
 export type * from './auth/types/internet-identity';
 export type * from './auth/types/progress';

@@ -11,3 +11,15 @@ export class AuthenticationUndefinedJwtError extends Error {}
 
 export class GetDelegationError extends Error {}
 export class GetDelegationRetryError extends Error {}
+
+export class ApiGitHubInitError extends Error {
+  constructor(options?: ErrorOptions) {
+    super('GitHub OAuth initialization failed', options);
+  }
+}
+
+export class ApiGitHubFinalizeError extends Error {
+  constructor(options?: ErrorOptions) {
+    super('GitHub OAuth finalization failed', options);
+  }
+}

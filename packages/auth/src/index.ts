@@ -1,5 +1,9 @@
 export * from './authenticate';
 export * from './errors';
+export type * from './providers/github/types/authenticate';
+export type * from './providers/github/types/provider';
+export type * from './providers/github/types/request';
+export type * from './providers/google/types/authenticate';
 export type * from './providers/google/types/request';
 export * from './request';
 export type * from './types/authenticate';

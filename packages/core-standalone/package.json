@@ -57,7 +57,7 @@
     "@dfinity/utils": "^4.1",
     "@icp-sdk/auth": "^5",
     "@icp-sdk/core": "^5",
-    "@junobuild/auth": "^2.1",
+    "@junobuild/auth": "^3",
     "@junobuild/errors": "*",
     "@junobuild/ic-client": "^7.1",
     "@junobuild/storage": "^2.2",

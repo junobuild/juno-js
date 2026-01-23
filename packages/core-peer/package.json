@@ -54,7 +54,7 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
-    "@junobuild/auth": "^2.1",
+    "@junobuild/auth": "^3",
     "@junobuild/errors": "*",
     "@junobuild/ic-client": "^7.1",
     "@junobuild/storage": "^2.2",

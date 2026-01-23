@@ -1,7 +1,7 @@
-// https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
 import type {OpenIdProvider} from '../../../types/provider';
 
-export type GitHubAuthScope = 'read:user' | 'repo';
+// https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
+export type GitHubAuthScope = 'read:user' | 'user:email';
 
 export interface OpenIdGitHubProvider extends Omit<OpenIdProvider, 'authScopes' | 'configUrl'> {
   // OAuth authentication scope

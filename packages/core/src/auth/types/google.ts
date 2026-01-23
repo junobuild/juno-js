@@ -1,5 +1,3 @@
-export type AuthScope = 'openid' | 'profile' | 'email';
-
 /**
  * Combination of OAuth scopes supported by Google.
  *

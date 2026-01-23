@@ -14,7 +14,7 @@ describe('providers > github > _oauth', () => {
 
   describe('initOAuth', () => {
     it('should return success with state when fetch succeeds', async () => {
-      const mockResponse = {success: {state: 'abc123'}};
+      const mockResponse = {state: 'abc123'};
 
       vi.mocked(fetch).mockResolvedValue({
         ok: true,
@@ -23,7 +23,7 @@ describe('providers > github > _oauth', () => {
 
       const result = await initOAuth({url: GITHUB_PROVIDER.initUrl});
 
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual({success: mockResponse});
       expect(fetch).toHaveBeenCalledWith(GITHUB_PROVIDER.initUrl, {credentials: 'include'});
     });
 
@@ -66,7 +66,7 @@ describe('providers > github > _oauth', () => {
     const body = {code: 'auth_code_123', state: 'abc123'};
 
     it('should return success with token when fetch succeeds', async () => {
-      const mockResponse = {success: {token: 'token_xyz'}};
+      const mockResponse = {token: 'token_xyz'};
 
       vi.mocked(fetch).mockResolvedValue({
         ok: true,
@@ -75,7 +75,7 @@ describe('providers > github > _oauth', () => {
 
       const result = await finalizeOAuth({url: GITHUB_PROVIDER.finalizeUrl, body});
 
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual({success: mockResponse});
       expect(fetch).toHaveBeenCalledWith(GITHUB_PROVIDER.finalizeUrl, {
         method: 'POST',
         credentials: 'include',

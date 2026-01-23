@@ -20,6 +20,7 @@ export const requestGitHubJwtWithRedirect = ({
 
   requestUrl.searchParams.set('redirect_uri', redirectUrl ?? currentUrl);
 
+  // Note: GitHub Apps ignore this parameter and use permissions from app settings instead
   requestUrl.searchParams.set('scope', authScopes.join(' '));
 
   // Used for security reasons. When the provider redirects to the application,

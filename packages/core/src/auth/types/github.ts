@@ -1,7 +1,6 @@
-export type AuthScope = 'openid' | 'profile' | 'email';
-
 /**
- * Combination of OAuth scopes supported by GitHub.
+ * OAuth scopes supported by GitHub.
+ * Only applicable for OAuth Apps - GitHub Apps use permissions configured in app settings.
  *
  * - `'read:user'` is always required.
  * - `'user:email'` is optional.
@@ -33,8 +32,8 @@ export interface GitHubRedirectOptions {
 
   /**
    * OAuth scopes to request.
-   * Must begin with `'openid'` and include `'profile'`, `'email'`, or both.
-   * @default ['openid', 'profile', 'email']
+   * Optional - only used for OAuth Apps. GitHub Apps ignore this parameter.
+   * @default ['read:user', 'user:email']
    */
   authScopes?: GitHubAuthScopes;
 

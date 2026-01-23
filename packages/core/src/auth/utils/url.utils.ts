@@ -3,7 +3,7 @@ export const parseOptionalUrl = ({url}: {url: string}): URL | null => {
     // Use the URL constructor, for backwards compatibility with older Android/WebView.
     return new URL(url);
   } catch (_error: unknown) {
-    console.warn('Cannot parse URL. Skipping option.', {cause: url});
+    console.warn(`Cannot parse URL ${url}. Skipping option.`);
     return null;
   }
 };

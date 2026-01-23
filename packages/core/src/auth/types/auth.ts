@@ -79,6 +79,6 @@ export type HandleRedirectCallbackOptions =
   | {google: null}
   | {
       github: {
-        options?: GitHubHandleRedirectCallbackOptions;
-      };
+        options: GitHubHandleRedirectCallbackOptions;
+      } | null;
     };

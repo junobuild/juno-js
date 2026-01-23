@@ -55,7 +55,7 @@ describe('providers > github > _openid', () => {
       requestGitHubJwtWithRedirect(mockRequest);
 
       const url = new URL(window.location.href);
-      expect(url.searchParams.get('scope')).toBe('read:user repo');
+      expect(url.searchParams.get('scope')).toBe('read:user user:email');
     });
 
     it('includes state parameter for security', () => {

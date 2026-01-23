@@ -3,7 +3,7 @@ import {toArray} from '@junobuild/utils';
 import * as userServices from '../../../auth/services/_user.services';
 import * as identityServices from '../../../auth/services/identity.services';
 import {InitError} from '../../../auth/types/errors';
-import type {Provider} from '../../../auth/types/provider';
+import type {ProviderWithoutData} from '../../../auth/types/provider';
 import * as actorApi from '../../../core/api/actor.api';
 import {mockIdentity, mockUserIdPrincipal, mockUserIdText} from '../../mocks/core.mock';
 
@@ -67,7 +67,7 @@ describe('user.services', async () => {
         set_doc: mockSetDoc
       } as any);
 
-      await userServices.initUser({provider: provider as Provider});
+      await userServices.initUser({provider: provider as ProviderWithoutData});
 
       const expectedData = await toArray({
         provider

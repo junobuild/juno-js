@@ -21,6 +21,7 @@ import {
   SignInProviderNotSupportedError,
   SignInUserInterruptError
 } from '../../../auth/types/errors';
+import type {GitHubSignInRedirectOptions} from '../../../auth/types/github';
 import type {GoogleSignInRedirectOptions} from '../../../auth/types/google';
 import {EnvStore} from '../../../core/stores/env.store';
 import {mockSatelliteId, mockUser, mockUserIdText} from '../../mocks/core.mock';
@@ -184,6 +185,30 @@ describe('sign-in.services', () => {
         expect(removeSpy).not.toHaveBeenCalled();
       });
 
+      it('should not add and remove window beforeunload guard for GitHub redirect', async () => {
+        const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
+        const removeSpy = vi
+          .spyOn(window, 'removeEventListener')
+          .mockImplementation(() => undefined);
+
+        authClientMock.isAuthenticated.mockResolvedValue(false);
+        authClientMock.login.mockImplementation(async (options) => {
+          // @ts-ignore
+          options?.onSuccess?.();
+        });
+
+        vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
+
+        await signIn({
+          github: {
+            options: {redirect: {clientId: '456'}}
+          }
+        });
+
+        expect(addSpy).not.toHaveBeenCalled();
+        expect(removeSpy).not.toHaveBeenCalled();
+      });
+
       it('call auth client with internet identity options', async () => {
         authClientMock.isAuthenticated.mockResolvedValue(false);
         const spy = authClientMock.login.mockImplementation(async (options) => {
@@ -265,6 +290,35 @@ describe('sign-in.services', () => {
 
         expect(requestSpy).toHaveBeenCalledExactlyOnceWith({
           google: {
+            redirect: options.redirect
+          }
+        });
+      });
+
+      it('should call github provider with options', async () => {
+        await loadAuth();
+
+        const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
+
+        const options: GitHubSignInRedirectOptions = {
+          redirect: {
+            clientId: 'client-xyz',
+            authScopes: ['read:user', 'user:email'],
+            redirectUrl: 'https://app.example.com/auth/callback',
+            initUrl: 'https://custom.api.com/oauth/init'
+          }
+        };
+
+        await expect(
+          signIn({
+            github: {
+              options
+            }
+          })
+        ).resolves.toBeUndefined();
+
+        expect(requestSpy).toHaveBeenCalledExactlyOnceWith({
+          github: {
             redirect: options.redirect
           }
         });

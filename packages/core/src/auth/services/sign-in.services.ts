@@ -1,4 +1,5 @@
 import {executeWithWindowGuard} from '../helpers/window.helpers';
+import {GitHubProvider} from '../providers/github.providers';
 import {GoogleProvider} from '../providers/google.providers';
 import {InternetIdentityProvider} from '../providers/internet-identity.providers';
 import {WebAuthnProvider} from '../providers/webauthn.providers';
@@ -41,6 +42,24 @@ export const signIn = async (options: SignInOptions): Promise<void> => {
 
     const fn = (): Promise<void> =>
       new GoogleProvider().signIn({
+        options: signInOptions
+      });
+
+    await signInWithContext({
+      fn,
+      context: {windowGuard: false}
+    });
+
+    return;
+  }
+
+  if ('github' in options) {
+    const {
+      github: {options: signInOptions}
+    } = options;
+
+    const fn = (): Promise<void> =>
+      new GitHubProvider().signIn({
         options: signInOptions
       });
 

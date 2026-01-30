@@ -25,9 +25,10 @@ describe('internet-identity.providers', () => {
     const provider = new InternetIdentityProvider({});
 
     const {identityProvider, windowOpenerFeatures} = provider.signInOptions({windowed: true});
+
     expect(provider.id).toBe('internet_identity');
-    expect(identityProvider).toBe('https://identity.internetcomputer.org');
-    expect(windowOpenerFeatures).toEqual(expectedWindowOpenerFeaturesDesignV1);
+    expect(identityProvider).toBe('https://id.ai');
+    expect(windowOpenerFeatures).toEqual(expectedWindowOpenerFeaturesDesignV2);
   });
 
   it('returns identityProvider for internetcomputer.org', () => {
@@ -40,14 +41,14 @@ describe('internet-identity.providers', () => {
     expect(identityProvider).toBe('https://identity.internetcomputer.org');
   });
 
-  it('returns identityProvider with internetcomputer.org for empty domain', () => {
+  it('returns identityProvider with id.ai for empty domain', () => {
     const provider = new InternetIdentityProvider({
-      domain: '' as 'internetcomputer.org'
+      domain: '' as 'id.ai'
     });
 
     const {identityProvider} = provider.signInOptions({});
     expect(provider.id).toBe('internet_identity');
-    expect(identityProvider).toBe('https://identity.internetcomputer.org');
+    expect(identityProvider).toBe('https://id.ai');
   });
 
   it('returns identityProvider for ic0.app', () => {
@@ -110,7 +111,7 @@ describe('internet-identity.providers', () => {
 
     const {identityProvider, windowOpenerFeatures} = provider.signInOptions({windowed: false});
 
-    expect(identityProvider).toMatch(/^https:\/\/identity\./);
+    expect(identityProvider).toBe('https://id.ai');
     expect(windowOpenerFeatures).toBeUndefined();
   });
 });

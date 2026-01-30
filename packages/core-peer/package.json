@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/core-peer",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "JavaScript core client for Juno (deprecated, use @junobuild/core)",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

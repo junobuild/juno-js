@@ -49,7 +49,7 @@ export const ControllerSchema = z
     updated_at: TimestampSchema,
     expires_at: TimestampSchema.optional(),
     scope: ControllerScopeSchema,
-    kind: ControllerKindSchema.optional(),
+    kind: ControllerKindSchema.optional()
   })
   .strict();
 

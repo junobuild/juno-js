@@ -3,6 +3,8 @@ export const JUNO_ERROR_CONTROLLERS_ANONYMOUS_NOT_ALLOWED =
   'juno.error.controllers.anonymous_not_allowed';
 export const JUNO_ERROR_CONTROLLERS_REVOKED_NOT_ALLOWED =
   'juno.error.controllers.revoked_not_allowed';
+export const JUNO_ERROR_CONTROLLERS_ADMIN_NO_EXPIRY = 'juno.error.controllers.admin_no_expire';
+export const JUNO_ERROR_CONTROLLERS_EXPIRY_IN_PAST = 'juno.error.controllers.expiry_in_past';
 
 export const JUNO_ERROR_MEMORY_STABLE_EXCEEDED = 'juno.error.memory.stable_exceeded';
 export const JUNO_ERROR_MEMORY_HEAP_EXCEEDED = 'juno.error.memory.heap_exceeded';

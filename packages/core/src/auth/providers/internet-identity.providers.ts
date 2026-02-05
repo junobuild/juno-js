@@ -55,12 +55,10 @@ export class InternetIdentityProvider extends AuthClientProvider {
 
       // Production
       if (isNullish(container) || container === false) {
-        const identityV1Domain = [INTERNET_COMPUTER_ORG, IC0_APP].includes(
-          this.#domain ?? INTERNET_COMPUTER_ORG
-        );
+        const identityV1Domain = [INTERNET_COMPUTER_ORG, IC0_APP].includes(this.#domain ?? ID_AI);
 
         if (isEmptyString(this.#domain)) {
-          return `https://identity.${INTERNET_COMPUTER_ORG}`;
+          return `https://${ID_AI}`;
         }
 
         if (identityV1Domain) {

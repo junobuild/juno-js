@@ -270,9 +270,9 @@ The raw user ID as a `Uint8Array`.
 
 Gets the list of admin controllers from the Satellite.
 
-| Function              | Type                                                                                                                                                                                        |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getAdminControllers` | `() => [Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; }][]` |
+| Function              | Type                                                                                                                                                                                                                                            |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getAdminControllers` | `() => [Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
 
 Returns:
 
@@ -284,9 +284,9 @@ The list of admin controllers.
 
 Gets the list of controllers from the Satellite.
 
-| Function         | Type                                                                                                                                                                                        |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getControllers` | `() => [Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; }][]` |
+| Function         | Type                                                                                                                                                                                                                                            |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getControllers` | `() => [Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
 
 Returns:
 
@@ -811,6 +811,7 @@ The current timestamp.
 - [ListOrderSchema](#gear-listorderschema)
 - [ListParamsSchema](#gear-listparamsschema)
 - [ControllerScopeSchema](#gear-controllerscopeschema)
+- [ControllerKindSchema](#gear-controllerkindschema)
 - [MetadataSchema](#gear-metadataschema)
 - [ControllerSchema](#gear-controllerschema)
 - [ControllerRecordSchema](#gear-controllerrecordschema)
@@ -1641,9 +1642,21 @@ References:
 
 References:
 
-- ControllerScopeSchema
+- ControllerScope
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L15)
+
+#### :gear: ControllerKindSchema
+
+| Constant               | Type                                                           |
+| ---------------------- | -------------------------------------------------------------- |
+| `ControllerKindSchema` | `ZodEnum<{ automation: "automation"; emulator: "emulator"; }>` |
+
+References:
+
+- ControllerKind
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L25)
 
 #### :gear: MetadataSchema
 
@@ -1655,43 +1668,43 @@ References:
 
 - MetadataSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L35)
 
 #### :gear: ControllerSchema
 
-| Constant           | Type                                                                                                                                                                                   |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllerSchema` | `ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, $strict>` |
+| Constant           | Type                                                                                                                                                                                                           |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ControllerSchema` | `ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; kind: ZodOptional<...>; }, $strict>` |
 
 References:
 
 - ControllerSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L35)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L45)
 
 #### :gear: ControllerRecordSchema
 
-| Constant                 | Type                                                                                                                                                                                                                                                                          |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllerRecordSchema` | `ZodTuple<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, $strict>], null>` |
+| Constant                 | Type                                                                                                                                                                                                                 |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ControllerRecordSchema` | `ZodTuple<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; ... 4 more ...; kind: ZodOptional<...>; }, $strict>], null>` |
 
 References:
 
 - ControllerRecordSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L79)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L94)
 
 #### :gear: ControllersSchema
 
-| Constant            | Type                                                                                                                                                                                                                                                                                    |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllersSchema` | `ZodArray<ZodTuple<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, $strict>], null>>` |
+| Constant            | Type                                                                                                                                                                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ControllersSchema` | `ZodArray<ZodTuple<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; ... 4 more ...; kind: ZodOptional<...>; }, $strict>], null>>` |
 
 References:
 
 - ControllersSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L89)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L104)
 
 #### :gear: ControllerCheckParamsSchema
 
@@ -1703,7 +1716,7 @@ References:
 
 - ControllerCheckParamsSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L114)
 
 #### :gear: CollectionParamsSchema
 
@@ -2311,26 +2324,27 @@ List results, parameterized by type of returned item.
 
 Represents a controller with access scope and associated metadata.
 
-| Property     | Type                             | Description                                                                                        |
-| ------------ | -------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `metadata`   | `[string, string][]`             | A list of key-value metadata pairs associated with the controller.                                 |
-| `created_at` | `bigint`                         | The timestamp when the controller was created.                                                     |
-| `updated_at` | `bigint`                         | The timestamp when the controller was last updated.                                                |
-| `expires_at` | `bigint or undefined`            | Optional expiration timestamp for the controller. 👉 It's a placeholder for future implementation. |
-| `scope`      | `"write" or "admin" or "submit"` | The scope assigned to the controller.                                                              |
+| Property     | Type                                      | Description                                                        |
+| ------------ | ----------------------------------------- | ------------------------------------------------------------------ |
+| `metadata`   | `[string, string][]`                      | A list of key-value metadata pairs associated with the controller. |
+| `created_at` | `bigint`                                  | The timestamp when the controller was created.                     |
+| `updated_at` | `bigint`                                  | The timestamp when the controller was last updated.                |
+| `expires_at` | `bigint or undefined`                     | Optional expiration timestamp for the controller.                  |
+| `scope`      | `"write" or "admin" or "submit"`          | The scope assigned to the controller.                              |
+| `kind`       | `"automation" or "emulator" or undefined` | An optional kind identifier of the controller.                     |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L48)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L59)
 
 #### :gear: ControllerCheckParams
 
 Represents the parameters required to perform controller checks.
 
-| Property      | Type                                                                                                                                                                                  | Description                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `caller`      | `any`                                                                                                                                                                                 | The identity of the caller to verify against the controller list. |
-| `controllers` | `[Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; }][]` | The list of controllers to check against.                         |
+| Property      | Type                                                                                                                                                                                                                                      | Description                                                       |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `caller`      | `any`                                                                                                                                                                                                                                     | The identity of the caller to verify against the controller list. |
+| `controllers` | `[Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` | The list of controllers to check against.                         |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L107)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L122)
 
 #### :gear: CollectionParams
 
@@ -2446,6 +2460,7 @@ Type representing the parameters required to make a canister call.
 - [TimestampMatcher](#gear-timestampmatcher)
 - [ListOrderField](#gear-listorderfield)
 - [ControllerScope](#gear-controllerscope)
+- [ControllerKind](#gear-controllerkind)
 - [Metadata](#gear-metadata)
 - [ControllerRecord](#gear-controllerrecord)
 - [Controllers](#gear-controllers)
@@ -3175,6 +3190,16 @@ Represents the permission scope of a controller.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L20)
 
+#### :gear: ControllerKind
+
+Represents a specific kind of controller. Meant for informational purposes.
+
+| Type             | Type                                   |
+| ---------------- | -------------------------------------- |
+| `ControllerKind` | `z.infer<typeof ControllerKindSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L30)
+
 #### :gear: Metadata
 
 Represents a single metadata entry as a key-value tuple.
@@ -3183,7 +3208,7 @@ Represents a single metadata entry as a key-value tuple.
 | ---------- | -------------------------------- |
 | `Metadata` | `z.infer<typeof MetadataSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L30)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L40)
 
 #### :gear: ControllerRecord
 
@@ -3193,7 +3218,7 @@ Represents a tuple containing the principal ID and associated controller data.
 | ------------------ | ---------------------------------------- |
 | `ControllerRecord` | `z.infer<typeof ControllerRecordSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L84)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
 
 #### :gear: Controllers
 
@@ -3203,7 +3228,7 @@ Represents a list of controllers.
 | ------------- | ----------------------------------- |
 | `Controllers` | `z.infer<typeof ControllersSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L94)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L109)
 
 #### :gear: ListStoreParams
 

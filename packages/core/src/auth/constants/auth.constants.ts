@@ -17,7 +17,6 @@ interface PopupSize {
 
 export const II_DESIGN_V1_POPUP: PopupSize = {width: 576, height: 576};
 export const II_DESIGN_V2_POPUP: PopupSize = {width: 424, height: 576};
-export const NFID_POPUP: PopupSize = {width: 505, height: 705};
 
 export const INTERNET_COMPUTER_ORG = 'internetcomputer.org';
 export const IC0_APP = 'ic0.app';

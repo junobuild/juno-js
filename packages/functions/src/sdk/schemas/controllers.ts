@@ -74,7 +74,6 @@ export interface Controller {
 
   /**
    * Optional expiration timestamp for the controller.
-   * 👉 It's a placeholder for future implementation.
    */
   expires_at?: Timestamp;
 

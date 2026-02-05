@@ -1692,7 +1692,7 @@ References:
 
 - ControllerRecordSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L95)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L94)
 
 #### :gear: ControllersSchema
 
@@ -1704,7 +1704,7 @@ References:
 
 - ControllersSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L105)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L104)
 
 #### :gear: ControllerCheckParamsSchema
 
@@ -1716,7 +1716,7 @@ References:
 
 - ControllerCheckParamsSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L115)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L114)
 
 #### :gear: CollectionParamsSchema
 
@@ -2324,14 +2324,14 @@ List results, parameterized by type of returned item.
 
 Represents a controller with access scope and associated metadata.
 
-| Property     | Type                                      | Description                                                                                        |
-| ------------ | ----------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `metadata`   | `[string, string][]`                      | A list of key-value metadata pairs associated with the controller.                                 |
-| `created_at` | `bigint`                                  | The timestamp when the controller was created.                                                     |
-| `updated_at` | `bigint`                                  | The timestamp when the controller was last updated.                                                |
-| `expires_at` | `bigint or undefined`                     | Optional expiration timestamp for the controller. 👉 It's a placeholder for future implementation. |
-| `scope`      | `"write" or "admin" or "submit"`          | The scope assigned to the controller.                                                              |
-| `kind`       | `"automation" or "emulator" or undefined` | An optional kind identifier of the controller.                                                     |
+| Property     | Type                                      | Description                                                        |
+| ------------ | ----------------------------------------- | ------------------------------------------------------------------ |
+| `metadata`   | `[string, string][]`                      | A list of key-value metadata pairs associated with the controller. |
+| `created_at` | `bigint`                                  | The timestamp when the controller was created.                     |
+| `updated_at` | `bigint`                                  | The timestamp when the controller was last updated.                |
+| `expires_at` | `bigint or undefined`                     | Optional expiration timestamp for the controller.                  |
+| `scope`      | `"write" or "admin" or "submit"`          | The scope assigned to the controller.                              |
+| `kind`       | `"automation" or "emulator" or undefined` | An optional kind identifier of the controller.                     |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L59)
 
@@ -2344,7 +2344,7 @@ Represents the parameters required to perform controller checks.
 | `caller`      | `any`                                                                                                                                                                                                                                     | The identity of the caller to verify against the controller list. |
 | `controllers` | `[Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` | The list of controllers to check against.                         |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L123)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L122)
 
 #### :gear: CollectionParams
 
@@ -3218,7 +3218,7 @@ Represents a tuple containing the principal ID and associated controller data.
 | ------------------ | ---------------------------------------- |
 | `ControllerRecord` | `z.infer<typeof ControllerRecordSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L100)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
 
 #### :gear: Controllers
 
@@ -3228,7 +3228,7 @@ Represents a list of controllers.
 | ------------- | ----------------------------------- |
 | `Controllers` | `z.infer<typeof ControllersSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L110)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L109)
 
 #### :gear: ListStoreParams
 

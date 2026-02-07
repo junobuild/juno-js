@@ -28,6 +28,11 @@
       "types": "./utils.d.ts",
       "import": "./utils.js",
       "require": "./utils.mjs"
+    },
+    "./dev": {
+      "types": "./dev.d.ts",
+      "import": "./dev.js",
+      "require": "./dev.mjs"
     }
   },
   "files": [
@@ -73,6 +78,7 @@
   "homepage": "https://juno.build",
   "peerDependencies": {
     "@dfinity/utils": "^4.1",
-    "@icp-sdk/core": "^5"
+    "@icp-sdk/core": "^5",
+    "idb-keyval": "^6.2.2"
   }
 }

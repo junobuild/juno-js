@@ -3,7 +3,6 @@
  */
 
 import {DelegationChain, DelegationIdentity, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
-import {clear} from 'idb-keyval';
 import {
   UnsafeDevIdentityInvalidIdentifierError,
   UnsafeDevIdentityNotBrowserError,
@@ -27,7 +26,7 @@ describe('Dev Identity', () => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
 
-    await clear();
+    await clearDevIdentifiers();
   });
 
   describe('generateUnsafeDevIdentity', () => {

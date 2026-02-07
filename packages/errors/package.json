@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/errors",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A collection of predefined error constants and utilities for Juno applications.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

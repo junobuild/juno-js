@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/core-standalone",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "JavaScript core client for Juno with all dependencies bundled — no peer dependencies",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -59,7 +59,7 @@
     "@icp-sdk/core": "^5",
     "@junobuild/auth": "^3",
     "@junobuild/errors": "*",
-    "@junobuild/ic-client": "^7.1",
+    "@junobuild/ic-client": "^7.2",
     "@junobuild/storage": "^2.2",
     "@junobuild/utils": "*"
   }

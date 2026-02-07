@@ -5,6 +5,7 @@
 import {AuthClient} from '@icp-sdk/auth/client';
 import * as identityLib from '@icp-sdk/core/identity';
 import * as authLib from '@junobuild/auth';
+import * as devLib from '@junobuild/ic-client/dev';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
@@ -15,6 +16,7 @@ import {createAuth, signIn} from '../../../auth/services/sign-in.services';
 import {resetAuth} from '../../../auth/services/sign-out.services';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import type {SignInOptions} from '../../../auth/types/auth';
+import {DevIdentitySignInOptions} from '../../../auth/types/dev-identity';
 import {
   SignInError,
   SignInInitError,
@@ -322,6 +324,34 @@ describe('sign-in.services', () => {
             redirect: options.redirect
           }
         });
+      });
+
+      it('should call dev provider with options', async () => {
+        await loadAuth();
+
+        const generateSpy = vi.spyOn(devLib, 'generateUnsafeDevIdentity').mockResolvedValue({
+          identity: {} as any,
+          sessionKey: {getKeyPair: vi.fn()} as any,
+          delegationChain: {toJSON: vi.fn().mockReturnValue({})} as any
+        });
+
+        authClientMock.isAuthenticated.mockResolvedValue(true);
+
+        const options: DevIdentitySignInOptions = {
+          identifier: 'alice',
+          maxTimeToLiveInMilliseconds: 24 * 60 * 60 * 1000
+        };
+
+        await expect(
+          signIn({
+            dev: {
+              options
+            }
+          })
+        ).resolves.toBeUndefined();
+
+        expect(generateSpy).toHaveBeenCalledWith(options);
+        expect(userServices.loadUser).toHaveBeenCalled();
       });
 
       it('rejects with SignInUserInterruptError if interrupted', async () => {

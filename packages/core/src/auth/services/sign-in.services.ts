@@ -1,4 +1,5 @@
 import {executeWithWindowGuard} from '../helpers/window.helpers';
+import {DevIdentityProvider} from '../providers/dev-identity.providers';
 import {GitHubProvider} from '../providers/github.providers';
 import {GoogleProvider} from '../providers/google.providers';
 import {InternetIdentityProvider} from '../providers/internet-identity.providers';
@@ -102,6 +103,28 @@ export const signIn = async (options: SignInOptions): Promise<void> => {
       });
 
     await signInWithContext({fn, context});
+
+    return;
+  }
+
+  if ('dev' in options) {
+    const {
+      dev: {options: devOptions}
+    } = options;
+
+    const {setAuthClientStorage: setStorage} = AuthClientStore.getInstance();
+
+    const fn = (): Promise<void> =>
+      new DevIdentityProvider().signIn({
+        options: devOptions,
+        initAuth: createAuth,
+        setStorage
+      });
+
+    await signInWithContext({
+      fn,
+      context: {windowGuard: false}
+    });
 
     return;
   }

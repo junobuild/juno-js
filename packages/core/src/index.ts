@@ -18,6 +18,7 @@ export {signOut} from './auth/services/sign-out.services';
 export {signUp} from './auth/services/sign-up.services';
 export type * from './auth/types/auth';
 export * from './auth/types/auth-client';
+export type * from './auth/types/dev-identity';
 export * from './auth/types/errors';
 export type * from './auth/types/github';
 export type * from './auth/types/google';

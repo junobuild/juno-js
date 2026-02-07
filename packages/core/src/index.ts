@@ -26,7 +26,7 @@ export type * from './auth/types/internet-identity';
 export type * from './auth/types/progress';
 export type * from './auth/types/provider';
 export type * from './auth/types/user';
-export type * from './auth/types/webauthn';
+export * from './auth/types/webauthn';
 export * from './auth/utils/user.utils';
 export type * from './core/types/env';
 export {ListOrder, ListPaginate, ListParams, ListResults} from './core/types/list';

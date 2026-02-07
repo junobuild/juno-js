@@ -1,3 +1,4 @@
+import type {DevIdentitySignInOptions} from './dev-identity';
 import type {GitHubHandleRedirectCallbackOptions, GitHubSignInRedirectOptions} from './github';
 import type {GoogleSignInRedirectOptions} from './google';
 import type {InternetIdentitySignInOptions} from './internet-identity';
@@ -25,6 +26,7 @@ export interface SignInContext {
  * - `github` — GitHub sign-in
  * - `internet_identity` — Internet Identity
  * - `webauthn` — WebAuthn/Passkeys
+ * - `dev` — Local development (only)
  */
 export type SignInOptions =
   | {
@@ -45,6 +47,9 @@ export type SignInOptions =
     }
   | {
       webauthn: {options?: WebAuthnSignInOptions; context?: SignInContext};
+    }
+  | {
+      dev: {options?: DevIdentitySignInOptions};
     };
 
 /**

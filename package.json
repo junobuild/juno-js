@@ -97,21 +97,6 @@
       "limit": "55 kB"
     },
     {
-      "name": "@junobuild/core-peer",
-      "path": "./packages/core-peer/dist/index.js",
-      "limit": "15 kB",
-      "ignore": [
-        "@dfinity/agent",
-        "@dfinity/candid",
-        "@dfinity/identity",
-        "@dfinity/principal",
-        "@dfinity/auth-client",
-        "@icp-sdk/core",
-        "@icp-sdk/auth",
-        "@dfinity/utils"
-      ]
-    },
-    {
       "name": "@junobuild/core-standalone",
       "path": "./packages/core-standalone/dist/index.js",
       "limit": "90 kB"

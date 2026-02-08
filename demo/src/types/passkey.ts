@@ -1,4 +1,4 @@
-import {
+import type {
   WebAuthnSignInProgressStep,
   SignProgress,
   WebAuthnSignUpProgressStep,
@@ -15,6 +15,6 @@ export type PasskeyProgress =
 
 export interface PasskeyProps {
   progress: PasskeyProgress | undefined;
-  // eslint-disable-next-line no-unused-vars
+
   onProgress: (progress: PasskeyProgress | undefined) => void;
 }

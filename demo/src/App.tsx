@@ -1,5 +1,5 @@
 import { initSatellite } from "@junobuild/core";
-import { FC, useEffect } from "react";
+import { type FC, useEffect } from "react";
 import { Auth } from "./components/Auth";
 import { Background } from "./components/Background";
 import { Footer } from "./components/Footer";

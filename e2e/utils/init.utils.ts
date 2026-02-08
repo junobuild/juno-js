@@ -1,16 +1,12 @@
 import {testWithII} from '@dfinity/internet-identity-playwright';
-import {AppPageParams} from '../page-objects/app.page';
+import type {AppPageParams} from '../page-objects/app.page';
 import {ExampleInternetIdentityPage} from '../page-objects/example.ii.page';
-import {ExamplePage} from '../page-objects/example.page';
+import type {ExamplePage} from '../page-objects/example.page';
 import {ExamplePasskeyPage} from '../page-objects/example.passkey.page';
 
-export const initTestSuiteWithInternetIdentity = (): (() => ExampleInternetIdentityPage) => {
-  return initTestSuite(ExampleInternetIdentityPage.create);
-};
+export const initTestSuiteWithInternetIdentity = (): (() => ExampleInternetIdentityPage) => initTestSuite(ExampleInternetIdentityPage.create);
 
-export const initTestSuiteWithPasskey = (): (() => ExamplePasskeyPage) => {
-  return initTestSuite(ExamplePasskeyPage.create);
-};
+export const initTestSuiteWithPasskey = (): (() => ExamplePasskeyPage) => initTestSuite(ExamplePasskeyPage.create);
 
 const initTestSuite = <T extends ExamplePage>(
   create: (params: AppPageParams) => Promise<T>

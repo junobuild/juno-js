@@ -11,26 +11,26 @@ export default defineConfig({
     collections: {
       datastore: [
         {
-          collection: 'notes',
-          read: 'managed',
-          write: 'managed',
-          memory: 'stable'
-        }
+          collection: "notes",
+          read: "managed",
+          write: "managed",
+          memory: "stable",
+        },
       ],
       storage: [
         {
-          collection: 'images',
-          read: 'managed',
-          write: 'managed',
-          memory: 'stable'
-        }
-      ]
-    }
+          collection: "images",
+          read: "managed",
+          write: "managed",
+          memory: "stable",
+        },
+      ],
+    },
   },
   emulator: {
     runner: {
-      type: "docker"
+      type: "docker",
     },
-    satellite: {}
-  }
+    satellite: {},
+  },
 });

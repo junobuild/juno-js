@@ -1,6 +1,6 @@
-import { Doc, listDocs } from "@junobuild/core";
-import { FC, useContext, useEffect, useState } from "react";
-import { NoteData } from "../types/note";
+import { type Doc, listDocs } from "@junobuild/core";
+import { type FC, useContext, useEffect, useState } from "react";
+import type { NoteData } from "../types/note";
 import { AuthContext } from "./Auth";
 import { Delete } from "./Delete";
 

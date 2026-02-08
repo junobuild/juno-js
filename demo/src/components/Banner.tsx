@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 
 export const Banner: FC = () => {
   const dev = import.meta.env.DEV;

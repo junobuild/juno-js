@@ -1,5 +1,5 @@
 import { signIn } from "@junobuild/core";
-import { FC } from "react";
+import type { FC } from "react";
 import { Button } from "./Button";
 
 export const LoginWitII: FC = () => {

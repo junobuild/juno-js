@@ -1,5 +1,5 @@
 import { deleteAsset, deleteDoc } from "@junobuild/core";
-import { FC, useState } from "react";
+import { type FC, useState } from "react";
 import type { Note } from "../types/note";
 import { Backdrop } from "./Backdrop";
 

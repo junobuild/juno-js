@@ -1,8 +1,8 @@
-import { onAuthStateChange, User } from "@junobuild/core";
+import { type User, onAuthStateChange } from "@junobuild/core";
 import {
+  type FC,
+  type PropsWithChildren,
   createContext,
-  FC,
-  PropsWithChildren,
   useEffect,
   useState,
 } from "react";

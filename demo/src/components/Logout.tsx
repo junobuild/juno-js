@@ -1,5 +1,5 @@
 import { signOut } from "@junobuild/core";
-import { FC } from "react";
+import type { FC } from "react";
 
 export const Logout: FC = () => {
   const doSignOut = (): Promise<void> => signOut();

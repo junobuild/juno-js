@@ -1,6 +1,6 @@
-import { setDoc, uploadFile, User } from "@junobuild/core";
+import { type User, setDoc, uploadFile } from "@junobuild/core";
 import { nanoid } from "nanoid";
-import { FC, useContext, useEffect, useRef, useState } from "react";
+import { type FC, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "./Auth";
 import { Backdrop } from "./Backdrop";
 import { Button } from "./Button";

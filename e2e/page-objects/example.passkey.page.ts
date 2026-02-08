@@ -1,4 +1,4 @@
-import {CDPSession, expect} from '@playwright/test';
+import {type CDPSession, expect} from '@playwright/test';
 import type {AppPageParams} from './app.page';
 import {ExamplePage} from './example.page';
 

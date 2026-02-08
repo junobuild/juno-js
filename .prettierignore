@@ -17,3 +17,5 @@ packages/**/*.d.ts
 !packages/**/declarations/**/*.mjs
 !packages/**/esbuild.mjs
 !packages/**/global.d.ts
+
+demo

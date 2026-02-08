@@ -6,9 +6,11 @@ import {
   deleteAsset,
   deleteFilteredAssets,
   deleteManyAssets,
+  downloadUrl,
   getAsset,
   getManyAssets,
   listAssets,
+  setAssetToken,
   uploadBlob,
   uploadFile
 } from '../../../storage/services/storage.services';
@@ -265,6 +267,17 @@ describe('storage.services', () => {
     expect(mockDelFilteredAssets).toHaveBeenCalledOnce();
   });
 
+  it.each([null, '1234'])('setAssetToken calls set_asset_token with token %s', async (token) => {
+    const mockSetAssetToken = vi.fn().mockResolvedValue(undefined);
+    vi.spyOn(actorApi, 'getSatelliteActor').mockResolvedValue({
+      set_asset_token: mockSetAssetToken
+    } as any);
+
+    await setAssetToken({collection, fullPath, token, satellite: mockSatellite});
+
+    expect(mockSetAssetToken).toHaveBeenCalledOnce();
+  });
+
   describe('getAsset', () => {
     let mockGetAsset: MockInstance;
     let spy: MockInstance;
@@ -354,6 +367,58 @@ describe('storage.services', () => {
 
       expect(spy).toHaveBeenCalledOnce();
       expect(spy).toHaveBeenCalledWith({satellite: mockSatellite, ...mockUpdateOptions});
+    });
+  });
+
+  describe('downloadUrl', () => {
+    it('should generate URL without token', () => {
+      const url = downloadUrl({
+        assetKey: {fullPath: '/images/logo.png'},
+        satellite: mockSatellite
+      });
+
+      expect(url).toBe('http://jx5yt-yyaaa-aaaal-abzbq-cai.localhost:5987/images/logo.png');
+    });
+
+    it('should generate URL with token', () => {
+      const url = downloadUrl({
+        assetKey: {fullPath: '/images/logo.png', token: 'test-token-123'},
+        satellite: mockSatellite
+      });
+
+      expect(url).toBe(
+        'http://jx5yt-yyaaa-aaaal-abzbq-cai.localhost:5987/images/logo.png?token=test-token-123'
+      );
+    });
+
+    it('should generate URL without satellite options', () => {
+      const url = downloadUrl({
+        assetKey: {fullPath: '/documents/file.pdf'}
+      });
+
+      // This should use default satellite URL behavior
+      expect(url).toContain('/documents/file.pdf');
+    });
+
+    it('should handle complex paths', () => {
+      const url = downloadUrl({
+        assetKey: {fullPath: '/folder/subfolder/file%20name.jpg'},
+        satellite: mockSatellite
+      });
+
+      expect(url).toBe(
+        'http://jx5yt-yyaaa-aaaal-abzbq-cai.localhost:5987/folder/subfolder/file%20name.jpg'
+      );
+    });
+
+    it('should handle undefined token', () => {
+      const url = downloadUrl({
+        assetKey: {fullPath: '/test.png', token: undefined},
+        satellite: mockSatellite
+      });
+
+      expect(url).toBe('http://jx5yt-yyaaa-aaaal-abzbq-cai.localhost:5987/test.png');
+      expect(url).not.toContain('?token=');
     });
   });
 });

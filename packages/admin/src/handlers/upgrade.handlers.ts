@@ -115,7 +115,7 @@ const upgradeCode = async ({
   ...rest
 }: Omit<UpgradeCodeParams, 'onProgress'>) => {
   const upgradeType = (): 'chunked' | 'single' => {
-    const blob = new Blob([wasmModule]);
+    const blob = new Blob([wasmModule as Uint8Array<ArrayBuffer>]);
     return blob.size > SIMPLE_INSTALL_MAX_WASM_SIZE ? 'chunked' : 'single';
   };
 

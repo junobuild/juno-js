@@ -1,4 +1,4 @@
-import {ICManagementCanister} from '@icp-sdk/canisters/ic-management';
+import {IcManagementCanister} from '@icp-sdk/canisters/ic-management';
 import {mockDeep} from 'vitest-mock-extended';
 import {upgradeSingleChunkCode} from '../../handlers/upgrade.single.handlers';
 import {mockHttpAgent, mockIdentity, mockSatelliteIdPrincipal} from '../mocks/admin.mock';
@@ -8,11 +8,11 @@ describe('upgrade.single.handlers', () => {
 
   const wasmModule = new Uint8Array([1, 2, 3]);
 
-  const icManagementMock = mockDeep<ICManagementCanister>();
+  const icManagementMock = mockDeep<IcManagementCanister>();
 
   beforeEach(() => {
     vi.restoreAllMocks();
-    vi.spyOn(ICManagementCanister, 'create').mockReturnValue(icManagementMock);
+    vi.spyOn(IcManagementCanister, 'create').mockReturnValue(icManagementMock);
   });
 
   it('calls installCode with correct parameters', async () => {

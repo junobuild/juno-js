@@ -2,22 +2,28 @@
  * @vitest-environment jsdom
  */
 
-import {requestJwtWithRedirect, requestWithCredentials} from '../_openid';
 import {
   FedCMIdentityCredentialInvalidError,
   FedCMIdentityCredentialUndefinedError,
   InvalidUrlError
-} from '../errors';
-import {RequestJwtWithCredentials, RequestJwtWithRedirect} from '../types/openid';
+} from '../../../errors';
+import {
+  requestGoogleJwtWithCredentials,
+  requestGoogleJwtWithRedirect
+} from '../../../providers/google/_openid';
+import {
+  RequestGoogleJwtWithCredentials,
+  RequestGoogleJwtWithRedirect
+} from '../../../providers/google/types/openid';
 
-describe('_openid', () => {
+describe('providers > google > _openid', () => {
   const mockState = {state: '123456'};
   const mockNonce = {nonce: 'abc'};
 
-  describe('requestJwtWithRedirect', () => {
+  describe('requestGoogleJwtWithRedirect', () => {
     const mockUrl = 'https://app.example';
 
-    const mockRequest: RequestJwtWithRedirect = {
+    const mockRequest: RequestGoogleJwtWithRedirect = {
       ...mockState,
       ...mockNonce,
       authUrl: `${mockUrl}/authorize`,
@@ -39,7 +45,7 @@ describe('_openid', () => {
 
     it('throws AuthInvalidUrlError when authUrl is invalid', async () => {
       expect(() =>
-        requestJwtWithRedirect({
+        requestGoogleJwtWithRedirect({
           ...mockRequest,
           authUrl: '::not-a-url::'
         })
@@ -47,7 +53,7 @@ describe('_openid', () => {
     });
 
     it('navigates to provider with all expected params; defaults redirect_uri to current origin', async () => {
-      requestJwtWithRedirect({
+      requestGoogleJwtWithRedirect({
         ...mockRequest,
         loginHint: 'me@example.com'
       });
@@ -67,7 +73,7 @@ describe('_openid', () => {
     });
 
     it('uses provided redirectUrl when given', async () => {
-      requestJwtWithRedirect({
+      requestGoogleJwtWithRedirect({
         ...mockRequest,
         redirectUrl: 'https://my.app/callback'
       });
@@ -77,7 +83,7 @@ describe('_openid', () => {
     });
 
     it('sets prompt=select_account when loginHint is empty/falsey per notEmptyString', async () => {
-      requestJwtWithRedirect(mockRequest);
+      requestGoogleJwtWithRedirect(mockRequest);
 
       const url = new URL(window.location.href);
       expect(url.searchParams.get('login_hint')).toBeNull();
@@ -88,7 +94,7 @@ describe('_openid', () => {
   describe('requestWithCredentials', () => {
     const mockIdentityProviderUrl = 'https://idp.example/fedcm.json';
 
-    const mockRequest: RequestJwtWithCredentials = {
+    const mockRequest: RequestGoogleJwtWithCredentials = {
       clientId: '6789543',
       configUrl: mockIdentityProviderUrl,
       ...mockNonce
@@ -116,7 +122,7 @@ describe('_openid', () => {
         token: 'idtoken-123'
       });
 
-      const token = await requestWithCredentials({
+      const token = await requestGoogleJwtWithCredentials({
         ...mockRequest,
         loginHint: 'me@example.com',
         domainHint: 'example.com'
@@ -151,7 +157,7 @@ describe('_openid', () => {
       const mockGet = navigator.credentials.get as ReturnType<typeof vi.fn>;
       mockGet.mockResolvedValue(null);
 
-      await expect(requestWithCredentials(mockRequest)).rejects.toBeInstanceOf(
+      await expect(requestGoogleJwtWithCredentials(mockRequest)).rejects.toBeInstanceOf(
         FedCMIdentityCredentialUndefinedError
       );
     });
@@ -164,7 +170,7 @@ describe('_openid', () => {
         password: 'secret'
       });
 
-      await expect(requestWithCredentials(mockRequest)).rejects.toBeInstanceOf(
+      await expect(requestGoogleJwtWithCredentials(mockRequest)).rejects.toBeInstanceOf(
         FedCMIdentityCredentialInvalidError
       );
     });
@@ -176,7 +182,7 @@ describe('_openid', () => {
         type: 'identity'
       });
 
-      await expect(requestWithCredentials(mockRequest)).rejects.toBeInstanceOf(
+      await expect(requestGoogleJwtWithCredentials(mockRequest)).rejects.toBeInstanceOf(
         FedCMIdentityCredentialInvalidError
       );
 
@@ -185,7 +191,7 @@ describe('_openid', () => {
         token: 42
       });
 
-      await expect(requestWithCredentials(mockRequest)).rejects.toBeInstanceOf(
+      await expect(requestGoogleJwtWithCredentials(mockRequest)).rejects.toBeInstanceOf(
         FedCMIdentityCredentialInvalidError
       );
     });

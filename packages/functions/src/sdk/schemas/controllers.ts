@@ -10,7 +10,7 @@ import {
 } from '../../schemas/satellite';
 
 /**
- * @see ControllerScopeSchema
+ * @see ControllerScope
  */
 export const ControllerScopeSchema = z.enum(['write', 'admin', 'submit']);
 
@@ -18,6 +18,16 @@ export const ControllerScopeSchema = z.enum(['write', 'admin', 'submit']);
  * Represents the permission scope of a controller.
  */
 export type ControllerScope = z.infer<typeof ControllerScopeSchema>;
+
+/**
+ * @see ControllerKind
+ */
+export const ControllerKindSchema = z.enum(['automation', 'emulator']);
+
+/**
+ * Represents a specific kind of controller. Meant for informational purposes.
+ */
+export type ControllerKind = z.infer<typeof ControllerKindSchema>;
 
 /**
  * @see MetadataSchema
@@ -38,7 +48,8 @@ export const ControllerSchema = z
     created_at: TimestampSchema,
     updated_at: TimestampSchema,
     expires_at: TimestampSchema.optional(),
-    scope: ControllerScopeSchema
+    scope: ControllerScopeSchema,
+    kind: ControllerKindSchema.optional()
   })
   .strict();
 
@@ -63,7 +74,6 @@ export interface Controller {
 
   /**
    * Optional expiration timestamp for the controller.
-   * 👉 It's a placeholder for future implementation.
    */
   expires_at?: Timestamp;
 
@@ -71,6 +81,11 @@ export interface Controller {
    * The scope assigned to the controller.
    */
   scope: ControllerScope;
+
+  /**
+   * An optional kind identifier of the controller.
+   */
+  kind?: ControllerKind;
 }
 
 /**

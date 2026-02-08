@@ -1,7 +1,8 @@
-import {assertNonNullish} from '@dfinity/utils';
+import {assertNonNullish, nonNullish} from '@dfinity/utils';
 import {isWebAuthnAvailable} from '@junobuild/ic-client/webauthn';
 import type {Asset, AssetEncoding, AssetKey, EncodingType, Storage} from '@junobuild/storage';
 import {initAuthTimeoutWorker} from './auth/services/auth-timout.services';
+import {initAuthBroadcastListener} from './auth/services/broadcast.services';
 import {loadAuth} from './auth/services/load.services';
 import {AuthStore} from './auth/stores/auth.store';
 import type {User} from './auth/types/user';
@@ -17,7 +18,11 @@ export {signOut} from './auth/services/sign-out.services';
 export {signUp} from './auth/services/sign-up.services';
 export type * from './auth/types/auth';
 export * from './auth/types/auth-client';
+export type * from './auth/types/dev-identity';
 export * from './auth/types/errors';
+export type * from './auth/types/github';
+export type * from './auth/types/google';
+export type * from './auth/types/internet-identity';
 export type * from './auth/types/progress';
 export type * from './auth/types/provider';
 export type * from './auth/types/user';
@@ -47,6 +52,7 @@ const parseEnv = (userEnv?: UserEnvironment): Environment => {
     satelliteId,
     internetIdentityId: userEnv?.internetIdentityId,
     workers: userEnv?.workers,
+    syncTabs: userEnv?.syncTabs,
     container
   };
 };
@@ -73,7 +79,12 @@ export const initSatellite = async (userEnv?: UserEnvironment): Promise<Unsubscr
   const authSubscribe =
     env.workers?.auth !== undefined ? initAuthTimeoutWorker(env.workers.auth) : undefined;
 
-  return [...(authSubscribe ? [authSubscribe] : [])];
+  const syncTabsSubscribe = env.syncTabs === false ? undefined : initAuthBroadcastListener();
+
+  return [
+    ...(nonNullish(authSubscribe) ? [authSubscribe] : []),
+    ...(nonNullish(syncTabsSubscribe) ? [syncTabsSubscribe] : [])
+  ];
 };
 
 /**

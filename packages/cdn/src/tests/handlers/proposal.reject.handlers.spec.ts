@@ -27,6 +27,7 @@ describe('executeRejectProposal', () => {
   const ok = Promise.resolve();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
     vi.mocked(proposals.rejectProposal).mockResolvedValue(undefined);
     vi.mocked(proposals.deleteProposalAssets).mockResolvedValue(undefined);

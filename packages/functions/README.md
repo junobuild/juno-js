@@ -53,6 +53,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [deleteAssetStore](#gear-deleteassetstore)
 - [deleteAssetsStore](#gear-deleteassetsstore)
 - [deleteFilteredAssetsStore](#gear-deletefilteredassetsstore)
+- [setAssetTokenStore](#gear-setassettokenstore)
 - [getAssetStore](#gear-getassetstore)
 - [listAssetsStore](#gear-listassetsstore)
 - [getContentChunksStore](#gear-getcontentchunksstore)
@@ -269,9 +270,9 @@ The raw user ID as a `Uint8Array`.
 
 Gets the list of admin controllers from the Satellite.
 
-| Function              | Type                                                                                                                                                                                        |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getAdminControllers` | `() => [Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; }][]` |
+| Function              | Type                                                                                                                                                                                                                                            |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getAdminControllers` | `() => [Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
 
 Returns:
 
@@ -283,9 +284,9 @@ The list of admin controllers.
 
 Gets the list of controllers from the Satellite.
 
-| Function         | Type                                                                                                                                                                                        |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getControllers` | `() => [Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; }][]` |
+| Function         | Type                                                                                                                                                                                                                                            |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getControllers` | `() => [Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
 
 Returns:
 
@@ -529,7 +530,7 @@ Returns:
 
 The total number of assets in the specified collection.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L35)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L37)
 
 #### :gear: countAssetsStore
 
@@ -547,7 +548,7 @@ Returns:
 
 The number of assets that match the provided filters.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L53)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L55)
 
 #### :gear: setAssetHandler
 
@@ -561,7 +562,7 @@ Parameters:
 
 - `params`: - The parameters required to set or update an asset.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L71)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L73)
 
 #### :gear: deleteAssetStore
 
@@ -579,7 +580,7 @@ Returns:
 
 The potentially deleted asset.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L89)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L91)
 
 #### :gear: deleteAssetsStore
 
@@ -593,7 +594,7 @@ Parameters:
 
 - `params`: - The parameters required to delete assets in the collection.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L107)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L109)
 
 #### :gear: deleteFilteredAssetsStore
 
@@ -611,7 +612,21 @@ Returns:
 
 The potential asset resulting of the deletion that match the provided filters.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L125)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L127)
+
+#### :gear: setAssetTokenStore
+
+Set or update an access token for an asset in a collection's store.
+
+| Function             | Type                                         |
+| -------------------- | -------------------------------------------- |
+| `setAssetTokenStore` | `(params: SetAssetTokenStoreParams) => void` |
+
+Parameters:
+
+- `params`: - The parameters required to set the token of the asset.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L147)
 
 #### :gear: getAssetStore
 
@@ -629,7 +644,7 @@ Returns:
 
 The asset if found, or undefined if not.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L147)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L167)
 
 #### :gear: listAssetsStore
 
@@ -647,7 +662,7 @@ Returns:
 
 A list result containing matching assets and pagination metadata.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L167)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L187)
 
 #### :gear: getContentChunksStore
 
@@ -667,7 +682,7 @@ Returns:
 
 The content chunk if found, or `undefined` if not.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L189)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/storage.sdk.ts#L209)
 
 #### :gear: call
 
@@ -765,6 +780,7 @@ The current timestamp.
 - [BatchSchema](#gear-batchschema)
 - [CommitBatchSchema](#gear-commitbatchschema)
 - [FullPathSchema](#gear-fullpathschema)
+- [AssetAccessTokenSchema](#gear-assetaccesstokenschema)
 - [OptionAssetSchema](#gear-optionassetschema)
 - [AssetAssertUploadSchema](#gear-assetassertuploadschema)
 - [OnUploadAssetContextSchema](#gear-onuploadassetcontextschema)
@@ -795,6 +811,7 @@ The current timestamp.
 - [ListOrderSchema](#gear-listorderschema)
 - [ListParamsSchema](#gear-listparamsschema)
 - [ControllerScopeSchema](#gear-controllerscopeschema)
+- [ControllerKindSchema](#gear-controllerkindschema)
 - [MetadataSchema](#gear-metadataschema)
 - [ControllerSchema](#gear-controllerschema)
 - [ControllerRecordSchema](#gear-controllerrecordschema)
@@ -818,6 +835,7 @@ The current timestamp.
 - [DeleteAssetsStoreParamsSchema](#gear-deleteassetsstoreparamsschema)
 - [DeleteFilteredAssetsStoreParamsSchema](#gear-deletefilteredassetsstoreparamsschema)
 - [DeleteAssetStoreParamsSchema](#gear-deleteassetstoreparamsschema)
+- [SetAssetTokenStoreParamsSchema](#gear-setassettokenstoreparamsschema)
 - [ListAssetsStoreParamsSchema](#gear-listassetsstoreparamsschema)
 - [GetContentChunksStoreParamsSchema](#gear-getcontentchunksstoreparamsschema)
 - [IDLTypeSchema](#gear-idltypeschema)
@@ -1256,6 +1274,18 @@ References:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L339)
 
+#### :gear: AssetAccessTokenSchema
+
+| Constant                 | Type                     |
+| ------------------------ | ------------------------ |
+| `AssetAccessTokenSchema` | `ZodOptional<ZodString>` |
+
+References:
+
+- AssetAccessToken
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L352)
+
 #### :gear: OptionAssetSchema
 
 | Constant            | Type                                                                                                                                                                                                                                                                                                        |
@@ -1266,7 +1296,7 @@ References:
 
 - OptionAsset
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L352)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L365)
 
 #### :gear: AssetAssertUploadSchema
 
@@ -1612,9 +1642,21 @@ References:
 
 References:
 
-- ControllerScopeSchema
+- ControllerScope
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L15)
+
+#### :gear: ControllerKindSchema
+
+| Constant               | Type                                                           |
+| ---------------------- | -------------------------------------------------------------- |
+| `ControllerKindSchema` | `ZodEnum<{ automation: "automation"; emulator: "emulator"; }>` |
+
+References:
+
+- ControllerKind
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L25)
 
 #### :gear: MetadataSchema
 
@@ -1626,43 +1668,43 @@ References:
 
 - MetadataSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L35)
 
 #### :gear: ControllerSchema
 
-| Constant           | Type                                                                                                                                                                                   |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllerSchema` | `ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, $strict>` |
+| Constant           | Type                                                                                                                                                                                                           |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ControllerSchema` | `ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; kind: ZodOptional<...>; }, $strict>` |
 
 References:
 
 - ControllerSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L35)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L45)
 
 #### :gear: ControllerRecordSchema
 
-| Constant                 | Type                                                                                                                                                                                                                                                                          |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllerRecordSchema` | `ZodTuple<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, $strict>], null>` |
+| Constant                 | Type                                                                                                                                                                                                                 |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ControllerRecordSchema` | `ZodTuple<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; ... 4 more ...; kind: ZodOptional<...>; }, $strict>], null>` |
 
 References:
 
 - ControllerRecordSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L79)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L94)
 
 #### :gear: ControllersSchema
 
-| Constant            | Type                                                                                                                                                                                                                                                                                    |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllersSchema` | `ZodArray<ZodTuple<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; }, $strict>], null>>` |
+| Constant            | Type                                                                                                                                                                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ControllersSchema` | `ZodArray<ZodTuple<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; ... 4 more ...; kind: ZodOptional<...>; }, $strict>], null>>` |
 
 References:
 
 - ControllersSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L89)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L104)
 
 #### :gear: ControllerCheckParamsSchema
 
@@ -1674,7 +1716,7 @@ References:
 
 - ControllerCheckParamsSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L114)
 
 #### :gear: CollectionParamsSchema
 
@@ -1818,7 +1860,7 @@ References:
 
 - GetAssetStoreParams
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L26)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L28)
 
 #### :gear: CountCollectionAssetsStoreParamsSchema
 
@@ -1830,7 +1872,7 @@ References:
 
 - CountCollectionAssetsStoreParams
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L51)
 
 #### :gear: CountAssetsStoreParamsSchema
 
@@ -1842,7 +1884,7 @@ References:
 
 - CountAssetsStoreParams
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L59)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L61)
 
 #### :gear: SetAssetHandlerParamsSchema
 
@@ -1854,7 +1896,7 @@ References:
 
 - SetAssetHandlerParams
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L69)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L71)
 
 #### :gear: DeleteAssetsStoreParamsSchema
 
@@ -1866,7 +1908,7 @@ References:
 
 - DeleteAssetsStoreParams
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L100)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L102)
 
 #### :gear: DeleteFilteredAssetsStoreParamsSchema
 
@@ -1878,7 +1920,7 @@ References:
 
 - DeleteFilteredAssetsParams
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L110)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L112)
 
 #### :gear: DeleteAssetStoreParamsSchema
 
@@ -1890,7 +1932,19 @@ References:
 
 - DeleteAssetStoreParams
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L120)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L122)
+
+#### :gear: SetAssetTokenStoreParamsSchema
+
+| Constant                         | Type                                                                                                                                                                                                     |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SetAssetTokenStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; full_path: ZodString; token: ZodOptional<...>; }, $strict>` |
+
+References:
+
+- SetAssetTokenStoreParams
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L132)
 
 #### :gear: ListAssetsStoreParamsSchema
 
@@ -1902,7 +1956,7 @@ References:
 
 - ListAssetsStoreParams
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L130)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L150)
 
 #### :gear: GetContentChunksStoreParamsSchema
 
@@ -1914,7 +1968,7 @@ References:
 
 - GetContentChunksStoreParams
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L140)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L160)
 
 #### :gear: IDLTypeSchema
 
@@ -2270,26 +2324,27 @@ List results, parameterized by type of returned item.
 
 Represents a controller with access scope and associated metadata.
 
-| Property     | Type                             | Description                                                                                        |
-| ------------ | -------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `metadata`   | `[string, string][]`             | A list of key-value metadata pairs associated with the controller.                                 |
-| `created_at` | `bigint`                         | The timestamp when the controller was created.                                                     |
-| `updated_at` | `bigint`                         | The timestamp when the controller was last updated.                                                |
-| `expires_at` | `bigint or undefined`            | Optional expiration timestamp for the controller. 👉 It's a placeholder for future implementation. |
-| `scope`      | `"write" or "admin" or "submit"` | The scope assigned to the controller.                                                              |
+| Property     | Type                                      | Description                                                        |
+| ------------ | ----------------------------------------- | ------------------------------------------------------------------ |
+| `metadata`   | `[string, string][]`                      | A list of key-value metadata pairs associated with the controller. |
+| `created_at` | `bigint`                                  | The timestamp when the controller was created.                     |
+| `updated_at` | `bigint`                                  | The timestamp when the controller was last updated.                |
+| `expires_at` | `bigint or undefined`                     | Optional expiration timestamp for the controller.                  |
+| `scope`      | `"write" or "admin" or "submit"`          | The scope assigned to the controller.                              |
+| `kind`       | `"automation" or "emulator" or undefined` | An optional kind identifier of the controller.                     |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L48)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L59)
 
 #### :gear: ControllerCheckParams
 
 Represents the parameters required to perform controller checks.
 
-| Property      | Type                                                                                                                                                                                  | Description                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `caller`      | `any`                                                                                                                                                                                 | The identity of the caller to verify against the controller list. |
-| `controllers` | `[Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; }][]` | The list of controllers to check against.                         |
+| Property      | Type                                                                                                                                                                                                                                      | Description                                                       |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `caller`      | `any`                                                                                                                                                                                                                                     | The identity of the caller to verify against the controller list. |
+| `controllers` | `[Uint8Array<ArrayBufferLike>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` | The list of controllers to check against.                         |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L107)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L122)
 
 #### :gear: CollectionParams
 
@@ -2311,7 +2366,7 @@ The parameters required to set (or update) an asset.
 | `content` | `Blob`         | The binary content of the asset. |
 | `headers` | `HeaderFields` | Associated HTTP headers.         |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L80)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L82)
 
 #### :gear: GetContentChunksStoreParams
 
@@ -2323,7 +2378,7 @@ The parameters required to retrieve a specific chunk from an asset.
 | `chunk_index` | `bigint`             | The index of the chunk to retrieve.         |
 | `memory`      | `"heap" or "stable"` | The memory type to retrieve the chunk from. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L151)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L171)
 
 #### :gear: CallParams
 
@@ -2373,6 +2428,7 @@ Type representing the parameters required to make a canister call.
 - [ChunkId](#gear-chunkid)
 - [BatchId](#gear-batchid)
 - [FullPath](#gear-fullpath)
+- [AssetAccessToken](#gear-assetaccesstoken)
 - [OptionAsset](#gear-optionasset)
 - [OnUploadAssetContext](#gear-onuploadassetcontext)
 - [OnDeleteAssetContext](#gear-ondeleteassetcontext)
@@ -2404,6 +2460,7 @@ Type representing the parameters required to make a canister call.
 - [TimestampMatcher](#gear-timestampmatcher)
 - [ListOrderField](#gear-listorderfield)
 - [ControllerScope](#gear-controllerscope)
+- [ControllerKind](#gear-controllerkind)
 - [Metadata](#gear-metadata)
 - [ControllerRecord](#gear-controllerrecord)
 - [Controllers](#gear-controllers)
@@ -2423,6 +2480,7 @@ Type representing the parameters required to make a canister call.
 - [DeleteAssetsStoreParams](#gear-deleteassetsstoreparams)
 - [DeleteFilteredAssetsStoreParams](#gear-deletefilteredassetsstoreparams)
 - [DeleteAssetStoreParams](#gear-deleteassetstoreparams)
+- [SetAssetTokenStoreParams](#gear-setassettokenstoreparams)
 - [ListAssetsStoreParams](#gear-listassetsstoreparams)
 - [IDLType](#gear-idltype)
 - [CallArg](#gear-callarg)
@@ -2803,6 +2861,19 @@ Example: `/images/a-sun-above-the-mountains.png`
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L347)
 
+#### :gear: AssetAccessToken
+
+An optional access token that can be used to make an asset private on the web.
+Private as in practically unguessable (if complex enough and not shared of course).
+
+Example: `/images/a-sun-above-the-mountains.png?token=a-super-long-unguessable-not-shared-id`
+
+| Type               | Type                  |
+| ------------------ | --------------------- |
+| `AssetAccessToken` | `string or undefined` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L360)
+
 #### :gear: OptionAsset
 
 A shorthand for an asset that might or not be defined.
@@ -2811,7 +2882,7 @@ A shorthand for an asset that might or not be defined.
 | ------------- | -------------------- |
 | `OptionAsset` | `Asset or undefined` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L357)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/storage.ts#L370)
 
 #### :gear: OnUploadAssetContext
 
@@ -3119,6 +3190,16 @@ Represents the permission scope of a controller.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L20)
 
+#### :gear: ControllerKind
+
+Represents a specific kind of controller. Meant for informational purposes.
+
+| Type             | Type                                   |
+| ---------------- | -------------------------------------- |
+| `ControllerKind` | `z.infer<typeof ControllerKindSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L30)
+
 #### :gear: Metadata
 
 Represents a single metadata entry as a key-value tuple.
@@ -3127,7 +3208,7 @@ Represents a single metadata entry as a key-value tuple.
 | ---------- | -------------------------------- |
 | `Metadata` | `z.infer<typeof MetadataSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L30)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L40)
 
 #### :gear: ControllerRecord
 
@@ -3137,7 +3218,7 @@ Represents a tuple containing the principal ID and associated controller data.
 | ------------------ | ---------------------------------------- |
 | `ControllerRecord` | `z.infer<typeof ControllerRecordSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L84)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
 
 #### :gear: Controllers
 
@@ -3147,7 +3228,7 @@ Represents a list of controllers.
 | ------------- | ----------------------------------- |
 | `Controllers` | `z.infer<typeof ControllersSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L94)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L109)
 
 #### :gear: ListStoreParams
 
@@ -3263,7 +3344,7 @@ Represents the base parameters required to access the storage and modify an asse
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `GetAssetStoreParams` | `CollectionParams and { /** * The caller who initiate the document operation. */ caller: RawUserId or UserId;  /** * The full_path identifying the asset within the collection. */ full_path: FullPath; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L34)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L36)
 
 #### :gear: CountCollectionAssetsStoreParams
 
@@ -3273,7 +3354,7 @@ The parameters required to count documents from the storage.
 | ---------------------------------- | ------------------ |
 | `CountCollectionAssetsStoreParams` | `CollectionParams` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L54)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L56)
 
 #### :gear: CountAssetsStoreParams
 
@@ -3283,7 +3364,7 @@ The parameters required to count documents from the storage.
 | ------------------------ | ----------------- |
 | `CountAssetsStoreParams` | `ListStoreParams` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L64)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L66)
 
 #### :gear: DeleteAssetsStoreParams
 
@@ -3293,7 +3374,7 @@ The parameters required to delete the assets from a collection of the storage.
 | ------------------------- | ------------------ |
 | `DeleteAssetsStoreParams` | `CollectionParams` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L105)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L107)
 
 #### :gear: DeleteFilteredAssetsStoreParams
 
@@ -3303,7 +3384,7 @@ The parameters required to delete assets from the storage.
 | --------------------------------- | ----------------- |
 | `DeleteFilteredAssetsStoreParams` | `ListStoreParams` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L115)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L117)
 
 #### :gear: DeleteAssetStoreParams
 
@@ -3313,7 +3394,17 @@ Represents the parameters required to delete an asset.
 | ------------------------ | --------------------- |
 | `DeleteAssetStoreParams` | `GetAssetStoreParams` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L125)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L127)
+
+#### :gear: SetAssetTokenStoreParams
+
+Represents the parameters required to delete an asset.
+
+| Type                       | Type                                                                                                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SetAssetTokenStoreParams` | `GetAssetStoreParams and { /** * The token to apply to the asset. * Setting `undefined` removes the protection and makes the asset public. */ token: AssetAccessToken; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L139)
 
 #### :gear: ListAssetsStoreParams
 
@@ -3323,7 +3414,7 @@ The parameters required to list documents from the datastore.
 | ----------------------- | ----------------- |
 | `ListAssetsStoreParams` | `ListStoreParams` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L135)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/storage.ts#L155)
 
 #### :gear: IDLType
 

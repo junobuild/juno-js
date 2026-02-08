@@ -5,21 +5,25 @@
 import {AuthClient} from '@icp-sdk/auth/client';
 import * as identityLib from '@icp-sdk/core/identity';
 import * as authLib from '@junobuild/auth';
+import * as devLib from '@junobuild/ic-client/dev';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
+import * as authClientServices from '../../../auth/services/_auth-client.services';
 import * as userServices from '../../../auth/services/_user.services';
 import {loadAuth} from '../../../auth/services/load.services';
 import {createAuth, signIn} from '../../../auth/services/sign-in.services';
 import {resetAuth} from '../../../auth/services/sign-out.services';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import type {SignInOptions} from '../../../auth/types/auth';
+import {DevIdentitySignInOptions} from '../../../auth/types/dev-identity';
 import {
   SignInError,
   SignInInitError,
   SignInProviderNotSupportedError,
   SignInUserInterruptError
 } from '../../../auth/types/errors';
+import type {GitHubSignInRedirectOptions} from '../../../auth/types/github';
 import type {GoogleSignInRedirectOptions} from '../../../auth/types/google';
 import {EnvStore} from '../../../core/stores/env.store';
 import {mockSatelliteId, mockUser, mockUserIdText} from '../../mocks/core.mock';
@@ -73,6 +77,19 @@ describe('sign-in.services', () => {
 
       expect(authClientMock.isAuthenticated).toHaveBeenCalled();
       expect(authStore.get()).not.toBeNull();
+    });
+
+    it('calls authenticateWithAuthClient with syncTabsOnSuccess=true on createAuth', async () => {
+      const spy = vi.spyOn(authClientServices, 'authenticateWithAuthClient');
+
+      await createAuth({provider: 'internet_identity'});
+
+      expect(spy).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          syncTabsOnSuccess: true
+        })
+      );
     });
   });
 
@@ -170,6 +187,30 @@ describe('sign-in.services', () => {
         expect(removeSpy).not.toHaveBeenCalled();
       });
 
+      it('should not add and remove window beforeunload guard for GitHub redirect', async () => {
+        const addSpy = vi.spyOn(window, 'addEventListener').mockImplementation(() => undefined);
+        const removeSpy = vi
+          .spyOn(window, 'removeEventListener')
+          .mockImplementation(() => undefined);
+
+        authClientMock.isAuthenticated.mockResolvedValue(false);
+        authClientMock.login.mockImplementation(async (options) => {
+          // @ts-ignore
+          options?.onSuccess?.();
+        });
+
+        vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
+
+        await signIn({
+          github: {
+            options: {redirect: {clientId: '456'}}
+          }
+        });
+
+        expect(addSpy).not.toHaveBeenCalled();
+        expect(removeSpy).not.toHaveBeenCalled();
+      });
+
       it('call auth client with internet identity options', async () => {
         authClientMock.isAuthenticated.mockResolvedValue(false);
         const spy = authClientMock.login.mockImplementation(async (options) => {
@@ -254,6 +295,63 @@ describe('sign-in.services', () => {
             redirect: options.redirect
           }
         });
+      });
+
+      it('should call github provider with options', async () => {
+        await loadAuth();
+
+        const requestSpy = vi.spyOn(authLib, 'requestJwt').mockResolvedValue(undefined);
+
+        const options: GitHubSignInRedirectOptions = {
+          redirect: {
+            clientId: 'client-xyz',
+            authScopes: ['read:user', 'user:email'],
+            redirectUrl: 'https://app.example.com/auth/callback',
+            initUrl: 'https://custom.api.com/oauth/init'
+          }
+        };
+
+        await expect(
+          signIn({
+            github: {
+              options
+            }
+          })
+        ).resolves.toBeUndefined();
+
+        expect(requestSpy).toHaveBeenCalledExactlyOnceWith({
+          github: {
+            redirect: options.redirect
+          }
+        });
+      });
+
+      it('should call dev provider with options', async () => {
+        await loadAuth();
+
+        const generateSpy = vi.spyOn(devLib, 'generateUnsafeDevIdentity').mockResolvedValue({
+          identity: {} as any,
+          sessionKey: {getKeyPair: vi.fn()} as any,
+          delegationChain: {toJSON: vi.fn().mockReturnValue({})} as any
+        });
+
+        authClientMock.isAuthenticated.mockResolvedValue(true);
+
+        const options: DevIdentitySignInOptions = {
+          identifier: 'alice',
+          maxTimeToLiveInMilliseconds: 24 * 60 * 60 * 1000
+        };
+
+        await expect(
+          signIn({
+            dev: {
+              options
+            }
+          })
+        ).resolves.toBeUndefined();
+
+        expect(generateSpy).toHaveBeenCalledWith(options);
+        expect(userServices.loadUser).toHaveBeenCalled();
       });
 
       it('rejects with SignInUserInterruptError if interrupted', async () => {

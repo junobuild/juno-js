@@ -7,6 +7,7 @@ import {
 
 const NNS_REQUIRED_SERVICES = ['icp'] as const;
 const CMC_REQUIRED_SERVICES = ['icp', 'nns'] as const;
+const CYCLES_REQUIRED_SERVICES = ['cmc', 'icp', 'nns'] as const;
 const NNS_DAPP_REQUIRED_SERVICES = ['cmc', 'icp', 'nns', 'sns', 'internet_identity'] as const;
 
 type EmulatorConfigInput = z.input<typeof EmulatorConfigSchema>;
@@ -24,6 +25,7 @@ const refineNetworkServices = (cfg: EmulatorConfigInput, ctx: z.RefinementCtx) =
     requiredServices:
       | typeof NNS_DAPP_REQUIRED_SERVICES
       | typeof CMC_REQUIRED_SERVICES
+      | typeof CYCLES_REQUIRED_SERVICES
       | typeof NNS_REQUIRED_SERVICES;
     key: string;
   }) => {
@@ -51,6 +53,13 @@ const refineNetworkServices = (cfg: EmulatorConfigInput, ctx: z.RefinementCtx) =
     assertServices({
       requiredServices: CMC_REQUIRED_SERVICES,
       key: 'cmc'
+    });
+  }
+
+  if (mergedServices.cycles) {
+    assertServices({
+      requiredServices: CYCLES_REQUIRED_SERVICES,
+      key: 'cycles'
     });
   }
 

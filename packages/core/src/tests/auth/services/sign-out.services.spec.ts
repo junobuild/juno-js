@@ -30,8 +30,6 @@ describe('sign-out.services', () => {
   beforeEach(async () => {
     await resetAuth();
 
-    vi.resetModules();
-
     (AuthClient.create as Mock).mockResolvedValue(authClientMock);
     vi.spyOn(userServices, 'initUser').mockResolvedValue(mockUser);
     vi.spyOn(userServices, 'loadUser').mockResolvedValue({user: mockUser, userId: mockUserIdText});
@@ -98,6 +96,8 @@ describe('sign-out.services', () => {
 
     it('should not reload if resetAuth fails', async () => {
       authClientMock.logout.mockRejectedValue(new Error('logout failed'));
+
+      createAuthClientSpy.mockClear();
 
       await expect(signOut()).rejects.toThrow('logout failed');
       expect(createAuthClientSpy).not.toHaveBeenCalled();

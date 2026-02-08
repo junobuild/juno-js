@@ -1,5 +1,5 @@
-import {isNullish, nonNullish, uint8ArrayToHexString} from '@dfinity/utils';
-import type {chunk_hash} from '@icp-sdk/canisters/ic-management';
+import {nonNullish, uint8ArrayToHexString} from '@dfinity/utils';
+import type {IcManagementDid} from '@icp-sdk/canisters/ic-management';
 import {
   clearChunkStore,
   installChunkedCode,
@@ -20,13 +20,12 @@ interface UploadChunkParams extends UploadChunkOrderId {
 }
 
 interface UploadChunkResult extends UploadChunkOrderId {
-  chunkHash: chunk_hash;
+  chunkHash: IcManagementDid.chunk_hash;
 }
 
 export const upgradeChunkedCode = async ({
   actor,
   canisterId,
-  missionControlId,
   wasmModule,
   preClearChunks: userPreClearChunks,
   ...rest
@@ -41,8 +40,7 @@ export const upgradeChunkedCode = async ({
   const {uploadChunks, storedChunks, preClearChunks, postClearChunks} = await prepareUpload({
     actor,
     wasmChunks,
-    canisterId,
-    missionControlId
+    canisterId
   });
 
   // Alright, let's start by clearing existing chunks if there are already stored chunks but, none are matching those we want to upload.
@@ -55,8 +53,7 @@ export const upgradeChunkedCode = async ({
   for await (const results of batchUploadChunks({
     uploadChunks,
     actor,
-    canisterId,
-    missionControlId
+    canisterId
   })) {
     chunkIds = [...chunkIds, ...results];
   }
@@ -71,7 +68,6 @@ export const upgradeChunkedCode = async ({
         .sort(({orderId: orderIdA}, {orderId: orderIdB}) => orderIdA - orderIdB)
         .map(({chunkHash}) => chunkHash),
       targetCanisterId: canisterId,
-      storeCanisterId: missionControlId,
       wasmModuleHash: await uint8ArraySha256(wasmModule)
     }
   });
@@ -85,7 +81,7 @@ export const upgradeChunkedCode = async ({
 const wasmToChunks = async ({
   wasmModule
 }: Pick<UpgradeCodeParams, 'wasmModule'>): Promise<UploadChunkParams[]> => {
-  const blob = new Blob([wasmModule]);
+  const blob = new Blob([wasmModule as Uint8Array<ArrayBuffer>]);
 
   const uploadChunks: UploadChunkParams[] = [];
 
@@ -118,15 +114,15 @@ interface PrepareUpload {
  * Prepares the upload of WASM chunks by determining which chunks need to be uploaded
  * and which are already stored. Additionally, it provides flags for pre-clear and post-clear operations.
  *
- * If a `missionControlId` is provided, the function fetches the already stored chunks
- * for the given mission control canister. Otherwise, it fetches them from the `canisterId`.
+ * The stored chunks are fetched from the `canisterId`.
  *
- * In the response, `preClearChunks` is set to `true` if no stored chunks matching the one we are looking to upload are detected.
- * `postClearChunks` is set to `true` if no `missionControlId` is given, as the chunks might be reused for other installations.
+ * In the response:
+ * - `preClearChunks` is set to `true` if no stored chunks matching the one we are about to upload are detected.
+ * - `postClearChunks` is always set to `true` because we are using the same canister to upload chunks. In the future,
+ * if this function is upgraded with an orchestrator that holds chunks for multiple canisters, it should be set to `false` for that use case.
  *
  * @param {Object} params - The input parameters.
  * @param {string} params.canisterId - The ID of the target canister.
- * @param {string} [params.missionControlId] - The ID of the mission control canister, if provided.
  * @param {Object} params.actor - The actor instance for interacting with the canister.
  * @param {UploadChunkParams[]} params.wasmChunks - The WASM chunks to be uploaded, including their hashes and metadata.
  *
@@ -134,15 +130,20 @@ interface PrepareUpload {
  */
 const prepareUpload = async ({
   canisterId,
-  missionControlId,
   actor,
   wasmChunks
-}: Pick<UpgradeCodeParams, 'canisterId' | 'missionControlId' | 'actor'> & {
+}: Pick<UpgradeCodeParams, 'canisterId' | 'actor'> & {
   wasmChunks: UploadChunkParams[];
 }): Promise<PrepareUpload> => {
   const stored = await storedChunksApi({
     actor,
-    canisterId: missionControlId ?? canisterId
+    // We used to store the chunks, if provided, within Mission Control. However, this module
+    // was recently merged with Monitoring and therefore no longer acts as an orchestrator.
+    // Furthermore, note that the canister holding the chunks must live on the same subnet
+    // as the canister that downloads them for the upgrade. The IC does not support this
+    // process across subnets ⚠️.
+    // See documentation: https://docs.internetcomputer.org/references/ic-interface-spec#ic-install_chunked_code
+    canisterId
   });
 
   // We convert existing hash to extend with an easily comparable sha256 as hex value
@@ -181,7 +182,7 @@ const prepareUpload = async ({
     uploadChunks,
     storedChunks,
     preClearChunks: stored.length > 0 && storedChunks.length === 0,
-    postClearChunks: isNullish(missionControlId)
+    postClearChunks: true
   };
 };
 
@@ -189,7 +190,7 @@ async function* batchUploadChunks({
   uploadChunks,
   limit = 12,
   ...rest
-}: Pick<UpgradeCodeParams, 'actor' | 'canisterId' | 'missionControlId'> & {
+}: Pick<UpgradeCodeParams, 'actor' | 'canisterId'> & {
   uploadChunks: UploadChunkParams[];
   limit?: number;
 }): AsyncGenerator<UploadChunkResult[], void> {
@@ -210,15 +211,14 @@ async function* batchUploadChunks({
 const uploadChunk = async ({
   actor,
   canisterId,
-  missionControlId,
   uploadChunk: {chunk, ...rest}
-}: Pick<UpgradeCodeParams, 'actor' | 'canisterId' | 'missionControlId'> & {
+}: Pick<UpgradeCodeParams, 'actor' | 'canisterId'> & {
   uploadChunk: UploadChunkParams;
 }): Promise<UploadChunkResult> => {
   const chunkHash = await uploadChunkApi({
     actor,
     chunk: {
-      canisterId: missionControlId ?? canisterId,
+      canisterId,
       chunk: new Uint8Array(await chunk.arrayBuffer())
     }
   });

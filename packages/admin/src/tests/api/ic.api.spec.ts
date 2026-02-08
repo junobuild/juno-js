@@ -1,6 +1,6 @@
 import {
   type CanisterStatusResponse,
-  ICManagementCanister,
+  IcManagementCanister,
   type InstallChunkedCodeParams,
   InstallCodeParams,
   type UploadChunkParams
@@ -32,17 +32,24 @@ vi.mock('@junobuild/ic-client/actor', () => {
 vi.mock('@icp-sdk/core/agent', () => {
   return {
     CanisterStatus: {
-      request: vi.fn()
+      request: vi.fn(),
+      CustomPath: class CustomPath {
+        constructor(
+          public key: string,
+          public path: string,
+          public decodeStrategy: string
+        ) {}
+      }
     }
   };
 });
 
 describe('ic.api', () => {
-  const icManagementMock = mockDeep<ICManagementCanister>();
+  const icManagementMock = mockDeep<IcManagementCanister>();
 
   beforeEach(() => {
     vi.restoreAllMocks();
-    vi.spyOn(ICManagementCanister, 'create').mockReturnValue(icManagementMock);
+    vi.spyOn(IcManagementCanister, 'create').mockReturnValue(icManagementMock);
   });
 
   describe('canisterStop', () => {
@@ -211,7 +218,7 @@ describe('ic.api', () => {
         canisterId: mockSatelliteIdPrincipal
       });
 
-      expect(canisterStatusMock).toHaveBeenCalledWith(mockSatelliteIdPrincipal);
+      expect(canisterStatusMock).toHaveBeenCalledWith({canisterId: mockSatelliteIdPrincipal});
       expect(result).toEqual(response);
     });
 

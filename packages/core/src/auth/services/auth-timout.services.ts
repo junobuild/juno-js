@@ -25,7 +25,6 @@ export const initAuthTimeoutWorker = (auth: EnvironmentWorker): Unsubscribe => {
         return;
       case 'junoDelegationRemainingTime':
         emit({message: 'junoDelegationRemainingTime', detail: value?.authRemainingTime});
-        return;
     }
   };
 

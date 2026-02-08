@@ -1,5 +1,5 @@
 import {hexStringToUint8Array} from '@dfinity/utils';
-import {ICManagementCanister, type CanisterStatusResponse} from '@icp-sdk/canisters/ic-management';
+import {IcManagementCanister, type CanisterStatusResponse} from '@icp-sdk/canisters/ic-management';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
 import {mockDeep} from 'vitest-mock-extended';
 import {UpgradeCodeUnchangedError} from '../../errors/upgrade.errors';
@@ -13,11 +13,12 @@ describe('upgrade.handlers', () => {
 
   const wasmModule = new Uint8Array([1, 2, 3]);
 
-  const icManagementMock = mockDeep<ICManagementCanister>();
+  const icManagementMock = mockDeep<IcManagementCanister>();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
-    vi.spyOn(ICManagementCanister, 'create').mockReturnValue(icManagementMock);
+    vi.spyOn(IcManagementCanister, 'create').mockReturnValue(icManagementMock);
   });
 
   it('calls all upgrade steps successfully', async () => {

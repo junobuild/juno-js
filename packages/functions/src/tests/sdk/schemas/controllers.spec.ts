@@ -9,7 +9,7 @@ import {mockRawUserId, mockUserIdText} from '../../mocks/controllers.mock';
 
 describe('controllers', () => {
   describe('ControllerSchema', () => {
-    const validController = {
+    const validFullController = {
       metadata: [
         ['role', 'admin'],
         ['env', 'prod']
@@ -17,19 +17,21 @@ describe('controllers', () => {
       created_at: BigInt(1711900000000),
       updated_at: BigInt(1711905000000),
       expires_at: BigInt(1719999999999),
-      scope: 'admin'
+      scope: 'admin',
+      kind: 'automation'
     };
 
     it('parses a valid controller', () => {
-      const result = ControllerSchema.parse(validController);
+      const result = ControllerSchema.parse(validFullController);
       expect(result.scope).toBe('admin');
+      expect(result.kind).toBe('automation');
       expect(result.metadata.length).toBe(2);
     });
 
     it('fails if metadata is not an array of tuples', () => {
       expect(() =>
         ControllerSchema.parse({
-          ...validController,
+          ...validFullController,
           metadata: {role: 'admin'}
         })
       ).toThrow();
@@ -38,23 +40,38 @@ describe('controllers', () => {
     it('fails if created_at is not a bigint', () => {
       expect(() =>
         ControllerSchema.parse({
-          ...validController,
+          ...validFullController,
           created_at: 1234567890
         })
       ).toThrow();
     });
 
     it('accepts missing expires_at (optional)', () => {
-      const {expires_at: _, ...withoutExpires} = validController;
+      const {expires_at: _, ...withoutExpires} = validFullController;
       const result = ControllerSchema.parse(withoutExpires);
       expect(result.expires_at).toBeUndefined();
+    });
+
+    it('accepts missing kind (optional)', () => {
+      const {kind: _, ...withoutKind} = validFullController;
+      const result = ControllerSchema.parse(withoutKind);
+      expect(result.kind).toBeUndefined();
     });
 
     it('fails if scope is not in enum', () => {
       expect(() =>
         ControllerSchema.parse({
-          ...validController,
+          ...validFullController,
           scope: 'superadmin'
+        })
+      ).toThrow();
+    });
+
+    it('fails if kind is not in enum', () => {
+      expect(() =>
+        ControllerSchema.parse({
+          ...validFullController,
+          kind: 'test'
         })
       ).toThrow();
     });

@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import {type ApiConfig, ApiConfigSchema} from '../shared/api.config';
 import {type EmulatorConfig, EmulatorConfigSchema} from './configs/emulator.config';
 import {type OrbiterConfig, OrbiterConfigSchema} from './configs/orbiter.config';
 import {type SatelliteConfig, SatelliteConfigOptionsSchema} from './configs/satellite.config';
@@ -9,7 +10,8 @@ import {type SatelliteConfig, SatelliteConfigOptionsSchema} from './configs/sate
 export const JunoConfigSchema = z.strictObject({
   satellite: SatelliteConfigOptionsSchema,
   orbiter: OrbiterConfigSchema.optional(),
-  emulator: EmulatorConfigSchema.optional()
+  emulator: EmulatorConfigSchema.optional(),
+  api: ApiConfigSchema.optional()
 });
 
 /**
@@ -34,4 +36,11 @@ export interface JunoConfig {
    * Your options for the emulator.
    */
   emulator?: EmulatorConfig;
+
+  /**
+   * Optional configuration for the Juno API.
+   * @type {ApiConfig}
+   * @optional
+   */
+  api?: ApiConfig;
 }

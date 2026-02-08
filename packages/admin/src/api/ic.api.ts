@@ -1,12 +1,9 @@
 import {
   type CanisterStatusResponse,
-  type chunk_hash,
-  ICManagementCanister,
+  IcManagementCanister,
+  type IcManagementDid,
   type InstallChunkedCodeParams,
   type InstallCodeParams,
-  type list_canister_snapshots_result,
-  type snapshot_id,
-  type take_canister_snapshot_result,
   type UploadChunkParams
 } from '@icp-sdk/canisters/ic-management';
 import {CanisterStatus} from '@icp-sdk/core/agent';
@@ -22,7 +19,7 @@ export const canisterStop = async ({
 }): Promise<void> => {
   const agent = await useOrInitAgent(actor);
 
-  const {stopCanister} = ICManagementCanister.create({
+  const {stopCanister} = IcManagementCanister.create({
     agent
   });
 
@@ -38,7 +35,7 @@ export const canisterStart = async ({
 }): Promise<void> => {
   const agent = await useOrInitAgent(actor);
 
-  const {startCanister} = ICManagementCanister.create({
+  const {startCanister} = IcManagementCanister.create({
     agent
   });
 
@@ -54,7 +51,7 @@ export const installCode = async ({
 }): Promise<void> => {
   const agent = await useOrInitAgent(actor);
 
-  const {installCode} = ICManagementCanister.create({
+  const {installCode} = IcManagementCanister.create({
     agent
   });
 
@@ -67,10 +64,10 @@ export const storedChunks = async ({
 }: {
   actor: ActorParameters;
   canisterId: Principal;
-}): Promise<chunk_hash[]> => {
+}): Promise<IcManagementDid.chunk_hash[]> => {
   const agent = await useOrInitAgent(actor);
 
-  const {storedChunks} = ICManagementCanister.create({
+  const {storedChunks} = IcManagementCanister.create({
     agent
   });
 
@@ -86,7 +83,7 @@ export const clearChunkStore = async ({
 }): Promise<void> => {
   const agent = await useOrInitAgent(actor);
 
-  const {clearChunkStore} = ICManagementCanister.create({
+  const {clearChunkStore} = IcManagementCanister.create({
     agent
   });
 
@@ -99,10 +96,10 @@ export const uploadChunk = async ({
 }: {
   actor: ActorParameters;
   chunk: UploadChunkParams;
-}): Promise<chunk_hash> => {
+}): Promise<IcManagementDid.chunk_hash> => {
   const agent = await useOrInitAgent(actor);
 
-  const {uploadChunk} = ICManagementCanister.create({
+  const {uploadChunk} = IcManagementCanister.create({
     agent
   });
 
@@ -118,7 +115,7 @@ export const installChunkedCode = async ({
 }): Promise<void> => {
   const agent = await useOrInitAgent(actor);
 
-  const {installChunkedCode} = ICManagementCanister.create({
+  const {installChunkedCode} = IcManagementCanister.create({
     agent
   });
 
@@ -134,11 +131,11 @@ export const canisterStatus = async ({
 }): Promise<CanisterStatusResponse> => {
   const agent = await useOrInitAgent(actor);
 
-  const {canisterStatus} = ICManagementCanister.create({
+  const {canisterStatus} = IcManagementCanister.create({
     agent
   });
 
-  return canisterStatus(canisterId);
+  return canisterStatus({canisterId});
 };
 
 export const canisterMetadata = async ({
@@ -159,14 +156,7 @@ export const canisterMetadata = async ({
   const result = await CanisterStatus.request({
     canisterId: canisterId instanceof Principal ? canisterId : Principal.from(canisterId),
     agent,
-    paths: [
-      {
-        kind: 'metadata',
-        key: path,
-        path,
-        decodeStrategy: 'utf-8'
-      }
-    ]
+    paths: [new CanisterStatus.CustomPath(path, path, 'utf-8')]
   });
 
   // Redo console.warn
@@ -181,10 +171,10 @@ export const listCanisterSnapshots = async ({
 }: {
   actor: ActorParameters;
   canisterId: Principal;
-}): Promise<list_canister_snapshots_result> => {
+}): Promise<IcManagementDid.list_canister_snapshots_result> => {
   const agent = await useOrInitAgent(actor);
 
-  const {listCanisterSnapshots} = ICManagementCanister.create({
+  const {listCanisterSnapshots} = IcManagementCanister.create({
     agent
   });
 
@@ -197,11 +187,11 @@ export const takeCanisterSnapshot = async ({
 }: {
   actor: ActorParameters;
   canisterId: Principal;
-  snapshotId?: snapshot_id;
-}): Promise<take_canister_snapshot_result> => {
+  snapshotId?: IcManagementDid.snapshot_id;
+}): Promise<IcManagementDid.take_canister_snapshot_result> => {
   const agent = await useOrInitAgent(actor);
 
-  const {takeCanisterSnapshot} = ICManagementCanister.create({
+  const {takeCanisterSnapshot} = IcManagementCanister.create({
     agent
   });
 

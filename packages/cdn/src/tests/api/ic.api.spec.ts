@@ -1,4 +1,4 @@
-import {ICManagementCanister} from '@icp-sdk/canisters/ic-management';
+import {IcManagementCanister} from '@icp-sdk/canisters/ic-management';
 import {mockDeep} from 'vitest-mock-extended';
 import {createSnapshot} from '../../api/ic.api';
 import {CdnParameters} from '../../types/actor.params';
@@ -18,15 +18,16 @@ describe('ic.api', () => {
   };
 
   describe('createSnapshot', () => {
-    const icManagementMock = mockDeep<ICManagementCanister>();
+    const icManagementMock = mockDeep<IcManagementCanister>();
 
     const mockSnapshotId = Uint8Array.from([1, 2, 3]);
     const mockSnapshot = {id: mockSnapshotId, total_size: 123n, taken_at_timestamp: 456n};
 
     beforeEach(() => {
+      vi.clearAllMocks();
       vi.restoreAllMocks();
 
-      vi.spyOn(ICManagementCanister, 'create').mockReturnValue(icManagementMock);
+      vi.spyOn(IcManagementCanister, 'create').mockReturnValue(icManagementMock);
     });
 
     it('creates snapshot for a satellite canister (Principal id) and passes first snapshot id', async () => {

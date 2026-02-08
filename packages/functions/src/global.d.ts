@@ -4,6 +4,7 @@ import type {DelDoc, Doc, OptionDoc, RawData, SetDoc} from './schemas/db';
 import type {ListParams, ListResults} from './schemas/list';
 import type {Collection, Key, RawPrincipal, RawUserId} from './schemas/satellite';
 import type {
+  AssetAccessToken,
   AssetEncoding,
   AssetKey,
   AssetNoContent,
@@ -101,6 +102,12 @@ declare global {
     chunk_index: bigint,
     memory: Memory
   ): Blob | undefined;
+  function __juno_satellite_storage_set_asset_token_store(
+    caller: RawUserId,
+    collection: Collection,
+    full_path: FullPath,
+    token: AssetAccessToken
+  ): void;
 
   function __ic_cdk_id(): RawPrincipal;
   function __ic_cdk_time(): bigint;

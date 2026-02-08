@@ -10,6 +10,7 @@ describe('auth-timeout.services', () => {
   let mockWorkerInstance: Worker;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
 
     mockPostMessage = vi.fn();
@@ -18,10 +19,10 @@ describe('auth-timeout.services', () => {
       onmessage: null
     } as unknown as Worker;
 
-    vi.stubGlobal(
-      'Worker',
-      vi.fn(() => mockWorkerInstance)
-    );
+    const WorkerMock = vi.fn(function (this: any, _url: string) {
+      return mockWorkerInstance;
+    }) as unknown as typeof Worker;
+    vi.stubGlobal('Worker', WorkerMock);
 
     AuthStore.getInstance().reset();
   });

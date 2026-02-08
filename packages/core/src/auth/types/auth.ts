@@ -1,3 +1,5 @@
+import type {DevIdentitySignInOptions} from './dev-identity';
+import type {GitHubHandleRedirectCallbackOptions, GitHubSignInRedirectOptions} from './github';
 import type {GoogleSignInRedirectOptions} from './google';
 import type {InternetIdentitySignInOptions} from './internet-identity';
 import type {WebAuthnSignInOptions, WebAuthnSignUpOptions} from './webauthn';
@@ -21,13 +23,20 @@ export interface SignInContext {
  * Defines which provider to use for signing in and its associated options.
  *
  * - `google` — Google sign-in
+ * - `github` — GitHub sign-in
  * - `internet_identity` — Internet Identity
  * - `webauthn` — WebAuthn/Passkeys
+ * - `dev` — Local development (only)
  */
 export type SignInOptions =
   | {
       google: {
         options?: GoogleSignInRedirectOptions;
+      };
+    }
+  | {
+      github: {
+        options?: GitHubSignInRedirectOptions;
       };
     }
   | {
@@ -38,6 +47,9 @@ export type SignInOptions =
     }
   | {
       webauthn: {options?: WebAuthnSignInOptions; context?: SignInContext};
+    }
+  | {
+      dev: {options?: DevIdentitySignInOptions};
     };
 
 /**
@@ -61,3 +73,17 @@ export interface SignOutOptions {
    */
   windowReload?: boolean;
 }
+
+/**
+ * Defines which redirect should be handled.
+ *
+ * - `google`: Google sign-in
+ * - `github`: GitHub sign-in
+ */
+export type HandleRedirectCallbackOptions =
+  | {google: null}
+  | {
+      github: {
+        options: GitHubHandleRedirectCallbackOptions;
+      } | null;
+    };

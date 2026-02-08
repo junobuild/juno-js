@@ -1,9 +1,4 @@
-import {
-  type list_canister_snapshots_result,
-  type snapshot_id,
-  type take_canister_snapshot_result,
-  ICManagementCanister
-} from '@icp-sdk/canisters/ic-management';
+import {type IcManagementDid, IcManagementCanister} from '@icp-sdk/canisters/ic-management';
 import {Principal} from '@icp-sdk/core/principal';
 import {type ActorParameters, useOrInitAgent} from '@junobuild/ic-client/actor';
 import type {CdnParameters} from '../types/actor.params';
@@ -14,10 +9,10 @@ const listCanisterSnapshots = async ({
 }: {
   actor: ActorParameters;
   canisterId: Principal;
-}): Promise<list_canister_snapshots_result> => {
+}): Promise<IcManagementDid.list_canister_snapshots_result> => {
   const agent = await useOrInitAgent(actor);
 
-  const {listCanisterSnapshots} = ICManagementCanister.create({
+  const {listCanisterSnapshots} = IcManagementCanister.create({
     agent
   });
 
@@ -30,11 +25,11 @@ const takeCanisterSnapshot = async ({
 }: {
   actor: ActorParameters;
   canisterId: Principal;
-  snapshotId?: snapshot_id;
-}): Promise<take_canister_snapshot_result> => {
+  snapshotId?: IcManagementDid.snapshot_id;
+}): Promise<IcManagementDid.take_canister_snapshot_result> => {
   const agent = await useOrInitAgent(actor);
 
-  const {takeCanisterSnapshot} = ICManagementCanister.create({
+  const {takeCanisterSnapshot} = IcManagementCanister.create({
     agent
   });
 

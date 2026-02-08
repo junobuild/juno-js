@@ -1,4 +1,4 @@
-import type {chunk_hash} from '@icp-sdk/canisters/ic-management';
+import type {IcManagementDid} from '@icp-sdk/canisters/ic-management';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
 import {mockDeep, mockReset} from 'vitest-mock-extended';
 import * as icApi from '../../api/ic.api';
@@ -12,11 +12,12 @@ describe('upgrade.chunks.handlers', () => {
 
   const actor: ActorParameters = {identity: mockIdentity, agent: mockHttpAgent};
 
-  const mockChunkHash: chunk_hash = {hash: Uint8Array.from([1, 2, 3])};
+  const mockChunkHash: IcManagementDid.chunk_hash = {hash: Uint8Array.from([1, 2, 3])};
 
   const apiMock = mockDeep<typeof icApi>();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     mockReset(apiMock);
 
     vi.spyOn(icApi, 'clearChunkStore').mockImplementation(apiMock.clearChunkStore);
@@ -30,11 +31,10 @@ describe('upgrade.chunks.handlers', () => {
     apiMock.installChunkedCode.mockResolvedValue();
   });
 
-  it('clears chunks pre and post if required', async () => {
+  it('clears chunks pre and post', async () => {
     await upgradeChunkedCode({
       actor,
       canisterId: mockSatelliteIdPrincipal,
-      missionControlId: undefined,
       wasmModule: wasmBytes,
       mode: {install: null},
       arg: new Uint8Array(),
@@ -46,28 +46,11 @@ describe('upgrade.chunks.handlers', () => {
     expect(apiMock.installChunkedCode).toHaveBeenCalled();
   });
 
-  it('skips post-clear if missionControlId is provided', async () => {
-    await upgradeChunkedCode({
-      actor,
-      canisterId: mockSatelliteIdPrincipal,
-      missionControlId: mockSatelliteIdPrincipal,
-      wasmModule: wasmBytes,
-      mode: {reinstall: null},
-      arg: new Uint8Array(),
-      preClearChunks: false
-    });
-
-    expect(apiMock.clearChunkStore).toHaveBeenCalledTimes(0);
-    expect(apiMock.uploadChunk).toHaveBeenCalled();
-    expect(apiMock.installChunkedCode).toHaveBeenCalled();
-  });
-
   it('uploads all wasm chunks', async () => {
     const largeWasm = new Uint8Array(INSTALL_MAX_CHUNK_SIZE * 2 + 1);
     await upgradeChunkedCode({
       actor,
       canisterId: mockSatelliteIdPrincipal,
-      missionControlId: undefined,
       wasmModule: largeWasm,
       mode: {install: null},
       arg: new Uint8Array(),
@@ -84,7 +67,7 @@ describe('upgrade.chunks.handlers', () => {
     const sha256Hex = await blobSha256(chunkBlob);
     const sha256Bytes = Uint8Array.from(Buffer.from(sha256Hex, 'hex'));
 
-    const storedChunk: chunk_hash = {hash: sha256Bytes};
+    const storedChunk: IcManagementDid.chunk_hash = {hash: sha256Bytes};
     vi.spyOn(icApi, 'storedChunks').mockResolvedValue([{hash: storedChunk.hash}]);
 
     const uploadSpy = vi.spyOn(icApi, 'uploadChunk');
@@ -92,7 +75,6 @@ describe('upgrade.chunks.handlers', () => {
     await upgradeChunkedCode({
       actor,
       canisterId: mockSatelliteIdPrincipal,
-      missionControlId: undefined,
       wasmModule: chunkBytes,
       mode: {reinstall: null},
       arg: new Uint8Array(),

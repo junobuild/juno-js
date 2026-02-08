@@ -87,15 +87,16 @@ describe('_options', () => {
     });
 
     it('should throws WebAuthnHostnameError when new URL fails', () => {
-      const originalURL = global.URL;
-
-      global.URL = vi.fn(() => {
-        throw new TypeError('Invalid URL');
-      }) as unknown as typeof URL;
+      vi.stubGlobal(
+        'URL',
+        vi.fn(function () {
+          throw new TypeError('Invalid URL');
+        })
+      );
 
       expect(() => createPasskeyOptions({})).toThrow(WebAuthnIdentityHostnameError);
 
-      global.URL = originalURL;
+      vi.unstubAllGlobals();
     });
   });
 
@@ -116,15 +117,16 @@ describe('_options', () => {
     });
 
     it('throws WebAuthnHostnameError when new URL fails', () => {
-      const originalURL = global.URL;
-
-      global.URL = vi.fn(() => {
-        throw new TypeError('Invalid URL');
-      }) as unknown as typeof URL;
+      vi.stubGlobal(
+        'URL',
+        vi.fn(function () {
+          throw new TypeError('Invalid URL');
+        })
+      );
 
       expect(() => retrievePasskeyOptions({})).toThrow(WebAuthnIdentityHostnameError);
 
-      global.URL = originalURL;
+      vi.unstubAllGlobals();
     });
   });
 });

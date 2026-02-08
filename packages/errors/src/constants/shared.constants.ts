@@ -3,6 +3,8 @@ export const JUNO_ERROR_CONTROLLERS_ANONYMOUS_NOT_ALLOWED =
   'juno.error.controllers.anonymous_not_allowed';
 export const JUNO_ERROR_CONTROLLERS_REVOKED_NOT_ALLOWED =
   'juno.error.controllers.revoked_not_allowed';
+export const JUNO_ERROR_CONTROLLERS_ADMIN_NO_EXPIRY = 'juno.error.controllers.admin_no_expire';
+export const JUNO_ERROR_CONTROLLERS_EXPIRY_IN_PAST = 'juno.error.controllers.expiry_in_past';
 
 export const JUNO_ERROR_MEMORY_STABLE_EXCEEDED = 'juno.error.memory.stable_exceeded';
 export const JUNO_ERROR_MEMORY_HEAP_EXCEEDED = 'juno.error.memory.heap_exceeded';
@@ -18,7 +20,6 @@ export const JUNO_ERROR_SEGMENT_DELETE_FAILED = 'juno.error.segment.delete_faile
 
 export const JUNO_ERROR_CMC_CALL_LEDGER_FAILED = 'juno.error.cmc.call_ledger_failed';
 export const JUNO_ERROR_CMC_LEDGER_TRANSFER_FAILED = 'juno.error.cmc.ledger_transfer_failed';
-export const JUNO_ERROR_CMC_TOP_UP_FAILED = 'juno.error.cmc.top_up_failed';
 export const JUNO_ERROR_CMC_CALL_CREATE_CANISTER_FAILED =
   'juno.error.cmc.call_create_canister_failed';
 export const JUNO_ERROR_CMC_CREATE_CANISTER_FAILED = 'juno.error.cmc.create_canister_failed';

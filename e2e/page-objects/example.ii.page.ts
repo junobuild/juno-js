@@ -1,5 +1,4 @@
 import {InternetIdentityPage} from '@dfinity/internet-identity-playwright';
-import {assertNonNullish} from '@dfinity/utils';
 import type {AppPageParams} from './app.page';
 import {ExamplePage} from './example.page';
 

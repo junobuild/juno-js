@@ -10,7 +10,12 @@ runs:
       shell: bash
 
     - name: Install dependencies in demo
-      run: npm ci --prefix demo
+      shell: bash
+      working-directory: demo
+      run: npm ci
+
+    - name: Install Juno CLI
+      run: npm i -g @junobuild/cli
       shell: bash
 
     - name: Cache Docker layers
@@ -23,6 +28,7 @@ runs:
 
     - name: Run emulator
       shell: bash
+      working-directory: demo
       run: |
         set -e
         juno emulator start --headless &

@@ -8,6 +8,7 @@ export default defineConfig({
       tsconfig: 'tsconfig.spec.json'
     },
     globals: true,
-    setupFiles: ['./vitest.setup.ts']
+    setupFiles: ['./vitest.setup.ts'],
+    include: ['src/**/*.{test,spec}.{js,ts}']
   }
 });

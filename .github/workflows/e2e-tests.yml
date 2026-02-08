@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
+      - 'e2e'
+      - 'package-lock.json'
       - 'packages/auth/**'
       - 'packages/core/**'
       - 'packages/ic-client/**'

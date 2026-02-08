@@ -1,11 +1,8 @@
 import {InternetIdentityPage} from '@dfinity/internet-identity-playwright';
-import {assertNonNullish} from '@dfinity/utils';
 import type {AppPageParams} from './app.page';
 import {ExamplePage} from './example.page';
 
 export class ExampleInternetIdentityPage extends ExamplePage {
-  #identity: number | undefined;
-
   #iiPage: InternetIdentityPage;
 
   private constructor(params: AppPageParams) {
@@ -31,17 +28,18 @@ export class ExampleInternetIdentityPage extends ExamplePage {
   }
 
   override async signUp(): Promise<void> {
-    this.#identity = await this.#iiPage.signInWithNewIdentity({
-      selector: this.locators.internet_identity.sign_in
+    await this.#iiPage.signIn({
+      passkey: {
+        selector: this.locators.internet_identity.sign_in
+      }
     });
   }
 
   override async signIn(): Promise<void> {
-    assertNonNullish(this.#identity);
-
-    await this.#iiPage.signInWithIdentity({
-      identity: this.#identity,
-      selector: this.locators.internet_identity.sign_in
+    await this.#iiPage.signIn({
+      passkey: {
+        selector: this.locators.internet_identity.sign_in
+      }
     });
   }
 }

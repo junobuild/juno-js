@@ -16,7 +16,13 @@
     "update:ic-js": "./scripts/update-ic-js",
     "docs": "node scripts/docs.js && prettier --write packages/**/README.md",
     "test": "vitest",
-    "clean": "npm run clean --workspaces --if-present"
+    "clean": "npm run clean --workspaces --if-present",
+    "e2e": "NODE_ENV=development playwright test",
+    "e2e:ci": "playwright test --reporter=html",
+    "e2e:snapshots": "playwright test --update-snapshots --reporter=list",
+    "e2e:snapshots:local": "NODE_ENV=development playwright test --update-snapshots --reporter=list",
+    "e2e:report": "playwright show-report",
+    "e2e:playwright:install": "playwright install chromium --with-deps"
   },
   "workspaces": [
     "packages/utils",
@@ -38,7 +44,9 @@
   ],
   "devDependencies": {
     "@dfinity/eslint-config-oisy-wallet": "^0.2.3",
+    "@dfinity/internet-identity-playwright": "^2.0.0",
     "@icp-sdk/bindgen": "^0.2.1",
+    "@playwright/test": "^1.58.2",
     "@size-limit/esbuild": "^11.2.0",
     "@size-limit/preset-small-lib": "^11.2.0",
     "@types/jest": "^30.0.0",

@@ -4,9 +4,11 @@ import {ExampleInternetIdentityPage} from '../page-objects/example.ii.page';
 import type {ExamplePage} from '../page-objects/example.page';
 import {ExamplePasskeyPage} from '../page-objects/example.passkey.page';
 
-export const initTestSuiteWithInternetIdentity = (): (() => ExampleInternetIdentityPage) => initTestSuite(ExampleInternetIdentityPage.create);
+export const initTestSuiteWithInternetIdentity = (): (() => ExampleInternetIdentityPage) =>
+  initTestSuite(ExampleInternetIdentityPage.create);
 
-export const initTestSuiteWithPasskey = (): (() => ExamplePasskeyPage) => initTestSuite(ExamplePasskeyPage.create);
+export const initTestSuiteWithPasskey = (): (() => ExamplePasskeyPage) =>
+  initTestSuite(ExamplePasskeyPage.create);
 
 const initTestSuite = <T extends ExamplePage>(
   create: (params: AppPageParams) => Promise<T>

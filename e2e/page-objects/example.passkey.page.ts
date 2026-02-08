@@ -117,6 +117,7 @@ export class ExamplePasskeyPage extends ExamplePage {
 
     await action();
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     withCreation && (await createCompleted);
     await assertCompleted;
 

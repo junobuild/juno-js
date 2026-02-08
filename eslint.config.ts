@@ -29,7 +29,8 @@ export default [
       'packages/core-peer/src/**/*',
       'packages/core-standalone/src/**/*',
       'eslint-local-rules.cjs',
-      '**/esbuild.mjs'
+      '**/esbuild.mjs',
+      'demo/**/*'
     ]
   },
   {

@@ -18,6 +18,7 @@ export class ExampleInternetIdentityPage extends ExamplePage {
     });
   }
 
+  // eslint-disable-next-line require-await
   static async create(params: AppPageParams): Promise<ExampleInternetIdentityPage> {
     return new ExampleInternetIdentityPage(params);
   }

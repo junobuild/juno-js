@@ -13,6 +13,10 @@ runs:
       run: npm ci --prefix demo
       shell: bash
 
+    - name: Install Juno CLI
+      run: npm i -g @junobuild/cli
+      shell: bash
+
     - name: Cache Docker layers
       uses: actions/cache@v3
       with:

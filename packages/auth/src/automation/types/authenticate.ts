@@ -2,8 +2,10 @@ import type {SatelliteParameters} from '@junobuild/ic-client/actor';
 import type {Nonce} from '../../types/nonce';
 import type {AutomationData} from './actor';
 
+export type AutomationGenerateJwtFn = (params: {nonce: Nonce}) => Promise<{jwt: string}>;
+
 export interface AutomationCredentials {
-  generateJwt: (params: {nonce: Nonce}) => Promise<{jwt: string}>;
+  generateJwt: AutomationGenerateJwtFn;
 }
 
 export interface AutomationParams<T extends AutomationParameters = AutomationParameters> {

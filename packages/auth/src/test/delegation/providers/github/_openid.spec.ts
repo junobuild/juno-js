@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 
-import {GITHUB_PROVIDER} from '../../../_constants';
-import {requestGitHubJwtWithRedirect} from '../../../providers/github/_openid';
-import type {RequestGitHubJwtWithRedirect} from '../../../providers/github/types/openid';
+import {GITHUB_PROVIDER} from '../../../../delegation/_constants';
+import {requestGitHubJwtWithRedirect} from '../../../../delegation/providers/github/_openid';
+import type {RequestGitHubJwtWithRedirect} from '../../../../delegation/providers/github/types/openid';
 
 describe('providers > github > _openid', () => {
   describe('requestGitHubJwtWithRedirect', () => {

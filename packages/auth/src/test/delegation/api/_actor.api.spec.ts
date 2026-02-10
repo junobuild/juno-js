@@ -1,9 +1,9 @@
 import type {ConsoleActor, SatelliteActor} from '@junobuild/ic-client/actor';
 import * as icClient from '@junobuild/ic-client/actor';
-import {getAuthActor} from '../../api/_actor.api';
-import {AuthParameters} from '../../types/actor';
-import {mockIdentity} from '../mocks/identity.mock';
-import {mockSatelliteIdPrincipal} from '../mocks/principal.mock';
+import {getAuthActor} from '../../../delegation/api/_actor.api';
+import {AuthParameters} from '../../../delegation/types/actor';
+import {mockIdentity} from '../../mocks/identity.mock';
+import {mockSatelliteIdPrincipal} from '../../mocks/principal.mock';
 
 vi.mock('@junobuild/ic-client/actor', () => {
   return {

@@ -1,5 +1,5 @@
-import {InvalidUrlError} from '../../errors';
-import {parseUrl, toBase64URL} from '../../utils/url.utils';
+import {InvalidUrlError} from '../../../delegation/errors';
+import {parseUrl, toBase64URL} from '../../../delegation/utils/url.utils';
 
 describe('url.utils', () => {
   describe('toBase64URL', () => {

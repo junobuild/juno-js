@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {generateRandomState} from '../../utils/state.utils';
+import {generateRandomState} from '../../../delegation/utils/state.utils';
 
 describe('state.utils', () => {
   describe('generateRandomState', () => {

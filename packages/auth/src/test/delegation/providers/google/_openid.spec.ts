@@ -6,15 +6,15 @@ import {
   FedCMIdentityCredentialInvalidError,
   FedCMIdentityCredentialUndefinedError,
   InvalidUrlError
-} from '../../../errors';
+} from '../../../../delegation/errors';
 import {
   requestGoogleJwtWithCredentials,
   requestGoogleJwtWithRedirect
-} from '../../../providers/google/_openid';
+} from '../../../../delegation/providers/google/_openid';
 import {
   RequestGoogleJwtWithCredentials,
   RequestGoogleJwtWithRedirect
-} from '../../../providers/google/types/openid';
+} from '../../../../delegation/providers/google/types/openid';
 
 describe('providers > google > _openid', () => {
   const mockState = {state: '123456'};

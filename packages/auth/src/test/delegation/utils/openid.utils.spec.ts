@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {isFedCMSupported} from '../../utils/openid.utils';
+import {isFedCMSupported} from '../../../delegation/utils/openid.utils';
 
 describe('openid.utils', () => {
   describe('isFedCMSupported', () => {

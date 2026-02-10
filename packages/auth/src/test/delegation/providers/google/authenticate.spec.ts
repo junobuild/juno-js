@@ -3,33 +3,29 @@
  */
 
 import {ECDSAKeyIdentity, Ed25519KeyIdentity} from '@icp-sdk/core/identity';
-import {GITHUB_PROVIDER} from '../../../_constants';
-import * as authApi from '../../../api/auth.api';
+import * as authApi from '../../../../delegation/api/auth.api';
 import {
+  AuthenticationInvalidStateError,
   AuthenticationUndefinedJwtError,
+  AuthenticationUrlHashError,
   GetDelegationError,
   GetDelegationRetryError
-} from '../../../errors';
-import * as apiModule from '../../../providers/github/_api';
-import {authenticateGitHubWithRedirect} from '../../../providers/github/authenticate';
+} from '../../../../delegation/errors';
+import {authenticateGoogleWithRedirect} from '../../../../delegation/providers/google/authenticate';
 import {
   type AuthenticationResult,
   type GetDelegationArgs,
   type GetDelegationResult
-} from '../../../types/actor';
-import {AuthenticatedIdentity, AuthParameters} from '../../../types/authenticate';
-import type {OpenIdAuthContext} from '../../../types/context';
-import * as sessionUtils from '../../../utils/session.utils';
-import {mockUserDoc} from '../../mocks/doc.mock';
-import {mockSatelliteIdText} from '../../mocks/principal.mock';
+} from '../../../../delegation/types/actor';
+import {AuthenticatedIdentity, AuthParameters} from '../../../../delegation/types/authenticate';
+import type {OpenIdAuthContext} from '../../../../delegation/types/context';
+import * as sessionUtils from '../../../../delegation/utils/session.utils';
+import {mockUserDoc} from '../../../mocks/doc.mock';
+import {mockSatelliteIdText} from '../../../mocks/principal.mock';
 
 vi.mock('../../../api/auth.api', () => ({
   authenticate: vi.fn(),
   getDelegation: vi.fn()
-}));
-
-vi.mock('../../../providers/github/_api', () => ({
-  finalizeOAuth: vi.fn()
 }));
 
 vi.mock('../../../utils/session.utils', async (importOriginal) => {
@@ -40,7 +36,7 @@ vi.mock('../../../utils/session.utils', async (importOriginal) => {
   };
 });
 
-describe('authenticateGitHubWithRedirect', () => {
+describe('authenticateGoogleWithRedirect', () => {
   const auth: AuthParameters = {satellite: {satelliteId: mockSatelliteIdText}};
 
   const user_key = new Uint8Array([9, 9, 9]);
@@ -61,9 +57,9 @@ describe('authenticateGitHubWithRedirect', () => {
     data: {doc: mockUserDoc}
   };
 
-  const createContext = (): Omit<OpenIdAuthContext, 'state'> => {
+  const createContext = (state: string): OpenIdAuthContext => {
     const salt = new Uint8Array([1, 2, 3, 4]);
-    return {salt, caller: Ed25519KeyIdentity.generate()};
+    return {salt, state, caller: Ed25519KeyIdentity.generate()};
   };
 
   beforeEach(() => {
@@ -81,7 +77,7 @@ describe('authenticateGitHubWithRedirect', () => {
 
     vi.spyOn(sessionUtils, 'generateIdentity').mockReturnValue(mockGenerateIdentityReturn);
 
-    let hrefStore = 'https://app.test?code=CODE123&state=STATE123';
+    let hrefStore = 'https://app.test';
     vi.spyOn(window, 'location', 'get').mockReturnValue({
       ...window.location,
       get href() {
@@ -90,8 +86,11 @@ describe('authenticateGitHubWithRedirect', () => {
       set href(v: string) {
         hrefStore = v;
       },
-      get search() {
-        return new URL(hrefStore).search;
+      get hash() {
+        return new URL(hrefStore).hash;
+      },
+      set hash(v: string) {
+        hrefStore = `https://app.test/${v.startsWith('#') ? v : `#${v}`}`;
       },
       origin: 'https://app.test'
     } as unknown as Location);
@@ -103,12 +102,8 @@ describe('authenticateGitHubWithRedirect', () => {
     vi.restoreAllMocks();
   });
 
-  it('should authenticate successfully with valid code and state', async () => {
-    const context = createContext();
-
-    vi.mocked(apiModule.finalizeOAuth).mockResolvedValue({
-      success: {token: 'TOKEN_ABC'}
-    });
+  it('should authenticate successfully with valid state and id_token', async () => {
+    const context = createContext('SAVED_STATE');
 
     vi.mocked(authApi.authenticate).mockResolvedValue({
       Ok: {delegation: {user_key, expiration}, doc: mockUserDoc}
@@ -118,11 +113,9 @@ describe('authenticateGitHubWithRedirect', () => {
       Ok: {delegation: {pubkey, expiration, targets: targetsNone}, signature}
     } as GetDelegationResult);
 
-    const p = authenticateGitHubWithRedirect({
-      auth,
-      context,
-      redirect: {finalizeUrl: GITHUB_PROVIDER.finalizeUrl}
-    });
+    window.location.hash = '#id_token=IDTOKEN_ABC&state=SAVED_STATE';
+
+    const p = authenticateGoogleWithRedirect({auth, context});
 
     await vi.advanceTimersByTimeAsync(0);
     await vi.runOnlyPendingTimersAsync();
@@ -131,18 +124,13 @@ describe('authenticateGitHubWithRedirect', () => {
 
     expect(res).toStrictEqual(mockAuthenticatedSession);
 
-    expect(apiModule.finalizeOAuth).toHaveBeenCalledWith({
-      url: GITHUB_PROVIDER.finalizeUrl,
-      body: {code: 'CODE123', state: 'STATE123'}
-    });
-
     expect(authApi.authenticate).toHaveBeenCalledWith({
-      args: {OpenId: {jwt: 'TOKEN_ABC', session_key: mockPublicKey, salt: context.salt}},
+      args: {OpenId: {jwt: 'IDTOKEN_ABC', session_key: mockPublicKey, salt: context.salt}},
       actorParams: {auth, identity: expect.anything()}
     });
 
     const expectedArgs: GetDelegationArgs = {
-      OpenId: {jwt: 'TOKEN_ABC', session_key: mockPublicKey, salt: context.salt, expiration}
+      OpenId: {jwt: 'IDTOKEN_ABC', session_key: mockPublicKey, salt: context.salt, expiration}
     };
 
     expect(authApi.getDelegation).toHaveBeenCalledWith({
@@ -151,43 +139,35 @@ describe('authenticateGitHubWithRedirect', () => {
     });
   });
 
-  it('should throw error when finalizeOAuth returns error', async () => {
-    const context = createContext();
-    const error = new Error('Finalize failed');
+  it('should throw AuthenticationUrlHashError when no hash', async () => {
+    const context = createContext('SAVED_STATE');
+    window.location.hash = '';
 
-    vi.mocked(apiModule.finalizeOAuth).mockResolvedValue({error});
-
-    await expect(
-      authenticateGitHubWithRedirect({
-        auth,
-        context,
-        redirect: {finalizeUrl: GITHUB_PROVIDER.finalizeUrl}
-      })
-    ).rejects.toBe(error);
+    await expect(authenticateGoogleWithRedirect({auth, context})).rejects.toThrow(
+      AuthenticationUrlHashError
+    );
   });
 
-  it('should throw AuthenticationUndefinedJwtError when token is empty', async () => {
-    const context = createContext();
+  it('should throw AuthenticationInvalidStateError when state mismatch', async () => {
+    const context = createContext('SAVED_STATE');
+    window.location.hash = '#id_token=JWT123&state=OTHER_STATE';
 
-    vi.mocked(apiModule.finalizeOAuth).mockResolvedValue({
-      success: {token: ''}
-    });
+    await expect(authenticateGoogleWithRedirect({auth, context})).rejects.toThrow(
+      AuthenticationInvalidStateError
+    );
+  });
 
-    await expect(
-      authenticateGitHubWithRedirect({
-        auth,
-        context,
-        redirect: {finalizeUrl: GITHUB_PROVIDER.finalizeUrl}
-      })
-    ).rejects.toThrow(AuthenticationUndefinedJwtError);
+  it('should throw AuthenticationUndefinedJwtError when id_token missing', async () => {
+    const context = createContext('SAVED_STATE');
+    window.location.hash = '#state=SAVED_STATE';
+
+    await expect(authenticateGoogleWithRedirect({auth, context})).rejects.toThrow(
+      AuthenticationUndefinedJwtError
+    );
   });
 
   it('should bubble GetDelegationError from authenticateSession', async () => {
-    const context = createContext();
-
-    vi.mocked(apiModule.finalizeOAuth).mockResolvedValue({
-      success: {token: 'TOKEN_ABC'}
-    });
+    const context = createContext('SAVED_STATE');
 
     vi.mocked(authApi.authenticate).mockResolvedValue({
       Ok: {delegation: {user_key, expiration}}
@@ -197,11 +177,9 @@ describe('authenticateGitHubWithRedirect', () => {
       Err: {DeriveSeedFailed: 'boom'}
     });
 
-    const p = authenticateGitHubWithRedirect({
-      auth,
-      context,
-      redirect: {finalizeUrl: GITHUB_PROVIDER.finalizeUrl}
-    });
+    window.location.hash = '#id_token=IDTOKEN_ABC&state=SAVED_STATE';
+
+    const p = authenticateGoogleWithRedirect({auth, context});
     const guarded = p.catch((e) => e);
 
     await vi.advanceTimersByTimeAsync(0);
@@ -211,11 +189,7 @@ describe('authenticateGitHubWithRedirect', () => {
   });
 
   it('should bubble GetDelegationRetryError after retries', async () => {
-    const context = createContext();
-
-    vi.mocked(apiModule.finalizeOAuth).mockResolvedValue({
-      success: {token: 'TOKEN_ABC'}
-    });
+    const context = createContext('SAVED_STATE');
 
     vi.mocked(authApi.authenticate).mockResolvedValue({
       Ok: {delegation: {user_key, expiration}}
@@ -223,11 +197,9 @@ describe('authenticateGitHubWithRedirect', () => {
 
     vi.mocked(authApi.getDelegation).mockResolvedValue({Err: {NoSuchDelegation: null}});
 
-    const p = authenticateGitHubWithRedirect({
-      auth,
-      context,
-      redirect: {finalizeUrl: GITHUB_PROVIDER.finalizeUrl}
-    });
+    window.location.hash = '#id_token=IDTOKEN_ABC&state=SAVED_STATE';
+
+    const p = authenticateGoogleWithRedirect({auth, context});
     const guarded = p.catch((e) => e);
 
     await vi.advanceTimersByTimeAsync(0);

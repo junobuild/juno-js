@@ -6,8 +6,8 @@ import {
   type SignedDelegation
 } from '@icp-sdk/core/identity';
 import {Principal} from '@icp-sdk/core/principal';
-import {Delegations} from '../../types/session';
-import {generateIdentity} from '../../utils/session.utils';
+import {Delegations} from '../../../delegation/types/session';
+import {generateIdentity} from '../../../delegation/utils/session.utils';
 
 describe('session.utils', () => {
   describe('generateIdentity', () => {

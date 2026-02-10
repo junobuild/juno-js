@@ -1,19 +1,27 @@
 import {Delegation, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import {MockInstance} from 'vitest';
-import {authenticateSession} from '../_session';
-import * as authApi from '../api/auth.api';
-import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from '../errors';
+import {authenticateSession} from '../../delegation/_session';
+import * as authApi from '../../delegation/api/auth.api';
+import {
+  AuthenticationError,
+  GetDelegationError,
+  GetDelegationRetryError
+} from '../../delegation/errors';
 import {
   type AuthenticationResult,
   GetDelegationArgs,
   type GetDelegationResult
-} from '../types/actor';
-import {AuthenticatedIdentity, AuthenticatedSession, AuthParameters} from '../types/authenticate';
-import {OpenIdAuthContext} from '../types/context';
-import * as authenticateUtils from '../utils/session.utils';
-import {mockUserDoc} from './mocks/doc.mock';
-import {mockIdentity} from './mocks/identity.mock';
-import {mockSatelliteIdText} from './mocks/principal.mock';
+} from '../../delegation/types/actor';
+import {
+  AuthenticatedIdentity,
+  AuthenticatedSession,
+  AuthParameters
+} from '../../delegation/types/authenticate';
+import {OpenIdAuthContext} from '../../delegation/types/context';
+import * as authenticateUtils from '../../delegation/utils/session.utils';
+import {mockUserDoc} from '../mocks/doc.mock';
+import {mockIdentity} from '../mocks/identity.mock';
+import {mockSatelliteIdText} from '../mocks/principal.mock';
 
 vi.mock('../api/auth.api', () => ({
   authenticate: vi.fn(),

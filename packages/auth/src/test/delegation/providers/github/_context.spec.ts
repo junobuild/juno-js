@@ -1,7 +1,7 @@
-import {GITHUB_PROVIDER} from '../../../_constants';
-import {ApiGitHubInitError} from '../../../errors';
-import * as apiModule from '../../../providers/github/_api';
-import {buildGenerateState} from '../../../providers/github/_context';
+import {GITHUB_PROVIDER} from '../../../../delegation/_constants';
+import {ApiGitHubInitError} from '../../../../delegation/errors';
+import * as apiModule from '../../../../delegation/providers/github/_api';
+import {buildGenerateState} from '../../../../delegation/providers/github/_context';
 
 vi.mock('../../../providers/github/_api', () => ({
   initOAuth: vi.fn()

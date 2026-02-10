@@ -1,15 +1,15 @@
 import * as actor from '@junobuild/ic-client/actor';
-import * as actorApi from '../../api/_actor.api';
-import {authenticate, getDelegation} from '../../api/auth.api';
+import * as actorApi from '../../../delegation/api/_actor.api';
+import {authenticate, getDelegation} from '../../../delegation/api/auth.api';
 import {
   ActorParameters,
   AuthenticationArgs,
   AuthenticationResult,
   GetDelegationArgs,
   GetDelegationResult
-} from '../../types/actor';
-import {mockIdentity} from '../mocks/identity.mock';
-import {mockSatelliteIdPrincipal} from '../mocks/principal.mock';
+} from '../../../delegation/types/actor';
+import {mockIdentity} from '../../mocks/identity.mock';
+import {mockSatelliteIdPrincipal} from '../../mocks/principal.mock';
 
 vi.mock(import('@junobuild/ic-client/actor'), async (importOriginal) => {
   const actual = await importOriginal();

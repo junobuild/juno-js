@@ -3,27 +3,27 @@
  */
 
 import {ECDSAKeyIdentity, Ed25519KeyIdentity} from '@icp-sdk/core/identity';
-import {CONTEXT_KEY, GITHUB_PROVIDER} from '../_constants';
-import * as authApi from '../api/auth.api';
-import {authenticate} from '../authenticate';
+import {CONTEXT_KEY, GITHUB_PROVIDER} from '../../delegation/_constants';
+import * as authApi from '../../delegation/api/auth.api';
+import {authenticate} from '../../delegation/authenticate';
 import {
   AuthenticationInvalidStateError,
   AuthenticationUndefinedJwtError,
   AuthenticationUrlHashError,
   GetDelegationError,
   GetDelegationRetryError
-} from '../errors';
-import * as githubApiModule from '../providers/github/_api';
+} from '../../delegation/errors';
+import * as githubApiModule from '../../delegation/providers/github/_api';
 import {
   type AuthenticationResult,
   type GetDelegationArgs,
   type GetDelegationResult
-} from '../types/actor';
-import {AuthenticatedIdentity, AuthParameters} from '../types/authenticate';
-import {stringifyContext} from '../utils/session-storage.utils';
-import * as sessionUtils from '../utils/session.utils';
-import {mockUserDoc} from './mocks/doc.mock';
-import {mockSatelliteIdText} from './mocks/principal.mock';
+} from '../../delegation/types/actor';
+import {AuthenticatedIdentity, AuthParameters} from '../../delegation/types/authenticate';
+import {stringifyContext} from '../../delegation/utils/session-storage.utils';
+import * as sessionUtils from '../../delegation/utils/session.utils';
+import {mockUserDoc} from '../mocks/doc.mock';
+import {mockSatelliteIdText} from '../mocks/principal.mock';
 
 vi.mock('../api/auth.api', () => ({
   authenticate: vi.fn(),

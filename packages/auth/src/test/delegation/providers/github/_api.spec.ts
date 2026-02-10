@@ -1,6 +1,6 @@
-import {GITHUB_PROVIDER} from '../../../_constants';
-import {ApiGitHubFinalizeError, ApiGitHubInitError} from '../../../errors';
-import {finalizeOAuth, initOAuth} from '../../../providers/github/_api';
+import {GITHUB_PROVIDER} from '../../../../delegation/_constants';
+import {ApiGitHubFinalizeError, ApiGitHubInitError} from '../../../../delegation/errors';
+import {finalizeOAuth, initOAuth} from '../../../../delegation/providers/github/_api';
 
 describe('providers > github > _oauth', () => {
   beforeEach(() => {

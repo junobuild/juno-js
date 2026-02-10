@@ -2,10 +2,10 @@
  * @vitest-environment jsdom
  */
 
-import {generateNonce} from '../../utils/auth.utils';
+import {generateNonce} from '../../utils/nonce.utils';
 import {mockIdentity} from '../mocks/identity.mock';
 
-describe('auth.utils', () => {
+describe('nonce.utils', () => {
   describe('generateNonce', () => {
     it('should generate a salt of length 32', async () => {
       const {salt} = await generateNonce({caller: mockIdentity});

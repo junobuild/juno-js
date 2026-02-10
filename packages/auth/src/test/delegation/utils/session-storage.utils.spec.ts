@@ -3,8 +3,8 @@
  */
 
 import {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
-import {parseContext, stringifyContext} from '../../utils/session-storage.utils';
-import {generateRandomState} from '../../utils/state.utils';
+import {parseContext, stringifyContext} from '../../../delegation/utils/session-storage.utils';
+import {generateRandomState} from '../../../delegation/utils/state.utils';
 
 describe('session-storage.utils', () => {
   describe('stringifyContext', () => {

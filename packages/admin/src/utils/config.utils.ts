@@ -2,6 +2,8 @@ import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
 import {Principal} from '@icp-sdk/core/principal';
 import type {
   AuthenticationConfig,
+  AuthenticationConfigGitHub,
+  AuthenticationConfigGoogle,
   DatastoreConfig,
   StorageConfig,
   StorageConfigHeader,
@@ -122,57 +124,75 @@ export const toDatastoreConfig = ({
 
 export const fromAuthenticationConfig = ({
   internetIdentity,
+  github,
   google,
   rules,
   version
-}: AuthenticationConfig): SatelliteDid.SetAuthenticationConfig => ({
-  internet_identity: isNullish(internetIdentity)
-    ? []
-    : [
-        {
-          derivation_origin: toNullable(internetIdentity?.derivationOrigin),
-          external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
-        }
-      ],
-  openid: isNullish(google)
-    ? []
-    : [
-        {
-          providers: [
-            [
-              {Google: null},
-              {
-                client_id: google.clientId,
-                delegation: isNullish(google.delegation)
-                  ? []
-                  : [
-                      {
-                        targets:
-                          google.delegation.allowedTargets === null
-                            ? []
-                            : [
-                                (google.delegation.allowedTargets ?? [])?.map((target) =>
-                                  Principal.fromText(target)
-                                )
-                              ],
-                        max_time_to_live: toNullable(google.delegation.sessionDuration)
-                      }
-                    ]
-              }
-            ]
+}: AuthenticationConfig): SatelliteDid.SetAuthenticationConfig => {
+  const fromAuthenticationOpenIdConfig = (
+    config: AuthenticationConfigGoogle | AuthenticationConfigGitHub
+  ): SatelliteDid.OpenIdAuthProviderConfig => ({
+    client_id: config.clientId,
+    delegation: isNullish(config.delegation)
+      ? []
+      : [
+          {
+            targets:
+              config.delegation.allowedTargets === null
+                ? []
+                : [
+                    (config.delegation.allowedTargets ?? [])?.map((target) =>
+                      Principal.fromText(target)
+                    )
+                  ],
+            max_time_to_live: toNullable(config.delegation.sessionDuration)
+          }
+        ]
+  });
+
+  const providers = [
+    ...(isNullish(google)
+      ? []
+      : ([[{Google: null}, fromAuthenticationOpenIdConfig(google)]] as [
+          SatelliteDid.OpenIdDelegationProvider,
+          SatelliteDid.OpenIdAuthProviderConfig
+        ][])),
+    ...(isNullish(github)
+      ? []
+      : ([[{GitHub: null}, fromAuthenticationOpenIdConfig(github)]] as [
+          SatelliteDid.OpenIdDelegationProvider,
+          SatelliteDid.OpenIdAuthProviderConfig
+        ][]))
+  ];
+
+  return {
+    internet_identity: isNullish(internetIdentity)
+      ? []
+      : [
+          {
+            derivation_origin: toNullable(internetIdentity?.derivationOrigin),
+            external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
+          }
+        ],
+    openid:
+      providers.length === 0
+        ? []
+        : [
+            {
+              providers,
+              observatory_id: []
+            }
           ],
-          observatory_id: []
-        }
-      ],
-  rules: isNullish(rules)
-    ? []
-    : [
-        {
-          allowed_callers: rules.allowedCallers.map((caller) => Principal.fromText(caller))
-        }
-      ],
-  version: toNullable(version)
-});
+    rules: isNullish(rules)
+      ? []
+      : [
+          {
+            allowed_callers: rules.allowedCallers.map((caller) => Principal.fromText(caller))
+          }
+        ],
+    version: toNullable(version)
+  };
+};
 
 export const toAuthenticationConfig = ({
   version,
@@ -186,20 +206,36 @@ export const toAuthenticationConfig = ({
     internetIdentity?.external_alternative_origins ?? []
   );
 
+  const toDelegation = (
+    provider: SatelliteDid.OpenIdAuthProviderConfig | undefined
+  ):
+    | Omit<AuthenticationConfigGoogle, 'clientId'>
+    | Omit<AuthenticationConfigGitHub, 'clientId'> => {
+    const delegation = fromNullable(provider?.delegation ?? []);
+    const targets =
+      // delegation.targets===[] (exactly equals because delegation is undefined by default)
+      nonNullish(delegation) && nonNullish(delegation.targets) && delegation.targets.length === 0
+        ? null
+        : // delegation.targets===[[]]
+          (fromNullable(delegation?.targets ?? []) ?? []).length === 0
+          ? undefined
+          : (fromNullable(delegation?.targets ?? []) ?? []).map((p) => p.toText());
+    const maxTimeToLive = fromNullable(delegation?.max_time_to_live ?? []);
+    const withDelegation = targets !== undefined || nonNullish(maxTimeToLive);
+
+    return {
+      ...(withDelegation && {
+        delegation: {
+          ...(targets !== undefined && {allowedTargets: targets}),
+          ...(nonNullish(maxTimeToLive) && {sessionDuration: maxTimeToLive})
+        }
+      })
+    };
+  };
+
   const openId = fromNullable(openIdDid);
   const google = openId?.providers.find(([key]) => 'Google' in key)?.[1];
-
-  const delegation = fromNullable(google?.delegation ?? []);
-  const targets =
-    // delegation.targets===[] (exactly equals because delegation is undefined by default)
-    nonNullish(delegation) && nonNullish(delegation.targets) && delegation.targets.length === 0
-      ? null
-      : // delegation.targets===[[]]
-        (fromNullable(delegation?.targets ?? []) ?? []).length === 0
-        ? undefined
-        : (fromNullable(delegation?.targets ?? []) ?? []).map((p) => p.toText());
-  const maxTimeToLive = fromNullable(delegation?.max_time_to_live ?? []);
-  const withDelegation = targets !== undefined || nonNullish(maxTimeToLive);
+  const github = openId?.providers.find(([key]) => 'GitHub' in key)?.[1];
 
   const rules = fromNullable(rulesDid);
 
@@ -213,12 +249,13 @@ export const toAuthenticationConfig = ({
     ...(nonNullish(google) && {
       google: {
         clientId: google.client_id,
-        ...(withDelegation && {
-          delegation: {
-            ...(targets !== undefined && {allowedTargets: targets}),
-            ...(nonNullish(maxTimeToLive) && {sessionDuration: maxTimeToLive})
-          }
-        })
+        ...toDelegation(google)
+      }
+    }),
+    ...(nonNullish(github) && {
+      github: {
+        clientId: github.client_id,
+        ...toDelegation(github)
       }
     }),
     ...(nonNullish(rules) && {

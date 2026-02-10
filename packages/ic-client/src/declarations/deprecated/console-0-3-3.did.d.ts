@@ -69,7 +69,7 @@ export interface AuthenticationConfigInternetIdentity {
 }
 export interface AuthenticationConfigOpenId {
 	observatory_id: [] | [Principal];
-	providers: Array<[OpenIdDelegationProvider, OpenIdAuthProviderConfig]>;
+	providers: Array<[OpenIdProvider, OpenIdProviderConfig]>;
 }
 export type AuthenticationError =
 	| {
@@ -99,12 +99,10 @@ export interface ConfigMaxMemorySize {
 export interface Controller {
 	updated_at: bigint;
 	metadata: Array<[string, string]>;
-	kind: [] | [ControllerKind];
 	created_at: bigint;
 	scope: ControllerScope;
 	expires_at: [] | [bigint];
 }
-export type ControllerKind = { Emulator: null } | { Automation: null };
 export type ControllerScope = { Write: null } | { Admin: null } | { Submit: null };
 export interface CreateMissionControlArgs {
 	subnet_id: [] | [Principal];
@@ -279,16 +277,8 @@ export interface ListSegmentsArgs {
 }
 export type Memory = { Heap: null } | { Stable: null };
 export interface OpenId {
-	provider: OpenIdDelegationProvider;
+	provider: OpenIdProvider;
 	data: OpenIdData;
-}
-export interface OpenIdAuthProviderConfig {
-	delegation: [] | [OpenIdAuthProviderDelegationConfig];
-	client_id: string;
-}
-export interface OpenIdAuthProviderDelegationConfig {
-	targets: [] | [Array<Principal>];
-	max_time_to_live: [] | [bigint];
 }
 export interface OpenIdData {
 	name: [] | [string];
@@ -299,7 +289,6 @@ export interface OpenIdData {
 	given_name: [] | [string];
 	preferred_username: [] | [string];
 }
-export type OpenIdDelegationProvider = { GitHub: null } | { Google: null };
 export interface OpenIdGetDelegationArgs {
 	jwt: string;
 	session_key: Uint8Array;
@@ -310,6 +299,15 @@ export interface OpenIdPrepareDelegationArgs {
 	jwt: string;
 	session_key: Uint8Array;
 	salt: Uint8Array;
+}
+export type OpenIdProvider = { GitHub: null } | { Google: null };
+export interface OpenIdProviderConfig {
+	delegation: [] | [OpenIdProviderDelegationConfig];
+	client_id: string;
+}
+export interface OpenIdProviderDelegationConfig {
+	targets: [] | [Array<Principal>];
+	max_time_to_live: [] | [bigint];
 }
 export type PaymentStatus = { Refunded: null } | { Acknowledged: null } | { Completed: null };
 export type PrepareDelegationError =
@@ -379,7 +377,6 @@ export interface SetAuthenticationConfig {
 }
 export interface SetController {
 	metadata: Array<[string, string]>;
-	kind: [] | [ControllerKind];
 	scope: ControllerScope;
 	expires_at: [] | [bigint];
 }

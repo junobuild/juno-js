@@ -115,6 +115,10 @@ export const idlFactory = ({IDL}) => {
   const DeleteControllersArgs = IDL.Record({
     controllers: IDL.Vec(IDL.Principal)
   });
+  const ControllerKind = IDL.Variant({
+    Emulator: IDL.Null,
+    Automation: IDL.Null
+  });
   const ControllerScope = IDL.Variant({
     Write: IDL.Null,
     Admin: IDL.Null,
@@ -123,6 +127,7 @@ export const idlFactory = ({IDL}) => {
   const Controller = IDL.Record({
     updated_at: IDL.Nat64,
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    kind: IDL.Opt(ControllerKind),
     created_at: IDL.Nat64,
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
@@ -158,18 +163,21 @@ export const idlFactory = ({IDL}) => {
     created_at: IDL.Nat64,
     version: IDL.Opt(IDL.Nat64)
   });
-  const OpenIdProvider = IDL.Variant({Google: IDL.Null});
-  const OpenIdProviderDelegationConfig = IDL.Record({
+  const OpenIdDelegationProvider = IDL.Variant({
+    GitHub: IDL.Null,
+    Google: IDL.Null
+  });
+  const OpenIdAuthProviderDelegationConfig = IDL.Record({
     targets: IDL.Opt(IDL.Vec(IDL.Principal)),
     max_time_to_live: IDL.Opt(IDL.Nat64)
   });
-  const OpenIdProviderConfig = IDL.Record({
-    delegation: IDL.Opt(OpenIdProviderDelegationConfig),
+  const OpenIdAuthProviderConfig = IDL.Record({
+    delegation: IDL.Opt(OpenIdAuthProviderDelegationConfig),
     client_id: IDL.Text
   });
   const AuthenticationConfigOpenId = IDL.Record({
     observatory_id: IDL.Opt(IDL.Principal),
-    providers: IDL.Vec(IDL.Tuple(OpenIdProvider, OpenIdProviderConfig))
+    providers: IDL.Vec(IDL.Tuple(OpenIdDelegationProvider, OpenIdAuthProviderConfig))
   });
   const AuthenticationConfigInternetIdentity = IDL.Record({
     derivation_origin: IDL.Opt(IDL.Text),
@@ -398,6 +406,7 @@ export const idlFactory = ({IDL}) => {
   });
   const SetController = IDL.Record({
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    kind: IDL.Opt(ControllerKind),
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });

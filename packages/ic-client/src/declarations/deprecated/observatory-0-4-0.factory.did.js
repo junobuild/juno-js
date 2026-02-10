@@ -21,9 +21,8 @@ export const idlFactory = ({IDL}) => {
     failed: IDL.Nat64
   });
   const OpenIdProvider = IDL.Variant({
-    GitHubActions: IDL.Null,
-    Google: IDL.Null,
-    GitHubAuth: IDL.Null
+    GitHub: IDL.Null,
+    Google: IDL.Null
   });
   const GetOpenIdCertificateArgs = IDL.Record({provider: OpenIdProvider});
   const JwkType = IDL.Variant({
@@ -59,10 +58,6 @@ export const idlFactory = ({IDL}) => {
     created_at: IDL.Nat64,
     version: IDL.Opt(IDL.Nat64)
   });
-  const ControllerKind = IDL.Variant({
-    Emulator: IDL.Null,
-    Automation: IDL.Null
-  });
   const ControllerScope = IDL.Variant({
     Write: IDL.Null,
     Admin: IDL.Null,
@@ -71,7 +66,6 @@ export const idlFactory = ({IDL}) => {
   const Controller = IDL.Record({
     updated_at: IDL.Nat64,
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
-    kind: IDL.Opt(ControllerKind),
     created_at: IDL.Nat64,
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
@@ -120,7 +114,6 @@ export const idlFactory = ({IDL}) => {
   });
   const SetController = IDL.Record({
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
-    kind: IDL.Opt(ControllerKind),
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
@@ -137,10 +130,10 @@ export const idlFactory = ({IDL}) => {
 
   return IDL.Service({
     del_controllers: IDL.Func([DeleteControllersArgs], [], []),
-    get_notify_status: IDL.Func([GetNotifications], [NotifyStatus], []),
+    get_notify_status: IDL.Func([GetNotifications], [NotifyStatus], ['query']),
     get_openid_certificate: IDL.Func([GetOpenIdCertificateArgs], [IDL.Opt(OpenIdCertificate)], []),
     is_openid_monitoring_enabled: IDL.Func([OpenIdProvider], [IDL.Bool], []),
-    list_controllers: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))], []),
+    list_controllers: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))], ['query']),
     notify: IDL.Func([NotifyArgs], [], []),
     ping: IDL.Func([NotifyArgs], [], []),
     set_controllers: IDL.Func([SetControllersArgs], [], []),

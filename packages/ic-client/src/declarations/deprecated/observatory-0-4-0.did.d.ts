@@ -13,12 +13,10 @@ import type { Principal } from '@icp-sdk/core/principal';
 export interface Controller {
 	updated_at: bigint;
 	metadata: Array<[string, string]>;
-	kind: [] | [ControllerKind];
 	created_at: bigint;
 	scope: ControllerScope;
 	expires_at: [] | [bigint];
 }
-export type ControllerKind = { Emulator: null } | { Automation: null };
 export type ControllerScope = { Write: null } | { Admin: null } | { Submit: null };
 export interface CyclesBalance {
 	timestamp: bigint;
@@ -108,7 +106,7 @@ export interface OpenIdCertificate {
 	created_at: bigint;
 	version: [] | [bigint];
 }
-export type OpenIdProvider = { GitHubActions: null } | { Google: null } | { GitHubAuth: null };
+export type OpenIdProvider = { GitHub: null } | { Google: null };
 export interface RateConfig {
 	max_tokens: bigint;
 	time_per_token_ns: bigint;
@@ -122,7 +120,6 @@ export interface Segment {
 export type SegmentKind = { Orbiter: null } | { MissionControl: null } | { Satellite: null };
 export interface SetController {
 	metadata: Array<[string, string]>;
-	kind: [] | [ControllerKind];
 	scope: ControllerScope;
 	expires_at: [] | [bigint];
 }

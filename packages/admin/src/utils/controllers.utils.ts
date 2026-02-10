@@ -17,5 +17,6 @@ export const mapSetControllerParams = ({
 const toSetController = (profile: string | null | undefined): MissionControlDid.SetController => ({
   metadata: nonNullish(profile) && profile !== '' ? [['profile', profile]] : [],
   expires_at: toNullable<bigint>(undefined),
-  scope: {Admin: null}
+  scope: {Admin: null},
+  kind: toNullable()
 });

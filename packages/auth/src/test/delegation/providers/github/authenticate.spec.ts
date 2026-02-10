@@ -23,16 +23,16 @@ import * as sessionUtils from '../../../../delegation/utils/session.utils';
 import {mockUserDoc} from '../../../mocks/doc.mock';
 import {mockSatelliteIdText} from '../../../mocks/principal.mock';
 
-vi.mock('../../../api/auth.api', () => ({
+vi.mock('../../../../delegation/api/auth.api', () => ({
   authenticate: vi.fn(),
   getDelegation: vi.fn()
 }));
 
-vi.mock('../../../providers/github/_api', () => ({
+vi.mock('../../../../delegation/providers/github/_api', () => ({
   finalizeOAuth: vi.fn()
 }));
 
-vi.mock('../../../utils/session.utils', async (importOriginal) => {
+vi.mock('../../../../delegation/utils/session.utils', async (importOriginal) => {
   const actual = await importOriginal<typeof sessionUtils>();
   return {
     ...actual,

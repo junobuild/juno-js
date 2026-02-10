@@ -23,12 +23,12 @@ import {mockUserDoc} from '../mocks/doc.mock';
 import {mockIdentity} from '../mocks/identity.mock';
 import {mockSatelliteIdText} from '../mocks/principal.mock';
 
-vi.mock('../api/auth.api', () => ({
+vi.mock('../../delegation/api/auth.api', () => ({
   authenticate: vi.fn(),
   getDelegation: vi.fn()
 }));
 
-vi.mock('../utils/authenticate.utils', async (importOriginal) => {
+vi.mock('../../delegation/utils/authenticate.utils', async (importOriginal) => {
   const actual = await importOriginal<typeof authenticateUtils>();
   return {
     ...actual,

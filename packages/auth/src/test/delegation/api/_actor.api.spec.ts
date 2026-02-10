@@ -1,7 +1,7 @@
 import type {ConsoleActor, SatelliteActor} from '@junobuild/ic-client/actor';
 import * as icClient from '@junobuild/ic-client/actor';
 import {getAuthActor} from '../../../delegation/api/_actor.api';
-import {AuthParameters} from '../../../delegation/types/actor';
+import type {AuthParameters} from '../../../delegation/types/authenticate';
 import {mockIdentity} from '../../mocks/identity.mock';
 import {mockSatelliteIdPrincipal} from '../../mocks/principal.mock';
 

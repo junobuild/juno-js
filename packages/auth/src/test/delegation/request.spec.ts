@@ -6,7 +6,7 @@ import {GITHUB_PROVIDER, GOOGLE_PROVIDER} from '../../delegation/_constants';
 import * as githubApiModule from '../../delegation/providers/github/_api';
 import {requestJwt} from '../../delegation/request';
 
-vi.mock('../providers/github/_api', () => ({
+vi.mock('../../delegation/providers/github/_api', () => ({
   initOAuth: vi.fn()
 }));
 

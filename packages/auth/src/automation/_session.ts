@@ -1,17 +1,46 @@
 import type {AuthParameters} from '../delegation/types/authenticate';
 import {authenticateAutomation as authenticateAutomationApi} from './api/automation.api';
-import {AutomationError} from './errors';
-import type {AuthenticatedAutomation, AutomationParameters} from './types/authenticate';
+import {AutomationError, GenerateJwtError} from './errors';
+import type {
+  AuthenticatedAutomation,
+  AutomationCredentials,
+  AutomationParameters
+} from './types/authenticate';
 import type {OpenIdAutomationContext} from './types/context';
 
 interface AutomationArgs {
   jwt: string;
-  context: OpenIdAutomationContext;
+  context: Omit<OpenIdAutomationContext, 'nonce'>;
   automation: AutomationParameters;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type AuthenticationAutomationArgs = AutomationCredentials & {
+  context: OpenIdAutomationContext;
+  automation: AutomationParameters;
+};
+
 export const authenticateAutomation = async <T extends AuthParameters>({
+  generateJwt,
+  context: {nonce, ...context},
+  automation
+}: AuthenticationAutomationArgs): Promise<AuthenticatedAutomation> => {
+  const generate = async (): Promise<{jwt: string}> => {
+    try {
+      return await generateJwt({nonce});
+    } catch (err: unknown) {
+      throw new GenerateJwtError({cause: err});
+    }
+  };
+
+  return await authenticate<T>({
+    ...(await generate()),
+    context,
+    automation
+  });
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const authenticate = async <T extends AuthParameters>({
   jwt,
   context: {caller, salt},
   automation

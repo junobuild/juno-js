@@ -13,13 +13,13 @@ export const authenticateAutomation = async <T extends AutomationParameters>(
 
   const {
     github: {
-      credentials: {jwt},
+      credentials: {generateJwt},
       automation
     }
   } = params;
 
   return await authenticate<T>({
-    jwt,
+    generateJwt,
     context,
     automation
   });

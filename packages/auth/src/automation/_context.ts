@@ -1,12 +1,8 @@
 import {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
-import type {Nonce, Salt} from '../types/nonce';
 import {generateNonce} from '../utils/nonce.utils';
+import type {OpenIdAutomationContext} from './types/context';
 
-export const initContext = async (): Promise<{
-  nonce: Nonce;
-  salt: Salt;
-  caller: Ed25519KeyIdentity;
-}> => {
+export const initContext = async (): Promise<OpenIdAutomationContext> => {
   const caller = Ed25519KeyIdentity.generate();
   const {nonce, salt} = await generateNonce({caller});
 

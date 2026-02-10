@@ -8,7 +8,7 @@ describe('_context', () => {
       const {nonce, salt, caller} = await initContext();
 
       expect(typeof nonce).toBe('string');
-      expect(typeof salt).toBe('string');
+      expect(salt).toBeInstanceOf(Uint8Array);
       expect(caller).toBeInstanceOf(Ed25519KeyIdentity);
       expect(nonce.length).toBeGreaterThan(0);
       expect(salt.length).toBeGreaterThan(0);
@@ -32,7 +32,7 @@ describe('_context', () => {
       const second = await initContext();
 
       expect(first.nonce).not.toBe(second.nonce);
-      expect(first.salt).not.toBe(second.salt);
+      expect(Array.from(first.salt)).not.toEqual(Array.from(second.salt));
       expect(first.caller.getPrincipal().toText()).not.toBe(second.caller.getPrincipal().toText());
     });
   });

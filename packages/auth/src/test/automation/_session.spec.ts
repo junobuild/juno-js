@@ -1,6 +1,6 @@
 import {authenticateAutomation} from '../../automation/_session';
 import * as automationApi from '../../automation/api/automation.api';
-import {AutomationError} from '../../automation/errors';
+import {AutomationError, GenerateJwtError} from '../../automation/errors';
 import type {AutomationResult} from '../../automation/types/actor';
 import type {AutomationParameters} from '../../automation/types/authenticate';
 import {OpenIdAutomationContext} from '../../automation/types/context';
@@ -11,18 +11,21 @@ vi.mock('../../automation/api/automation.api', () => ({
   authenticateAutomation: vi.fn()
 }));
 
-describe('_automation', () => {
+describe('_session', () => {
   const jwt = '123456778';
   const caller = mockIdentity;
   const salt = new Uint8Array([1, 2, 3, 4]);
+  const nonce = 'mock-nonce-123';
 
-  const context: OpenIdAutomationContext = {caller, salt};
+  const context: OpenIdAutomationContext = {caller, salt, nonce};
 
   const automation: AutomationParameters = {
     satellite: {satelliteId: mockSatelliteIdText}
   };
 
-  const automationArgs = {jwt, context, automation};
+  const mockGenerateJwt = vi.fn();
+
+  const automationArgs = {generateJwt: mockGenerateJwt, context, automation};
 
   const mockController = {
     scope: {Write: null},
@@ -32,9 +35,11 @@ describe('_automation', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
+
+    mockGenerateJwt.mockResolvedValue({jwt});
   });
 
-  it('should call authenticateAutomationApi and return result', async () => {
+  it('should generateJwt with nonce and call authenticateAutomationApi', async () => {
     vi.mocked(automationApi.authenticateAutomation).mockResolvedValue({
       Ok: [mockUserIdPrincipal, mockController]
     } as AutomationResult);
@@ -42,6 +47,9 @@ describe('_automation', () => {
     const result = await authenticateAutomation(automationArgs);
 
     expect(result).toStrictEqual([mockUserIdPrincipal, mockController]);
+
+    expect(mockGenerateJwt).toHaveBeenCalledTimes(1);
+    expect(mockGenerateJwt).toHaveBeenCalledWith({nonce});
 
     expect(automationApi.authenticateAutomation).toHaveBeenCalledTimes(1);
     expect(automationApi.authenticateAutomation).toHaveBeenCalledWith({
@@ -53,6 +61,14 @@ describe('_automation', () => {
       },
       actorParams: {automation, identity: caller}
     });
+  });
+
+  it('should throw GenerateJwtError when generateJwt fails', async () => {
+    const error = new Error('JWT generation failed');
+    mockGenerateJwt.mockRejectedValue(error);
+
+    await expect(authenticateAutomation(automationArgs)).rejects.toBeInstanceOf(GenerateJwtError);
+    expect(automationApi.authenticateAutomation).not.toHaveBeenCalled();
   });
 
   it('should throw AutomationError when authenticateAutomationApi returns Err', async () => {

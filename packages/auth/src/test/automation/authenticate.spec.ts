@@ -35,6 +35,8 @@ describe('authenticate', () => {
   const mockSalt = new Uint8Array([1, 2, 3, 4]);
   const mockNonce = 'mock-nonce-123';
 
+  const mockGenerateJwt = vi.fn();
+
   beforeEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
@@ -55,7 +57,7 @@ describe('authenticate', () => {
 
         const result = await authenticateAutomation({
           github: {
-            credentials: {jwt: 'jwt-123'},
+            credentials: {generateJwt: mockGenerateJwt},
             automation
           }
         });
@@ -66,10 +68,11 @@ describe('authenticate', () => {
 
         expect(sessionModule.authenticateAutomation).toHaveBeenCalledTimes(1);
         expect(sessionModule.authenticateAutomation).toHaveBeenCalledWith({
-          jwt: 'jwt-123',
+          generateJwt: mockGenerateJwt,
           context: {
             caller: mockCaller,
-            salt: mockSalt
+            salt: mockSalt,
+            nonce: mockNonce
           },
           automation
         });

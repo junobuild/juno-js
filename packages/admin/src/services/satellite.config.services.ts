@@ -237,6 +237,6 @@ export const getConfig = async ({
     storage: toStorageConfig(storage),
     ...(nonNullish(datastore) && {datastore: toDatastoreConfig(datastore)}),
     ...(nonNullish(auth) && {auth: toAuthenticationConfig(auth)}),
-    ...(nonNullish(automationConfig) && {auth: toAutomationConfig(automationConfig)})
+    ...(nonNullish(automationConfig) && {automation: toAutomationConfig(automationConfig)})
   };
 };

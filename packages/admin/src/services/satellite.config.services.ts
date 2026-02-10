@@ -1,20 +1,29 @@
 import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
-import type {AuthenticationConfig, DatastoreConfig, StorageConfig} from '@junobuild/config';
+import type {
+  AuthenticationConfig,
+  AutomationConfig,
+  DatastoreConfig,
+  StorageConfig
+} from '@junobuild/config';
 import type {SatelliteParameters} from '@junobuild/ic-client/actor';
 import {
   getAuthConfig as getAuthConfigApi,
+  getAutomationConfig as getAutomationConfigApi,
   getConfig as getConfigApi,
   getDatastoreConfig as getDatastoreConfigApi,
   getStorageConfig as getStorageConfigApi,
   setAuthConfig as setAuthConfigApi,
+  setAutomationConfig as setAutomationConfigApi,
   setDatastoreConfig as setDatastoreConfigApi,
   setStorageConfig as setStorageConfigApi
 } from '../api/satellite.api';
 import {
   fromAuthenticationConfig,
+  fromAutomationConfig,
   fromDatastoreConfig,
   fromStorageConfig,
   toAuthenticationConfig,
+  toAutomationConfig,
   toDatastoreConfig,
   toStorageConfig
 } from '../utils/config.utils';
@@ -90,6 +99,28 @@ export const setAuthConfig = async ({
 };
 
 /**
+ * Sets the automation configuration for a satellite.
+ * @param {Object} params - The parameters for setting the automation configuration.
+ * @param {Object} params.config - The automation configuration.
+ * @param {SatelliteParameters} params.satellite - The satellite parameters.
+ * @returns {Promise<void>} A promise that resolves when the automation configuration is set.
+ */
+export const setAutomationConfig = async ({
+  config,
+  ...rest
+}: {
+  config: Omit<AutomationConfig, 'createdAt' | 'updatedAt'>;
+  satellite: SatelliteParameters;
+}): Promise<AutomationConfig> => {
+  const result = await setAutomationConfigApi({
+    config: fromAutomationConfig(config),
+    ...rest
+  });
+
+  return toAutomationConfig(result);
+};
+
+/**
  * Gets the authentication configuration for a satellite.
  * @param {Object} params - The parameters for getting the authentication configuration.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
@@ -111,6 +142,30 @@ export const getAuthConfig = async ({
   }
 
   return toAuthenticationConfig(config);
+};
+
+/**
+ * Gets the automation configuration for a satellite.
+ * @param {Object} params - The parameters for getting the automation configuration.
+ * @param {SatelliteParameters} params.satellite - The satellite parameters.
+ * @returns {Promise<AutomationConfig | undefined>} A promise that resolves to the automation configuration or undefined if not found.
+ */
+export const getAutomationConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<AutomationConfig | undefined> => {
+  const result = await getAutomationConfigApi({
+    satellite
+  });
+
+  const config = fromNullable(result);
+
+  if (isNullish(config)) {
+    return undefined;
+  }
+
+  return toAutomationConfig(config);
 };
 
 /**
@@ -170,16 +225,18 @@ export const getConfig = async ({
   datastore?: DatastoreConfig;
   auth?: AuthenticationConfig;
 }> => {
-  const {storage, db, authentication} = await getConfigApi({
+  const {storage, db, authentication, automation} = await getConfigApi({
     satellite
   });
 
   const datastore = fromNullable(db);
   const auth = fromNullable(authentication);
+  const automationConfig = fromNullable(automation);
 
   return {
     storage: toStorageConfig(storage),
     ...(nonNullish(datastore) && {datastore: toDatastoreConfig(datastore)}),
-    ...(nonNullish(auth) && {auth: toAuthenticationConfig(auth)})
+    ...(nonNullish(auth) && {auth: toAuthenticationConfig(auth)}),
+    ...(nonNullish(automationConfig) && {automation: toAutomationConfig(automationConfig)})
   };
 };

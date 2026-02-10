@@ -9,7 +9,7 @@ import {
   Ed25519KeyIdentity
 } from '@icp-sdk/core/identity';
 import {Principal} from '@icp-sdk/core/principal';
-import * as authLib from '@junobuild/auth';
+import * as authLib from '@junobuild/auth/delegation';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {toArray} from '@junobuild/utils';
 import {MockInstance} from 'vitest';

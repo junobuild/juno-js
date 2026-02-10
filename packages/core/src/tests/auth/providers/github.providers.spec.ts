@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import * as authLib from '@junobuild/auth';
+import * as authLib from '@junobuild/auth/delegation';
 import {GitHubProvider} from '../../../auth/providers/github.providers';
 import {SignInMissingClientIdError} from '../../../auth/types/errors';
 import {GitHubRedirectOptions} from '../../../auth/types/github';

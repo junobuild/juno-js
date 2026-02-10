@@ -1,5 +1,5 @@
 import {isEmptyString, isNullish, nonNullish, notEmptyString} from '@dfinity/utils';
-import {authenticate} from '@junobuild/auth';
+import {authenticate} from '@junobuild/auth/delegation';
 import {EnvStore} from '../../core/stores/env.store';
 import {envApiUrl} from '../../core/utils/window.env.utils';
 import {fromDoc} from '../../datastore/utils/doc.utils';

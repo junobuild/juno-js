@@ -151,9 +151,9 @@
       ]
     },
     {
-      "name": "@junobuild/auth",
-      "path": "./packages/auth/dist/index.js",
-      "limit": "5 kB",
+      "name": "@junobuild/auth/delegation",
+      "path": "./packages/auth/delegation.js",
+      "limit": "10 kB",
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",

@@ -1,6 +1,6 @@
 import {initContext} from './_context';
 import {authenticateAutomation as authenticate} from './_session';
-import type {AutomationParameters, AutomationParams} from './types/auhtenticate';
+import type {AutomationParameters, AutomationParams} from './types/authenticate';
 
 export const authenticateAutomation = async <T extends AutomationParameters>(
   params: AutomationParams<T>

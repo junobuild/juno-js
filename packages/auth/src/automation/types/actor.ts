@@ -1,6 +1,6 @@
 import type {Identity} from '@icp-sdk/core/agent';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
-import type {AutomationParameters} from './auhtenticate';
+import type {AutomationParameters} from './authenticate';
 
 export interface ActorParameters {
   automation: AutomationParameters;

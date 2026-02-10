@@ -18,6 +18,11 @@
       "types": "./delegation.d.ts",
       "import": "./delegation.js",
       "require": "./delegation.mjs"
+    },
+    "./automation": {
+      "types": "./automation.d.ts",
+      "import": "./automation.js",
+      "require": "./automation.mjs"
     }
   },
   "files": [

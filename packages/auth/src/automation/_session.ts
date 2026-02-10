@@ -1,7 +1,7 @@
 import type {AuthParameters} from '../delegation/types/authenticate';
 import {authenticateAutomation as authenticateAutomationApi} from './api/automation.api';
 import {AutomationError} from './errors';
-import type {AutomationParameters} from './types/auhtenticate';
+import type {AutomationParameters} from './types/authenticate';
 import type {OpenIdAutomationContext} from './types/context';
 
 interface AutomationArgs {

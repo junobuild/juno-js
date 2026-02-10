@@ -165,6 +165,20 @@
       ]
     },
     {
+      "name": "@junobuild/auth/automation",
+      "path": "./packages/auth/automation.js",
+      "limit": "10 kB",
+      "ignore": [
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/identity",
+        "@dfinity/principal",
+        "@icp-sdk/core",
+        "@dfinity/utils",
+        "@junobuild/ic-client"
+      ]
+    },
+    {
       "name": "@junobuild/cdn",
       "path": "./packages/cdn/dist/index.js",
       "limit": "5 kB",

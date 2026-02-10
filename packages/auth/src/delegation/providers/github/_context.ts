@@ -1,4 +1,4 @@
-import type {Nonce} from '../../types/nonce';
+import type {Nonce} from '../../../types/nonce';
 import {parseUrl} from '../../utils/url.utils';
 import {initOAuth} from './_api';
 import type {OpenIdGitHubProvider} from './types/provider';

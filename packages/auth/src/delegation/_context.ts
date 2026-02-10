@@ -1,10 +1,10 @@
 import {isNullish} from '@dfinity/utils';
 import {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
+import type {Nonce} from '../types/nonce';
+import {generateNonce} from '../utils/nonce.utils';
 import {CONTEXT_KEY} from './_constants';
 import {ContextUndefinedError} from './errors';
 import type {OpenIdAuthContext} from './types/context';
-import type {Nonce} from './types/nonce';
-import {generateNonce} from './utils/auth.utils';
 import {parseContext, stringifyContext} from './utils/session-storage.utils';
 
 export const initContext = async ({

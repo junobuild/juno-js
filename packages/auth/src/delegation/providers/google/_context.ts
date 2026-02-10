@@ -1,4 +1,4 @@
-import type {Nonce} from '../../types/nonce';
+import type {Nonce} from '../../../types/nonce';
 import {generateRandomState} from '../../utils/state.utils';
 
 // eslint-disable-next-line require-await

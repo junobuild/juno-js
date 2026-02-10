@@ -404,6 +404,68 @@ describe('config.utils', () => {
 
       expect(googleConfig.delegation?.[0]?.max_time_to_live).toEqual([ttl]);
     });
+
+    it('maps github -> openid providers GitHub', () => {
+      const config: AuthenticationConfig = {
+        github: {clientId: 'Ov99aa88ijrrJJfwXsqW'}
+      };
+
+      const result = fromAuthenticationConfig(config);
+
+      expect(result.openid).toEqual([
+        {
+          providers: [[{GitHub: null}, {client_id: 'Ov99aa88ijrrJJfwXsqW', delegation: []}]],
+          observatory_id: []
+        }
+      ]);
+    });
+
+    it('maps both google and github providers', () => {
+      const config: AuthenticationConfig = {
+        google: {clientId: '1234567890-abcdef.apps.googleusercontent.com'},
+        github: {clientId: 'Ov99aa88ijrrJJfwXsqW'}
+      };
+
+      const result = fromAuthenticationConfig(config);
+
+      expect(result.openid).toEqual([
+        {
+          providers: [
+            [
+              {Google: null},
+              {client_id: '1234567890-abcdef.apps.googleusercontent.com', delegation: []}
+            ],
+            [{GitHub: null}, {client_id: 'Ov99aa88ijrrJJfwXsqW', delegation: []}]
+          ],
+          observatory_id: []
+        }
+      ]);
+    });
+
+    it('encodes github delegation with targets and ttl', () => {
+      const ttl = 24n * 60n * 60n * 1_000_000_000n;
+      const config: AuthenticationConfig = {
+        github: {
+          clientId: 'Ov99aa88ijrrJJfwXsqW',
+          delegation: {
+            allowedTargets: [mockUserIdText],
+            sessionDuration: ttl
+          }
+        }
+      };
+
+      const result = fromAuthenticationConfig(config);
+
+      const github = result.openid?.[0]?.providers.find(([key]) => 'GitHub' in key);
+      assertNonNullish(github);
+
+      const [_, githubConfig] = github;
+
+      expect(githubConfig.delegation?.[0]?.targets?.[0]).toEqual([
+        Principal.fromText(mockUserIdText)
+      ]);
+      expect(githubConfig.delegation?.[0]?.max_time_to_live).toEqual([ttl]);
+    });
   });
 
   describe('toAuthenticationConfig', () => {
@@ -659,6 +721,87 @@ describe('config.utils', () => {
 
       expect(result.google?.delegation?.allowedTargets).toBeUndefined();
       expect(result.google?.delegation?.sessionDuration).toBe(ttl);
+    });
+
+    it('maps openid providers (GitHub) -> github', () => {
+      const mockClientId = 'Ov99aa88ijrrJJfwXsqW';
+      const result = toAuthenticationConfig({
+        internet_identity: [],
+        openid: [
+          {
+            providers: [[{GitHub: null}, {client_id: mockClientId, delegation: []}]],
+            observatory_id: []
+          }
+        ],
+        rules: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.github).toEqual({
+        clientId: mockClientId
+      });
+    });
+
+    it('maps both Google and GitHub providers', () => {
+      const result = toAuthenticationConfig({
+        internet_identity: [],
+        openid: [
+          {
+            providers: [
+              [
+                {Google: null},
+                {client_id: '1234567890-abcdef.apps.googleusercontent.com', delegation: []}
+              ],
+              [{GitHub: null}, {client_id: 'Ov99aa88ijrrJJfwXsqW', delegation: []}]
+            ],
+            observatory_id: []
+          }
+        ],
+        rules: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.google).toEqual({
+        clientId: '1234567890-abcdef.apps.googleusercontent.com'
+      });
+      expect(result.github).toEqual({
+        clientId: 'Ov99aa88ijrrJJfwXsqW'
+      });
+    });
+
+    it('decodes github delegation with targets', () => {
+      const result = toAuthenticationConfig({
+        internet_identity: [],
+        openid: [
+          {
+            providers: [
+              [
+                {GitHub: null},
+                {
+                  client_id: 'Ov99aa88ijrrJJfwXsqW',
+                  delegation: [
+                    {
+                      targets: [[Principal.fromText(mockUserIdText)]],
+                      max_time_to_live: []
+                    }
+                  ]
+                }
+              ]
+            ],
+            observatory_id: []
+          }
+        ],
+        rules: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.github?.delegation?.allowedTargets).toEqual([mockUserIdText]);
     });
   });
 });

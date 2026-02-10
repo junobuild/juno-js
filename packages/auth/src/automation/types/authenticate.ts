@@ -1,3 +1,4 @@
+import type {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
 import type {SatelliteParameters} from '@junobuild/ic-client/actor';
 import type {Nonce} from '../../types/nonce';
 import type {AutomationData} from './actor';
@@ -20,4 +21,7 @@ export interface AutomationParameters {
     Required<Pick<SatelliteParameters, 'satelliteId'>>;
 }
 
-export type AuthenticatedAutomation = AutomationData;
+export interface AuthenticatedAutomation {
+  identity: Ed25519KeyIdentity;
+  data: AutomationData;
+}

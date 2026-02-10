@@ -46,7 +46,10 @@ describe('_automation', () => {
 
     const result = await authenticateAutomation(automationArgs);
 
-    expect(result).toStrictEqual([mockUserIdPrincipal, mockController]);
+    expect(result).toStrictEqual({
+      identity: caller,
+      data: [mockUserIdPrincipal, mockController]
+    });
 
     expect(mockGenerateJwt).toHaveBeenCalledTimes(1);
     expect(mockGenerateJwt).toHaveBeenCalledWith({nonce});

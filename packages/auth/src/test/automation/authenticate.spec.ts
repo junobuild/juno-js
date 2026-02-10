@@ -1,5 +1,5 @@
 import {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
-import * as sessionModule from '../../automation/_automation';
+import * as automationModule from '../../automation/_automation';
 import * as contextModule from '../../automation/_context';
 import {authenticateAutomation} from '../../automation/authenticate';
 import type {
@@ -12,7 +12,7 @@ vi.mock('../../automation/_context', () => ({
   initContext: vi.fn()
 }));
 
-vi.mock('../../automation/_session', () => ({
+vi.mock('../../automation/_automation', () => ({
   authenticateAutomation: vi.fn()
 }));
 
@@ -26,16 +26,16 @@ describe('authenticate', () => {
     expires_at: 123456789n
   };
 
-  const mockAuthenticatedAutomation: AuthenticatedAutomation = [
-    mockUserIdPrincipal,
-    mockController
-  ];
-
   const mockCaller = Ed25519KeyIdentity.generate();
   const mockSalt = new Uint8Array([1, 2, 3, 4]);
   const mockNonce = 'mock-nonce-123';
 
   const mockGenerateJwt = vi.fn();
+
+  const mockAuthenticatedAutomation: AuthenticatedAutomation = {
+    identity: mockCaller,
+    data: [mockUserIdPrincipal, mockController]
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -51,7 +51,7 @@ describe('authenticate', () => {
   describe('GitHub', () => {
     describe('With credentials', () => {
       it('should initialize context and authenticate', async () => {
-        vi.mocked(sessionModule.authenticateAutomation).mockResolvedValue(
+        vi.mocked(automationModule.authenticateAutomation).mockResolvedValue(
           mockAuthenticatedAutomation
         );
 
@@ -66,8 +66,8 @@ describe('authenticate', () => {
 
         expect(contextModule.initContext).toHaveBeenCalledTimes(1);
 
-        expect(sessionModule.authenticateAutomation).toHaveBeenCalledTimes(1);
-        expect(sessionModule.authenticateAutomation).toHaveBeenCalledWith({
+        expect(automationModule.authenticateAutomation).toHaveBeenCalledTimes(1);
+        expect(automationModule.authenticateAutomation).toHaveBeenCalledWith({
           generateJwt: mockGenerateJwt,
           context: {
             caller: mockCaller,

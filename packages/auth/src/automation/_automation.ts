@@ -62,5 +62,10 @@ const authenticate = async <T extends AuthParameters>({
     throw new AutomationError('Automation authentication failed', {cause: result});
   }
 
-  return result.Ok;
+  const {Ok: data} = result;
+
+  return {
+    identity: caller,
+    data
+  };
 };

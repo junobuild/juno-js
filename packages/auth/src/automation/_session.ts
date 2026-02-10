@@ -1,7 +1,7 @@
 import type {AuthParameters} from '../delegation/types/authenticate';
 import {authenticateAutomation as authenticateAutomationApi} from './api/automation.api';
 import {AutomationError} from './errors';
-import type {AutomationParameters} from './types/authenticate';
+import type {AuthenticatedAutomation, AutomationParameters} from './types/authenticate';
 import type {OpenIdAutomationContext} from './types/context';
 
 interface AutomationArgs {
@@ -10,11 +10,12 @@ interface AutomationArgs {
   automation: AutomationParameters;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const authenticateAutomation = async <T extends AuthParameters>({
   jwt,
   context: {caller, salt},
   automation
-}: AutomationArgs): Promise<void> => {
+}: AutomationArgs): Promise<AuthenticatedAutomation> => {
   const result = await authenticateAutomationApi({
     args: {
       OpenId: {
@@ -31,4 +32,6 @@ export const authenticateAutomation = async <T extends AuthParameters>({
   if ('Err' in result) {
     throw new AutomationError('Automation authentication failed', {cause: result});
   }
+
+  return result.Ok;
 };

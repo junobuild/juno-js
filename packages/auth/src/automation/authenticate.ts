@@ -1,10 +1,14 @@
 import {initContext} from './_context';
 import {authenticateAutomation as authenticate} from './_session';
-import type {AutomationParameters, AutomationParams} from './types/authenticate';
+import type {
+  AuthenticatedAutomation,
+  AutomationParameters,
+  AutomationParams
+} from './types/authenticate';
 
 export const authenticateAutomation = async <T extends AutomationParameters>(
   params: AutomationParams<T>
-): Promise<void> => {
+): Promise<AuthenticatedAutomation> => {
   const context = await initContext();
 
   const {
@@ -14,7 +18,7 @@ export const authenticateAutomation = async <T extends AutomationParameters>(
     }
   } = params;
 
-  await authenticate({
+  return await authenticate<T>({
     jwt,
     context,
     automation

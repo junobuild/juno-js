@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/juno-js",
-  "version": "219",
+  "version": "220",
   "description": "JavaScript libraries for interfacing with Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -16,7 +16,13 @@
     "update:ic-js": "./scripts/update-ic-js",
     "docs": "node scripts/docs.js && prettier --write packages/**/README.md",
     "test": "vitest",
-    "clean": "npm run clean --workspaces --if-present"
+    "clean": "npm run clean --workspaces --if-present",
+    "e2e": "NODE_ENV=development playwright test",
+    "e2e:ci": "playwright test --reporter=html",
+    "e2e:snapshots": "playwright test --update-snapshots --reporter=list",
+    "e2e:snapshots:local": "NODE_ENV=development playwright test --update-snapshots --reporter=list",
+    "e2e:report": "playwright show-report",
+    "e2e:playwright:install": "playwright install chromium --with-deps"
   },
   "workspaces": [
     "packages/utils",
@@ -38,19 +44,21 @@
   ],
   "devDependencies": {
     "@dfinity/eslint-config-oisy-wallet": "^0.2.3",
-    "@icp-sdk/bindgen": "^0.2.0",
+    "@dfinity/internet-identity-playwright": "^3.0.0-next-2026-02-02",
+    "@icp-sdk/bindgen": "^0.2.1",
+    "@playwright/test": "^1.58.2",
     "@size-limit/esbuild": "^11.2.0",
     "@size-limit/preset-small-lib": "^11.2.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.1",
-    "esbuild": "^0.27.0",
+    "esbuild": "^0.27.3",
     "fake-indexeddb": "^6.2.5",
-    "jsdom": "^27.2.0",
-    "prettier": "^3.6.2",
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.1",
     "prettier-plugin-organize-imports": "^4.3.0",
     "tsdoc-markdown": "^1.4.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.12",
+    "vitest": "^4.0.18",
     "vitest-mock-extended": "^3.1.0"
   },
   "engines": {
@@ -79,7 +87,7 @@
     {
       "name": "@junobuild/core",
       "path": "./packages/core/dist/index.js",
-      "limit": "15 kB",
+      "limit": "20 kB",
       "ignore": [
         "@dfinity/agent",
         "@dfinity/candid",
@@ -95,21 +103,6 @@
       "name": "@junobuild/core-worker",
       "path": "./packages/core/dist/workers/auth.worker.js",
       "limit": "55 kB"
-    },
-    {
-      "name": "@junobuild/core-peer",
-      "path": "./packages/core-peer/dist/index.js",
-      "limit": "15 kB",
-      "ignore": [
-        "@dfinity/agent",
-        "@dfinity/candid",
-        "@dfinity/identity",
-        "@dfinity/principal",
-        "@dfinity/auth-client",
-        "@icp-sdk/core",
-        "@icp-sdk/auth",
-        "@dfinity/utils"
-      ]
     },
     {
       "name": "@junobuild/core-standalone",

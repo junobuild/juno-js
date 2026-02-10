@@ -41,3 +41,10 @@ packages/core-standalone/declarations
 packages/core-standalone/src
 
 packages/**/LICENSE
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

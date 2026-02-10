@@ -1,0 +1,37 @@
+name: Setup E2E Environment
+
+description: Build the CLI and caches Docker layers
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build the libs
+      run: npm run build
+      shell: bash
+
+    - name: Install dependencies in demo
+      shell: bash
+      working-directory: demo
+      run: npm ci
+
+    - name: Install Juno CLI
+      run: npm i -g @junobuild/cli
+      shell: bash
+
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      with:
+        path: /home/runner/.docker
+        key: ${{ runner.os }}-docker-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-docker-
+
+    - name: Run emulator
+      shell: bash
+      working-directory: demo
+      run: |
+        set -e
+        juno emulator start --headless &
+        juno emulator wait
+        juno login --emulator --mode development --headless
+        juno config apply --mode development --headless

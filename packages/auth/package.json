@@ -14,7 +14,7 @@
       "import": "./index.js",
       "require": "./index.mjs"
     },
-    "./actor": {
+    "./delegation": {
       "types": "./delegation.d.ts",
       "import": "./delegation.js",
       "require": "./delegation.mjs"

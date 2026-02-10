@@ -364,7 +364,7 @@ References:
 
 - SatelliteId
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L20)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L21)
 
 #### :gear: SatelliteIdsSchema
 
@@ -376,19 +376,19 @@ References:
 
 - SatelliteIds
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L39)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L40)
 
 #### :gear: SatelliteConfigOptionsSchema
 
 | Constant                       | Type                                                                                                                                                                                                                                                                                                                          |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 5 more ...; version: ZodOptional<...>; }, $strip>>; ... 5 more ...; id: ZodString; }, $strict>, ZodObject<...>]>` |
+| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 5 more ...; version: ZodOptional<...>; }, $strip>>; ... 6 more ...; id: ZodString; }, $strict>, ZodObject<...>]>` |
 
 References:
 
 - JunoConsoleConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L78)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L80)
 
 ### :tropical_drink: Interfaces
 
@@ -706,7 +706,7 @@ Represents the unique identifier for a satellite.
 | -------- | -------- | -------------------------------------------------------------------------------- |
 | `id`     | `string` | The unique identifier (ID) of the satellite for this application. type: {string} |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L28)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L29)
 
 #### :gear: SatelliteIds
 
@@ -716,13 +716,13 @@ Represents a mapping of satellite identifiers to different configurations based 
 | -------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ids`    | `Record<string, string>` | A mapping of satellite identifiers (IDs) to different configurations based on the mode of the application. This allows the application to use different satellite IDs, such as production, staging, etc. Example: { "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai" } type: {Record<JunoConfigMode, string>} |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L47)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L48)
 
 #### :gear: SatelliteConfigOptions
 
 SatelliteConfigOptions interface provides configuration settings that allow for fine-tuning
 the operational behavior of various aspects of a Satellite, such as storage, datastore,
-authentication, and deployment assertions.
+authentication, automation, and deployment assertions.
 
 These options affect specific modules of the Satellite and may require manual application of
 changes, typically through CLI commands (e.g., `juno config`).
@@ -732,11 +732,12 @@ changes, typically through CLI commands (e.g., `juno config`).
 | `storage`        | `StorageConfig or undefined`        | Optional configuration parameters for the satellite, affecting the operational behavior of its Storage. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {StorageConfig}optional               |
 | `datastore`      | `DatastoreConfig or undefined`      | Optional configuration parameters for the satellite, affecting the operational behavior of its Datastore. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {DatastoreConfig}optional           |
 | `authentication` | `AuthenticationConfig or undefined` | Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {AuthenticationConfig}optional |
+| `automation`     | `AutomationConfig or undefined`     | Optional configuration parameters for the behavior of the automation. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {AutomationConfig}optional                                              |
 | `assertions`     | `SatelliteAssertions or undefined`  | Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions. type: {SatelliteAssertions}optional                                                                                                                       |
 | `settings`       | `ModuleSettings or undefined`       | Optional configuration parameters for the Satellite. These settings control various aspects of the module's behavior and resource usage. type: {ModuleSettings}optional                                                                                                     |
 | `collections`    | `Collections or undefined`          | Optional configuration for the Datastore and Storage collections. type: {Collections}optional                                                                                                                                                                               |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L109)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L112)
 
 ### :cocktail: Types
 
@@ -849,7 +850,7 @@ The configuration for running the Juno emulator.
 | ----------------- | ---------------------------------------------------------------------------- |
 | `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> and CliConfig and SatelliteConfigOptions` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L165)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L176)
 
 <!-- TSDOC_END -->
 

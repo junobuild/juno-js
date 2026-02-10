@@ -17,6 +17,7 @@ export * from './satellite/configs/satellite.config';
 export * from './satellite/constants/emulator.constants';
 export * from './satellite/juno.config';
 export * from './shared/authentication.config';
+export * from './shared/automation.config';
 export * from './shared/feature.config';
 export * from './shared/storage.config';
 export * from './types/cli.config';

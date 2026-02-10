@@ -1,7 +1,3 @@
-/**
- * @vitest-environment jsdom
- */
-
 import {generateNonce} from '../../utils/nonce.utils';
 import {mockIdentity} from '../mocks/identity.mock';
 
@@ -38,19 +34,19 @@ describe('nonce.utils', () => {
     it('should produce deterministic nonce for same salt and caller', async () => {
       const fixedSalt = new Uint8Array(32).fill(42);
 
-      const originalGetRandomValues = window.crypto.getRandomValues;
+      const originalGetRandomValues = crypto.getRandomValues;
       // @ts-ignore
-      window.crypto.getRandomValues = vi.fn(() => fixedSalt);
+      crypto.getRandomValues = vi.fn(() => fixedSalt);
 
       const result1 = await generateNonce({caller: mockIdentity});
 
       // @ts-ignore
-      window.crypto.getRandomValues = vi.fn(() => fixedSalt);
+      crypto.getRandomValues = vi.fn(() => fixedSalt);
       const result2 = await generateNonce({caller: mockIdentity});
 
       expect(result1.nonce).toBe(result2.nonce);
 
-      window.crypto.getRandomValues = originalGetRandomValues;
+      crypto.getRandomValues = originalGetRandomValues;
     });
 
     it('should generate a valid base64url string as nonce', async () => {
@@ -61,7 +57,7 @@ describe('nonce.utils', () => {
     });
 
     it('should use SHA-256 for hashing', async () => {
-      const digestSpy = vi.spyOn(window.crypto.subtle, 'digest');
+      const digestSpy = vi.spyOn(crypto.subtle, 'digest');
 
       await generateNonce({caller: mockIdentity});
 
@@ -69,7 +65,7 @@ describe('nonce.utils', () => {
     });
 
     it('should combine salt and principal bytes before hashing', async () => {
-      const digestSpy = vi.spyOn(window.crypto.subtle, 'digest');
+      const digestSpy = vi.spyOn(crypto.subtle, 'digest');
 
       await generateNonce({caller: mockIdentity});
 

@@ -1,4 +1,4 @@
-import {authenticateAutomation} from '../../automation/_session';
+import {authenticateAutomation} from '../../automation/_automation';
 import * as automationApi from '../../automation/api/automation.api';
 import {AutomationError, GenerateJwtError} from '../../automation/errors';
 import type {AutomationResult} from '../../automation/types/actor';
@@ -11,7 +11,7 @@ vi.mock('../../automation/api/automation.api', () => ({
   authenticateAutomation: vi.fn()
 }));
 
-describe('_session', () => {
+describe('_automation', () => {
   const jwt = '123456778';
   const caller = mockIdentity;
   const salt = new Uint8Array([1, 2, 3, 4]);

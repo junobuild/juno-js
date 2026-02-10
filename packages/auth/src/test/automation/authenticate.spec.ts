@@ -1,6 +1,6 @@
 import {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
+import * as sessionModule from '../../automation/_automation';
 import * as contextModule from '../../automation/_context';
-import * as sessionModule from '../../automation/_session';
 import {authenticateAutomation} from '../../automation/authenticate';
 import type {
   AuthenticatedAutomation,

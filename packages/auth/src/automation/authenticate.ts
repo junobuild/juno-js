@@ -1,5 +1,5 @@
+import {authenticateAutomation as authenticate} from './_automation';
 import {initContext} from './_context';
-import {authenticateAutomation as authenticate} from './_session';
 import type {
   AuthenticatedAutomation,
   AutomationParameters,

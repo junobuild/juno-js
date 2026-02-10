@@ -1,4 +1,4 @@
 import {toBase64URL} from '../../utils/url.utils';
 
 export const generateRandomState = (): string =>
-  toBase64URL(window.crypto.getRandomValues(new Uint8Array(12)));
+  toBase64URL(crypto.getRandomValues(new Uint8Array(12)));

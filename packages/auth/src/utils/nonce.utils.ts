@@ -3,7 +3,7 @@ import type {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
 import type {Nonce, Salt} from '../types/nonce';
 import {toBase64URL} from './url.utils';
 
-const generateSalt = (): Salt => window.crypto.getRandomValues(new Uint8Array(32));
+const generateSalt = (): Salt => crypto.getRandomValues(new Uint8Array(32));
 
 const buildNonce = async ({salt, caller}: {salt: Salt; caller: Ed25519KeyIdentity}) => {
   const principal = caller.getPrincipal().toUint8Array();
@@ -12,7 +12,7 @@ const buildNonce = async ({salt, caller}: {salt: Salt; caller: Ed25519KeyIdentit
   bytes.set(salt);
   bytes.set(principal, salt.length);
 
-  const hash = await window.crypto.subtle.digest('SHA-256', bytes);
+  const hash = await crypto.subtle.digest('SHA-256', bytes);
 
   return toBase64URL(arrayBufferToUint8Array(hash));
 };

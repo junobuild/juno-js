@@ -4,6 +4,7 @@ import type {
   AuthenticationConfig,
   AuthenticationConfigGitHub,
   AuthenticationConfigGoogle,
+  AutomationConfig,
   DatastoreConfig,
   StorageConfig,
   StorageConfigHeader,
@@ -261,6 +262,97 @@ export const toAuthenticationConfig = ({
     ...(nonNullish(rules) && {
       rules: {
         allowedCallers: rules.allowed_callers.map((caller) => caller.toText())
+      }
+    }),
+    version: fromNullable(version)
+  };
+};
+
+export const fromAutomationConfig = ({
+  github,
+  version
+}: AutomationConfig): SatelliteDid.SetAutomationConfig => {
+  if (isNullish(github)) {
+    return {openid: [], version: toNullable(version)};
+  }
+
+  const {repositories, accessKeys} = github;
+
+  const repositoriesMap: Map<
+    SatelliteDid.RepositoryKey,
+    SatelliteDid.OpenIdAutomationRepositoryConfig
+  > = new Map(
+    repositories.map(({owner, name, branches}) => [
+      {owner, name},
+      {branches: (branches?.length ?? 0) > 0 ? toNullable(branches) : toNullable()}
+    ])
+  );
+
+  const controller: SatelliteDid.OpenIdAutomationProviderControllerConfig | undefined = isNullish(
+    accessKeys
+  )
+    ? undefined
+    : {
+        scope: toNullable(
+          accessKeys.scope === 'Write'
+            ? {Write: null}
+            : accessKeys.scope === 'Submit'
+              ? {Submit: null}
+              : undefined
+        ),
+        max_time_to_live: toNullable(accessKeys.timeToLive)
+      };
+
+  return {
+    openid: [
+      {
+        providers: [
+          [
+            {GitHub: null},
+            {
+              repositories: [...repositoriesMap],
+              controller: toNullable(controller)
+            }
+          ]
+        ],
+        observatory_id: []
+      }
+    ],
+    version: toNullable(version)
+  };
+};
+
+export const toAutomationConfig = ({
+  version,
+  openid: openIdDid
+}: SatelliteDid.AutomationConfig): AutomationConfig => {
+  const openId = fromNullable(openIdDid);
+  const github = openId?.providers.find(([key]) => 'GitHub' in key)?.[1];
+
+  const repositories = (github?.repositories ?? []).map(([key, config]) => ({
+    ...key,
+    ...(nonNullish(fromNullable(config.branches)) && {
+      branches: fromNullable(config.branches)
+    })
+  }));
+
+  const controller = fromNullable(github?.controller ?? []);
+  const scope = fromNullable(controller?.scope ?? []);
+  const maxTimeToLive = fromNullable(controller?.max_time_to_live ?? []);
+  const withAccessKeys = nonNullish(scope) || nonNullish(maxTimeToLive);
+
+  return {
+    ...(nonNullish(github) && {
+      github: {
+        repositories,
+        ...(withAccessKeys && {
+          accessKeys: {
+            ...(nonNullish(scope) && {
+              scope: 'Write' in scope ? 'Write' : 'Submit' in scope ? 'Submit' : undefined
+            }),
+            ...(nonNullish(maxTimeToLive) && {timeToLive: maxTimeToLive})
+          }
+        })
       }
     }),
     version: fromNullable(version)

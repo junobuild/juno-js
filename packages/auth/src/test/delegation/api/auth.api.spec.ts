@@ -24,7 +24,7 @@ const mockActor = {
   get_delegation: vi.fn()
 };
 
-describe('proposals.api', () => {
+describe('auth.api', () => {
   const actorParams: ActorParameters = {
     auth: {satellite: {satelliteId: mockSatelliteIdPrincipal}},
     identity: mockIdentity

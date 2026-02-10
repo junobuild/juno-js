@@ -1,6 +1,6 @@
 import {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
 import type {Nonce, Salt} from '../types/nonce';
-import {generateNonce} from '../utils/auth.utils';
+import {generateNonce} from '../utils/nonce.utils';
 
 export const initContext = async (): Promise<{
   nonce: Nonce;

@@ -2,6 +2,7 @@ import {assertNonNullish} from '@dfinity/utils';
 import {Principal} from '@icp-sdk/core/principal';
 import type {
   AuthenticationConfig,
+  AutomationConfig,
   DatastoreConfig,
   StorageConfig,
   StorageConfigHeader,
@@ -11,9 +12,11 @@ import type {
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {
   fromAuthenticationConfig,
+  fromAutomationConfig,
   fromDatastoreConfig,
   fromStorageConfig,
   toAuthenticationConfig,
+  toAutomationConfig,
   toDatastoreConfig,
   toStorageConfig
 } from '../../utils/config.utils';
@@ -383,7 +386,7 @@ describe('config.utils', () => {
     });
 
     it('encodes delegation: maxTimeToLive present', () => {
-      const ttl = 24n * 60n * 60n * 1_000_000_000n; // 1 day ns
+      const ttl = 24n * 60n * 60n * 1_000_000_000n;
       const config: AuthenticationConfig = {
         google: {
           clientId: '1234567890-abcdef.apps.googleusercontent.com',
@@ -643,7 +646,6 @@ describe('config.utils', () => {
         updated_at: []
       });
 
-      // delegation omitted entirely because targets=undefined and no TTL
       expect(result.google?.delegation).toBeUndefined();
     });
 
@@ -802,6 +804,301 @@ describe('config.utils', () => {
       });
 
       expect(result.github?.delegation?.allowedTargets).toEqual([mockUserIdText]);
+    });
+  });
+
+  describe('fromAutomationConfig', () => {
+    it('maps AutomationConfig with github repositories', () => {
+      const config: AutomationConfig = {
+        github: {
+          repositories: [
+            {owner: 'octo-org', name: 'octo-repo'},
+            {owner: 'peterpeterparker', name: 'daviddalbusco.com', branches: ['main', 'develop']}
+          ]
+        },
+        version: 1n
+      };
+
+      const result = fromAutomationConfig(config);
+
+      expect(result.openid).toEqual([
+        {
+          providers: [
+            [
+              {GitHub: null},
+              {
+                repositories: [
+                  [{owner: 'octo-org', name: 'octo-repo'}, {branches: []}],
+                  [
+                    {owner: 'peterpeterparker', name: 'daviddalbusco.com'},
+                    {branches: [['main', 'develop']]}
+                  ]
+                ],
+                controller: []
+              }
+            ]
+          ],
+          observatory_id: []
+        }
+      ]);
+      expect(result.version).toEqual([1n]);
+    });
+
+    it('omits openid when github is undefined', () => {
+      const result = fromAutomationConfig({
+        github: undefined,
+        version: undefined
+      });
+
+      expect(result.openid).toEqual([]);
+      expect(result.version).toEqual([]);
+    });
+
+    it('handles accessKeys with scope and timeToLive', () => {
+      const ttl = 10n * 60n * 1_000_000_000n;
+      const config: AutomationConfig = {
+        github: {
+          repositories: [{owner: 'octo-org', name: 'octo-repo'}],
+          accessKeys: {
+            scope: 'Write',
+            timeToLive: ttl
+          }
+        }
+      };
+
+      const result = fromAutomationConfig(config);
+
+      const github = result.openid?.[0]?.providers[0];
+      assertNonNullish(github);
+
+      const [_, githubConfig] = github;
+
+      expect(githubConfig.controller).toEqual([
+        {
+          scope: [{Write: null}],
+          max_time_to_live: [ttl]
+        }
+      ]);
+    });
+
+    it('encodes Submit scope correctly', () => {
+      const config: AutomationConfig = {
+        github: {
+          repositories: [{owner: 'octo-org', name: 'octo-repo'}],
+          accessKeys: {
+            scope: 'Submit'
+          }
+        }
+      };
+
+      const result = fromAutomationConfig(config);
+
+      const github = result.openid?.[0]?.providers[0];
+      assertNonNullish(github);
+
+      const [_, githubConfig] = github;
+
+      expect(githubConfig.controller?.[0]?.scope).toEqual([{Submit: null}]);
+    });
+
+    it('handles repositories without branches', () => {
+      const config: AutomationConfig = {
+        github: {
+          repositories: [{owner: 'octo-org', name: 'octo-repo'}]
+        }
+      };
+
+      const result = fromAutomationConfig(config);
+
+      const github = result.openid?.[0]?.providers[0];
+      assertNonNullish(github);
+
+      const [_, githubConfig] = github;
+
+      expect(githubConfig.repositories).toEqual([
+        [{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]
+      ]);
+    });
+
+    it('handles empty branches array', () => {
+      const config: AutomationConfig = {
+        github: {
+          repositories: [{owner: 'octo-org', name: 'octo-repo', branches: []}]
+        }
+      };
+
+      const result = fromAutomationConfig(config);
+
+      const github = result.openid?.[0]?.providers[0];
+      assertNonNullish(github);
+
+      const [_, githubConfig] = github;
+
+      expect(githubConfig.repositories).toEqual([
+        [{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]
+      ]);
+    });
+  });
+
+  describe('toAutomationConfig', () => {
+    it('maps AutomationConfigDid correctly', () => {
+      const result = toAutomationConfig({
+        openid: [
+          {
+            providers: [
+              [
+                {GitHub: null},
+                {
+                  repositories: [
+                    [{owner: 'octo-org', name: 'octo-repo'}, {branches: []}],
+                    [{owner: 'peterpeterparker', name: 'daviddalbusco.com'}, {branches: [['main']]}]
+                  ],
+                  controller: []
+                }
+              ]
+            ],
+            observatory_id: []
+          }
+        ],
+        version: [2n],
+        created_at: [now],
+        updated_at: [now]
+      });
+
+      expect(result.github).toEqual({
+        repositories: [
+          {owner: 'octo-org', name: 'octo-repo'},
+          {owner: 'peterpeterparker', name: 'daviddalbusco.com', branches: ['main']}
+        ]
+      });
+      expect(result.version).toBe(2n);
+    });
+
+    it('handles empty openid', () => {
+      const result = toAutomationConfig({
+        openid: [],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.github).toBeUndefined();
+      expect(result.version).toBeUndefined();
+    });
+
+    it('decodes controller with Write scope', () => {
+      const ttl = 10n * 60n * 1_000_000_000n;
+
+      const result = toAutomationConfig({
+        openid: [
+          {
+            providers: [
+              [
+                {GitHub: null},
+                {
+                  repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]],
+                  controller: [
+                    {
+                      scope: [{Write: null}],
+                      max_time_to_live: [ttl]
+                    }
+                  ]
+                }
+              ]
+            ],
+            observatory_id: []
+          }
+        ],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.github?.accessKeys).toEqual({
+        scope: 'Write',
+        timeToLive: ttl
+      });
+    });
+
+    it('decodes controller with Submit scope', () => {
+      const result = toAutomationConfig({
+        openid: [
+          {
+            providers: [
+              [
+                {GitHub: null},
+                {
+                  repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]],
+                  controller: [
+                    {
+                      scope: [{Submit: null}],
+                      max_time_to_live: []
+                    }
+                  ]
+                }
+              ]
+            ],
+            observatory_id: []
+          }
+        ],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.github?.accessKeys?.scope).toBe('Submit');
+    });
+
+    it('omits accessKeys when controller is empty', () => {
+      const result = toAutomationConfig({
+        openid: [
+          {
+            providers: [
+              [
+                {GitHub: null},
+                {
+                  repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]],
+                  controller: []
+                }
+              ]
+            ],
+            observatory_id: []
+          }
+        ],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.github?.accessKeys).toBeUndefined();
+    });
+
+    it('handles repositories with branches', () => {
+      const result = toAutomationConfig({
+        openid: [
+          {
+            providers: [
+              [
+                {GitHub: null},
+                {
+                  repositories: [
+                    [{owner: 'octo-org', name: 'octo-repo'}, {branches: [['main', 'develop']]}]
+                  ],
+                  controller: []
+                }
+              ]
+            ],
+            observatory_id: []
+          }
+        ],
+        version: [],
+        created_at: [],
+        updated_at: []
+      });
+
+      expect(result.github?.repositories).toEqual([
+        {owner: 'octo-org', name: 'octo-repo', branches: ['main', 'develop']}
+      ]);
     });
   });
 });

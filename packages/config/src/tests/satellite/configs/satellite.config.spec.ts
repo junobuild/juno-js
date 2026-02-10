@@ -165,5 +165,46 @@ describe('satellite.config', () => {
         expect(result.success).toBe(false);
       });
     });
+
+    describe('authentication and automation integration', () => {
+      it('accepts config with both authentication and automation', () => {
+        const result = SatelliteConfigOptionsSchema.safeParse({
+          id: mockModuleIdText,
+          authentication: {
+            google: {
+              clientId: '1234567890-abcdef.apps.googleusercontent.com'
+            }
+          },
+          automation: {
+            github: {
+              repositories: [{owner: 'octo-org', name: 'octo-repo'}]
+            }
+          }
+        });
+
+        expect(result.success).toBe(true);
+      });
+
+      it('validates both authentication and automation independently', () => {
+        const result = SatelliteConfigOptionsSchema.safeParse({
+          id: mockModuleIdText,
+          authentication: {
+            google: {
+              clientId: 'invalid-format'
+            }
+          },
+          automation: {
+            github: {
+              repositories: []
+            }
+          }
+        });
+
+        expect(result.success).toBe(false);
+        if (!result.success) {
+          expect(result.error.issues.length).toBeGreaterThan(0);
+        }
+      });
+    });
   });
 });

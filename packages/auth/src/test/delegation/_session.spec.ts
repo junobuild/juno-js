@@ -110,7 +110,7 @@ describe('_session', () => {
         },
         signature
       }
-    } as GetDelegationResult);
+    } as unknown as GetDelegationResult);
 
     const resultPromise = authenticateSession(authArgs);
 
@@ -183,7 +183,7 @@ describe('_session', () => {
           delegation: {pubkey, expiration, targets: targetsNone},
           signature
         }
-      } as GetDelegationResult);
+      } as unknown as GetDelegationResult);
 
     const p = authenticateSession(authArgs);
 
@@ -206,7 +206,7 @@ describe('_session', () => {
       .mockResolvedValueOnce({Err: {GetCachedJwks: null}})
       .mockResolvedValueOnce({
         Ok: {delegation: {pubkey, expiration, targets: targetsNone}, signature}
-      } as GetDelegationResult);
+      } as unknown as GetDelegationResult);
 
     const p = authenticateSession(authArgs);
 

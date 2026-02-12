@@ -165,12 +165,6 @@ describe('satellite.api', () => {
     version: [2n]
   };
 
-  const mockConfig: SatelliteDid.Config = {
-    db: [mockDatastoreConfig],
-    authentication: [mockAuthenticationConfig],
-    storage: mockStorageConfig
-  };
-
   const mockAutomationConfig: SatelliteDid.AutomationConfig = {
     openid: [
       {
@@ -189,6 +183,13 @@ describe('satellite.api', () => {
     created_at: [1724532900000n],
     updated_at: [1724532900000n],
     version: [2n]
+  };
+
+  const mockConfig: SatelliteDid.Config = {
+    db: [mockDatastoreConfig],
+    authentication: [mockAuthenticationConfig],
+    automation: [mockAutomationConfig],
+    storage: mockStorageConfig
   };
 
   describe('setStorageConfig', () => {

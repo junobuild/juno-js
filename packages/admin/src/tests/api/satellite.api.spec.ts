@@ -4,6 +4,7 @@ import {
   countAssets,
   countDocs,
   deleteAssets,
+  deleteControllers,
   deleteDocs,
   getAuthConfig,
   getAutomationConfig,
@@ -57,6 +58,7 @@ const mockActor = {
   del_docs: vi.fn(),
   del_assets: vi.fn(),
   set_controllers: vi.fn(),
+  del_controllers: vi.fn(),
   set_automation_config: vi.fn(),
   get_automation_config: vi.fn()
 };
@@ -569,6 +571,40 @@ describe('satellite.api', () => {
       const err = new Error('fail');
       mockActor.set_controllers.mockRejectedValueOnce(err);
       await expect(setControllers({satellite: {identity: mockIdentity}, args})).rejects.toThrow(
+        err
+      );
+    });
+  });
+
+  describe('deleteControllers', () => {
+    const args: SatelliteDid.DeleteControllersArgs = {
+      controllers: [mockUserIdPrincipal]
+    };
+
+    it('deletes controllers', async () => {
+      const expectedResponse = [
+        [
+          mockUserIdPrincipal,
+          {
+            updated_at: 1624532800000n,
+            metadata: [['key', 'value']],
+            created_at: 1624532700000n,
+            scope: {Admin: null},
+            expires_at: [1624532900000n]
+          }
+        ]
+      ];
+
+      mockActor.del_controllers.mockResolvedValue(expectedResponse);
+
+      const result = await deleteControllers({satellite: {identity: mockIdentity}, args});
+      expect(result).toEqual(expectedResponse);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.del_controllers.mockRejectedValueOnce(err);
+      await expect(deleteControllers({satellite: {identity: mockIdentity}, args})).rejects.toThrow(
         err
       );
     });

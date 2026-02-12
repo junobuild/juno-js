@@ -1,6 +1,7 @@
 import * as actor from '@junobuild/ic-client/actor';
 import {SatelliteDid} from '@junobuild/ic-client/actor';
 import {
+  deleteSatelliteControllers,
   listSatelliteControllers,
   setSatelliteControllers
 } from '../../services/satellite.controllers.services';
@@ -23,7 +24,8 @@ vi.mock(import('@junobuild/ic-client/actor'), async (importOriginal) => {
 
 const mockActor = {
   list_controllers: vi.fn(),
-  set_controllers: vi.fn()
+  set_controllers: vi.fn(),
+  del_controllers: vi.fn()
 };
 
 const mockDeprecatedActor = {
@@ -93,6 +95,35 @@ describe('satellite.controllers.services', () => {
     });
 
     expect(mockActor.set_controllers).toHaveBeenCalledWith(args);
+    expect(result).toEqual(expectedResponse);
+  });
+
+  it('deletes controllers using the satellite actor', async () => {
+    const expectedResponse = [
+      [
+        mockUserIdPrincipal,
+        {
+          updated_at: 1624532800000n,
+          metadata: [['key', 'value']],
+          created_at: 1624532700000n,
+          scope: {Admin: null},
+          expires_at: [1624532900000n]
+        }
+      ]
+    ];
+
+    mockActor.del_controllers.mockResolvedValue(expectedResponse);
+
+    const args: SatelliteDid.DeleteControllersArgs = {
+      controllers: [mockUserIdPrincipal]
+    };
+
+    const result = await deleteSatelliteControllers({
+      satellite,
+      args
+    });
+
+    expect(mockActor.del_controllers).toHaveBeenCalledWith(args);
     expect(result).toEqual(expectedResponse);
   });
 });

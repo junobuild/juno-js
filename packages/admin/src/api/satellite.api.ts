@@ -254,3 +254,14 @@ export const setControllers = async ({
   const {set_controllers} = await getSatelliteActor(satellite);
   return set_controllers(args);
 };
+
+export const deleteControllers = async ({
+  args,
+  satellite
+}: {
+  args: SatelliteDid.DeleteControllersArgs;
+  satellite: SatelliteParameters;
+}): Promise<[Principal, SatelliteDid.Controller][]> => {
+  const {del_controllers} = await getSatelliteActor(satellite);
+  return del_controllers(args);
+};

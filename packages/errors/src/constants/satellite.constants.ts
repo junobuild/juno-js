@@ -35,6 +35,14 @@ export const JUNO_AUTH_ERROR_AUTOMATION_NOT_CONFIGURED =
   'juno.auth.error.automation_not_configured';
 export const JUNO_AUTH_ERROR_OPENID_DISABLED = 'juno.auth.error.openid_disabled';
 
+export const JUNO_AUTOMATION_TOKEN_ERROR_MISSING_JTI = 'juno.automation.token.error.missing_jti';
+export const JUNO_AUTOMATION_TOKEN_ERROR_TOKEN_REUSED = 'juno.automation.token.error.token_reused';
+export const JUNO_AUTOMATION_WORKFLOW_ERROR_MISSING_REPOSITORY =
+  'juno.automation.workflow.error.missing_repository';
+export const JUNO_AUTOMATION_WORKFLOW_ERROR_MISSING_RUN_ID =
+  'juno.automation.workflow.error.missing_run_id';
+export const JUNO_DATASTORE_ERROR_AUTOMATION_CALLER = 'juno.datastore.error.automation.caller';
+
 export const JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE = 'juno.datastore.error.user.cannot_update';
 export const JUNO_DATASTORE_ERROR_USER_INVALID_DATA = 'juno.datastore.error.user.invalid_data';
 export const JUNO_DATASTORE_ERROR_USER_CALLER_KEY = 'juno.datastore.error.user.caller_key';

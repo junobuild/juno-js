@@ -2,6 +2,7 @@ import * as actor from '@junobuild/ic-client/actor';
 import {SatelliteDid} from '@junobuild/ic-client/actor';
 import {
   deleteSatelliteControllers,
+  deleteSatelliteControllerSelf,
   listSatelliteControllers,
   setSatelliteControllers
 } from '../../services/satellite.controllers.services';
@@ -25,7 +26,8 @@ vi.mock(import('@junobuild/ic-client/actor'), async (importOriginal) => {
 const mockActor = {
   list_controllers: vi.fn(),
   set_controllers: vi.fn(),
-  del_controllers: vi.fn()
+  del_controllers: vi.fn(),
+  del_controller_self: vi.fn()
 };
 
 const mockDeprecatedActor = {
@@ -125,5 +127,14 @@ describe('satellite.controllers.services', () => {
 
     expect(mockActor.del_controllers).toHaveBeenCalledWith(args);
     expect(result).toEqual(expectedResponse);
+  });
+
+  it('deletes the calling controller using the satellite actor', async () => {
+    mockActor.del_controller_self.mockResolvedValue(undefined);
+
+    const result = await deleteSatelliteControllerSelf({satellite});
+
+    expect(mockActor.del_controller_self).toHaveBeenCalledTimes(1);
+    expect(result).toBeUndefined();
   });
 });

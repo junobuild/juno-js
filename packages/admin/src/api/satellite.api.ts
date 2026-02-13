@@ -265,3 +265,12 @@ export const deleteControllers = async ({
   const {del_controllers} = await getSatelliteActor(satellite);
   return del_controllers(args);
 };
+
+export const deleteControllerSelf = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<void> => {
+  const {del_controller_self} = await getSatelliteActor(satellite);
+  await del_controller_self();
+};

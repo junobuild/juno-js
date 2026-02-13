@@ -2,6 +2,7 @@ import type {Principal} from '@icp-sdk/core/principal';
 import type {SatelliteDid, SatelliteParameters} from '@junobuild/ic-client/actor';
 import {
   deleteControllers,
+  deleteControllerSelf,
   listControllers,
   listDeprecatedNoScopeControllers,
   setControllers
@@ -57,3 +58,17 @@ export const deleteSatelliteControllers = (params: {
   satellite: SatelliteParameters;
   args: SatelliteDid.DeleteControllersArgs;
 }): Promise<[Principal, SatelliteDid.Controller][]> => deleteControllers(params);
+
+/**
+ * Delete the calling controller from the satellite.
+ *
+ * Note: This only removes the controller from the satellite's in-memory list, which is used for
+ * guards and access control within the satellite's features.
+ *
+ * @param {Object} params - The parameters for deleting the controller.
+ * @param {SatelliteParameters} params.satellite - The satellite parameters.
+ * @returns {Promise<void>} A promise that resolves when the controller is deleted.
+ */
+export const deleteSatelliteControllerSelf = (params: {
+  satellite: SatelliteParameters;
+}): Promise<void> => deleteControllerSelf(params);

@@ -114,7 +114,7 @@ describe('satellite.config.services', () => {
           [
             {GitHub: null},
             {
-              repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]],
+              repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {refs: []}]],
               controller: []
             }
           ]
@@ -376,7 +376,7 @@ describe('satellite.config.services', () => {
   it('sets automation config and returns mapped config', async () => {
     const mockInput: AutomationConfig = {
       github: {
-        repositories: [{owner: 'octo-org', name: 'octo-repo', branches: ['main']}],
+        repositories: [{owner: 'octo-org', name: 'octo-repo', refs: ['refs/heads/main']}],
         accessKeys: {
           scope: 'Write',
           timeToLive: 10n * 60n * 1_000_000_000n
@@ -392,7 +392,9 @@ describe('satellite.config.services', () => {
             [
               {GitHub: null},
               {
-                repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {branches: [['main']]}]],
+                repositories: [
+                  [{owner: 'octo-org', name: 'octo-repo'}, {refs: [['refs/heads/main']]}]
+                ],
                 controller: [
                   {
                     scope: [{Write: null}],

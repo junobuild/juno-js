@@ -106,11 +106,11 @@ describe('automation.config', () => {
       expect(result.success).toBe(true);
     });
 
-    it('accepts valid branches', () => {
+    it('accepts valid refs', () => {
       const result = AutomationConfigRepositorySchema.safeParse({
         owner: 'octo-org',
         name: 'octo-repo',
-        branches: ['main', 'develop']
+        refs: ['refs/heads/main', 'refs/pull/74/merge']
       });
       expect(result.success).toBe(true);
     });
@@ -159,15 +159,15 @@ describe('automation.config', () => {
       }
     });
 
-    it('rejects empty branch in branches array', () => {
+    it('rejects empty branch in refs array', () => {
       const result = AutomationConfigRepositorySchema.safeParse({
         owner: 'octo-org',
         name: 'octo-repo',
-        branches: ['main', '']
+        refs: ['refs/heads/main', '']
       });
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.issues[0].path).toEqual(['branches', 1]);
+        expect(result.error.issues[0].path).toEqual(['refs', 1]);
       }
     });
 
@@ -217,13 +217,13 @@ describe('automation.config', () => {
       expect(result.success).toBe(true);
     });
 
-    it('accepts repositories with branches', () => {
+    it('accepts repositories with refs', () => {
       const result = AutomationConfigGitHubSchema.safeParse({
         repositories: [
           {
             owner: 'octo-org',
             name: 'octo-repo',
-            branches: ['main', 'develop']
+            refs: ['refs/heads/main', 'refs/pull/74/merge']
           }
         ]
       });
@@ -266,11 +266,11 @@ describe('automation.config', () => {
       }
     });
 
-    it('rejects duplicate repositories with different branches', () => {
+    it('rejects duplicate repositories with different refs', () => {
       const result = AutomationConfigGitHubSchema.safeParse({
         repositories: [
-          {owner: 'octo-org', name: 'octo-repo', branches: ['main']},
-          {owner: 'octo-org', name: 'octo-repo', branches: ['develop']}
+          {owner: 'octo-org', name: 'octo-repo', refs: ['refs/heads/main']},
+          {owner: 'octo-org', name: 'octo-repo', refs: ['refs/pull/74/merge']}
         ]
       });
       expect(result.success).toBe(false);
@@ -335,7 +335,7 @@ describe('automation.config', () => {
             {
               owner: 'octo-org',
               name: 'octo-repo',
-              branches: ['main', 'develop']
+              refs: ['refs/heads/main', 'refs/pull/74/merge']
             }
           ],
           accessKeys: {

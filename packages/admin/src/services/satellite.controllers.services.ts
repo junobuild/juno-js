@@ -6,11 +6,9 @@ import {
   listDeprecatedNoScopeControllers,
   setControllers
 } from '../api/satellite.api';
+
 /**
  * Lists the controllers of a satellite.
- *
- * Note: This only removes controllers from the satellite's in-memory list, which is used for
- * guards and access control within the satellite's features.
  *
  * @param {Object} params - The parameters for listing the controllers.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
@@ -31,7 +29,7 @@ export const listSatelliteControllers = ({
 /**
  * Sets the controllers of a satellite.
  *
- * Note: This only removes controllers from the satellite's in-memory list, which is used for
+ * Note: This only add controllers for the satellite's in-memory list, which is used for
  * guards and access control within the satellite's features.
  *
  * @param {Object} params - The parameters for setting the controllers.
@@ -46,6 +44,10 @@ export const setSatelliteControllers = (params: {
 
 /**
  * Delete selected controllers from a satellite.
+ *
+ * Note: This only removes controllers from the satellite's in-memory list, which is used for
+ * guards and access control within the satellite's features.
+ *
  * @param {Object} params - The parameters for setting the controllers.
  * @param {SatelliteParameters} params.satellite - The satellite parameters.
  * @param {SetControllersArgs} params.args - The arguments for setting the controllers.

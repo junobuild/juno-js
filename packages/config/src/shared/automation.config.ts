@@ -60,7 +60,7 @@ export const AutomationConfigRepositorySchema = z.strictObject({
     .trim()
     .min(1, 'Repository name cannot be empty')
     .max(256, 'Repository name too long'),
-  branches: z.array(z.string().trim().min(1)).optional()
+  refs: z.array(z.string().trim().min(1)).optional()
 });
 
 /**
@@ -84,14 +84,14 @@ export interface AutomationConfigRepository {
   name: string;
 
   /**
-   * Optional list of allowed branches (e.g., ["main", "develop"]).
+   * Optional list of allowed refs (e.g., ["refs/heads/main", "refs/pull/74/merge"]).
    *
-   * If omitted, all branches are allowed.
+   * If omitted, all refs are allowed.
    *
    * @type {string[]}
    * @optional
    */
-  branches?: string[];
+  refs?: string[];
 }
 
 /**
@@ -121,7 +121,7 @@ export interface AutomationConfigGitHub {
    * List of GitHub repositories authorized to authenticate with this Satellite.
    *
    * Each repository must specify owner and name.
-   * Optionally restrict to specific branches.
+   * Optionally restrict to specific refs.
    *
    * @type {AutomationConfigRepository[]}
    */

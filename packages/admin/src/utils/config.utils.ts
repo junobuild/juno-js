@@ -282,9 +282,9 @@ export const fromAutomationConfig = ({
     SatelliteDid.RepositoryKey,
     SatelliteDid.OpenIdAutomationRepositoryConfig
   > = new Map(
-    repositories.map(({owner, name, branches}) => [
+    repositories.map(({owner, name, refs}) => [
       {owner, name},
-      {branches: (branches?.length ?? 0) > 0 ? toNullable(branches) : toNullable()}
+      {refs: (refs?.length ?? 0) > 0 ? toNullable(refs) : toNullable()}
     ])
   );
 
@@ -331,8 +331,8 @@ export const toAutomationConfig = ({
 
   const repositories = (github?.repositories ?? []).map(([key, config]) => ({
     ...key,
-    ...(nonNullish(fromNullable(config.branches)) && {
-      branches: fromNullable(config.branches)
+    ...(nonNullish(fromNullable(config.refs)) && {
+      refs: fromNullable(config.refs)
     })
   }));
 

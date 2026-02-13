@@ -813,7 +813,11 @@ describe('config.utils', () => {
         github: {
           repositories: [
             {owner: 'octo-org', name: 'octo-repo'},
-            {owner: 'peterpeterparker', name: 'daviddalbusco.com', branches: ['main', 'develop']}
+            {
+              owner: 'peterpeterparker',
+              name: 'daviddalbusco.com',
+              refs: ['refs/heads/main', 'refs/pull/74/merge']
+            }
           ]
         },
         version: 1n
@@ -828,10 +832,10 @@ describe('config.utils', () => {
               {GitHub: null},
               {
                 repositories: [
-                  [{owner: 'octo-org', name: 'octo-repo'}, {branches: []}],
+                  [{owner: 'octo-org', name: 'octo-repo'}, {refs: []}],
                   [
                     {owner: 'peterpeterparker', name: 'daviddalbusco.com'},
-                    {branches: [['main', 'develop']]}
+                    {refs: [['refs/heads/main', 'refs/pull/74/merge']]}
                   ]
                 ],
                 controller: []
@@ -901,7 +905,7 @@ describe('config.utils', () => {
       expect(githubConfig.controller?.[0]?.scope).toEqual([{Submit: null}]);
     });
 
-    it('handles repositories without branches', () => {
+    it('handles repositories without refs', () => {
       const config: AutomationConfig = {
         github: {
           repositories: [{owner: 'octo-org', name: 'octo-repo'}]
@@ -916,14 +920,14 @@ describe('config.utils', () => {
       const [_, githubConfig] = github;
 
       expect(githubConfig.repositories).toEqual([
-        [{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]
+        [{owner: 'octo-org', name: 'octo-repo'}, {refs: []}]
       ]);
     });
 
-    it('handles empty branches array', () => {
+    it('handles empty refs array', () => {
       const config: AutomationConfig = {
         github: {
-          repositories: [{owner: 'octo-org', name: 'octo-repo', branches: []}]
+          repositories: [{owner: 'octo-org', name: 'octo-repo', refs: []}]
         }
       };
 
@@ -935,7 +939,7 @@ describe('config.utils', () => {
       const [_, githubConfig] = github;
 
       expect(githubConfig.repositories).toEqual([
-        [{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]
+        [{owner: 'octo-org', name: 'octo-repo'}, {refs: []}]
       ]);
     });
   });
@@ -950,8 +954,11 @@ describe('config.utils', () => {
                 {GitHub: null},
                 {
                   repositories: [
-                    [{owner: 'octo-org', name: 'octo-repo'}, {branches: []}],
-                    [{owner: 'peterpeterparker', name: 'daviddalbusco.com'}, {branches: [['main']]}]
+                    [{owner: 'octo-org', name: 'octo-repo'}, {refs: []}],
+                    [
+                      {owner: 'peterpeterparker', name: 'daviddalbusco.com'},
+                      {refs: [['refs/heads/main']]}
+                    ]
                   ],
                   controller: []
                 }
@@ -968,7 +975,11 @@ describe('config.utils', () => {
       expect(result.github).toEqual({
         repositories: [
           {owner: 'octo-org', name: 'octo-repo'},
-          {owner: 'peterpeterparker', name: 'daviddalbusco.com', branches: ['main']}
+          {
+            owner: 'peterpeterparker',
+            name: 'daviddalbusco.com',
+            refs: ['refs/heads/main']
+          }
         ]
       });
       expect(result.version).toBe(2n);
@@ -996,7 +1007,7 @@ describe('config.utils', () => {
               [
                 {GitHub: null},
                 {
-                  repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]],
+                  repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {refs: []}]],
                   controller: [
                     {
                       scope: [{Write: null}],
@@ -1028,7 +1039,7 @@ describe('config.utils', () => {
               [
                 {GitHub: null},
                 {
-                  repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]],
+                  repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {refs: []}]],
                   controller: [
                     {
                       scope: [{Submit: null}],
@@ -1057,7 +1068,7 @@ describe('config.utils', () => {
               [
                 {GitHub: null},
                 {
-                  repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]],
+                  repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {refs: []}]],
                   controller: []
                 }
               ]
@@ -1073,7 +1084,7 @@ describe('config.utils', () => {
       expect(result.github?.accessKeys).toBeUndefined();
     });
 
-    it('handles repositories with branches', () => {
+    it('handles repositories with refs', () => {
       const result = toAutomationConfig({
         openid: [
           {
@@ -1082,7 +1093,10 @@ describe('config.utils', () => {
                 {GitHub: null},
                 {
                   repositories: [
-                    [{owner: 'octo-org', name: 'octo-repo'}, {branches: [['main', 'develop']]}]
+                    [
+                      {owner: 'octo-org', name: 'octo-repo'},
+                      {refs: [['refs/heads/main', 'refs/pull/74/merge']]}
+                    ]
                   ],
                   controller: []
                 }
@@ -1097,7 +1111,7 @@ describe('config.utils', () => {
       });
 
       expect(result.github?.repositories).toEqual([
-        {owner: 'octo-org', name: 'octo-repo', branches: ['main', 'develop']}
+        {owner: 'octo-org', name: 'octo-repo', refs: ['refs/heads/main', 'refs/pull/74/merge']}
       ]);
     });
   });

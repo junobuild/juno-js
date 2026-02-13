@@ -176,7 +176,7 @@ describe('satellite.api', () => {
           [
             {GitHub: null},
             {
-              repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {branches: []}]],
+              repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {refs: []}]],
               controller: []
             }
           ]

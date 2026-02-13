@@ -172,7 +172,8 @@ export type GetDelegationError =
 	| { NoSuchDelegation: null }
 	| { JwtVerify: JwtVerifyError }
 	| { GetOrFetchJwks: GetOrRefreshJwksError }
-	| { DeriveSeedFailed: string };
+	| { DeriveSeedFailed: string }
+	| { InvalidObservatoryId: string };
 export type GetDelegationResultResponse = { Ok: SignedDelegation } | { Err: GetDelegationError };
 export type GetOrRefreshJwksError =
 	| { InvalidConfig: string }
@@ -342,6 +343,7 @@ export type PrepareAutomationError =
 	| { JwtVerify: JwtVerifyError }
 	| { GetOrFetchJwks: GetOrRefreshJwksError }
 	| { ControllerAlreadyExists: null }
+	| { InvalidObservatoryId: string }
 	| { TooManyControllers: string };
 export type PrepareDelegationError =
 	| {
@@ -350,7 +352,8 @@ export type PrepareDelegationError =
 	| { GetCachedJwks: null }
 	| { JwtVerify: JwtVerifyError }
 	| { GetOrFetchJwks: GetOrRefreshJwksError }
-	| { DeriveSeedFailed: string };
+	| { DeriveSeedFailed: string }
+	| { InvalidObservatoryId: string };
 export interface PreparedDelegation {
 	user_key: Uint8Array;
 	expiration: bigint;
@@ -523,6 +526,7 @@ export interface _SERVICE {
 	count_proposals: ActorMethod<[], bigint>;
 	del_asset: ActorMethod<[string, string], undefined>;
 	del_assets: ActorMethod<[string], undefined>;
+	del_controller_self: ActorMethod<[], undefined>;
 	del_controllers: ActorMethod<[DeleteControllersArgs], Array<[Principal, Controller]>>;
 	del_custom_domain: ActorMethod<[string], undefined>;
 	del_doc: ActorMethod<[string, string, DelDoc], undefined>;

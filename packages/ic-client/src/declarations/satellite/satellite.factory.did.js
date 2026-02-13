@@ -65,7 +65,8 @@ export const idlFactory = ({IDL}) => {
     GetCachedJwks: IDL.Null,
     JwtVerify: JwtVerifyError,
     GetOrFetchJwks: GetOrRefreshJwksError,
-    DeriveSeedFailed: IDL.Text
+    DeriveSeedFailed: IDL.Text,
+    InvalidObservatoryId: IDL.Text
   });
   const AuthenticationError = IDL.Variant({
     PrepareDelegation: PrepareDelegationError,
@@ -97,6 +98,7 @@ export const idlFactory = ({IDL}) => {
     JwtVerify: JwtVerifyError,
     GetOrFetchJwks: GetOrRefreshJwksError,
     ControllerAlreadyExists: IDL.Null,
+    InvalidObservatoryId: IDL.Text,
     TooManyControllers: IDL.Text
   });
   const AuthenticationAutomationError = IDL.Variant({
@@ -313,7 +315,8 @@ export const idlFactory = ({IDL}) => {
     NoSuchDelegation: IDL.Null,
     JwtVerify: JwtVerifyError,
     GetOrFetchJwks: GetOrRefreshJwksError,
-    DeriveSeedFailed: IDL.Text
+    DeriveSeedFailed: IDL.Text,
+    InvalidObservatoryId: IDL.Text
   });
   const GetDelegationResultResponse = IDL.Variant({
     Ok: SignedDelegation,
@@ -530,6 +533,7 @@ export const idlFactory = ({IDL}) => {
     count_proposals: IDL.Func([], [IDL.Nat64], ['query']),
     del_asset: IDL.Func([IDL.Text, IDL.Text], [], []),
     del_assets: IDL.Func([IDL.Text], [], []),
+    del_controller_self: IDL.Func([], [], []),
     del_controllers: IDL.Func(
       [DeleteControllersArgs],
       [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))],

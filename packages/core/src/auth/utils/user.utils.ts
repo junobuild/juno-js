@@ -21,3 +21,14 @@ export const isWebAuthnUser = (user: User): user is User<'webauthn'> =>
  */
 export const isGoogleUser = (user: User): user is User<'google'> =>
   user?.data?.provider === 'google';
+
+/**
+ * Checks whether a user signed in using GitHub (OpenID).
+ *
+ * Acts as a type guard that narrows {@link User} to {@link User<'github'>}.
+ *
+ * @param user - The user object to check.
+ * @returns True if the user signed in via GitHub.
+ */
+export const isGitHubUser = (user: User): user is User<'github'> =>
+  user?.data?.provider === 'github';

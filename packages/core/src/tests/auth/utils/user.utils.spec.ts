@@ -1,5 +1,5 @@
 import {User} from '../../../auth/types/user';
-import {isGoogleUser, isWebAuthnUser} from '../../../auth/utils/user.utils';
+import {isGitHubUser, isGoogleUser, isWebAuthnUser} from '../../../auth/utils/user.utils';
 
 describe('user.utils', () => {
   it('should return true for WebAuthn users', () => {
@@ -12,6 +12,7 @@ describe('user.utils', () => {
 
     expect(isWebAuthnUser(user)).toBe(true);
     expect(isGoogleUser(user)).toBe(false);
+    expect(isGitHubUser(user)).toBe(false);
   });
 
   it('should return true for Google users', () => {
@@ -24,6 +25,20 @@ describe('user.utils', () => {
 
     expect(isGoogleUser(user)).toBe(true);
     expect(isWebAuthnUser(user)).toBe(false);
+    expect(isGitHubUser(user)).toBe(false);
+  });
+
+  it('should return true for GitHub users', () => {
+    const user = {
+      data: {
+        provider: 'github',
+        providerData: {openid: {email: 'user@example.com'}}
+      }
+    } as unknown as User;
+
+    expect(isGitHubUser(user)).toBe(true);
+    expect(isGoogleUser(user)).toBe(false);
+    expect(isWebAuthnUser(user)).toBe(false);
   });
 
   it('should return false for other providers', () => {
@@ -33,6 +48,7 @@ describe('user.utils', () => {
 
     expect(isWebAuthnUser(user)).toBe(false);
     expect(isGoogleUser(user)).toBe(false);
+    expect(isGitHubUser(user)).toBe(false);
   });
 
   it('should return false if provider is undefined', () => {
@@ -40,5 +56,6 @@ describe('user.utils', () => {
 
     expect(isWebAuthnUser(user)).toBe(false);
     expect(isGoogleUser(user)).toBe(false);
+    expect(isGitHubUser(user)).toBe(false);
   });
 });

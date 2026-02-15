@@ -13,6 +13,7 @@ export type UserProvider = Provider | undefined;
  * Resolves to the appropriate structure based on the provider:
  * - `webauthn` → includes WebAuthn metadata.
  * - `google` → includes OpenID profile metadata.
+ * - `github` → includes OpenID profile metadata.
  * - `internet_identity` / `nfid` / `undefined` → no provider-specific metadata.
  *
  * @template P Authentication provider (defaults to all).
@@ -33,14 +34,22 @@ export type UserData<P extends UserProvider = UserProvider> = P extends 'webauth
         provider: 'google';
         providerData: ProviderData<'openid'>;
       }
-    : {
-        /**
-         * Sign-in via another provider. There is no absolute guarantee that the information can be set by the browser
-         * during the sign-in flow, therefore it is optional.
-         */
-        provider?: 'internet_identity' | DeprecatedNfid | undefined;
-        providerData?: never;
-      };
+    : P extends 'github'
+      ? {
+          /**
+           * Sign-in via Github.
+           */
+          provider: 'github';
+          providerData: ProviderData<'openid'>;
+        }
+      : {
+          /**
+           * Sign-in via another provider. There is no absolute guarantee that the information can be set by the browser
+           * during the sign-in flow, therefore it is optional.
+           */
+          provider?: 'internet_identity' | DeprecatedNfid | undefined;
+          providerData?: never;
+        };
 
 /**
  *  A simplified version of {@link UserData} for users signed in with providers

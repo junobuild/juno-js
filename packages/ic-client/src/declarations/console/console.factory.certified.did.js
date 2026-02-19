@@ -24,17 +24,21 @@ export const idlFactory = ({IDL}) => {
     user_key: IDL.Vec(IDL.Nat8),
     expiration: IDL.Nat64
   });
-  const OpenIdProvider = IDL.Variant({Google: IDL.Null});
+  const OpenIdDelegationProvider = IDL.Variant({
+    GitHub: IDL.Null,
+    Google: IDL.Null
+  });
   const OpenIdData = IDL.Record({
     name: IDL.Opt(IDL.Text),
     locale: IDL.Opt(IDL.Text),
     family_name: IDL.Opt(IDL.Text),
     email: IDL.Opt(IDL.Text),
     picture: IDL.Opt(IDL.Text),
-    given_name: IDL.Opt(IDL.Text)
+    given_name: IDL.Opt(IDL.Text),
+    preferred_username: IDL.Opt(IDL.Text)
   });
   const OpenId = IDL.Record({
-    provider: OpenIdProvider,
+    provider: OpenIdDelegationProvider,
     data: OpenIdData
   });
   const Provider = IDL.Variant({
@@ -81,7 +85,8 @@ export const idlFactory = ({IDL}) => {
     GetCachedJwks: IDL.Null,
     JwtVerify: JwtVerifyError,
     GetOrFetchJwks: GetOrRefreshJwksError,
-    DeriveSeedFailed: IDL.Text
+    DeriveSeedFailed: IDL.Text,
+    InvalidObservatoryId: IDL.Text
   });
   const AuthenticationError = IDL.Variant({
     PrepareDelegation: PrepareDelegationError,
@@ -129,17 +134,17 @@ export const idlFactory = ({IDL}) => {
   const DeleteProposalAssets = IDL.Record({
     proposal_ids: IDL.Vec(IDL.Nat)
   });
-  const OpenIdProviderDelegationConfig = IDL.Record({
+  const OpenIdAuthProviderDelegationConfig = IDL.Record({
     targets: IDL.Opt(IDL.Vec(IDL.Principal)),
     max_time_to_live: IDL.Opt(IDL.Nat64)
   });
-  const OpenIdProviderConfig = IDL.Record({
-    delegation: IDL.Opt(OpenIdProviderDelegationConfig),
+  const OpenIdAuthProviderConfig = IDL.Record({
+    delegation: IDL.Opt(OpenIdAuthProviderDelegationConfig),
     client_id: IDL.Text
   });
   const AuthenticationConfigOpenId = IDL.Record({
     observatory_id: IDL.Opt(IDL.Principal),
-    providers: IDL.Vec(IDL.Tuple(OpenIdProvider, OpenIdProviderConfig))
+    providers: IDL.Vec(IDL.Tuple(OpenIdDelegationProvider, OpenIdAuthProviderConfig))
   });
   const AuthenticationConfigInternetIdentity = IDL.Record({
     derivation_origin: IDL.Opt(IDL.Text),
@@ -211,7 +216,8 @@ export const idlFactory = ({IDL}) => {
     NoSuchDelegation: IDL.Null,
     JwtVerify: JwtVerifyError,
     GetOrFetchJwks: GetOrRefreshJwksError,
-    DeriveSeedFailed: IDL.Text
+    DeriveSeedFailed: IDL.Text,
+    InvalidObservatoryId: IDL.Text
   });
   const Result_1 = IDL.Variant({
     Ok: SignedDelegation,
@@ -360,6 +366,10 @@ export const idlFactory = ({IDL}) => {
     items: IDL.Vec(IDL.Tuple(IDL.Text, AssetNoContent)),
     items_length: IDL.Nat64
   });
+  const ControllerKind = IDL.Variant({
+    Emulator: IDL.Null,
+    Automation: IDL.Null
+  });
   const ControllerScope = IDL.Variant({
     Write: IDL.Null,
     Admin: IDL.Null,
@@ -368,6 +378,7 @@ export const idlFactory = ({IDL}) => {
   const Controller = IDL.Record({
     updated_at: IDL.Nat64,
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    kind: IDL.Opt(ControllerKind),
     created_at: IDL.Nat64,
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
@@ -448,6 +459,7 @@ export const idlFactory = ({IDL}) => {
   });
   const SetController = IDL.Record({
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    kind: IDL.Opt(ControllerKind),
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
@@ -542,11 +554,13 @@ export const idlFactory = ({IDL}) => {
     set_controllers: IDL.Func([SetControllersArgs], [], []),
     set_custom_domain: IDL.Func([IDL.Text, IDL.Opt(IDL.Text)], [], []),
     set_fee: IDL.Func([SegmentKind, FeesArgs], [], []),
+    set_many_segments: IDL.Func([IDL.Vec(SetSegmentsArgs)], [IDL.Vec(Segment)], []),
     set_rate_config: IDL.Func([SegmentKind, RateConfig], [], []),
     set_segment: IDL.Func([SetSegmentsArgs], [Segment], []),
     set_segment_metadata: IDL.Func([SetSegmentMetadataArgs], [Segment], []),
     set_storage_config: IDL.Func([SetStorageConfig], [StorageConfig], []),
     submit_proposal: IDL.Func([IDL.Nat], [IDL.Nat, Proposal], []),
+    unset_many_segments: IDL.Func([IDL.Vec(UnsetSegmentsArgs)], [], []),
     unset_segment: IDL.Func([UnsetSegmentsArgs], [], []),
     upload_proposal_asset_chunk: IDL.Func([UploadChunk], [UploadChunkResult], [])
   });

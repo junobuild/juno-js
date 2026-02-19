@@ -4,6 +4,7 @@ import {
   type AuthenticationConfig,
   AuthenticationConfigSchema
 } from '../../shared/authentication.config';
+import {type AutomationConfig, AutomationConfigSchema} from '../../shared/automation.config';
 import {type StorageConfig, StorageConfigSchema} from '../../shared/storage.config';
 import type {CliConfig} from '../../types/cli.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../../types/juno.env';
@@ -67,6 +68,7 @@ const SatelliteConfigOptionsBaseSchema = z.object({
   storage: StorageConfigSchema.optional(),
   datastore: DatastoreConfigSchema.optional(),
   authentication: AuthenticationConfigSchema.optional(),
+  automation: AutomationConfigSchema.optional(),
   assertions: SatelliteAssertionsSchema.optional(),
   settings: ModuleSettingsSchema.optional(),
   collections: CollectionsSchema.optional()
@@ -93,7 +95,7 @@ export const SatelliteConfigOptionsSchema = z.union([
 /**
  * SatelliteConfigOptions interface provides configuration settings that allow for fine-tuning
  * the operational behavior of various aspects of a Satellite, such as storage, datastore,
- * authentication, and deployment assertions.
+ * authentication, automation, and deployment assertions.
  *
  * These options affect specific modules of the Satellite and may require manual application of
  * changes, typically through CLI commands (e.g., `juno config`).
@@ -103,6 +105,7 @@ export const SatelliteConfigOptionsSchema = z.union([
  * @property {StorageConfig} [storage] - Configuration settings for storage management in the Satellite.
  * @property {DatastoreConfig} [datastore] - Configuration settings for datastore management.
  * @property {AuthenticationConfig} [authentication] - Authentication-specific configurations.
+ * @property {AutomationConfig} [automation] - Automation-specific configurations for CI/CD.
  * @property {SatelliteAssertions} [assertions] - Conditions and assertions for deployment or operational checks.
  * @property {ModuleSettings} [settings] - General settings governing module behavior and resource management.
  */
@@ -130,6 +133,14 @@ export interface SatelliteConfigOptions {
    * @optional
    */
   authentication?: AuthenticationConfig;
+
+  /**
+   * Optional configuration parameters for the behavior of the automation.
+   * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
+   * @type {AutomationConfig}
+   * @optional
+   */
+  automation?: AutomationConfig;
 
   /**
    * Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions.

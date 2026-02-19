@@ -34,12 +34,27 @@ export interface AssetNoContent {
 export interface AssetsUpgradeOptions {
 	clear_existing_assets: [] | [boolean];
 }
+export type AuthenticateAutomationArgs = {
+	OpenId: OpenIdPrepareAutomationArgs;
+};
+export type AuthenticateAutomationResultResponse =
+	| {
+			Ok: [Principal, AutomationController];
+	  }
+	| { Err: AuthenticationAutomationError };
 export type AuthenticateResultResponse = { Ok: Authentication } | { Err: AuthenticationError };
 export interface Authentication {
 	doc: Doc;
 	delegation: PreparedDelegation;
 }
 export type AuthenticationArgs = { OpenId: OpenIdPrepareDelegationArgs };
+export type AuthenticationAutomationError =
+	| {
+			PrepareAutomation: PrepareAutomationError;
+	  }
+	| { RegisterController: string }
+	| { SaveWorkflowMetadata: string }
+	| { SaveUniqueJtiToken: string };
 export interface AuthenticationConfig {
 	updated_at: [] | [bigint];
 	openid: [] | [AuthenticationConfigOpenId];
@@ -54,7 +69,7 @@ export interface AuthenticationConfigInternetIdentity {
 }
 export interface AuthenticationConfigOpenId {
 	observatory_id: [] | [Principal];
-	providers: Array<[OpenIdProvider, OpenIdProviderConfig]>;
+	providers: Array<[OpenIdDelegationProvider, OpenIdAuthProviderConfig]>;
 }
 export type AuthenticationError =
 	| {
@@ -64,6 +79,21 @@ export type AuthenticationError =
 export interface AuthenticationRules {
 	allowed_callers: Array<Principal>;
 }
+export interface AutomationConfig {
+	updated_at: [] | [bigint];
+	openid: [] | [AutomationConfigOpenId];
+	created_at: [] | [bigint];
+	version: [] | [bigint];
+}
+export interface AutomationConfigOpenId {
+	observatory_id: [] | [Principal];
+	providers: Array<[OpenIdAutomationProvider, OpenIdAutomationProviderConfig]>;
+}
+export interface AutomationController {
+	scope: AutomationScope;
+	expires_at: bigint;
+}
+export type AutomationScope = { Write: null } | { Submit: null };
 export type CollectionType = { Db: null } | { Storage: null };
 export interface CommitBatch {
 	batch_id: bigint;
@@ -78,6 +108,7 @@ export interface Config {
 	db: [] | [DbConfig];
 	authentication: [] | [AuthenticationConfig];
 	storage: StorageConfig;
+	automation: [] | [AutomationConfig];
 }
 export interface ConfigMaxMemorySize {
 	stable: [] | [bigint];
@@ -86,10 +117,12 @@ export interface ConfigMaxMemorySize {
 export interface Controller {
 	updated_at: bigint;
 	metadata: Array<[string, string]>;
+	kind: [] | [ControllerKind];
 	created_at: bigint;
 	scope: ControllerScope;
 	expires_at: [] | [bigint];
 }
+export type ControllerKind = { Emulator: null } | { Automation: null };
 export type ControllerScope = { Write: null } | { Admin: null } | { Submit: null };
 export interface CustomDomain {
 	updated_at: bigint;
@@ -139,7 +172,8 @@ export type GetDelegationError =
 	| { NoSuchDelegation: null }
 	| { JwtVerify: JwtVerifyError }
 	| { GetOrFetchJwks: GetOrRefreshJwksError }
-	| { DeriveSeedFailed: string };
+	| { DeriveSeedFailed: string }
+	| { InvalidObservatoryId: string };
 export type GetDelegationResultResponse = { Ok: SignedDelegation } | { Err: GetDelegationError };
 export type GetOrRefreshJwksError =
 	| { InvalidConfig: string }
@@ -259,31 +293,58 @@ export interface MemorySize {
 	stable: bigint;
 	heap: bigint;
 }
+export interface OpenIdAuthProviderConfig {
+	delegation: [] | [OpenIdAuthProviderDelegationConfig];
+	client_id: string;
+}
+export interface OpenIdAuthProviderDelegationConfig {
+	targets: [] | [Array<Principal>];
+	max_time_to_live: [] | [bigint];
+}
+export type OpenIdAutomationProvider = { GitHub: null };
+export interface OpenIdAutomationProviderConfig {
+	controller: [] | [OpenIdAutomationProviderControllerConfig];
+	repositories: Array<[RepositoryKey, OpenIdAutomationRepositoryConfig]>;
+}
+export interface OpenIdAutomationProviderControllerConfig {
+	scope: [] | [AutomationScope];
+	max_time_to_live: [] | [bigint];
+}
+export interface OpenIdAutomationRepositoryConfig {
+	refs: [] | [Array<string>];
+}
+export type OpenIdDelegationProvider = { GitHub: null } | { Google: null };
 export interface OpenIdGetDelegationArgs {
 	jwt: string;
 	session_key: Uint8Array;
 	salt: Uint8Array;
 	expiration: bigint;
 }
+export interface OpenIdPrepareAutomationArgs {
+	jwt: string;
+	salt: Uint8Array;
+}
 export interface OpenIdPrepareDelegationArgs {
 	jwt: string;
 	session_key: Uint8Array;
 	salt: Uint8Array;
-}
-export type OpenIdProvider = { Google: null };
-export interface OpenIdProviderConfig {
-	delegation: [] | [OpenIdProviderDelegationConfig];
-	client_id: string;
-}
-export interface OpenIdProviderDelegationConfig {
-	targets: [] | [Array<Principal>];
-	max_time_to_live: [] | [bigint];
 }
 export type Permission =
 	| { Controllers: null }
 	| { Private: null }
 	| { Public: null }
 	| { Managed: null };
+export type PrepareAutomationError =
+	| {
+			JwtFindProvider: JwtFindProviderError;
+	  }
+	| { InvalidController: string }
+	| { GetCachedJwks: null }
+	| { JwtVerify: JwtVerifyError }
+	| { GetOrFetchJwks: GetOrRefreshJwksError }
+	| { ControllerAlreadyExists: null }
+	| { InvalidObservatoryId: string }
+	| { TooManyControllers: string };
 export type PrepareDelegationError =
 	| {
 			JwtFindProvider: JwtFindProviderError;
@@ -291,7 +352,8 @@ export type PrepareDelegationError =
 	| { GetCachedJwks: null }
 	| { JwtVerify: JwtVerifyError }
 	| { GetOrFetchJwks: GetOrRefreshJwksError }
-	| { DeriveSeedFailed: string };
+	| { DeriveSeedFailed: string }
+	| { InvalidObservatoryId: string };
 export interface PreparedDelegation {
 	user_key: Uint8Array;
 	expiration: bigint;
@@ -323,6 +385,10 @@ export interface RateConfig {
 	max_tokens: bigint;
 	time_per_token_ns: bigint;
 }
+export interface RepositoryKey {
+	owner: string;
+	name: string;
+}
 export interface Rule {
 	max_capacity: [] | [number];
 	memory: [] | [Memory];
@@ -347,8 +413,13 @@ export interface SetAuthenticationConfig {
 	internet_identity: [] | [AuthenticationConfigInternetIdentity];
 	rules: [] | [AuthenticationRules];
 }
+export interface SetAutomationConfig {
+	openid: [] | [AutomationConfigOpenId];
+	version: [] | [bigint];
+}
 export interface SetController {
 	metadata: Array<[string, string]>;
+	kind: [] | [ControllerKind];
 	scope: ControllerScope;
 	expires_at: [] | [bigint];
 }
@@ -440,6 +511,10 @@ export interface UploadChunkResult {
 }
 export interface _SERVICE {
 	authenticate: ActorMethod<[AuthenticationArgs], AuthenticateResultResponse>;
+	authenticate_automation: ActorMethod<
+		[AuthenticateAutomationArgs],
+		AuthenticateAutomationResultResponse
+	>;
 	commit_asset_upload: ActorMethod<[CommitBatch], undefined>;
 	commit_proposal: ActorMethod<[CommitProposal], null>;
 	commit_proposal_asset_upload: ActorMethod<[CommitBatch], undefined>;
@@ -451,6 +526,7 @@ export interface _SERVICE {
 	count_proposals: ActorMethod<[], bigint>;
 	del_asset: ActorMethod<[string, string], undefined>;
 	del_assets: ActorMethod<[string], undefined>;
+	del_controller_self: ActorMethod<[], undefined>;
 	del_controllers: ActorMethod<[DeleteControllersArgs], Array<[Principal, Controller]>>;
 	del_custom_domain: ActorMethod<[string], undefined>;
 	del_doc: ActorMethod<[string, string, DelDoc], undefined>;
@@ -464,6 +540,7 @@ export interface _SERVICE {
 	deposit_cycles: ActorMethod<[DepositCyclesArgs], undefined>;
 	get_asset: ActorMethod<[string, string], [] | [AssetNoContent]>;
 	get_auth_config: ActorMethod<[], [] | [AuthenticationConfig]>;
+	get_automation_config: ActorMethod<[], [] | [AutomationConfig]>;
 	get_config: ActorMethod<[], Config>;
 	get_db_config: ActorMethod<[], [] | [DbConfig]>;
 	get_delegation: ActorMethod<[GetDelegationArgs], GetDelegationResultResponse>;
@@ -495,6 +572,7 @@ export interface _SERVICE {
 	reject_proposal: ActorMethod<[CommitProposal], null>;
 	set_asset_token: ActorMethod<[string, string, [] | [string]], undefined>;
 	set_auth_config: ActorMethod<[SetAuthenticationConfig], AuthenticationConfig>;
+	set_automation_config: ActorMethod<[SetAutomationConfig], AutomationConfig>;
 	set_controllers: ActorMethod<[SetControllersArgs], Array<[Principal, Controller]>>;
 	set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;
 	set_db_config: ActorMethod<[SetDbConfig], DbConfig>;

@@ -4,8 +4,11 @@ import {
   countAssets,
   countDocs,
   deleteAssets,
+  deleteControllers,
+  deleteControllerSelf,
   deleteDocs,
   getAuthConfig,
+  getAutomationConfig,
   getConfig,
   getDatastoreConfig,
   getStorageConfig,
@@ -14,6 +17,7 @@ import {
   listRules,
   memorySize,
   setAuthConfig,
+  setAutomationConfig,
   setControllers,
   setCustomDomain,
   setDatastoreConfig,
@@ -54,7 +58,11 @@ const mockActor = {
   count_collection_assets: vi.fn(),
   del_docs: vi.fn(),
   del_assets: vi.fn(),
-  set_controllers: vi.fn()
+  set_controllers: vi.fn(),
+  del_controllers: vi.fn(),
+  del_controller_self: vi.fn(),
+  set_automation_config: vi.fn(),
+  get_automation_config: vi.fn()
 };
 
 describe('satellite.api', () => {
@@ -161,9 +169,30 @@ describe('satellite.api', () => {
     version: [2n]
   };
 
+  const mockAutomationConfig: SatelliteDid.AutomationConfig = {
+    openid: [
+      {
+        providers: [
+          [
+            {GitHub: null},
+            {
+              repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {refs: []}]],
+              controller: []
+            }
+          ]
+        ],
+        observatory_id: []
+      }
+    ],
+    created_at: [1724532900000n],
+    updated_at: [1724532900000n],
+    version: [2n]
+  };
+
   const mockConfig: SatelliteDid.Config = {
     db: [mockDatastoreConfig],
     authentication: [mockAuthenticationConfig],
+    automation: [mockAutomationConfig],
     storage: mockStorageConfig
   };
 
@@ -546,6 +575,95 @@ describe('satellite.api', () => {
       await expect(setControllers({satellite: {identity: mockIdentity}, args})).rejects.toThrow(
         err
       );
+    });
+  });
+
+  describe('deleteControllers', () => {
+    const args: SatelliteDid.DeleteControllersArgs = {
+      controllers: [mockUserIdPrincipal]
+    };
+
+    it('deletes controllers', async () => {
+      const expectedResponse = [
+        [
+          mockUserIdPrincipal,
+          {
+            updated_at: 1624532800000n,
+            metadata: [['key', 'value']],
+            created_at: 1624532700000n,
+            scope: {Admin: null},
+            expires_at: [1624532900000n]
+          }
+        ]
+      ];
+
+      mockActor.del_controllers.mockResolvedValue(expectedResponse);
+
+      const result = await deleteControllers({satellite: {identity: mockIdentity}, args});
+      expect(result).toEqual(expectedResponse);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.del_controllers.mockRejectedValueOnce(err);
+      await expect(deleteControllers({satellite: {identity: mockIdentity}, args})).rejects.toThrow(
+        err
+      );
+    });
+  });
+
+  describe('deleteControllerSelf', () => {
+    it('deletes the calling controller', async () => {
+      mockActor.del_controller_self.mockResolvedValue(undefined);
+
+      const result = await deleteControllerSelf({satellite: {identity: mockIdentity}});
+
+      expect(result).toBeUndefined();
+      expect(mockActor.del_controller_self).toHaveBeenCalledTimes(1);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.del_controller_self.mockRejectedValueOnce(err);
+
+      await expect(deleteControllerSelf({satellite: {identity: mockIdentity}})).rejects.toThrow(
+        err
+      );
+    });
+  });
+
+  describe('setAutomationConfig', () => {
+    it('set the automation config', async () => {
+      mockActor.set_automation_config.mockResolvedValue(mockAutomationConfig);
+      const result = await setAutomationConfig({
+        satellite: {identity: mockIdentity},
+        config: mockAutomationConfig
+      });
+      expect(result).toBe(mockAutomationConfig);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.set_automation_config.mockRejectedValueOnce(err);
+      await expect(
+        setAutomationConfig({satellite: {identity: mockIdentity}, config: mockAutomationConfig})
+      ).rejects.toThrow(err);
+    });
+  });
+
+  describe('getAutomationConfig', () => {
+    it('get the automation config', async () => {
+      mockActor.get_automation_config.mockResolvedValue([mockAutomationConfig]);
+      const result = await getAutomationConfig({
+        satellite: {identity: mockIdentity}
+      });
+      expect(result).toStrictEqual([mockAutomationConfig]);
+    });
+
+    it('bubbles errors', async () => {
+      const err = new Error('fail');
+      mockActor.get_automation_config.mockRejectedValueOnce(err);
+      await expect(getAutomationConfig({satellite: {identity: mockIdentity}})).rejects.toThrow(err);
     });
   });
 });

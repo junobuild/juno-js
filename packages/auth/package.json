@@ -1,34 +1,44 @@
 {
   "name": "@junobuild/auth",
-  "version": "3.0.3",
+  "version": "4.0.0",
   "description": "A SDK for working with Juno authentication modules",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/node/index.mjs",
-  "module": "./dist/browser/index.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/browser/index.js"
-      },
-      "require": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/node/index.mjs"
-      }
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.mjs"
+    },
+    "./delegation": {
+      "types": "./delegation.d.ts",
+      "import": "./delegation.js",
+      "require": "./delegation.mjs"
+    },
+    "./automation": {
+      "types": "./automation.d.ts",
+      "import": "./automation.js",
+      "require": "./automation.mjs"
     }
   },
   "files": [
-    "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "**/*.js",
+    "**/*.js.map",
+    "**/*.mjs",
+    "**/*.mjs.map",
+    "**/*.d.ts",
+    "**/*.d.ts.map"
   ],
   "scripts": {
-    "rmdir": "node ../../scripts/rmdir.mjs",
-    "ts-declaration": "tsc --emitDeclarationOnly --outDir dist/types",
-    "build": "npm run rmdir && mkdir -p dist && node esbuild.mjs && npm run ts-declaration",
+    "clean": "git ls-files --others --ignored --exclude-standard | grep -v \"LICENSE\" | xargs rm -rf",
+    "ts-declaration": "tsc --emitDeclarationOnly -outDir .",
+    "build": "npm run clean && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },
   "repository": {
@@ -43,12 +53,14 @@
     "authentication",
     "openid",
     "jwt",
-    "fedcm"
+    "fedcm",
+    "google",
+    "github"
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
     "@dfinity/utils": "^4.1",
     "@icp-sdk/core": "^5",
-    "@junobuild/ic-client": "^7.2"
+    "@junobuild/ic-client": "^8"
   }
 }

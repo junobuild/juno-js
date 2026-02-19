@@ -1,0 +1,29 @@
+import {arrayBufferToUint8Array} from '@dfinity/utils';
+import type {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
+import type {Nonce, Salt} from '../types/nonce';
+import {toBase64URL} from './url.utils';
+
+const generateSalt = (): Salt => crypto.getRandomValues(new Uint8Array(32));
+
+const buildNonce = async ({salt, caller}: {salt: Salt; caller: Ed25519KeyIdentity}) => {
+  const principal = caller.getPrincipal().toUint8Array();
+
+  const bytes = new Uint8Array(salt.length + principal.byteLength);
+  bytes.set(salt);
+  bytes.set(principal, salt.length);
+
+  const hash = await crypto.subtle.digest('SHA-256', bytes);
+
+  return toBase64URL(arrayBufferToUint8Array(hash));
+};
+
+export const generateNonce = async ({
+  caller
+}: {
+  caller: Ed25519KeyIdentity;
+}): Promise<{nonce: Nonce; salt: Salt}> => {
+  const salt = generateSalt();
+  const nonce = await buildNonce({salt, caller});
+
+  return {nonce, salt};
+};

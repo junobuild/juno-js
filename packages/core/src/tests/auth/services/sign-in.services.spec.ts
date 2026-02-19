@@ -4,7 +4,7 @@
 
 import {AuthClient} from '@icp-sdk/auth/client';
 import * as identityLib from '@icp-sdk/core/identity';
-import * as authLib from '@junobuild/auth';
+import * as authLib from '@junobuild/auth/delegation';
 import * as devLib from '@junobuild/ic-client/dev';
 import * as webAuthnLib from '@junobuild/ic-client/webauthn';
 import type {Mock} from 'vitest';

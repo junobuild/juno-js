@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import * as authLib from '@junobuild/auth';
+import * as authLib from '@junobuild/auth/delegation';
 import {GoogleProvider} from '../../../auth/providers/google.providers';
 import {SignInMissingClientIdError} from '../../../auth/types/errors';
 import {GoogleRedirectOptions} from '../../../auth/types/google';

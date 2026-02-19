@@ -1,12 +1,1 @@
-export * from './authenticate';
-export * from './errors';
-export type * from './providers/github/types/authenticate';
-export type * from './providers/github/types/provider';
-export type * from './providers/github/types/request';
-export type * from './providers/google/types/authenticate';
-export type * from './providers/google/types/request';
-export * from './request';
-export type * from './types/authenticate';
-export type * from './types/provider';
-export type * from './types/request';
-export * from './utils/openid.utils';
+throw new Error('This package has no default entry point. Please import from a subpath.');

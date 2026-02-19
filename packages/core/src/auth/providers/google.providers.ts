@@ -1,5 +1,5 @@
 import {isNullish} from '@dfinity/utils';
-import {requestJwt} from '@junobuild/auth';
+import {requestJwt} from '@junobuild/auth/delegation';
 import {envGoogleClientId} from '../../core/utils/window.env.utils';
 import {SignInMissingClientIdError} from '../types/errors';
 import type {GoogleSignInRedirectOptions} from '../types/google';

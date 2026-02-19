@@ -42,6 +42,17 @@ export const setAuthConfig = async ({
   return set_auth_config(config);
 };
 
+export const setAutomationConfig = async ({
+  config,
+  satellite
+}: {
+  config: SatelliteDid.SetAutomationConfig;
+  satellite: SatelliteParameters;
+}): Promise<SatelliteDid.AutomationConfig> => {
+  const {set_automation_config} = await getSatelliteActor(satellite);
+  return set_automation_config(config);
+};
+
 export const getStorageConfig = async ({
   satellite
 }: {
@@ -67,6 +78,15 @@ export const getAuthConfig = async ({
 }): Promise<[] | [SatelliteDid.AuthenticationConfig]> => {
   const {get_auth_config} = await getSatelliteActor(satellite);
   return get_auth_config();
+};
+
+export const getAutomationConfig = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<[] | [SatelliteDid.AutomationConfig]> => {
+  const {get_automation_config} = await getSatelliteActor(satellite);
+  return get_automation_config();
 };
 
 export const getConfig = async ({
@@ -233,4 +253,24 @@ export const setControllers = async ({
 }): Promise<[Principal, SatelliteDid.Controller][]> => {
   const {set_controllers} = await getSatelliteActor(satellite);
   return set_controllers(args);
+};
+
+export const deleteControllers = async ({
+  args,
+  satellite
+}: {
+  args: SatelliteDid.DeleteControllersArgs;
+  satellite: SatelliteParameters;
+}): Promise<[Principal, SatelliteDid.Controller][]> => {
+  const {del_controllers} = await getSatelliteActor(satellite);
+  return del_controllers(args);
+};
+
+export const deleteControllerSelf = async ({
+  satellite
+}: {
+  satellite: SatelliteParameters;
+}): Promise<void> => {
+  const {del_controller_self} = await getSatelliteActor(satellite);
+  await del_controller_self();
 };

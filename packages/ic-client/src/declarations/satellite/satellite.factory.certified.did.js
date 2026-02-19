@@ -65,7 +65,8 @@ export const idlFactory = ({IDL}) => {
     GetCachedJwks: IDL.Null,
     JwtVerify: JwtVerifyError,
     GetOrFetchJwks: GetOrRefreshJwksError,
-    DeriveSeedFailed: IDL.Text
+    DeriveSeedFailed: IDL.Text,
+    InvalidObservatoryId: IDL.Text
   });
   const AuthenticationError = IDL.Variant({
     PrepareDelegation: PrepareDelegationError,
@@ -74,6 +75,41 @@ export const idlFactory = ({IDL}) => {
   const AuthenticateResultResponse = IDL.Variant({
     Ok: Authentication,
     Err: AuthenticationError
+  });
+  const OpenIdPrepareAutomationArgs = IDL.Record({
+    jwt: IDL.Text,
+    salt: IDL.Vec(IDL.Nat8)
+  });
+  const AuthenticateAutomationArgs = IDL.Variant({
+    OpenId: OpenIdPrepareAutomationArgs
+  });
+  const AutomationScope = IDL.Variant({
+    Write: IDL.Null,
+    Submit: IDL.Null
+  });
+  const AutomationController = IDL.Record({
+    scope: AutomationScope,
+    expires_at: IDL.Nat64
+  });
+  const PrepareAutomationError = IDL.Variant({
+    JwtFindProvider: JwtFindProviderError,
+    InvalidController: IDL.Text,
+    GetCachedJwks: IDL.Null,
+    JwtVerify: JwtVerifyError,
+    GetOrFetchJwks: GetOrRefreshJwksError,
+    ControllerAlreadyExists: IDL.Null,
+    InvalidObservatoryId: IDL.Text,
+    TooManyControllers: IDL.Text
+  });
+  const AuthenticationAutomationError = IDL.Variant({
+    PrepareAutomation: PrepareAutomationError,
+    RegisterController: IDL.Text,
+    SaveWorkflowMetadata: IDL.Text,
+    SaveUniqueJtiToken: IDL.Text
+  });
+  const AuthenticateAutomationResultResponse = IDL.Variant({
+    Ok: IDL.Tuple(IDL.Principal, AutomationController),
+    Err: AuthenticationAutomationError
   });
   const CommitBatch = IDL.Record({
     batch_id: IDL.Nat,
@@ -115,6 +151,10 @@ export const idlFactory = ({IDL}) => {
   const DeleteControllersArgs = IDL.Record({
     controllers: IDL.Vec(IDL.Principal)
   });
+  const ControllerKind = IDL.Variant({
+    Emulator: IDL.Null,
+    Automation: IDL.Null
+  });
   const ControllerScope = IDL.Variant({
     Write: IDL.Null,
     Admin: IDL.Null,
@@ -123,6 +163,7 @@ export const idlFactory = ({IDL}) => {
   const Controller = IDL.Record({
     updated_at: IDL.Nat64,
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    kind: IDL.Opt(ControllerKind),
     created_at: IDL.Nat64,
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
@@ -158,18 +199,21 @@ export const idlFactory = ({IDL}) => {
     created_at: IDL.Nat64,
     version: IDL.Opt(IDL.Nat64)
   });
-  const OpenIdProvider = IDL.Variant({Google: IDL.Null});
-  const OpenIdProviderDelegationConfig = IDL.Record({
+  const OpenIdDelegationProvider = IDL.Variant({
+    GitHub: IDL.Null,
+    Google: IDL.Null
+  });
+  const OpenIdAuthProviderDelegationConfig = IDL.Record({
     targets: IDL.Opt(IDL.Vec(IDL.Principal)),
     max_time_to_live: IDL.Opt(IDL.Nat64)
   });
-  const OpenIdProviderConfig = IDL.Record({
-    delegation: IDL.Opt(OpenIdProviderDelegationConfig),
+  const OpenIdAuthProviderConfig = IDL.Record({
+    delegation: IDL.Opt(OpenIdAuthProviderDelegationConfig),
     client_id: IDL.Text
   });
   const AuthenticationConfigOpenId = IDL.Record({
     observatory_id: IDL.Opt(IDL.Principal),
-    providers: IDL.Vec(IDL.Tuple(OpenIdProvider, OpenIdProviderConfig))
+    providers: IDL.Vec(IDL.Tuple(OpenIdDelegationProvider, OpenIdAuthProviderConfig))
   });
   const AuthenticationConfigInternetIdentity = IDL.Record({
     derivation_origin: IDL.Opt(IDL.Text),
@@ -185,6 +229,29 @@ export const idlFactory = ({IDL}) => {
     version: IDL.Opt(IDL.Nat64),
     internet_identity: IDL.Opt(AuthenticationConfigInternetIdentity),
     rules: IDL.Opt(AuthenticationRules)
+  });
+  const OpenIdAutomationProvider = IDL.Variant({GitHub: IDL.Null});
+  const OpenIdAutomationProviderControllerConfig = IDL.Record({
+    scope: IDL.Opt(AutomationScope),
+    max_time_to_live: IDL.Opt(IDL.Nat64)
+  });
+  const RepositoryKey = IDL.Record({owner: IDL.Text, name: IDL.Text});
+  const OpenIdAutomationRepositoryConfig = IDL.Record({
+    refs: IDL.Opt(IDL.Vec(IDL.Text))
+  });
+  const OpenIdAutomationProviderConfig = IDL.Record({
+    controller: IDL.Opt(OpenIdAutomationProviderControllerConfig),
+    repositories: IDL.Vec(IDL.Tuple(RepositoryKey, OpenIdAutomationRepositoryConfig))
+  });
+  const AutomationConfigOpenId = IDL.Record({
+    observatory_id: IDL.Opt(IDL.Principal),
+    providers: IDL.Vec(IDL.Tuple(OpenIdAutomationProvider, OpenIdAutomationProviderConfig))
+  });
+  const AutomationConfig = IDL.Record({
+    updated_at: IDL.Opt(IDL.Nat64),
+    openid: IDL.Opt(AutomationConfigOpenId),
+    created_at: IDL.Opt(IDL.Nat64),
+    version: IDL.Opt(IDL.Nat64)
   });
   const ConfigMaxMemorySize = IDL.Record({
     stable: IDL.Opt(IDL.Nat64),
@@ -223,7 +290,8 @@ export const idlFactory = ({IDL}) => {
   const Config = IDL.Record({
     db: IDL.Opt(DbConfig),
     authentication: IDL.Opt(AuthenticationConfig),
-    storage: StorageConfig
+    storage: StorageConfig,
+    automation: IDL.Opt(AutomationConfig)
   });
   const OpenIdGetDelegationArgs = IDL.Record({
     jwt: IDL.Text,
@@ -247,7 +315,8 @@ export const idlFactory = ({IDL}) => {
     NoSuchDelegation: IDL.Null,
     JwtVerify: JwtVerifyError,
     GetOrFetchJwks: GetOrRefreshJwksError,
-    DeriveSeedFailed: IDL.Text
+    DeriveSeedFailed: IDL.Text,
+    InvalidObservatoryId: IDL.Text
   });
   const GetDelegationResultResponse = IDL.Variant({
     Ok: SignedDelegation,
@@ -396,8 +465,13 @@ export const idlFactory = ({IDL}) => {
     internet_identity: IDL.Opt(AuthenticationConfigInternetIdentity),
     rules: IDL.Opt(AuthenticationRules)
   });
+  const SetAutomationConfig = IDL.Record({
+    openid: IDL.Opt(AutomationConfigOpenId),
+    version: IDL.Opt(IDL.Nat64)
+  });
   const SetController = IDL.Record({
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
+    kind: IDL.Opt(ControllerKind),
     scope: ControllerScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
@@ -443,6 +517,11 @@ export const idlFactory = ({IDL}) => {
 
   return IDL.Service({
     authenticate: IDL.Func([AuthenticationArgs], [AuthenticateResultResponse], []),
+    authenticate_automation: IDL.Func(
+      [AuthenticateAutomationArgs],
+      [AuthenticateAutomationResultResponse],
+      []
+    ),
     commit_asset_upload: IDL.Func([CommitBatch], [], []),
     commit_proposal: IDL.Func([CommitProposal], [IDL.Null], []),
     commit_proposal_asset_upload: IDL.Func([CommitBatch], [], []),
@@ -454,6 +533,7 @@ export const idlFactory = ({IDL}) => {
     count_proposals: IDL.Func([], [IDL.Nat64], []),
     del_asset: IDL.Func([IDL.Text, IDL.Text], [], []),
     del_assets: IDL.Func([IDL.Text], [], []),
+    del_controller_self: IDL.Func([], [], []),
     del_controllers: IDL.Func(
       [DeleteControllersArgs],
       [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))],
@@ -471,6 +551,7 @@ export const idlFactory = ({IDL}) => {
     deposit_cycles: IDL.Func([DepositCyclesArgs], [], []),
     get_asset: IDL.Func([IDL.Text, IDL.Text], [IDL.Opt(AssetNoContent)], []),
     get_auth_config: IDL.Func([], [IDL.Opt(AuthenticationConfig)], []),
+    get_automation_config: IDL.Func([], [IDL.Opt(AutomationConfig)], []),
     get_config: IDL.Func([], [Config], []),
     get_db_config: IDL.Func([], [IDL.Opt(DbConfig)], []),
     get_delegation: IDL.Func([GetDelegationArgs], [GetDelegationResultResponse], []),
@@ -512,6 +593,7 @@ export const idlFactory = ({IDL}) => {
     reject_proposal: IDL.Func([CommitProposal], [IDL.Null], []),
     set_asset_token: IDL.Func([IDL.Text, IDL.Text, IDL.Opt(IDL.Text)], [], []),
     set_auth_config: IDL.Func([SetAuthenticationConfig], [AuthenticationConfig], []),
+    set_automation_config: IDL.Func([SetAutomationConfig], [AutomationConfig], []),
     set_controllers: IDL.Func(
       [SetControllersArgs],
       [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))],

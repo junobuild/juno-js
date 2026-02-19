@@ -57,7 +57,8 @@ describe('mission-control.controllers.services', () => {
         metadata: [['profile', 'dev']],
         scope: {
           Admin: null
-        }
+        },
+        kind: []
       }
     );
   });
@@ -76,7 +77,8 @@ describe('mission-control.controllers.services', () => {
         metadata: [['profile', 'dev']],
         scope: {
           Admin: null
-        }
+        },
+        kind: []
       }
     );
   });
@@ -86,7 +88,8 @@ describe('mission-control.controllers.services', () => {
     metadata: [],
     created_at: 4456n,
     scope: {Admin: null},
-    expires_at: []
+    expires_at: [],
+    kind: []
   };
 
   it('delegates to listControllers API', async () => {

@@ -69,7 +69,7 @@ export interface AuthenticationConfigInternetIdentity {
 }
 export interface AuthenticationConfigOpenId {
 	observatory_id: [] | [Principal];
-	providers: Array<[OpenIdProvider, OpenIdProviderConfig]>;
+	providers: Array<[OpenIdDelegationProvider, OpenIdAuthProviderConfig]>;
 }
 export type AuthenticationError =
 	| {
@@ -99,10 +99,12 @@ export interface ConfigMaxMemorySize {
 export interface Controller {
 	updated_at: bigint;
 	metadata: Array<[string, string]>;
+	kind: [] | [ControllerKind];
 	created_at: bigint;
 	scope: ControllerScope;
 	expires_at: [] | [bigint];
 }
+export type ControllerKind = { Emulator: null } | { Automation: null };
 export type ControllerScope = { Write: null } | { Admin: null } | { Submit: null };
 export interface CreateMissionControlArgs {
 	subnet_id: [] | [Principal];
@@ -159,7 +161,8 @@ export type GetDelegationError =
 	| { NoSuchDelegation: null }
 	| { JwtVerify: JwtVerifyError }
 	| { GetOrFetchJwks: GetOrRefreshJwksError }
-	| { DeriveSeedFailed: string };
+	| { DeriveSeedFailed: string }
+	| { InvalidObservatoryId: string };
 export type GetOrRefreshJwksError =
 	| { InvalidConfig: string }
 	| { MissingKid: null }
@@ -277,8 +280,16 @@ export interface ListSegmentsArgs {
 }
 export type Memory = { Heap: null } | { Stable: null };
 export interface OpenId {
-	provider: OpenIdProvider;
+	provider: OpenIdDelegationProvider;
 	data: OpenIdData;
+}
+export interface OpenIdAuthProviderConfig {
+	delegation: [] | [OpenIdAuthProviderDelegationConfig];
+	client_id: string;
+}
+export interface OpenIdAuthProviderDelegationConfig {
+	targets: [] | [Array<Principal>];
+	max_time_to_live: [] | [bigint];
 }
 export interface OpenIdData {
 	name: [] | [string];
@@ -287,7 +298,9 @@ export interface OpenIdData {
 	email: [] | [string];
 	picture: [] | [string];
 	given_name: [] | [string];
+	preferred_username: [] | [string];
 }
+export type OpenIdDelegationProvider = { GitHub: null } | { Google: null };
 export interface OpenIdGetDelegationArgs {
 	jwt: string;
 	session_key: Uint8Array;
@@ -299,15 +312,6 @@ export interface OpenIdPrepareDelegationArgs {
 	session_key: Uint8Array;
 	salt: Uint8Array;
 }
-export type OpenIdProvider = { Google: null };
-export interface OpenIdProviderConfig {
-	delegation: [] | [OpenIdProviderDelegationConfig];
-	client_id: string;
-}
-export interface OpenIdProviderDelegationConfig {
-	targets: [] | [Array<Principal>];
-	max_time_to_live: [] | [bigint];
-}
 export type PaymentStatus = { Refunded: null } | { Acknowledged: null } | { Completed: null };
 export type PrepareDelegationError =
 	| {
@@ -316,7 +320,8 @@ export type PrepareDelegationError =
 	| { GetCachedJwks: null }
 	| { JwtVerify: JwtVerifyError }
 	| { GetOrFetchJwks: GetOrRefreshJwksError }
-	| { DeriveSeedFailed: string };
+	| { DeriveSeedFailed: string }
+	| { InvalidObservatoryId: string };
 export interface PreparedDelegation {
 	user_key: Uint8Array;
 	expiration: bigint;
@@ -376,6 +381,7 @@ export interface SetAuthenticationConfig {
 }
 export interface SetController {
 	metadata: Array<[string, string]>;
+	kind: [] | [ControllerKind];
 	scope: ControllerScope;
 	expires_at: [] | [bigint];
 }
@@ -514,11 +520,13 @@ export interface _SERVICE {
 	set_controllers: ActorMethod<[SetControllersArgs], undefined>;
 	set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;
 	set_fee: ActorMethod<[SegmentKind, FeesArgs], undefined>;
+	set_many_segments: ActorMethod<[Array<SetSegmentsArgs>], Array<Segment>>;
 	set_rate_config: ActorMethod<[SegmentKind, RateConfig], undefined>;
 	set_segment: ActorMethod<[SetSegmentsArgs], Segment>;
 	set_segment_metadata: ActorMethod<[SetSegmentMetadataArgs], Segment>;
 	set_storage_config: ActorMethod<[SetStorageConfig], StorageConfig>;
 	submit_proposal: ActorMethod<[bigint], [bigint, Proposal]>;
+	unset_many_segments: ActorMethod<[Array<UnsetSegmentsArgs>], undefined>;
 	unset_segment: ActorMethod<[UnsetSegmentsArgs], undefined>;
 	upload_proposal_asset_chunk: ActorMethod<[UploadChunk], UploadChunkResult>;
 }

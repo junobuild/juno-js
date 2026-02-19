@@ -1,18 +1,25 @@
 import {toNullable} from '@dfinity/utils';
 import {Principal} from '@icp-sdk/core/principal';
-import {AuthenticationConfig, StorageConfig} from '@junobuild/config';
+import {AuthenticationConfig, AutomationConfig, StorageConfig} from '@junobuild/config';
 import * as actor from '@junobuild/ic-client/actor';
 import {SatelliteDid} from '@junobuild/ic-client/actor';
 import {
   getAuthConfig,
+  getAutomationConfig,
   getConfig,
   getDatastoreConfig,
   getStorageConfig,
   setAuthConfig,
+  setAutomationConfig,
   setDatastoreConfig,
   setStorageConfig
 } from '../../services/satellite.config.services';
-import {toAuthenticationConfig, toDatastoreConfig, toStorageConfig} from '../../utils/config.utils';
+import {
+  toAuthenticationConfig,
+  toAutomationConfig,
+  toDatastoreConfig,
+  toStorageConfig
+} from '../../utils/config.utils';
 import {
   mockHttpAgent,
   mockIdentity,
@@ -36,7 +43,9 @@ const mockActor = {
   get_config: vi.fn(),
   set_auth_config: vi.fn(),
   set_db_config: vi.fn(),
-  set_storage_config: vi.fn()
+  set_storage_config: vi.fn(),
+  get_automation_config: vi.fn(),
+  set_automation_config: vi.fn()
 };
 
 describe('satellite.config.services', () => {
@@ -55,6 +64,7 @@ describe('satellite.config.services', () => {
         external_alternative_origins: [['https://bar.icp0.io']]
       }
     ],
+    openid: [],
     rules: [
       {
         allowed_callers: [
@@ -92,6 +102,26 @@ describe('satellite.config.services', () => {
     rewrites: [['/hello.html', '/hello.html']],
     raw_access: toNullable(),
     max_memory_size: toNullable(),
+    version: [7n],
+    created_at: [now],
+    updated_at: [now]
+  };
+
+  const mockAutomationConfig: SatelliteDid.AutomationConfig = {
+    openid: [
+      {
+        providers: [
+          [
+            {GitHub: null},
+            {
+              repositories: [[{owner: 'octo-org', name: 'octo-repo'}, {refs: []}]],
+              controller: []
+            }
+          ]
+        ],
+        observatory_id: []
+      }
+    ],
     version: [7n],
     created_at: [now],
     updated_at: [now]
@@ -191,6 +221,7 @@ describe('satellite.config.services', () => {
           external_alternative_origins: [[]]
         }
       ],
+      openid: [],
       rules: [
         {
           allowed_callers: [mockUserIdPrincipal]
@@ -283,6 +314,7 @@ describe('satellite.config.services', () => {
           external_alternative_origins: [[]]
         }
       ],
+      openid: [],
       rules: [
         {
           allowed_callers: [mockUserIdPrincipal]
@@ -299,5 +331,92 @@ describe('satellite.config.services', () => {
 
     expect(mockActor.set_auth_config).toHaveBeenCalled();
     expect(result).toStrictEqual(toAuthenticationConfig(mockResponse));
+  });
+
+  describe('getAutomationConfig', () => {
+    it('gets automation config and returns undefined when nullish', async () => {
+      mockActor.get_automation_config.mockResolvedValue([]);
+
+      const result = await getAutomationConfig({satellite});
+      expect(mockActor.get_automation_config).toHaveBeenCalled();
+      expect(result).toBeUndefined();
+    });
+
+    it('should return config', async () => {
+      mockActor.get_automation_config.mockResolvedValue([mockAutomationConfig]);
+
+      const result = await getAutomationConfig({satellite});
+
+      expect(mockActor.get_automation_config).toHaveBeenCalled();
+      expect(result).toStrictEqual(toAutomationConfig(mockAutomationConfig));
+    });
+  });
+
+  it('gets all configs from get_config including automation', async () => {
+    const mockConfig = {
+      storage: mockStorageConfig,
+      db: [mockDatastoreConfig],
+      authentication: [mockAuthConfig],
+      automation: [mockAutomationConfig]
+    };
+
+    mockActor.get_config.mockResolvedValue(mockConfig);
+
+    const result = await getConfig({satellite});
+
+    expect(mockActor.get_config).toHaveBeenCalled();
+    expect(result).toStrictEqual({
+      storage: toStorageConfig(mockStorageConfig),
+      datastore: toDatastoreConfig(mockDatastoreConfig),
+      auth: toAuthenticationConfig(mockAuthConfig),
+      automation: toAutomationConfig(mockAutomationConfig)
+    });
+  });
+
+  it('sets automation config and returns mapped config', async () => {
+    const mockInput: AutomationConfig = {
+      github: {
+        repositories: [{owner: 'octo-org', name: 'octo-repo', refs: ['refs/heads/main']}],
+        accessKeys: {
+          scope: 'Write',
+          timeToLive: 10n * 60n * 1_000_000_000n
+        }
+      },
+      version: 1n
+    };
+
+    const mockResponse: SatelliteDid.AutomationConfig = {
+      openid: [
+        {
+          providers: [
+            [
+              {GitHub: null},
+              {
+                repositories: [
+                  [{owner: 'octo-org', name: 'octo-repo'}, {refs: [['refs/heads/main']]}]
+                ],
+                controller: [
+                  {
+                    scope: [{Write: null}],
+                    max_time_to_live: [10n * 60n * 1_000_000_000n]
+                  }
+                ]
+              }
+            ]
+          ],
+          observatory_id: []
+        }
+      ],
+      version: [1n],
+      created_at: [now],
+      updated_at: [now]
+    };
+
+    mockActor.set_automation_config.mockResolvedValue(mockResponse);
+
+    const result = await setAutomationConfig({config: mockInput, satellite});
+
+    expect(mockActor.set_automation_config).toHaveBeenCalled();
+    expect(result).toStrictEqual(toAutomationConfig(mockResponse));
   });
 });

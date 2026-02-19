@@ -19,7 +19,8 @@ describe('controllers.utils', () => {
       const expected: SatelliteDid.SetController = {
         metadata: [['profile', 'hello world']],
         expires_at: [],
-        scope: {Admin: null}
+        scope: {Admin: null},
+        kind: []
       };
 
       expect(result.controller).toEqual(expected);

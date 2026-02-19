@@ -2,6 +2,9 @@ import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
 import {Principal} from '@icp-sdk/core/principal';
 import type {
   AuthenticationConfig,
+  AuthenticationConfigGitHub,
+  AuthenticationConfigGoogle,
+  AutomationConfig,
   DatastoreConfig,
   StorageConfig,
   StorageConfigHeader,
@@ -122,57 +125,75 @@ export const toDatastoreConfig = ({
 
 export const fromAuthenticationConfig = ({
   internetIdentity,
+  github,
   google,
   rules,
   version
-}: AuthenticationConfig): SatelliteDid.SetAuthenticationConfig => ({
-  internet_identity: isNullish(internetIdentity)
-    ? []
-    : [
-        {
-          derivation_origin: toNullable(internetIdentity?.derivationOrigin),
-          external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
-        }
-      ],
-  openid: isNullish(google)
-    ? []
-    : [
-        {
-          providers: [
-            [
-              {Google: null},
-              {
-                client_id: google.clientId,
-                delegation: isNullish(google.delegation)
-                  ? []
-                  : [
-                      {
-                        targets:
-                          google.delegation.allowedTargets === null
-                            ? []
-                            : [
-                                (google.delegation.allowedTargets ?? [])?.map((target) =>
-                                  Principal.fromText(target)
-                                )
-                              ],
-                        max_time_to_live: toNullable(google.delegation.sessionDuration)
-                      }
-                    ]
-              }
-            ]
+}: AuthenticationConfig): SatelliteDid.SetAuthenticationConfig => {
+  const fromAuthenticationOpenIdConfig = (
+    config: AuthenticationConfigGoogle | AuthenticationConfigGitHub
+  ): SatelliteDid.OpenIdAuthProviderConfig => ({
+    client_id: config.clientId,
+    delegation: isNullish(config.delegation)
+      ? []
+      : [
+          {
+            targets:
+              config.delegation.allowedTargets === null
+                ? []
+                : [
+                    (config.delegation.allowedTargets ?? [])?.map((target) =>
+                      Principal.fromText(target)
+                    )
+                  ],
+            max_time_to_live: toNullable(config.delegation.sessionDuration)
+          }
+        ]
+  });
+
+  const providers = [
+    ...(isNullish(google)
+      ? []
+      : ([[{Google: null}, fromAuthenticationOpenIdConfig(google)]] as [
+          SatelliteDid.OpenIdDelegationProvider,
+          SatelliteDid.OpenIdAuthProviderConfig
+        ][])),
+    ...(isNullish(github)
+      ? []
+      : ([[{GitHub: null}, fromAuthenticationOpenIdConfig(github)]] as [
+          SatelliteDid.OpenIdDelegationProvider,
+          SatelliteDid.OpenIdAuthProviderConfig
+        ][]))
+  ];
+
+  return {
+    internet_identity: isNullish(internetIdentity)
+      ? []
+      : [
+          {
+            derivation_origin: toNullable(internetIdentity?.derivationOrigin),
+            external_alternative_origins: toNullable(internetIdentity?.externalAlternativeOrigins)
+          }
+        ],
+    openid:
+      providers.length === 0
+        ? []
+        : [
+            {
+              providers,
+              observatory_id: []
+            }
           ],
-          observatory_id: []
-        }
-      ],
-  rules: isNullish(rules)
-    ? []
-    : [
-        {
-          allowed_callers: rules.allowedCallers.map((caller) => Principal.fromText(caller))
-        }
-      ],
-  version: toNullable(version)
-});
+    rules: isNullish(rules)
+      ? []
+      : [
+          {
+            allowed_callers: rules.allowedCallers.map((caller) => Principal.fromText(caller))
+          }
+        ],
+    version: toNullable(version)
+  };
+};
 
 export const toAuthenticationConfig = ({
   version,
@@ -186,20 +207,36 @@ export const toAuthenticationConfig = ({
     internetIdentity?.external_alternative_origins ?? []
   );
 
+  const toDelegation = (
+    provider: SatelliteDid.OpenIdAuthProviderConfig | undefined
+  ):
+    | Omit<AuthenticationConfigGoogle, 'clientId'>
+    | Omit<AuthenticationConfigGitHub, 'clientId'> => {
+    const delegation = fromNullable(provider?.delegation ?? []);
+    const targets =
+      // delegation.targets===[] (exactly equals because delegation is undefined by default)
+      nonNullish(delegation) && nonNullish(delegation.targets) && delegation.targets.length === 0
+        ? null
+        : // delegation.targets===[[]]
+          (fromNullable(delegation?.targets ?? []) ?? []).length === 0
+          ? undefined
+          : (fromNullable(delegation?.targets ?? []) ?? []).map((p) => p.toText());
+    const maxTimeToLive = fromNullable(delegation?.max_time_to_live ?? []);
+    const withDelegation = targets !== undefined || nonNullish(maxTimeToLive);
+
+    return {
+      ...(withDelegation && {
+        delegation: {
+          ...(targets !== undefined && {allowedTargets: targets}),
+          ...(nonNullish(maxTimeToLive) && {sessionDuration: maxTimeToLive})
+        }
+      })
+    };
+  };
+
   const openId = fromNullable(openIdDid);
   const google = openId?.providers.find(([key]) => 'Google' in key)?.[1];
-
-  const delegation = fromNullable(google?.delegation ?? []);
-  const targets =
-    // delegation.targets===[] (exactly equals because delegation is undefined by default)
-    nonNullish(delegation) && nonNullish(delegation.targets) && delegation.targets.length === 0
-      ? null
-      : // delegation.targets===[[]]
-        (fromNullable(delegation?.targets ?? []) ?? []).length === 0
-        ? undefined
-        : (fromNullable(delegation?.targets ?? []) ?? []).map((p) => p.toText());
-  const maxTimeToLive = fromNullable(delegation?.max_time_to_live ?? []);
-  const withDelegation = targets !== undefined || nonNullish(maxTimeToLive);
+  const github = openId?.providers.find(([key]) => 'GitHub' in key)?.[1];
 
   const rules = fromNullable(rulesDid);
 
@@ -213,17 +250,109 @@ export const toAuthenticationConfig = ({
     ...(nonNullish(google) && {
       google: {
         clientId: google.client_id,
-        ...(withDelegation && {
-          delegation: {
-            ...(targets !== undefined && {allowedTargets: targets}),
-            ...(nonNullish(maxTimeToLive) && {sessionDuration: maxTimeToLive})
-          }
-        })
+        ...toDelegation(google)
+      }
+    }),
+    ...(nonNullish(github) && {
+      github: {
+        clientId: github.client_id,
+        ...toDelegation(github)
       }
     }),
     ...(nonNullish(rules) && {
       rules: {
         allowedCallers: rules.allowed_callers.map((caller) => caller.toText())
+      }
+    }),
+    version: fromNullable(version)
+  };
+};
+
+export const fromAutomationConfig = ({
+  github,
+  version
+}: AutomationConfig): SatelliteDid.SetAutomationConfig => {
+  if (isNullish(github)) {
+    return {openid: [], version: toNullable(version)};
+  }
+
+  const {repositories, accessKeys} = github;
+
+  const repositoriesMap: Map<
+    SatelliteDid.RepositoryKey,
+    SatelliteDid.OpenIdAutomationRepositoryConfig
+  > = new Map(
+    repositories.map(({owner, name, refs}) => [
+      {owner, name},
+      {refs: (refs?.length ?? 0) > 0 ? toNullable(refs) : toNullable()}
+    ])
+  );
+
+  const controller: SatelliteDid.OpenIdAutomationProviderControllerConfig | undefined = isNullish(
+    accessKeys
+  )
+    ? undefined
+    : {
+        scope: toNullable(
+          accessKeys.scope === 'Write'
+            ? {Write: null}
+            : accessKeys.scope === 'Submit'
+              ? {Submit: null}
+              : undefined
+        ),
+        max_time_to_live: toNullable(accessKeys.timeToLive)
+      };
+
+  return {
+    openid: [
+      {
+        providers: [
+          [
+            {GitHub: null},
+            {
+              repositories: [...repositoriesMap],
+              controller: toNullable(controller)
+            }
+          ]
+        ],
+        observatory_id: []
+      }
+    ],
+    version: toNullable(version)
+  };
+};
+
+export const toAutomationConfig = ({
+  version,
+  openid: openIdDid
+}: SatelliteDid.AutomationConfig): AutomationConfig => {
+  const openId = fromNullable(openIdDid);
+  const github = openId?.providers.find(([key]) => 'GitHub' in key)?.[1];
+
+  const repositories = (github?.repositories ?? []).map(([key, config]) => ({
+    ...key,
+    ...(nonNullish(fromNullable(config.refs)) && {
+      refs: fromNullable(config.refs)
+    })
+  }));
+
+  const controller = fromNullable(github?.controller ?? []);
+  const scope = fromNullable(controller?.scope ?? []);
+  const maxTimeToLive = fromNullable(controller?.max_time_to_live ?? []);
+  const withAccessKeys = nonNullish(scope) || nonNullish(maxTimeToLive);
+
+  return {
+    ...(nonNullish(github) && {
+      github: {
+        repositories,
+        ...(withAccessKeys && {
+          accessKeys: {
+            ...(nonNullish(scope) && {
+              scope: 'Write' in scope ? 'Write' : 'Submit' in scope ? 'Submit' : undefined
+            }),
+            ...(nonNullish(maxTimeToLive) && {timeToLive: maxTimeToLive})
+          }
+        })
       }
     }),
     version: fromNullable(version)

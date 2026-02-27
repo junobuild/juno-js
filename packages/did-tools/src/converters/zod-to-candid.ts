@@ -8,9 +8,25 @@ import {core, z} from 'zod';
 type JSONSchemaOutput = core.ZodStandardJSONSchemaPayload<any>;
 type JSONSchema = core.JSONSchema.BaseSchema;
 
+type RustType =
+  | {kind: 'String'}
+  | {kind: 'bool'}
+  | {kind: 'f64'}
+  | {kind: 'i32'}
+  | {kind: 'u64'} // bigint => nat => u64
+  | {kind: 'Option'; inner: RustType}
+  | {kind: 'Vec'; inner: RustType}
+  | {kind: 'struct'; fields: {name: string; type: RustType}[]}
+  | {kind: 'enum'; variants: string[]}
+  | {kind: 'Principal'};
+
 const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
   switch (schema.type) {
     case 'string':
+      if (schema.const !== undefined) {
+        return `variant { ${String(schema.const)} }`;
+      }
+
       if (schema.enum !== undefined) {
         if (schema.enum.some((v) => typeof v !== 'string')) {
           throw new Error('Non-string enum values are not supported');
@@ -68,6 +84,10 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
         return 'record {}';
       }
 
+      if (Object.keys(schema.properties).length === 0) {
+        return 'record {}';
+      }
+
       const required = new Set(schema.required ?? []);
       const entries = Object.entries(schema.properties);
 
@@ -93,7 +113,7 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
       return `opt ${jsonSchemaToCandid(variants[0])}`;
     }
 
-    return `variant { ${schema.oneOf.map(jsonSchemaToCandid).join('; ')} }`;
+    return `variant { ${variants.map(jsonSchemaToCandid).join('; ')} }`;
   }
 
   if (schema.anyOf !== undefined) {

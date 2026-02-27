@@ -119,18 +119,22 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
   if (schema.anyOf !== undefined) {
     const nonBoolean = schema.anyOf.filter((s) => typeof s !== 'boolean') as JSONSchema[];
 
-    // all members have const => variant with named tags
+    const empty = nonBoolean.filter((s) => Object.keys(s).length === 0);
+    if (empty.length > 0) {
+      throw new Error('Unrepresentable type in union');
+    }
+
+    const nonNull = nonBoolean.filter((s) => s.type !== 'null');
+
     if (nonBoolean.every((s) => s.const !== undefined)) {
       return `variant { ${nonBoolean.map((s) => String(s.const)).join('; ')} }`;
     }
 
-    const nonEmpty = nonBoolean.filter((s) => Object.keys(s).length > 0);
-
-    if (nonEmpty.length === 1) {
-      return `opt ${jsonSchemaToCandid(nonEmpty[0])}`;
+    if (nonNull.length === 1) {
+      return `opt ${jsonSchemaToCandid(nonNull[0])}`;
     }
 
-    return `variant { ${nonEmpty.map((s) => jsonSchemaToCandid(s)).join('; ')} }`;
+    return `variant { ${nonNull.map((s) => jsonSchemaToCandid(s)).join('; ')} }`;
   }
 
   if (schema.allOf !== undefined) {
@@ -183,7 +187,7 @@ export const zodToCandid = (inputs: Record<string, z.ZodType>): string =>
 
       const candid = jsonSchemaToCandid(json);
 
-      const isTopLevelOptional = schema._zod.def.type === 'optional';
+      const isTopLevelOptional = schema._zod.def.type === 'optional' && json.anyOf === undefined;
       return `type ${id} = ${isTopLevelOptional ? `opt ${candid}` : candid};`;
     })
     .join('\n');

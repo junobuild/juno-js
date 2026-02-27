@@ -43,7 +43,7 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
     case 'integer':
       return schema.format === 'bigint' ? 'nat' : 'int32';
     case 'null':
-      return 'null';
+      throw new Error('null type is not supported');
 
     case 'array': {
       if (schema.prefixItems !== undefined) {
@@ -181,7 +181,10 @@ export const zodToCandid = (inputs: Record<string, z.ZodType>): string =>
         }
       });
 
-      return `type ${id} = ${jsonSchemaToCandid(json)};`;
+      const candid = jsonSchemaToCandid(json);
+
+      const isTopLevelOptional = schema._zod.def.type === 'optional';
+      return `type ${id} = ${isTopLevelOptional ? `opt ${candid}` : candid};`;
     })
     .join('\n');
 

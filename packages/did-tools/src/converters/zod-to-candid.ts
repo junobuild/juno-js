@@ -1,4 +1,4 @@
-import {core, z} from 'zod';
+import {core, z, ZodNullable} from 'zod';
 
 // Documentation and existing parsers related to Candid:
 // https://zod.dev/json-schema
@@ -187,7 +187,12 @@ export const zodToCandid = (inputs: Record<string, z.ZodType>): string =>
 
       const candid = jsonSchemaToCandid(json);
 
-      const isTopLevelOptional = schema._zod.def.type === 'optional' && json.anyOf === undefined;
+      // Zod strips optional from JSON Schema output, so we need to re-add the opt wrapper.
+      // However, nullish (optional + nullable) is already handled by the anyOf handler, so we skip it.
+      // e.g. z.string().nullish())
+      const isTopLevelOptional =
+        schema._zod.def.type === 'optional' &&
+        !('innerType' in schema._zod.def && schema._zod.def.innerType instanceof ZodNullable);
       return `type ${id} = ${isTopLevelOptional ? `opt ${candid}` : candid};`;
     })
     .join('\n');

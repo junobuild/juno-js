@@ -1,24 +1,25 @@
-import {core, z, ZodNullable} from 'zod';
+import {type core, type z, ZodNullable} from 'zod';
 
-// Documentation and existing parsers related to Candid:
+// - Zod schema doc:
 // https://zod.dev/json-schema
+// - icp-js-did parser, useful for the mapping
 // https://github.com/dfinity/icp-js-bindgen/blob/main/src/core/generate/rs/src/bindings/typescript.rs
-// https://github.com/slide-computer/candid-json/blob/main/src/index.ts
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type JSONSchemaOutput = core.ZodStandardJSONSchemaPayload<any>;
 type JSONSchema = core.JSONSchema.BaseSchema;
 
-type RustType =
-  | {kind: 'String'}
-  | {kind: 'bool'}
-  | {kind: 'f64'}
-  | {kind: 'i32'}
-  | {kind: 'u64'} // bigint => nat => u64
-  | {kind: 'Option'; inner: RustType}
-  | {kind: 'Vec'; inner: RustType}
-  | {kind: 'struct'; fields: {name: string; type: RustType}[]}
-  | {kind: 'enum'; variants: string[]}
-  | {kind: 'Principal'};
+// type RustType =
+//   | {kind: 'String'}
+//   | {kind: 'bool'}
+//   | {kind: 'f64'}
+//   | {kind: 'i32'}
+//   | {kind: 'u64'} // bigint => nat => u64
+//   | {kind: 'Option'; inner: RustType}
+//   | {kind: 'Vec'; inner: RustType}
+//   | {kind: 'struct'; fields: {name: string; type: RustType}[]}
+//   | {kind: 'enum'; variants: string[]}
+//   | {kind: 'Principal'};
 
 const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
   switch (schema.type) {
@@ -77,7 +78,7 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
         if (typeof schema.additionalProperties === 'boolean') {
           throw new Error('Boolean additionalProperties not supported');
         }
-        return `vec record { text; ${jsonSchemaToCandid(schema.additionalProperties as JSONSchema)} }`;
+        return `vec record { text; ${jsonSchemaToCandid(schema.additionalProperties)} }`;
       }
 
       if (schema.properties === undefined) {
@@ -117,7 +118,7 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
   }
 
   if (schema.anyOf !== undefined) {
-    const nonBoolean = schema.anyOf.filter((s) => typeof s !== 'boolean') as JSONSchema[];
+    const nonBoolean = schema.anyOf.filter((s) => typeof s !== 'boolean');
 
     const empty = nonBoolean.filter((s) => Object.keys(s).length === 0);
     if (empty.length > 0) {

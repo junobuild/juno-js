@@ -9,23 +9,57 @@ import {type core, type z, ZodNullable} from 'zod';
 type JSONSchemaOutput = core.ZodStandardJSONSchemaPayload<any>;
 type JSONSchema = core.JSONSchema.BaseSchema;
 
-// type RustType =
-//   | {kind: 'String'}
-//   | {kind: 'bool'}
-//   | {kind: 'f64'}
-//   | {kind: 'i32'}
-//   | {kind: 'u64'} // bigint => nat => u64
-//   | {kind: 'Option'; inner: RustType}
-//   | {kind: 'Vec'; inner: RustType}
-//   | {kind: 'struct'; fields: {name: string; type: RustType}[]}
-//   | {kind: 'enum'; variants: string[]}
-//   | {kind: 'Principal'};
+// Did -> in Rust
+type Did =
+  | {kind: 'text'} // -> String
+  | {kind: 'bool'} // -> bool
+  | {kind: 'float64'} // -> f64
+  | {kind: 'int32'} // -> i32
+  | {kind: 'nat'} // -> u64
+  | {kind: 'opt'; inner: Did} // -> Option<T>
+  | {kind: 'vec'; inner: Did} // -> Vec<T>
+  | {kind: 'record'; fields: {name: string; type: Did}[]} // -> struct { field: T, ... }
+  | {kind: 'tuple'; members: Did[]} // -> (T, T, ...)
+  | {kind: 'indexedTuple'; members: Did[]} // -> (T, T, ...)
+  | {kind: 'variant'; tags: string[]} // -> enum { A, B, C }
+  | {kind: 'variantRecords'; members: Did[]}; // -> enum { VariantA { ... }, VariantB { ... } }
+// | {kind: 'Principal'};
 
-const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
+const didToString = (did: Did): string => {
+  switch (did.kind) {
+    case 'text':
+      return 'text';
+    case 'bool':
+      return 'bool';
+    case 'float64':
+      return 'float64';
+    case 'int32':
+      return 'int32';
+    case 'nat':
+      return 'nat';
+    case 'opt':
+      return `opt ${didToString(did.inner)}`;
+    case 'vec':
+      return `vec ${didToString(did.inner)}`;
+    case 'record':
+      if (did.fields.length === 0) return 'record {}';
+      return `record { ${did.fields.map((f) => `${f.name} : ${didToString(f.type)}`).join('; ')} }`;
+    case 'tuple':
+      return `record { ${did.members.map(didToString).join('; ')} }`;
+    case 'indexedTuple':
+      return `record { ${did.members.map((m, i) => `${i} : ${didToString(m)}`).join('; ')} }`;
+    case 'variant':
+      return `variant { ${did.tags.join('; ')} }`;
+    case 'variantRecords':
+      return `variant { ${did.members.map(didToString).join('; ')} }`;
+  }
+};
+
+const jsonSchemaToDid = (schema: JSONSchemaOutput | JSONSchema): Did => {
   switch (schema.type) {
     case 'string':
       if (schema.const !== undefined) {
-        return `variant { ${String(schema.const)} }`;
+        return {kind: 'variant', tags: [String(schema.const)]};
       }
 
       if (schema.enum !== undefined) {
@@ -33,16 +67,20 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
           throw new Error('Non-string enum values are not supported');
         }
 
-        return `variant { ${schema.enum.join('; ')} }`;
+        return {kind: 'variant', tags: schema.enum as string[]};
       }
 
-      return 'text';
+      return {kind: 'text'};
+
     case 'boolean':
-      return 'bool';
+      return {kind: 'bool'};
+
     case 'number':
-      return 'float64';
+      return {kind: 'float64'};
+
     case 'integer':
-      return schema.format === 'bigint' ? 'nat' : 'int32';
+      return schema.format === 'bigint' ? {kind: 'nat'} : {kind: 'int32'};
+
     case 'null':
       throw new Error('null type is not supported');
 
@@ -52,24 +90,25 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
           throw new Error(`Boolean schema not supported.`);
         }
 
-        const fields = schema.prefixItems
-          .map((item, i) => `${i} : ${jsonSchemaToCandid(item as JSONSchema)}`)
-          .join('; ');
-
-        return `record { ${fields} }`;
+        return {
+          kind: 'indexedTuple',
+          members: schema.prefixItems.map((item) => jsonSchemaToDid(item as JSONSchema))
+        };
       }
 
       if (schema.items === undefined) {
         throw new Error('Array schema must have items defined');
       }
+
       if (Array.isArray(schema.items)) {
         throw new Error('Tuple-style array items not supported');
       }
+
       if (typeof schema.items === 'boolean') {
         throw new Error('Boolean schema not supported for array items');
       }
 
-      return `vec ${jsonSchemaToCandid(schema.items)}`;
+      return {kind: 'vec', inner: jsonSchemaToDid(schema.items)};
     }
 
     case 'object': {
@@ -78,15 +117,22 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
         if (typeof schema.additionalProperties === 'boolean') {
           throw new Error('Boolean additionalProperties not supported');
         }
-        return `vec record { text; ${jsonSchemaToCandid(schema.additionalProperties)} }`;
+
+        return {
+          kind: 'vec',
+          inner: {
+            kind: 'tuple',
+            members: [{kind: 'text'}, jsonSchemaToDid(schema.additionalProperties as JSONSchema)]
+          }
+        };
       }
 
       if (schema.properties === undefined) {
-        return 'record {}';
+        return {kind: 'record', fields: []};
       }
 
       if (Object.keys(schema.properties).length === 0) {
-        return 'record {}';
+        return {kind: 'record', fields: []};
       }
 
       const required = new Set(schema.required ?? []);
@@ -96,14 +142,13 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
         throw new Error(`Boolean schema not supported.`);
       }
 
-      const fields = entries
-        .map(([k, v]) => {
-          const type = jsonSchemaToCandid(v as JSONSchema);
-          return required.has(k) ? `${k} : ${type}` : `${k} : opt ${type}`;
+      return {
+        kind: 'record',
+        fields: entries.map(([k, v]) => {
+          const type = jsonSchemaToDid(v as JSONSchema);
+          return {name: k, type: required.has(k) ? type : {kind: 'opt', inner: type}};
         })
-        .join('; ');
-
-      return `record { ${fields} }`;
+      };
     }
   }
 
@@ -111,10 +156,10 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
     const variants = schema.oneOf.filter(({type}) => type !== 'null');
 
     if (variants.length === 1) {
-      return `opt ${jsonSchemaToCandid(variants[0])}`;
+      return {kind: 'opt', inner: jsonSchemaToDid(variants[0])};
     }
 
-    return `variant { ${variants.map(jsonSchemaToCandid).join('; ')} }`;
+    return {kind: 'variantRecords', members: variants.map(jsonSchemaToDid)};
   }
 
   if (schema.anyOf !== undefined) {
@@ -125,17 +170,17 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
       throw new Error('Unrepresentable type in union');
     }
 
+    if (nonBoolean.every((s) => s.const !== undefined)) {
+      return {kind: 'variant', tags: nonBoolean.map((s) => String(s.const))};
+    }
+
     const nonNull = nonBoolean.filter((s) => s.type !== 'null');
 
-    if (nonBoolean.every((s) => s.const !== undefined)) {
-      return `variant { ${nonBoolean.map((s) => String(s.const)).join('; ')} }`;
-    }
-
     if (nonNull.length === 1) {
-      return `opt ${jsonSchemaToCandid(nonNull[0])}`;
+      return {kind: 'opt', inner: jsonSchemaToDid(nonNull[0])};
     }
 
-    return `variant { ${nonNull.map((s) => jsonSchemaToCandid(s)).join('; ')} }`;
+    return {kind: 'variantRecords', members: nonNull.map(jsonSchemaToDid)};
   }
 
   if (schema.allOf !== undefined) {
@@ -153,14 +198,13 @@ const jsonSchemaToCandid = (schema: JSONSchemaOutput | JSONSchema): string => {
 
     const fields = schema.allOf.flatMap((s) => {
       const required = new Set(s.required ?? []);
-
       return Object.entries(s.properties ?? {}).map(([k, v]) => {
-        const type = jsonSchemaToCandid(v as JSONSchema);
-        return required.has(k) ? `${k} : ${type}` : `${k} : opt ${type}`;
+        const type = jsonSchemaToDid(v as JSONSchema);
+        return {name: k, type: required.has(k) ? type : {kind: 'opt' as const, inner: type}};
       });
     });
 
-    return `record { ${fields.join('; ')} }`;
+    return {kind: 'record', fields};
   }
 
   if (Object.keys(schema).length === 0) {
@@ -186,7 +230,7 @@ export const zodToCandid = (inputs: Record<string, z.ZodType>): string =>
         }
       });
 
-      const candid = jsonSchemaToCandid(json);
+      const did = jsonSchemaToDid(json);
 
       // Zod strips optional from JSON Schema output, so we need to re-add the opt wrapper.
       // However, nullish (optional + nullable) is already handled by the anyOf handler, so we skip it.
@@ -194,36 +238,7 @@ export const zodToCandid = (inputs: Record<string, z.ZodType>): string =>
       const isTopLevelOptional =
         schema._zod.def.type === 'optional' &&
         !('innerType' in schema._zod.def && schema._zod.def.innerType instanceof ZodNullable);
-      return `type ${id} = ${isTopLevelOptional ? `opt ${candid}` : candid};`;
+
+      return `type ${id} = ${isTopLevelOptional ? `opt ${didToString(did)}` : didToString(did)};`;
     })
     .join('\n');
-
-// const testSchema = z
-//   .strictObject({
-//     yolo: z.string().max(1),
-//     what: z.object({
-//       woot: z.string().max(1)
-//     })
-//   })
-//   .meta({id: 'testSchema'});
-//
-// const anotherSchema = z.object({
-//   mmmm: z.int(),
-//   world: z.bigint().min(1n).optional(),
-//   whatever: z.union([z.literal('yolo'), z.literal('yala')]),
-//   popo_popopo: z.enum(['a', 'b', 'c'])
-// });
-//
-// const moreSchemas = z.object({
-//   tuple: z.tuple([z.string(), z.number()]),
-//   rec: z.record(z.string(), z.number()),
-//   inter: z.intersection(z.object({a: z.string()}), z.object({b: z.number()}))
-// });
-//
-// const result = zodToCandid({
-//   TestSchema: testSchema,
-//   AnotherSchema: anotherSchema,
-//   MoreSchemas: moreSchemas
-// });
-//
-// console.log(result);

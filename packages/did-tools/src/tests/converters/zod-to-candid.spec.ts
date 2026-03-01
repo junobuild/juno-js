@@ -1,5 +1,6 @@
 import {z} from 'zod';
 import {zodToCandid} from '../../converters/zod-to-candid';
+import {Principal} from '@icp-sdk/core/principal';
 
 const candid = (id: string, schema: z.ZodType, expected: string) => {
   it(id, () => {
@@ -180,6 +181,21 @@ describe('objects', () => {
     }),
     'record { id : nat; name : text; tags : vec text; metadata : vec record { text; text }; status : variant { active; inactive }; address : opt record { street : text; city : text } }'
   );
+});
+
+// ─── Principal ──────────────────────────────────────────────────────
+
+const PrincipalSchema = z
+  .custom<Principal>()
+  .refine((principal) => Principal.isPrincipal(principal), {
+    error: 'Invalid Principal.',
+    abort: true
+  })
+  .transform((value) => Principal.from(value))
+  .meta({id: 'Principal'});
+
+describe('principal', () => {
+  candid('Principal', PrincipalSchema, 'principal');
 });
 
 // ─── Optional / Nullable ──────────────────────────────────────────────────────

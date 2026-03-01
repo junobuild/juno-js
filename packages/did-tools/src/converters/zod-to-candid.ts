@@ -22,8 +22,8 @@ type Did =
   | {kind: 'tuple'; members: Did[]} // -> (T, T, ...)
   | {kind: 'indexedTuple'; members: Did[]} // -> (T, T, ...)
   | {kind: 'variant'; tags: string[]} // -> enum { A, B, C }
-  | {kind: 'variantRecords'; members: Did[]}; // -> enum { VariantA { ... }, VariantB { ... } }
-// | {kind: 'Principal'};
+  | {kind: 'variantRecords'; members: Did[]} // -> enum { VariantA { ... }, VariantB { ... } }
+  | {kind: 'principal'};
 
 const didToString = (did: Did): string => {
   switch (did.kind) {
@@ -52,10 +52,16 @@ const didToString = (did: Did): string => {
       return `variant { ${did.tags.join('; ')} }`;
     case 'variantRecords':
       return `variant { ${did.members.map(didToString).join('; ')} }`;
+    case 'principal':
+      return 'principal';
   }
 };
 
 const jsonSchemaToDid = (schema: JSONSchemaOutput | JSONSchema): Did => {
+  if (schema.format === 'principal') {
+    return {kind: 'principal'};
+  }
+
   switch (schema.type) {
     case 'string':
       if (schema.const !== undefined) {
@@ -226,6 +232,10 @@ export const zodToCandid = (inputs: Record<string, z.ZodType>): string =>
             ctx.jsonSchema.type = 'integer';
             // https://json-schema.org/understanding-json-schema/reference/type#format
             ctx.jsonSchema.format = 'bigint';
+          }
+
+          if (ctx.jsonSchema.id === 'Principal') {
+            ctx.jsonSchema.format = 'principal';
           }
         }
       });

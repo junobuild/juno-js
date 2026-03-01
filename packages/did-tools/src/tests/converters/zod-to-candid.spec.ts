@@ -1,6 +1,6 @@
+import {Principal} from '@icp-sdk/core/principal';
 import {z} from 'zod';
 import {zodToCandid} from '../../converters/zod-to-candid';
-import {Principal} from '@icp-sdk/core/principal';
 
 const candid = (id: string, schema: z.ZodType, expected: string) => {
   it(id, () => {

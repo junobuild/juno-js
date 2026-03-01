@@ -1,4 +1,4 @@
-import {Principal} from '@icp-sdk/core/principal';
+import {PrincipalSchema} from '@dfinity/zod-schemas';
 import {z} from 'zod';
 import {jsonToSputnikSchema} from '../../converters/_converters';
 import {SputnikSchema} from '../../converters/_types';
@@ -185,15 +185,6 @@ describe('objects', () => {
 });
 
 // ─── Principal ────────────────────────────────────────────────────────────────
-
-const PrincipalSchema = z
-  .custom<Principal>()
-  .refine((principal) => Principal.isPrincipal(principal), {
-    error: 'Invalid Principal.',
-    abort: true
-  })
-  .transform((value) => Principal.from(value))
-  .meta({id: 'Principal'});
 
 describe('principal', () => {
   schema('Principal', PrincipalSchema, {kind: 'principal'});

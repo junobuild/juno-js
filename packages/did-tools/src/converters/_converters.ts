@@ -1,3 +1,4 @@
+import {ZodSchemaId} from '@dfinity/zod-schemas';
 import {type z, ZodNullable} from 'zod';
 import type {JSONSchema, JSONSchemaOutput, SputnikSchema} from './_types';
 
@@ -24,7 +25,7 @@ export const jsonToSputnikSchema = ({inputs}: SputnikSchemaArgs): SputnikSchemaR
           ctx.jsonSchema.format = 'bigint';
         }
 
-        if (ctx.jsonSchema.id === 'Principal') {
+        if (ctx.jsonSchema.id === ZodSchemaId.Principal) {
           ctx.jsonSchema.format = 'principal';
         }
       }

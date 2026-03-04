@@ -90,6 +90,16 @@ const getTypeName = (
 
   if (isTSTypeReference(typeAnnotation)) {
     const typeName = (typeAnnotation.typeName as Identifier)?.name;
+
+    if (isNullish(typeName)) {
+      return 'unknown';
+    }
+
+    if (nonNullish(typeAnnotation.typeParameters?.params?.length)) {
+      const typeParams = typeAnnotation.typeParameters.params.map(getTypeName);
+      return `${typeName}<${typeParams.join(', ')}>`;
+    }
+
     return typeName ?? 'unknown';
   }
 

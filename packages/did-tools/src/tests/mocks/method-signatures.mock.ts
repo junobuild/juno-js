@@ -10,7 +10,12 @@ export const mockMethodSignatures = [
     paramsType: ['Hello', 'string'],
     returnType: 'string'
   },
-  {name: 'yolo', paramsType: ['Hello'], returnType: 'string'}
+  {name: 'yolo', paramsType: ['Hello'], returnType: 'string'},
+  {
+    name: 'delete_errors',
+    paramsType: ['Array<string>'],
+    returnType: 'Result'
+  }
 ];
 
 export const mockImports = ['Hello', 'Result'];

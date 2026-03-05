@@ -1,3 +1,6 @@
+export * from './functions/query';
+export * from './functions/schemas/function';
+export * from './functions/update';
 export * from './hooks/assertions';
 export * from './hooks/hooks';
 export * from './hooks/schemas/collections';

@@ -1,5 +1,5 @@
 import type {z} from 'zod';
-import {type ConvertedSputnikSchema,jsonToSputnikSchema} from './_converters';
+import {type ConvertedSputnikSchema, jsonToSputnikSchema} from './_converters';
 import type {SputnikSchema} from './_types';
 
 const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);
@@ -10,12 +10,14 @@ type RustTypeResult =
   | {kind: 'primitive'; fieldType: string}
   | {kind: 'composite'; fieldType: string; structs: string[]};
 
-const primitive = (fieldType: string): RustTypeResult => ({kind: 'primitive', fieldType});
+const primitive = (result: {fieldType: string}): RustTypeResult => ({
+  kind: 'primitive',
+  ...result
+});
 
-const composite = (fieldType: string, structs: string[]): RustTypeResult => ({
+const composite = (result: {fieldType: string; structs: string[]}): RustTypeResult => ({
   kind: 'composite',
-  fieldType,
-  structs
+  ...result
 });
 
 const collectStructs = (results: RustTypeResult[]): string[] =>
@@ -30,37 +32,37 @@ const schemaToRustType = ({
 }): RustTypeResult => {
   switch (schema.kind) {
     case 'text':
-      return primitive('String');
+      return primitive({fieldType: 'String'});
 
     case 'bool':
-      return primitive('bool');
+      return primitive({fieldType: 'bool'});
 
     case 'float64':
-      return primitive('f64');
+      return primitive({fieldType: 'f64'});
 
     case 'int32':
-      return primitive('i32');
+      return primitive({fieldType: 'i32'});
 
     case 'nat':
-      return primitive('u64');
+      return primitive({fieldType: 'u64'});
 
     case 'principal':
-      return primitive('candid::Principal');
+      return primitive({fieldType: 'candid::Principal'});
 
     case 'opt': {
       const inner = schemaToRustType({schema: schema.inner, structName});
       const fieldType = `Option<${inner.fieldType}>`;
       return inner.kind === 'composite'
-        ? composite(fieldType, inner.structs)
-        : primitive(fieldType);
+        ? composite({fieldType, structs: inner.structs})
+        : primitive({fieldType});
     }
 
     case 'vec': {
       const inner = schemaToRustType({schema: schema.inner, structName});
       const fieldType = `Vec<${inner.fieldType}>`;
       return inner.kind === 'composite'
-        ? composite(fieldType, inner.structs)
-        : primitive(fieldType);
+        ? composite({fieldType, structs: inner.structs})
+        : primitive({fieldType});
     }
 
     case 'tuple':
@@ -70,13 +72,16 @@ const schemaToRustType = ({
       );
       const fieldType = `(${results.map((r) => r.fieldType).join(', ')})`;
       const structs = collectStructs(results);
-      return structs.length > 0 ? composite(fieldType, structs) : primitive(fieldType);
+      return structs.length > 0 ? composite({fieldType, structs}) : primitive({fieldType});
     }
 
     case 'variant': {
       const enumName = capitalize(structName);
       const variants = schema.tags.map((tag) => `    ${capitalize(tag)},`).join('\n');
-      return composite(enumName, [`${DERIVES}\npub enum ${enumName} {\n${variants}\n}`]);
+      return composite({
+        fieldType: enumName,
+        structs: [`${DERIVES}\npub enum ${enumName} {\n${variants}\n}`]
+      });
     }
 
     case 'variantRecords': {
@@ -101,10 +106,13 @@ const schemaToRustType = ({
         };
       });
       const variants = results.map((r) => r.variantLine).join(',\n');
-      return composite(enumName, [
-        ...results.flatMap((r) => r.structs),
-        `${DERIVES}\npub enum ${enumName} {\n${variants}\n}`
-      ]);
+      return composite({
+        fieldType: enumName,
+        structs: [
+          ...results.flatMap((r) => r.structs),
+          `${DERIVES}\npub enum ${enumName} {\n${variants}\n}`
+        ]
+      });
     }
 
     case 'record': {
@@ -115,10 +123,13 @@ const schemaToRustType = ({
       const fields = schema.fields
         .map((f, i) => `    pub ${f.name}: ${fieldResults[i].fieldType},`)
         .join('\n');
-      return composite(recordName, [
-        ...collectStructs(fieldResults),
-        `${DERIVES}\npub struct ${recordName} {\n${fields}\n}`
-      ]);
+      return composite({
+        fieldType: recordName,
+        structs: [
+          ...collectStructs(fieldResults),
+          `${DERIVES}\npub struct ${recordName} {\n${fields}\n}`
+        ]
+      });
     }
   }
 };

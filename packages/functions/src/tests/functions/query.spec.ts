@@ -1,13 +1,14 @@
 import * as z from 'zod';
 import {defineQuery, QuerySchema} from '../../functions/query';
-import {CUSTOM_FUNCTION_TYPE} from '../../functions/schemas/function';
+
+import {__JUNO_FUNCTION_TYPE} from '../../functions/constants';
 
 describe('query', () => {
   describe('QuerySchema', () => {
     it('should accept a valid query with no args and no result', () => {
       expect(() =>
         QuerySchema.parse({
-          type: CUSTOM_FUNCTION_TYPE.QUERY,
+          type: __JUNO_FUNCTION_TYPE.QUERY,
           handler: () => {}
         })
       ).not.toThrow();
@@ -16,7 +17,7 @@ describe('query', () => {
     it('should accept a valid query with args only', () => {
       expect(() =>
         QuerySchema.parse({
-          type: CUSTOM_FUNCTION_TYPE.QUERY,
+          type: __JUNO_FUNCTION_TYPE.QUERY,
           args: z.object({name: z.string()}),
           handler: () => {}
         })
@@ -26,7 +27,7 @@ describe('query', () => {
     it('should accept a valid query with result only', () => {
       expect(() =>
         QuerySchema.parse({
-          type: CUSTOM_FUNCTION_TYPE.QUERY,
+          type: __JUNO_FUNCTION_TYPE.QUERY,
           result: z.string(),
           handler: () => 'result'
         })
@@ -36,7 +37,7 @@ describe('query', () => {
     it('should accept a valid query with args and result', () => {
       expect(() =>
         QuerySchema.parse({
-          type: CUSTOM_FUNCTION_TYPE.QUERY,
+          type: __JUNO_FUNCTION_TYPE.QUERY,
           args: z.object({name: z.string()}),
           result: z.string(),
           handler: (args: unknown) => args
@@ -47,7 +48,7 @@ describe('query', () => {
     it('should reject update type', () => {
       expect(() =>
         QuerySchema.parse({
-          type: CUSTOM_FUNCTION_TYPE.UPDATE,
+          type: __JUNO_FUNCTION_TYPE.UPDATE,
           handler: () => {}
         })
       ).toThrow();
@@ -61,7 +62,7 @@ describe('query', () => {
           handler: () => {}
         });
 
-        expect(query.type).toBe(CUSTOM_FUNCTION_TYPE.QUERY);
+        expect(query.type).toBe(__JUNO_FUNCTION_TYPE.QUERY);
       });
 
       it('should inject query type with args only', () => {
@@ -70,7 +71,7 @@ describe('query', () => {
           handler: (_args: {name: string}) => {}
         });
 
-        expect(query.type).toBe(CUSTOM_FUNCTION_TYPE.QUERY);
+        expect(query.type).toBe(__JUNO_FUNCTION_TYPE.QUERY);
       });
 
       it('should inject query type with result only', () => {
@@ -79,7 +80,7 @@ describe('query', () => {
           handler: () => 'result'
         });
 
-        expect(query.type).toBe(CUSTOM_FUNCTION_TYPE.QUERY);
+        expect(query.type).toBe(__JUNO_FUNCTION_TYPE.QUERY);
       });
 
       it('should inject query type with args and result', () => {
@@ -92,7 +93,7 @@ describe('query', () => {
           handler: (input: {name: string}) => input.name
         });
 
-        expect(query.type).toBe(CUSTOM_FUNCTION_TYPE.QUERY);
+        expect(query.type).toBe(__JUNO_FUNCTION_TYPE.QUERY);
       });
 
       it('should preserve args schema', () => {
@@ -131,7 +132,7 @@ describe('query', () => {
           handler: async () => 'result'
         });
 
-        expect(query.type).toBe(CUSTOM_FUNCTION_TYPE.QUERY);
+        expect(query.type).toBe(__JUNO_FUNCTION_TYPE.QUERY);
       });
     });
 
@@ -143,7 +144,7 @@ describe('query', () => {
 
         const query = fn({});
 
-        expect(query.type).toBe(CUSTOM_FUNCTION_TYPE.QUERY);
+        expect(query.type).toBe(__JUNO_FUNCTION_TYPE.QUERY);
       });
 
       it('should preserve args and result when called with env', () => {

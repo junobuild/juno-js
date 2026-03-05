@@ -1,19 +1,15 @@
 import * as z from 'zod';
 import {createFunctionSchema} from '../../utils/zod.utils';
-
-export const CUSTOM_FUNCTION_TYPE = {
-  QUERY: '__juno_function_query',
-  UPDATE: '__juno_function_update'
-} as const;
+import {__JUNO_FUNCTION_TYPE} from '../constants';
 
 /**
  * The type of a serverless function. Not exposed to the developer. It allows the CLI
  * to discover the functions when parsing the code.
  */
-export type CustomFunctionType = (typeof CUSTOM_FUNCTION_TYPE)[keyof typeof CUSTOM_FUNCTION_TYPE];
+export type CustomFunctionType = (typeof __JUNO_FUNCTION_TYPE)[keyof typeof __JUNO_FUNCTION_TYPE];
 
 const CustomFunctionBaseSchema = z.strictObject({
-  type: z.enum([CUSTOM_FUNCTION_TYPE.QUERY, CUSTOM_FUNCTION_TYPE.UPDATE])
+  type: z.enum([__JUNO_FUNCTION_TYPE.QUERY, __JUNO_FUNCTION_TYPE.UPDATE])
 });
 
 /**

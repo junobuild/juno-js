@@ -1,12 +1,12 @@
 import * as z from 'zod';
 import {type SatelliteEnv, SatelliteEnvSchema} from '../schemas/satellite.env';
 import {createFunctionSchema} from '../utils/zod.utils';
+import {__JUNO_FUNCTION_TYPE} from './constants';
 import {
   type CustomFunctionWithArgs,
   type CustomFunctionWithArgsAndResult,
   type CustomFunctionWithoutArgsAndResult,
   type CustomFunctionWithResult,
-  CUSTOM_FUNCTION_TYPE,
   CustomFunctionWithArgsAndResultSchema,
   CustomFunctionWithArgsSchema,
   CustomFunctionWithoutArgsAndResultSchema,
@@ -14,7 +14,7 @@ import {
 } from './schemas/function';
 
 const UpdateBaseSchema = z.strictObject({
-  type: z.literal(CUSTOM_FUNCTION_TYPE.UPDATE)
+  type: z.literal(__JUNO_FUNCTION_TYPE.UPDATE)
 });
 
 /**
@@ -54,7 +54,7 @@ export type Update<TArgs = unknown, TResult = unknown> =
  * Queries are read-only functions that do not modify state.
  */
 export type UpdateDefinition<TArgs = unknown, TResult = unknown> = Update<TArgs, TResult> & {
-  type: typeof CUSTOM_FUNCTION_TYPE.UPDATE;
+  type: typeof __JUNO_FUNCTION_TYPE.UPDATE;
 };
 
 export const UpdateFnSchema = <T extends z.ZodTypeAny>(updateSchema: T) =>
@@ -87,13 +87,13 @@ export function defineUpdate<TArgs, TResult>(
 ): UpdateDefinition<TArgs, TResult> | ((env: SatelliteEnv) => UpdateDefinition<TArgs, TResult>) {
   if (typeof update === 'function') {
     return (env: SatelliteEnv) => {
-      const result = {...update(env), type: CUSTOM_FUNCTION_TYPE.UPDATE};
+      const result = {...update(env), type: __JUNO_FUNCTION_TYPE.UPDATE};
       UpdateSchema.parse(result);
       return result;
     };
   }
 
-  const result = {...update, type: CUSTOM_FUNCTION_TYPE.UPDATE};
+  const result = {...update, type: __JUNO_FUNCTION_TYPE.UPDATE};
   UpdateSchema.parse(result);
   return result;
 }

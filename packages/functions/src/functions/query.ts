@@ -1,12 +1,12 @@
 import * as z from 'zod';
 import {type SatelliteEnv, SatelliteEnvSchema} from '../schemas/satellite.env';
 import {createFunctionSchema} from '../utils/zod.utils';
+import {__JUNO_FUNCTION_TYPE} from './constants';
 import {
   type CustomFunctionWithArgs,
   type CustomFunctionWithArgsAndResult,
   type CustomFunctionWithoutArgsAndResult,
   type CustomFunctionWithResult,
-  CUSTOM_FUNCTION_TYPE,
   CustomFunctionWithArgsAndResultSchema,
   CustomFunctionWithArgsSchema,
   CustomFunctionWithoutArgsAndResultSchema,
@@ -14,7 +14,7 @@ import {
 } from './schemas/function';
 
 const QueryBaseSchema = z.strictObject({
-  type: z.literal(CUSTOM_FUNCTION_TYPE.QUERY)
+  type: z.literal(__JUNO_FUNCTION_TYPE.QUERY)
 });
 
 /**
@@ -54,7 +54,7 @@ export type Query<TArgs = unknown, TResult = unknown> =
  * Queries are read-only functions that do not modify state.
  */
 export type QueryDefinition<TArgs = unknown, TResult = unknown> = Query<TArgs, TResult> & {
-  type: typeof CUSTOM_FUNCTION_TYPE.QUERY;
+  type: typeof __JUNO_FUNCTION_TYPE.QUERY;
 };
 
 export const QueryFnSchema = <T extends z.ZodTypeAny>(querySchema: T) =>
@@ -87,13 +87,13 @@ export function defineQuery<TArgs, TResult>(
 ): QueryDefinition<TArgs, TResult> | ((env: SatelliteEnv) => QueryDefinition<TArgs, TResult>) {
   if (typeof query === 'function') {
     return (env: SatelliteEnv) => {
-      const result = {...query(env), type: CUSTOM_FUNCTION_TYPE.QUERY};
+      const result = {...query(env), type: __JUNO_FUNCTION_TYPE.QUERY};
       QuerySchema.parse(result);
       return result;
     };
   }
 
-  const result = {...query, type: CUSTOM_FUNCTION_TYPE.QUERY};
+  const result = {...query, type: __JUNO_FUNCTION_TYPE.QUERY};
   QuerySchema.parse(result);
   return result;
 }

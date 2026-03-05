@@ -853,7 +853,7 @@ The current timestamp.
 ### :wrench: Constants
 
 - [SatelliteEnvSchema](#gear-satelliteenvschema)
-- [CUSTOM_FUNCTION_TYPE](#gear-custom_function_type)
+- [\_\_JUNO_FUNCTION_TYPE](#gear-custom_function_type)
 - [CustomFunctionSchema](#gear-customfunctionschema)
 - [QuerySchema](#gear-queryschema)
 - [UpdateSchema](#gear-updateschema)
@@ -968,11 +968,11 @@ References:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.env.ts#L6)
 
-#### :gear: CUSTOM_FUNCTION_TYPE
+#### :gear: \_\_JUNO_FUNCTION_TYPE
 
 | Constant               | Type                                                                                      |
 | ---------------------- | ----------------------------------------------------------------------------------------- |
-| `CUSTOM_FUNCTION_TYPE` | `{ readonly QUERY: "__juno_function_query"; readonly UPDATE: "__juno_function_update"; }` |
+| `__JUNO_FUNCTION_TYPE` | `{ readonly QUERY: "__juno_function_query"; readonly UPDATE: "__juno_function_update"; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L4)
 
@@ -2688,7 +2688,7 @@ to discover the functions when parsing the code.
 
 | Type                 | Type                                                               |
 | -------------------- | ------------------------------------------------------------------ |
-| `CustomFunctionType` | `(typeof CUSTOM_FUNCTION_TYPE)[keyof typeof CUSTOM_FUNCTION_TYPE]` |
+| `CustomFunctionType` | `(typeof __JUNO_FUNCTION_TYPE)[keyof typeof __JUNO_FUNCTION_TYPE]` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L13)
 
@@ -2710,7 +2710,7 @@ Queries are read-only functions that do not modify state.
 
 | Type              | Type                                                  |
 | ----------------- | ----------------------------------------------------- |
-| `QueryDefinition` | `Query and {type: typeof CUSTOM_FUNCTION_TYPE.QUERY}` |
+| `QueryDefinition` | `Query and {type: typeof __JUNO_FUNCTION_TYPE.QUERY}` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L24)
 
@@ -2752,7 +2752,7 @@ Queries are read-only functions that do not modify state.
 
 | Type               | Type                                                    |
 | ------------------ | ------------------------------------------------------- |
-| `UpdateDefinition` | `Update and {type: typeof CUSTOM_FUNCTION_TYPE.UPDATE}` |
+| `UpdateDefinition` | `Update and {type: typeof __JUNO_FUNCTION_TYPE.UPDATE}` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L24)
 

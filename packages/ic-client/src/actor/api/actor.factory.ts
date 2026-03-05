@@ -1,3 +1,5 @@
+/* eslint-disable import/order */
+
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlFactoryMissionControl} from '../../declarations/mission_control/mission_control.factory.did.js';
 // eslint-disable-next-line import/no-relative-parent-imports

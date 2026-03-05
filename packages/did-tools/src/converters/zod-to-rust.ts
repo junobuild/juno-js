@@ -1,6 +1,5 @@
 import type {z} from 'zod';
-import type {ConvertedSputnikSchema} from './_converters';
-import {jsonToSputnikSchema} from './_converters';
+import {type ConvertedSputnikSchema,jsonToSputnikSchema} from './_converters';
 import type {SputnikSchema} from './_types';
 
 const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);

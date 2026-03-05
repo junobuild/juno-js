@@ -19,7 +19,9 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
     case 'vec':
       return `vec ${sputnikSchemaToDid(schema.inner)}`;
     case 'record':
-      if (schema.fields.length === 0) {return 'record {}';}
+      if (schema.fields.length === 0) {
+        return 'record {}';
+      }
       return `record { ${schema.fields.map((f) => `${f.name} : ${sputnikSchemaToDid(f.type)}`).join('; ')} }`;
     case 'tuple':
       return `record { ${schema.members.map(sputnikSchemaToDid).join('; ')} }`;

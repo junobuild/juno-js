@@ -23,6 +23,7 @@ import {idlFactory as idlFactoryConsole} from '../../declarations/console/consol
 // eslint-disable-next-line import/no-relative-parent-imports
 import {idlFactory as idlCertifiedFactoryConsole} from '../../declarations/console/console.factory.certified.did.js';
 // eslint-disable-next-line import/no-relative-parent-imports
+import {idlFactory as idlFactorySputnik} from '../../declarations/sputnik/sputnik.factory.did.js';
 import type {_SERVICE as ConsoleActor} from '../../declarations/console/console.did';
 import type {_SERVICE as DeprecatedMissionControlVersionActor} from '../../declarations/deprecated/mission_control-deprecated-version.did';
 import type {_SERVICE as DeprecatedOrbiterVersionActor} from '../../declarations/deprecated/orbiter-deprecated-version.did';
@@ -32,7 +33,6 @@ import type {_SERVICE as DeprecatedSatelliteActor} from '../../declarations/depr
 import type {_SERVICE as MissionControlActor} from '../../declarations/mission_control/mission_control.did';
 import type {_SERVICE as OrbiterActor} from '../../declarations/orbiter/orbiter.did';
 import type {_SERVICE as SatelliteActor} from '../../declarations/satellite/satellite.did';
-import {idlFactory as idlFactorySputnik} from '../../declarations/sputnik/sputnik.factory.did.js';
 
 export {
   idlCertifiedFactoryConsole,

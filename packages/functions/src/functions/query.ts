@@ -15,13 +15,18 @@ export const QuerySchema = z.strictObject({
  * The input shape for defining a query serverless function.
  * Does not include `type`, which is injected by `defineQuery`.
  */
-export type Query = Omit<CustomFunction, 'type'>;
+export type Query<TArgs = unknown, TResult = unknown> = Omit<
+  CustomFunction<TArgs, TResult>,
+  'type'
+>;
 
 /**
  * A query function definition with `type` injected by `defineQuery`.
  * Queries are read-only functions that do not modify state.
  */
-export type QueryDefinition = Query & {type: typeof CUSTOM_FUNCTION_TYPE.QUERY};
+export type QueryDefinition<TArgs = unknown, TResult = unknown> = Query<TArgs, TResult> & {
+  type: typeof CUSTOM_FUNCTION_TYPE.QUERY;
+};
 
 export const QueryFnSchema = <T extends z.ZodTypeAny>(querySchema: T) =>
   z.function({input: z.tuple([SatelliteEnvSchema]), output: querySchema});
@@ -29,7 +34,7 @@ export const QueryFnSchema = <T extends z.ZodTypeAny>(querySchema: T) =>
 /**
  * A factory function that receives the satellite environment and returns a query definition.
  */
-export type QueryFn<T extends Query> = (env: SatelliteEnv) => T;
+export type QueryFn<TArgs, TResult> = (env: SatelliteEnv) => QueryDefinition<TArgs, TResult>;
 
 export const QueryFnOrObjectSchema = <T extends z.ZodTypeAny>(querySchema: T) =>
   z.union([querySchema, createFunctionSchema(QueryFnSchema(querySchema))]);
@@ -37,16 +42,22 @@ export const QueryFnOrObjectSchema = <T extends z.ZodTypeAny>(querySchema: T) =>
 /**
  * A query definition or a factory function that returns one.
  */
-export type QueryFnOrObject<T extends Query> = T | QueryFn<T>;
+export type QueryFnOrObject<TArgs, TResult> =
+  | QueryDefinition<TArgs, TResult>
+  | QueryFn<TArgs, TResult>;
 
-export function defineQuery<T extends Query>(query: T): T & QueryDefinition;
-export function defineQuery<T extends Query>(query: QueryFn<T>): QueryFn<T & QueryDefinition>;
-export function defineQuery<T extends Query>(
-  query: QueryFnOrObject<T>
-): QueryFnOrObject<T & QueryDefinition>;
-export function defineQuery<T extends Query>(
-  query: QueryFnOrObject<T>
-): QueryFnOrObject<T & QueryDefinition> {
+export function defineQuery<TArgs, TResult>(
+  query: Query<TArgs, TResult>
+): QueryDefinition<TArgs, TResult>;
+export function defineQuery<TArgs, TResult>(
+  query: QueryFn<TArgs, TResult>
+): (env: SatelliteEnv) => QueryDefinition<TArgs, TResult>;
+export function defineQuery<TArgs, TResult>(
+  query: QueryFnOrObject<TArgs, TResult>
+): QueryDefinition<TArgs, TResult> | ((env: SatelliteEnv) => QueryDefinition<TArgs, TResult>);
+export function defineQuery<TArgs, TResult>(
+  query: Query<TArgs, TResult> | QueryFn<TArgs, TResult>
+): QueryDefinition<TArgs, TResult> | ((env: SatelliteEnv) => QueryDefinition<TArgs, TResult>) {
   if (typeof query === 'function') {
     return (env: SatelliteEnv) => {
       const result = {...query(env), type: CUSTOM_FUNCTION_TYPE.QUERY};

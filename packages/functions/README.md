@@ -44,6 +44,8 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [defineHook](#gear-definehook)
 - [defineHook](#gear-definehook)
 - [createListResultsSchema](#gear-createlistresultsschema)
+- [decodeDocData](#gear-decodedocdata)
+- [encodeDocData](#gear-encodedocdata)
 - [normalizeCaller](#gear-normalizecaller)
 - [getAdminControllers](#gear-getadmincontrollers)
 - [getControllers](#gear-getcontrollers)
@@ -57,8 +59,6 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [countDocsStore](#gear-countdocsstore)
 - [deleteDocsStore](#gear-deletedocsstore)
 - [deleteFilteredDocsStore](#gear-deletefiltereddocsstore)
-- [decodeDocData](#gear-decodedocdata)
-- [encodeDocData](#gear-encodedocdata)
 - [countCollectionAssetsStore](#gear-countcollectionassetsstore)
 - [countAssetsStore](#gear-countassetsstore)
 - [setAssetHandler](#gear-setassethandler)
@@ -355,6 +355,42 @@ References:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L128)
 
+#### :gear: decodeDocData
+
+Decodes the raw data of a document into a JavaScript object.
+
+| Function        | Type                                          |
+| --------------- | --------------------------------------------- |
+| `decodeDocData` | `<T>(data: Uint8Array<ArrayBufferLike>) => T` |
+
+Parameters:
+
+- `data`: - The raw data to be decoded.
+
+Returns:
+
+The parsed JavaScript object.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L11)
+
+#### :gear: encodeDocData
+
+Encodes a JavaScript object into a raw data format to be applied to a document.
+
+| Function        | Type                                          |
+| --------------- | --------------------------------------------- |
+| `encodeDocData` | `<T>(data: T) => Uint8Array<ArrayBufferLike>` |
+
+Parameters:
+
+- `data`: - The data to be encoded.
+
+Returns:
+
+The serialized raw data.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
+
 #### :gear: normalizeCaller
 
 Normalizes a user ID into a raw `Uint8Array` representation.
@@ -585,42 +621,6 @@ Returns:
 The context resulting of the deletion of documents that match the provided filters.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L175)
-
-#### :gear: decodeDocData
-
-Decodes the raw data of a document into a JavaScript object.
-
-| Function        | Type                                          |
-| --------------- | --------------------------------------------- |
-| `decodeDocData` | `<T>(data: Uint8Array<ArrayBufferLike>) => T` |
-
-Parameters:
-
-- `data`: - The raw data to be decoded.
-
-Returns:
-
-The parsed JavaScript object.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L11)
-
-#### :gear: encodeDocData
-
-Encodes a JavaScript object into a raw data format to be applied to a document.
-
-| Function        | Type                                          |
-| --------------- | --------------------------------------------- |
-| `encodeDocData` | `<T>(data: T) => Uint8Array<ArrayBufferLike>` |
-
-Parameters:
-
-- `data`: - The data to be encoded.
-
-Returns:
-
-The serialized raw data.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
 
 #### :gear: countCollectionAssetsStore
 
@@ -2226,12 +2226,12 @@ References:
 
 Defines a serverless function with optional input arguments and output result.
 
-| Property  | Type                                                                          | Description                                                                                                 |
-| --------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `type`    | `CustomFunctionType`                                                          | The type of the function, either a query or an update.                                                      |
-| `args`    | `ZodType<TArgs, unknown, $ZodTypeInternals<TArgs, unknown>> or undefined`     | An optional Zod schema describing the input arguments. If not provided, the function takes no arguments.    |
-| `result`  | `ZodType<TResult, unknown, $ZodTypeInternals<TResult, unknown>> or undefined` | An optional Zod schema describing the output result. If not provided, the function returns void.            |
-| `handler` | `(args: TArgs) => void or Promise<void> or TResult or Promise<TResult>`       | The function handler. Can be synchronous or asynchronous. param: args - The input arguments, if any.returns |
+| Property  | Type                                                                                  | Description                                                                                                 |
+| --------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `type`    | `CustomFunctionType`                                                                  | The type of the function, either a query or an update.                                                      |
+| `args`    | `ZodType<TArgs, unknown, $ZodTypeInternals<TArgs, unknown>> or undefined`             | An optional Zod schema describing the input arguments. If not provided, the function takes no arguments.    |
+| `result`  | `ZodType<TResult, unknown, $ZodTypeInternals<TResult, unknown>> or undefined`         | An optional Zod schema describing the output result. If not provided, the function returns void.            |
+| `handler` | `(args?: TArgs or undefined) => void or Promise<void> or TResult or Promise<TResult>` | The function handler. Can be synchronous or asynchronous. param: args - The input arguments, if any.returns |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L36)
 

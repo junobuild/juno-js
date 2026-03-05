@@ -5,7 +5,7 @@ import type {SputnikSchema} from './_types';
 
 const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);
 
-const DERIVES = '#[derive(CandidType, Serialize, Deserialize)]';
+const DERIVES = '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]';
 
 type RustTypeResult =
   | {kind: 'primitive'; fieldType: string}

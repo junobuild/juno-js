@@ -46,13 +46,13 @@ describe('enums', () => {
   rust(
     'myFunction',
     z.enum(['a', 'b']),
-    '#[derive(CandidType, Serialize, Deserialize)]\npub enum MyFunctionArgs {\n    A,\n    B,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    A,\n    B,\n}'
   );
 
   rust(
     'myFunction',
     z.enum(['active', 'inactive']),
-    '#[derive(CandidType, Serialize, Deserialize)]\npub enum MyFunctionArgs {\n    Active,\n    Inactive,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    Active,\n    Inactive,\n}'
   );
 });
 
@@ -72,31 +72,31 @@ describe('objects', () => {
   rust(
     'myFunction',
     z.object({}),
-    '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgs {\n\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n\n}'
   );
 
   rust(
     'myFunction',
     z.object({name: z.string()}),
-    '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgs {\n    pub name: String,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub name: String,\n}'
   );
 
   rust(
     'myFunction',
     z.object({name: z.string(), age: z.int()}),
-    '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgs {\n    pub name: String,\n    pub age: i32,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub name: String,\n    pub age: i32,\n}'
   );
 
   rust(
     'myFunction',
     z.object({name: z.string(), age: z.int().optional()}),
-    '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgs {\n    pub name: String,\n    pub age: Option<i32>,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub name: String,\n    pub age: Option<i32>,\n}'
   );
 
   rust(
     'myFunction',
     z.object({id: z.bigint(), name: z.string()}),
-    '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgs {\n    pub id: u64,\n    pub name: String,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub id: u64,\n    pub name: String,\n}'
   );
 });
 
@@ -107,8 +107,8 @@ describe('nested objects', () => {
     'myFunction',
     z.object({address: z.object({street: z.string()})}),
     [
-      '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgsAddress {\n    pub street: String,\n}',
-      '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgs {\n    pub address: MyFunctionArgsAddress,\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgsAddress {\n    pub street: String,\n}',
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub address: MyFunctionArgsAddress,\n}'
     ].join('\n\n')
   );
 
@@ -116,8 +116,8 @@ describe('nested objects', () => {
     'myFunction',
     z.object({address: z.object({street: z.string()}).optional()}),
     [
-      '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgsAddress {\n    pub street: String,\n}',
-      '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgs {\n    pub address: Option<MyFunctionArgsAddress>,\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgsAddress {\n    pub street: String,\n}',
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub address: Option<MyFunctionArgsAddress>,\n}'
     ].join('\n\n')
   );
 });
@@ -129,8 +129,8 @@ describe('object with enum field', () => {
     'myFunction',
     z.object({status: z.enum(['active', 'inactive'])}),
     [
-      '#[derive(CandidType, Serialize, Deserialize)]\npub enum MyFunctionArgsStatus {\n    Active,\n    Inactive,\n}',
-      '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgs {\n    pub status: MyFunctionArgsStatus,\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgsStatus {\n    Active,\n    Inactive,\n}',
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub status: MyFunctionArgsStatus,\n}'
     ].join('\n\n')
   );
 });
@@ -141,7 +141,7 @@ describe('object with array field', () => {
   rust(
     'myFunction',
     z.object({tags: z.array(z.string())}),
-    '#[derive(CandidType, Serialize, Deserialize)]\npub struct MyFunctionArgs {\n    pub tags: Vec<String>,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub tags: Vec<String>,\n}'
   );
 });
 

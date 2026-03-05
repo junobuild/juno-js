@@ -15,6 +15,18 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 ### :toolbox: Functions
 
 - [createFunctionSchema](#gear-createfunctionschema)
+- [QueryFnSchema](#gear-queryfnschema)
+- [QueryFnOrObjectSchema](#gear-queryfnorobjectschema)
+- [defineQuery](#gear-definequery)
+- [defineQuery](#gear-definequery)
+- [defineQuery](#gear-definequery)
+- [defineQuery](#gear-definequery)
+- [UpdateFnSchema](#gear-updatefnschema)
+- [UpdateFnOrObjectSchema](#gear-updatefnorobjectschema)
+- [defineUpdate](#gear-defineupdate)
+- [defineUpdate](#gear-defineupdate)
+- [defineUpdate](#gear-defineupdate)
+- [defineUpdate](#gear-defineupdate)
 - [HookContextSchema](#gear-hookcontextschema)
 - [AssertFunctionSchema](#gear-assertfunctionschema)
 - [RunFunctionSchema](#gear-runfunctionschema)
@@ -88,6 +100,102 @@ https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912*
 | `createFunctionSchema` | `<T extends z.ZodFunction>(schema: T) => ZodCustom<Parameters<T["implement"]>[0], Parameters<T["implement"]>[0]>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/utils/zod.utils.ts#L24)
+
+#### :gear: QueryFnSchema
+
+| Function        | Type                                                                                                            |
+| --------------- | --------------------------------------------------------------------------------------------------------------- |
+| `QueryFnSchema` | `<T extends z.ZodTypeAny>(querySchema: T) => ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L26)
+
+#### :gear: QueryFnOrObjectSchema
+
+| Function                | Type                                                                                                                                                                                         |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `QueryFnOrObjectSchema` | `<T extends z.ZodTypeAny>(querySchema: T) => ZodUnion<readonly [T, ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>, $InferInnerFunctionType<...>>]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L34)
+
+#### :gear: defineQuery
+
+| Function      | Type                                                                                                                                                                                                                                                            |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineQuery` | `{ <T extends Query>(query: T): T and Query and { type: "__juno_function_query"; }; <T extends Query>(query: QueryFn<T>): QueryFn<T and Query and { type: "__juno_function_query"; }>; <T extends Query>(query: QueryFnOrObject<...>): QueryFnOrObject<...>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L42)
+
+#### :gear: defineQuery
+
+| Function      | Type                                                                                                                                                                                                                                                            |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineQuery` | `{ <T extends Query>(query: T): T and Query and { type: "__juno_function_query"; }; <T extends Query>(query: QueryFn<T>): QueryFn<T and Query and { type: "__juno_function_query"; }>; <T extends Query>(query: QueryFnOrObject<...>): QueryFnOrObject<...>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L43)
+
+#### :gear: defineQuery
+
+| Function      | Type                                                                                                                                                                                                                                                            |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineQuery` | `{ <T extends Query>(query: T): T and Query and { type: "__juno_function_query"; }; <T extends Query>(query: QueryFn<T>): QueryFn<T and Query and { type: "__juno_function_query"; }>; <T extends Query>(query: QueryFnOrObject<...>): QueryFnOrObject<...>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L44)
+
+#### :gear: defineQuery
+
+| Function      | Type                                                                                                                                                                                                                                                            |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineQuery` | `{ <T extends Query>(query: T): T and Query and { type: "__juno_function_query"; }; <T extends Query>(query: QueryFn<T>): QueryFn<T and Query and { type: "__juno_function_query"; }>; <T extends Query>(query: QueryFnOrObject<...>): QueryFnOrObject<...>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L47)
+
+#### :gear: UpdateFnSchema
+
+| Function         | Type                                                                                                             |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `UpdateFnSchema` | `<T extends z.ZodTypeAny>(updateSchema: T) => ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L26)
+
+#### :gear: UpdateFnOrObjectSchema
+
+| Function                 | Type                                                                                                                                                                                          |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UpdateFnOrObjectSchema` | `<T extends z.ZodTypeAny>(updateSchema: T) => ZodUnion<readonly [T, ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>, $InferInnerFunctionType<...>>]>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L34)
+
+#### :gear: defineUpdate
+
+| Function       | Type                                                                                                                                                                                                                                                                          |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineUpdate` | `{ <T extends Update>(update: T): T and Update and { type: "__juno_function_update"; }; <T extends Update>(update: UpdateFn<T>): UpdateFn<T and Update and { type: "__juno_function_update"; }>; <T extends Update>(update: UpdateFnOrObject<...>): UpdateFnOrObject<...>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L42)
+
+#### :gear: defineUpdate
+
+| Function       | Type                                                                                                                                                                                                                                                                          |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineUpdate` | `{ <T extends Update>(update: T): T and Update and { type: "__juno_function_update"; }; <T extends Update>(update: UpdateFn<T>): UpdateFn<T and Update and { type: "__juno_function_update"; }>; <T extends Update>(update: UpdateFnOrObject<...>): UpdateFnOrObject<...>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L43)
+
+#### :gear: defineUpdate
+
+| Function       | Type                                                                                                                                                                                                                                                                          |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineUpdate` | `{ <T extends Update>(update: T): T and Update and { type: "__juno_function_update"; }; <T extends Update>(update: UpdateFn<T>): UpdateFn<T and Update and { type: "__juno_function_update"; }>; <T extends Update>(update: UpdateFnOrObject<...>): UpdateFnOrObject<...>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L44)
+
+#### :gear: defineUpdate
+
+| Function       | Type                                                                                                                                                                                                                                                                          |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineUpdate` | `{ <T extends Update>(update: T): T and Update and { type: "__juno_function_update"; }; <T extends Update>(update: UpdateFn<T>): UpdateFn<T and Update and { type: "__juno_function_update"; }>; <T extends Update>(update: UpdateFnOrObject<...>): UpdateFnOrObject<...>; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L47)
 
 #### :gear: HookContextSchema
 
@@ -744,6 +852,11 @@ The current timestamp.
 
 ### :wrench: Constants
 
+- [SatelliteEnvSchema](#gear-satelliteenvschema)
+- [CUSTOM_FUNCTION_TYPE](#gear-custom_function_type)
+- [CustomFunctionSchema](#gear-customfunctionschema)
+- [QuerySchema](#gear-queryschema)
+- [UpdateSchema](#gear-updateschema)
 - [Uint8ArraySchema](#gear-uint8arrayschema)
 - [RawPrincipalSchema](#gear-rawprincipalschema)
 - [PrincipalSchema](#gear-principalschema)
@@ -770,7 +883,6 @@ The current timestamp.
 - [OnDeleteFilteredDocsContextSchema](#gear-ondeletefiltereddocscontextschema)
 - [AssertSetDocContextSchema](#gear-assertsetdoccontextschema)
 - [AssertDeleteDocContextSchema](#gear-assertdeletedoccontextschema)
-- [SatelliteEnvSchema](#gear-satelliteenvschema)
 - [HeaderFieldsSchema](#gear-headerfieldsschema)
 - [BlobSchema](#gear-blobschema)
 - [AssetKeySchema](#gear-assetkeyschema)
@@ -843,6 +955,62 @@ The current timestamp.
 - [CallArgsSchema](#gear-callargsschema)
 - [CallResultSchema](#gear-callresultschema)
 - [CallParamsSchema](#gear-callparamsschema)
+
+#### :gear: SatelliteEnvSchema
+
+| Constant             | Type                              |
+| -------------------- | --------------------------------- |
+| `SatelliteEnvSchema` | `ZodRecord<ZodString, ZodString>` |
+
+References:
+
+- SatelliteEnv
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/satellite.env.ts#L6)
+
+#### :gear: CUSTOM_FUNCTION_TYPE
+
+| Constant               | Type                                                                                      |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| `CUSTOM_FUNCTION_TYPE` | `{ readonly QUERY: "__juno_function_query"; readonly UPDATE: "__juno_function_update"; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L4)
+
+#### :gear: CustomFunctionSchema
+
+| Constant               | Type                                                                                                                                                                                                                                                                                                           |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionSchema` | `ZodObject<{ type: ZodEnum<{ __juno_function_query: "__juno_function_query"; __juno_function_update: "__juno_function_update"; }>; args: ZodOptional<ZodCustom<ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ZodType<...>>>; result: ZodOptional<...>; handler: ZodCustom<...>; }, $strict>` |
+
+References:
+
+- CustomFunction
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L18)
+
+#### :gear: QuerySchema
+
+| Constant      | Type                                                                                                                                                                                                                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `QuerySchema` | `ZodObject<{ type: ZodLiteral<"__juno_function_query">; args: ZodOptional<ZodCustom<ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>>; result: ZodOptional<...>; handler: ZodCustom<...>; }, $strict>` |
+
+References:
+
+- Query
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L9)
+
+#### :gear: UpdateSchema
+
+| Constant       | Type                                                                                                                                                                                                                                                                                   |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UpdateSchema` | `ZodObject<{ type: ZodLiteral<"__juno_function_update">; args: ZodOptional<ZodCustom<ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>>; result: ZodOptional<...>; handler: ZodCustom<...>; }, $strict>` |
+
+References:
+
+- Update
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L9)
 
 #### :gear: Uint8ArraySchema
 
@@ -1153,18 +1321,6 @@ References:
 - AssertDeleteDocContext
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L136)
-
-#### :gear: SatelliteEnvSchema
-
-| Constant             | Type                              |
-| -------------------- | --------------------------------- |
-| `SatelliteEnvSchema` | `ZodRecord<ZodString, ZodString>` |
-
-References:
-
-- SatelliteEnv
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/satellite.env.ts#L6)
 
 #### :gear: HeaderFieldsSchema
 
@@ -2038,6 +2194,7 @@ References:
 
 ### :tropical_drink: Interfaces
 
+- [CustomFunction](#gear-customfunction)
 - [Collections](#gear-collections)
 - [HookContext](#gear-hookcontext)
 - [Doc](#gear-doc)
@@ -2064,6 +2221,19 @@ References:
 - [SetAssetHandlerParams](#gear-setassethandlerparams)
 - [GetContentChunksStoreParams](#gear-getcontentchunksstoreparams)
 - [CallParams](#gear-callparams)
+
+#### :gear: CustomFunction
+
+Defines a serverless function with optional input arguments and output result.
+
+| Property  | Type                                                                          | Description                                                                                                 |
+| --------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `type`    | `CustomFunctionType`                                                          | The type of the function, either a query or an update.                                                      |
+| `args`    | `ZodType<TArgs, unknown, $ZodTypeInternals<TArgs, unknown>> or undefined`     | An optional Zod schema describing the input arguments. If not provided, the function takes no arguments.    |
+| `result`  | `ZodType<TResult, unknown, $ZodTypeInternals<TResult, unknown>> or undefined` | An optional Zod schema describing the output result. If not provided, the function returns void.            |
+| `handler` | `(args: TArgs) => void or Promise<void> or TResult or Promise<TResult>`       | The function handler. Can be synchronous or asynchronous. param: args - The input arguments, if any.returns |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L36)
 
 #### :gear: Collections
 
@@ -2395,6 +2565,16 @@ Type representing the parameters required to make a canister call.
 
 ### :cocktail: Types
 
+- [SatelliteEnv](#gear-satelliteenv)
+- [CustomFunctionType](#gear-customfunctiontype)
+- [Query](#gear-query)
+- [QueryDefinition](#gear-querydefinition)
+- [QueryFn](#gear-queryfn)
+- [QueryFnOrObject](#gear-queryfnorobject)
+- [Update](#gear-update)
+- [UpdateDefinition](#gear-updatedefinition)
+- [UpdateFn](#gear-updatefn)
+- [UpdateFnOrObject](#gear-updatefnorobject)
 - [RawPrincipal](#gear-rawprincipal)
 - [Principal](#gear-principal)
 - [Timestamp](#gear-timestamp)
@@ -2415,7 +2595,6 @@ Type representing the parameters required to make a canister call.
 - [OnDeleteFilteredDocsContext](#gear-ondeletefiltereddocscontext)
 - [AssertSetDocContext](#gear-assertsetdoccontext)
 - [AssertDeleteDocContext](#gear-assertdeletedoccontext)
-- [SatelliteEnv](#gear-satelliteenv)
 - [HeaderField](#gear-headerfield)
 - [HeaderFields](#gear-headerfields)
 - [Blob](#gear-blob)
@@ -2486,6 +2665,116 @@ Type representing the parameters required to make a canister call.
 - [CallArg](#gear-callarg)
 - [CallArgs](#gear-callargs)
 - [CallResult](#gear-callresult)
+
+#### :gear: SatelliteEnv
+
+Placeholder for future environment-specific configurations.
+
+Currently unused, but it may support features such as:
+
+- Defining the execution mode (e.g., staging or production).
+- Providing environment-specific values like `ckBtcLedgerId` for test or production.
+
+| Type           | Type                                 |
+| -------------- | ------------------------------------ |
+| `SatelliteEnv` | `z.infer<typeof SatelliteEnvSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/satellite.env.ts#L15)
+
+#### :gear: CustomFunctionType
+
+The type of a serverless function. Not exposed to the developer. It allows the CLI
+to discover the functions when parsing the code.
+
+| Type                 | Type                                                               |
+| -------------------- | ------------------------------------------------------------------ |
+| `CustomFunctionType` | `(typeof CUSTOM_FUNCTION_TYPE)[keyof typeof CUSTOM_FUNCTION_TYPE]` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L13)
+
+#### :gear: Query
+
+The input shape for defining a query serverless function.
+Does not include `type`, which is injected by `defineQuery`.
+
+| Type    | Type                           |
+| ------- | ------------------------------ |
+| `Query` | `Omit<CustomFunction, 'type'>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L18)
+
+#### :gear: QueryDefinition
+
+A query function definition with `type` injected by `defineQuery`.
+Queries are read-only functions that do not modify state.
+
+| Type              | Type                                                  |
+| ----------------- | ----------------------------------------------------- |
+| `QueryDefinition` | `Query and {type: typeof CUSTOM_FUNCTION_TYPE.QUERY}` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L24)
+
+#### :gear: QueryFn
+
+A factory function that receives the satellite environment and returns a query definition.
+
+| Type      | Type                       |
+| --------- | -------------------------- |
+| `QueryFn` | `(env: SatelliteEnv) => T` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L32)
+
+#### :gear: QueryFnOrObject
+
+A query definition or a factory function that returns one.
+
+| Type              | Type              |
+| ----------------- | ----------------- |
+| `QueryFnOrObject` | `T or QueryFn<T>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L40)
+
+#### :gear: Update
+
+The input shape for defining a update serverless function.
+Does not include `type`, which is injected by `defineUpdate`.
+
+| Type     | Type                           |
+| -------- | ------------------------------ |
+| `Update` | `Omit<CustomFunction, 'type'>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L18)
+
+#### :gear: UpdateDefinition
+
+A update function definition with `type` injected by `defineUpdate`.
+Queries are read-only functions that do not modify state.
+
+| Type               | Type                                                    |
+| ------------------ | ------------------------------------------------------- |
+| `UpdateDefinition` | `Update and {type: typeof CUSTOM_FUNCTION_TYPE.UPDATE}` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L24)
+
+#### :gear: UpdateFn
+
+A factory function that receives the satellite environment and returns a update definition.
+
+| Type       | Type                       |
+| ---------- | -------------------------- |
+| `UpdateFn` | `(env: SatelliteEnv) => T` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L32)
+
+#### :gear: UpdateFnOrObject
+
+A update definition or a factory function that returns one.
+
+| Type               | Type               |
+| ------------------ | ------------------ |
+| `UpdateFnOrObject` | `T or UpdateFn<T>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L40)
 
 #### :gear: RawPrincipal
 
@@ -2722,21 +3011,6 @@ it is deleted. If validation fails, the developer should throw an error.
 | `AssertDeleteDocContext` | `HookContext<DocContext<DocAssertDelete>>` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/db/context.ts#L146)
-
-#### :gear: SatelliteEnv
-
-Placeholder for future environment-specific configurations.
-
-Currently unused, but it may support features such as:
-
-- Defining the execution mode (e.g., staging or production).
-- Providing environment-specific values like `ckBtcLedgerId` for test or production.
-
-| Type           | Type                                 |
-| -------------- | ------------------------------------ |
-| `SatelliteEnv` | `z.infer<typeof SatelliteEnvSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/satellite.env.ts#L15)
 
 #### :gear: HeaderField
 

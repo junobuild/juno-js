@@ -10,6 +10,7 @@ export interface _SERVICE {
     'hello_world_world' : ActorMethod<[Hello, string, bigint], Result>,
     'world' : ActorMethod<[Hello, string], string>,
     'yolo' : ActorMethod<[Hello], string>,
+    'delete_errors' : ActorMethod<[Array<string>], Result>
 }
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];

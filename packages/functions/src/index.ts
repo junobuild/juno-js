@@ -16,5 +16,6 @@ export * from './schemas/satellite';
 export * from './schemas/satellite.env';
 export * from './schemas/storage';
 
+import './functions/wrappers';
 import './polyfills/console.polyfill';
 import './polyfills/random.polyfill';

@@ -57,5 +57,5 @@ export interface CustomFunction<TArgs = unknown, TResult = unknown> {
    * @param {TArgs} args - The input arguments, if any.
    * @returns {TResult | Promise<TResult> | void | Promise<void>}
    */
-  handler: (args: TArgs) => TResult | Promise<TResult> | void | Promise<void>;
+  handler: (args?: TArgs) => TResult | Promise<TResult> | void | Promise<void>;
 }

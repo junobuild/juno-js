@@ -33,25 +33,7 @@ describe('function', () => {
     });
 
     describe('handler', () => {
-      it('should accept a sync handler', () => {
-        expect(() =>
-          CustomFunctionSchema.parse({
-            type: CUSTOM_FUNCTION_TYPE.QUERY,
-            handler: () => 'result'
-          })
-        ).not.toThrow();
-      });
-
-      it('should accept an async handler', () => {
-        expect(() =>
-          CustomFunctionSchema.parse({
-            type: CUSTOM_FUNCTION_TYPE.QUERY,
-            handler: async () => 'result'
-          })
-        ).not.toThrow();
-      });
-
-      it('should accept a void handler', () => {
+      it('should accept a sync void handler with no args and no result', () => {
         expect(() =>
           CustomFunctionSchema.parse({
             type: CUSTOM_FUNCTION_TYPE.QUERY,
@@ -60,10 +42,51 @@ describe('function', () => {
         ).not.toThrow();
       });
 
+      it('should accept an async void handler with no args and no result', () => {
+        expect(() =>
+          CustomFunctionSchema.parse({
+            type: CUSTOM_FUNCTION_TYPE.QUERY,
+            handler: async () => {}
+          })
+        ).not.toThrow();
+      });
+
       it('should accept a handler with args', () => {
         expect(() =>
           CustomFunctionSchema.parse({
             type: CUSTOM_FUNCTION_TYPE.QUERY,
+            args: z.object({name: z.string()}),
+            handler: (args: unknown) => args
+          })
+        ).not.toThrow();
+      });
+
+      it('should accept a handler with result', () => {
+        expect(() =>
+          CustomFunctionSchema.parse({
+            type: CUSTOM_FUNCTION_TYPE.QUERY,
+            result: z.string(),
+            handler: () => 'result'
+          })
+        ).not.toThrow();
+      });
+
+      it('should accept an async handler with result', () => {
+        expect(() =>
+          CustomFunctionSchema.parse({
+            type: CUSTOM_FUNCTION_TYPE.QUERY,
+            result: z.string(),
+            handler: async () => 'result'
+          })
+        ).not.toThrow();
+      });
+
+      it('should accept a handler with args and result', () => {
+        expect(() =>
+          CustomFunctionSchema.parse({
+            type: CUSTOM_FUNCTION_TYPE.QUERY,
+            args: z.object({name: z.string()}),
+            result: z.string(),
             handler: (args: unknown) => args
           })
         ).not.toThrow();

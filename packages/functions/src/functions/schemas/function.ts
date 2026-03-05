@@ -12,50 +12,172 @@ export const CUSTOM_FUNCTION_TYPE = {
  */
 export type CustomFunctionType = (typeof CUSTOM_FUNCTION_TYPE)[keyof typeof CUSTOM_FUNCTION_TYPE];
 
+const CustomFunctionBaseSchema = z.strictObject({
+  type: z.enum([CUSTOM_FUNCTION_TYPE.QUERY, CUSTOM_FUNCTION_TYPE.UPDATE])
+});
+
 /**
- * @see CustomFunction
+ * @see CustomFunctionWithArgsAndResult
  */
-export const CustomFunctionSchema = z.strictObject({
-  type: z.enum([CUSTOM_FUNCTION_TYPE.QUERY, CUSTOM_FUNCTION_TYPE.UPDATE]),
-  args: z.instanceof(z.ZodType).optional(),
-  result: z.instanceof(z.ZodType).optional(),
+export const CustomFunctionWithArgsAndResultSchema = z.strictObject({
+  ...CustomFunctionBaseSchema.shape,
+  args: z.instanceof(z.ZodType),
+  result: z.instanceof(z.ZodType),
   handler: createFunctionSchema(
     z.function({
-      input: z.tuple([z.unknown().optional()]),
-      output: z.union([z.unknown(), z.promise(z.unknown()), z.void(), z.promise(z.void())])
+      input: z.tuple([z.unknown()]),
+      output: z.union([z.unknown(), z.promise(z.unknown())])
     })
   )
 });
 
 /**
- * Defines a serverless function with optional input arguments and output result.
- *
- * @template TArgs - The type of the input arguments.
- * @template TResult - The type of the output result.
+ * @see CustomFunctionWithArgs
  */
-export interface CustomFunction<TArgs = unknown, TResult = unknown> {
+export const CustomFunctionWithArgsSchema = z.strictObject({
+  ...CustomFunctionBaseSchema.shape,
+  args: z.instanceof(z.ZodType),
+  handler: createFunctionSchema(
+    z.function({
+      input: z.tuple([z.unknown()]),
+      output: z.union([z.void(), z.promise(z.void())])
+    })
+  )
+});
+
+/**
+ * @see CustomFunctionWithResult
+ */
+export const CustomFunctionWithResultSchema = z.strictObject({
+  ...CustomFunctionBaseSchema.shape,
+  result: z.instanceof(z.ZodType),
+  handler: createFunctionSchema(
+    z.function({
+      input: z.tuple([]),
+      output: z.union([z.unknown(), z.promise(z.unknown())])
+    })
+  )
+});
+
+/**
+ * @see CustomFunctionWithoutArgsAndResult
+ */
+export const CustomFunctionWithoutArgsAndResultSchema = z.strictObject({
+  ...CustomFunctionBaseSchema.shape,
+  handler: createFunctionSchema(
+    z.function({
+      input: z.tuple([]),
+      output: z.union([z.void(), z.promise(z.void())])
+    })
+  )
+});
+
+/**
+ * @see CustomFunction
+ */
+export const CustomFunctionSchema = z.union([
+  CustomFunctionWithArgsAndResultSchema,
+  CustomFunctionWithArgsSchema,
+  CustomFunctionWithResultSchema,
+  CustomFunctionWithoutArgsAndResultSchema
+]);
+
+/**
+ * Base interface for all serverless function variants.
+ */
+interface CustomFunctionBase {
   /**
    * The type of the function, either a query or an update.
    */
   type: CustomFunctionType;
+}
+
+/**
+ * A serverless function with both input arguments and an output result.
+ *
+ * @template TArgs - The type of the input arguments.
+ * @template TResult - The type of the output result.
+ */
+export interface CustomFunctionWithArgsAndResult<TArgs, TResult> extends CustomFunctionBase {
+  /**
+   * A Zod schema describing the input arguments.
+   */
+  args: z.ZodType<TArgs>;
 
   /**
-   * An optional Zod schema describing the input arguments.
-   * If not provided, the function takes no arguments.
+   * A Zod schema describing the output result.
    */
-  args?: z.ZodType<TArgs>;
-
-  /**
-   * An optional Zod schema describing the output result.
-   * If not provided, the function returns void.
-   */
-  result?: z.ZodType<TResult>;
+  result: z.ZodType<TResult>;
 
   /**
    * The function handler. Can be synchronous or asynchronous.
    *
-   * @param {TArgs} args - The input arguments, if any.
-   * @returns {TResult | Promise<TResult> | void | Promise<void>}
+   * @param {TArgs} args - The input arguments.
+   * @returns {TResult | Promise<TResult>}
    */
-  handler: (args?: TArgs) => TResult | Promise<TResult> | void | Promise<void>;
+  handler: (args: TArgs) => TResult | Promise<TResult>;
 }
+
+/**
+ * A serverless function with input arguments but no output result.
+ *
+ * @template TArgs - The type of the input arguments.
+ */
+export interface CustomFunctionWithArgs<TArgs> extends CustomFunctionBase {
+  /**
+   * A Zod schema describing the input arguments.
+   */
+  args: z.ZodType<TArgs>;
+
+  /**
+   * The function handler. Can be synchronous or asynchronous.
+   *
+   * @param {TArgs} args - The input arguments.
+   * @returns {void | Promise<void>}
+   */
+  handler: (args: TArgs) => void | Promise<void>;
+}
+
+/**
+ * A serverless function with an output result but no input arguments.
+ *
+ * @template TResult - The type of the output result.
+ */
+export interface CustomFunctionWithResult<TResult> extends CustomFunctionBase {
+  /**
+   * A Zod schema describing the output result.
+   */
+  result: z.ZodType<TResult>;
+
+  /**
+   * The function handler. Can be synchronous or asynchronous.
+   *
+   * @returns {TResult | Promise<TResult>}
+   */
+  handler: () => TResult | Promise<TResult>;
+}
+
+/**
+ * A serverless function with no input arguments and no output result.
+ */
+export interface CustomFunctionWithoutArgsAndResult extends CustomFunctionBase {
+  /**
+   * The function handler. Can be synchronous or asynchronous.
+   *
+   * @returns {void | Promise<void>}
+   */
+  handler: () => void | Promise<void>;
+}
+
+/**
+ * A serverless function definition. The four variants cover all combinations
+ * of optional input arguments and output result.
+ *
+ * @template TArgs - The type of the input arguments.
+ * @template TResult - The type of the output result.
+ */
+export type CustomFunction<TArgs = unknown, TResult = unknown> =
+  | CustomFunctionWithArgsAndResult<TArgs, TResult>
+  | CustomFunctionWithArgs<TArgs>
+  | CustomFunctionWithResult<TResult>
+  | CustomFunctionWithoutArgsAndResult;

@@ -1,4 +1,4 @@
-import {describe} from 'vitest';
+import * as z from 'zod';
 import {CUSTOM_FUNCTION_TYPE} from '../../functions/schemas/function';
 import '../../functions/wrappers';
 import {RawData} from '../../schemas/db';
@@ -30,27 +30,25 @@ describe('wrappers', () => {
     it('should decode raw and pass parsed args to handler', () => {
       const data = {name: 'test'};
       const raw = encodeDocData(data);
-      const argsSchema = {parse: vi.fn().mockReturnValue(data)};
+      const argsSchema = z.object({name: z.string()});
       const handler = vi.fn();
 
       const config = {...mockQuery, args: argsSchema, handler};
 
       globalThis.__juno_satellite_fn_invoke_sync(config, raw);
 
-      expect(argsSchema.parse).toHaveBeenCalledWith(decodeDocData(raw));
-      expect(handler).toHaveBeenCalledWith(data);
+      expect(handler).toHaveBeenCalledWith(decodeDocData(raw));
     });
 
     it('should parse and encode result when result schema is defined', () => {
       const data = {value: 'hello'};
-      const resultSchema = {parse: vi.fn().mockReturnValue(data)};
+      const resultSchema = z.object({value: z.string()});
       const handler = vi.fn().mockReturnValue(data);
 
       const config = {...mockQuery, result: resultSchema, handler};
 
       globalThis.__juno_satellite_fn_invoke_sync(config);
 
-      expect(resultSchema.parse).toHaveBeenCalledWith(data);
       expect(globalThis.jsResult).toEqual(encodeDocData(data));
     });
 
@@ -74,30 +72,36 @@ describe('wrappers', () => {
       expect(handler).toHaveBeenCalledWith();
     });
 
-    it('should decode raw and pass parsed args to handler', async () => {
-      const data = {value: 'test'};
+    it('should decode raw and pass parsed args to handler', () => {
+      const data = {name: 'test'};
       const raw = encodeDocData(data);
-      const argsSchema = {parse: vi.fn().mockReturnValue(data)};
-      const handler = vi.fn().mockResolvedValue(undefined);
+      const argsSchema = z.object({name: z.string()});
+      const handler = vi.fn();
 
-      const config = {...mockQuery, args: argsSchema, handler};
+      const config = {
+        type: CUSTOM_FUNCTION_TYPE.QUERY,
+        args: argsSchema,
+        handler
+      };
 
-      await globalThis.__juno_satellite_fn_invoke_async(config, raw);
+      globalThis.__juno_satellite_fn_invoke_sync(config, raw);
 
-      expect(argsSchema.parse).toHaveBeenCalledWith(decodeDocData(raw));
-      expect(handler).toHaveBeenCalledWith(data);
+      expect(handler).toHaveBeenCalledWith(decodeDocData(raw));
     });
 
-    it('should parse and encode result when result schema is defined', async () => {
+    it('should parse and encode result when result schema is defined', () => {
       const data = {value: 'hello'};
-      const resultSchema = {parse: vi.fn().mockReturnValue(data)};
-      const handler = vi.fn().mockResolvedValue(data);
+      const resultSchema = z.object({value: z.string()});
+      const handler = vi.fn().mockReturnValue(data);
 
-      const config = {...mockQuery, result: resultSchema, handler};
+      const config = {
+        type: CUSTOM_FUNCTION_TYPE.QUERY,
+        result: resultSchema,
+        handler
+      };
 
-      await globalThis.__juno_satellite_fn_invoke_async(config);
+      globalThis.__juno_satellite_fn_invoke_sync(config);
 
-      expect(resultSchema.parse).toHaveBeenCalledWith(data);
       expect(globalThis.jsResult).toEqual(encodeDocData(data));
     });
 

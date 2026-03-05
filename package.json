@@ -43,7 +43,7 @@
     "packages/functions"
   ],
   "devDependencies": {
-    "@dfinity/eslint-config-oisy-wallet": "^0.2.3",
+    "@dfinity/eslint-config-oisy-wallet": "^0.2.4",
     "@dfinity/internet-identity-playwright": "^3.0.0-next-2026-02-02",
     "@icp-sdk/bindgen": "^0.2.2",
     "@playwright/test": "^1.58.2",

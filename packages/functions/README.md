@@ -966,7 +966,7 @@ References:
 
 - SatelliteEnv
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/satellite.env.ts#L6)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.env.ts#L6)
 
 #### :gear: CUSTOM_FUNCTION_TYPE
 
@@ -2679,7 +2679,7 @@ Currently unused, but it may support features such as:
 | -------------- | ------------------------------------ |
 | `SatelliteEnv` | `z.infer<typeof SatelliteEnvSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/hooks/schemas/satellite.env.ts#L15)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.env.ts#L15)
 
 #### :gear: CustomFunctionType
 

@@ -1,6 +1,6 @@
 import {PrincipalSchema} from '@dfinity/zod-schemas';
 import {z} from 'zod';
-import {zodToRust} from '../../converters/zod-to-rust';
+import {zodToRust} from '../../zod/zod-to-rust';
 
 const rust = (id: string, schema: z.ZodType, expected: string) => {
   it(id, () => {

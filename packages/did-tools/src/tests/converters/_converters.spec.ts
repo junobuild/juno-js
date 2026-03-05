@@ -1,7 +1,7 @@
 import {PrincipalSchema} from '@dfinity/zod-schemas';
 import {z} from 'zod';
-import {jsonToSputnikSchema} from '../../converters/_converters';
-import {SputnikSchema} from '../../converters/_types';
+import {jsonToSputnikSchema} from '../../zod/_converters';
+import {SputnikSchema} from '../../zod/_types';
 
 const schema = (
   id: string,

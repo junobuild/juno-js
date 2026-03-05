@@ -134,11 +134,7 @@ const schemaToRustType = ({
   }
 };
 
-export const sputnikSchemaToRust = ({
-  id,
-  schema,
-  isTopLevelOptional
-}: ConvertedSputnikSchema): string => {
+const sputnikSchemaToRust = ({id, schema, isTopLevelOptional}: ConvertedSputnikSchema): string => {
   const baseName = `${capitalize(id)}Args`;
   const resolvedSchema: SputnikSchema = isTopLevelOptional ? {kind: 'opt', inner: schema} : schema;
   const result = schemaToRustType({schema: resolvedSchema, structName: baseName});

@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {type SatelliteEnv, SatelliteEnvSchema} from '../hooks/schemas/satellite.env';
+import {type SatelliteEnv, SatelliteEnvSchema} from '../schemas/satellite.env';
 import {createFunctionSchema} from '../utils/zod.utils';
 import {CUSTOM_FUNCTION_TYPE, type CustomFunction, CustomFunctionSchema} from './schemas/function';
 

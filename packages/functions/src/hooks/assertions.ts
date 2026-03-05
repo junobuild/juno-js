@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import {SatelliteEnvSchema} from '../schemas/satellite.env';
 import {createFunctionSchema} from '../utils/zod.utils';
 import {type Collections, CollectionsSchema} from './schemas/collections';
 import {type AssertFunction, AssertFunctionSchema} from './schemas/context';
@@ -8,7 +9,6 @@ import {
   type AssertSetDocContext,
   AssertSetDocContextSchema
 } from './schemas/db/context';
-import {SatelliteEnvSchema} from './schemas/satellite.env';
 import {
   type AssertDeleteAssetContext,
   AssertDeleteAssetContextSchema,

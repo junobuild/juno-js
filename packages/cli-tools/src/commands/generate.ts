@@ -2,6 +2,7 @@ import {isNullish} from '@dfinity/utils';
 import type {Metafile} from 'esbuild';
 import {writeFile} from 'node:fs/promises';
 import {buildFunctions} from './build';
+import {__JUNO_FUNCTION_TYPE} from '@junobuild/functions';
 
 export interface GenerateArgs {
   infile: string;
@@ -116,6 +117,13 @@ const writeDevFunctions = async ({
   const devModule = await import(
     `data:text/javascript;base64,${Buffer.from(code).toString(`base64`)}`
   );
+
+  const queries = Object.entries(devModule).filter(([key, value]) => {
+    const config = typeof value === 'function' ? value({}) : value;
+    return config?.type === __JUNO_FUNCTION_TYPE.QUERY;
+  });
+
+  console.log('Queries ->', queries);
 };
 
 const writeDevScript = async ({

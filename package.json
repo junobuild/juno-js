@@ -251,5 +251,8 @@
         "@dfinity/utils"
       ]
     }
-  ]
+  ],
+  "dependencies": {
+    "@junobuild/cli-tools": "^0.10.2"
+  }
 }

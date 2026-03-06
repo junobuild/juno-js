@@ -1,4 +1,5 @@
 export * from './commands/build';
+export * from './commands/generate';
 export * from './commands/deploy';
 export * from './commands/publish';
 export * from './constants/deploy.constants';

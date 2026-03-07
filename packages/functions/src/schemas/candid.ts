@@ -17,7 +17,7 @@ export const RawPrincipalSchema = Uint8ArraySchema;
 /**
  * Represents a raw principal - a Uint8Array representation of a Principal.
  */
-export type RawPrincipal = z.infer<typeof RawPrincipalSchema>;
+export type RawPrincipal = Uint8Array;
 
 /**
  * @see Principal

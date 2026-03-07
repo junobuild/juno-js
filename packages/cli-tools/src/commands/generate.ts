@@ -108,34 +108,42 @@ const writeDevFunctions = async ({
   code,
   outfileRs
 }: Pick<GenerateBuildResultData, 'code'> & Pick<GenerateArgs, 'outfileRs'>) => {
-  // @junobuild/functions replaces globalThis.console with a version that calls
-  // __ic_cdk_print, which only exists in the WASM host environment. We stub it
-  // so the import doesn't throw when the module is evaluated in Node.
-  globalThis.__ic_cdk_print = (msg: string) => process.stdout.write(msg + '\n');
+  const originalConsole = globalThis.console;
+  const originalRandom = globalThis.Math.random;
 
-  // It might be needed
-  // globalThis.__juno_satellite_random = () => {
-  //   const buf = new Uint32Array(1);
-  //   crypto.getRandomValues(buf);
-  //   return buf[0];
-  // };
+  try {
+    // @junobuild/functions replaces globalThis.console with a version that calls
+    // __ic_cdk_print, which only exists in the WASM host environment. We stub it
+    // so the import doesn't throw when the module is evaluated in Node.
+    globalThis.__ic_cdk_print = (msg: string) => process.stdout.write(`${msg  }\n`);
 
-  const devModule = await import(
-    `data:text/javascript;base64,${Buffer.from(code).toString(`base64`)}`
-  );
+    // It might be needed
+    // globalThis.__juno_satellite_random = () => {
+    //   const buf = new Uint32Array(1);
+    //   crypto.getRandomValues(buf);
+    //   return buf[0];
+    // };
 
-  const {__JUNO_FUNCTION_TYPE, QuerySchema} = await import('@junobuild/functions');
+    const devModule = await import(
+      `data:text/javascript;base64,${Buffer.from(code).toString(`base64`)}`
+      );
 
-  // TODO: no need to be exported?
-  __JUNO_FUNCTION_TYPE;
+    const {__JUNO_FUNCTION_TYPE, QuerySchema} = await import('@junobuild/functions');
 
-  const queries = Object.entries(devModule).filter(([_key, value]) => {
-    // const config = typeof value === 'function' ? value({}) : value;
-    // return config?.type === __JUNO_FUNCTION_TYPE.QUERY;
-    return QuerySchema.safeParse(value).success;
-  });
+    // TODO: no need to be exported?
+    __JUNO_FUNCTION_TYPE;
 
-  console.log('Queries ->', queries);
+    const queries = Object.entries(devModule).filter(([_key, value]) =>
+      // const config = typeof value === 'function' ? value({}) : value;
+      // return config?.type === __JUNO_FUNCTION_TYPE.QUERY;
+      QuerySchema.safeParse(value).success
+    );
+
+    console.log('Queries ->', queries);
+  } finally {
+    globalThis.console = originalConsole;
+    globalThis.Math.random = originalRandom;
+  }
 };
 
 const writeDevScript = async ({

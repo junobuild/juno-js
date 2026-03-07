@@ -31,8 +31,7 @@ export const buildFunctions = async ({
 }: {
   infile: string;
   banner?: {[type: string]: string};
-}): Promise<EsbuildResult> => {
-  return await esbuild({
+}): Promise<EsbuildResult> => await esbuild({
     infile,
     platform: 'browser',
     treeShaking: true,
@@ -41,7 +40,6 @@ export const buildFunctions = async ({
     },
     banner
   });
-};
 
 /**
  * Builds a script using `esbuild` for `juno run`.

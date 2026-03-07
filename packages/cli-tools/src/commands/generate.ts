@@ -2,7 +2,6 @@ import {isNullish} from '@dfinity/utils';
 import type {Metafile} from 'esbuild';
 import {writeFile} from 'node:fs/promises';
 import {buildFunctions} from './build';
-import {__JUNO_FUNCTION_TYPE} from '@junobuild/functions';
 
 export interface GenerateArgs {
   infile: string;
@@ -114,13 +113,26 @@ const writeDevFunctions = async ({
   // so the import doesn't throw when the module is evaluated in Node.
   globalThis.__ic_cdk_print = (msg: string) => process.stdout.write(msg + '\n');
 
+  // It might be needed
+  // globalThis.__juno_satellite_random = () => {
+  //   const buf = new Uint32Array(1);
+  //   crypto.getRandomValues(buf);
+  //   return buf[0];
+  // };
+
   const devModule = await import(
     `data:text/javascript;base64,${Buffer.from(code).toString(`base64`)}`
   );
 
-  const queries = Object.entries(devModule).filter(([key, value]) => {
-    const config = typeof value === 'function' ? value({}) : value;
-    return config?.type === __JUNO_FUNCTION_TYPE.QUERY;
+  const {__JUNO_FUNCTION_TYPE, QuerySchema} = await import('@junobuild/functions');
+
+  // TODO: no need to be exported?
+  __JUNO_FUNCTION_TYPE;
+
+  const queries = Object.entries(devModule).filter(([_key, value]) => {
+    // const config = typeof value === 'function' ? value({}) : value;
+    // return config?.type === __JUNO_FUNCTION_TYPE.QUERY;
+    return QuerySchema.safeParse(value).success;
   });
 
   console.log('Queries ->', queries);

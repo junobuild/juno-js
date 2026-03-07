@@ -19,12 +19,10 @@ export const CustomFunctionWithArgsAndResultSchema = z.strictObject({
   ...CustomFunctionBaseSchema.shape,
   args: z.instanceof(z.ZodType),
   result: z.instanceof(z.ZodType),
-  handler: createFunctionSchema(
-    z.function({
-      input: z.tuple([z.unknown()]),
-      output: z.union([z.unknown(), z.promise(z.unknown())])
-    })
-  )
+  handler: z.function({
+    input: z.tuple([z.unknown()]),
+    output: z.union([z.unknown(), z.promise(z.unknown())])
+  })
 });
 
 /**
@@ -33,12 +31,10 @@ export const CustomFunctionWithArgsAndResultSchema = z.strictObject({
 export const CustomFunctionWithArgsSchema = z.strictObject({
   ...CustomFunctionBaseSchema.shape,
   args: z.instanceof(z.ZodType),
-  handler: createFunctionSchema(
-    z.function({
-      input: z.tuple([z.unknown()]),
-      output: z.union([z.void(), z.promise(z.void())])
-    })
-  )
+  handler: z.function({
+    input: z.tuple([z.unknown()]),
+    output: z.union([z.void(), z.promise(z.void())])
+  })
 });
 
 /**
@@ -47,12 +43,10 @@ export const CustomFunctionWithArgsSchema = z.strictObject({
 export const CustomFunctionWithResultSchema = z.strictObject({
   ...CustomFunctionBaseSchema.shape,
   result: z.instanceof(z.ZodType),
-  handler: createFunctionSchema(
-    z.function({
-      input: z.tuple([]),
-      output: z.union([z.unknown(), z.promise(z.unknown())])
-    })
-  )
+  handler: z.function({
+    input: z.tuple([]),
+    output: z.union([z.unknown(), z.promise(z.unknown())])
+  })
 });
 
 /**
@@ -60,12 +54,10 @@ export const CustomFunctionWithResultSchema = z.strictObject({
  */
 export const CustomFunctionWithoutArgsAndResultSchema = z.strictObject({
   ...CustomFunctionBaseSchema.shape,
-  handler: createFunctionSchema(
-    z.function({
-      input: z.tuple([]),
-      output: z.union([z.void(), z.promise(z.void())])
-    })
-  )
+  handler: z.function({
+    input: z.tuple([]),
+    output: z.union([z.void(), z.promise(z.void())])
+  })
 });
 
 /**

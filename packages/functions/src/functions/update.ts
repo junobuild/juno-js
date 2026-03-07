@@ -66,7 +66,7 @@ export const UpdateFnSchema = <T extends z.ZodTypeAny>(updateSchema: T) =>
 export type UpdateFn<TArgs, TResult> = (env: SatelliteEnv) => Update<TArgs, TResult>;
 
 export const UpdateFnOrObjectSchema = <T extends z.ZodTypeAny>(updateSchema: T) =>
-  z.union([updateSchema, createFunctionSchema(UpdateFnSchema(updateSchema))]);
+  z.union([updateSchema, UpdateFnSchema(updateSchema)]);
 
 /**
  * An update definition or a factory function that returns one.

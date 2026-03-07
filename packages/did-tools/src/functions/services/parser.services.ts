@@ -76,13 +76,13 @@ export const parseFunctions = ({
 }): string => {
   const templateQueries = queries
     .map(([jsFnName, fn]) => parseFunction({jsFnName, fn, fnType: 'query'}))
-    .join('\n');
+    .join('\n\n');
 
   const templateUpdates = updates
     .map(([jsFnName, fn]) => parseFunction({jsFnName, fn, fnType: 'update'}))
-    .join('\n');
+    .join('\n\n');
 
-  const functions = `${templateQueries}\n${templateUpdates}`.trim();
+  const functions = `${templateQueries}\n\n${templateUpdates}`.trim();
 
   return template.replace('%FUNCTIONS%', functions);
 };
@@ -115,13 +115,13 @@ const parseFunction = ({
   const withTemplate = (): string => {
     if (nonNullish(args) && nonNullish(result)) {
       return isAsync ? templateAsyncWithArgsWithResult : templateSyncWithArgsWithResult;
-    } else if (nonNullish(args)) {
+    } if (nonNullish(args)) {
       return isAsync ? templateAsyncWithArgsNoResult : templateSyncWithArgsNoResult;
-    } else if (nonNullish(result)) {
+    } if (nonNullish(result)) {
       return isAsync ? templateAsyncNoArgsWithResult : templateSyncNoArgsWithResult;
-    } else {
+    } 
       return isAsync ? templateAsyncNoArgsNoResult : templateSyncNoArgsNoResult;
-    }
+    
   };
 
   const template = withTemplate();
@@ -138,6 +138,4 @@ const parseFunction = ({
 };
 
 // Source: https://stackoverflow.com/a/77489094/5404186
-const convertCamelToSnake = (str: string): string => {
-  return str.replace(/([a-zA-Z])(?=[A-Z])/g, '$1_').toLowerCase();
-};
+const convertCamelToSnake = (str: string): string => str.replace(/([a-zA-Z])(?=[A-Z])/g, '$1_').toLowerCase();

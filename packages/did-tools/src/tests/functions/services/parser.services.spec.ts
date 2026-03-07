@@ -142,7 +142,9 @@ describe('parseFunctions', () => {
 
       expect(result).toContain('#[ic_cdk::update]');
       expect(result).toContain('fn yolo()');
-      expect(result).toContain('execute_sync_function::<NoArgs, NoResult>("yolo", None).unwrap_or_trap();');
+      expect(result).toContain(
+        'execute_sync_function::<NoArgs, NoResult>("yolo", None).unwrap_or_trap();'
+      );
     });
 
     it('should generate an async update with no args and no result', () => {

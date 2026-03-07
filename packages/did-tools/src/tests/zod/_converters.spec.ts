@@ -10,7 +10,7 @@ const schema = (
   isTopLevelOptional = false
 ) => {
   it(id, () => {
-    const [result] = jsonToSputnikSchema({inputs: {[id]: zodSchema}});
+    const result = jsonToSputnikSchema({id, zodSchema});
     expect(result.schema).toEqual(expected);
     expect(result.isTopLevelOptional).toBe(isTopLevelOptional);
   });
@@ -18,7 +18,7 @@ const schema = (
 
 const throws = (id: string, zodSchema: z.ZodType) => {
   it(`${id} throws`, () => {
-    expect(() => jsonToSputnikSchema({inputs: {[id]: zodSchema}})).toThrow();
+    expect(() => jsonToSputnikSchema({id, zodSchema})).toThrow();
   });
 };
 

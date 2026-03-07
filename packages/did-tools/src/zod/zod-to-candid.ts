@@ -37,7 +37,8 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
 };
 
 export const zodToCandid = (inputs: Record<string, z.ZodType>): string =>
-  jsonToSputnikSchema({inputs})
+  Object.entries(inputs)
+    .map(([id, zodSchema]) => jsonToSputnikSchema({id, zodSchema}))
     .map(
       ({schema, id, isTopLevelOptional}) =>
         `type ${id} = ${isTopLevelOptional ? `opt ${sputnikSchemaToDid(schema)}` : sputnikSchemaToDid(schema)};`

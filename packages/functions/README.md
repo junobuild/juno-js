@@ -93,13 +93,16 @@ parse time, but the returned value is the **original function** you passed
 in — no runtime wrapper, no sync/async mismatch.
 
 Reference:
-https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912*
+https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912
+
+Note: We need the function for this library, see following comment
+https://github.com/colinhacks/zod/issues/4143#issuecomment-3335735535
 
 | Function               | Type                                                                                                              |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | `createFunctionSchema` | `<T extends z.ZodFunction>(schema: T) => ZodCustom<Parameters<T["implement"]>[0], Parameters<T["implement"]>[0]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/utils/zod.utils.ts#L24)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/utils/zod.utils.ts#L27)
 
 #### :gear: QueryFnSchema
 

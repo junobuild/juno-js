@@ -25,6 +25,6 @@ import * as z from 'zod';
  * https://github.com/colinhacks/zod/issues/4143#issuecomment-3335735535
  */
 export const createFunctionSchema = <T extends z.ZodFunction>(schema: T) =>
-  z.custom<Parameters<T['implement']>[0]>((fn) =>
-    schema.implement(fn as Parameters<T['implement']>[0])
+  z.custom<Parameters<T['implement']>[0]>(
+    (fn) => typeof fn === 'function' && schema.implement(fn as Parameters<T['implement']>[0])
   );

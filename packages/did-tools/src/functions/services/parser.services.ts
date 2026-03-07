@@ -115,7 +115,7 @@ const parseFunction = ({
         })
       : undefined;
 
-  const isAsync = fn.handler instanceof Promise;
+  const isAsync = fn.handler.constructor.name === 'AsyncFunction';
 
   const withTemplate = (): string => {
     if (nonNullish(args) && nonNullish(result)) {

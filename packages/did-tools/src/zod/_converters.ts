@@ -2,50 +2,49 @@ import {ZodSchemaId} from '@dfinity/zod-schemas';
 import * as z from 'zod';
 import type {JSONSchema, JSONSchemaOutput, SputnikSchema} from './_types';
 
-export interface ConvertedSputnikSchema {
+export interface SputnikSchemaResult {
   id: string;
   schema: SputnikSchema;
   isTopLevelOptional: boolean;
 }
 
-export type SputnikSchemaResult = ConvertedSputnikSchema[];
-
-export interface SputnikSchemaArgs {
-  inputs: Record<string, z.ZodType>;
-}
-
-export const jsonToSputnikSchema = ({inputs}: SputnikSchemaArgs): SputnikSchemaResult =>
-  Object.entries(inputs).map(([id, zodSchema]) => {
-    const json = zodSchema.toJSONSchema({
-      unrepresentable: 'any',
-      override: (ctx) => {
-        if (ctx.zodSchema._zod.def.type === 'bigint') {
-          ctx.jsonSchema.type = 'integer';
-          // https://json-schema.org/understanding-json-schema/reference/type#format
-          ctx.jsonSchema.format = 'bigint';
-        }
-
-        if (ctx.jsonSchema.id === ZodSchemaId.Principal) {
-          ctx.jsonSchema.format = 'principal';
-        }
+export const jsonToSputnikSchema = ({
+  id,
+  zodSchema
+}: {
+  id: string;
+  zodSchema: z.ZodType;
+}): SputnikSchemaResult => {
+  const json = zodSchema.toJSONSchema({
+    unrepresentable: 'any',
+    override: (ctx) => {
+      if (ctx.zodSchema._zod.def.type === 'bigint') {
+        ctx.jsonSchema.type = 'integer';
+        // https://json-schema.org/understanding-json-schema/reference/type#format
+        ctx.jsonSchema.format = 'bigint';
       }
-    });
 
-    const sputnikSchema = jsonToSchema({schema: json, rootDefs: json.$defs ?? {}});
-
-    // Zod strips optional from JSON Schema output, so we need to re-add the opt wrapper.
-    // However, nullish (optional + nullable) is already handled by the anyOf handler, so we skip it.
-    // e.g. z.string().nullish())
-    const isTopLevelOptional =
-      zodSchema._zod.def.type === 'optional' &&
-      !('innerType' in zodSchema._zod.def && zodSchema._zod.def.innerType instanceof z.ZodNullable);
-
-    return {
-      id,
-      schema: sputnikSchema,
-      isTopLevelOptional
-    };
+      if (ctx.jsonSchema.id === ZodSchemaId.Principal) {
+        ctx.jsonSchema.format = 'principal';
+      }
+    }
   });
+
+  const sputnikSchema = jsonToSchema({schema: json, rootDefs: json.$defs ?? {}});
+
+  // Zod strips optional from JSON Schema output, so we need to re-add the opt wrapper.
+  // However, nullish (optional + nullable) is already handled by the anyOf handler, so we skip it.
+  // e.g. z.string().nullish())
+  const isTopLevelOptional =
+    zodSchema._zod.def.type === 'optional' &&
+    !('innerType' in zodSchema._zod.def && zodSchema._zod.def.innerType instanceof z.ZodNullable);
+
+  return {
+    id,
+    schema: sputnikSchema,
+    isTopLevelOptional
+  };
+};
 
 const jsonToSchema = ({
   schema,

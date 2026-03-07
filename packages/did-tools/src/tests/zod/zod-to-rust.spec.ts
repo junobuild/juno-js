@@ -4,13 +4,13 @@ import {zodToRust} from '../../zod/zod-to-rust';
 
 const rust = (id: string, schema: z.ZodType, expected: string) => {
   it(id, () => {
-    expect(zodToRust({[id]: schema})).toBe(expected);
+    expect(zodToRust({id, schema, suffix: 'Args'}).code).toBe(expected);
   });
 };
 
 const throws = (id: string, schema: z.ZodType) => {
   it(`${id} throws`, () => {
-    expect(() => zodToRust({[id]: schema})).toThrow();
+    expect(() => zodToRust({id, schema, suffix: 'Args'})).toThrow();
   });
 };
 
@@ -163,4 +163,21 @@ describe('throws', () => {
   throws('myFunction', z.date());
   throws('myFunction', z.map(z.string(), z.string()));
   throws('myFunction', z.set(z.string()));
+});
+
+describe('baseName', () => {
+  it('should capitalize and append Args', () => {
+    const result = zodToRust({id: 'helloWorld', schema: z.string(), suffix: 'Args'});
+    expect(result.baseName).toBe('HelloWorldArgs');
+  });
+
+  it('should capitalize and append Result', () => {
+    const result = zodToRust({id: 'helloWorld', schema: z.string(), suffix: 'Result'});
+    expect(result.baseName).toBe('HelloWorldResult');
+  });
+
+  it('should handle single word', () => {
+    const result = zodToRust({id: 'query', schema: z.string(), suffix: 'Args'});
+    expect(result.baseName).toBe('QueryArgs');
+  });
 });

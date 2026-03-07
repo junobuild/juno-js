@@ -1,5 +1,5 @@
 import type {z} from 'zod';
-import {type ConvertedSputnikSchema, jsonToSputnikSchema} from './_converters';
+import {type SputnikSchemaResult, jsonToSputnikSchema} from './_converters';
 import type {SputnikSchema} from './_types';
 
 const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);
@@ -134,17 +134,37 @@ const schemaToRustType = ({
   }
 };
 
-const sputnikSchemaToRust = ({id, schema, isTopLevelOptional}: ConvertedSputnikSchema): string => {
-  const baseName = `${capitalize(id)}Args`;
+export interface RustResult {
+  baseName: string;
+  code: string;
+}
+
+const sputnikSchemaToRust = ({
+  id,
+  schema,
+  isTopLevelOptional,
+  suffix
+}: SputnikSchemaResult & {suffix: 'Args' | 'Result'}): RustResult => {
+  const baseName = `${capitalize(id)}${suffix}`;
   const resolvedSchema: SputnikSchema = isTopLevelOptional ? {kind: 'opt', inner: schema} : schema;
   const result = schemaToRustType({schema: resolvedSchema, structName: baseName});
 
   if (result.kind === 'composite') {
-    return result.structs.join('\n\n');
+    return {baseName, code: result.structs.join('\n\n')};
   }
 
-  return `pub type ${baseName} = ${result.fieldType};`;
+  return {baseName, code: `pub type ${baseName} = ${result.fieldType};`};
 };
 
-export const zodToRust = (inputs: Record<string, z.ZodType>): string =>
-  jsonToSputnikSchema({inputs}).map(sputnikSchemaToRust).join('\n\n');
+export const zodToRust = ({
+  id,
+  schema,
+  suffix
+}: {
+  id: string;
+  schema: z.ZodType;
+  suffix: 'Args' | 'Result';
+}): RustResult => {
+  const converted = jsonToSputnikSchema({zodSchema: schema, id});
+  return sputnikSchemaToRust({...converted, suffix});
+};

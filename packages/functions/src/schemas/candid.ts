@@ -1,4 +1,4 @@
-import {Principal as CandidPrincipal} from '@icp-sdk/core/principal';
+import {PrincipalSchema as CandidPrincipalSchema} from '@dfinity/zod-schemas';
 import * as z from 'zod';
 
 /**
@@ -21,9 +21,7 @@ export type RawPrincipal = z.infer<typeof RawPrincipalSchema>;
 /**
  * @see Principal
  */
-export const PrincipalSchema = z.custom<CandidPrincipal>((val) => val instanceof CandidPrincipal, {
-  message: 'Expected an instance of a Principal'
-});
+export const PrincipalSchema = CandidPrincipalSchema;
 
 /**
  * Represents a principal - i.e. an object instantiated with the class Principal.

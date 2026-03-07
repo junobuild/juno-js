@@ -2,7 +2,7 @@ import {
   PrincipalSchema as DfnPrincipalSchema,
   Uint8ArraySchema as DfnUint8ArraySchema
 } from '@dfinity/zod-schemas';
-import * as z from 'zod';
+import type * as z from 'zod';
 
 /**
  * A schema that validates a value is an Uint8Array.

@@ -21,7 +21,7 @@ export const RawDataSchema = Uint8ArraySchema;
  *
  * This is used to store structured data in a document.
  */
-export type RawData = z.infer<typeof Uint8ArraySchema>;
+export type RawData = Uint8Array;
 
 /**
  * @see Doc

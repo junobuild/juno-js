@@ -362,9 +362,9 @@ References:
 
 Decodes the raw data of a document into a JavaScript object.
 
-| Function        | Type                                      |
-| --------------- | ----------------------------------------- |
-| `decodeDocData` | `<T>(data: Uint8Array<ArrayBuffer>) => T` |
+| Function        | Type                      |
+| --------------- | ------------------------- |
+| `decodeDocData` | `<T>(data: RawData) => T` |
 
 Parameters:
 
@@ -380,9 +380,9 @@ The parsed JavaScript object.
 
 Encodes a JavaScript object into a raw data format to be applied to a document.
 
-| Function        | Type                                      |
-| --------------- | ----------------------------------------- |
-| `encodeDocData` | `<T>(data: T) => Uint8Array<ArrayBuffer>` |
+| Function        | Type                      |
+| --------------- | ------------------------- |
+| `encodeDocData` | `<T>(data: T) => RawData` |
 
 Parameters:
 
@@ -2352,14 +2352,14 @@ Represents the context provided to hooks, containing information about the calle
 
 Represents a document stored in a collection.
 
-| Property      | Type                      | Description                                                                                                             |
-| ------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `owner`       | `RawPrincipal`            | The user who owns this document.                                                                                        |
-| `data`        | `Uint8Array<ArrayBuffer>` | The raw data of the document.                                                                                           |
-| `description` | `string or undefined`     | An optional description of the document.                                                                                |
-| `created_at`  | `bigint`                  | The timestamp when the document was first created.                                                                      |
-| `updated_at`  | `bigint`                  | The timestamp when the document was last updated.                                                                       |
-| `version`     | `bigint or undefined`     | The version number of the document, used for consistency checks. If not provided, it's assumed to be the first version. |
+| Property      | Type                  | Description                                                                                                             |
+| ------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `owner`       | `RawPrincipal`        | The user who owns this document.                                                                                        |
+| `data`        | `RawData`             | The raw data of the document.                                                                                           |
+| `description` | `string or undefined` | An optional description of the document.                                                                                |
+| `created_at`  | `bigint`              | The timestamp when the document was first created.                                                                      |
+| `updated_at`  | `bigint`              | The timestamp when the document was last updated.                                                                       |
+| `version`     | `bigint or undefined` | The version number of the document, used for consistency checks. If not provided, it's assumed to be the first version. |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L43)
 
@@ -2368,11 +2368,11 @@ Represents a document stored in a collection.
 Represents the proposed version of a document to be created or updated.
 This can be validated before allowing the operation.
 
-| Property      | Type                      | Description                                        |
-| ------------- | ------------------------- | -------------------------------------------------- |
-| `data`        | `Uint8Array<ArrayBuffer>` | The raw data of the document.                      |
-| `description` | `string or undefined`     | An optional description of the document.           |
-| `version`     | `bigint or undefined`     | The expected version number to ensure consistency. |
+| Property      | Type                  | Description                                        |
+| ------------- | --------------------- | -------------------------------------------------- |
+| `data`        | `RawData`             | The raw data of the document.                      |
+| `description` | `string or undefined` | An optional description of the document.           |
+| `version`     | `bigint or undefined` | The expected version number to ensure consistency. |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L101)
 
@@ -3009,9 +3009,9 @@ Represents raw binary data.
 
 This is used to store structured data in a document.
 
-| Type      | Type                               |
-| --------- | ---------------------------------- |
-| `RawData` | `z.infer<typeof Uint8ArraySchema>` |
+| Type      | Type         |
+| --------- | ------------ |
+| `RawData` | `Uint8Array` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/db.ts#L24)
 

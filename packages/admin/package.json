@@ -58,6 +58,6 @@
     "@junobuild/config": "*",
     "@junobuild/ic-client": "^8",
     "semver": "7.*",
-    "zod": "^4"
+    "zod": "^4.3"
   }
 }

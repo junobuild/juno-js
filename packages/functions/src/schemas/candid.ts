@@ -1,12 +1,13 @@
-import {PrincipalSchema as CandidPrincipalSchema} from '@dfinity/zod-schemas';
-import * as z from 'zod';
+import {
+  PrincipalSchema as DfnPrincipalSchema,
+  Uint8ArraySchema as DfnUint8ArraySchema
+} from '@dfinity/zod-schemas';
+import type * as z from 'zod';
 
 /**
  * A schema that validates a value is an Uint8Array.
  */
-export const Uint8ArraySchema = z.custom<Uint8Array>((val) => val instanceof Uint8Array, {
-  message: 'Expected Uint8Array'
-});
+export const Uint8ArraySchema = DfnUint8ArraySchema;
 
 /**
  * @see RawPrincipal
@@ -16,12 +17,12 @@ export const RawPrincipalSchema = Uint8ArraySchema;
 /**
  * Represents a raw principal - a Uint8Array representation of a Principal.
  */
-export type RawPrincipal = z.infer<typeof RawPrincipalSchema>;
+export type RawPrincipal = Uint8Array;
 
 /**
  * @see Principal
  */
-export const PrincipalSchema = CandidPrincipalSchema;
+export const PrincipalSchema = DfnPrincipalSchema;
 
 /**
  * Represents a principal - i.e. an object instantiated with the class Principal.

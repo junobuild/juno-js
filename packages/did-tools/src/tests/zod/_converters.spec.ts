@@ -1,5 +1,5 @@
 import {PrincipalSchema} from '@dfinity/zod-schemas';
-import {z} from 'zod';
+import * as z from 'zod';
 import {jsonToSputnikSchema} from '../../zod/_converters';
 import {SputnikSchema} from '../../zod/_types';
 

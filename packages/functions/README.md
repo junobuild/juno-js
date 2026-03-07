@@ -968,9 +968,9 @@ The current timestamp.
 Internal constant used by Juno's tooling to discover serverless functions.
 Not intended for direct use by developers.
 
-| Constant               | Type                                                                                      |
-| ---------------------- | ----------------------------------------------------------------------------------------- |
-| `__JUNO_FUNCTION_TYPE` | `{ readonly QUERY: "__juno_function_query"; readonly UPDATE: "__juno_function_update"; }` |
+| Constant             | Type                                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| `JUNO_FUNCTION_TYPE` | `{ readonly QUERY: "__juno_function_query"; readonly UPDATE: "__juno_function_update"; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/constants.ts#L5)
 
@@ -2779,9 +2779,9 @@ Currently unused, but it may support features such as:
 The type of a serverless function. Not exposed to the developer. It allows the CLI
 to discover the functions when parsing the code.
 
-| Type                 | Type                                                               |
-| -------------------- | ------------------------------------------------------------------ |
-| `CustomFunctionType` | `(typeof __JUNO_FUNCTION_TYPE)[keyof typeof __JUNO_FUNCTION_TYPE]` |
+| Type                 | Type                                                           |
+| -------------------- | -------------------------------------------------------------- |
+| `CustomFunctionType` | `(typeof JUNO_FUNCTION_TYPE)[keyof typeof JUNO_FUNCTION_TYPE]` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L9)
 
@@ -2812,9 +2812,9 @@ Does not include `type`, which is injected by `defineQuery`.
 A query function definition with `type` injected by `defineQuery`.
 Queries are read-only functions that do not modify state.
 
-| Type              | Type                                                                     |
-| ----------------- | ------------------------------------------------------------------------ |
-| `QueryDefinition` | `Query<TArgs, TResult> and { type: typeof __JUNO_FUNCTION_TYPE.QUERY; }` |
+| Type              | Type                                                                   |
+| ----------------- | ---------------------------------------------------------------------- |
+| `QueryDefinition` | `Query<TArgs, TResult> and { type: typeof JUNO_FUNCTION_TYPE.QUERY; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L56)
 
@@ -2854,9 +2854,9 @@ Does not include `type`, which is injected by `defineUpdate`.
 A update function definition with `type` injected by `defineUpdate`.
 Queries are read-only functions that do not modify state.
 
-| Type               | Type                                                                       |
-| ------------------ | -------------------------------------------------------------------------- |
-| `UpdateDefinition` | `Update<TArgs, TResult> and { type: typeof __JUNO_FUNCTION_TYPE.UPDATE; }` |
+| Type               | Type                                                                     |
+| ------------------ | ------------------------------------------------------------------------ |
+| `UpdateDefinition` | `Update<TArgs, TResult> and { type: typeof JUNO_FUNCTION_TYPE.UPDATE; }` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L56)
 

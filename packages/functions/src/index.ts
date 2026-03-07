@@ -1,4 +1,3 @@
-export {__JUNO_FUNCTION_TYPE} from './functions/constants';
 export * from './functions/query';
 export * from './functions/schemas/function';
 export * from './functions/update';

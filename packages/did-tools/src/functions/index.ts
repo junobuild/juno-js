@@ -1,4 +1,6 @@
 import type {Query, Update} from '@junobuild/functions';
+import {writeFile} from 'node:fs/promises';
+import {parseFunctions} from './services/parser.services';
 
 export interface GenerateArgs {
   outputFile: string;
@@ -27,13 +29,8 @@ export const generateFunctions = async ({code, outputFile}: GenerateArgs) => {
     );
 
     // Lazy load the functions this way it uses the globalThis stubs we defined above
-    const {__JUNO_FUNCTION_TYPE, QuerySchema, UpdateSchema} = await import('@junobuild/functions');
+    const {QuerySchema, UpdateSchema} = await import('@junobuild/functions');
 
-    // TODO: no need to be exported?
-    __JUNO_FUNCTION_TYPE;
-
-    // const config = typeof value === 'function' ? value({}) : value;
-    // return config?.type === __JUNO_FUNCTION_TYPE.QUERY;
     const [queries, updates] = Object.entries(devModule).reduce<
       [[string, Query][], [string, Update][]]
     >(
@@ -58,8 +55,9 @@ export const generateFunctions = async ({code, outputFile}: GenerateArgs) => {
       return;
     }
 
-    console.log('Queries ->', queries.length);
-    console.log('Updates ->', updates.length);
+    const functions = parseFunctions({queries, updates});
+
+    await writeFile(outputFile, functions, 'utf-8');
   } finally {
     globalThis.console = originalConsole;
     globalThis.Math.random = originalRandom;

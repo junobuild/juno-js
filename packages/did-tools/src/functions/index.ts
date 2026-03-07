@@ -1,4 +1,4 @@
-import type * as z from 'zod';
+import type {Query, Update} from '@junobuild/functions';
 
 export interface GenerateArgs {
   outputFile: string;
@@ -26,13 +26,11 @@ export const generateFunctions = async ({code, outputFile}: GenerateArgs) => {
       `data:text/javascript;base64,${Buffer.from(code).toString(`base64`)}`
     );
 
+    // Lazy load the functions this way it uses the globalThis stubs we defined above
     const {__JUNO_FUNCTION_TYPE, QuerySchema, UpdateSchema} = await import('@junobuild/functions');
 
     // TODO: no need to be exported?
     __JUNO_FUNCTION_TYPE;
-
-    type Query = z.infer<typeof QuerySchema>;
-    type Update = z.infer<typeof UpdateSchema>;
 
     // const config = typeof value === 'function' ? value({}) : value;
     // return config?.type === __JUNO_FUNCTION_TYPE.QUERY;

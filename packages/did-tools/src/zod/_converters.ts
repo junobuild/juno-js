@@ -31,7 +31,7 @@ export const jsonToSputnikSchema = ({inputs}: SputnikSchemaArgs): SputnikSchemaR
       }
     });
 
-    const sputnikSchema = jsonToSchema(json);
+    const sputnikSchema = jsonToSchema({schema: json, rootDefs: json.$defs ?? {}});
 
     // Zod strips optional from JSON Schema output, so we need to re-add the opt wrapper.
     // However, nullish (optional + nullable) is already handled by the anyOf handler, so we skip it.
@@ -47,9 +47,26 @@ export const jsonToSputnikSchema = ({inputs}: SputnikSchemaArgs): SputnikSchemaR
     };
   });
 
-const jsonToSchema = (schema: JSONSchemaOutput | JSONSchema): SputnikSchema => {
+const jsonToSchema = ({
+  schema,
+  rootDefs
+}: {
+  schema: JSONSchemaOutput | JSONSchema;
+  rootDefs: Record<string, JSONSchema>;
+}): SputnikSchema => {
   if (schema.format === 'principal') {
     return {kind: 'principal'};
+  }
+
+  if ('$ref' in schema) {
+    const refKey = (schema.$ref as string).replace('#/$defs/', '');
+    const resolved = rootDefs[refKey];
+
+    if (resolved === undefined) {
+      throw new Error(`Unresolved $ref: ${schema.$ref}`);
+    }
+
+    return jsonToSchema({schema: resolved, rootDefs});
   }
 
   switch (schema.type) {
@@ -88,7 +105,9 @@ const jsonToSchema = (schema: JSONSchemaOutput | JSONSchema): SputnikSchema => {
 
         return {
           kind: 'indexedTuple',
-          members: schema.prefixItems.map((item) => jsonToSchema(item as JSONSchema))
+          members: schema.prefixItems.map((item) =>
+            jsonToSchema({schema: item as JSONSchema, rootDefs})
+          )
         };
       }
 
@@ -104,7 +123,7 @@ const jsonToSchema = (schema: JSONSchemaOutput | JSONSchema): SputnikSchema => {
         throw new Error('Boolean schema not supported for array items');
       }
 
-      return {kind: 'vec', inner: jsonToSchema(schema.items)};
+      return {kind: 'vec', inner: jsonToSchema({schema: schema.items, rootDefs})};
     }
 
     case 'object': {
@@ -118,7 +137,7 @@ const jsonToSchema = (schema: JSONSchemaOutput | JSONSchema): SputnikSchema => {
           kind: 'vec',
           inner: {
             kind: 'tuple',
-            members: [{kind: 'text'}, jsonToSchema(schema.additionalProperties)]
+            members: [{kind: 'text'}, jsonToSchema({schema: schema.additionalProperties, rootDefs})]
           }
         };
       }
@@ -141,7 +160,7 @@ const jsonToSchema = (schema: JSONSchemaOutput | JSONSchema): SputnikSchema => {
       return {
         kind: 'record',
         fields: entries.map(([k, v]) => {
-          const type = jsonToSchema(v as JSONSchema);
+          const type = jsonToSchema({schema: v as JSONSchema, rootDefs});
           return {name: k, type: required.has(k) ? type : {kind: 'opt', inner: type}};
         })
       };
@@ -152,10 +171,13 @@ const jsonToSchema = (schema: JSONSchemaOutput | JSONSchema): SputnikSchema => {
     const variants = schema.oneOf.filter(({type}) => type !== 'null');
 
     if (variants.length === 1) {
-      return {kind: 'opt', inner: jsonToSchema(variants[0])};
+      return {kind: 'opt', inner: jsonToSchema({schema: variants[0], rootDefs})};
     }
 
-    return {kind: 'variantRecords', members: variants.map(jsonToSchema)};
+    return {
+      kind: 'variantRecords',
+      members: variants.map((schema) => jsonToSchema({schema, rootDefs}))
+    };
   }
 
   if (schema.anyOf !== undefined) {
@@ -173,10 +195,13 @@ const jsonToSchema = (schema: JSONSchemaOutput | JSONSchema): SputnikSchema => {
     const nonNull = nonBoolean.filter((s) => s.type !== 'null');
 
     if (nonNull.length === 1) {
-      return {kind: 'opt', inner: jsonToSchema(nonNull[0])};
+      return {kind: 'opt', inner: jsonToSchema({schema: nonNull[0], rootDefs})};
     }
 
-    return {kind: 'variantRecords', members: nonNull.map(jsonToSchema)};
+    return {
+      kind: 'variantRecords',
+      members: nonNull.map((schema) => jsonToSchema({schema, rootDefs}))
+    };
   }
 
   if (schema.allOf !== undefined) {
@@ -195,7 +220,7 @@ const jsonToSchema = (schema: JSONSchemaOutput | JSONSchema): SputnikSchema => {
     const fields = schema.allOf.flatMap((s) => {
       const required = new Set(s.required ?? []);
       return Object.entries(s.properties ?? {}).map(([k, v]) => {
-        const type = jsonToSchema(v as JSONSchema);
+        const type = jsonToSchema({schema: v as JSONSchema, rootDefs});
         return {name: k, type: required.has(k) ? type : {kind: 'opt' as const, inner: type}};
       });
     });

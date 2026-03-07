@@ -188,6 +188,11 @@ describe('objects', () => {
 
 describe('principal', () => {
   schema('Principal', PrincipalSchema, {kind: 'principal'});
+
+  schema('ObjectWithPrincipal', z.object({value: PrincipalSchema}), {
+    kind: 'record',
+    fields: [{name: 'value', type: {kind: 'principal'}}]
+  });
 });
 
 // ─── Optional / Nullable ──────────────────────────────────────────────────────

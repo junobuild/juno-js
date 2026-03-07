@@ -1094,9 +1094,9 @@ References:
 
 #### :gear: PrincipalSchema
 
-| Constant          | Type                                          |
-| ----------------- | --------------------------------------------- |
-| `PrincipalSchema` | `ZodCustom<CandidPrincipal, CandidPrincipal>` |
+| Constant          | Type                                                                           |
+| ----------------- | ------------------------------------------------------------------------------ |
+| `PrincipalSchema` | `ZodPipe<ZodCustom<Principal, Principal>, ZodTransform<Principal, Principal>>` |
 
 References:
 
@@ -1142,9 +1142,9 @@ References:
 
 #### :gear: UserIdSchema
 
-| Constant       | Type                                          |
-| -------------- | --------------------------------------------- |
-| `UserIdSchema` | `ZodCustom<CandidPrincipal, CandidPrincipal>` |
+| Constant       | Type                                                                           |
+| -------------- | ------------------------------------------------------------------------------ |
+| `UserIdSchema` | `ZodPipe<ZodCustom<Principal, Principal>, ZodTransform<Principal, Principal>>` |
 
 References:
 
@@ -1922,9 +1922,9 @@ References:
 
 #### :gear: ControllerCheckParamsSchema
 
-| Constant                      | Type                                                                                                                                                                                       |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ControllerCheckParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<CandidPrincipal, CandidPrincipal>]>; controllers: ZodArray<...>; }, $strip>` |
+| Constant                      | Type                                                                                                                                                                                                       |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ControllerCheckParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<ZodCustom<Principal, Principal>, ZodTransform<...>>]>; controllers: ZodArray<...>; }, $strip>` |
 
 References:
 
@@ -1946,9 +1946,9 @@ References:
 
 #### :gear: ListStoreParamsSchema
 
-| Constant                | Type                                                                                                                                                                              |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ListStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+| Constant                | Type                                                                                                                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; params: ZodObject<...>; }, $strict>` |
 
 References:
 
@@ -1958,9 +1958,9 @@ References:
 
 #### :gear: GetDocStoreParamsSchema
 
-| Constant                  | Type                                                                                                                                                                      |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GetDocStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; key: ZodString; }, $strict>` |
+| Constant                  | Type                                                                                                                                                                    |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GetDocStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; key: ZodString; }, $strict>` |
 
 References:
 
@@ -1970,9 +1970,9 @@ References:
 
 #### :gear: SetDocStoreParamsSchema
 
-| Constant                  | Type                                                                                                                                                                                           |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SetDocStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; key: ZodString; doc: ZodObject<...>; }, $strict>` |
+| Constant                  | Type                                                                                                                                                                                         |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SetDocStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; key: ZodString; doc: ZodObject<...>; }, $strict>` |
 
 References:
 
@@ -1982,9 +1982,9 @@ References:
 
 #### :gear: DeleteDocStoreParamsSchema
 
-| Constant                     | Type                                                                                                                                                                                           |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DeleteDocStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; key: ZodString; doc: ZodObject<...>; }, $strict>` |
+| Constant                     | Type                                                                                                                                                                                         |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DeleteDocStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; key: ZodString; doc: ZodObject<...>; }, $strict>` |
 
 References:
 
@@ -2006,9 +2006,9 @@ References:
 
 #### :gear: CountDocsStoreParamsSchema
 
-| Constant                     | Type                                                                                                                                                                              |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CountDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+| Constant                     | Type                                                                                                                                                                            |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CountDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; params: ZodObject<...>; }, $strict>` |
 
 References:
 
@@ -2018,9 +2018,9 @@ References:
 
 #### :gear: ListDocsStoreParamsSchema
 
-| Constant                    | Type                                                                                                                                                                              |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ListDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+| Constant                    | Type                                                                                                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; params: ZodObject<...>; }, $strict>` |
 
 References:
 
@@ -2042,9 +2042,9 @@ References:
 
 #### :gear: DeleteFilteredDocsStoreParamsSchema
 
-| Constant                              | Type                                                                                                                                                                              |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DeleteFilteredDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+| Constant                              | Type                                                                                                                                                                            |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DeleteFilteredDocsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; params: ZodObject<...>; }, $strict>` |
 
 References:
 
@@ -2066,9 +2066,9 @@ References:
 
 #### :gear: GetAssetStoreParamsSchema
 
-| Constant                    | Type                                                                                                                                                                            |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GetAssetStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; full_path: ZodString; }, $strict>` |
+| Constant                    | Type                                                                                                                                                                          |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GetAssetStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; full_path: ZodString; }, $strict>` |
 
 References:
 
@@ -2090,9 +2090,9 @@ References:
 
 #### :gear: CountAssetsStoreParamsSchema
 
-| Constant                       | Type                                                                                                                                                                              |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CountAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+| Constant                       | Type                                                                                                                                                                            |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CountAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; params: ZodObject<...>; }, $strict>` |
 
 References:
 
@@ -2126,9 +2126,9 @@ References:
 
 #### :gear: DeleteFilteredAssetsStoreParamsSchema
 
-| Constant                                | Type                                                                                                                                                                              |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DeleteFilteredAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+| Constant                                | Type                                                                                                                                                                            |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DeleteFilteredAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; params: ZodObject<...>; }, $strict>` |
 
 References:
 
@@ -2138,9 +2138,9 @@ References:
 
 #### :gear: DeleteAssetStoreParamsSchema
 
-| Constant                       | Type                                                                                                                                                                            |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `DeleteAssetStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; full_path: ZodString; }, $strict>` |
+| Constant                       | Type                                                                                                                                                                          |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DeleteAssetStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; full_path: ZodString; }, $strict>` |
 
 References:
 
@@ -2150,9 +2150,9 @@ References:
 
 #### :gear: SetAssetTokenStoreParamsSchema
 
-| Constant                         | Type                                                                                                                                                                                                     |
-| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SetAssetTokenStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; full_path: ZodString; token: ZodOptional<...>; }, $strict>` |
+| Constant                         | Type                                                                                                                                                                                                   |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `SetAssetTokenStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; full_path: ZodString; token: ZodOptional<...>; }, $strict>` |
 
 References:
 
@@ -2162,9 +2162,9 @@ References:
 
 #### :gear: ListAssetsStoreParamsSchema
 
-| Constant                      | Type                                                                                                                                                                              |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ListAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<...>]>; params: ZodObject<...>; }, $strict>` |
+| Constant                      | Type                                                                                                                                                                            |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ListAssetsStoreParamsSchema` | `ZodObject<{ collection: ZodString; caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<...>]>; params: ZodObject<...>; }, $strict>` |
 
 References:
 
@@ -2236,9 +2236,9 @@ References:
 
 #### :gear: CallParamsSchema
 
-| Constant           | Type                                                                                                                                                                                                                                    |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodCustom<CandidPrincipal, CandidPrincipal>]>; method: ZodString; args: ZodOptional<...>; result: ZodOptional<...>; }, $strip>` |
+| Constant           | Type                                                                                                                                                                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodCustom<Uint8Array<ArrayBufferLike>, Uint8Array<ArrayBufferLike>>, ZodPipe<ZodCustom<Principal, Principal>, ZodTransform<...>>]>; method: ZodString; args: ZodOptional<...>; result: ZodOptional<...>; }, $strip>` |
 
 References:
 
@@ -2898,7 +2898,7 @@ Represents a principal - i.e. an object instantiated with the class Principal.
 | ----------- | --------------------------------- |
 | `Principal` | `z.infer<typeof PrincipalSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L31)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L29)
 
 #### :gear: Timestamp
 

@@ -110,7 +110,7 @@ https://github.com/colinhacks/zod/issues/4143#issuecomment-3335735535
 | --------------- | --------------------------------------------------------------------------------------------------------------- |
 | `QueryFnSchema` | `<T extends z.ZodTypeAny>(querySchema: T) => ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L60)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L66)
 
 #### :gear: QueryFnOrObjectSchema
 
@@ -118,39 +118,39 @@ https://github.com/colinhacks/zod/issues/4143#issuecomment-3335735535
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `QueryFnOrObjectSchema` | `<T extends z.ZodTypeAny>(querySchema: T) => ZodUnion<readonly [T, ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>, $InferInnerFunctionType<...>>]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L68)
-
-#### :gear: defineQuery
-
-| Function      | Type                                                                                                                                                                                                                                                                                                      |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineQuery` | `{ <TArgs, TResult>(query: Query<TArgs, TResult>): QueryDefinition<TArgs, TResult>; <TArgs, TResult>(query: QueryFn<TArgs, TResult>): (env: Record<...>) => QueryDefinition<...>; <TArgs, TResult>(query: QueryFnOrObject<...>): QueryDefinition<...> or ((env: Record<...>) => QueryDefinition<...>); }` |
-
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L76)
 
 #### :gear: defineQuery
 
-| Function      | Type                                                                                                                                                                                                                                                                                                      |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineQuery` | `{ <TArgs, TResult>(query: Query<TArgs, TResult>): QueryDefinition<TArgs, TResult>; <TArgs, TResult>(query: QueryFn<TArgs, TResult>): (env: Record<...>) => QueryDefinition<...>; <TArgs, TResult>(query: QueryFnOrObject<...>): QueryDefinition<...> or ((env: Record<...>) => QueryDefinition<...>); }` |
+| Function      | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineQuery` | `{ <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(query: Query<TArgs, TResult>): QueryDefinition<TArgs, TResult>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(query: QueryFn<...>): (env: Record<...>) => QueryDefinition<...>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(qu...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L79)
-
-#### :gear: defineQuery
-
-| Function      | Type                                                                                                                                                                                                                                                                                                      |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineQuery` | `{ <TArgs, TResult>(query: Query<TArgs, TResult>): QueryDefinition<TArgs, TResult>; <TArgs, TResult>(query: QueryFn<TArgs, TResult>): (env: Record<...>) => QueryDefinition<...>; <TArgs, TResult>(query: QueryFnOrObject<...>): QueryDefinition<...> or ((env: Record<...>) => QueryDefinition<...>); }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L82)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L86)
 
 #### :gear: defineQuery
 
-| Function      | Type                                                                                                                                                                                                                                                                                                      |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineQuery` | `{ <TArgs, TResult>(query: Query<TArgs, TResult>): QueryDefinition<TArgs, TResult>; <TArgs, TResult>(query: QueryFn<TArgs, TResult>): (env: Record<...>) => QueryDefinition<...>; <TArgs, TResult>(query: QueryFnOrObject<...>): QueryDefinition<...> or ((env: Record<...>) => QueryDefinition<...>); }` |
+| Function      | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineQuery` | `{ <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(query: Query<TArgs, TResult>): QueryDefinition<TArgs, TResult>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(query: QueryFn<...>): (env: Record<...>) => QueryDefinition<...>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(qu...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L85)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L89)
+
+#### :gear: defineQuery
+
+| Function      | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineQuery` | `{ <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(query: Query<TArgs, TResult>): QueryDefinition<TArgs, TResult>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(query: QueryFn<...>): (env: Record<...>) => QueryDefinition<...>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(qu...` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L92)
+
+#### :gear: defineQuery
+
+| Function      | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineQuery` | `{ <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(query: Query<TArgs, TResult>): QueryDefinition<TArgs, TResult>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(query: QueryFn<...>): (env: Record<...>) => QueryDefinition<...>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(qu...` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L95)
 
 #### :gear: UpdateFnSchema
 
@@ -158,7 +158,7 @@ https://github.com/colinhacks/zod/issues/4143#issuecomment-3335735535
 | ---------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `UpdateFnSchema` | `<T extends z.ZodTypeAny>(updateSchema: T) => ZodFunction<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L60)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L66)
 
 #### :gear: UpdateFnOrObjectSchema
 
@@ -166,39 +166,39 @@ https://github.com/colinhacks/zod/issues/4143#issuecomment-3335735535
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `UpdateFnOrObjectSchema` | `<T extends z.ZodTypeAny>(updateSchema: T) => ZodUnion<readonly [T, ZodCustom<$InferInnerFunctionType<ZodTuple<[ZodRecord<ZodString, ZodString>], null>, T>, $InferInnerFunctionType<...>>]>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L68)
-
-#### :gear: defineUpdate
-
-| Function       | Type                                                                                                                                                                                                                                                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineUpdate` | `{ <TArgs, TResult>(update: Update<TArgs, TResult>): UpdateDefinition<TArgs, TResult>; <TArgs, TResult>(update: UpdateFn<TArgs, TResult>): (env: Record<...>) => UpdateDefinition<...>; <TArgs, TResult>(update: UpdateFnOrObject<...>): UpdateDefinition<...> or ((env: Record<...>) => UpdateDefinition<...>); }` |
-
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L76)
 
 #### :gear: defineUpdate
 
-| Function       | Type                                                                                                                                                                                                                                                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineUpdate` | `{ <TArgs, TResult>(update: Update<TArgs, TResult>): UpdateDefinition<TArgs, TResult>; <TArgs, TResult>(update: UpdateFn<TArgs, TResult>): (env: Record<...>) => UpdateDefinition<...>; <TArgs, TResult>(update: UpdateFnOrObject<...>): UpdateDefinition<...> or ((env: Record<...>) => UpdateDefinition<...>); }` |
+| Function       | Type                                                                                                                                                                                                                                                                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineUpdate` | `{ <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(update: Update<TArgs, TResult>): UpdateDefinition<TArgs, TResult>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(update: UpdateFn<...>): (env: Record<...>) => UpdateDefinition<...>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawSha...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L79)
-
-#### :gear: defineUpdate
-
-| Function       | Type                                                                                                                                                                                                                                                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineUpdate` | `{ <TArgs, TResult>(update: Update<TArgs, TResult>): UpdateDefinition<TArgs, TResult>; <TArgs, TResult>(update: UpdateFn<TArgs, TResult>): (env: Record<...>) => UpdateDefinition<...>; <TArgs, TResult>(update: UpdateFnOrObject<...>): UpdateDefinition<...> or ((env: Record<...>) => UpdateDefinition<...>); }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L82)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L86)
 
 #### :gear: defineUpdate
 
-| Function       | Type                                                                                                                                                                                                                                                                                                                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defineUpdate` | `{ <TArgs, TResult>(update: Update<TArgs, TResult>): UpdateDefinition<TArgs, TResult>; <TArgs, TResult>(update: UpdateFn<TArgs, TResult>): (env: Record<...>) => UpdateDefinition<...>; <TArgs, TResult>(update: UpdateFnOrObject<...>): UpdateDefinition<...> or ((env: Record<...>) => UpdateDefinition<...>); }` |
+| Function       | Type                                                                                                                                                                                                                                                                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineUpdate` | `{ <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(update: Update<TArgs, TResult>): UpdateDefinition<TArgs, TResult>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(update: UpdateFn<...>): (env: Record<...>) => UpdateDefinition<...>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawSha...` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L85)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L89)
+
+#### :gear: defineUpdate
+
+| Function       | Type                                                                                                                                                                                                                                                                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineUpdate` | `{ <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(update: Update<TArgs, TResult>): UpdateDefinition<TArgs, TResult>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(update: UpdateFn<...>): (env: Record<...>) => UpdateDefinition<...>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawSha...` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L92)
+
+#### :gear: defineUpdate
+
+| Function       | Type                                                                                                                                                                                                                                                                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `defineUpdate` | `{ <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(update: Update<TArgs, TResult>): UpdateDefinition<TArgs, TResult>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(update: UpdateFn<...>): (env: Record<...>) => UpdateDefinition<...>; <TArgs extends z.ZodRawShape, TResult extends z.ZodRawSha...` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L95)
 
 #### :gear: HookContextSchema
 
@@ -988,9 +988,9 @@ Not intended for direct use by developers.
 
 #### :gear: CustomFunctionWithArgsAndResultSchema
 
-| Constant                                | Type                                                                                                                                                                                                                                            |
-| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionWithArgsAndResultSchema` | `ZodObject<{ args: ZodCustom<ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>; result: ZodCustom<...>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>` |
+| Constant                                | Type                                                                                                                                                                                  |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionWithArgsAndResultSchema` | `ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
@@ -1000,9 +1000,9 @@ References:
 
 #### :gear: CustomFunctionWithArgsSchema
 
-| Constant                       | Type                                                                                                                                                                                                                    |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionWithArgsSchema` | `ZodObject<{ args: ZodCustom<ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>` |
+| Constant                       | Type                                                                                                                                                          |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionWithArgsSchema` | `ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
@@ -1012,9 +1012,9 @@ References:
 
 #### :gear: CustomFunctionWithResultSchema
 
-| Constant                         | Type                                                                                                                                                                                                                      |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionWithResultSchema` | `ZodObject<{ result: ZodCustom<ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>` |
+| Constant                         | Type                                                                                                                                                            |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionWithResultSchema` | `ZodObject<{ result: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
@@ -1036,9 +1036,9 @@ References:
 
 #### :gear: CustomFunctionSchema
 
-| Constant               | Type                                                                                                                                                                                                                                                                                                                 |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionSchema` | `ZodUnion<readonly [ZodObject<{ args: ZodCustom<ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>; result: ZodCustom<...>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
+| Constant               | Type                                                                                                                                                                                                                                                       |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionSchema` | `ZodUnion<readonly [ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
 
 References:
 
@@ -1048,9 +1048,9 @@ References:
 
 #### :gear: QuerySchema
 
-| Constant      | Type                                                                                                                                                                                                                                                                                                                               |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `QuerySchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_query">; args: ZodCustom<ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>; result: ZodCustom<...>; handler: ZodCustom<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodO...` |
+| Constant      | Type                                                                                                                                                                                                                                                                              |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `QuerySchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_query">; args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
 
 References:
 
@@ -1060,9 +1060,9 @@ References:
 
 #### :gear: UpdateSchema
 
-| Constant       | Type                                                                                                                                                                                                                                                                                                                               |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UpdateSchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_update">; args: ZodCustom<ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>; result: ZodCustom<...>; handler: ZodCustom<...>; }, $strict>, ZodObject<...>, ZodObject<...>, Zod...` |
+| Constant       | Type                                                                                                                                                                                                                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UpdateSchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_update">; args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
 
 References:
 
@@ -2287,11 +2287,11 @@ References:
 
 A serverless function with both input arguments and an output result.
 
-| Property  | Type                                                             | Description                                                                                         |
-| --------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `args`    | `ZodType<TArgs, unknown, $ZodTypeInternals<TArgs, unknown>>`     | A Zod schema describing the input arguments.                                                        |
-| `result`  | `ZodType<TResult, unknown, $ZodTypeInternals<TResult, unknown>>` | A Zod schema describing the output result.                                                          |
-| `handler` | `(args: TArgs) => TResult or Promise<TResult>`                   | The function handler. Can be synchronous or asynchronous. param: args - The input arguments.returns |
+| Property  | Type                                                                                                                   | Description                                                                                         |
+| --------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `args`    | `ZodObject<TArgs, $strip>`                                                                                             | A Zod schema describing the input arguments.                                                        |
+| `result`  | `ZodObject<TResult, $strip>`                                                                                           | A Zod schema describing the output result.                                                          |
+| `handler` | `(args: $InferObjectOutput<TArgs, {}>) => $InferObjectOutput<TResult, {}> or Promise<$InferObjectOutput<TResult, {}>>` | The function handler. Can be synchronous or asynchronous. param: args - The input arguments.returns |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L97)
 
@@ -2299,23 +2299,23 @@ A serverless function with both input arguments and an output result.
 
 A serverless function with input arguments but no output result.
 
-| Property  | Type                                                         | Description                                                                                         |
-| --------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
-| `args`    | `ZodType<TArgs, unknown, $ZodTypeInternals<TArgs, unknown>>` | A Zod schema describing the input arguments.                                                        |
-| `handler` | `(args: TArgs) => void or Promise<void>`                     | The function handler. Can be synchronous or asynchronous. param: args - The input arguments.returns |
+| Property  | Type                                                             | Description                                                                                         |
+| --------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `args`    | `ZodObject<TArgs, $strip>`                                       | A Zod schema describing the input arguments.                                                        |
+| `handler` | `(args: $InferObjectOutput<TArgs, {}>) => void or Promise<void>` | The function handler. Can be synchronous or asynchronous. param: args - The input arguments.returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L122)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L127)
 
 #### :gear: CustomFunctionWithResult
 
 A serverless function with an output result but no input arguments.
 
-| Property  | Type                                                             | Description                                                       |
-| --------- | ---------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `result`  | `ZodType<TResult, unknown, $ZodTypeInternals<TResult, unknown>>` | A Zod schema describing the output result.                        |
-| `handler` | `() => TResult or Promise<TResult>`                              | The function handler. Can be synchronous or asynchronous. returns |
+| Property  | Type                                                                                | Description                                                       |
+| --------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `result`  | `ZodObject<TResult, $strip>`                                                        | A Zod schema describing the output result.                        |
+| `handler` | `() => $InferObjectOutput<TResult, {}> or Promise<$InferObjectOutput<TResult, {}>>` | The function handler. Can be synchronous or asynchronous. returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L142)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L147)
 
 #### :gear: CustomFunctionWithoutArgsAndResult
 
@@ -2325,7 +2325,7 @@ A serverless function with no input arguments and no output result.
 | --------- | ----------------------------- | ----------------------------------------------------------------- |
 | `handler` | `() => void or Promise<void>` | The function handler. Can be synchronous or asynchronous. returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L159)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L166)
 
 #### :gear: Collections
 
@@ -2794,7 +2794,7 @@ of optional input arguments and output result.
 | ---------------- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `CustomFunction` | `    | CustomFunctionWithArgsAndResult<TArgs, TResult> or CustomFunctionWithArgs<TArgs> or CustomFunctionWithResult<TResult> or CustomFunctionWithoutArgsAndResult` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L175)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L182)
 
 #### :gear: Query
 
@@ -2816,31 +2816,31 @@ Queries are read-only functions that do not modify state.
 | ----------------- | ---------------------------------------------------------------------- |
 | `QueryDefinition` | `Query<TArgs, TResult> and { type: typeof JUNO_FUNCTION_TYPE.QUERY; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L56)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L59)
 
 #### :gear: QueryFn
 
 A factory function that receives the satellite environment and returns a query definition.
 
-| Type      | Type                                           |
-| --------- | ---------------------------------------------- |
-| `QueryFn` | `(env: SatelliteEnv) => Query<TArgs, TResult>` |
+| Type      | Type                                             |
+| --------- | ------------------------------------------------ |
+| `QueryFn` | `( env: SatelliteEnv ) => Query<TArgs, TResult>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L66)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L72)
 
 #### :gear: QueryFnOrObject
 
 A query definition or a factory function that returns one.
 
-| Type              | Type                                               |
-| ----------------- | -------------------------------------------------- |
-| `QueryFnOrObject` | `Query<TArgs, TResult> or QueryFn<TArgs, TResult>` |
+| Type              | Type |
+| ----------------- | ---- | ------------------------------------------------- |
+| `QueryFnOrObject` | `    | Query<TArgs, TResult> or QueryFn<TArgs, TResult>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L74)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/query.ts#L82)
 
 #### :gear: Update
 
-The input shape for defining a update serverless function.
+The input shape for defining an update serverless function.
 Does not include `type`, which is injected by `defineUpdate`.
 
 | Type     | Type |
@@ -2858,27 +2858,27 @@ Queries are read-only functions that do not modify state.
 | ------------------ | ------------------------------------------------------------------------ |
 | `UpdateDefinition` | `Update<TArgs, TResult> and { type: typeof JUNO_FUNCTION_TYPE.UPDATE; }` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L56)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L59)
 
 #### :gear: UpdateFn
 
-A factory function that receives the satellite environment and returns a update definition.
+A factory function that receives the satellite environment and returns an update definition.
 
-| Type       | Type                                            |
-| ---------- | ----------------------------------------------- |
-| `UpdateFn` | `(env: SatelliteEnv) => Update<TArgs, TResult>` |
+| Type       | Type                                              |
+| ---------- | ------------------------------------------------- |
+| `UpdateFn` | `( env: SatelliteEnv ) => Update<TArgs, TResult>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L66)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L72)
 
 #### :gear: UpdateFnOrObject
 
-An update definition or a factory function that returns one.
+A update definition or a factory function that returns one.
 
-| Type               | Type                                                 |
-| ------------------ | ---------------------------------------------------- |
-| `UpdateFnOrObject` | `Update<TArgs, TResult> or UpdateFn<TArgs, TResult>` |
+| Type               | Type |
+| ------------------ | ---- | --------------------------------------------------- |
+| `UpdateFnOrObject` | `    | Update<TArgs, TResult> or UpdateFn<TArgs, TResult>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L74)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L82)
 
 #### :gear: RawPrincipal
 

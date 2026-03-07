@@ -9,6 +9,6 @@ describe('zod.utils', () => {
     });
 
     // Error: implement() must be called with a function
-    expect(QuerySchema.safeParse(onSetDoc)).not.toThrowError();
+    expect(() => QuerySchema.safeParse(onSetDoc)).not.toThrowError();
   });
 });

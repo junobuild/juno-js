@@ -1,7 +1,7 @@
 import * as z from 'zod';
 import {type SatelliteEnv, SatelliteEnvSchema} from '../schemas/satellite.env';
 import {createFunctionSchema} from '../utils/zod.utils';
-import {__JUNO_FUNCTION_TYPE} from './constants';
+import {JUNO_FUNCTION_TYPE} from './constants';
 import {
   type CustomFunctionWithArgs,
   type CustomFunctionWithArgsAndResult,
@@ -14,7 +14,7 @@ import {
 } from './schemas/function';
 
 const UpdateBaseSchema = z.strictObject({
-  type: z.literal(__JUNO_FUNCTION_TYPE.UPDATE)
+  type: z.literal(JUNO_FUNCTION_TYPE.UPDATE)
 });
 
 /**
@@ -40,10 +40,13 @@ export const UpdateSchema = z.union([
 ]);
 
 /**
- * The input shape for defining a update serverless function.
+ * The input shape for defining an update serverless function.
  * Does not include `type`, which is injected by `defineUpdate`.
  */
-export type Update<TArgs = unknown, TResult = unknown> =
+export type Update<
+  TArgs extends z.ZodRawShape = z.ZodRawShape,
+  TResult extends z.ZodRawShape = z.ZodRawShape
+> =
   | Omit<CustomFunctionWithArgsAndResult<TArgs, TResult>, 'type'>
   | Omit<CustomFunctionWithArgs<TArgs>, 'type'>
   | Omit<CustomFunctionWithResult<TResult>, 'type'>
@@ -53,47 +56,54 @@ export type Update<TArgs = unknown, TResult = unknown> =
  * A update function definition with `type` injected by `defineUpdate`.
  * Queries are read-only functions that do not modify state.
  */
-export type UpdateDefinition<TArgs = unknown, TResult = unknown> = Update<TArgs, TResult> & {
-  type: typeof __JUNO_FUNCTION_TYPE.UPDATE;
+export type UpdateDefinition<
+  TArgs extends z.ZodRawShape = z.ZodRawShape,
+  TResult extends z.ZodRawShape = z.ZodRawShape
+> = Update<TArgs, TResult> & {
+  type: typeof JUNO_FUNCTION_TYPE.UPDATE;
 };
 
 export const UpdateFnSchema = <T extends z.ZodTypeAny>(updateSchema: T) =>
   z.function({input: z.tuple([SatelliteEnvSchema]), output: updateSchema});
 
 /**
- * A factory function that receives the satellite environment and returns a update definition.
+ * A factory function that receives the satellite environment and returns an update definition.
  */
-export type UpdateFn<TArgs, TResult> = (env: SatelliteEnv) => Update<TArgs, TResult>;
+export type UpdateFn<TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape> = (
+  env: SatelliteEnv
+) => Update<TArgs, TResult>;
 
 export const UpdateFnOrObjectSchema = <T extends z.ZodTypeAny>(updateSchema: T) =>
   z.union([updateSchema, createFunctionSchema(UpdateFnSchema(updateSchema))]);
 
 /**
- * An update definition or a factory function that returns one.
+ * A update definition or a factory function that returns one.
  */
-export type UpdateFnOrObject<TArgs, TResult> = Update<TArgs, TResult> | UpdateFn<TArgs, TResult>;
+export type UpdateFnOrObject<TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape> =
+  | Update<TArgs, TResult>
+  | UpdateFn<TArgs, TResult>;
 
-export function defineUpdate<TArgs, TResult>(
+export function defineUpdate<TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(
   update: Update<TArgs, TResult>
 ): UpdateDefinition<TArgs, TResult>;
-export function defineUpdate<TArgs, TResult>(
+export function defineUpdate<TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(
   update: UpdateFn<TArgs, TResult>
 ): (env: SatelliteEnv) => UpdateDefinition<TArgs, TResult>;
-export function defineUpdate<TArgs, TResult>(
+export function defineUpdate<TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(
   update: UpdateFnOrObject<TArgs, TResult>
 ): UpdateDefinition<TArgs, TResult> | ((env: SatelliteEnv) => UpdateDefinition<TArgs, TResult>);
-export function defineUpdate<TArgs, TResult>(
+export function defineUpdate<TArgs extends z.ZodRawShape, TResult extends z.ZodRawShape>(
   update: Update<TArgs, TResult> | UpdateFn<TArgs, TResult>
 ): UpdateDefinition<TArgs, TResult> | ((env: SatelliteEnv) => UpdateDefinition<TArgs, TResult>) {
   if (typeof update === 'function') {
     return (env: SatelliteEnv) => {
-      const result = {...update(env), type: __JUNO_FUNCTION_TYPE.UPDATE};
+      const result = {...update(env), type: JUNO_FUNCTION_TYPE.UPDATE};
       UpdateSchema.parse(result);
       return result;
     };
   }
 
-  const result = {...update, type: __JUNO_FUNCTION_TYPE.UPDATE};
+  const result = {...update, type: JUNO_FUNCTION_TYPE.UPDATE};
   UpdateSchema.parse(result);
   return result;
 }

@@ -1,15 +1,15 @@
 import * as z from 'zod';
 import {createFunctionSchema} from '../../utils/zod.utils';
-import {__JUNO_FUNCTION_TYPE} from '../constants';
+import {JUNO_FUNCTION_TYPE} from '../constants';
 
 /**
  * The type of a serverless function. Not exposed to the developer. It allows the CLI
  * to discover the functions when parsing the code.
  */
-export type CustomFunctionType = (typeof __JUNO_FUNCTION_TYPE)[keyof typeof __JUNO_FUNCTION_TYPE];
+export type CustomFunctionType = (typeof JUNO_FUNCTION_TYPE)[keyof typeof JUNO_FUNCTION_TYPE];
 
 const CustomFunctionBaseSchema = z.strictObject({
-  type: z.enum([__JUNO_FUNCTION_TYPE.QUERY, __JUNO_FUNCTION_TYPE.UPDATE])
+  type: z.enum([JUNO_FUNCTION_TYPE.QUERY, JUNO_FUNCTION_TYPE.UPDATE])
 });
 
 /**
@@ -17,8 +17,8 @@ const CustomFunctionBaseSchema = z.strictObject({
  */
 export const CustomFunctionWithArgsAndResultSchema = z.strictObject({
   ...CustomFunctionBaseSchema.shape,
-  args: z.instanceof(z.ZodType),
-  result: z.instanceof(z.ZodType),
+  args: z.instanceof(z.ZodObject),
+  result: z.instanceof(z.ZodObject),
   handler: createFunctionSchema(
     z.function({
       input: z.tuple([z.unknown()]),
@@ -32,7 +32,7 @@ export const CustomFunctionWithArgsAndResultSchema = z.strictObject({
  */
 export const CustomFunctionWithArgsSchema = z.strictObject({
   ...CustomFunctionBaseSchema.shape,
-  args: z.instanceof(z.ZodType),
+  args: z.instanceof(z.ZodObject),
   handler: createFunctionSchema(
     z.function({
       input: z.tuple([z.unknown()]),
@@ -46,7 +46,7 @@ export const CustomFunctionWithArgsSchema = z.strictObject({
  */
 export const CustomFunctionWithResultSchema = z.strictObject({
   ...CustomFunctionBaseSchema.shape,
-  result: z.instanceof(z.ZodType),
+  result: z.instanceof(z.ZodObject),
   handler: createFunctionSchema(
     z.function({
       input: z.tuple([]),
@@ -94,16 +94,19 @@ interface CustomFunctionBase {
  * @template TArgs - The type of the input arguments.
  * @template TResult - The type of the output result.
  */
-export interface CustomFunctionWithArgsAndResult<TArgs, TResult> extends CustomFunctionBase {
+export interface CustomFunctionWithArgsAndResult<
+  TArgs extends z.ZodRawShape,
+  TResult extends z.ZodRawShape
+> extends CustomFunctionBase {
   /**
    * A Zod schema describing the input arguments.
    */
-  args: z.ZodType<TArgs>;
+  args: z.ZodObject<TArgs>;
 
   /**
    * A Zod schema describing the output result.
    */
-  result: z.ZodType<TResult>;
+  result: z.ZodObject<TResult>;
 
   /**
    * The function handler. Can be synchronous or asynchronous.
@@ -111,7 +114,9 @@ export interface CustomFunctionWithArgsAndResult<TArgs, TResult> extends CustomF
    * @param {TArgs} args - The input arguments.
    * @returns {TResult | Promise<TResult>}
    */
-  handler: (args: TArgs) => TResult | Promise<TResult>;
+  handler: (
+    args: z.infer<z.ZodObject<TArgs>>
+  ) => z.infer<z.ZodObject<TResult>> | Promise<z.infer<z.ZodObject<TResult>>>;
 }
 
 /**
@@ -119,11 +124,11 @@ export interface CustomFunctionWithArgsAndResult<TArgs, TResult> extends CustomF
  *
  * @template TArgs - The type of the input arguments.
  */
-export interface CustomFunctionWithArgs<TArgs> extends CustomFunctionBase {
+export interface CustomFunctionWithArgs<TArgs extends z.ZodRawShape> extends CustomFunctionBase {
   /**
    * A Zod schema describing the input arguments.
    */
-  args: z.ZodType<TArgs>;
+  args: z.ZodObject<TArgs>;
 
   /**
    * The function handler. Can be synchronous or asynchronous.
@@ -131,7 +136,7 @@ export interface CustomFunctionWithArgs<TArgs> extends CustomFunctionBase {
    * @param {TArgs} args - The input arguments.
    * @returns {void | Promise<void>}
    */
-  handler: (args: TArgs) => void | Promise<void>;
+  handler: (args: z.infer<z.ZodObject<TArgs>>) => void | Promise<void>;
 }
 
 /**
@@ -139,18 +144,20 @@ export interface CustomFunctionWithArgs<TArgs> extends CustomFunctionBase {
  *
  * @template TResult - The type of the output result.
  */
-export interface CustomFunctionWithResult<TResult> extends CustomFunctionBase {
+export interface CustomFunctionWithResult<
+  TResult extends z.ZodRawShape
+> extends CustomFunctionBase {
   /**
    * A Zod schema describing the output result.
    */
-  result: z.ZodType<TResult>;
+  result: z.ZodObject<TResult>;
 
   /**
    * The function handler. Can be synchronous or asynchronous.
    *
    * @returns {TResult | Promise<TResult>}
    */
-  handler: () => TResult | Promise<TResult>;
+  handler: () => z.infer<z.ZodObject<TResult>> | Promise<z.infer<z.ZodObject<TResult>>>;
 }
 
 /**
@@ -172,7 +179,10 @@ export interface CustomFunctionWithoutArgsAndResult extends CustomFunctionBase {
  * @template TArgs - The type of the input arguments.
  * @template TResult - The type of the output result.
  */
-export type CustomFunction<TArgs = unknown, TResult = unknown> =
+export type CustomFunction<
+  TArgs extends z.ZodRawShape = z.ZodRawShape,
+  TResult extends z.ZodRawShape = z.ZodRawShape
+> =
   | CustomFunctionWithArgsAndResult<TArgs, TResult>
   | CustomFunctionWithArgs<TArgs>
   | CustomFunctionWithResult<TResult>

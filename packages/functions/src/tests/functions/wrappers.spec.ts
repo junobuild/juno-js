@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {__JUNO_FUNCTION_TYPE} from '../../functions/constants';
+import {JUNO_FUNCTION_TYPE} from '../../functions/constants';
 import '../../functions/wrappers';
 import {RawData} from '../../schemas/db';
 import {decodeDocData, encodeDocData} from '../../sdk/serializer.sdk';
@@ -14,7 +14,7 @@ global.__juno_satellite_datastore_raw_data_from_text = vi.fn(
 
 describe('wrappers', () => {
   const mockQuery = {
-    type: __JUNO_FUNCTION_TYPE.QUERY
+    type: JUNO_FUNCTION_TYPE.QUERY
   } as const;
 
   describe('__juno_satellite_fn_invoke_sync', () => {
@@ -79,7 +79,7 @@ describe('wrappers', () => {
       const handler = vi.fn();
 
       const config = {
-        type: __JUNO_FUNCTION_TYPE.QUERY,
+        type: JUNO_FUNCTION_TYPE.QUERY,
         args: argsSchema,
         handler
       };
@@ -95,7 +95,7 @@ describe('wrappers', () => {
       const handler = vi.fn().mockReturnValue(data);
 
       const config = {
-        type: __JUNO_FUNCTION_TYPE.QUERY,
+        type: JUNO_FUNCTION_TYPE.QUERY,
         result: resultSchema,
         handler
       };

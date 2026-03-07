@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {PrincipalSchema, RawPrincipal, RawPrincipalSchema} from './candid';
+import {type RawPrincipal, PrincipalSchema, RawPrincipalSchema} from './candid';
 
 /**
  * @see Timestamp

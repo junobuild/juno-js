@@ -37,7 +37,7 @@ describe('optional primitives', () => {
 // ─── Principal ────────────────────────────────────────────────────────────────
 
 describe('principal', () => {
-  rust('myFunction', PrincipalSchema, 'pub type MyFunctionArgs = candid::Principal;');
+  rust('myFunction', PrincipalSchema, 'pub type MyFunctionArgs = Principal;');
 });
 
 // ─── Enums ────────────────────────────────────────────────────────────────────

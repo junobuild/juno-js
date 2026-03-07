@@ -180,7 +180,7 @@ describe('parseFunctions', () => {
       expect(result).toContain('fn welcome(args: WelcomeArgs) -> WelcomeResult');
       expect(result).toContain('execute_sync_function("welcome", Some(args))');
       expect(result).toContain(`${DERIVES}\npub struct WelcomeArgs {\n    pub value: String,\n}`);
-      expect(result).toContain('pub caller: candid::Principal');
+      expect(result).toContain('pub caller: Principal');
     });
 
     it('should generate an async update with args and result', () => {
@@ -205,7 +205,7 @@ describe('parseFunctions', () => {
       expect(result).toContain('async fn welcome(args: WelcomeArgs) -> WelcomeResult');
       expect(result).toContain('execute_async_function("welcome", Some(args))');
       expect(result).toContain(`${DERIVES}\npub struct WelcomeArgs {\n    pub value: String,\n}`);
-      expect(result).toContain('pub caller: candid::Principal');
+      expect(result).toContain('pub caller: Principal');
     });
 
     it('should generate a sync update with result only', () => {

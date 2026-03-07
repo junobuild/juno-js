@@ -47,7 +47,7 @@ const schemaToRustType = ({
       return primitive({fieldType: 'u64'});
 
     case 'principal':
-      return primitive({fieldType: 'candid::Principal'});
+      return primitive({fieldType: 'Principal'});
 
     case 'opt': {
       const inner = schemaToRustType({schema: schema.inner, structName});

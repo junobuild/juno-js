@@ -54,6 +54,7 @@
     "@babel/types": "7.28.4",
     "@dfinity/utils": "^4.1",
     "@dfinity/zod-schemas": "^3.1.0",
+    "@junobuild/functions": "^0.5.6",
     "zod": "^4"
   }
 }

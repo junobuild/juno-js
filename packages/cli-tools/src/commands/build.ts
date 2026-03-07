@@ -27,16 +27,13 @@ import {rm} from 'node:fs/promises';
  */
 export const buildFunctions = async ({
   infile,
-  outfile,
   banner
 }: {
   infile: string;
-  outfile: string;
   banner?: {[type: string]: string};
-}): Promise<Omit<EsbuildResult, 'outputFiles'>> => {
-  const {outputFiles: _, ...rest} = await esbuild({
+}): Promise<EsbuildResult> =>
+  await esbuild({
     infile,
-    outfile,
     platform: 'browser',
     treeShaking: true,
     define: {
@@ -44,9 +41,6 @@ export const buildFunctions = async ({
     },
     banner
   });
-
-  return rest;
-};
 
 /**
  * Builds a script using `esbuild` for `juno run`.

@@ -49,6 +49,7 @@
     "@dfinity/utils": "^4.1",
     "@junobuild/cdn": "^2.3",
     "@junobuild/config": "^2.7",
+    "@junobuild/did-tools": "^0.3.10",
     "@junobuild/storage": "^2.3",
     "esbuild": "^0.27.0",
     "ora": "^9"

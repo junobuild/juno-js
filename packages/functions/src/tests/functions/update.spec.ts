@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {__JUNO_FUNCTION_TYPE} from '../../functions/constants';
+import {JUNO_FUNCTION_TYPE} from '../../functions/constants';
 import {defineUpdate, UpdateSchema} from '../../functions/update';
 
 describe('update', () => {
@@ -7,7 +7,7 @@ describe('update', () => {
     it('should accept a valid update with no args and no result', () => {
       expect(() =>
         UpdateSchema.parse({
-          type: __JUNO_FUNCTION_TYPE.UPDATE,
+          type: JUNO_FUNCTION_TYPE.UPDATE,
           handler: () => {}
         })
       ).not.toThrow();
@@ -16,7 +16,7 @@ describe('update', () => {
     it('should accept a valid update with args only', () => {
       expect(() =>
         UpdateSchema.parse({
-          type: __JUNO_FUNCTION_TYPE.UPDATE,
+          type: JUNO_FUNCTION_TYPE.UPDATE,
           args: z.object({name: z.string()}),
           handler: () => {}
         })
@@ -26,7 +26,7 @@ describe('update', () => {
     it('should accept a valid update with result only', () => {
       expect(() =>
         UpdateSchema.parse({
-          type: __JUNO_FUNCTION_TYPE.UPDATE,
+          type: JUNO_FUNCTION_TYPE.UPDATE,
           result: z.string(),
           handler: () => 'result'
         })
@@ -36,7 +36,7 @@ describe('update', () => {
     it('should accept a valid update with args and result', () => {
       expect(() =>
         UpdateSchema.parse({
-          type: __JUNO_FUNCTION_TYPE.UPDATE,
+          type: JUNO_FUNCTION_TYPE.UPDATE,
           args: z.object({name: z.string()}),
           result: z.string(),
           handler: (args: unknown) => args
@@ -47,7 +47,7 @@ describe('update', () => {
     it('should reject query type', () => {
       expect(() =>
         UpdateSchema.parse({
-          type: __JUNO_FUNCTION_TYPE.QUERY,
+          type: JUNO_FUNCTION_TYPE.QUERY,
           handler: () => {}
         })
       ).toThrow();
@@ -61,7 +61,7 @@ describe('update', () => {
           handler: () => {}
         });
 
-        expect(update.type).toBe(__JUNO_FUNCTION_TYPE.UPDATE);
+        expect(update.type).toBe(JUNO_FUNCTION_TYPE.UPDATE);
       });
 
       it('should inject update type with args only', () => {
@@ -70,7 +70,7 @@ describe('update', () => {
           handler: (_args: {name: string}) => {}
         });
 
-        expect(update.type).toBe(__JUNO_FUNCTION_TYPE.UPDATE);
+        expect(update.type).toBe(JUNO_FUNCTION_TYPE.UPDATE);
       });
 
       it('should inject update type with result only', () => {
@@ -79,7 +79,7 @@ describe('update', () => {
           handler: () => 'result'
         });
 
-        expect(update.type).toBe(__JUNO_FUNCTION_TYPE.UPDATE);
+        expect(update.type).toBe(JUNO_FUNCTION_TYPE.UPDATE);
       });
 
       it('should inject update type with args and result', () => {
@@ -92,7 +92,7 @@ describe('update', () => {
           handler: (input: {name: string}) => input.name
         });
 
-        expect(update.type).toBe(__JUNO_FUNCTION_TYPE.UPDATE);
+        expect(update.type).toBe(JUNO_FUNCTION_TYPE.UPDATE);
       });
 
       it('should preserve args schema', () => {
@@ -131,7 +131,7 @@ describe('update', () => {
           handler: async () => 'result'
         });
 
-        expect(update.type).toBe(__JUNO_FUNCTION_TYPE.UPDATE);
+        expect(update.type).toBe(JUNO_FUNCTION_TYPE.UPDATE);
       });
     });
 
@@ -143,7 +143,7 @@ describe('update', () => {
 
         const update = fn({});
 
-        expect(update.type).toBe(__JUNO_FUNCTION_TYPE.UPDATE);
+        expect(update.type).toBe(JUNO_FUNCTION_TYPE.UPDATE);
       });
 
       it('should preserve args and result when called with env', () => {

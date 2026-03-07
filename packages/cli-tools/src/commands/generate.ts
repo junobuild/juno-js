@@ -158,6 +158,11 @@ const writeDevFunctions = async ({
       [[], []]
     );
 
+    // No custom functions to generate
+    if (queries.length === 0 && updates.length === 0) {
+      return;
+    }
+
     console.log('Queries ->', queries.length);
     console.log('Updates ->', updates.length);
   } finally {

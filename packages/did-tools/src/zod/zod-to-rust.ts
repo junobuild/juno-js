@@ -1,8 +1,7 @@
 import type {z} from 'zod';
+import {capitalize} from '../utils/string.utils';
 import {type SputnikSchemaResult, jsonToSputnikSchema} from './_converters';
 import type {SputnikSchema} from './_types';
-
-const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);
 
 const DERIVES = '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]';
 

@@ -19,7 +19,10 @@ import * as z from 'zod';
  * in — no runtime wrapper, no sync/async mismatch.
  *
  * Reference:
- * https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912*
+ * https://github.com/colinhacks/zod/issues/4143#issuecomment-2845134912
+ *
+ * Note: We need the function for this library, see following comment
+ * https://github.com/colinhacks/zod/issues/4143#issuecomment-3335735535
  */
 export const createFunctionSchema = <T extends z.ZodFunction>(schema: T) =>
   z.custom<Parameters<T['implement']>[0]>((fn) =>

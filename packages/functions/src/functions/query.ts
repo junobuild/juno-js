@@ -66,7 +66,7 @@ export const QueryFnSchema = <T extends z.ZodTypeAny>(querySchema: T) =>
 export type QueryFn<TArgs, TResult> = (env: SatelliteEnv) => Query<TArgs, TResult>;
 
 export const QueryFnOrObjectSchema = <T extends z.ZodTypeAny>(querySchema: T) =>
-  z.union([querySchema, QueryFnSchema(querySchema)]);
+  z.union([querySchema, createFunctionSchema(QueryFnSchema(querySchema))]);
 
 /**
  * A query definition or a factory function that returns one.

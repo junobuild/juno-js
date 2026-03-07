@@ -1,6 +1,7 @@
 import * as z from 'zod';
-import {__JUNO_FUNCTION_TYPE} from '../../functions/constants';
 import {defineQuery, QuerySchema} from '../../functions/query';
+
+import {__JUNO_FUNCTION_TYPE} from '../../functions/constants';
 
 describe('query', () => {
   describe('QuerySchema', () => {

@@ -27,8 +27,8 @@ describe('update', () => {
       expect(() =>
         UpdateSchema.parse({
           type: JUNO_FUNCTION_TYPE.UPDATE,
-          result: z.string(),
-          handler: () => 'result'
+          result: z.object({value: z.string()}),
+          handler: () => ({value: 'result'})
         })
       ).not.toThrow();
     });
@@ -38,7 +38,7 @@ describe('update', () => {
         UpdateSchema.parse({
           type: JUNO_FUNCTION_TYPE.UPDATE,
           args: z.object({name: z.string()}),
-          result: z.string(),
+          result: z.object({value: z.string()}),
           handler: (args: unknown) => args
         })
       ).not.toThrow();
@@ -75,8 +75,8 @@ describe('update', () => {
 
       it('should inject update type with result only', () => {
         const update = defineUpdate({
-          result: z.string(),
-          handler: () => 'result'
+          result: z.object({value: z.string()}),
+          handler: () => ({value: 'result'})
         });
 
         expect(update.type).toBe(JUNO_FUNCTION_TYPE.UPDATE);
@@ -84,12 +84,12 @@ describe('update', () => {
 
       it('should inject update type with args and result', () => {
         const args = z.object({name: z.string()});
-        const result = z.string();
+        const result = z.object({value: z.string()});
 
         const update = defineUpdate({
           args,
           result,
-          handler: (input: {name: string}) => input.name
+          handler: (input: {name: string}) => ({value: input.name})
         });
 
         expect(update.type).toBe(JUNO_FUNCTION_TYPE.UPDATE);
@@ -107,11 +107,11 @@ describe('update', () => {
       });
 
       it('should preserve result schema', () => {
-        const result = z.string();
+        const result = z.object({value: z.string()});
 
         const update = defineUpdate({
           result,
-          handler: () => 'result'
+          handler: () => ({value: 'result'})
         });
 
         expect('result' in update && update.result).toBe(result);
@@ -127,8 +127,8 @@ describe('update', () => {
 
       it('should accept async handler', () => {
         const update = defineUpdate({
-          result: z.string(),
-          handler: async () => 'result'
+          result: z.object({value: z.string()}),
+          handler: async () => ({value: 'result'})
         });
 
         expect(update.type).toBe(JUNO_FUNCTION_TYPE.UPDATE);
@@ -148,12 +148,12 @@ describe('update', () => {
 
       it('should preserve args and result when called with env', () => {
         const args = z.object({name: z.string()});
-        const result = z.string();
+        const result = z.object({value: z.string()});
 
         const fn = defineUpdate((_env) => ({
           args,
           result,
-          handler: (input: {name: string}) => input.name
+          handler: (input: {name: string}) => ({value: input.name})
         }));
 
         const update = fn({});

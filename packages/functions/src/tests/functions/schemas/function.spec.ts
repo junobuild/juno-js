@@ -66,8 +66,8 @@ describe('function', () => {
         expect(() =>
           CustomFunctionSchema.parse({
             type: JUNO_FUNCTION_TYPE.QUERY,
-            result: z.string(),
-            handler: () => 'result'
+            result: z.object({value: z.string()}),
+            handler: () => ({value: 'result'})
           })
         ).not.toThrow();
       });
@@ -76,8 +76,8 @@ describe('function', () => {
         expect(() =>
           CustomFunctionSchema.parse({
             type: JUNO_FUNCTION_TYPE.QUERY,
-            result: z.string(),
-            handler: async () => 'result'
+            result: z.object({value: z.string()}),
+            handler: async () => ({value: 'result'})
           })
         ).not.toThrow();
       });
@@ -87,7 +87,7 @@ describe('function', () => {
           CustomFunctionSchema.parse({
             type: JUNO_FUNCTION_TYPE.QUERY,
             args: z.object({name: z.string()}),
-            result: z.string(),
+            result: z.object({value: z.string()}),
             handler: (args: unknown) => args
           })
         ).not.toThrow();
@@ -138,17 +138,17 @@ describe('function', () => {
         expect(() =>
           CustomFunctionSchema.parse({
             type: JUNO_FUNCTION_TYPE.QUERY,
-            result: z.string(),
+            result: z.object({value: z.string()}),
             handler: () => {}
           })
         ).not.toThrow();
       });
 
-      it('should reject a non-zod value as result', () => {
+      it('should reject a non-object zod schema as result', () => {
         expect(() =>
           CustomFunctionSchema.parse({
             type: JUNO_FUNCTION_TYPE.QUERY,
-            result: 'string',
+            result: z.string(),
             handler: () => {}
           })
         ).toThrow();

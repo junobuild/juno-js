@@ -1,5 +1,5 @@
 import {ZodSchemaId} from '@dfinity/zod-schemas';
-import {type z, ZodNullable} from 'zod';
+import * as z from 'zod';
 import type {JSONSchema, JSONSchemaOutput, SputnikSchema} from './_types';
 
 export interface ConvertedSputnikSchema {
@@ -38,7 +38,7 @@ export const jsonToSputnikSchema = ({inputs}: SputnikSchemaArgs): SputnikSchemaR
     // e.g. z.string().nullish())
     const isTopLevelOptional =
       zodSchema._zod.def.type === 'optional' &&
-      !('innerType' in zodSchema._zod.def && zodSchema._zod.def.innerType instanceof ZodNullable);
+      !('innerType' in zodSchema._zod.def && zodSchema._zod.def.innerType instanceof z.ZodNullable);
 
     return {
       id,

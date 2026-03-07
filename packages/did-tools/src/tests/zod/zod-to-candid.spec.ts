@@ -1,5 +1,5 @@
 import {PrincipalSchema} from '@dfinity/zod-schemas';
-import {z} from 'zod';
+import * as z from 'zod';
 import {zodToCandid} from '../../zod/zod-to-candid';
 
 const candid = (id: string, schema: z.ZodType, expected: string) => {

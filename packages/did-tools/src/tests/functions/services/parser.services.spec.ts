@@ -13,7 +13,7 @@ describe('parseFunctions', () => {
       });
 
       expect(result).toContain('#[ic_cdk::query]');
-      expect(result).toContain('fn hello_world()');
+      expect(result).toContain('fn app_hello_world()');
       expect(result).toContain(
         'execute_sync_function::<NoArgs, NoResult>("helloWorld", None).unwrap_or_trap();'
       );
@@ -26,7 +26,7 @@ describe('parseFunctions', () => {
       });
 
       expect(result).toContain('#[ic_cdk::query]');
-      expect(result).toContain('async fn hello_world()');
+      expect(result).toContain('async fn app_hello_world()');
       expect(result).toContain('execute_async_function::<NoArgs, NoResult>("helloWorld", None)');
     });
 
@@ -49,13 +49,15 @@ describe('parseFunctions', () => {
       });
 
       expect(result).toContain('#[ic_cdk::query]');
-      expect(result).toContain('fn hello_world(args: HelloWorldArgs) -> HelloWorldResult');
+      expect(result).toContain(
+        'fn app_hello_world(args: AppHelloWorldArgs) -> AppHelloWorldResult'
+      );
       expect(result).toContain('execute_sync_function("helloWorld", Some(args))');
       expect(result).toContain(
-        `${DERIVES}\npub struct HelloWorldArgs {\n    pub value: String,\n}`
+        `${DERIVES}\npub struct AppHelloWorldArgs {\n    pub value: String,\n}`
       );
       expect(result).toContain(
-        `${DERIVES}\npub struct HelloWorldResult {\n    pub text: String,\n}`
+        `${DERIVES}\npub struct AppHelloWorldResult {\n    pub text: String,\n}`
       );
     });
 
@@ -78,13 +80,15 @@ describe('parseFunctions', () => {
       });
 
       expect(result).toContain('#[ic_cdk::query]');
-      expect(result).toContain('async fn hello_world(args: HelloWorldArgs) -> HelloWorldResult');
+      expect(result).toContain(
+        'async fn app_hello_world(args: AppHelloWorldArgs) -> AppHelloWorldResult'
+      );
       expect(result).toContain('execute_async_function("helloWorld", Some(args))');
       expect(result).toContain(
-        `${DERIVES}\npub struct HelloWorldArgs {\n    pub value: String,\n}`
+        `${DERIVES}\npub struct AppHelloWorldArgs {\n    pub value: String,\n}`
       );
       expect(result).toContain(
-        `${DERIVES}\npub struct HelloWorldResult {\n    pub text: String,\n}`
+        `${DERIVES}\npub struct AppHelloWorldResult {\n    pub text: String,\n}`
       );
     });
 
@@ -104,9 +108,9 @@ describe('parseFunctions', () => {
         updates: []
       });
 
-      expect(result).toContain('fn hello_world() -> HelloWorldResult');
+      expect(result).toContain('fn app_hello_world() -> AppHelloWorldResult');
       expect(result).toContain(
-        'execute_sync_function::<NoArgs, HelloWorldResult>("helloWorld", None)'
+        'execute_sync_function::<NoArgs, AppHelloWorldResult>("helloWorld", None)'
       );
     });
 
@@ -126,9 +130,9 @@ describe('parseFunctions', () => {
         updates: []
       });
 
-      expect(result).toContain('async fn hello_world() -> HelloWorldResult');
+      expect(result).toContain('async fn app_hello_world() -> AppHelloWorldResult');
       expect(result).toContain(
-        'execute_async_function::<NoArgs, HelloWorldResult>("helloWorld", None)'
+        'execute_async_function::<NoArgs, AppHelloWorldResult>("helloWorld", None)'
       );
     });
   });
@@ -141,7 +145,7 @@ describe('parseFunctions', () => {
       });
 
       expect(result).toContain('#[ic_cdk::update]');
-      expect(result).toContain('fn yolo()');
+      expect(result).toContain('fn app_yolo()');
       expect(result).toContain(
         'execute_sync_function::<NoArgs, NoResult>("yolo", None).unwrap_or_trap();'
       );
@@ -154,7 +158,7 @@ describe('parseFunctions', () => {
       });
 
       expect(result).toContain('#[ic_cdk::update]');
-      expect(result).toContain('async fn yolo()');
+      expect(result).toContain('async fn app_yolo()');
       expect(result).toContain('execute_async_function::<NoArgs, NoResult>("yolo", None)');
     });
 
@@ -177,9 +181,11 @@ describe('parseFunctions', () => {
       });
 
       expect(result).toContain('#[ic_cdk::update]');
-      expect(result).toContain('fn welcome(args: WelcomeArgs) -> WelcomeResult');
+      expect(result).toContain('fn app_welcome(args: AppWelcomeArgs) -> AppWelcomeResult');
       expect(result).toContain('execute_sync_function("welcome", Some(args))');
-      expect(result).toContain(`${DERIVES}\npub struct WelcomeArgs {\n    pub value: String,\n}`);
+      expect(result).toContain(
+        `${DERIVES}\npub struct AppWelcomeArgs {\n    pub value: String,\n}`
+      );
       expect(result).toContain('pub caller: Principal');
     });
 
@@ -202,9 +208,11 @@ describe('parseFunctions', () => {
       });
 
       expect(result).toContain('#[ic_cdk::update]');
-      expect(result).toContain('async fn welcome(args: WelcomeArgs) -> WelcomeResult');
+      expect(result).toContain('async fn app_welcome(args: AppWelcomeArgs) -> AppWelcomeResult');
       expect(result).toContain('execute_async_function("welcome", Some(args))');
-      expect(result).toContain(`${DERIVES}\npub struct WelcomeArgs {\n    pub value: String,\n}`);
+      expect(result).toContain(
+        `${DERIVES}\npub struct AppWelcomeArgs {\n    pub value: String,\n}`
+      );
       expect(result).toContain('pub caller: Principal');
     });
 
@@ -224,9 +232,9 @@ describe('parseFunctions', () => {
         ]
       });
 
-      expect(result).toContain('fn welcome_without_args() -> Welcome_without_argsResult');
+      expect(result).toContain('fn app_welcome_without_args() -> AppWelcome_without_argsResult');
       expect(result).toContain(
-        'execute_sync_function::<NoArgs, Welcome_without_argsResult>("welcome_without_args", None)'
+        'execute_sync_function::<NoArgs, AppWelcome_without_argsResult>("welcome_without_args", None)'
       );
     });
 
@@ -246,9 +254,11 @@ describe('parseFunctions', () => {
         ]
       });
 
-      expect(result).toContain('async fn welcome_without_args() -> Welcome_without_argsResult');
       expect(result).toContain(
-        'execute_async_function::<NoArgs, Welcome_without_argsResult>("welcome_without_args", None)'
+        'async fn app_welcome_without_args() -> AppWelcome_without_argsResult'
+      );
+      expect(result).toContain(
+        'execute_async_function::<NoArgs, AppWelcome_without_argsResult>("welcome_without_args", None)'
       );
     });
   });
@@ -259,7 +269,7 @@ describe('parseFunctions', () => {
         queries: [['helloWorld', {handler: () => {}}]],
         updates: []
       });
-      expect(result).toContain('fn hello_world()');
+      expect(result).toContain('fn app_hello_world()');
     });
 
     it('should keep already snake_case names as is', () => {
@@ -267,7 +277,7 @@ describe('parseFunctions', () => {
         queries: [],
         updates: [['welcome_without_args', {handler: async () => {}}]]
       });
-      expect(result).toContain('fn welcome_without_args()');
+      expect(result).toContain('fn app_welcome_without_args()');
     });
   });
 });

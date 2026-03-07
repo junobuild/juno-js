@@ -855,8 +855,8 @@ The current timestamp.
 
 ### :wrench: Constants
 
-- [\_\_JUNO_FUNCTION_TYPE](#gear-__juno_function_type)
 - [SatelliteEnvSchema](#gear-satelliteenvschema)
+- [JUNO_FUNCTION_TYPE](#gear-juno_function_type)
 - [CustomFunctionWithArgsAndResultSchema](#gear-customfunctionwithargsandresultschema)
 - [CustomFunctionWithArgsSchema](#gear-customfunctionwithargsschema)
 - [CustomFunctionWithResultSchema](#gear-customfunctionwithresultschema)
@@ -963,17 +963,6 @@ The current timestamp.
 - [CallResultSchema](#gear-callresultschema)
 - [CallParamsSchema](#gear-callparamsschema)
 
-#### :gear: \_\_JUNO_FUNCTION_TYPE
-
-Internal constant used by Juno's tooling to discover serverless functions.
-Not intended for direct use by developers.
-
-| Constant             | Type                                                                                      |
-| -------------------- | ----------------------------------------------------------------------------------------- |
-| `JUNO_FUNCTION_TYPE` | `{ readonly QUERY: "__juno_function_query"; readonly UPDATE: "__juno_function_update"; }` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/constants.ts#L5)
-
 #### :gear: SatelliteEnvSchema
 
 | Constant             | Type                              |
@@ -985,6 +974,17 @@ References:
 - SatelliteEnv
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.env.ts#L6)
+
+#### :gear: JUNO_FUNCTION_TYPE
+
+Internal constant used by Juno's tooling to discover serverless functions.
+Not intended for direct use by developers.
+
+| Constant             | Type                                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| `JUNO_FUNCTION_TYPE` | `{ readonly QUERY: "__juno_function_query"; readonly UPDATE: "__juno_function_update"; }` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/constants.ts#L5)
 
 #### :gear: CustomFunctionWithArgsAndResultSchema
 

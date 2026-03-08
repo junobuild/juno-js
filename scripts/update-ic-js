@@ -30,9 +30,22 @@ function install_utils_peer() {
   npm i @dfinity/utils --workspace=packages/"$package" --save-peer
 }
 
+function rm_zod_schemas() {
+  local package=$1
+
+  npm rm @dfinity/zod-schemas --workspace=packages/"$package"
+}
+
+function install_zod_schemas() {
+  local package=$1
+
+  npm i @dfinity/zod-schemas --workspace=packages/"$package" --save-peer
+}
+
 PACKAGES_IC_MGMT_PEER=admin,cdn
-PACKAGES_UTILS_PEER=admin,auth,cdn,functions,core,core-peer,cli-tools,did-tools,utils,storage,ic-client
+PACKAGES_UTILS_PEER=admin,auth,cdn,core,core-peer,utils,storage,ic-client,functions,cli-tools,did-tools
 PACKAGES_UTILS=core-standalone
+PACKAGES_ZOD_SCHEMAS=config,zod,functions
 
 for package in $(echo $PACKAGES_IC_MGMT_PEER | sed "s/,/ /g"); do
   rm_ic_mgmt "$package"
@@ -44,6 +57,10 @@ done
 
 for package in $(echo $PACKAGES_UTILS | sed "s/,/ /g"); do
   rm_utils "$package"
+done
+
+for package in $(echo $PACKAGES_ZOD_SCHEMAS | sed "s/,/ /g"); do
+  rm_zod_schemas "$package"
 done
 
 ./scripts/update-agent
@@ -58,4 +75,8 @@ done
 
 for package in $(echo $PACKAGES_UTILS | sed "s/,/ /g"); do
   install_utils "$package"
+done
+
+for package in $(echo $PACKAGES_ZOD_SCHEMAS | sed "s/,/ /g"); do
+  install_zod_schemas "$package"
 done

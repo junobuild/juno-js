@@ -28,6 +28,8 @@ const functionsInputFiles = [
   './packages/functions/src/ic-cdk.ts'
 ];
 
+const zodInputFiles = ['./packages/zod/src/index.ts'];
+
 const buildOptions = {
   repo: {url: 'https://github.com/junobuild/juno-js'}
 };
@@ -46,6 +48,13 @@ generateDocumentation({
 generateDocumentation({
   inputFiles: functionsInputFiles,
   outputFile: './packages/functions/README.md',
+  markdownOptions,
+  buildOptions: {...buildOptions, explore: true, types: true}
+});
+
+generateDocumentation({
+  inputFiles: zodInputFiles,
+  outputFile: './packages/zod/README.md',
   markdownOptions,
   buildOptions: {...buildOptions, explore: true, types: true}
 });

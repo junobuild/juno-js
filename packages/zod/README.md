@@ -14,26 +14,29 @@ Zod utilities and converters for [Juno].
 
 ### :toolbox: Functions
 
-- [zodToCandid](#gear-zodtocandid)
+- [zodToIdl](#gear-zodtoidl)
 - [zodToRust](#gear-zodtorust)
+- [zodToCandid](#gear-zodtocandid)
 
-#### :gear: zodToCandid
+#### :gear: zodToIdl
 
-Converts a record of Zod schemas to a Candid type definition string.
+Converts a Zod schema to a Candid IDL type for use with `IDL.encode` and `IDL.decode`.
 
-| Function      | Type                                                                                                 |
-| ------------- | ---------------------------------------------------------------------------------------------------- |
-| `zodToCandid` | `(inputs: Record<string, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>) => string` |
+| Function   | Type                                                                                                                                                         |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `zodToIdl` | `({ id, schema, suffix }: { id: string; schema: ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>; suffix: "Args" or "Result"; }) => IdlResult` |
 
 Parameters:
 
-- `inputs`: - A record mapping type names to Zod schemas.
+- `id`: - The base name used to generate the IDL type name.
+- `schema`: - The Zod schema to convert.
+- `suffix`: - Whether this represents function arguments or a return type.
 
 Returns:
 
-A Candid type definition string, one `type` declaration per entry.
+An object containing the generated IDL type and the base type name.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-candid.ts#L46)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-idl.ts#L69)
 
 #### :gear: zodToRust
 
@@ -55,9 +58,37 @@ An object containing the generated Rust code and the base type name.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-rust.ts#L167)
 
+#### :gear: zodToCandid
+
+Converts a record of Zod schemas to a Candid type definition string.
+
+| Function      | Type                                                                                                 |
+| ------------- | ---------------------------------------------------------------------------------------------------- |
+| `zodToCandid` | `(inputs: Record<string, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>) => string` |
+
+Parameters:
+
+- `inputs`: - A record mapping type names to Zod schemas.
+
+Returns:
+
+A Candid type definition string, one `type` declaration per entry.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-candid.ts#L46)
+
 ### :tropical_drink: Interfaces
 
+- [IdlResult](#gear-idlresult)
 - [RustResult](#gear-rustresult)
+
+#### :gear: IdlResult
+
+| Property   | Type       | Description |
+| ---------- | ---------- | ----------- |
+| `baseName` | `string`   |             |
+| `idl`      | `IDL.Type` |             |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-idl.ts#L41)
 
 #### :gear: RustResult
 

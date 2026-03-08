@@ -1,6 +1,6 @@
 import type {z} from 'zod';
 import {type SputnikSchemaResult, jsonToSputnikSchema} from './_converters';
-import {capitalize} from './_string.utils';
+import {capitalize} from '@junobuild/utils';
 import type {SputnikSchema} from './_types';
 
 const DERIVES = '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]';

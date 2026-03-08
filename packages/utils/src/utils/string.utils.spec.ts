@@ -1,4 +1,4 @@
-import {capitalize, convertCamelToSnake} from '../../utils/string.utils';
+import {capitalize, convertCamelToSnake} from './string.utils';
 
 describe('string.utils', () => {
   describe('convertCamelToSnake', () => {

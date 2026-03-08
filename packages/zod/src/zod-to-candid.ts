@@ -36,6 +36,13 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
   }
 };
 
+/**
+ * Converts a record of Zod schemas to a Candid type definition string.
+ *
+ * @param {Record<string, z.ZodType>} inputs - A record mapping type names to Zod schemas.
+ * @returns {string} A Candid type definition string, one `type` declaration per entry.
+ *
+ */
 export const zodToCandid = (inputs: Record<string, z.ZodType>): string =>
   Object.entries(inputs)
     .map(([id, zodSchema]) => jsonToSputnikSchema({id, zodSchema}))

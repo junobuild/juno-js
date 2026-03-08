@@ -1,7 +1,8 @@
 import {isNullish} from '@dfinity/utils';
-import {generateFunctions} from '@junobuild/did-tools';
+import {generateFunctions, type GenerateFunctionsResult} from '@junobuild/did-tools';
 import type {Metafile} from 'esbuild';
 import {writeFile} from 'node:fs/promises';
+import {relative} from 'node:path';
 import {buildFunctions} from './build';
 
 export interface GenerateArgs {
@@ -11,12 +12,17 @@ export interface GenerateArgs {
   banner?: {[type: string]: string};
 }
 
-export interface GenerateResultData {
+export interface GenerateBuildData {
   version: string;
   output: [string, Metafile['outputs'][0]];
+  code: Uint8Array;
+  outputPath: string;
 }
 
-type GenerateBuildResultData = GenerateResultData & {code: Uint8Array};
+export interface GenerateResultData {
+  build: Omit<GenerateBuildData, 'code'>;
+  generate: GenerateFunctionsResult;
+}
 
 export interface GenerateResultError {
   status: 'error';
@@ -27,7 +33,7 @@ export interface GenerateResultError {
 export type GenerateResult = {status: 'success'; result: GenerateResultData} | GenerateResultError;
 
 export type GenerateCodeResult =
-  | {status: 'success'; result: GenerateBuildResultData}
+  | {status: 'success'; result: Omit<GenerateBuildData, 'outputPath'>}
   | GenerateResultError;
 
 export const buildAndGenerateFunctions = async ({
@@ -48,11 +54,11 @@ export const buildAndGenerateFunctions = async ({
   // We generate the custom functions before the JavaScript script because
   // there might be none, therefore no Rust module to generate but, also because
   // the Docker image currently watches the script to initiate new automatic build.
-  await writeDevFunctions({code, outfileRs});
+  const generate = await writeDevFunctions({code, outfileRs});
 
-  await writeDevScript({code, outfileJs});
+  const dev = await writeDevScript({code, outfileJs});
 
-  return {status: 'success', result: buildResult};
+  return {status: 'success', result: {build: {...buildResult, ...dev}, generate}};
 };
 
 const buildWithEsbuild = async ({
@@ -108,13 +114,18 @@ const buildWithEsbuild = async ({
 const writeDevFunctions = async ({
   code,
   outfileRs
-}: Pick<GenerateBuildResultData, 'code'> & Pick<GenerateArgs, 'outfileRs'>) => {
-  await generateFunctions({code, outputFile: outfileRs});
-};
+}: Pick<GenerateBuildData, 'code'> &
+  Pick<GenerateArgs, 'outfileRs'>): Promise<GenerateFunctionsResult> => await generateFunctions({code, outputFile: outfileRs});
 
 const writeDevScript = async ({
   code,
   outfileJs
-}: Pick<GenerateBuildResultData, 'code'> & Pick<GenerateArgs, 'outfileJs'>) => {
+}: Pick<GenerateBuildData, 'code'> & Pick<GenerateArgs, 'outfileJs'>): Promise<{
+  outputPath: string;
+}> => {
   await writeFile(outfileJs, code);
+
+  return {
+    outputPath: relative(process.cwd(), outfileJs)
+  };
 };

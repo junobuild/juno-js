@@ -1,13 +1,25 @@
 import type {Query, Update} from '@junobuild/functions';
 import {writeFile} from 'node:fs/promises';
+import {relative} from 'node:path';
 import {parseFunctions} from './services/parser.services';
 
-export interface GenerateArgs {
+export interface GenerateFunctionsArgs {
   outputFile: string;
   code: Uint8Array;
 }
 
-export const generateFunctions = async ({code, outputFile}: GenerateArgs) => {
+export interface GenerateFunctionsData {
+  totalQueries: number;
+  totalUpdates: number;
+  outputPath: string;
+}
+
+export type GenerateFunctionsResult = GenerateFunctionsData | null;
+
+export const generateFunctions = async ({
+  code,
+  outputFile
+}: GenerateFunctionsArgs): Promise<GenerateFunctionsResult> => {
   const originalConsole = globalThis.console;
   const originalRandom = globalThis.Math.random;
 
@@ -52,12 +64,18 @@ export const generateFunctions = async ({code, outputFile}: GenerateArgs) => {
 
     // No custom functions to generate
     if (queries.length === 0 && updates.length === 0) {
-      return;
+      return null;
     }
 
     const functions = parseFunctions({queries, updates});
 
     await writeFile(outputFile, functions, 'utf-8');
+
+    return {
+      outputPath: relative(process.cwd(), outputFile),
+      totalQueries: queries.length,
+      totalUpdates: updates.length
+    };
   } finally {
     globalThis.console = originalConsole;
     globalThis.Math.random = originalRandom;

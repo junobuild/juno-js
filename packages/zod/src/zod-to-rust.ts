@@ -1,6 +1,6 @@
 import type {z} from 'zod';
-import {capitalize} from '../utils/string.utils';
 import {type SputnikSchemaResult, jsonToSputnikSchema} from './_converters';
+import {capitalize} from './_string.utils';
 import type {SputnikSchema} from './_types';
 
 const DERIVES = '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]';
@@ -155,6 +155,15 @@ const sputnikSchemaToRust = ({
   return {baseName, code: `pub type ${baseName} = ${result.fieldType};`};
 };
 
+/**
+ * Converts a Zod schema to a Rust type definition string.
+ *
+ * @param {string} id - The base name used to generate the Rust struct or type alias name.
+ * @param {z.ZodType} schema - The Zod schema to convert.
+ * @param {'Args' | 'Result'} suffix - Whether this represents function arguments or a return type.
+ * @returns {RustResult} An object containing the generated Rust code and the base type name.
+ *
+ */
 export const zodToRust = ({
   id,
   schema,

@@ -28,7 +28,11 @@ const functionsInputFiles = [
   './packages/functions/src/ic-cdk.ts'
 ];
 
-const zodInputFiles = ['./packages/zod/src/zod-to-candid.ts', './packages/zod/src/zod-to-rust.ts'];
+const zodInputFiles = [
+  './packages/zod/src/zod-to-idl.ts',
+  './packages/zod/src/zod-to-rust.ts',
+  './packages/zod/src/zod-to-candid.ts'
+];
 
 const buildOptions = {
   repo: {url: 'https://github.com/junobuild/juno-js'}

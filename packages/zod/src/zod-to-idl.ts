@@ -57,6 +57,15 @@ const sputnikSchemaToIdl = ({
   return {baseName, idl};
 };
 
+/**
+ * Converts a Zod schema to a Candid IDL type for use with `IDL.encode` and `IDL.decode`.
+ *
+ * @param {string} id - The base name used to generate the IDL type name.
+ * @param {z.ZodType} schema - The Zod schema to convert.
+ * @param {'Args' | 'Result'} suffix - Whether this represents function arguments or a return type.
+ * @returns {IdlResult} An object containing the generated IDL type and the base type name.
+ *
+ */
 export const zodToIdl = ({
   id,
   schema,

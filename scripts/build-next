@@ -18,6 +18,7 @@ node ./scripts/update-version.mjs analytics
 node ./scripts/update-version.mjs core-peer
 node ./scripts/update-version.mjs core-standalone
 node ./scripts/update-version.mjs functions
+node ./scripts/update-version.mjs zod
 
 : Now we can build
 npm run build --workspaces

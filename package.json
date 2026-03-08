@@ -38,6 +38,7 @@
     "packages/core-peer",
     "packages/core-standalone",
     "packages/config-loader",
+    "packages/zod",
     "packages/functions",
     "packages/did-tools",
     "packages/cli-tools"

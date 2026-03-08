@@ -115,7 +115,8 @@ const writeDevFunctions = async ({
   code,
   outfileRs
 }: Pick<GenerateBuildData, 'code'> &
-  Pick<GenerateArgs, 'outfileRs'>): Promise<GenerateFunctionsResult> => await generateFunctions({code, outputFile: outfileRs});
+  Pick<GenerateArgs, 'outfileRs'>): Promise<GenerateFunctionsResult> =>
+  await generateFunctions({code, outputFile: outfileRs});
 
 const writeDevScript = async ({
   code,

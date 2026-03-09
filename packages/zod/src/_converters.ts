@@ -29,7 +29,7 @@ export const jsonToSputnikSchema = ({
       }
 
       if (ctx.jsonSchema.id === ZodSchemaId.Uint8Array) {
-        ctx.jsonSchema.format = 'blob';
+        ctx.jsonSchema.format = 'uint8array';
       }
     }
   });

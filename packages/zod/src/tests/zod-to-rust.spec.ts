@@ -128,7 +128,7 @@ describe('nested objects', () => {
     z.object({address: z.object({street: z.string()})}),
     [
       '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgsAddress {\n    pub street: String,\n}',
-      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub address: MyFunctionArgsAddress,\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[json_data(nested)]\n    pub address: MyFunctionArgsAddress,\n}'
     ].join('\n\n')
   );
 
@@ -137,7 +137,7 @@ describe('nested objects', () => {
     z.object({address: z.object({street: z.string()}).optional()}),
     [
       '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgsAddress {\n    pub street: String,\n}',
-      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub address: Option<MyFunctionArgsAddress>,\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[json_data(nested)]\n    pub address: Option<MyFunctionArgsAddress>,\n}'
     ].join('\n\n')
   );
 });
@@ -150,7 +150,7 @@ describe('object with enum field', () => {
     z.object({status: z.enum(['active', 'inactive'])}),
     [
       '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgsStatus {\n    Active,\n    Inactive,\n}',
-      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub status: MyFunctionArgsStatus,\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[json_data(nested)]\n    pub status: MyFunctionArgsStatus,\n}'
     ].join('\n\n')
   );
 });

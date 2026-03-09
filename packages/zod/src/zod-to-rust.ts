@@ -123,7 +123,11 @@ const schemaToRustType = ({
         schemaToRustType({schema: f.type, structName: `${structName}${capitalize(f.name)}`})
       );
       const fields = schema.fields
-        .map((f, i) => `    pub ${f.name}: ${fieldResults[i].fieldType},`)
+        .map((f, i) => {
+          const result = fieldResults[i];
+          const attr = result.kind === 'composite' ? '    #[json_data(nested)]\n' : '';
+          return `${attr}    pub ${f.name}: ${result.fieldType},`;
+        })
         .join('\n');
       return composite({
         fieldType: recordName,

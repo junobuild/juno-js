@@ -1,4 +1,4 @@
-import {PrincipalSchema} from '@dfinity/zod-schemas';
+import {PrincipalSchema, Uint8ArraySchema} from '@dfinity/zod-schemas';
 import {IDL} from '@icp-sdk/core/candid';
 import * as z from 'zod';
 import {zodToIdl} from '../zod-to-idl';
@@ -40,6 +40,26 @@ describe('optional primitives', () => {
 
 describe('principal', () => {
   idl('Principal', PrincipalSchema, IDL.Principal);
+});
+
+// ─── Uint8Array ───────────────────────────────────────────────────────────────
+
+describe('uint8array', () => {
+  idl('Uint8Array', Uint8ArraySchema, IDL.Vec(IDL.Nat8));
+
+  idl(
+    'ObjectWithUint8Array',
+    z.object({value: Uint8ArraySchema}),
+    IDL.Record({value: IDL.Vec(IDL.Nat8)})
+  );
+
+  idl('OptionalUint8Array', Uint8ArraySchema.optional(), IDL.Opt(IDL.Vec(IDL.Nat8)));
+
+  idl(
+    'ObjectWithOptionalUint8Array',
+    z.object({value: Uint8ArraySchema.optional()}),
+    IDL.Record({value: IDL.Opt(IDL.Vec(IDL.Nat8))})
+  );
 });
 
 // ─── Enums ────────────────────────────────────────────────────────────────────

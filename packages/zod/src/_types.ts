@@ -18,4 +18,5 @@ export type SputnikSchema =
   | {kind: 'indexedTuple'; members: SputnikSchema[]} // -> (T, T, ...)
   | {kind: 'variant'; tags: string[]} // -> enum { A, B, C }
   | {kind: 'variantRecords'; members: SputnikSchema[]} // -> enum { VariantA { ... }, VariantB { ... } }
-  | {kind: 'principal'};
+  | {kind: 'principal'}
+  | {kind: 'uint8array'};

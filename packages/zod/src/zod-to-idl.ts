@@ -18,6 +18,8 @@ const schemaToIdlType = (schema: SputnikSchema): IDL.Type => {
       return IDL.Nat64;
     case 'principal':
       return IDL.Principal;
+    case 'uint8array':
+      return IDL.Vec(IDL.Nat8);
     case 'opt':
       return IDL.Opt(schemaToIdlType(schema.inner));
     case 'vec':

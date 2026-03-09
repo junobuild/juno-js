@@ -1,4 +1,4 @@
-import {PrincipalSchema} from '@dfinity/zod-schemas';
+import {PrincipalSchema, Uint8ArraySchema} from '@dfinity/zod-schemas';
 import * as z from 'zod';
 import {jsonToSputnikSchema} from '../_converters';
 import {SputnikSchema} from '../_types';
@@ -192,6 +192,24 @@ describe('principal', () => {
   schema('ObjectWithPrincipal', z.object({value: PrincipalSchema}), {
     kind: 'record',
     fields: [{name: 'value', type: {kind: 'principal'}}]
+  });
+});
+
+// ─── Uint8Array ───────────────────────────────────────────────────────────────
+
+describe('uint8array', () => {
+  schema('Uint8Array', Uint8ArraySchema, {kind: 'uint8array'});
+
+  schema('ObjectWithUint8Array', z.object({value: Uint8ArraySchema}), {
+    kind: 'record',
+    fields: [{name: 'value', type: {kind: 'uint8array'}}]
+  });
+
+  schema('OptionalUint8Array', Uint8ArraySchema.optional(), {kind: 'uint8array'}, true);
+
+  schema('ObjectWithOptionalUint8Array', z.object({value: Uint8ArraySchema.optional()}), {
+    kind: 'record',
+    fields: [{name: 'value', type: {kind: 'opt', inner: {kind: 'uint8array'}}}]
   });
 });
 

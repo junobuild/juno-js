@@ -1,4 +1,4 @@
-import {PrincipalSchema} from '@dfinity/zod-schemas';
+import {PrincipalSchema, Uint8ArraySchema} from '@dfinity/zod-schemas';
 import * as z from 'zod';
 import {zodToCandid} from '../zod-to-candid';
 
@@ -187,6 +187,22 @@ describe('objects', () => {
 
 describe('principal', () => {
   candid('Principal', PrincipalSchema, 'principal');
+});
+
+// ─── Uint8Array ───────────────────────────────────────────────────────────────
+
+describe('uint8array', () => {
+  candid('Uint8Array', Uint8ArraySchema, 'blob');
+
+  candid('ObjectWithUint8Array', z.object({value: Uint8ArraySchema}), 'record { value : blob }');
+
+  candid('OptionalUint8Array', Uint8ArraySchema.optional(), 'opt blob');
+
+  candid(
+    'ObjectWithOptionalUint8Array',
+    z.object({value: Uint8ArraySchema.optional()}),
+    'record { value : opt blob }'
+  );
 });
 
 // ─── Optional / Nullable ──────────────────────────────────────────────────────

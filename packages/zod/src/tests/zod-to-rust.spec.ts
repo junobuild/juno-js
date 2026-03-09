@@ -1,4 +1,4 @@
-import {PrincipalSchema} from '@dfinity/zod-schemas';
+import {PrincipalSchema, Uint8ArraySchema} from '@dfinity/zod-schemas';
 import * as z from 'zod';
 import {zodToRust} from '../zod-to-rust';
 
@@ -38,6 +38,26 @@ describe('optional primitives', () => {
 
 describe('principal', () => {
   rust('myFunction', PrincipalSchema, 'pub type MyFunctionArgs = Principal;');
+});
+
+// ─── Uint8Array ───────────────────────────────────────────────────────────────
+
+describe('uint8array', () => {
+  rust('myFunction', Uint8ArraySchema, 'pub type MyFunctionArgs = Vec<u8>;');
+
+  rust('myFunction', Uint8ArraySchema.optional(), 'pub type MyFunctionArgs = Option<Vec<u8>>;');
+
+  rust(
+    'myFunction',
+    z.object({value: Uint8ArraySchema}),
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub value: Vec<u8>,\n}'
+  );
+
+  rust(
+    'myFunction',
+    z.object({value: Uint8ArraySchema.optional()}),
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub value: Option<Vec<u8>>,\n}'
+  );
 });
 
 // ─── Enums ────────────────────────────────────────────────────────────────────

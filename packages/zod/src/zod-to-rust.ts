@@ -48,6 +48,9 @@ const schemaToRustType = ({
     case 'principal':
       return primitive({fieldType: 'Principal'});
 
+    case 'uint8array':
+      return primitive({fieldType: 'Vec<u8>'});
+
     case 'opt': {
       const inner = schemaToRustType({schema: schema.inner, structName});
       const fieldType = `Option<${inner.fieldType}>`;

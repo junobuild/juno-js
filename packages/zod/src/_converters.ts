@@ -27,6 +27,10 @@ export const jsonToSputnikSchema = ({
       if (ctx.jsonSchema.id === ZodSchemaId.Principal) {
         ctx.jsonSchema.format = 'principal';
       }
+
+      if (ctx.jsonSchema.id === ZodSchemaId.Uint8Array) {
+        ctx.jsonSchema.format = 'blob';
+      }
     }
   });
 
@@ -55,6 +59,10 @@ const jsonToSchema = ({
 }): SputnikSchema => {
   if (schema.format === 'principal') {
     return {kind: 'principal'};
+  }
+
+  if (schema.format === 'uint8array') {
+    return {kind: 'uint8array'};
   }
 
   if ('$ref' in schema) {

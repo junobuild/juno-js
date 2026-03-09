@@ -33,6 +33,8 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
       return `variant { ${schema.members.map(sputnikSchemaToDid).join('; ')} }`;
     case 'principal':
       return 'principal';
+    case 'uint8array':
+      return 'blob';
   }
 };
 

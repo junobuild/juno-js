@@ -36,7 +36,7 @@ Returns:
 
 An object containing the generated IDL type and the base type name.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-idl.ts#L69)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-idl.ts#L71)
 
 #### :gear: zodToRust
 
@@ -56,7 +56,7 @@ Returns:
 
 An object containing the generated Rust code and the base type name.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-rust.ts#L167)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-rust.ts#L170)
 
 #### :gear: zodToCandid
 
@@ -74,7 +74,7 @@ Returns:
 
 A Candid type definition string, one `type` declaration per entry.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-candid.ts#L46)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-candid.ts#L48)
 
 ### :tropical_drink: Interfaces
 
@@ -88,7 +88,7 @@ A Candid type definition string, one `type` declaration per entry.
 | `baseName` | `string`   |             |
 | `idl`      | `IDL.Type` |             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-idl.ts#L41)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-idl.ts#L43)
 
 #### :gear: RustResult
 
@@ -97,7 +97,7 @@ A Candid type definition string, one `type` declaration per entry.
 | `baseName` | `string` |             |
 | `code`     | `string` |             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-rust.ts#L136)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/zod/src/zod-to-rust.ts#L139)
 
 <!-- TSDOC_END -->
 

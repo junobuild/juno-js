@@ -9,8 +9,13 @@ import {Principal} from '@icp-sdk/core/principal';
  *
  * @returns {Principal} The Principal ID of the caller.
  */
-export const caller = (): Principal => {
+export const msgCaller = (): Principal => {
   const principal = Principal.fromUint8Array(__ic_cdk_caller());
 
   return principal;
 };
+
+/**
+ * @deprecated Use {@link msgCaller} instead.
+ */
+export const caller = (): Principal => msgCaller();

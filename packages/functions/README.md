@@ -72,7 +72,9 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [call](#gear-call)
 - [msgCaller](#gear-msgcaller)
 - [caller](#gear-caller)
+- [canisterSelf](#gear-canisterself)
 - [id](#gear-id)
+- [satelliteSelf](#gear-satelliteself)
 - [time](#gear-time)
 
 #### :gear: createFunctionSchema
@@ -845,23 +847,45 @@ The Principal ID of the caller.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/caller.ic-cdk.ts#L21)
 
-#### :gear: id
+#### :gear: canisterSelf
 
 Retrieves the Satellite's Principal ID.
 
 This function is a JavaScript binding for the Rust function
-[`ic_cdk::id()`](https://docs.rs/ic-cdk/latest/ic_cdk/fn.id.html), which returns
+[`ic_cdk::api::canister_self()`](https://docs.rs/ic-cdk/latest/ic_cdk/api/fn.canister_self.html), which returns
 the Principal of the executing canister.
 
-| Function | Type              |
-| -------- | ----------------- |
-| `id`     | `() => Principal` |
+| Function       | Type              |
+| -------------- | ----------------- |
+| `canisterSelf` | `() => Principal` |
 
 Returns:
 
 The Principal ID of the Satellite.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/id.ic-cdk.ts#L12)
+
+#### :gear: id
+
+| Function | Type              |
+| -------- | ----------------- |
+| `id`     | `() => Principal` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/id.ic-cdk.ts#L24)
+
+#### :gear: satelliteSelf
+
+Retrieves the Satellite's Principal ID.
+
+| Function        | Type              |
+| --------------- | ----------------- |
+| `satelliteSelf` | `() => Principal` |
+
+Returns:
+
+The Principal ID of the Satellite.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/id.ic-cdk.ts#L31)
 
 #### :gear: time
 

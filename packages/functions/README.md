@@ -824,7 +824,7 @@ Returns `undefined` if the canister response is empty.
 Retrieves the caller's Principal ID.
 
 This function is a JavaScript binding for the Rust function
-[`ic_cdk::caller()`](https://docs.rs/ic-cdk/latest/ic_cdk/api/fn.msg_caller.html), which returns
+[`ic_cdk::api::msg_caller()`](https://docs.rs/ic-cdk/latest/ic_cdk/api/fn.msg_caller.html), which returns
 the Principal of the caller of the current call.
 
 | Function    | Type              |

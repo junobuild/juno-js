@@ -70,6 +70,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [listAssetsStore](#gear-listassetsstore)
 - [getContentChunksStore](#gear-getcontentchunksstore)
 - [call](#gear-call)
+- [msgCaller](#gear-msgcaller)
 - [caller](#gear-caller)
 - [id](#gear-id)
 - [time](#gear-time)
@@ -818,23 +819,31 @@ Returns `undefined` if the canister response is empty.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/call.ic-cdk.ts#L20)
 
-#### :gear: caller
+#### :gear: msgCaller
 
 Retrieves the caller's Principal ID.
 
 This function is a JavaScript binding for the Rust function
-[`ic_cdk::caller()`](https://docs.rs/ic-cdk/latest/ic_cdk/api/fn.msg_caller.html), which returns
+[`ic_cdk::api::msg_caller()`](https://docs.rs/ic-cdk/latest/ic_cdk/api/fn.msg_caller.html), which returns
 the Principal of the caller of the current call.
 
-| Function | Type              |
-| -------- | ----------------- |
-| `caller` | `() => Principal` |
+| Function    | Type              |
+| ----------- | ----------------- |
+| `msgCaller` | `() => Principal` |
 
 Returns:
 
 The Principal ID of the caller.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/caller.ic-cdk.ts#L12)
+
+#### :gear: caller
+
+| Function | Type              |
+| -------- | ----------------- |
+| `caller` | `() => Principal` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/caller.ic-cdk.ts#L21)
 
 #### :gear: id
 

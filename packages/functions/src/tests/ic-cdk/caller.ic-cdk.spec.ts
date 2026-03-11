@@ -1,6 +1,6 @@
 import {Principal} from '@icp-sdk/core/principal';
-import {msgCaller} from '../../ic-cdk/caller.ic-cdk';
 import {caller} from '../../../ic-cdk/caller.ic-cdk';
+import {msgCaller} from '../../ic-cdk/caller.ic-cdk';
 
 vi.stubGlobal('__ic_cdk_caller', vi.fn());
 

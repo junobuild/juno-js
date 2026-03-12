@@ -1,4 +1,4 @@
-import {PrincipalTextSchema} from '@dfinity/zod-schemas';
+import {PrincipalTextSchema} from '@junobuild/zod';
 import {Principal} from '@icp-sdk/core/principal';
 import * as z from 'zod';
 

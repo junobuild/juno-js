@@ -27,6 +27,7 @@
   "workspaces": [
     "packages/utils",
     "packages/errors",
+    "packages/zod",
     "packages/config",
     "packages/ic-client",
     "packages/storage",
@@ -38,7 +39,6 @@
     "packages/core-peer",
     "packages/core-standalone",
     "packages/config-loader",
-    "packages/zod",
     "packages/functions",
     "packages/functions-tools",
     "packages/cli-tools"

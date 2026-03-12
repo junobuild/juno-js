@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/zod",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Zod utilities and converters for Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

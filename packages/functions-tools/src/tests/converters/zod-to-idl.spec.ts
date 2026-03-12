@@ -1,4 +1,4 @@
-import {PrincipalSchema, Uint8ArraySchema} from '@dfinity/zod-schemas';
+import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/zod';
 import {IDL} from '@icp-sdk/core/candid';
 import * as z from 'zod';
 import {zodToIdl} from '../../converters/zod-to-idl';

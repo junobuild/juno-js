@@ -1,23 +1,22 @@
+import type {Query, Update} from '@junobuild/functions';
 import {writeFile} from 'node:fs/promises';
 import type {TransformerOptions} from '../types/transformer-options';
-import {collectApi} from './services/inspector.services';
-import {parseApi} from './services/parser.services';
+import {parseZodApi} from './services/parser.services';
 
-export const generateApi = async ({
-  inputFile,
+export const generateZodApi = async ({
+  queries,
+  updates,
   outputFile,
   transformerOptions
 }: {
-  inputFile: string;
+  queries: [string, Query][];
+  updates: [string, Update][];
   outputFile: string;
   transformerOptions: TransformerOptions;
 }) => {
-  const definition = await collectApi({
-    inputFile
-  });
-
-  const api = parseApi({
-    ...definition,
+  const api = parseZodApi({
+    queries,
+    updates,
     transformerOptions
   });
 

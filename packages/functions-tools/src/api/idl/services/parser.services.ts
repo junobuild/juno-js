@@ -1,3 +1,5 @@
+import {FRONTEND_FUNCTION_NAMESPACE} from '../../../constants';
+import {templateNamespace} from '../../_contants';
 import type {TransformerOptions} from '../../types/transformer-options';
 import type {MethodSignature} from '../types/method-signature';
 
@@ -11,9 +13,11 @@ import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/%CORE_LIB%';
 
 %METHODS%
+
+%NAMESPACE%
 `;
 
-const methodTemplateTypeScript = `export const %METHOD_NAME% = async (%PARAMS%): Promise<%METHOD_RESULT%> => {
+const methodTemplateTypeScript = `const %METHOD_NAME% = async (%PARAMS%): Promise<%METHOD_RESULT%> => {
 \tconst {%DID_METHOD_NAME%} = await getSatelliteExtendedActor<SatelliteActor>({
 \t\tidlFactory
 \t});
@@ -21,7 +25,7 @@ const methodTemplateTypeScript = `export const %METHOD_NAME% = async (%PARAMS%):
 \treturn await %DID_METHOD_NAME%(%CALL_PARAMS%);
 }`;
 
-const methodTemplateJavaScript = `export const %METHOD_NAME% = async (%CALL_PARAMS%) => {
+const methodTemplateJavaScript = `const %METHOD_NAME% = async (%CALL_PARAMS%) => {
 \tconst {%DID_METHOD_NAME%} = await getSatelliteExtendedActor({
 \t\tidlFactory
 \t});
@@ -45,12 +49,12 @@ export const parseApi = ({
   const langTemplate =
     outputLanguage === 'js' ? methodTemplateJavaScript : methodTemplateTypeScript;
 
-  const methods = signatures
-    .map((signature) => {
-      const replacers = mapSignature(signature);
+  const replacers = signatures.map(mapSignature);
 
+  const methods = replacers
+    .map((replacer) => {
       let result = langTemplate;
-      Object.entries(replacers).map(([key, value]) => {
+      Object.entries(replacer).map(([key, value]) => {
         result = result.replaceAll(`%${key}%`, value);
       });
 
@@ -58,9 +62,14 @@ export const parseApi = ({
     })
     .join('\n\n');
 
+  const namespaceExport = templateNamespace
+    .replace('%FUNCTION_NAMESPACE%', FRONTEND_FUNCTION_NAMESPACE)
+    .replace('%JS_FUNCTIONS%', replacers.map(({METHOD_NAME}) => METHOD_NAME).join(',\n\t'));
+
   return template
     .replace('%CORE_LIB%', coreLib ?? 'core')
     .replace('%METHODS%', methods)
+    .replace('%NAMESPACE%', namespaceExport)
     .replace(
       '%IMPORT%',
       outputLanguage === 'js'
@@ -73,17 +82,15 @@ export const parseApi = ({
     .trim();
 };
 
-const mapSignature = ({
-  name,
-  returnType,
-  paramsType
-}: MethodSignature): {
+interface Replacer {
   METHOD_NAME: string;
   DID_METHOD_NAME: string;
   METHOD_RESULT: string;
   PARAMS: string;
   CALL_PARAMS: string;
-} => {
+}
+
+const mapSignature = ({name, returnType, paramsType}: MethodSignature): Replacer => {
   const camelize = (s: string): string => s.replace(/_./g, (x) => x[1].toUpperCase());
 
   const methodName = camelize(name);

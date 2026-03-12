@@ -7,41 +7,41 @@ export const jsTemplateWithArgsWithResult = `
 %ARGS_ZOD%
 %RESULT_ZOD%
 
-export const %JS_FUNCTION% = async (args) => {
-  const parsedArgs = %ARGS_SCHEMA%.parse(args);
-  const idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
+const %JS_FUNCTION% = async (args) => {
+\tconst parsedArgs = %ARGS_SCHEMA%.parse(args);
+\tconst idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
 
-  const {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});
-  const idlResult = await %RS_FUNCTION%(idlArgs);
+\tconst {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});
+\tconst idlResult = await %RS_FUNCTION%(idlArgs);
 
-  const result = recursiveFromNullable({schema: %RESULT_SCHEMA%, value: idlResult});
-  return %RESULT_SCHEMA%.parse(result);
+\tconst result = recursiveFromNullable({schema: %RESULT_SCHEMA%, value: idlResult});
+\treturn %RESULT_SCHEMA%.parse(result);
 };`;
 
 export const jsTemplateWithArgsNoResult = `
 %ARGS_ZOD%
 
-export const %JS_FUNCTION% = async (args) => {
-  const parsedArgs = %ARGS_SCHEMA%.parse(args);
-  const idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
+const %JS_FUNCTION% = async (args) => {
+\tconst parsedArgs = %ARGS_SCHEMA%.parse(args);
+\tconst idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
 
-  const {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});
-  await %RS_FUNCTION%(idlArgs);
+\tconst {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});
+\tawait %RS_FUNCTION%(idlArgs);
 };`;
 
 export const jsTemplateNoArgsWithResult = `
 %RESULT_ZOD%
 
-export const %JS_FUNCTION% = async () => {
-  const {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});
-  const idlResult = await %RS_FUNCTION%();
+const %JS_FUNCTION% = async () => {
+\tconst {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});
+\tconst idlResult = await %RS_FUNCTION%();
 
-  const result = recursiveFromNullable({schema: %RESULT_SCHEMA%, value: idlResult});
-  return %RESULT_SCHEMA%.parse(result);
+\tconst result = recursiveFromNullable({schema: %RESULT_SCHEMA%, value: idlResult});
+\treturn %RESULT_SCHEMA%.parse(result);
 };`;
 
 export const jsTemplateNoArgsNoResult = `
-export const %JS_FUNCTION% = async () => {
-  const {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});
-  await %RS_FUNCTION%();
+const %JS_FUNCTION% = async () => {
+\tconst {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});
+\tawait %RS_FUNCTION%();
 };`;

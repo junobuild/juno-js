@@ -1,5 +1,5 @@
-import {PrincipalTextSchema} from '@junobuild/zod';
 import {Principal} from '@icp-sdk/core/principal';
+import {PrincipalTextSchema} from '@junobuild/zod';
 import * as z from 'zod';
 
 /**

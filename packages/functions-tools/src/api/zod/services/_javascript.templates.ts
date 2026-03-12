@@ -4,8 +4,8 @@ import {recursiveToNullable, recursiveFromNullable} from '@junobuild/zod';
 import * as z from 'zod';`;
 
 export const jsTemplateWithArgsWithResult = `
-const %ARGS_SCHEMA% = %ARGS_ZOD%;
-const %RESULT_SCHEMA% = %RESULT_ZOD%;
+%ARGS_ZOD%
+%RESULT_ZOD%
 
 export const %JS_FUNCTION% = async (args) => {
   const parsedArgs = %ARGS_SCHEMA%.parse(args);
@@ -19,7 +19,7 @@ export const %JS_FUNCTION% = async (args) => {
 };`;
 
 export const jsTemplateWithArgsNoResult = `
-const %ARGS_SCHEMA% = %ARGS_ZOD%;
+%ARGS_ZOD%
 
 export const %JS_FUNCTION% = async (args) => {
   const parsedArgs = %ARGS_SCHEMA%.parse(args);
@@ -30,7 +30,7 @@ export const %JS_FUNCTION% = async (args) => {
 };`;
 
 export const jsTemplateNoArgsWithResult = `
-const %RESULT_SCHEMA% = %RESULT_ZOD%;
+%RESULT_ZOD%
 
 export const %JS_FUNCTION% = async () => {
   const {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});

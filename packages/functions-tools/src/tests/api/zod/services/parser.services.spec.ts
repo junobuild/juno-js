@@ -1,5 +1,15 @@
 import {parseZodApi} from '../../../../api/zod/services/parser.services';
 import {
+  mockJsNoArgsNoResult,
+  mockJsNoArgsWithResult,
+  mockJsWithArgsNoResult,
+  mockJsWithArgsWithResult,
+  mockTsNoArgsNoResult,
+  mockTsNoArgsWithResult,
+  mockTsWithArgsNoResult,
+  mockTsWithArgsWithResult
+} from '../mocks/zod-api-transformed.mock';
+import {
   mockQueryNoArgsNoResult,
   mockQueryNoArgsWithResult,
   mockQueryWithArgsNoResult,
@@ -425,6 +435,82 @@ describe('zod-api-parser', () => {
       expect(result).toContain(
         'z.strictObject({street: z.string(), city: z.optional(z.string())})'
       );
+    });
+  });
+
+  // ─── full output ─────
+
+  describe('full output', () => {
+    it('should match ts no args no result', () => {
+      const result = parseZodApi({
+        queries: [['helloWorld', mockQueryNoArgsNoResult]],
+        updates: [],
+        transformerOptions: {outputLanguage: 'ts'}
+      });
+      expect(result.trim()).toContain(mockTsNoArgsNoResult);
+    });
+
+    it('should match ts with args no result', () => {
+      const result = parseZodApi({
+        queries: [['helloWorld', mockQueryWithArgsNoResult]],
+        updates: [],
+        transformerOptions: {outputLanguage: 'ts'}
+      });
+      expect(result.trim()).toContain(mockTsWithArgsNoResult);
+    });
+
+    it('should match ts no args with result', () => {
+      const result = parseZodApi({
+        queries: [['helloWorld', mockQueryNoArgsWithResult]],
+        updates: [],
+        transformerOptions: {outputLanguage: 'ts'}
+      });
+      expect(result.trim()).toContain(mockTsNoArgsWithResult);
+    });
+
+    it('should match ts with args and result', () => {
+      const result = parseZodApi({
+        queries: [['helloWorld', mockQueryWithArgsWithResult]],
+        updates: [],
+        transformerOptions: {outputLanguage: 'ts'}
+      });
+      expect(result.trim()).toContain(mockTsWithArgsWithResult);
+    });
+
+    it('should match js no args no result', () => {
+      const result = parseZodApi({
+        queries: [['helloWorld', mockQueryNoArgsNoResult]],
+        updates: [],
+        transformerOptions: {outputLanguage: 'js'}
+      });
+      expect(result.trim()).toContain(mockJsNoArgsNoResult);
+    });
+
+    it('should match js with args no result', () => {
+      const result = parseZodApi({
+        queries: [['helloWorld', mockQueryWithArgsNoResult]],
+        updates: [],
+        transformerOptions: {outputLanguage: 'js'}
+      });
+      expect(result.trim()).toContain(mockJsWithArgsNoResult);
+    });
+
+    it('should match js no args with result', () => {
+      const result = parseZodApi({
+        queries: [['helloWorld', mockQueryNoArgsWithResult]],
+        updates: [],
+        transformerOptions: {outputLanguage: 'js'}
+      });
+      expect(result.trim()).toContain(mockJsNoArgsWithResult);
+    });
+
+    it('should match js with args and result', () => {
+      const result = parseZodApi({
+        queries: [['helloWorld', mockQueryWithArgsWithResult]],
+        updates: [],
+        transformerOptions: {outputLanguage: 'js'}
+      });
+      expect(result.trim()).toContain(mockJsWithArgsWithResult);
     });
   });
 });

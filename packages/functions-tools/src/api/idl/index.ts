@@ -1,9 +1,9 @@
 import {writeFile} from 'node:fs/promises';
 import {collectApi} from './services/inspector.services';
 import {parseApi} from './services/parser.services';
-import type {TransformerOptions} from './types/transformer-options';
+import type {TransformerOptions} from '../types/transformer-options';
 
-export type * from './types/transformer-options';
+export type * from '../types/transformer-options';
 
 export const generateApi = async ({
   inputFile,

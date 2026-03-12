@@ -1,6 +1,6 @@
 import {PrincipalSchema, Uint8ArraySchema} from '@dfinity/zod-schemas';
 import * as z from 'zod';
-import {zodToCandid} from '../zod-to-candid';
+import {zodToCandid} from '../../converters/zod-to-candid';
 
 const candid = (id: string, schema: z.ZodType, expected: string) => {
   it(id, () => {

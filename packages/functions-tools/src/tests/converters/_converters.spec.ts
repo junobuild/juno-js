@@ -1,7 +1,7 @@
 import {PrincipalSchema, Uint8ArraySchema} from '@dfinity/zod-schemas';
 import * as z from 'zod';
-import {jsonToSputnikSchema} from '../_converters';
-import {SputnikSchema} from '../_types';
+import {jsonToSputnikSchema} from '../../converters/_converters';
+import {SputnikSchema} from '../../converters/_types';
 
 const schema = (
   id: string,

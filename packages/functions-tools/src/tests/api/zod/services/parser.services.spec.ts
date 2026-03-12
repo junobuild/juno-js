@@ -1,5 +1,16 @@
 import {parseZodApi} from '../../../../api/zod/services/parser.services';
 import {
+  mockQueryNoArgsNoResult,
+  mockQueryNoArgsWithResult,
+  mockQueryWithArgsNoResult,
+  mockQueryWithArgsWithResult,
+  mockQueryWithArray,
+  mockQueryWithEnum,
+  mockQueryWithNestedObject,
+  mockQueryWithPrincipal,
+  mockQueryWithUint8Array
+} from '../../../mocks/zod-functions.mock';
+import {
   mockJsFullNoArgsNoResult,
   mockJsNoArgsNoResult,
   mockJsNoArgsWithResult,
@@ -11,17 +22,6 @@ import {
   mockTsWithArgsNoResult,
   mockTsWithArgsWithResult
 } from '../mocks/zod-api-transformed.mock';
-import {
-  mockQueryNoArgsNoResult,
-  mockQueryNoArgsWithResult,
-  mockQueryWithArgsNoResult,
-  mockQueryWithArgsWithResult,
-  mockQueryWithArray,
-  mockQueryWithEnum,
-  mockQueryWithNestedObject,
-  mockQueryWithPrincipal,
-  mockQueryWithUint8Array
-} from '../mocks/zod-api.mock';
 
 describe('zod-api-parser', () => {
   // ─── file header ────────────────────────────────────────────────────────────

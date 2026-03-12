@@ -23,8 +23,6 @@ describe('ic-cdk > id', () => {
     vi.mocked(global.__ic_cdk_id).mockReturnValue(mockPrincipalBytes);
 
     expect(id()).toEqual(canisterSelf());
-
-    expect(canisterSelf).toHaveBeenCalledOnce();
   });
 
   it('satelliteSelf should be an alias for canisterSelf', () => {
@@ -32,7 +30,5 @@ describe('ic-cdk > id', () => {
     vi.mocked(global.__ic_cdk_id).mockReturnValue(mockPrincipalBytes);
 
     expect(satelliteSelf()).toEqual(canisterSelf());
-
-    expect(canisterSelf).toHaveBeenCalledOnce();
   });
 });

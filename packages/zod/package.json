@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/zod",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Zod utilities and converters for Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -50,7 +50,7 @@
   "homepage": "https://juno.build",
   "peerDependencies": {
     "@icp-sdk/core": "^5",
-    "@junobuild/utils": "*",
+    "@junobuild/utils": "^0.3",
     "zod": "^4.3"
   },
   "dependencies": {

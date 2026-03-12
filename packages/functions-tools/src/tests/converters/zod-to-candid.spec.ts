@@ -4,13 +4,13 @@ import {zodToCandid} from '../../converters/zod-to-candid';
 
 const candid = (id: string, schema: z.ZodType, expected: string) => {
   it(id, () => {
-    expect(zodToCandid({[id]: schema})).toBe(`type ${id} = ${expected};`);
+    expect(zodToCandid({id, schema, suffix: 'Args'}).code).toBe(`type ${id}Args = ${expected};`);
   });
 };
 
 const throws = (id: string, schema: z.ZodType) => {
   it(`${id} throws`, () => {
-    expect(() => zodToCandid({[id]: schema})).toThrow();
+    expect(() => zodToCandid({id, schema, suffix: 'Args'})).toThrow();
   });
 };
 
@@ -183,7 +183,7 @@ describe('objects', () => {
   );
 });
 
-// ─── Principal ──────────────────────────────────────────────────────
+// ─── Principal ────────────────────────────────────────────────────────────────
 
 describe('principal', () => {
   candid('Principal', PrincipalSchema, 'principal');
@@ -442,6 +442,20 @@ describe('complex', () => {
     }),
     'record { config : opt vec record { text; vec nat } }'
   );
+});
+
+// ─── baseName ─────────────────────────────────────────────────────────────────
+
+describe('baseName', () => {
+  it('should capitalize and append Args', () => {
+    const result = zodToCandid({id: 'helloWorld', schema: z.string(), suffix: 'Args'});
+    expect(result.baseName).toBe('HelloWorldArgs');
+  });
+
+  it('should capitalize and append Result', () => {
+    const result = zodToCandid({id: 'helloWorld', schema: z.string(), suffix: 'Result'});
+    expect(result.baseName).toBe('HelloWorldResult');
+  });
 });
 
 // ─── Should throw ─────────────────────────────────────────────────────────────

@@ -251,6 +251,21 @@
         "@icp-sdk/core",
         "@dfinity/utils"
       ]
+    },
+    {
+      "name": "@junobuild/zod",
+      "path": "./packages/zod/dist/index.js",
+      "limit": "10 kB",
+      "ignore": [
+        "zod",
+        "@dfinity/zod-schemas",
+        "@dfinity/agent",
+        "@dfinity/candid",
+        "@dfinity/identity",
+        "@dfinity/principal",
+        "@icp-sdk/core",
+        "@dfinity/utils"
+      ]
     }
   ]
 }

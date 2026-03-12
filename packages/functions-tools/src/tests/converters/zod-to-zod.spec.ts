@@ -1,186 +1,209 @@
 import {PrincipalSchema, Uint8ArraySchema} from '@dfinity/zod-schemas';
-import {IDL} from '@icp-sdk/core/candid';
 import * as z from 'zod';
-import {zodToIdl} from '../zod-to-idl';
+import {zodToZod} from '../../converters/zod-to-zod';
 
-const idl = (id: string, schema: z.ZodType, expected: IDL.Type) => {
+const zod = (id: string, schema: z.ZodType, expected: string) => {
   it(id, () => {
-    const {idl: result} = zodToIdl({id, schema, suffix: 'Args'});
-    expect(result.display()).toBe(expected.display());
+    expect(zodToZod({id, schema, suffix: 'Args'}).code).toBe(expected);
   });
 };
 
 const throws = (id: string, schema: z.ZodType) => {
   it(`${id} throws`, () => {
-    expect(() => zodToIdl({id, schema, suffix: 'Args'})).toThrow();
+    expect(() => zodToZod({id, schema, suffix: 'Args'})).toThrow();
   });
 };
 
 // ─── Primitives ───────────────────────────────────────────────────────────────
 
 describe('primitives', () => {
-  idl('String', z.string(), IDL.Text);
-  idl('Boolean', z.boolean(), IDL.Bool);
-  idl('Number', z.number(), IDL.Float64);
-  idl('Int', z.int(), IDL.Int32);
-  idl('Bigint', z.bigint(), IDL.Nat64);
+  zod('myFunction', z.string(), 'const MyFunctionArgsSchema = z.string();');
+  zod('myFunction', z.boolean(), 'const MyFunctionArgsSchema = z.boolean();');
+  zod('myFunction', z.number(), 'const MyFunctionArgsSchema = z.number();');
+  zod('myFunction', z.int(), 'const MyFunctionArgsSchema = z.int();');
+  zod('myFunction', z.bigint(), 'const MyFunctionArgsSchema = z.bigint();');
 });
 
 // ─── Optional primitives ──────────────────────────────────────────────────────
 
 describe('optional primitives', () => {
-  idl('OptionalString', z.string().optional(), IDL.Opt(IDL.Text));
-  idl('OptionalInt', z.int().optional(), IDL.Opt(IDL.Int32));
-  idl('OptionalBigint', z.bigint().optional(), IDL.Opt(IDL.Nat64));
-  idl('NullableString', z.string().nullable(), IDL.Opt(IDL.Text));
-  idl('NullishString', z.string().nullish(), IDL.Opt(IDL.Text));
+  zod('myFunction', z.string().optional(), 'const MyFunctionArgsSchema = z.optional(z.string());');
+  zod('myFunction', z.int().optional(), 'const MyFunctionArgsSchema = z.optional(z.int());');
+  zod('myFunction', z.bigint().optional(), 'const MyFunctionArgsSchema = z.optional(z.bigint());');
+  zod('myFunction', z.string().nullable(), 'const MyFunctionArgsSchema = z.optional(z.string());');
+  zod('myFunction', z.string().nullish(), 'const MyFunctionArgsSchema = z.optional(z.string());');
 });
 
 // ─── Principal ────────────────────────────────────────────────────────────────
 
 describe('principal', () => {
-  idl('Principal', PrincipalSchema, IDL.Principal);
+  zod('myFunction', PrincipalSchema, 'const MyFunctionArgsSchema = PrincipalSchema;');
 });
 
 // ─── Uint8Array ───────────────────────────────────────────────────────────────
 
 describe('uint8array', () => {
-  idl('Uint8Array', Uint8ArraySchema, IDL.Vec(IDL.Nat8));
-
-  idl(
-    'ObjectWithUint8Array',
-    z.object({value: Uint8ArraySchema}),
-    IDL.Record({value: IDL.Vec(IDL.Nat8)})
+  zod('myFunction', Uint8ArraySchema, 'const MyFunctionArgsSchema = Uint8ArraySchema;');
+  zod(
+    'myFunction',
+    Uint8ArraySchema.optional(),
+    'const MyFunctionArgsSchema = z.optional(Uint8ArraySchema);'
   );
-
-  idl('OptionalUint8Array', Uint8ArraySchema.optional(), IDL.Opt(IDL.Vec(IDL.Nat8)));
-
-  idl(
-    'ObjectWithOptionalUint8Array',
+  zod(
+    'myFunction',
+    z.object({value: Uint8ArraySchema}),
+    'const MyFunctionArgsSchema = z.strictObject({value: Uint8ArraySchema});'
+  );
+  zod(
+    'myFunction',
     z.object({value: Uint8ArraySchema.optional()}),
-    IDL.Record({value: IDL.Opt(IDL.Vec(IDL.Nat8))})
+    'const MyFunctionArgsSchema = z.strictObject({value: z.optional(Uint8ArraySchema)});'
   );
 });
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
 
 describe('enums', () => {
-  idl('EnumTwo', z.enum(['a', 'b']), IDL.Variant({a: IDL.Null, b: IDL.Null}));
-  idl(
-    'EnumThree',
+  zod('myFunction', z.enum(['a', 'b']), "const MyFunctionArgsSchema = z.enum(['a', 'b']);");
+  zod(
+    'myFunction',
     z.enum(['active', 'inactive']),
-    IDL.Variant({active: IDL.Null, inactive: IDL.Null})
+    "const MyFunctionArgsSchema = z.enum(['active', 'inactive']);"
   );
 });
 
 // ─── Arrays ───────────────────────────────────────────────────────────────────
 
 describe('arrays', () => {
-  idl('ArrayString', z.array(z.string()), IDL.Vec(IDL.Text));
-  idl('ArrayBool', z.array(z.boolean()), IDL.Vec(IDL.Bool));
-  idl('ArrayInt', z.array(z.int()), IDL.Vec(IDL.Int32));
-  idl('ArrayBigint', z.array(z.bigint()), IDL.Vec(IDL.Nat64));
-  idl('ArrayNested', z.array(z.array(z.string())), IDL.Vec(IDL.Vec(IDL.Text)));
+  zod('myFunction', z.array(z.string()), 'const MyFunctionArgsSchema = z.array(z.string());');
+  zod('myFunction', z.array(z.boolean()), 'const MyFunctionArgsSchema = z.array(z.boolean());');
+  zod('myFunction', z.array(z.int()), 'const MyFunctionArgsSchema = z.array(z.int());');
+  zod('myFunction', z.array(z.bigint()), 'const MyFunctionArgsSchema = z.array(z.bigint());');
+  zod(
+    'myFunction',
+    z.array(z.array(z.string())),
+    'const MyFunctionArgsSchema = z.array(z.array(z.string()));'
+  );
 });
 
 // ─── Objects ──────────────────────────────────────────────────────────────────
 
 describe('objects', () => {
-  idl('EmptyObject', z.object({}), IDL.Record({}));
-  idl('SingleField', z.object({name: z.string()}), IDL.Record({name: IDL.Text}));
-  idl(
-    'TwoFields',
+  zod('myFunction', z.object({}), 'const MyFunctionArgsSchema = z.strictObject({});');
+  zod(
+    'myFunction',
+    z.object({name: z.string()}),
+    'const MyFunctionArgsSchema = z.strictObject({name: z.string()});'
+  );
+  zod(
+    'myFunction',
     z.object({name: z.string(), age: z.int()}),
-    IDL.Record({name: IDL.Text, age: IDL.Int32})
+    'const MyFunctionArgsSchema = z.strictObject({name: z.string(), age: z.int()});'
   );
-  idl(
-    'WithOptionalField',
+  zod(
+    'myFunction',
     z.object({name: z.string(), age: z.int().optional()}),
-    IDL.Record({name: IDL.Text, age: IDL.Opt(IDL.Int32)})
+    'const MyFunctionArgsSchema = z.strictObject({name: z.string(), age: z.optional(z.int())});'
   );
-  idl(
-    'WithBigint',
+  zod(
+    'myFunction',
     z.object({id: z.bigint(), name: z.string()}),
-    IDL.Record({id: IDL.Nat64, name: IDL.Text})
+    'const MyFunctionArgsSchema = z.strictObject({id: z.bigint(), name: z.string()});'
   );
 });
 
 // ─── Nested objects ───────────────────────────────────────────────────────────
 
 describe('nested objects', () => {
-  idl(
-    'NestedOnce',
-    z.object({outer: z.object({inner: z.string()})}),
-    IDL.Record({outer: IDL.Record({inner: IDL.Text})})
+  zod(
+    'myFunction',
+    z.object({address: z.object({street: z.string()})}),
+    'const MyFunctionArgsSchema = z.strictObject({address: z.strictObject({street: z.string()})});'
   );
-  idl(
-    'WithOptionalNested',
+  zod(
+    'myFunction',
     z.object({address: z.object({street: z.string()}).optional()}),
-    IDL.Record({address: IDL.Opt(IDL.Record({street: IDL.Text}))})
+    'const MyFunctionArgsSchema = z.strictObject({address: z.optional(z.strictObject({street: z.string()}))});'
   );
 });
 
 // ─── Object with enum field ───────────────────────────────────────────────────
 
 describe('object with enum field', () => {
-  idl(
-    'WithEnum',
+  zod(
+    'myFunction',
     z.object({status: z.enum(['active', 'inactive'])}),
-    IDL.Record({status: IDL.Variant({active: IDL.Null, inactive: IDL.Null})})
+    "const MyFunctionArgsSchema = z.strictObject({status: z.enum(['active', 'inactive'])});"
   );
 });
 
 // ─── Object with array field ──────────────────────────────────────────────────
 
 describe('object with array field', () => {
-  idl('WithArray', z.object({tags: z.array(z.string())}), IDL.Record({tags: IDL.Vec(IDL.Text)}));
+  zod(
+    'myFunction',
+    z.object({tags: z.array(z.string())}),
+    'const MyFunctionArgsSchema = z.strictObject({tags: z.array(z.string())});'
+  );
 });
 
 // ─── Tuples ───────────────────────────────────────────────────────────────────
 
 describe('tuples', () => {
-  idl('TupleTwo', z.tuple([z.string(), z.int()]), IDL.Tuple(IDL.Text, IDL.Int32));
-  idl('TupleWithBigint', z.tuple([z.bigint(), z.string()]), IDL.Tuple(IDL.Nat64, IDL.Text));
+  zod(
+    'myFunction',
+    z.tuple([z.string(), z.int()]),
+    'const MyFunctionArgsSchema = z.tuple([z.string(), z.int()]);'
+  );
+  zod(
+    'myFunction',
+    z.tuple([z.bigint(), z.string()]),
+    'const MyFunctionArgsSchema = z.tuple([z.bigint(), z.string()]);'
+  );
 });
 
 // ─── Records ──────────────────────────────────────────────────────────────────
 
 describe('records', () => {
-  idl(
-    'RecordStringString',
+  zod(
+    'myFunction',
     z.record(z.string(), z.string()),
-    IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))
+    'const MyFunctionArgsSchema = z.array(z.tuple([z.string(), z.string()]));'
   );
-  idl('RecordStringInt', z.record(z.string(), z.int()), IDL.Vec(IDL.Tuple(IDL.Text, IDL.Int32)));
-  idl(
-    'RecordStringBigint',
+  zod(
+    'myFunction',
+    z.record(z.string(), z.int()),
+    'const MyFunctionArgsSchema = z.array(z.tuple([z.string(), z.int()]));'
+  );
+  zod(
+    'myFunction',
     z.record(z.string(), z.bigint()),
-    IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat64))
+    'const MyFunctionArgsSchema = z.array(z.tuple([z.string(), z.bigint()]));'
   );
 });
 
 // ─── Unions ───────────────────────────────────────────────────────────────────
 
 describe('unions', () => {
-  idl(
-    'UnionTwoLiterals',
+  zod(
+    'myFunction',
     z.union([z.literal('foo'), z.literal('bar')]),
-    IDL.Variant({foo: IDL.Null, bar: IDL.Null})
+    "const MyFunctionArgsSchema = z.enum(['foo', 'bar']);"
   );
-  idl(
-    'UnionObjects',
+  zod(
+    'myFunction',
     z.union([z.object({a: z.string()}), z.object({b: z.int()})]),
-    IDL.Variant({Variant0: IDL.Record({a: IDL.Text}), Variant1: IDL.Record({b: IDL.Int32})})
+    'const MyFunctionArgsSchema = z.union([z.strictObject({a: z.string()}), z.strictObject({b: z.int()})]);'
   );
 });
 
 // ─── Intersections ────────────────────────────────────────────────────────────
 
 describe('intersections', () => {
-  idl(
-    'IntersectionSimple',
+  zod(
+    'myFunction',
     z.intersection(z.object({a: z.string()}), z.object({b: z.int()})),
-    IDL.Record({a: IDL.Text, b: IDL.Int32})
+    'const MyFunctionArgsSchema = z.strictObject({a: z.string(), b: z.int()});'
   );
 });
 
@@ -188,12 +211,12 @@ describe('intersections', () => {
 
 describe('baseName', () => {
   it('should capitalize and append Args', () => {
-    const result = zodToIdl({id: 'helloWorld', schema: z.string(), suffix: 'Args'});
+    const result = zodToZod({id: 'helloWorld', schema: z.string(), suffix: 'Args'});
     expect(result.baseName).toBe('HelloWorldArgs');
   });
 
   it('should capitalize and append Result', () => {
-    const result = zodToIdl({id: 'helloWorld', schema: z.string(), suffix: 'Result'});
+    const result = zodToZod({id: 'helloWorld', schema: z.string(), suffix: 'Result'});
     expect(result.baseName).toBe('HelloWorldResult');
   });
 });

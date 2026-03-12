@@ -10,6 +10,10 @@
 
 Tools for generating [Juno] serverless functions code.
 
+<!-- TSDOC_START -->
+
+<!-- TSDOC_END -->
+
 ## License
 
 MIT © [David Dal Busco](mailto:david.dalbusco@outlook.com)

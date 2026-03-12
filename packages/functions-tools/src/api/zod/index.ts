@@ -4,19 +4,16 @@ import type {TransformerOptions} from '../types/transformer-options';
 import {parseZodApi} from './services/parser.services';
 
 export const generateZodApi = async ({
-  queries,
-  updates,
+  functions,
   outputFile,
   transformerOptions
 }: {
-  queries: [string, Query][];
-  updates: [string, Update][];
+  functions: [string, Update | Query][];
   outputFile: string;
   transformerOptions: TransformerOptions;
 }) => {
   const api = parseZodApi({
-    queries,
-    updates,
+    functions,
     transformerOptions
   });
 

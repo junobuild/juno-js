@@ -9,8 +9,8 @@ export interface GenerateFunctionsArgs {
 }
 
 export interface GenerateFunctionsData {
-  totalQueries: number;
-  totalUpdates: number;
+  queries: [string, Query][];
+  updates: [string, Update][];
   outputPath: string;
 }
 
@@ -73,8 +73,8 @@ export const generateFunctions = async ({
 
     return {
       outputPath: relative(process.cwd(), outputFile),
-      totalQueries: queries.length,
-      totalUpdates: updates.length
+      queries,
+      updates
     };
   } finally {
     globalThis.console = originalConsole;

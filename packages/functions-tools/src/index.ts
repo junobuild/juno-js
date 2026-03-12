@@ -1,3 +1,3 @@
-export * from './api/idl';
+export * from './api';
 export * from './converters';
 export * from './functions';

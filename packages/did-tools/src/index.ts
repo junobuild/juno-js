@@ -1,2 +1,2 @@
-export * from './api/index';
+export * from './api/idl';
 export * from './functions/index';

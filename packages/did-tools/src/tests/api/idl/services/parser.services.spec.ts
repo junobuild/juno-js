@@ -1,4 +1,4 @@
-import {parseApi} from '../../../api/services/parser.services';
+import {parseApi} from '../../../../api/idl/services/parser.services';
 import {mockImports, mockMethodSignatures} from '../mocks/method-signatures.mock';
 import {mockTransformedCoreJS, mockTransformedCoreTS} from '../mocks/transfomer.mock';
 

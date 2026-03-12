@@ -1,5 +1,5 @@
 import {join} from 'node:path';
-import {collectApi} from '../../../api/services/inspector.services';
+import {collectApi} from '../../../../api/idl/services/inspector.services';
 import {mockImports, mockMethodSignatures} from '../mocks/method-signatures.mock';
 
 describe('inspector-services', () => {

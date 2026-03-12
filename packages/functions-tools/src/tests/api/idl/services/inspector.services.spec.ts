@@ -8,7 +8,7 @@ describe('inspector-services', () => {
       inputFile: join(
         process.cwd(),
         'packages',
-        'did-tools',
+        'functions-tools',
         'src',
         'tests',
         'api',
@@ -26,7 +26,7 @@ describe('inspector-services', () => {
       inputFile: join(
         process.cwd(),
         'packages',
-        'did-tools',
+        'functions-tools',
         'src',
         'tests',
         'api',
@@ -44,7 +44,7 @@ describe('inspector-services', () => {
       inputFile: join(
         process.cwd(),
         'packages',
-        'did-tools',
+        'functions-tools',
         'src',
         'tests',
         'api',
@@ -62,7 +62,7 @@ describe('inspector-services', () => {
       inputFile: join(
         process.cwd(),
         'packages',
-        'did-tools',
+        'functions-tools',
         'src',
         'tests',
         'api',

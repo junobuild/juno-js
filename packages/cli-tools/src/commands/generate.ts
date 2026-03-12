@@ -1,5 +1,5 @@
 import {isNullish} from '@dfinity/utils';
-import {generateFunctions, type GenerateFunctionsResult} from '@junobuild/did-tools';
+import {generateFunctions, type GenerateFunctionsResult} from '@junobuild/functions-tools';
 import type {Metafile} from 'esbuild';
 import {writeFile} from 'node:fs/promises';
 import {relative} from 'node:path';

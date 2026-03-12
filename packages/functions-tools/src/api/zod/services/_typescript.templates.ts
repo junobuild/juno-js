@@ -8,7 +8,7 @@ export const tsTemplateWithArgsWithResult = `
 %ARGS_ZOD%
 %RESULT_ZOD%
 
-export const %JS_FUNCTION% = async (args: z.infer<typeof %ARGS_SCHEMA%>): Promise<z.infer<typeof %RESULT_SCHEMA%>> => {
+const %JS_FUNCTION% = async (args: z.infer<typeof %ARGS_SCHEMA%>): Promise<z.infer<typeof %RESULT_SCHEMA%>> => {
   const parsedArgs = %ARGS_SCHEMA%.parse(args);
   const idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
 
@@ -22,7 +22,7 @@ export const %JS_FUNCTION% = async (args: z.infer<typeof %ARGS_SCHEMA%>): Promis
 export const tsTemplateWithArgsNoResult = `
 %ARGS_ZOD%
 
-export const %JS_FUNCTION% = async (args: z.infer<typeof %ARGS_SCHEMA%>): Promise<void> => {
+const %JS_FUNCTION% = async (args: z.infer<typeof %ARGS_SCHEMA%>): Promise<void> => {
   const parsedArgs = %ARGS_SCHEMA%.parse(args);
   const idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
 
@@ -33,7 +33,7 @@ export const %JS_FUNCTION% = async (args: z.infer<typeof %ARGS_SCHEMA%>): Promis
 export const tsTemplateNoArgsWithResult = `
 %RESULT_ZOD%
 
-export const %JS_FUNCTION% = async (): Promise<z.infer<typeof %RESULT_SCHEMA%>> => {
+const %JS_FUNCTION% = async (): Promise<z.infer<typeof %RESULT_SCHEMA%>> => {
   const {%RS_FUNCTION%} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
   const idlResult = await %RS_FUNCTION%();
 
@@ -42,7 +42,7 @@ export const %JS_FUNCTION% = async (): Promise<z.infer<typeof %RESULT_SCHEMA%>> 
 };`;
 
 export const tsTemplateNoArgsNoResult = `
-export const %JS_FUNCTION% = async (): Promise<void> => {
+const %JS_FUNCTION% = async (): Promise<void> => {
   const {%RS_FUNCTION%} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
   await %RS_FUNCTION%();
 };`;

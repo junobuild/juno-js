@@ -7,7 +7,7 @@ export const jsTemplateWithArgsWithResult = `
 %ARGS_ZOD%
 %RESULT_ZOD%
 
-export const %JS_FUNCTION% = async (args) => {
+const %JS_FUNCTION% = async (args) => {
   const parsedArgs = %ARGS_SCHEMA%.parse(args);
   const idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
 
@@ -21,7 +21,7 @@ export const %JS_FUNCTION% = async (args) => {
 export const jsTemplateWithArgsNoResult = `
 %ARGS_ZOD%
 
-export const %JS_FUNCTION% = async (args) => {
+const %JS_FUNCTION% = async (args) => {
   const parsedArgs = %ARGS_SCHEMA%.parse(args);
   const idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
 
@@ -32,7 +32,7 @@ export const %JS_FUNCTION% = async (args) => {
 export const jsTemplateNoArgsWithResult = `
 %RESULT_ZOD%
 
-export const %JS_FUNCTION% = async () => {
+const %JS_FUNCTION% = async () => {
   const {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});
   const idlResult = await %RS_FUNCTION%();
 
@@ -41,7 +41,7 @@ export const %JS_FUNCTION% = async () => {
 };`;
 
 export const jsTemplateNoArgsNoResult = `
-export const %JS_FUNCTION% = async () => {
+const %JS_FUNCTION% = async () => {
   const {%RS_FUNCTION%} = await getSatelliteExtendedActor({idlFactory});
   await %RS_FUNCTION%();
 };`;

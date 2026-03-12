@@ -43,7 +43,7 @@ function install_zod_schemas() {
 }
 
 PACKAGES_IC_MGMT_PEER=admin,cdn
-PACKAGES_UTILS_PEER=admin,auth,cdn,core,core-peer,utils,storage,ic-client,functions,cli-tools,did-tools
+PACKAGES_UTILS_PEER=admin,auth,cdn,core,core-peer,utils,storage,ic-client,functions,cli-tools,functions-tools
 PACKAGES_UTILS=core-standalone
 PACKAGES_ZOD_SCHEMAS=config,zod,functions
 

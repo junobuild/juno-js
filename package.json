@@ -40,7 +40,7 @@
     "packages/config-loader",
     "packages/zod",
     "packages/functions",
-    "packages/did-tools",
+    "packages/functions-tools",
     "packages/cli-tools"
   ],
   "devDependencies": {

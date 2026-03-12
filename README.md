@@ -11,7 +11,6 @@ JavaScript libraries for interfacing with [Juno].
 - [config](/packages/config): configuration options for the CLI
 - [utils](/packages/utils): various utilities used across Juno's JS code base
 - [cli-tools](/packages/cli-tools): few tools used in Juno's CLIs and Plugins
-- [did-tools](/packages/did-tools): tools for generating APIs from DID files
 - [config-loader](/packages/config-loader): utilities for reading configuration settings
 - [auth](/packages/auth): SDK for working with authentication modules
 - [cdn](/packages/cdn): toolkit for working with modules that implement CDN functionality
@@ -19,6 +18,7 @@ JavaScript libraries for interfacing with [Juno].
 - [errors](/packages/errors): error constants and utilities
 - [ic-client](/packages/ic-client): client library for connecting Juno on the Internet Computer
 - [functions](/packages/functions): utilities for Serverless Functions
+- [functions-tools](/packages/functions-tools): tools for generating serverless functions code.
 - [zod](/packages/zod): Zod utilities and converters
 
 ## License

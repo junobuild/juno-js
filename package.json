@@ -258,7 +258,6 @@
       "limit": "10 kB",
       "ignore": [
         "zod",
-        "@dfinity/zod-schemas",
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/identity",

@@ -1,5 +1,5 @@
-import {PrincipalSchema} from '@dfinity/zod-schemas';
 import {Principal} from '@icp-sdk/core/principal';
+import {PrincipalSchema} from '@junobuild/zod';
 import * as z from 'zod';
 import {recursiveFromNullable, recursiveToNullable} from '../did';
 

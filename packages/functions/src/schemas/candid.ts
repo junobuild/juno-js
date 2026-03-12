@@ -1,7 +1,7 @@
 import {
   PrincipalSchema as DfnPrincipalSchema,
   Uint8ArraySchema as DfnUint8ArraySchema
-} from '@dfinity/zod-schemas';
+} from '@junobuild/zod';
 import type * as z from 'zod';
 
 /**

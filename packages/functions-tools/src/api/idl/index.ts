@@ -3,7 +3,7 @@ import type {TransformerOptions} from '../types/transformer-options';
 import {collectApi} from './services/inspector.services';
 import {parseApi} from './services/parser.services';
 
-export const generateApi = async ({
+export const generateIdlApi = async ({
   inputFile,
   outputFile,
   transformerOptions

@@ -1,5 +1,6 @@
+import {capitalize} from '@junobuild/utils';
 import type {z} from 'zod';
-import {jsonToSputnikSchema} from './_converters';
+import {jsonToSputnikSchema, type SputnikSchemaResult} from './_converters';
 import type {SputnikSchema} from './_types';
 
 const sputnikSchemaToDid = (schema: SputnikSchema): string => {
@@ -14,6 +15,10 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
       return 'int32';
     case 'nat':
       return 'nat';
+    case 'principal':
+      return 'principal';
+    case 'uint8array':
+      return 'blob';
     case 'opt':
       return `opt ${sputnikSchemaToDid(schema.inner)}`;
     case 'vec':
@@ -31,25 +36,46 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
       return `variant { ${schema.tags.join('; ')} }`;
     case 'variantRecords':
       return `variant { ${schema.members.map(sputnikSchemaToDid).join('; ')} }`;
-    case 'principal':
-      return 'principal';
-    case 'uint8array':
-      return 'blob';
   }
 };
 
+export interface CandidResult {
+  baseName: string;
+  code: string;
+}
+
+const sputnikSchemaToCandid = ({
+  id,
+  schema,
+  isTopLevelOptional,
+  suffix
+}: SputnikSchemaResult & {suffix: 'Args' | 'Result'}): CandidResult => {
+  const baseName = `${capitalize(id)}${suffix}`;
+  const resolvedSchema: SputnikSchema = isTopLevelOptional ? {kind: 'opt', inner: schema} : schema;
+
+  return {
+    baseName,
+    code: `type ${baseName} = ${sputnikSchemaToDid(resolvedSchema)};`
+  };
+};
+
 /**
- * Converts a record of Zod schemas to a Candid type definition string.
+ * Converts a Zod schema to a Candid type definition string.
  *
- * @param {Record<string, z.ZodType>} inputs - A record mapping type names to Zod schemas.
- * @returns {string} A Candid type definition string, one `type` declaration per entry.
- *
+ * @param {string} id - The base name used to generate the type name.
+ * @param {z.ZodType} schema - The Zod schema to convert.
+ * @param {'Args' | 'Result'} suffix - Whether this represents function arguments or a return type.
+ * @returns {CandidResult} An object containing the generated Candid type declaration and the base type name.
  */
-export const zodToCandid = (inputs: Record<string, z.ZodType>): string =>
-  Object.entries(inputs)
-    .map(([id, zodSchema]) => jsonToSputnikSchema({id, zodSchema}))
-    .map(
-      ({schema, id, isTopLevelOptional}) =>
-        `type ${id} = ${isTopLevelOptional ? `opt ${sputnikSchemaToDid(schema)}` : sputnikSchemaToDid(schema)};`
-    )
-    .join('\n');
+export const zodToCandid = ({
+  id,
+  schema,
+  suffix
+}: {
+  id: string;
+  schema: z.ZodType;
+  suffix: 'Args' | 'Result';
+}): CandidResult => {
+  const converted = jsonToSputnikSchema({zodSchema: schema, id});
+  return sputnikSchemaToCandid({...converted, suffix});
+};

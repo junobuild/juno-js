@@ -60,26 +60,29 @@ An object containing the generated Rust code and the base type name.
 
 #### :gear: zodToCandid
 
-Converts a record of Zod schemas to a Candid type definition string.
+Converts a Zod schema to a Candid type definition string.
 
-| Function      | Type                                                                                                 |
-| ------------- | ---------------------------------------------------------------------------------------------------- |
-| `zodToCandid` | `(inputs: Record<string, ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>>) => string` |
+| Function      | Type                                                                                                                                                            |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `zodToCandid` | `({ id, schema, suffix }: { id: string; schema: ZodType<unknown, unknown, $ZodTypeInternals<unknown, unknown>>; suffix: "Args" or "Result"; }) => CandidResult` |
 
 Parameters:
 
-- `inputs`: - A record mapping type names to Zod schemas.
+- `id`: - The base name used to generate the type name.
+- `schema`: - The Zod schema to convert.
+- `suffix`: - Whether this represents function arguments or a return type.
 
 Returns:
 
-A Candid type definition string, one `type` declaration per entry.
+An object containing the generated Candid type declaration and the base type name.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-candid.ts#L48)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-candid.ts#L70)
 
 ### :tropical_drink: Interfaces
 
 - [IdlResult](#gear-idlresult)
 - [RustResult](#gear-rustresult)
+- [CandidResult](#gear-candidresult)
 
 #### :gear: IdlResult
 
@@ -98,6 +101,15 @@ A Candid type definition string, one `type` declaration per entry.
 | `code`     | `string` |             |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L143)
+
+#### :gear: CandidResult
+
+| Property   | Type     | Description |
+| ---------- | -------- | ----------- |
+| `baseName` | `string` |             |
+| `code`     | `string` |             |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-candid.ts#L42)
 
 <!-- TSDOC_END -->
 

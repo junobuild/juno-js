@@ -1,9 +1,11 @@
 import {parseZodApi} from '../../../../api/zod/services/parser.services';
 import {
+  mockJsFullNoArgsNoResult,
   mockJsNoArgsNoResult,
   mockJsNoArgsWithResult,
   mockJsWithArgsNoResult,
   mockJsWithArgsWithResult,
+  mockTsFullNoArgsNoResult,
   mockTsNoArgsNoResult,
   mockTsNoArgsWithResult,
   mockTsWithArgsNoResult,
@@ -511,6 +513,24 @@ describe('zod-api-parser', () => {
         transformerOptions: {outputLanguage: 'js'}
       });
       expect(result.trim()).toContain(mockJsWithArgsWithResult);
+    });
+
+    it('should match full ts output no args no result', () => {
+      const result = parseZodApi({
+        queries: [['helloWorld', mockQueryNoArgsNoResult]],
+        updates: [],
+        transformerOptions: {outputLanguage: 'ts'}
+      });
+      expect(result.trim()).toEqual(mockTsFullNoArgsNoResult);
+    });
+
+    it('should match full js output no args no result', () => {
+      const result = parseZodApi({
+        queries: [['helloWorld', mockQueryNoArgsNoResult]],
+        updates: [],
+        transformerOptions: {outputLanguage: 'js'}
+      });
+      expect(result.trim()).toEqual(mockJsFullNoArgsNoResult);
     });
   });
 });

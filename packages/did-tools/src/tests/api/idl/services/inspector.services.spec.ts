@@ -12,6 +12,7 @@ describe('inspector-services', () => {
         'src',
         'tests',
         'api',
+        'idl',
         'mocks',
         'satellite.formatted.did.mock.ts'
       )
@@ -65,6 +66,7 @@ describe('inspector-services', () => {
         'src',
         'tests',
         'api',
+        'idl',
         'mocks',
         'satellite.raw.did.mock.ts'
       )

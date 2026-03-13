@@ -82,7 +82,7 @@ describe('object with enum field', () => {
     z.object({status: z.enum(['active', 'inactive'])}),
     [
       '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgsStatus {\n    Active,\n    Inactive,\n}',
-      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[json_data(nested)]\n    pub status: MyFunctionArgsStatus,\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub status: MyFunctionArgsStatus,\n}'
     ].join('\n\n')
   );
 });

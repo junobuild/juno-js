@@ -66,13 +66,24 @@ describe('enums', () => {
   rust(
     'myFunction',
     z.enum(['a', 'b']),
-    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    A,\n    B,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgs {\n    A,\n    B,\n}'
   );
 
   rust(
     'myFunction',
     z.enum(['active', 'inactive']),
-    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    Active,\n    Inactive,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgs {\n    Active,\n    Inactive,\n}'
+  );
+});
+
+describe('object with enum field', () => {
+  rust(
+    'myFunction',
+    z.object({status: z.enum(['active', 'inactive'])}),
+    [
+      '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgsStatus {\n    Active,\n    Inactive,\n}',
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[json_data(nested)]\n    pub status: MyFunctionArgsStatus,\n}'
+    ].join('\n\n')
   );
 });
 
@@ -142,19 +153,6 @@ describe('nested objects', () => {
   );
 });
 
-// ─── Object with enum field ───────────────────────────────────────────────────
-
-describe('object with enum field', () => {
-  rust(
-    'myFunction',
-    z.object({status: z.enum(['active', 'inactive'])}),
-    [
-      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgsStatus {\n    Active,\n    Inactive,\n}',
-      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[json_data(nested)]\n    pub status: MyFunctionArgsStatus,\n}'
-    ].join('\n\n')
-  );
-});
-
 // ─── Object with array field ──────────────────────────────────────────────────
 
 describe('object with array field', () => {
@@ -183,6 +181,40 @@ describe('throws', () => {
   throws('myFunction', z.date());
   throws('myFunction', z.map(z.string(), z.string()));
   throws('myFunction', z.set(z.string()));
+});
+
+// ─── Literal (single-tag variant) ────────────────────────────────────────────
+
+describe('literal', () => {
+  rust('myFunction', z.literal('active'), 'pub type MyFunctionArgs = String;');
+  rust('myFunction', z.literal('pending'), 'pub type MyFunctionArgs = String;');
+});
+
+// ─── Discriminated union (variantRecords) ─────────────────────────────────────
+
+describe('discriminated union', () => {
+  rust(
+    'myFunction',
+    z.discriminatedUnion('type', [
+      z.object({type: z.literal('active')}),
+      z.object({type: z.literal('inactive')})
+    ]),
+    [
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    Variant0 {\n        type: String,\n    },\n    Variant1 {\n        type: String,\n    }\n}'
+    ].join('\n\n')
+  );
+
+  rust(
+    'myFunction',
+    z.discriminatedUnion('type', [
+      z.object({type: z.literal('active'), owner: PrincipalSchema}),
+      z.object({type: z.literal('inactive')}),
+      z.object({type: z.literal('pending'), assignee: PrincipalSchema})
+    ]),
+    [
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    Variant0 {\n        type: String,\n        owner: Principal,\n    },\n    Variant1 {\n        type: String,\n    },\n    Variant2 {\n        type: String,\n        assignee: Principal,\n    }\n}'
+    ].join('\n\n')
+  );
 });
 
 describe('baseName', () => {

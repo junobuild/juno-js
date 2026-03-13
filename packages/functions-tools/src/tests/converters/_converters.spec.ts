@@ -373,27 +373,6 @@ describe('unions', () => {
     tags: ['a', 'b', 'c']
   });
 
-  schema('UnionObjects', z.union([z.object({a: z.string()}), z.object({b: z.int()})]), {
-    kind: 'variantRecords',
-    members: [
-      {kind: 'record', fields: [{name: 'a', type: {kind: 'text'}}]},
-      {kind: 'record', fields: [{name: 'b', type: {kind: 'int32'}}]}
-    ]
-  });
-
-  schema(
-    'UnionThreeObjects',
-    z.union([z.object({a: z.string()}), z.object({b: z.int()}), z.object({c: z.boolean()})]),
-    {
-      kind: 'variantRecords',
-      members: [
-        {kind: 'record', fields: [{name: 'a', type: {kind: 'text'}}]},
-        {kind: 'record', fields: [{name: 'b', type: {kind: 'int32'}}]},
-        {kind: 'record', fields: [{name: 'c', type: {kind: 'bool'}}]}
-      ]
-    }
-  );
-
   schema(
     'UnionOptional',
     z.union([z.literal('foo'), z.literal('bar')]).optional(),
@@ -542,4 +521,9 @@ describe('throws', () => {
   throws('ArrayWithUndefined', z.array(z.undefined()));
   throws('NonObjectIntersection', z.intersection(z.string(), z.number()));
   throws('ObjectIntersectionWithNonObject', z.intersection(z.object({a: z.string()}), z.string()));
+  throws('UnionObjects', z.union([z.object({a: z.string()}), z.object({b: z.int()})]));
+  throws(
+    'UnionThreeObjects',
+    z.union([z.object({a: z.string()}), z.object({b: z.int()}), z.object({c: z.boolean()})])
+  );
 });

@@ -181,6 +181,7 @@ describe('throws', () => {
   throws('myFunction', z.date());
   throws('myFunction', z.map(z.string(), z.string()));
   throws('myFunction', z.set(z.string()));
+  throws('myFunction', z.union([z.object({a: z.string()}), z.object({b: z.int()})]));
 });
 
 // ─── Literal (single-tag variant) ────────────────────────────────────────────

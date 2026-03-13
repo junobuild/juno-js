@@ -59,10 +59,6 @@ const schemaToIdlType = (schema: SputnikSchema): IDL.Type => {
           })
         )
       );
-    case 'variantRecords':
-      return IDL.Variant(
-        Object.fromEntries(schema.members.map((m, i) => [`Variant${i}`, schemaToIdlType(m)]))
-      );
   }
 };
 

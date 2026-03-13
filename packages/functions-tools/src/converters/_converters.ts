@@ -225,10 +225,7 @@ const jsonToSchema = ({
       };
     }
 
-    return {
-      kind: 'variantRecords',
-      members: variants.map((schema) => jsonToSchema({schema, rootDefs}))
-    };
+    throw new Error('z.union of objects is not supported. Use z.discriminatedUnion instead.');
   }
 
   if (schema.anyOf !== undefined) {
@@ -249,10 +246,7 @@ const jsonToSchema = ({
       return {kind: 'opt', inner: jsonToSchema({schema: nonNull[0], rootDefs})};
     }
 
-    return {
-      kind: 'variantRecords',
-      members: nonNull.map((schema) => jsonToSchema({schema, rootDefs}))
-    };
+    throw new Error('z.union of objects is not supported. Use z.discriminatedUnion instead.');
   }
 
   if (schema.allOf !== undefined) {

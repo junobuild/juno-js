@@ -177,43 +177,6 @@ const schemaToRustType = ({
       });
     }
 
-    case 'variantRecords': {
-      const enumName = capitalize(structName);
-      const results = schema.members.map((m, i) => {
-        if (m.kind === 'record') {
-          const fieldResults = m.fields.map((f) =>
-            schemaToRustType({schema: f.type, structName: `${structName}${capitalize(f.name)}`})
-          );
-
-          const fields = m.fields
-            .map((f, fi) => {
-              const {name: fieldName, sanitized} = sanitizeFieldName(f.name);
-              const renameAttr = sanitized ? `        #[serde(rename = "${f.name}")]\n` : '';
-              return `${renameAttr}        ${fieldName}: ${fieldResults[fi].fieldType},`;
-            })
-            .join('\n');
-
-          return {
-            variantLine: `    Variant${i} {\n${fields}\n    }`,
-            structs: collectStructs(fieldResults)
-          };
-        }
-        const inner = schemaToRustType({schema: m, structName: `${structName}Variant${i}`});
-        return {
-          variantLine: `    Variant${i}(${inner.fieldType})`,
-          structs: inner.kind === 'composite' ? inner.structs : []
-        };
-      });
-      const variants = results.map((r) => r.variantLine).join(',\n');
-      return composite({
-        fieldType: enumName,
-        structs: [
-          ...results.flatMap((r) => r.structs),
-          `${DERIVES}\npub enum ${enumName} {\n${variants}\n}`
-        ]
-      });
-    }
-
     case 'record': {
       const recordName = capitalize(structName);
       const fieldResults = schema.fields.map((f) =>

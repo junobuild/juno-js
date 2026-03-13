@@ -192,11 +192,6 @@ describe('unions', () => {
   );
   zod(
     'myFunction',
-    z.union([z.object({a: z.string()}), z.object({b: z.int()})]),
-    'const MyFunctionArgsSchema = z.union([z.strictObject({a: z.string()}), z.strictObject({b: z.int()})]);'
-  );
-  zod(
-    'myFunction',
     z.discriminatedUnion('type', [
       z.object({type: z.literal('cat'), name: z.string()}),
       z.object({type: z.literal('dog'), breed: z.string()})
@@ -240,4 +235,5 @@ describe('throws', () => {
   throws('Date', z.date());
   throws('Map', z.map(z.string(), z.string()));
   throws('Set', z.set(z.string()));
+  throws('myFunction', z.union([z.object({a: z.string()}), z.object({b: z.int()})]));
 });

@@ -59,8 +59,6 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
           return tagValue !== undefined ? `${tagValue} : ${inner}` : inner;
         })
         .join('; ')} }`;
-    case 'variantRecords':
-      return `variant { ${schema.members.map(sputnikSchemaToDid).join('; ')} }`;
   }
 };
 

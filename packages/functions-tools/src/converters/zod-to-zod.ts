@@ -30,6 +30,8 @@ const schemaToZodString = (schema: SputnikSchema): string => {
       return `z.strictObject({${schema.fields.map((f) => `${f.name}: ${schemaToZodString(f.type)}`).join(', ')}})`;
     case 'variant':
       return `z.enum([${schema.tags.map((t) => `'${t}'`).join(', ')}])`;
+    case 'discriminatedUnion':
+      return `z.discriminatedUnion('${schema.discriminator}', [${schema.members.map(schemaToZodString).join(', ')}])`;
     case 'variantRecords':
       return `z.union([${schema.members.map(schemaToZodString).join(', ')}])`;
   }

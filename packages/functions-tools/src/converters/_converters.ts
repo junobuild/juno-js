@@ -8,6 +8,40 @@ export interface SputnikSchemaResult {
   isTopLevelOptional: boolean;
 }
 
+const findDiscriminator = (variants: JSONSchema[]): string | null => {
+  if (variants.some((v) => v.type !== 'object' || v.properties === undefined)) {
+    return null;
+  }
+
+  const [first, ...rest] = variants;
+  const firstProperties = first.properties;
+
+  if (firstProperties === undefined) {
+    return null;
+  }
+
+  const candidate = Object.entries(firstProperties).find(
+    ([_, v]) => typeof v !== 'boolean' && v.const !== undefined
+  )?.[0];
+
+  if (candidate === undefined) {
+    return null;
+  }
+
+  if (
+    rest.every(
+      (v) =>
+        v.properties?.[candidate] !== undefined &&
+        typeof v.properties[candidate] !== 'boolean' &&
+        v.properties[candidate].const !== undefined
+    )
+  ) {
+    return candidate;
+  }
+
+  return null;
+};
+
 export const jsonToSputnikSchema = ({
   id,
   zodSchema
@@ -179,6 +213,16 @@ const jsonToSchema = ({
 
     if (variants.length === 1) {
       return {kind: 'opt', inner: jsonToSchema({schema: variants[0], rootDefs})};
+    }
+
+    const discriminator = findDiscriminator(variants);
+
+    if (discriminator !== null) {
+      return {
+        kind: 'discriminatedUnion',
+        discriminator,
+        members: variants.map((schema) => jsonToSchema({schema, rootDefs}))
+      };
     }
 
     return {

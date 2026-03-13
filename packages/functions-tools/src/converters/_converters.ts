@@ -33,7 +33,7 @@ const findDiscriminator = (variants: JSONSchema[]): string | null => {
       (v) =>
         v.properties?.[candidate] !== undefined &&
         typeof v.properties[candidate] !== 'boolean' &&
-        (v.properties[candidate]).const !== undefined
+        v.properties[candidate].const !== undefined
     )
   ) {
     return candidate;

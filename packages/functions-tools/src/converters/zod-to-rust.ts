@@ -115,7 +115,11 @@ const schemaToRustType = ({
       }
 
       const enumName = capitalize(structName);
-      const variants = schema.tags.map((tag) => `    ${capitalize(tag)},`).join('\n');
+
+      const variants = schema.tags
+        .map((tag) => `    #[serde(rename = "${tag}")]\n    ${capitalize(tag)},`)
+        .join('\n');
+
       return composite({
         fieldType: enumName,
         structs: [`${DERIVES_SIMPLE_ENUM}\npub enum ${enumName} {\n${variants}\n}`],

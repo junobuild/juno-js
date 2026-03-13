@@ -87,6 +87,14 @@ describe('object with enum field', () => {
   );
 });
 
+describe('variant records', () => {
+  rust(
+    'myFunction',
+    z.union([z.object({count: z.number(), label: z.string()}), z.object({value: z.number()})]),
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    Variant0 {\n        count: f64,\n        label: String,\n    },\n    Variant1 {\n        value: f64,\n    }\n}'
+  );
+});
+
 // ─── Arrays ───────────────────────────────────────────────────────────────────
 
 describe('arrays', () => {

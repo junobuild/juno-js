@@ -8,6 +8,29 @@ const DERIVES = '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]'
 // Simple string enums do not require JsonData — serde handles them natively
 const DERIVES_SIMPLE_ENUM = '#[derive(CandidType, Serialize, Deserialize, Clone)]';
 
+// Handle struct field not supported in Rust which would lead to issue such as "Field type is required"
+// type => r#type
+const RUST_KEYWORDS = new Set([
+  'type',
+  'struct',
+  'enum',
+  'fn',
+  'let',
+  'match',
+  'use',
+  'mod',
+  'impl',
+  'trait',
+  'where',
+  'move',
+  'ref',
+  'self',
+  'super',
+  'crate'
+]);
+
+const sanitizeFieldName = (name: string): string => (RUST_KEYWORDS.has(name) ? `r#${name}` : name);
+
 type RustTypeResult =
   | {kind: 'primitive'; fieldType: string}
   | {kind: 'composite'; fieldType: string; structs: string[]};
@@ -101,7 +124,7 @@ const schemaToRustType = ({
             schemaToRustType({schema: f.type, structName: `${structName}${capitalize(f.name)}`})
           );
           const fields = m.fields
-            .map((f, fi) => `        ${f.name}: ${fieldResults[fi].fieldType},`)
+            .map((f, fi) => `        ${sanitizeFieldName(f.name)}: ${fieldResults[fi].fieldType},`)
             .join('\n');
           return {
             variantLine: `    Variant${i} {\n${fields}\n    }`,
@@ -133,7 +156,7 @@ const schemaToRustType = ({
         .map((f, i) => {
           const result = fieldResults[i];
           const attr = result.kind === 'composite' ? '    #[json_data(nested)]\n' : '';
-          return `${attr}    pub ${f.name}: ${result.fieldType},`;
+          return `${attr}    pub ${sanitizeFieldName(f.name)}: ${result.fieldType},`;
         })
         .join('\n');
       return composite({

@@ -66,13 +66,13 @@ describe('enums', () => {
   rust(
     'myFunction',
     z.enum(['a', 'b']),
-    '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgs {\n    A,\n    B,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgs {\n    #[serde(rename = "a")]\n    A,\n    #[serde(rename = "b")]\n    B,\n}'
   );
 
   rust(
     'myFunction',
     z.enum(['active', 'inactive']),
-    '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgs {\n    Active,\n    Inactive,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgs {\n    #[serde(rename = "active")]\n    Active,\n    #[serde(rename = "inactive")]\n    Inactive,\n}'
   );
 });
 
@@ -81,7 +81,7 @@ describe('object with enum field', () => {
     'myFunction',
     z.object({status: z.enum(['active', 'inactive'])}),
     [
-      '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgsStatus {\n    Active,\n    Inactive,\n}',
+      '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgsStatus {\n    #[serde(rename = "active")]\n    Active,\n    #[serde(rename = "inactive")]\n    Inactive,\n}',
       '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub status: MyFunctionArgsStatus,\n}'
     ].join('\n\n')
   );

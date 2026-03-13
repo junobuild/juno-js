@@ -210,7 +210,8 @@ const schemaToRustType = ({
         structs: [
           ...results.flatMap((r) => r.structs),
           `${DERIVES}\npub enum ${enumName} {\n${variants}\n}`
-        ]
+        ],
+        needsJsonData: false
       });
     }
 

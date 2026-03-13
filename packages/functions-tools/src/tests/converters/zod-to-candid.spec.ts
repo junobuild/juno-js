@@ -342,7 +342,7 @@ describe('unions', () => {
       z.object({type: z.literal('cat'), name: z.string()}),
       z.object({type: z.literal('dog'), breed: z.string()})
     ]),
-    'variant { record { type : variant { cat }; name : text }; record { type : variant { dog }; breed : text } }'
+    'variant { cat : record { name : text }; dog : record { breed : text } }'
   );
 });
 

@@ -210,3 +210,19 @@ describe('throws', () => {
   throws('Map', z.map(z.string(), z.string()));
   throws('Set', z.set(z.string()));
 });
+
+describe('discriminated union', () => {
+  idl(
+    'DiscriminatedUnion',
+    z.discriminatedUnion('type', [
+      z.object({type: z.literal('active'), owner: PrincipalSchema}),
+      z.object({type: z.literal('inactive')}),
+      z.object({type: z.literal('pending'), assignee: PrincipalSchema})
+    ]),
+    IDL.Variant({
+      active: IDL.Record({owner: IDL.Principal}),
+      inactive: IDL.Record({}),
+      pending: IDL.Record({assignee: IDL.Principal})
+    })
+  );
+});

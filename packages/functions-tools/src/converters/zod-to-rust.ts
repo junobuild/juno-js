@@ -149,7 +149,7 @@ const schemaToRustType = ({
         fieldType: enumName,
         structs: [
           ...results.flatMap((r) => r.structs),
-          `${DERIVES}\npub enum ${enumName} {\n${variants}\n}`
+          `${DERIVES}\n#[serde(untagged)]\npub enum ${enumName} {\n${variants}\n}`
         ]
       });
     }

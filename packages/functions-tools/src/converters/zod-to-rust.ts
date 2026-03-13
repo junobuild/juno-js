@@ -162,7 +162,7 @@ const schemaToRustType = ({
         fieldType: enumName,
         structs: [
           ...results.flatMap((r) => r.structs),
-          `${DERIVES}\n#[serde(tag = "${schema.discriminator}")]\npub enum ${enumName} {\n${variants}\n}`
+          `${DERIVES}\n#[json_data(tag = "${schema.discriminator}")]\npub enum ${enumName} {\n${variants}\n}`
         ]
       });
     }

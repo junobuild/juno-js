@@ -200,7 +200,7 @@ describe('discriminated union', () => {
       z.object({type: z.literal('inactive')})
     ]),
     [
-      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    Variant0 {\n        r#type: String,\n    },\n    Variant1 {\n        r#type: String,\n    }\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    Variant0 {\n        #[serde(rename = "type")]\n        r#type: String,\n    },\n    Variant1 {\n        #[serde(rename = "type")]\n        r#type: String,\n    }\n}'
     ].join('\n\n')
   );
 
@@ -212,7 +212,7 @@ describe('discriminated union', () => {
       z.object({type: z.literal('pending'), assignee: PrincipalSchema})
     ]),
     [
-      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    Variant0 {\n        r#type: String,\n        owner: Principal,\n    },\n    Variant1 {\n        r#type: String,\n    },\n    Variant2 {\n        r#type: String,\n        assignee: Principal,\n    }\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub enum MyFunctionArgs {\n    Variant0 {\n        #[serde(rename = "type")]\n        r#type: String,\n        owner: Principal,\n    },\n    Variant1 {\n        #[serde(rename = "type")]\n        r#type: String,\n    },\n    Variant2 {\n        #[serde(rename = "type")]\n        r#type: String,\n        assignee: Principal,\n    }\n}'
     ].join('\n\n')
   );
 });
@@ -221,19 +221,39 @@ describe('reserved keyword field names', () => {
   rust(
     'myFunction',
     z.object({type: z.string()}),
-    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub r#type: String,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[serde(rename = "type")]\n    pub r#type: String,\n}'
   );
 
   rust(
     'myFunction',
     z.object({ref: z.string()}),
-    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub r#ref: String,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[serde(rename = "ref")]\n    pub r#ref: String,\n}'
   );
 
   rust(
     'myFunction',
     z.object({self: z.string()}),
-    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub r#self: String,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[serde(rename = "self")]\n    pub r#self: String,\n}'
+  );
+});
+
+describe('reserved keyword field names', () => {
+  rust(
+    'myFunction',
+    z.object({type: z.string()}),
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[serde(rename = "type")]\n    pub r#type: String,\n}'
+  );
+
+  rust(
+    'myFunction',
+    z.object({ref: z.string()}),
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[serde(rename = "ref")]\n    pub r#ref: String,\n}'
+  );
+
+  rust(
+    'myFunction',
+    z.object({self: z.string()}),
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[serde(rename = "self")]\n    pub r#self: String,\n}'
   );
 });
 

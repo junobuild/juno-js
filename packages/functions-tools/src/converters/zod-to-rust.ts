@@ -29,7 +29,8 @@ const RUST_KEYWORDS = new Set([
   'crate'
 ]);
 
-const sanitizeFieldName = (name: string): string => (RUST_KEYWORDS.has(name) ? `r#${name}` : name);
+const sanitizeFieldName = (name: string): {name: string; sanitized: boolean} =>
+  RUST_KEYWORDS.has(name) ? {name: `r#${name}`, sanitized: true} : {name, sanitized: false};
 
 type RustTypeResult =
   | {kind: 'primitive'; fieldType: string}
@@ -123,9 +124,15 @@ const schemaToRustType = ({
           const fieldResults = m.fields.map((f) =>
             schemaToRustType({schema: f.type, structName: `${structName}${capitalize(f.name)}`})
           );
+
           const fields = m.fields
-            .map((f, fi) => `        ${sanitizeFieldName(f.name)}: ${fieldResults[fi].fieldType},`)
+            .map((f, fi) => {
+              const {name: fieldName, sanitized} = sanitizeFieldName(f.name);
+              const renameAttr = sanitized ? `        #[serde(rename = "${f.name}")]\n` : '';
+              return `${renameAttr}        ${fieldName}: ${fieldResults[fi].fieldType},`;
+            })
             .join('\n');
+
           return {
             variantLine: `    Variant${i} {\n${fields}\n    }`,
             structs: collectStructs(fieldResults)
@@ -152,13 +159,17 @@ const schemaToRustType = ({
       const fieldResults = schema.fields.map((f) =>
         schemaToRustType({schema: f.type, structName: `${structName}${capitalize(f.name)}`})
       );
+
       const fields = schema.fields
         .map((f, i) => {
           const result = fieldResults[i];
+          const {name: fieldName, sanitized} = sanitizeFieldName(f.name);
+          const renameAttr = sanitized ? `    #[serde(rename = "${f.name}")]\n` : '';
           const attr = result.kind === 'composite' ? '    #[json_data(nested)]\n' : '';
-          return `${attr}    pub ${sanitizeFieldName(f.name)}: ${result.fieldType},`;
+          return `${renameAttr}${attr}    pub ${fieldName}: ${result.fieldType},`;
         })
         .join('\n');
+
       return composite({
         fieldType: recordName,
         structs: [

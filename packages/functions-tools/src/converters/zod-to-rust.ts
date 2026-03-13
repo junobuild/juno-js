@@ -5,6 +5,9 @@ import type {SputnikSchema} from './_types';
 
 const DERIVES = '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]';
 
+// Simple string enums do not require JsonData — serde handles them natively
+const DERIVES_SIMPLE_ENUM = '#[derive(CandidType, Serialize, Deserialize, Clone)]';
+
 type RustTypeResult =
   | {kind: 'primitive'; fieldType: string}
   | {kind: 'composite'; fieldType: string; structs: string[]};
@@ -78,11 +81,15 @@ const schemaToRustType = ({
     }
 
     case 'variant': {
+      if (schema.tags.length === 1) {
+        return primitive({fieldType: 'String'});
+      }
+
       const enumName = capitalize(structName);
       const variants = schema.tags.map((tag) => `    ${capitalize(tag)},`).join('\n');
       return composite({
         fieldType: enumName,
-        structs: [`${DERIVES}\npub enum ${enumName} {\n${variants}\n}`]
+        structs: [`${DERIVES_SIMPLE_ENUM}\npub enum ${enumName} {\n${variants}\n}`]
       });
     }
 

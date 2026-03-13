@@ -195,6 +195,14 @@ describe('unions', () => {
     z.union([z.object({a: z.string()}), z.object({b: z.int()})]),
     'const MyFunctionArgsSchema = z.union([z.strictObject({a: z.string()}), z.strictObject({b: z.int()})]);'
   );
+  zod(
+    'myFunction',
+    z.discriminatedUnion('type', [
+      z.object({type: z.literal('cat'), name: z.string()}),
+      z.object({type: z.literal('dog'), breed: z.string()})
+    ]),
+    "const MyFunctionArgsSchema = z.discriminatedUnion('type', [z.strictObject({type: z.enum(['cat']), name: z.string()}), z.strictObject({type: z.enum(['dog']), breed: z.string()})]);"
+  );
 });
 
 // ─── Intersections ────────────────────────────────────────────────────────────

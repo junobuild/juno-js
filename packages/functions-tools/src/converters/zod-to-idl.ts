@@ -33,6 +33,7 @@ const schemaToIdlType = (schema: SputnikSchema): IDL.Type => {
       );
     case 'variant':
       return IDL.Variant(Object.fromEntries(schema.tags.map((t) => [t, IDL.Null])));
+    case 'discriminatedUnion':
     case 'variantRecords':
       return IDL.Variant(
         Object.fromEntries(schema.members.map((m, i) => [`Variant${i}`, schemaToIdlType(m)]))

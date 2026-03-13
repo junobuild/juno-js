@@ -408,7 +408,8 @@ describe('unions', () => {
       z.object({type: z.literal('dog'), breed: z.string()})
     ]),
     {
-      kind: 'variantRecords',
+      kind: 'discriminatedUnion',
+      discriminator: 'type',
       members: [
         {
           kind: 'record',

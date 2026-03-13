@@ -34,6 +34,7 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
       return `record { ${schema.members.map((m, i) => `${i} : ${sputnikSchemaToDid(m)}`).join('; ')} }`;
     case 'variant':
       return `variant { ${schema.tags.join('; ')} }`;
+    case 'discriminatedUnion':
     case 'variantRecords':
       return `variant { ${schema.members.map(sputnikSchemaToDid).join('; ')} }`;
   }

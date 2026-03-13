@@ -117,6 +117,56 @@ const schemaToRustType = ({
       });
     }
 
+    case 'discriminatedUnion': {
+      const enumName = capitalize(structName);
+      const results = schema.members.map((m, i) => {
+        if (m.kind === 'record') {
+          const nonDiscriminatorFields = m.fields.filter((f) => f.name !== schema.discriminator);
+          const fieldResults = nonDiscriminatorFields.map((f) =>
+            schemaToRustType({schema: f.type, structName: `${structName}${capitalize(f.name)}`})
+          );
+
+          const fields = nonDiscriminatorFields
+            .map((f, fi) => {
+              const {name: fieldName, sanitized} = sanitizeFieldName(f.name);
+              const renameAttr = sanitized ? `        #[serde(rename = "${f.name}")]\n` : '';
+              return `${renameAttr}        ${fieldName}: ${fieldResults[fi].fieldType},`;
+            })
+            .join('\n');
+
+          const discriminatorField = m.fields.find((f) => f.name === schema.discriminator);
+          const tagValue =
+            discriminatorField?.type.kind === 'variant'
+              ? discriminatorField.type.tags[0]
+              : undefined;
+          const renameVariant =
+            tagValue !== undefined ? `    #[serde(rename = "${tagValue}")]\n` : '';
+
+          return {
+            variantLine:
+              fields.length > 0
+                ? `${renameVariant}    Variant${i} {\n${fields}\n    }`
+                : `${renameVariant}    Variant${i}`,
+            structs: collectStructs(fieldResults)
+          };
+        }
+        const inner = schemaToRustType({schema: m, structName: `${structName}Variant${i}`});
+        return {
+          variantLine: `    Variant${i}(${inner.fieldType})`,
+          structs: inner.kind === 'composite' ? inner.structs : []
+        };
+      });
+
+      const variants = results.map((r) => r.variantLine).join(',\n');
+      return composite({
+        fieldType: enumName,
+        structs: [
+          ...results.flatMap((r) => r.structs),
+          `${DERIVES}\n#[serde(tag = "${schema.discriminator}")]\npub enum ${enumName} {\n${variants}\n}`
+        ]
+      });
+    }
+
     case 'variantRecords': {
       const enumName = capitalize(structName);
       const results = schema.members.map((m, i) => {
@@ -149,7 +199,7 @@ const schemaToRustType = ({
         fieldType: enumName,
         structs: [
           ...results.flatMap((r) => r.structs),
-          `${DERIVES}\n#[serde(untagged)]\npub enum ${enumName} {\n${variants}\n}`
+          `${DERIVES}\npub enum ${enumName} {\n${variants}\n}`
         ]
       });
     }

@@ -93,7 +93,7 @@ export const schemaFromIdl = ({schema, value}: IdlParams): unknown => {
       throw new Error(`Expected exactly one key in variant object, got: ${keys.join(', ')}`);
     }
 
-    const tag = keys[0];
+    const [tag] = keys;
     const inner = obj[tag];
 
     if (typeof inner !== 'object' || inner === null) {

@@ -1,7 +1,7 @@
 {
   "name": "@junobuild/schema",
   "version": "1.0.0",
-  "description": "All schemas and utilities for validation on Juno",
+  "description": "The type system and utilities for validation on Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
   "type": "module",
@@ -47,7 +47,8 @@
   "keywords": [
     "schema",
     "validation",
-    "zod"
+    "zod",
+    "type-system"
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {

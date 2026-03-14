@@ -1,7 +1,7 @@
 export const tsTemplateImports = `import type {_SERVICE as SatelliteActor} from './satellite.did';
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/%CORE_LIB%';
-import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';
+import {schemaToIdl, schemaFromIdl} from '@junobuild/schema/utils';
 import {j} from '@junobuild/schema';`;
 
 export const tsTemplateWithArgsWithResult = `
@@ -10,12 +10,12 @@ export const tsTemplateWithArgsWithResult = `
 
 const %JS_FUNCTION% = async (args: j.infer<typeof %ARGS_SCHEMA%>): Promise<j.infer<typeof %RESULT_SCHEMA%>> => {
 \tconst parsedArgs = %ARGS_SCHEMA%.parse(args);
-\tconst idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
+\tconst idlArgs = schemaToIdl({schema: %ARGS_SCHEMA%, value: parsedArgs});
 
 \tconst {%RS_FUNCTION%} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tconst idlResult = await %RS_FUNCTION%(idlArgs);
 
-\tconst result = recursiveFromNullable({schema: %RESULT_SCHEMA%, value: idlResult});
+\tconst result = schemaFromIdl({schema: %RESULT_SCHEMA%, value: idlResult});
 \treturn %RESULT_SCHEMA%.parse(result);
 };`;
 
@@ -24,7 +24,7 @@ export const tsTemplateWithArgsNoResult = `
 
 const %JS_FUNCTION% = async (args: j.infer<typeof %ARGS_SCHEMA%>): Promise<void> => {
 \tconst parsedArgs = %ARGS_SCHEMA%.parse(args);
-\tconst idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
+\tconst idlArgs = schemaToIdl({schema: %ARGS_SCHEMA%, value: parsedArgs});
 
 \tconst {%RS_FUNCTION%} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tawait %RS_FUNCTION%(idlArgs);
@@ -37,7 +37,7 @@ const %JS_FUNCTION% = async (): Promise<j.infer<typeof %RESULT_SCHEMA%>> => {
 \tconst {%RS_FUNCTION%} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tconst idlResult = await %RS_FUNCTION%();
 
-\tconst result = recursiveFromNullable({schema: %RESULT_SCHEMA%, value: idlResult});
+\tconst result = schemaFromIdl({schema: %RESULT_SCHEMA%, value: idlResult});
 \treturn %RESULT_SCHEMA%.parse(result);
 };`;
 

@@ -19,7 +19,7 @@ JavaScript libraries for interfacing with [Juno].
 - [ic-client](/packages/ic-client): client library for connecting Juno on the Internet Computer
 - [functions](/packages/functions): utilities for Serverless Functions
 - [functions-tools](/packages/functions-tools): tools for generating serverless functions code
-- [schema](/packages/schema): All schemas and utilities for validation on Juno
+- [schema](/packages/schema): the type system and utilities for validation on Juno
 
 ## License
 

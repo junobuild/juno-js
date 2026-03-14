@@ -167,11 +167,6 @@ describe('unions', () => {
     z.union([z.literal('foo'), z.literal('bar')]),
     IDL.Variant({foo: IDL.Null, bar: IDL.Null})
   );
-  idl(
-    'UnionObjects',
-    z.union([z.object({a: z.string()}), z.object({b: z.int()})]),
-    IDL.Variant({Variant0: IDL.Record({a: IDL.Text}), Variant1: IDL.Record({b: IDL.Int32})})
-  );
 });
 
 // ─── Intersections ────────────────────────────────────────────────────────────
@@ -209,4 +204,21 @@ describe('throws', () => {
   throws('Date', z.date());
   throws('Map', z.map(z.string(), z.string()));
   throws('Set', z.set(z.string()));
+  throws('UnionObjects', z.union([z.object({a: z.string()}), z.object({b: z.int()})]));
+});
+
+describe('discriminated union', () => {
+  idl(
+    'DiscriminatedUnion',
+    z.discriminatedUnion('type', [
+      z.object({type: z.literal('active'), owner: PrincipalSchema}),
+      z.object({type: z.literal('inactive')}),
+      z.object({type: z.literal('pending'), assignee: PrincipalSchema})
+    ]),
+    IDL.Variant({
+      active: IDL.Record({owner: IDL.Principal}),
+      inactive: IDL.Record({}),
+      pending: IDL.Record({assignee: IDL.Principal})
+    })
+  );
 });

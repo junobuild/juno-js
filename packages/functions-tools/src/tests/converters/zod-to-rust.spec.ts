@@ -66,13 +66,13 @@ describe('enums', () => {
   rust(
     'myFunction',
     z.enum(['a', 'b']),
-    '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgs {\n    A,\n    B,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgs {\n    #[serde(rename = "a")]\n    A,\n    #[serde(rename = "b")]\n    B,\n}'
   );
 
   rust(
     'myFunction',
     z.enum(['active', 'inactive']),
-    '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgs {\n    Active,\n    Inactive,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgs {\n    #[serde(rename = "active")]\n    Active,\n    #[serde(rename = "inactive")]\n    Inactive,\n}'
   );
 });
 
@@ -81,8 +81,8 @@ describe('object with enum field', () => {
     'myFunction',
     z.object({status: z.enum(['active', 'inactive'])}),
     [
-      '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgsStatus {\n    Active,\n    Inactive,\n}',
-      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[json_data(nested)]\n    pub status: MyFunctionArgsStatus,\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgsStatus {\n    #[serde(rename = "active")]\n    Active,\n    #[serde(rename = "inactive")]\n    Inactive,\n}',
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub status: MyFunctionArgsStatus,\n}'
     ].join('\n\n')
   );
 });
@@ -181,6 +181,7 @@ describe('throws', () => {
   throws('myFunction', z.date());
   throws('myFunction', z.map(z.string(), z.string()));
   throws('myFunction', z.set(z.string()));
+  throws('myFunction', z.union([z.object({a: z.string()}), z.object({b: z.int()})]));
 });
 
 // ─── Literal (single-tag variant) ────────────────────────────────────────────
@@ -199,7 +200,7 @@ describe('discriminated union', () => {
       z.object({type: z.literal('active')}),
       z.object({type: z.literal('inactive')})
     ]),
-    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\n#[serde(tag = "type")]\npub enum MyFunctionArgs {\n    #[serde(rename = "active")]\n    Variant0,\n    #[serde(rename = "inactive")]\n    Variant1\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\n#[json_data(tag = "type")]\npub enum MyFunctionArgs {\n    #[serde(rename = "active")]\n    Variant0,\n    #[serde(rename = "inactive")]\n    Variant1\n}'
   );
 
   rust(
@@ -209,7 +210,7 @@ describe('discriminated union', () => {
       z.object({type: z.literal('inactive')}),
       z.object({type: z.literal('pending'), assignee: PrincipalSchema})
     ]),
-    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\n#[serde(tag = "type")]\npub enum MyFunctionArgs {\n    #[serde(rename = "active")]\n    Variant0 {\n        owner: Principal,\n    },\n    #[serde(rename = "inactive")]\n    Variant1,\n    #[serde(rename = "pending")]\n    Variant2 {\n        assignee: Principal,\n    }\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\n#[json_data(tag = "type")]\npub enum MyFunctionArgs {\n    #[serde(rename = "active")]\n    Variant0 {\n        owner: Principal,\n    },\n    #[serde(rename = "inactive")]\n    Variant1,\n    #[serde(rename = "pending")]\n    Variant2 {\n        assignee: Principal,\n    }\n}'
   );
 });
 

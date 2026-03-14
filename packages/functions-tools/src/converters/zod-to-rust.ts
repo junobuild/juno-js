@@ -34,15 +34,20 @@ const sanitizeFieldName = (name: string): {name: string; sanitized: boolean} =>
 
 type RustTypeResult =
   | {kind: 'primitive'; fieldType: string}
-  | {kind: 'composite'; fieldType: string; structs: string[]};
+  | {kind: 'composite'; fieldType: string; structs: string[]; needsJsonData: boolean};
 
 const primitive = (result: {fieldType: string}): RustTypeResult => ({
   kind: 'primitive',
   ...result
 });
 
-const composite = (result: {fieldType: string; structs: string[]}): RustTypeResult => ({
+const composite = (result: {
+  fieldType: string;
+  structs: string[];
+  needsJsonData?: boolean;
+}): RustTypeResult => ({
   kind: 'composite',
+  needsJsonData: true,
   ...result
 });
 
@@ -110,10 +115,15 @@ const schemaToRustType = ({
       }
 
       const enumName = capitalize(structName);
-      const variants = schema.tags.map((tag) => `    ${capitalize(tag)},`).join('\n');
+
+      const variants = schema.tags
+        .map((tag) => `    #[serde(rename = "${tag}")]\n    ${capitalize(tag)},`)
+        .join('\n');
+
       return composite({
         fieldType: enumName,
-        structs: [`${DERIVES_SIMPLE_ENUM}\npub enum ${enumName} {\n${variants}\n}`]
+        structs: [`${DERIVES_SIMPLE_ENUM}\npub enum ${enumName} {\n${variants}\n}`],
+        needsJsonData: false
       });
     }
 
@@ -162,44 +172,7 @@ const schemaToRustType = ({
         fieldType: enumName,
         structs: [
           ...results.flatMap((r) => r.structs),
-          `${DERIVES}\n#[serde(tag = "${schema.discriminator}")]\npub enum ${enumName} {\n${variants}\n}`
-        ]
-      });
-    }
-
-    case 'variantRecords': {
-      const enumName = capitalize(structName);
-      const results = schema.members.map((m, i) => {
-        if (m.kind === 'record') {
-          const fieldResults = m.fields.map((f) =>
-            schemaToRustType({schema: f.type, structName: `${structName}${capitalize(f.name)}`})
-          );
-
-          const fields = m.fields
-            .map((f, fi) => {
-              const {name: fieldName, sanitized} = sanitizeFieldName(f.name);
-              const renameAttr = sanitized ? `        #[serde(rename = "${f.name}")]\n` : '';
-              return `${renameAttr}        ${fieldName}: ${fieldResults[fi].fieldType},`;
-            })
-            .join('\n');
-
-          return {
-            variantLine: `    Variant${i} {\n${fields}\n    }`,
-            structs: collectStructs(fieldResults)
-          };
-        }
-        const inner = schemaToRustType({schema: m, structName: `${structName}Variant${i}`});
-        return {
-          variantLine: `    Variant${i}(${inner.fieldType})`,
-          structs: inner.kind === 'composite' ? inner.structs : []
-        };
-      });
-      const variants = results.map((r) => r.variantLine).join(',\n');
-      return composite({
-        fieldType: enumName,
-        structs: [
-          ...results.flatMap((r) => r.structs),
-          `${DERIVES}\npub enum ${enumName} {\n${variants}\n}`
+          `${DERIVES}\n#[json_data(tag = "${schema.discriminator}")]\npub enum ${enumName} {\n${variants}\n}`
         ]
       });
     }
@@ -215,7 +188,8 @@ const schemaToRustType = ({
           const result = fieldResults[i];
           const {name: fieldName, sanitized} = sanitizeFieldName(f.name);
           const renameAttr = sanitized ? `    #[serde(rename = "${f.name}")]\n` : '';
-          const attr = result.kind === 'composite' ? '    #[json_data(nested)]\n' : '';
+          const attr =
+            result.kind === 'composite' && result.needsJsonData ? '    #[json_data(nested)]\n' : '';
           return `${renameAttr}${attr}    pub ${fieldName}: ${result.fieldType},`;
         })
         .join('\n');

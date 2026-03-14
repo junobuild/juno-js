@@ -34,9 +34,30 @@ const schemaToIdlType = (schema: SputnikSchema): IDL.Type => {
     case 'variant':
       return IDL.Variant(Object.fromEntries(schema.tags.map((t) => [t, IDL.Null])));
     case 'discriminatedUnion':
-    case 'variantRecords':
       return IDL.Variant(
-        Object.fromEntries(schema.members.map((m, i) => [`Variant${i}`, schemaToIdlType(m)]))
+        Object.fromEntries(
+          schema.members.map((m, i) => {
+            const tagValue =
+              m.kind === 'record'
+                ? m.fields.find((f) => f.name === schema.discriminator)?.type.kind === 'variant'
+                  ? (
+                      m.fields.find((f) => f.name === schema.discriminator)?.type as {
+                        kind: 'variant';
+                        tags: string[];
+                      }
+                    ).tags[0]
+                  : `Variant${i}`
+                : `Variant${i}`;
+            const stripped =
+              m.kind === 'record'
+                ? {
+                    kind: 'record' as const,
+                    fields: m.fields.filter((f) => f.name !== schema.discriminator)
+                  }
+                : m;
+            return [tagValue, schemaToIdlType(stripped)];
+          })
+        )
       );
   }
 };

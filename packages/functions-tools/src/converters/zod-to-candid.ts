@@ -35,8 +35,30 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
     case 'variant':
       return `variant { ${schema.tags.join('; ')} }`;
     case 'discriminatedUnion':
-    case 'variantRecords':
-      return `variant { ${schema.members.map(sputnikSchemaToDid).join('; ')} }`;
+      return `variant { ${schema.members
+        .map((m) => {
+          const tagValue =
+            m.kind === 'record'
+              ? m.fields.find((f) => f.name === schema.discriminator)?.type.kind === 'variant'
+                ? (
+                    m.fields.find((f) => f.name === schema.discriminator)?.type as {
+                      kind: 'variant';
+                      tags: string[];
+                    }
+                  ).tags[0]
+                : undefined
+              : undefined;
+          const stripped =
+            m.kind === 'record'
+              ? {
+                  kind: 'record' as const,
+                  fields: m.fields.filter((f) => f.name !== schema.discriminator)
+                }
+              : m;
+          const inner = sputnikSchemaToDid(stripped);
+          return tagValue !== undefined ? `${tagValue} : ${inner}` : inner;
+        })
+        .join('; ')} }`;
   }
 };
 

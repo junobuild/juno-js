@@ -319,18 +319,6 @@ describe('unions', () => {
   );
 
   candid(
-    'UnionObjects',
-    z.union([z.object({a: z.string()}), z.object({b: z.int()})]),
-    'variant { record { a : text }; record { b : int32 } }'
-  );
-
-  candid(
-    'UnionThreeObjects',
-    z.union([z.object({a: z.string()}), z.object({b: z.int()}), z.object({c: z.boolean()})]),
-    'variant { record { a : text }; record { b : int32 }; record { c : bool } }'
-  );
-
-  candid(
     'UnionOptional',
     z.union([z.literal('foo'), z.literal('bar')]).optional(),
     'opt variant { foo; bar }'
@@ -342,7 +330,7 @@ describe('unions', () => {
       z.object({type: z.literal('cat'), name: z.string()}),
       z.object({type: z.literal('dog'), breed: z.string()})
     ]),
-    'variant { record { type : variant { cat }; name : text }; record { type : variant { dog }; breed : text } }'
+    'variant { cat : record { name : text }; dog : record { breed : text } }'
   );
 });
 
@@ -371,12 +359,6 @@ describe('intersections', () => {
 // ─── Complex combinations ─────────────────────────────────────────────────────
 
 describe('complex', () => {
-  candid(
-    'ArrayOfUnion',
-    z.array(z.union([z.object({a: z.string()}), z.object({b: z.int()})])),
-    'vec variant { record { a : text }; record { b : int32 } }'
-  );
-
   candid(
     'RecordOfEnum',
     z.record(z.string(), z.enum(['x', 'y'])),
@@ -481,4 +463,13 @@ describe('throws', () => {
   throws('ArrayWithUndefined', z.array(z.undefined()));
   throws('NonObjectIntersection', z.intersection(z.string(), z.number()));
   throws('ObjectIntersectionWithNonObject', z.intersection(z.object({a: z.string()}), z.string()));
+  throws('UnionObjects', z.union([z.object({a: z.string()}), z.object({b: z.int()})]));
+  throws(
+    'UnionThreeObjects',
+    z.union([z.object({a: z.string()}), z.object({b: z.int()}), z.object({c: z.boolean()})])
+  );
+  throws(
+    'ArrayOfUnionObjects',
+    z.array(z.union([z.object({a: z.string()}), z.object({b: z.int()})]))
+  );
 });

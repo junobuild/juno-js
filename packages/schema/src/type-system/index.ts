@@ -34,7 +34,7 @@ export const j = Object.assign({}, rest) as unknown as Omit<typeof z, 'union'> &
 j.principal = JunoType.principal;
 j.uint8Array = JunoType.uint8Array;
 
-// eslint-disable-next-linen @typescript-eslint/no-namespace
+// eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace j {
   export type infer<T extends z.ZodType> = z.infer<T>;
 }

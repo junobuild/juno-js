@@ -22,7 +22,7 @@ const {union: _, ...rest} = z;
  * such as `j.principal()` and `j.uint8Array()`.
  *
  * @example
- * import { j } from '@junobuild/functions';
+ * import { j } from '@junobuild/schema';
  *
  * const MySchema = j.strictObject({
  *   id: j.principal(),

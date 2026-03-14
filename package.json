@@ -28,6 +28,7 @@
     "packages/utils",
     "packages/errors",
     "packages/zod",
+    "packages/schema",
     "packages/config",
     "packages/ic-client",
     "packages/storage",

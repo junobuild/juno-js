@@ -18,8 +18,8 @@ JavaScript libraries for interfacing with [Juno].
 - [errors](/packages/errors): error constants and utilities
 - [ic-client](/packages/ic-client): client library for connecting Juno on the Internet Computer
 - [functions](/packages/functions): utilities for Serverless Functions
-- [functions-tools](/packages/functions-tools): tools for generating serverless functions code.
-- [zod](/packages/zod): Zod utilities and converters
+- [functions-tools](/packages/functions-tools): tools for generating serverless functions code
+- [schema](/packages/schema): All schemas and utilities for validation on Juno
 
 ## License
 

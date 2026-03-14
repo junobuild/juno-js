@@ -7,7 +7,7 @@ function publish_npm() {
 }
 
 # Tips: libs use by other libs first
-LIBS=utils,errors,zod,config,ic-client,storage,auth,cdn,config-loader,core,admin,analytics,core-peer,core-standalone,functions,functions-tools,cli-tools
+LIBS=utils,errors,schema,config,ic-client,storage,auth,cdn,config-loader,core,admin,analytics,core-peer,core-standalone,functions,functions-tools,cli-tools
 
 for lib in $(echo $LIBS | sed "s/,/ /g"); do
   publish_npm "$lib"

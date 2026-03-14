@@ -7,7 +7,7 @@ export const mockTsWithArgsNoResult = `const AppHelloWorldArgsSchema = j.strictO
 
 const helloWorld = async (args: j.infer<typeof AppHelloWorldArgsSchema>): Promise<void> => {
 \tconst parsedArgs = AppHelloWorldArgsSchema.parse(args);
-\tconst idlArgs = schemaToIdl({schema: AppHelloWorldArgsSchema, value: parsedArgs});
+\tconst idlArgs = schemaToIdl({schema: AppHelloWorldArgsSchema, value: parsedArgs}) as j.infer<typeof AppHelloWorldArgsSchema>;
 
 \tconst {app_hello_world} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tawait app_hello_world(idlArgs);
@@ -28,7 +28,7 @@ const AppHelloWorldResultSchema = j.strictObject({value: j.string(), count: j.bi
 
 const helloWorld = async (args: j.infer<typeof AppHelloWorldArgsSchema>): Promise<j.infer<typeof AppHelloWorldResultSchema>> => {
 \tconst parsedArgs = AppHelloWorldArgsSchema.parse(args);
-\tconst idlArgs = schemaToIdl({schema: AppHelloWorldArgsSchema, value: parsedArgs});
+\tconst idlArgs = schemaToIdl({schema: AppHelloWorldArgsSchema, value: parsedArgs}) as j.infer<typeof AppHelloWorldArgsSchema>;
 
 \tconst {app_hello_world} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tconst idlResult = await app_hello_world(idlArgs);

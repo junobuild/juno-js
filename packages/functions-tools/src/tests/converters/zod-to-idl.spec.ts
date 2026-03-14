@@ -1,5 +1,5 @@
 import {IDL} from '@icp-sdk/core/candid';
-import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/zod';
+import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
 import * as z from 'zod';
 import {zodToIdl} from '../../converters/zod-to-idl';
 

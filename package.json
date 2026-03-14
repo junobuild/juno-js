@@ -27,7 +27,6 @@
   "workspaces": [
     "packages/utils",
     "packages/errors",
-    "packages/zod",
     "packages/schema",
     "packages/config",
     "packages/ic-client",
@@ -84,7 +83,8 @@
         "@junobuild/config",
         "@junobuild/ic-client",
         "semver",
-        "zod"
+        "zod",
+        "@junobuild/schema"
       ]
     },
     {
@@ -136,7 +136,8 @@
         "@dfinity/principal",
         "@icp-sdk/core",
         "@dfinity/utils",
-        "zod"
+        "zod",
+        "@junobuild/schema"
       ]
     },
     {
@@ -150,7 +151,8 @@
       "limit": "10 kB",
       "ignore": [
         "zod",
-        "@dfinity/zod-schemas"
+        "@dfinity/zod-schemas",
+        "@junobuild/schema"
       ]
     },
     {
@@ -254,11 +256,11 @@
       ]
     },
     {
-      "name": "@junobuild/zod",
-      "path": "./packages/zod/dist/index.js",
+      "name": "@junobuild/schema",
+      "path": "./packages/schema/dist/index.js",
       "limit": "5 kB",
       "ignore": [
-        "zod",
+        "schema",
         "@dfinity/agent",
         "@dfinity/candid",
         "@dfinity/identity",

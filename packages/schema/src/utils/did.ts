@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-interface NullableParams {
+export interface NullableParams {
   schema: z.core.$ZodType;
   value: unknown;
 }

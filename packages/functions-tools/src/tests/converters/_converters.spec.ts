@@ -1,4 +1,4 @@
-import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/zod';
+import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
 import * as z from 'zod';
 import {jsonToSputnikSchema} from '../../converters/_converters';
 import {SputnikSchema} from '../../converters/_types';

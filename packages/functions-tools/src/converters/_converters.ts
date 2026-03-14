@@ -1,4 +1,4 @@
-import {ZodSchemaId} from '@junobuild/zod';
+import {ZodSchemaId} from '@junobuild/schema';
 import * as z from 'zod';
 import type {JSONSchema, JSONSchemaOutput, SputnikSchema} from './_types';
 

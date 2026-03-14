@@ -1,7 +1,7 @@
 import {Principal} from '@icp-sdk/core/principal';
-import {PrincipalSchema} from '@junobuild/zod';
+import {PrincipalSchema} from '@junobuild/schema';
 import * as z from 'zod';
-import {recursiveFromNullable, recursiveToNullable} from '../did';
+import {recursiveFromNullable, recursiveToNullable} from '../../utils/did';
 
 describe('did', () => {
   describe('toNullableRecursive', () => {

@@ -1,4 +1,4 @@
-import {type PrincipalText, PrincipalTextSchema} from '@junobuild/zod';
+import {type PrincipalText, PrincipalTextSchema} from '@junobuild/schema';
 import * as z from 'zod';
 import {
   type AuthenticationConfig,

@@ -85,7 +85,7 @@ export const mockTsFullNoArgsNoResult = `// This file was automatically generate
 import type {_SERVICE as SatelliteActor} from './satellite.did';
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
-import {recursiveToNullable, recursiveFromNullable} from '@junobuild/zod';
+import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';
 import * as z from 'zod';
 
 const helloWorld = async (): Promise<void> => {
@@ -105,7 +105,7 @@ export const mockJsFullNoArgsNoResult = `// This file was automatically generate
 
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
-import {recursiveToNullable, recursiveFromNullable} from '@junobuild/zod';
+import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';
 import * as z from 'zod';
 
 const helloWorld = async () => {

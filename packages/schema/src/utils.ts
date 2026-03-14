@@ -1,1 +1,2 @@
-export * from './utils/did';
+export * from './utils/idl';
+export * from './utils/nullable';

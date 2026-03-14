@@ -1,9 +1,9 @@
 import {Principal} from '@icp-sdk/core/principal';
 import {PrincipalSchema} from '@junobuild/schema';
 import * as z from 'zod';
-import {recursiveFromNullable, recursiveToNullable} from '../../utils/did';
+import {recursiveFromNullable, recursiveToNullable} from '../../utils/nullable';
 
-describe('did', () => {
+describe('nullable', () => {
   describe('toNullableRecursive', () => {
     describe('primitives', () => {
       it('should pass through string', () => {

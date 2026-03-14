@@ -10,7 +10,7 @@ export const tsTemplateWithArgsWithResult = `
 
 const %JS_FUNCTION% = async (args: j.infer<typeof %ARGS_SCHEMA%>): Promise<j.infer<typeof %RESULT_SCHEMA%>> => {
 \tconst parsedArgs = %ARGS_SCHEMA%.parse(args);
-\tconst idlArgs = schemaToIdl({schema: %ARGS_SCHEMA%, value: parsedArgs});
+\tconst idlArgs = schemaToIdl({schema: %ARGS_SCHEMA%, value: parsedArgs}) as j.infer<typeof %ARGS_SCHEMA%>;
 
 \tconst {%RS_FUNCTION%} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tconst idlResult = await %RS_FUNCTION%(idlArgs);
@@ -24,7 +24,7 @@ export const tsTemplateWithArgsNoResult = `
 
 const %JS_FUNCTION% = async (args: j.infer<typeof %ARGS_SCHEMA%>): Promise<void> => {
 \tconst parsedArgs = %ARGS_SCHEMA%.parse(args);
-\tconst idlArgs = schemaToIdl({schema: %ARGS_SCHEMA%, value: parsedArgs});
+\tconst idlArgs = schemaToIdl({schema: %ARGS_SCHEMA%, value: parsedArgs}) as j.infer<typeof %ARGS_SCHEMA%>;
 
 \tconst {%RS_FUNCTION%} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tawait %RS_FUNCTION%(idlArgs);

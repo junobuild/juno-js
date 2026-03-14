@@ -3,9 +3,9 @@ export const mockTsNoArgsNoResult = `const helloWorld = async (): Promise<void> 
 \tawait app_hello_world();
 };`;
 
-export const mockTsWithArgsNoResult = `const AppHelloWorldArgsSchema = z.strictObject({name: z.string()});
+export const mockTsWithArgsNoResult = `const AppHelloWorldArgsSchema = j.strictObject({name: j.string()});
 
-const helloWorld = async (args: z.infer<typeof AppHelloWorldArgsSchema>): Promise<void> => {
+const helloWorld = async (args: j.infer<typeof AppHelloWorldArgsSchema>): Promise<void> => {
 \tconst parsedArgs = AppHelloWorldArgsSchema.parse(args);
 \tconst idlArgs = recursiveToNullable({schema: AppHelloWorldArgsSchema, value: parsedArgs});
 
@@ -13,9 +13,9 @@ const helloWorld = async (args: z.infer<typeof AppHelloWorldArgsSchema>): Promis
 \tawait app_hello_world(idlArgs);
 };`;
 
-export const mockTsNoArgsWithResult = `const AppHelloWorldResultSchema = z.strictObject({value: z.string()});
+export const mockTsNoArgsWithResult = `const AppHelloWorldResultSchema = j.strictObject({value: j.string()});
 
-const helloWorld = async (): Promise<z.infer<typeof AppHelloWorldResultSchema>> => {
+const helloWorld = async (): Promise<j.infer<typeof AppHelloWorldResultSchema>> => {
 \tconst {app_hello_world} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tconst idlResult = await app_hello_world();
 
@@ -23,10 +23,10 @@ const helloWorld = async (): Promise<z.infer<typeof AppHelloWorldResultSchema>> 
 \treturn AppHelloWorldResultSchema.parse(result);
 };`;
 
-export const mockTsWithArgsWithResult = `const AppHelloWorldArgsSchema = z.strictObject({name: z.string(), age: z.optional(z.int())});
-const AppHelloWorldResultSchema = z.strictObject({value: z.string(), count: z.bigint()});
+export const mockTsWithArgsWithResult = `const AppHelloWorldArgsSchema = j.strictObject({name: j.string(), age: j.optional(j.int())});
+const AppHelloWorldResultSchema = j.strictObject({value: j.string(), count: j.bigint()});
 
-const helloWorld = async (args: z.infer<typeof AppHelloWorldArgsSchema>): Promise<z.infer<typeof AppHelloWorldResultSchema>> => {
+const helloWorld = async (args: j.infer<typeof AppHelloWorldArgsSchema>): Promise<j.infer<typeof AppHelloWorldResultSchema>> => {
 \tconst parsedArgs = AppHelloWorldArgsSchema.parse(args);
 \tconst idlArgs = recursiveToNullable({schema: AppHelloWorldArgsSchema, value: parsedArgs});
 
@@ -42,7 +42,7 @@ export const mockJsNoArgsNoResult = `const helloWorld = async () => {
 \tawait app_hello_world();
 };`;
 
-export const mockJsWithArgsNoResult = `const AppHelloWorldArgsSchema = z.strictObject({name: z.string()});
+export const mockJsWithArgsNoResult = `const AppHelloWorldArgsSchema = j.strictObject({name: j.string()});
 
 const helloWorld = async (args) => {
 \tconst parsedArgs = AppHelloWorldArgsSchema.parse(args);
@@ -52,7 +52,7 @@ const helloWorld = async (args) => {
 \tawait app_hello_world(idlArgs);
 };`;
 
-export const mockJsNoArgsWithResult = `const AppHelloWorldResultSchema = z.strictObject({value: z.string()});
+export const mockJsNoArgsWithResult = `const AppHelloWorldResultSchema = j.strictObject({value: j.string()});
 
 const helloWorld = async () => {
 \tconst {app_hello_world} = await getSatelliteExtendedActor({idlFactory});
@@ -62,8 +62,8 @@ const helloWorld = async () => {
 \treturn AppHelloWorldResultSchema.parse(result);
 };`;
 
-export const mockJsWithArgsWithResult = `const AppHelloWorldArgsSchema = z.strictObject({name: z.string(), age: z.optional(z.int())});
-const AppHelloWorldResultSchema = z.strictObject({value: z.string(), count: z.bigint()});
+export const mockJsWithArgsWithResult = `const AppHelloWorldArgsSchema = j.strictObject({name: j.string(), age: j.optional(j.int())});
+const AppHelloWorldResultSchema = j.strictObject({value: j.string(), count: j.bigint()});
 
 const helloWorld = async (args) => {
 \tconst parsedArgs = AppHelloWorldArgsSchema.parse(args);
@@ -86,7 +86,7 @@ import type {_SERVICE as SatelliteActor} from './satellite.did';
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
 import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';
-import * as z from 'zod';
+import {j} from '@junobuild/schema';
 
 const helloWorld = async (): Promise<void> => {
 \tconst {app_hello_world} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
@@ -106,7 +106,7 @@ export const mockJsFullNoArgsNoResult = `// This file was automatically generate
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
 import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';
-import * as z from 'zod';
+import {j} from '@junobuild/schema';
 
 const helloWorld = async () => {
 \tconst {app_hello_world} = await getSatelliteExtendedActor({idlFactory});

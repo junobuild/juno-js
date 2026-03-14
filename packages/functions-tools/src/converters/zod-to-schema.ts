@@ -3,39 +3,39 @@ import type {z} from 'zod';
 import {jsonToSputnikSchema, type SputnikSchemaResult} from './_converters';
 import type {SputnikSchema} from './_types';
 
-const schemaToZodString = (schema: SputnikSchema): string => {
+const schemaToString = (schema: SputnikSchema): string => {
   switch (schema.kind) {
     case 'text':
-      return 'z.string()';
+      return 'j.string()';
     case 'bool':
-      return 'z.boolean()';
+      return 'j.boolean()';
     case 'float64':
-      return 'z.number()';
+      return 'j.number()';
     case 'int32':
-      return 'z.int()';
+      return 'j.int()';
     case 'nat':
-      return 'z.bigint()';
+      return 'j.bigint()';
     case 'principal':
-      return 'PrincipalSchema';
+      return 'j.principal()';
     case 'uint8array':
-      return 'Uint8ArraySchema';
+      return 'j.uint8Array()';
     case 'opt':
-      return `z.optional(${schemaToZodString(schema.inner)})`;
+      return `j.optional(${schemaToString(schema.inner)})`;
     case 'vec':
-      return `z.array(${schemaToZodString(schema.inner)})`;
+      return `j.array(${schemaToString(schema.inner)})`;
     case 'tuple':
     case 'indexedTuple':
-      return `z.tuple([${schema.members.map(schemaToZodString).join(', ')}])`;
+      return `j.tuple([${schema.members.map(schemaToString).join(', ')}])`;
     case 'record':
-      return `z.strictObject({${schema.fields.map((f) => `${f.name}: ${schemaToZodString(f.type)}`).join(', ')}})`;
+      return `j.strictObject({${schema.fields.map((f) => `${f.name}: ${schemaToString(f.type)}`).join(', ')}})`;
     case 'variant':
-      return `z.enum([${schema.tags.map((t) => `'${t}'`).join(', ')}])`;
+      return `j.enum([${schema.tags.map((t) => `'${t}'`).join(', ')}])`;
     case 'discriminatedUnion':
-      return `z.discriminatedUnion('${schema.discriminator}', [${schema.members.map(schemaToZodString).join(', ')}])`;
+      return `j.discriminatedUnion('${schema.discriminator}', [${schema.members.map(schemaToString).join(', ')}])`;
   }
 };
 
-export interface ZodResult {
+export interface SchemaResult {
   baseName: string;
   code: string;
 }
@@ -45,10 +45,10 @@ const sputnikSchemaToZod = ({
   schema,
   isTopLevelOptional,
   suffix
-}: SputnikSchemaResult & {suffix: 'Args' | 'Result'}): ZodResult => {
+}: SputnikSchemaResult & {suffix: 'Args' | 'Result'}): SchemaResult => {
   const baseName = `${capitalize(id)}${suffix}`;
   const resolvedSchema: SputnikSchema = isTopLevelOptional ? {kind: 'opt', inner: schema} : schema;
-  const zodString = schemaToZodString(resolvedSchema);
+  const zodString = schemaToString(resolvedSchema);
 
   return {
     baseName,
@@ -57,14 +57,14 @@ const sputnikSchemaToZod = ({
 };
 
 /**
- * Converts a Zod schema to a Zod schema source code string.
+ * Converts a Zod schema to Juno schema source code.
  *
  * @param {string} id - The base name used to generate the schema constant name.
  * @param {z.ZodType} schema - The Zod schema to convert.
  * @param {'Args' | 'Result'} suffix - Whether this represents function arguments or a return type.
- * @returns {ZodResult} An object containing the generated code and the base type name.
+ * @returns {SchemaResult} An object containing the generated code and the base type name.
  */
-export const zodToZod = ({
+export const zodToSchema = ({
   id,
   schema,
   suffix
@@ -72,7 +72,7 @@ export const zodToZod = ({
   id: string;
   schema: z.ZodType;
   suffix: 'Args' | 'Result';
-}): ZodResult => {
+}): SchemaResult => {
   const converted = jsonToSputnikSchema({zodSchema: schema, id});
   return sputnikSchemaToZod({...converted, suffix});
 };

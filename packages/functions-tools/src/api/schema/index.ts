@@ -1,9 +1,9 @@
 import type {Query, Update} from '@junobuild/functions';
 import {writeFile} from 'node:fs/promises';
 import type {TransformerOptions} from '../types/transformer-options';
-import {parseZodApi} from './services/parser.services';
+import {parseSchemaApi} from './services/parser.services';
 
-export const generateZodApi = async ({
+export const generateSchemaApi = async ({
   functions,
   outputFile,
   transformerOptions
@@ -12,7 +12,7 @@ export const generateZodApi = async ({
   outputFile: string;
   transformerOptions: TransformerOptions;
 }) => {
-  const api = parseZodApi({
+  const api = parseSchemaApi({
     functions,
     transformerOptions
   });

@@ -1,7 +1,7 @@
 import {
   PrincipalSchema as DfnPrincipalSchema,
   Uint8ArraySchema as DfnUint8ArraySchema
-} from '@junobuild/zod';
+} from '@junobuild/schema';
 import type * as z from 'zod';
 
 /**

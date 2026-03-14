@@ -96,7 +96,7 @@
   "peerDependencies": {
     "@dfinity/utils": "^4.1",
     "@icp-sdk/core": "^5",
-    "@junobuild/zod": "^1",
+    "@junobuild/schema": "^1",
     "zod": "^4.3"
   }
 }

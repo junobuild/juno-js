@@ -90,7 +90,7 @@ describe('zod-api-parser', () => {
         transformerOptions: {outputLanguage: 'ts'}
       });
       expect(result).toContain(
-        "import {recursiveToNullable, recursiveFromNullable} from '@junobuild/zod';"
+        "import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';"
       );
     });
 

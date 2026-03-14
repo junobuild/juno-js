@@ -1,7 +1,7 @@
 export const tsTemplateImports = `import type {_SERVICE as SatelliteActor} from './satellite.did';
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/%CORE_LIB%';
-import {recursiveToNullable, recursiveFromNullable} from '@junobuild/zod';
+import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';
 import * as z from 'zod';`;
 
 export const tsTemplateWithArgsWithResult = `

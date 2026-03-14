@@ -55,7 +55,7 @@
     "@dfinity/utils": "^4.1",
     "@junobuild/functions": "^0.6",
     "@junobuild/utils": "^0.3",
-    "@junobuild/zod": "^1",
+    "@junobuild/schema": "^1",
     "zod": "^4.3"
   }
 }

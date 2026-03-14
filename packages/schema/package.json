@@ -13,6 +13,11 @@
       "types": "./index.d.ts",
       "import": "./index.js",
       "require": "./index.mjs"
+    },
+    "./utils": {
+      "types": "./utils.d.ts",
+      "import": "./utils.js",
+      "require": "./utils.mjs"
     }
   },
   "files": [
@@ -28,7 +33,7 @@
   "scripts": {
     "clean": "git ls-files --others --ignored --exclude-standard | grep -v \"LICENSE\" | xargs rm -rf",
     "ts-declaration": "tsc --emitDeclarationOnly -outDir .",
-    "build": "npm run clean && tsc --noEmit && node esbuild.mjs",
+    "build": "npm run clean && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",
     "prepack": "npm run build"
   },
   "repository": {

@@ -1,6 +1,6 @@
 export const jsTemplateImports = `import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/%CORE_LIB%';
-import {recursiveToNullable, recursiveFromNullable} from '@junobuild/zod';
+import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';
 import * as z from 'zod';`;
 
 export const jsTemplateWithArgsWithResult = `

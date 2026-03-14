@@ -1,5 +1,5 @@
 import type {Query} from '@junobuild/functions';
-import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/zod';
+import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
 import * as z from 'zod';
 
 export const mockQueryNoArgsNoResult: Query = {

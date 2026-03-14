@@ -34,7 +34,7 @@ const functionsToolsInputFiles = [
   './packages/functions-tools/src/converters/zod-to-candid.ts'
 ];
 
-const zodInputFiles = ['./packages/zod/src/index.ts'];
+const schemaInputFiles = ['./packages/schema/src/index.ts'];
 
 const buildOptions = {
   repo: {url: 'https://github.com/junobuild/juno-js'}
@@ -66,8 +66,8 @@ generateDocumentation({
 });
 
 generateDocumentation({
-  inputFiles: zodInputFiles,
-  outputFile: './packages/zod/README.md',
+  inputFiles: schemaInputFiles,
+  outputFile: './packages/schema/README.md',
   markdownOptions,
   buildOptions: {...buildOptions, explore: true, types: true}
 });

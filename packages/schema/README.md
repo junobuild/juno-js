@@ -11,22 +11,36 @@
 The `j` type system, all schemas and utilities for validation on [Juno].
 
 ```typescript
-import { j, defineQuery } from '@junobuild/functions';
+import {j, defineQuery} from '@junobuild/functions';
 
 const ArgsSchema = j.strictObject({
-    id: j.principal(),
-    name: j.string()
+  id: j.principal(),
+  name: j.string()
 });
 
 export const myQuery = defineQuery({
-    args: ArgsSchema,
-    handler: ({ id, name }) => {
-        console.log(id.toText(), name);
-    }
+  args: ArgsSchema,
+  handler: ({id, name}) => {
+    console.log(id.toText(), name);
+  }
 });
 ```
 
 <!-- TSDOC_START -->
+
+### :toolbox: Functions
+
+- [JunoType.principal](#gear-junotype.principal)
+
+#### :gear: JunoType.principal
+
+Validates a Principal.
+
+| Function             | Type                                                                                 |
+| -------------------- | ------------------------------------------------------------------------------------ |
+| `JunoType.principal` | `() => ZodPipe<ZodCustom<Principal, Principal>, ZodTransform<Principal, Principal>>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/schema/src/type-system/index.ts#L4)
 
 <!-- TSDOC_END -->
 

@@ -84,13 +84,13 @@ describe('parser.services', () => {
       expect(result).toContain("import {j} from '@junobuild/schema';");
     });
 
-    it('should import recursiveToNullable and recursiveFromNullable', () => {
+    it('should import schemaToIdl and schemaFromIdl', () => {
       const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsWithResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
       expect(result).toContain(
-        "import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';"
+        "import {schemaToIdl, schemaFromIdl} from '@junobuild/schema/utils';"
       );
     });
 
@@ -167,9 +167,7 @@ describe('parser.services', () => {
       );
       expect(result).toContain('args: j.infer<typeof AppHelloWorldArgsSchema>');
       expect(result).toContain(': Promise<void>');
-      expect(result).toContain(
-        'recursiveToNullable({schema: AppHelloWorldArgsSchema, value: parsedArgs})'
-      );
+      expect(result).toContain('schemaToIdl({schema: AppHelloWorldArgsSchema, value: parsedArgs})');
       expect(result).not.toContain('AppHelloWorldResultSchema');
     });
 
@@ -200,7 +198,7 @@ describe('parser.services', () => {
       );
       expect(result).toContain('Promise<j.infer<typeof AppHelloWorldResultSchema>>');
       expect(result).toContain(
-        'recursiveFromNullable({schema: AppHelloWorldResultSchema, value: idlResult})'
+        'schemaFromIdl({schema: AppHelloWorldResultSchema, value: idlResult})'
       );
       expect(result).toContain('return AppHelloWorldResultSchema.parse(result);');
       expect(result).not.toContain('AppHelloWorldArgsSchema');
@@ -236,11 +234,9 @@ describe('parser.services', () => {
       );
       expect(result).toContain('args: j.infer<typeof AppHelloWorldArgsSchema>');
       expect(result).toContain('Promise<j.infer<typeof AppHelloWorldResultSchema>>');
+      expect(result).toContain('schemaToIdl({schema: AppHelloWorldArgsSchema, value: parsedArgs})');
       expect(result).toContain(
-        'recursiveToNullable({schema: AppHelloWorldArgsSchema, value: parsedArgs})'
-      );
-      expect(result).toContain(
-        'recursiveFromNullable({schema: AppHelloWorldResultSchema, value: idlResult})'
+        'schemaFromIdl({schema: AppHelloWorldResultSchema, value: idlResult})'
       );
       expect(result).toContain('return AppHelloWorldResultSchema.parse(result);');
     });

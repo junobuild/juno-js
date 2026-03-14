@@ -7,7 +7,7 @@ export const mockTsWithArgsNoResult = `const AppHelloWorldArgsSchema = j.strictO
 
 const helloWorld = async (args: j.infer<typeof AppHelloWorldArgsSchema>): Promise<void> => {
 \tconst parsedArgs = AppHelloWorldArgsSchema.parse(args);
-\tconst idlArgs = recursiveToNullable({schema: AppHelloWorldArgsSchema, value: parsedArgs});
+\tconst idlArgs = schemaToIdl({schema: AppHelloWorldArgsSchema, value: parsedArgs});
 
 \tconst {app_hello_world} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tawait app_hello_world(idlArgs);
@@ -19,7 +19,7 @@ const helloWorld = async (): Promise<j.infer<typeof AppHelloWorldResultSchema>> 
 \tconst {app_hello_world} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tconst idlResult = await app_hello_world();
 
-\tconst result = recursiveFromNullable({schema: AppHelloWorldResultSchema, value: idlResult});
+\tconst result = schemaFromIdl({schema: AppHelloWorldResultSchema, value: idlResult});
 \treturn AppHelloWorldResultSchema.parse(result);
 };`;
 
@@ -28,12 +28,12 @@ const AppHelloWorldResultSchema = j.strictObject({value: j.string(), count: j.bi
 
 const helloWorld = async (args: j.infer<typeof AppHelloWorldArgsSchema>): Promise<j.infer<typeof AppHelloWorldResultSchema>> => {
 \tconst parsedArgs = AppHelloWorldArgsSchema.parse(args);
-\tconst idlArgs = recursiveToNullable({schema: AppHelloWorldArgsSchema, value: parsedArgs});
+\tconst idlArgs = schemaToIdl({schema: AppHelloWorldArgsSchema, value: parsedArgs});
 
 \tconst {app_hello_world} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tconst idlResult = await app_hello_world(idlArgs);
 
-\tconst result = recursiveFromNullable({schema: AppHelloWorldResultSchema, value: idlResult});
+\tconst result = schemaFromIdl({schema: AppHelloWorldResultSchema, value: idlResult});
 \treturn AppHelloWorldResultSchema.parse(result);
 };`;
 
@@ -46,7 +46,7 @@ export const mockJsWithArgsNoResult = `const AppHelloWorldArgsSchema = j.strictO
 
 const helloWorld = async (args) => {
 \tconst parsedArgs = AppHelloWorldArgsSchema.parse(args);
-\tconst idlArgs = recursiveToNullable({schema: AppHelloWorldArgsSchema, value: parsedArgs});
+\tconst idlArgs = schemaToIdl({schema: AppHelloWorldArgsSchema, value: parsedArgs});
 
 \tconst {app_hello_world} = await getSatelliteExtendedActor({idlFactory});
 \tawait app_hello_world(idlArgs);
@@ -58,7 +58,7 @@ const helloWorld = async () => {
 \tconst {app_hello_world} = await getSatelliteExtendedActor({idlFactory});
 \tconst idlResult = await app_hello_world();
 
-\tconst result = recursiveFromNullable({schema: AppHelloWorldResultSchema, value: idlResult});
+\tconst result = schemaFromIdl({schema: AppHelloWorldResultSchema, value: idlResult});
 \treturn AppHelloWorldResultSchema.parse(result);
 };`;
 
@@ -67,12 +67,12 @@ const AppHelloWorldResultSchema = j.strictObject({value: j.string(), count: j.bi
 
 const helloWorld = async (args) => {
 \tconst parsedArgs = AppHelloWorldArgsSchema.parse(args);
-\tconst idlArgs = recursiveToNullable({schema: AppHelloWorldArgsSchema, value: parsedArgs});
+\tconst idlArgs = schemaToIdl({schema: AppHelloWorldArgsSchema, value: parsedArgs});
 
 \tconst {app_hello_world} = await getSatelliteExtendedActor({idlFactory});
 \tconst idlResult = await app_hello_world(idlArgs);
 
-\tconst result = recursiveFromNullable({schema: AppHelloWorldResultSchema, value: idlResult});
+\tconst result = schemaFromIdl({schema: AppHelloWorldResultSchema, value: idlResult});
 \treturn AppHelloWorldResultSchema.parse(result);
 };`;
 
@@ -85,7 +85,7 @@ export const mockTsFullNoArgsNoResult = `// This file was automatically generate
 import type {_SERVICE as SatelliteActor} from './satellite.did';
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
-import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';
+import {schemaToIdl, schemaFromIdl} from '@junobuild/schema/utils';
 import {j} from '@junobuild/schema';
 
 const helloWorld = async (): Promise<void> => {
@@ -105,7 +105,7 @@ export const mockJsFullNoArgsNoResult = `// This file was automatically generate
 
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
-import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';
+import {schemaToIdl, schemaFromIdl} from '@junobuild/schema/utils';
 import {j} from '@junobuild/schema';
 
 const helloWorld = async () => {

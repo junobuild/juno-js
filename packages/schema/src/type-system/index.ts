@@ -29,9 +29,12 @@ const {union: _, ...rest} = z;
  *   name: j.string(),
  * });
  */
-const j = Object.assign({}, rest) as unknown as Omit<typeof z, 'union'> & typeof JunoType;
+export const j = Object.assign({}, rest) as unknown as Omit<typeof z, 'union'> & typeof JunoType;
 
 j.principal = JunoType.principal;
 j.uint8Array = JunoType.uint8Array;
 
-export {j};
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace j {
+  export type infer<T extends z.ZodType> = z.infer<T>;
+}

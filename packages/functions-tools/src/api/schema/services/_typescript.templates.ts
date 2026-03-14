@@ -2,13 +2,13 @@ export const tsTemplateImports = `import type {_SERVICE as SatelliteActor} from 
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/%CORE_LIB%';
 import {recursiveToNullable, recursiveFromNullable} from '@junobuild/schema/utils';
-import * as z from 'zod';`;
+import {j} from '@junobuild/schema';`;
 
 export const tsTemplateWithArgsWithResult = `
 %ARGS_ZOD%
 %RESULT_ZOD%
 
-const %JS_FUNCTION% = async (args: z.infer<typeof %ARGS_SCHEMA%>): Promise<z.infer<typeof %RESULT_SCHEMA%>> => {
+const %JS_FUNCTION% = async (args: j.infer<typeof %ARGS_SCHEMA%>): Promise<j.infer<typeof %RESULT_SCHEMA%>> => {
 \tconst parsedArgs = %ARGS_SCHEMA%.parse(args);
 \tconst idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
 
@@ -22,7 +22,7 @@ const %JS_FUNCTION% = async (args: z.infer<typeof %ARGS_SCHEMA%>): Promise<z.inf
 export const tsTemplateWithArgsNoResult = `
 %ARGS_ZOD%
 
-const %JS_FUNCTION% = async (args: z.infer<typeof %ARGS_SCHEMA%>): Promise<void> => {
+const %JS_FUNCTION% = async (args: j.infer<typeof %ARGS_SCHEMA%>): Promise<void> => {
 \tconst parsedArgs = %ARGS_SCHEMA%.parse(args);
 \tconst idlArgs = recursiveToNullable({schema: %ARGS_SCHEMA%, value: parsedArgs});
 
@@ -33,7 +33,7 @@ const %JS_FUNCTION% = async (args: z.infer<typeof %ARGS_SCHEMA%>): Promise<void>
 export const tsTemplateNoArgsWithResult = `
 %RESULT_ZOD%
 
-const %JS_FUNCTION% = async (): Promise<z.infer<typeof %RESULT_SCHEMA%>> => {
+const %JS_FUNCTION% = async (): Promise<j.infer<typeof %RESULT_SCHEMA%>> => {
 \tconst {%RS_FUNCTION%} = await getSatelliteExtendedActor<SatelliteActor>({idlFactory});
 \tconst idlResult = await %RS_FUNCTION%();
 

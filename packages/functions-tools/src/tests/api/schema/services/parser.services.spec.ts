@@ -1,4 +1,4 @@
-import {parseZodApi} from '../../../../api/zod/services/parser.services';
+import {parseSchemaApi} from '../../../../api/schema/services/parser.services';
 import {
   mockQueryNoArgsNoResult,
   mockQueryNoArgsWithResult,
@@ -23,12 +23,12 @@ import {
   mockTsWithArgsWithResult
 } from '../mocks/zod-api-transformed.mock';
 
-describe('zod-api-parser', () => {
+describe('parser.services', () => {
   // ─── file header ────────────────────────────────────────────────────────────
 
   describe('file header', () => {
     it('should include generated comment', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -37,7 +37,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should include eslint-disable comment', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -45,7 +45,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should include prettier-ignore comment', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -53,7 +53,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should import SatelliteActor from satellite.did for ts', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -61,31 +61,31 @@ describe('zod-api-parser', () => {
     });
 
     it('should not import SatelliteActor for js', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
       expect(result).not.toContain('import type {_SERVICE as SatelliteActor}');
     });
 
-    it('should import z from zod for ts', () => {
-      const result = parseZodApi({
+    it('should import j from @junobuild/schema for ts', () => {
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
-      expect(result).toContain("import * as z from 'zod';");
+      expect(result).toContain("import {j} from '@junobuild/schema';");
     });
 
-    it('should import z from zod for js', () => {
-      const result = parseZodApi({
+    it('should import j from @junobuild/schema for js', () => {
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
-      expect(result).toContain("import * as z from 'zod';");
+      expect(result).toContain("import {j} from '@junobuild/schema';");
     });
 
     it('should import recursiveToNullable and recursiveFromNullable', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsWithResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -95,7 +95,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should import from core by default', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -103,7 +103,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should import from core-standalone when specified', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts', coreLib: 'core-standalone'}
       });
@@ -113,7 +113,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should import idlFactory from satellite.factory.did.js for ts', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -121,7 +121,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should import idlFactory from satellite.factory.did.js for js', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
@@ -133,7 +133,7 @@ describe('zod-api-parser', () => {
 
   describe('no args no result', () => {
     it('should generate ts function with no args and no result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -144,7 +144,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should generate js function with no args and no result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
@@ -158,14 +158,14 @@ describe('zod-api-parser', () => {
 
   describe('args only', () => {
     it('should generate ts function with args and no result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
       expect(result).toContain(
-        'const AppHelloWorldArgsSchema = z.strictObject({name: z.string()});'
+        'const AppHelloWorldArgsSchema = j.strictObject({name: j.string()});'
       );
-      expect(result).toContain('args: z.infer<typeof AppHelloWorldArgsSchema>');
+      expect(result).toContain('args: j.infer<typeof AppHelloWorldArgsSchema>');
       expect(result).toContain(': Promise<void>');
       expect(result).toContain(
         'recursiveToNullable({schema: AppHelloWorldArgsSchema, value: parsedArgs})'
@@ -174,12 +174,12 @@ describe('zod-api-parser', () => {
     });
 
     it('should generate js function with args and no result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsNoResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
       expect(result).toContain(
-        'const AppHelloWorldArgsSchema = z.strictObject({name: z.string()});'
+        'const AppHelloWorldArgsSchema = j.strictObject({name: j.string()});'
       );
       expect(result).toContain('const helloWorld = async (args)');
       expect(result).not.toContain(': Promise<void>');
@@ -191,14 +191,14 @@ describe('zod-api-parser', () => {
 
   describe('result only', () => {
     it('should generate ts function with no args and result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsWithResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
       expect(result).toContain(
-        'const AppHelloWorldResultSchema = z.strictObject({value: z.string()});'
+        'const AppHelloWorldResultSchema = j.strictObject({value: j.string()});'
       );
-      expect(result).toContain('Promise<z.infer<typeof AppHelloWorldResultSchema>>');
+      expect(result).toContain('Promise<j.infer<typeof AppHelloWorldResultSchema>>');
       expect(result).toContain(
         'recursiveFromNullable({schema: AppHelloWorldResultSchema, value: idlResult})'
       );
@@ -207,12 +207,12 @@ describe('zod-api-parser', () => {
     });
 
     it('should generate js function with no args and result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsWithResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
       expect(result).toContain(
-        'const AppHelloWorldResultSchema = z.strictObject({value: z.string()});'
+        'const AppHelloWorldResultSchema = j.strictObject({value: j.string()});'
       );
       expect(result).toContain('const helloWorld = async ()');
       expect(result).not.toContain('Promise<');
@@ -224,18 +224,18 @@ describe('zod-api-parser', () => {
 
   describe('args and result', () => {
     it('should generate ts function with args and result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsWithResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
       expect(result).toContain(
-        'const AppHelloWorldArgsSchema = z.strictObject({name: z.string(), age: z.optional(z.int())});'
+        'const AppHelloWorldArgsSchema = j.strictObject({name: j.string(), age: j.optional(j.int())});'
       );
       expect(result).toContain(
-        'const AppHelloWorldResultSchema = z.strictObject({value: z.string(), count: z.bigint()});'
+        'const AppHelloWorldResultSchema = j.strictObject({value: j.string(), count: j.bigint()});'
       );
-      expect(result).toContain('args: z.infer<typeof AppHelloWorldArgsSchema>');
-      expect(result).toContain('Promise<z.infer<typeof AppHelloWorldResultSchema>>');
+      expect(result).toContain('args: j.infer<typeof AppHelloWorldArgsSchema>');
+      expect(result).toContain('Promise<j.infer<typeof AppHelloWorldResultSchema>>');
       expect(result).toContain(
         'recursiveToNullable({schema: AppHelloWorldArgsSchema, value: parsedArgs})'
       );
@@ -246,7 +246,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should generate js function with args and result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsWithResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
@@ -254,7 +254,7 @@ describe('zod-api-parser', () => {
       expect(result).toContain('const AppHelloWorldResultSchema');
       expect(result).toContain('const helloWorld = async (args)');
       expect(result).not.toContain(': Promise<');
-      expect(result).not.toContain('z.infer<');
+      expect(result).not.toContain('j.infer<');
     });
   });
 
@@ -262,7 +262,7 @@ describe('zod-api-parser', () => {
 
   describe('namespace export', () => {
     it('should export functions namespace for ts', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -271,7 +271,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should export functions namespace for js', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
@@ -280,7 +280,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should include multiple functions in namespace', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [
           ['getUser', mockQueryNoArgsWithResult],
           ['setUser', mockQueryWithArgsNoResult],
@@ -299,7 +299,7 @@ describe('zod-api-parser', () => {
 
   describe('rs function name', () => {
     it('should convert camelCase to snake_case with namespace prefix', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -307,7 +307,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should handle single word function name', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['greet', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -315,7 +315,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should handle long camelCase function name', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['getSatelliteConfig', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -327,7 +327,7 @@ describe('zod-api-parser', () => {
 
   describe('schema naming', () => {
     it('should prefix schema with FUNCTION_NAMESPACE and capitalize', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsWithResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -336,7 +336,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should handle single word function name in schema', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['greet', mockQueryWithArgsWithResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -349,7 +349,7 @@ describe('zod-api-parser', () => {
 
   describe('multiple functions', () => {
     it('should generate multiple functions', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [
           ['getUser', mockQueryNoArgsWithResult],
           ['listUsers', mockQueryNoArgsWithResult],
@@ -363,7 +363,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should handle empty functions', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -376,44 +376,44 @@ describe('zod-api-parser', () => {
 
   describe('schema types', () => {
     it('should handle principal in args', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithPrincipal]],
         transformerOptions: {outputLanguage: 'ts'}
       });
-      expect(result).toContain('PrincipalSchema');
+      expect(result).toContain('j.principal()');
     });
 
     it('should handle Uint8Array in args', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithUint8Array]],
         transformerOptions: {outputLanguage: 'ts'}
       });
-      expect(result).toContain('Uint8ArraySchema');
+      expect(result).toContain('j.uint8Array()');
     });
 
     it('should handle array fields', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArray]],
         transformerOptions: {outputLanguage: 'ts'}
       });
-      expect(result).toContain('z.array(z.string())');
+      expect(result).toContain('j.array(j.string())');
     });
 
     it('should handle enum fields', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithEnum]],
         transformerOptions: {outputLanguage: 'ts'}
       });
-      expect(result).toContain("z.enum(['active', 'inactive'])");
+      expect(result).toContain("j.enum(['active', 'inactive'])");
     });
 
     it('should handle nested objects', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithNestedObject]],
         transformerOptions: {outputLanguage: 'ts'}
       });
       expect(result).toContain(
-        'z.strictObject({street: z.string(), city: z.optional(z.string())})'
+        'j.strictObject({street: j.string(), city: j.optional(j.string())})'
       );
     });
   });
@@ -422,7 +422,7 @@ describe('zod-api-parser', () => {
 
   describe('full output', () => {
     it('should match ts no args no result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -430,7 +430,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should match ts with args no result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -438,7 +438,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should match ts no args with result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsWithResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -446,7 +446,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should match ts with args and result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsWithResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -454,7 +454,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should match js no args no result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
@@ -462,7 +462,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should match js with args no result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsNoResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
@@ -470,7 +470,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should match js no args with result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsWithResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
@@ -478,7 +478,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should match js with args and result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryWithArgsWithResult]],
         transformerOptions: {outputLanguage: 'js'}
       });
@@ -486,7 +486,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should match full ts output no args no result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'ts'}
       });
@@ -494,7 +494,7 @@ describe('zod-api-parser', () => {
     });
 
     it('should match full js output no args no result', () => {
-      const result = parseZodApi({
+      const result = parseSchemaApi({
         functions: [['helloWorld', mockQueryNoArgsNoResult]],
         transformerOptions: {outputLanguage: 'js'}
       });

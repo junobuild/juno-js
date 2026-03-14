@@ -6,6 +6,7 @@ export const mockTransformedCoreTS = `// This file was automatically generated b
 
 import type {_SERVICE as SatelliteActor} from './satellite.did';
 import type { Principal } from '@icp-sdk/core/principal';
+// @ts-expect-error - generated JS file without type declarations
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
 
@@ -63,6 +64,7 @@ export const mockTransformedCoreJS = `// This file was automatically generated b
 /* eslint-disable */
 /* prettier-ignore */
 
+// @ts-expect-error - generated JS file without type declarations
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
 

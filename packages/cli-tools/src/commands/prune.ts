@@ -1,6 +1,6 @@
 import ora from 'ora';
-import type {FileDetails} from '../types/deploy';
 import {PruneParams} from '../types/prune';
+import {FileDetails} from "../types/assets";
 
 export const prune = async ({params}: {params: PruneParams}) => {
   const prepareResult = await preparePrune(params);

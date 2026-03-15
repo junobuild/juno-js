@@ -18,3 +18,6 @@ export * from './utils/format.utils';
 export * from './utils/fs.utils';
 export * from './utils/pkg.utils';
 export * from './utils/prompt.utils';
+export {FileDetails} from './types/assets';
+export {FileExtension} from './types/assets';
+export {MimeType} from './types/assets';

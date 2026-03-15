@@ -1,18 +1,6 @@
 import type {EncodingType} from '@junobuild/config';
 import type {OnUploadProgress} from '@junobuild/storage';
-import type {AssetsParams, PrepareAssetsOptions} from './assets';
-
-export type MimeType = string;
-
-export type FileExtension = string;
-
-export interface FileDetails {
-  file: string;
-  // e.g. for index.js.gz -> index.js
-  alternateFile?: string;
-  encoding?: EncodingType;
-  mime?: MimeType;
-}
+import type {AssetsParams, FileDetails, PrepareAssetsOptions} from './assets';
 
 export type FilePaths = Required<Pick<UploadFileStorage, 'fullPath'>> & {
   filePath: string;

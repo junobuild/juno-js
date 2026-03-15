@@ -4,13 +4,13 @@ import {prune as pruneServices} from '../services/prune.services';
 import type {PruneFilesFn, PruneFileStorage, PruneParams, PruneResult} from '../types/prune';
 
 export const prune = async ({
-  params,
+  params: {dryRun, ...rest},
   pruneFn
 }: {
   params: PruneParams;
   pruneFn: PruneFilesFn;
 }): Promise<PruneResult> => {
-  const prepareResult = await preparePrune(params);
+  const prepareResult = await preparePrune(rest);
 
   if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
@@ -18,13 +18,17 @@ export const prune = async ({
 
   const {files} = prepareResult;
 
+  if (dryRun === true) {
+    return {result: 'simulated', files};
+  }
+
   await pruneServices({files, pruneFn});
 
   return {result: 'pruned', files};
 };
 
 const preparePrune = async (
-  params: Omit<PruneParams, 'uploadFn'>
+  params: Omit<PruneParams, 'dryRun'>
 ): Promise<{result: 'skipped'} | {result: 'to-prune'; files: PruneFileStorage[]}> => {
   const spinner = ora('Preparing deploy...').start();
 

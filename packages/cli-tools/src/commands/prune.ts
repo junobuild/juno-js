@@ -38,7 +38,7 @@ export const prune = async ({
 const preparePrune = async (
   params: Omit<PruneParams, 'dryRun'>
 ): Promise<{result: 'skipped'} | {result: 'to-prune'; files: PruneFileStorage[]}> => {
-  const spinner = ora('Preparing deploy...').start();
+  const spinner = ora('Preparing prune...').start();
 
   try {
     const {files: sourceFiles} = await preparePruneServices(params);

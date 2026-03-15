@@ -4,6 +4,7 @@ export * from './commands/generate';
 export * from './commands/prune';
 export * from './commands/publish';
 export * from './constants/deploy.constants';
+export * from './constants/storage.constants';
 export {ListAssets} from './types/assets';
 export type * from './types/deploy';
 export type * from './types/pkg';

@@ -1,7 +1,8 @@
 import {nonNullish, toNullable} from '@dfinity/utils';
 import type {CliConfig} from '@junobuild/config';
 import ora from 'ora';
-import {COLLECTION_DAPP, UPLOAD_DEFAULT_BATCH_SIZE} from '../constants/deploy.constants';
+import {UPLOAD_DEFAULT_BATCH_SIZE} from '../constants/deploy.constants';
+import {COLLECTION_DAPP} from '../constants/storage.constants';
 import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';

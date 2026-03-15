@@ -23,16 +23,14 @@ const preparePrune = async (
   try {
     const {files: sourceFiles} = await preparePruneServices(params);
 
-    if (sourceFiles.length === 0) {
-      spinner.stop();
+    spinner.stop();
 
+    if (sourceFiles.length === 0) {
       console.log('');
       console.log('👍  No stale assets found. Satellite is already clean.');
 
       return {result: 'skipped'};
     }
-
-    spinner.stop();
 
     return {
       result: 'to-prune',

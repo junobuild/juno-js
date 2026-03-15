@@ -55,10 +55,10 @@
     "ora": "^9"
   },
   "dependencies": {
-    "file-type": "^21.1.1",
-    "listr2": "^9.0.5",
+    "file-type": "^21.3.2",
+    "listr2": "^10.2.1",
     "mime-types": "^3.0.2",
-    "minimatch": "^10.1.2"
+    "minimatch": "^10.2.4"
   },
   "devDependencies": {
     "@types/mime-types": "^3.0.1",

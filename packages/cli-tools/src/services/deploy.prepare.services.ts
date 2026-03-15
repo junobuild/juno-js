@@ -13,9 +13,11 @@ import {
   DEPLOY_DEFAULT_PRECOMPRESS,
   DEPLOY_DEFAULT_SOURCE
 } from '../constants/deploy.constants';
-import type {FileDetails, FileExtension, ListAssets, PrepareDeployOptions} from '../types/deploy';
+import type {ListAssets} from '../types/assets';
+import type {FileDetails, FileExtension, PrepareDeployOptions} from '../types/deploy';
+import {fullPath} from '../utils/assets.utils';
 import {compressFiles} from '../utils/compress.utils';
-import {fullPath, listSourceFiles} from '../utils/deploy.utils';
+import {listSourceFilesForDeploy} from '../utils/deploy.utils';
 
 export const prepareDeploy = async ({
   config,
@@ -136,7 +138,7 @@ const prepareFiles = async ({
   sourceAbsolutePath: string;
 } & {listAssets: ListAssets} & Pick<PrepareDeployOptions, 'includeAllFiles'> &
   Required<Pick<CliConfig, 'ignore' | 'encoding' | 'precompress'>>): Promise<FileDetails[]> => {
-  const sourceFiles = listSourceFiles({sourceAbsolutePath, ignore});
+  const sourceFiles = listSourceFilesForDeploy({sourceAbsolutePath, ignore});
 
   const allCompressedFiles = await compressFiles({sourceFiles, precompress});
   const compressedFiles = allCompressedFiles.filter(

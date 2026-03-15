@@ -1,10 +1,11 @@
 import ora from 'ora';
+import {PRUNE_DEFAULT_BATCH_SIZE} from '../constants/prune.constants';
 import {preparePrune as preparePruneServices} from '../services/prune.prepare.services';
 import {prune as pruneServices} from '../services/prune.services';
 import type {PruneFilesFn, PruneFileStorage, PruneParams, PruneResult} from '../types/prune';
 
 export const prune = async ({
-  params: {dryRun, ...rest},
+  params: {dryRun, batchSize, ...rest},
   pruneFn
 }: {
   params: PruneParams;
@@ -18,11 +19,18 @@ export const prune = async ({
 
   const {files} = prepareResult;
 
+  // 4. Report
+  console.log(`\nFound ${files.length} stale asset(s):`);
+  for (const {fullPath} of files) {
+    console.log(`  - ${fullPath}`);
+  }
+  console.log('');
+
   if (dryRun === true) {
     return {result: 'simulated', files};
   }
 
-  await pruneServices({files, pruneFn});
+  await pruneServices({files, pruneFn, batchSize: batchSize ?? PRUNE_DEFAULT_BATCH_SIZE});
 
   return {result: 'pruned', files};
 };

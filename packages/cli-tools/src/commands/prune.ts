@@ -4,6 +4,18 @@ import {preparePrune as preparePruneServices} from '../services/prune.prepare.se
 import {prune as pruneServices} from '../services/prune.services';
 import type {PruneFilesFn, PruneFileStorage, PruneParams, PruneResult} from '../types/prune';
 
+/**
+ * Identifies and removes stale assets from a satellite's storage.
+ *
+ * @param {Object} options
+ * @param {PruneParams} options.params - Prune parameters including `dryRun` and `batchSize`.
+ * @param {PruneFilesFn} options.pruneFn - Function used to delete the resolved stale assets.
+ *
+ * @returns {Promise<PruneResult>}
+ *   - `{ result: 'skipped' }` when no stale assets are found.
+ *   - `{ result: 'simulated', files }` when `dryRun` is true; no files are deleted.
+ *   - `{ result: 'pruned', files }` when stale assets are successfully deleted.
+ */
 export const prune = async ({
   params: {dryRun, batchSize, ...rest},
   pruneFn

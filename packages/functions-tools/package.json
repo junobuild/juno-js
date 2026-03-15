@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/functions-tools",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Tools for generating Juno serverless functions code.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

@@ -1,9 +1,15 @@
 import ora from 'ora';
 import {preparePrune as preparePruneServices} from '../services/prune.prepare.services';
 import {prune as pruneServices} from '../services/prune.services';
-import type {PruneFilesFn, PruneFileStorage, PruneParams} from '../types/prune';
+import {PruneFilesFn, PruneFileStorage, PruneParams, PruneResult} from '../types/prune';
 
-export const prune = async ({params, pruneFn}: {params: PruneParams; pruneFn: PruneFilesFn}) => {
+export const prune = async ({
+  params,
+  pruneFn
+}: {
+  params: PruneParams;
+  pruneFn: PruneFilesFn;
+}): Promise<PruneResult> => {
   const prepareResult = await preparePrune(params);
 
   if (prepareResult.result === 'skipped') {
@@ -13,6 +19,8 @@ export const prune = async ({params, pruneFn}: {params: PruneParams; pruneFn: Pr
   const {files} = prepareResult;
 
   await pruneServices({files, pruneFn});
+
+  return {result: 'pruned', files};
 };
 
 const preparePrune = async (

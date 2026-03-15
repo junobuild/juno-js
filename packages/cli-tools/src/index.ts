@@ -1,12 +1,14 @@
 export * from './commands/build';
 export * from './commands/deploy';
 export * from './commands/generate';
+export * from './commands/prune';
 export * from './commands/publish';
 export * from './constants/deploy.constants';
 export {ListAssets} from './types/assets';
 export type * from './types/deploy';
 export type * from './types/pkg';
 export type * from './types/proposal';
+export type * from './types/prune';
 export type * from './types/publish';
 export * from './utils/args.utils';
 export * from './utils/cmd.utils';

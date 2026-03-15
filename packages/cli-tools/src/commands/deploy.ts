@@ -11,6 +11,7 @@ import type {
   DeployResult,
   DeployResultWithProposal,
   FileAndPaths,
+  FileDetails,
   FilePaths,
   UploadFilesWithProposal,
   UploadFileWithProposal,
@@ -20,7 +21,6 @@ import type {
 import type {ProposeChangesParams} from '../types/proposal';
 import type {UploadFilesParams} from '../types/upload';
 import {fullPath} from '../utils/assets.utils';
-import {FileDetails} from '../types/assets';
 
 /**
  * Executes all configured pre-deploy hooks defined in the Juno configuration.

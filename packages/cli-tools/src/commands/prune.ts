@@ -1,19 +1,45 @@
 import ora from 'ora';
-import {PruneParams} from '../types/prune';
-import {FileDetails} from "../types/assets";
+import {preparePrune as preparePruneServices} from '../services/prune.prepare.services';
+import {prune as pruneServices} from '../services/prune.services';
+import type {PruneFilesFn, PruneFileStorage, PruneParams} from '../types/prune';
 
-export const prune = async ({params}: {params: PruneParams}) => {
+export const prune = async ({params, pruneFn}: {params: PruneParams; pruneFn: PruneFilesFn}) => {
   const prepareResult = await preparePrune(params);
 
   if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
   }
+
+  const {files} = prepareResult;
+
+  await pruneServices({files, pruneFn});
 };
 
-const preparePrune = async (params: Omit<PruneParams, 'uploadFn'>): Promise<
-  {result: 'skipped'} | {result: 'to-prune'; files: FileDetails[]; sourceAbsolutePath: string}
-> => {
+const preparePrune = async (
+  params: Omit<PruneParams, 'uploadFn'>
+): Promise<{result: 'skipped'} | {result: 'to-prune'; files: PruneFileStorage[]}> => {
   const spinner = ora('Preparing deploy...').start();
 
+  try {
+    const {files: sourceFiles} = await preparePruneServices(params);
 
+    if (sourceFiles.length === 0) {
+      spinner.stop();
+
+      console.log('');
+      console.log('👍  No stale assets found. Satellite is already clean.');
+
+      return {result: 'skipped'};
+    }
+
+    spinner.stop();
+
+    return {
+      result: 'to-prune',
+      files: sourceFiles
+    };
+  } catch (err: unknown) {
+    spinner.stop();
+    throw err;
+  }
 };

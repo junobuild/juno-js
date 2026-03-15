@@ -1,13 +1,12 @@
 import {Listr} from 'listr2';
 import {relative} from 'node:path';
-import type {FileAndPaths, UploadFile, UploadFileStorage} from '../../types/deploy';
+import type {FileAndPaths, FileDetails, UploadFile, UploadFileStorage} from '../../types/deploy';
 import type {UploadFilesParams} from '../../types/upload';
 import {
   type ExecuteUploadFiles,
   executeUploadFiles,
   prepareFileForUpload
 } from './_upload.services';
-import {FileDetails} from "../../types/assets";
 
 export const uploadFilesIndividually = async ({
   uploadFile,

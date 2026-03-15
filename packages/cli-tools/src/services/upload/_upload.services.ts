@@ -1,10 +1,9 @@
 import {nonNullish, notEmptyString} from '@dfinity/utils';
 import {readFile} from 'node:fs/promises';
 import {basename} from 'node:path';
-import type {FileAndPaths, UploadFileStorage} from '../../types/deploy';
+import type {FileAndPaths, FileDetails, UploadFileStorage} from '../../types/deploy';
 import type {UploadFilesParams} from '../../types/upload';
 import {splitSourceFiles} from '../../utils/upload.utils';
-import {FileDetails} from "../../types/assets";
 
 export const prepareFileForUpload = async ({
   file,

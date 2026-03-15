@@ -1,5 +1,6 @@
-import type {CliConfig, EncodingType} from '@junobuild/config';
-import type {Asset, OnUploadProgress} from '@junobuild/storage';
+import type {EncodingType} from '@junobuild/config';
+import type {OnUploadProgress} from '@junobuild/storage';
+import type {AssetsParams, PrepareAssetsOptions} from './assets';
 
 export type MimeType = string;
 
@@ -21,8 +22,6 @@ export interface FileAndPaths {
   file: FileDetails;
   paths: FilePaths;
 }
-
-export type ListAssets = ({startAfter}: {startAfter?: string}) => Promise<Asset[]>;
 
 export interface UploadFileStorage {
   filename: string;
@@ -63,17 +62,15 @@ export type DeployResultWithProposal =
       proposalId: bigint;
     };
 
-export interface PrepareDeployOptions {
-  assertSourceDirExists?: (source: string) => void;
+export interface PrepareDeployOptions extends PrepareAssetsOptions {
   includeAllFiles?: boolean;
 }
 
-export type DeployParams = PrepareDeployOptions & {
-  config: CliConfig;
-  listAssets: ListAssets;
-  assertMemory: () => Promise<void>;
-  uploadBatchSize?: number;
-};
+export type DeployParams = PrepareDeployOptions &
+  AssetsParams & {
+    assertMemory: () => Promise<void>;
+    uploadBatchSize?: number;
+  };
 
 export interface UploadIndividually<T = UploadFile> {
   uploadFile: T;

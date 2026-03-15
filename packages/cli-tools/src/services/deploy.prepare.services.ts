@@ -13,7 +13,8 @@ import {
   DEPLOY_DEFAULT_PRECOMPRESS,
   DEPLOY_DEFAULT_SOURCE
 } from '../constants/deploy.constants';
-import type {FileDetails, FileExtension, ListAssets, PrepareDeployOptions} from '../types/deploy';
+import type {ListAssets} from '../types/assets';
+import type {FileDetails, FileExtension, PrepareDeployOptions} from '../types/deploy';
 import {compressFiles} from '../utils/compress.utils';
 import {fullPath, listSourceFiles} from '../utils/deploy.utils';
 

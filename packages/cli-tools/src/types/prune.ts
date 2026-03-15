@@ -1,5 +1,5 @@
 import type {AssetsParams, PrepareAssetsOptions} from './assets';
-import {PrepareDeployOptions} from './deploy';
+import type {PrepareDeployOptions} from './deploy';
 
 export type PreparePruneOptions = PrepareAssetsOptions;
 

@@ -1,7 +1,7 @@
 import ora from 'ora';
 import {preparePrune as preparePruneServices} from '../services/prune.prepare.services';
 import {prune as pruneServices} from '../services/prune.services';
-import {PruneFilesFn, PruneFileStorage, PruneParams, PruneResult} from '../types/prune';
+import type {PruneFilesFn, PruneFileStorage, PruneParams, PruneResult} from '../types/prune';
 
 export const prune = async ({
   params,

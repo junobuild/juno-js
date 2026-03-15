@@ -20,7 +20,6 @@ import type {
 } from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';
 import type {UploadFilesParams} from '../types/upload';
-
 import {fullPath} from '../utils/assets.utils';
 
 /**

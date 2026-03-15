@@ -2,7 +2,8 @@ import type {AssetsParams, PrepareAssetsOptions} from './assets';
 
 export type PreparePruneOptions = PrepareAssetsOptions;
 
-export type PruneParams = PrepareAssetsOptions & AssetsParams & {dryRun?: boolean};
+export type PruneParams = PrepareAssetsOptions &
+  AssetsParams & {dryRun?: boolean; batchSize?: number};
 
 export interface PruneFileStorage {
   fullPath: string;

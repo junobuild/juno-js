@@ -1,9 +1,8 @@
 import type {AssetsParams, PrepareAssetsOptions} from './assets';
-import type {PrepareDeployOptions} from './deploy';
 
 export type PreparePruneOptions = PrepareAssetsOptions;
 
-export type PruneParams = PrepareDeployOptions & AssetsParams & {dryRun?: boolean};
+export type PruneParams = PrepareAssetsOptions & AssetsParams & {dryRun?: boolean};
 
 export interface PruneFileStorage {
   fullPath: string;

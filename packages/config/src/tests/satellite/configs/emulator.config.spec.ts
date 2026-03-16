@@ -591,5 +591,101 @@ describe('emulator.config', () => {
         expect(res.success).toBe(true);
       });
     });
+
+    describe('runner.extraHosts', () => {
+      const withExtraHosts = (extraHosts: unknown) => ({
+        skylab: {},
+        runner: {type: 'docker', extraHosts}
+      });
+
+      it('accepts a valid IPv4 entry', () => {
+        const result = EmulatorConfigSchema.safeParse(
+          withExtraHosts([['myhost', '192.168.1.1']])
+        );
+        expect(result.success).toBe(true);
+      });
+
+      it('accepts a valid IPv6 entry', () => {
+        const result = EmulatorConfigSchema.safeParse(
+          withExtraHosts([['myhost', '::1']])
+        );
+        expect(result.success).toBe(true);
+      });
+
+      it('accepts "host-gateway" as a destination', () => {
+        const result = EmulatorConfigSchema.safeParse(
+          withExtraHosts([['host.docker.internal', 'host-gateway']])
+        );
+        expect(result.success).toBe(true);
+      });
+
+      it('accepts an arbitrary non-empty string as a destination (fallback hostname)', () => {
+        const result = EmulatorConfigSchema.safeParse(
+          withExtraHosts([['myhost', 'some-other-host']])
+        );
+        expect(result.success).toBe(true);
+      });
+
+      it('accepts multiple entries', () => {
+        const result = EmulatorConfigSchema.safeParse(
+          withExtraHosts([
+            ['host.docker.internal', 'host-gateway'],
+            ['eth-rpc', '192.168.0.10'],
+            ['ipv6host', '2001:db8::1']
+          ])
+        );
+        expect(result.success).toBe(true);
+      });
+
+      it('accepts an empty array', () => {
+        const result = EmulatorConfigSchema.safeParse(withExtraHosts([]));
+        expect(result.success).toBe(true);
+      });
+
+      it('is optional (omitted entirely)', () => {
+        const result = EmulatorConfigSchema.safeParse({skylab: {}, runner: {type: 'docker'}});
+        expect(result.success).toBe(true);
+      });
+
+      it('rejects the old flat-string format', () => {
+        const result = EmulatorConfigSchema.safeParse(
+          withExtraHosts(['host.docker.internal:host-gateway'])
+        );
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects an entry with an empty hostname', () => {
+        const result = EmulatorConfigSchema.safeParse(
+          withExtraHosts([['', '192.168.1.1']])
+        );
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects an entry with an empty destination', () => {
+        const result = EmulatorConfigSchema.safeParse(
+          withExtraHosts([['myhost', '']])
+        );
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects a tuple with more than two elements', () => {
+        const result = EmulatorConfigSchema.safeParse(
+          withExtraHosts([['myhost', '192.168.1.1', 'extra']])
+        );
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects a tuple with only one element', () => {
+        const result = EmulatorConfigSchema.safeParse(
+          withExtraHosts([['myhost']])
+        );
+        expect(result.success).toBe(false);
+      });
+
+      it('rejects a non-array value', () => {
+        const result = EmulatorConfigSchema.safeParse(withExtraHosts('invalid'));
+        expect(result.success).toBe(false);
+      });
+    });
   });
 });

@@ -116,7 +116,8 @@ const EmulatorRunnerSchema = z.strictObject({
   name: z.string().optional(),
   volume: z.string().optional(),
   target: z.string().optional(),
-  platform: z.enum(['linux/amd64', 'linux/arm64']).optional()
+  platform: z.enum(['linux/amd64', 'linux/arm64']).optional(),
+  extraHosts: z.array(z.string()).optional()
 });
 
 /**
@@ -155,6 +156,25 @@ export interface EmulatorRunner {
    * The platform to use when running the emulator container.
    */
   platform?: 'linux/amd64' | 'linux/arm64';
+
+  /**
+   * Additional host-to-IP mappings to inject into the container via `--add-host`.
+   * Format: `"hostname:ip"` or `"hostname:host-gateway"`.
+   *
+   * This is useful for making host-machine services (e.g. a local Ethereum RPC
+   * node) reachable from within the container under a stable DNS name such as
+   * `host.docker.internal`.
+   *
+   * @example
+   * ```ts
+   * runner: {
+   *   extraHosts: ['host.docker.internal:host-gateway']
+   * }
+   * ```
+   *
+   * @see https://docs.docker.com/reference/cli/docker/container/run/#add-host
+   */
+  extraHosts?: string[];
 }
 
 /**

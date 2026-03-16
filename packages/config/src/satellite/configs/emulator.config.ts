@@ -110,6 +110,8 @@ export interface EmulatorSatellite {
 /**
  * @see EmulatorRunner
  */
+const HostnameSchema = z.string().min(1);
+
 const EmulatorRunnerSchema = z.strictObject({
   type: z.enum(['docker', 'podman']),
   image: z.string().optional(),
@@ -117,7 +119,9 @@ const EmulatorRunnerSchema = z.strictObject({
   volume: z.string().optional(),
   target: z.string().optional(),
   platform: z.enum(['linux/amd64', 'linux/arm64']).optional(),
-  extraHosts: z.array(z.string()).optional()
+  extraHosts: z
+    .array(z.tuple([HostnameSchema, z.union([z.ipv4(), z.ipv6(), z.literal('host-gateway'), HostnameSchema])]))
+    .optional()
 });
 
 /**
@@ -159,7 +163,8 @@ export interface EmulatorRunner {
 
   /**
    * Additional host-to-IP mappings to inject into the container via `--add-host`.
-   * Format: `"hostname:ip"` or `"hostname:host-gateway"`.
+   * Each entry is a `[hostname, destination]` tuple where destination is an IPv4
+   * address, an IPv6 address, `"host-gateway"`, or an arbitrary host string.
    *
    * This is useful for making host-machine services (e.g. a local Ethereum RPC
    * node) reachable from within the container under a stable DNS name such as
@@ -168,13 +173,13 @@ export interface EmulatorRunner {
    * @example
    * ```ts
    * runner: {
-   *   extraHosts: ['host.docker.internal:host-gateway']
+   *   extraHosts: [['host.docker.internal', 'host-gateway']]
    * }
    * ```
    *
    * @see https://docs.docker.com/reference/cli/docker/container/run/#add-host
    */
-  extraHosts?: string[];
+  extraHosts?: [string, string][];
 }
 
 /**

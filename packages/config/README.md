@@ -168,13 +168,13 @@ References:
 
 | Constant               | Type                                                                                                                                                                                                                                                                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; podman: "podman"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; }, $strict>>; network: ZodOptional<...>; skylab: ZodObjec...` |
+| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; podman: "podman"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; extraHosts: ZodOptional<...>; }, $strict>>; network: ZodO...` |
 
 References:
 
 - EmulatorConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L249)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L288)
 
 #### :gear: ModuleLogVisibilitySchema
 
@@ -530,16 +530,17 @@ Configuration for the Satellite emulator.
 
 Shared options for all runner variants.
 
-| Property   | Type                                          | Description                                                                                           |
-| ---------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `type`     | `"docker" or "podman"`                        | The containerization tool to run the emulator.                                                        |
-| `image`    | `string or undefined`                         | Image reference. default: depends on emulator type, e.g. "junobuild/skylab:latest"                    |
-| `name`     | `string or undefined`                         | Optional container name to use for the emulator. Useful for reusing or managing a specific container. |
-| `volume`   | `string or undefined`                         | Persistent volume to store internal state. default: "juno"                                            |
-| `target`   | `string or undefined`                         | Shared folder for deploying and hot-reloading serverless functions.                                   |
-| `platform` | `"linux/amd64" or "linux/arm64" or undefined` | The platform to use when running the emulator container.                                              |
+| Property     | Type                                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------ | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`       | `"docker" or "podman"`                        | The containerization tool to run the emulator.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `image`      | `string or undefined`                         | Image reference. default: depends on emulator type, e.g. "junobuild/skylab:latest"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `name`       | `string or undefined`                         | Optional container name to use for the emulator. Useful for reusing or managing a specific container.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `volume`     | `string or undefined`                         | Persistent volume to store internal state. default: "juno"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `target`     | `string or undefined`                         | Shared folder for deploying and hot-reloading serverless functions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `platform`   | `"linux/amd64" or "linux/arm64" or undefined` | The platform to use when running the emulator container.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `extraHosts` | `[string, string][] or undefined`             | Additional host-to-IP mappings to inject into the container via `--add-host`. Each entry is a `[hostname, destination]` tuple where destination is an IPv4 address, an IPv6 address, `"host-gateway"`, or an arbitrary host string. This is useful for making host-machine services (e.g. a local Ethereum RPC node) reachable from within the container under a stable DNS name such as `host.docker.internal`. example: `ts runner: { extraHosts: [['host.docker.internal', 'host-gateway']] } `see: https://docs.docker.com/reference/cli/docker/container/run/#add-host |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L125)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L144)
 
 #### :gear: NetworkServices
 
@@ -559,7 +560,7 @@ in the local Internet Computer network when the emulator starts.
 | `internet_identity` | `boolean or undefined` | Internet Identity: Deploys the II canister for authentication.                                                                                                                                                           |
 | `nns_dapp`          | `boolean or undefined` | NNS dapp: Deploys the NNS UI canister and frontend application Requires cmc, icp, nns, sns, internet_identity to be enabled.                                                                                             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L180)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L219)
 
 #### :gear: Network
 
@@ -570,7 +571,7 @@ by the emulator.
 | ---------- | ----------------- | ----------------------------------------------------------- |
 | `services` | `NetworkServices` | System canisters and applications available in the network. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L239)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L278)
 
 #### :gear: ModuleSettings
 
@@ -746,6 +747,7 @@ changes, typically through CLI commands (e.g., `juno config`).
 - [RulesType](#gear-rulestype)
 - [DatastoreCollection](#gear-datastorecollection)
 - [StorageCollection](#gear-storagecollection)
+- [Hostname](#gear-hostname)
 - [EmulatorConfig](#gear-emulatorconfig)
 - [ModuleLogVisibility](#gear-modulelogvisibility)
 - [JunoConfigMode](#gear-junoconfigmode)
@@ -794,6 +796,16 @@ changes, typically through CLI commands (e.g., `juno config`).
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/collections.ts#L32)
 
+#### :gear: Hostname
+
+A non-empty hostname string.
+
+| Type       | Type |
+| ---------- | ---- |
+| `Hostname` |      |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L118)
+
 #### :gear: EmulatorConfig
 
 The configuration for running the Juno emulator.
@@ -802,7 +814,7 @@ The configuration for running the Juno emulator.
 | ---------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `EmulatorConfig` | `    | {runner?: EmulatorRunner; network?: Network; skylab: EmulatorSkylab} or {runner?: EmulatorRunner; network?: Network; console: EmulatorConsole} or {runner?: EmulatorRunner; network?: Network; satellite: EmulatorSatellite}` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L272)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L311)
 
 #### :gear: ModuleLogVisibility
 

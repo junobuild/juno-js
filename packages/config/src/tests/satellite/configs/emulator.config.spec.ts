@@ -599,16 +599,12 @@ describe('emulator.config', () => {
       });
 
       it('accepts a valid IPv4 entry', () => {
-        const result = EmulatorConfigSchema.safeParse(
-          withExtraHosts([['myhost', '192.168.1.1']])
-        );
+        const result = EmulatorConfigSchema.safeParse(withExtraHosts([['myhost', '192.168.1.1']]));
         expect(result.success).toBe(true);
       });
 
       it('accepts a valid IPv6 entry', () => {
-        const result = EmulatorConfigSchema.safeParse(
-          withExtraHosts([['myhost', '::1']])
-        );
+        const result = EmulatorConfigSchema.safeParse(withExtraHosts([['myhost', '::1']]));
         expect(result.success).toBe(true);
       });
 
@@ -637,9 +633,9 @@ describe('emulator.config', () => {
         expect(result.success).toBe(true);
       });
 
-      it('accepts an empty array', () => {
+      it('rejects an empty array', () => {
         const result = EmulatorConfigSchema.safeParse(withExtraHosts([]));
-        expect(result.success).toBe(true);
+        expect(result.success).toBe(false);
       });
 
       it('is optional (omitted entirely)', () => {
@@ -655,16 +651,12 @@ describe('emulator.config', () => {
       });
 
       it('rejects an entry with an empty hostname', () => {
-        const result = EmulatorConfigSchema.safeParse(
-          withExtraHosts([['', '192.168.1.1']])
-        );
+        const result = EmulatorConfigSchema.safeParse(withExtraHosts([['', '192.168.1.1']]));
         expect(result.success).toBe(false);
       });
 
       it('rejects an entry with an empty destination', () => {
-        const result = EmulatorConfigSchema.safeParse(
-          withExtraHosts([['myhost', '']])
-        );
+        const result = EmulatorConfigSchema.safeParse(withExtraHosts([['myhost', '']]));
         expect(result.success).toBe(false);
       });
 
@@ -676,9 +668,7 @@ describe('emulator.config', () => {
       });
 
       it('rejects a tuple with only one element', () => {
-        const result = EmulatorConfigSchema.safeParse(
-          withExtraHosts([['myhost']])
-        );
+        const result = EmulatorConfigSchema.safeParse(withExtraHosts([['myhost']]));
         expect(result.success).toBe(false);
       });
 

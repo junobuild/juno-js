@@ -108,10 +108,18 @@ export interface EmulatorSatellite {
 }
 
 /**
- * @see EmulatorRunner
+ * @see Hostname
  */
 const HostnameSchema = z.string().min(1);
 
+/**
+ * A non-empty hostname string.
+ */
+export type Hostname = string;
+
+/**
+ * @see EmulatorRunner
+ */
 const EmulatorRunnerSchema = z.strictObject({
   type: z.enum(['docker', 'podman']),
   image: z.string().optional(),
@@ -120,7 +128,13 @@ const EmulatorRunnerSchema = z.strictObject({
   target: z.string().optional(),
   platform: z.enum(['linux/amd64', 'linux/arm64']).optional(),
   extraHosts: z
-    .array(z.tuple([HostnameSchema, z.union([z.ipv4(), z.ipv6(), z.literal('host-gateway'), HostnameSchema])]))
+    .array(
+      z.tuple([
+        HostnameSchema,
+        z.union([z.ipv4(), z.ipv6(), z.literal('host-gateway'), HostnameSchema])
+      ])
+    )
+    .min(1)
     .optional()
 });
 
@@ -179,7 +193,7 @@ export interface EmulatorRunner {
    *
    * @see https://docs.docker.com/reference/cli/docker/container/run/#add-host
    */
-  extraHosts?: [string, string][];
+  extraHosts?: [Hostname, string | 'host-gateway' | Hostname][];
 }
 
 /**

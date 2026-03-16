@@ -594,6 +594,7 @@ describe('emulator.config', () => {
 
     describe('runner.extraHosts', () => {
       const withExtraHosts = (extraHosts: unknown) => ({
+        skylab: {},
         runner: {type: 'docker', extraHosts}
       });
 
@@ -642,7 +643,7 @@ describe('emulator.config', () => {
       });
 
       it('is optional (omitted entirely)', () => {
-        const result = EmulatorConfigSchema.safeParse({runner: {type: 'docker'}});
+        const result = EmulatorConfigSchema.safeParse({skylab: {}, runner: {type: 'docker'}});
         expect(result.success).toBe(true);
       });
 

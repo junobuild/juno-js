@@ -39,5 +39,12 @@ const filterFilesToPrune = async ({
   const existingAssets = await listAssets({});
 
   // 3. Compute stale = live_assets − local_files
-  return existingAssets.filter(({fullPath}) => !localPaths.has(fullPath));
+  const stale = existingAssets.filter(({fullPath}) => !localPaths.has(fullPath));
+
+  // Workaround: ic-domains and ii-alternative-origins should not be deleted
+  // @see https://github.com/junobuild/juno/issues/2686
+  return stale.filter(
+    ({fullPath}) =>
+      !['/.well-known/ic-domains', '/.well-known/ii-alternative-origins'].includes(fullPath)
+  );
 };

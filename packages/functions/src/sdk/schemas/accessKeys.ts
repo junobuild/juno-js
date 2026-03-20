@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import {RawPrincipalSchema} from '../../schemas/candid';
+import {RawPrincipalSchema} from '../../schemas/principal';
 import {type Timestamp, TimestampSchema} from '../../schemas/satellite';
 
 /**

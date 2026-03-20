@@ -1,11 +1,11 @@
+import {j} from '@junobuild/schema';
 import * as z from 'zod';
-import {PrincipalSchema} from '../schemas/candid';
 
 /**
  * @see CanisterOptions
  */
 export const CanisterOptionsSchema = z.strictObject({
-  canisterId: PrincipalSchema.optional()
+  canisterId: j.principal().optional()
 });
 
 /**

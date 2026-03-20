@@ -1,4 +1,4 @@
-import {type AccessKeys} from './schemas/accessKeys';
+import type {AccessKeys} from './schemas/accessKeys';
 
 /**
  * Gets the list of admin access keys from the Satellite.

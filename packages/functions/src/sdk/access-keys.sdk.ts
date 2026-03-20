@@ -2,7 +2,7 @@ import {
   type AccessKeyCheckParams,
   type AccessKeys,
   AccessKeyCheckParamsSchema
-} from './schemas/accessKeys';
+} from './schemas/access-keys';
 import {normalizeCaller} from './utils/caller.utils';
 
 /**

@@ -4,8 +4,8 @@ import {
   isAdminAccessKey,
   isValidAccessKey,
   isWriteAccessKey
-} from '../../sdk/accessKeys.sdk';
-import {AccessKeyCheckParams, AccessKeys} from '../../sdk/schemas/accessKeys';
+} from '../../sdk/access-keys.sdk';
+import {AccessKeyCheckParams, AccessKeys} from '../../sdk/schemas/access-keys';
 import {mockRawUserId, mockUserIdPrincipal} from '../mocks/user.mock';
 
 describe('accessKeys.sdk', () => {

@@ -13,7 +13,7 @@ import type {
   HeaderFields,
   OptionAsset
 } from './schemas/storage';
-import type {AccessKeys} from './sdk/schemas/accessKeys';
+import type {AccessKeys} from './sdk/schemas/access-keys';
 import type {Memory} from './sdk/schemas/collections';
 
 declare global {

@@ -1,4 +1,4 @@
-import type {AccessKeys} from './schemas/accessKeys';
+import type {AccessKeys} from './schemas/access-keys';
 
 /**
  * Guard that succeeds if the caller is an admin access key of this satellite.

@@ -4,7 +4,7 @@ import {
   AccessKeyRecordSchema,
   AccessKeySchema,
   AccessKeysSchema
-} from '../../../sdk/schemas/accessKeys';
+} from '../../../sdk/schemas/access-keys';
 import {mockRawUserId, mockUserIdText} from '../../mocks/user.mock';
 
 describe('accessKeys', () => {

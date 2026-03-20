@@ -2,10 +2,23 @@ import {nonNullish} from '@dfinity/utils';
 import * as z from 'zod';
 import {decodeDocData, encodeDocData} from '../sdk/serializer.sdk';
 import {QuerySchema} from './query';
+import {CustomFunctionGuardSchema} from './schemas/function';
 import {UpdateSchema} from './update';
 
 const ConfigSchema = z.union([QuerySchema, UpdateSchema]);
 type Config = z.infer<typeof ConfigSchema>;
+
+const ConfigWithGuardSchema = ConfigSchema.and(
+  z.strictObject({
+    guard: CustomFunctionGuardSchema
+  })
+);
+
+// eslint-disable-next-line local-rules/prefer-object-params
+globalThis.__juno_satellite_fn_guard_sync = (config: Config) => {
+  const configWithGuard = ConfigWithGuardSchema.parse(config);
+  configWithGuard.guard();
+};
 
 // eslint-disable-next-line local-rules/prefer-object-params
 globalThis.__juno_satellite_fn_invoke_sync = (config: Config, raw?: Uint8Array<ArrayBuffer>) => {

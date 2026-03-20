@@ -1,5 +1,6 @@
 export * from './sdk/accessKeys.sdk';
 export * from './sdk/db.sdk';
+export * from './sdk/guards.sdk';
 export * from './sdk/schemas/accessKeys';
 export * from './sdk/schemas/collections';
 export * from './sdk/schemas/db';

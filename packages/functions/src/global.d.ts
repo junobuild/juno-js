@@ -20,6 +20,10 @@ declare global {
   function __juno_satellite_get_admin_access_keys(): AccessKeys;
   function __juno_satellite_get_access_keys(): AccessKeys;
 
+  function __juno_satellite_caller_is_admin();
+  function __juno_satellite_caller_has_write_permission();
+  function __juno_satellite_caller_is_access_key();
+
   function __juno_satellite_random(): number;
 
   function __juno_satellite_datastore_raw_data_to_text(data: RawData): string;

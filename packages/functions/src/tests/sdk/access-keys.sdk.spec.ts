@@ -1,7 +1,7 @@
 import {
   getAccessKeys,
   getAdminAccessKeys,
-  isAdminAccessKey,
+  isAdminController,
   isValidAccessKey,
   isWriteAccessKey
 } from '../../sdk/access-keys.sdk';
@@ -67,24 +67,24 @@ describe('accessKeys.sdk', () => {
     });
   });
 
-  describe('isAdminAccessKey', () => {
-    it('returns true when principal is an admin access key', () => {
+  describe('isAdminController', () => {
+    it('returns true when principal is an admin access key and controller', () => {
       const params: AccessKeyCheckParams = {
         id: mockUserIdPrincipal,
         accessKeys: validAccessKeys
       };
 
-      const result = isAdminAccessKey(params);
+      const result = isAdminController(params);
       expect(result).toBe(true);
     });
 
-    it('returns true when raw principal is an admin access key', () => {
+    it('returns true when raw principal is an admin access key and controller', () => {
       const params: AccessKeyCheckParams = {
         id: mockRawUserId,
         accessKeys: validAccessKeys
       };
 
-      const result = isAdminAccessKey(params);
+      const result = isAdminController(params);
       expect(result).toBe(true);
     });
   });

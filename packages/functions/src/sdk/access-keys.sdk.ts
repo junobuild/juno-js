@@ -64,16 +64,16 @@ export const isValidAccessKey = (params: AccessKeyCheckParams): boolean => {
 };
 
 /**
- * Checks if the given id is an admin among the provided access keys.
+ * Checks if the given id is an admin among the provided access keys and a controller as known on the Internet Computer.
  *
  * @param {AccessKeyCheckParams} params - The parameters including the id
  * and the list of access keys to verify against.
  *
- * @returns {boolean} Whether the id is an admin.
+ * @returns {boolean} Whether the id is an admin and a controller of the Satellite on the Internet Computer.
  *
  * @throws {z.ZodError} If any input does not match the expected schema.
  */
-export const isAdminAccessKey = (params: AccessKeyCheckParams): boolean => {
+export const isAdminController = (params: AccessKeyCheckParams): boolean => {
   AccessKeyCheckParamsSchema.parse(params);
 
   const {id: providedId, accessKeys} = params;

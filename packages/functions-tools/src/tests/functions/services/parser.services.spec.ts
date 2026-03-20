@@ -17,7 +17,7 @@ describe('parseFunctions', () => {
 #![allow(non_camel_case_types)]
 
 use crate::functions::{
-    execute_async_function, execute_guard, execute_sync_function,
+    execute_async_function, execute_sync_guard, execute_sync_function,
     types::{NoArgs, NoResult},
 };
 use candid::{CandidType, Principal};
@@ -312,7 +312,7 @@ use serde::{Deserialize, Serialize};`);
 
       expect(result).toContain('#[ic_cdk::query(guard = "app_hello_world_guard")]');
       expect(result).toContain('fn app_hello_world_guard() -> Result<(), String>');
-      expect(result).toContain('execute_guard("helloWorld")');
+      expect(result).toContain('execute_sync_guard("helloWorld")');
     });
 
     it('should generate a guard function and annotate the update when guard is provided', () => {
@@ -323,7 +323,7 @@ use serde::{Deserialize, Serialize};`);
 
       expect(result).toContain('#[ic_cdk::update(guard = "app_yolo_guard")]');
       expect(result).toContain('fn app_yolo_guard() -> Result<(), String>');
-      expect(result).toContain('execute_guard("yolo")');
+      expect(result).toContain('execute_sync_guard("yolo")');
     });
 
     it('should not generate a guard when none is provided', () => {

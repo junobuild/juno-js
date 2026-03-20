@@ -27,6 +27,7 @@ use junobuild_shared::ic::UnwrapOrTrapResult;
 use serde::{Deserialize, Serialize};`);
   });
 
+
   describe('query', () => {
     it('should generate a sync query with no args and no result', () => {
       const result = parseFunctions({

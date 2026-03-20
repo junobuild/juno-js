@@ -876,9 +876,7 @@ The current timestamp.
 - [CustomFunctionSchema](#gear-customfunctionschema)
 - [QuerySchema](#gear-queryschema)
 - [UpdateSchema](#gear-updateschema)
-- [Uint8ArraySchema](#gear-uint8arrayschema)
 - [RawPrincipalSchema](#gear-rawprincipalschema)
-- [PrincipalSchema](#gear-principalschema)
 - [TimestampSchema](#gear-timestampschema)
 - [VersionSchema](#gear-versionschema)
 - [RawUserIdSchema](#gear-rawuseridschema)
@@ -1081,16 +1079,6 @@ References:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/update.ts#L23)
 
-#### :gear: Uint8ArraySchema
-
-A schema that validates a value is an Uint8Array.
-
-| Constant           | Type                                                          |
-| ------------------ | ------------------------------------------------------------- |
-| `Uint8ArraySchema` | `ZodCustom<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L10)
-
 #### :gear: RawPrincipalSchema
 
 | Constant             | Type                                                          |
@@ -1101,19 +1089,7 @@ References:
 
 - RawPrincipal
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L15)
-
-#### :gear: PrincipalSchema
-
-| Constant          | Type                                                                           |
-| ----------------- | ------------------------------------------------------------------------------ |
-| `PrincipalSchema` | `ZodPipe<ZodCustom<Principal, Principal>, ZodTransform<Principal, Principal>>` |
-
-References:
-
-- Principal
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/principal.ts#L6)
 
 #### :gear: TimestampSchema
 
@@ -1125,7 +1101,7 @@ References:
 
 - Timestamp
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L7)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L8)
 
 #### :gear: VersionSchema
 
@@ -1137,7 +1113,7 @@ References:
 
 - Version
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L19)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L20)
 
 #### :gear: RawUserIdSchema
 
@@ -1149,19 +1125,19 @@ References:
 
 - RawUserId
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L31)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L32)
 
 #### :gear: UserIdSchema
 
-| Constant       | Type                                                                           |
-| -------------- | ------------------------------------------------------------------------------ |
-| `UserIdSchema` | `ZodPipe<ZodCustom<Principal, Principal>, ZodTransform<Principal, Principal>>` |
+| Constant       | Type                                                   |
+| -------------- | ------------------------------------------------------ |
+| `UserIdSchema` | `ZodPipe<ZodCustom<any, any>, ZodTransform<any, any>>` |
 
 References:
 
 - UserId
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L43)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L44)
 
 #### :gear: CollectionSchema
 
@@ -1173,7 +1149,7 @@ References:
 
 - Collection
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L55)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L56)
 
 #### :gear: KeySchema
 
@@ -1185,7 +1161,7 @@ References:
 
 - Key
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L65)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L66)
 
 #### :gear: DescriptionSchema
 
@@ -1197,7 +1173,7 @@ References:
 
 - Description
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L75)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L76)
 
 #### :gear: CollectionsSchema
 
@@ -2193,7 +2169,7 @@ References:
 
 - IDLType
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L9)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L10)
 
 #### :gear: CallArgSchema
 
@@ -2205,7 +2181,7 @@ References:
 
 - CallArg
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L21)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L22)
 
 #### :gear: CallArgsSchema
 
@@ -2219,7 +2195,7 @@ References:
 
 - CallArgs
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L33)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L34)
 
 #### :gear: CallResultSchema
 
@@ -2231,19 +2207,19 @@ References:
 
 - CallResult
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L50)
 
 #### :gear: CallParamsSchema
 
-| Constant           | Type                                                                                                                                                                                                                                            |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodCustom<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>>, ZodPipe<ZodCustom<Principal, Principal>, ZodTransform<...>>]>; method: ZodString; args: ZodOptional<...>; result: ZodOptional<...>; }, $strip>` |
+| Constant           | Type                                                                                                                                                                                                                                |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CallParamsSchema` | `ZodObject<{ canisterId: ZodUnion<[ZodCustom<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>>, ZodPipe<ZodCustom<any, any>, ZodTransform<...>>]>; method: ZodString; args: ZodOptional<...>; result: ZodOptional<...>; }, $strip>` |
 
 References:
 
 - CallParams
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L59)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L60)
 
 ### :factory: CallResponseLengthError
 
@@ -2640,7 +2616,7 @@ Type representing the parameters required to make a canister call.
 | `args`       | `[IDL.Type<unknown>, unknown][] or undefined` | The arguments, including types and values, for the canister call. |
 | `result`     | `any`                                         | The expected result type used for decoding the response.          |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L69)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L70)
 
 ### :cocktail: Types
 
@@ -2656,7 +2632,6 @@ Type representing the parameters required to make a canister call.
 - [UpdateFn](#gear-updatefn)
 - [UpdateFnOrObject](#gear-updatefnorobject)
 - [RawPrincipal](#gear-rawprincipal)
-- [Principal](#gear-principal)
 - [Timestamp](#gear-timestamp)
 - [Version](#gear-version)
 - [RawUserId](#gear-rawuserid)
@@ -2875,17 +2850,7 @@ Represents a raw principal - a Uint8Array representation of a Principal.
 | -------------- | ------------ |
 | `RawPrincipal` | `Uint8Array` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L20)
-
-#### :gear: Principal
-
-Represents a principal - i.e. an object instantiated with the class Principal.
-
-| Type        | Type                              |
-| ----------- | --------------------------------- |
-| `Principal` | `z.infer<typeof PrincipalSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/candid.ts#L30)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/principal.ts#L11)
 
 #### :gear: Timestamp
 
@@ -2897,7 +2862,7 @@ Used for tracking when events occur, such as document creation and updates.
 | ----------- | --------------------------------- |
 | `Timestamp` | `z.infer<typeof TimestampSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L14)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L15)
 
 #### :gear: Version
 
@@ -2909,7 +2874,7 @@ This is typically incremented with each update to ensure consistency.
 | --------- | ------------------------------- |
 | `Version` | `z.infer<typeof VersionSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L26)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L27)
 
 #### :gear: RawUserId
 
@@ -2921,7 +2886,7 @@ This is a principal associated with a user.
 | ----------- | -------------- |
 | `RawUserId` | `RawPrincipal` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L38)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L39)
 
 #### :gear: UserId
 
@@ -2933,7 +2898,7 @@ This is a principal associated with a user.
 | -------- | ------------------------------ |
 | `UserId` | `z.infer<typeof UserIdSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L50)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L51)
 
 #### :gear: Collection
 
@@ -2943,7 +2908,7 @@ A collection name where data are stored.
 | ------------ | ---------------------------------- |
 | `Collection` | `z.infer<typeof CollectionSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L60)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L61)
 
 #### :gear: Key
 
@@ -2953,7 +2918,7 @@ A key identifier within a collection.
 | ----- | --------------------------- |
 | `Key` | `z.infer<typeof KeySchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L70)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L71)
 
 #### :gear: Description
 
@@ -2964,7 +2929,7 @@ Used for document and asset fields which can be useful for search purpose.
 | ------------- | ----------------------------------- |
 | `Description` | `z.infer<typeof DescriptionSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L81)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/satellite.ts#L82)
 
 #### :gear: AssertFunction
 
@@ -3789,7 +3754,7 @@ Custom validation function to verify if a value is an instance of `IDL.Type` fro
 | --------- | ------------------------------- |
 | `IDLType` | `z.infer<typeof IDLTypeSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L16)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L17)
 
 #### :gear: CallArg
 
@@ -3799,7 +3764,7 @@ A call argument consisting of its IDL type and corresponding value.
 | --------- | ------------------------------- |
 | `CallArg` | `z.infer<typeof CallArgSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L26)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L27)
 
 #### :gear: CallArgs
 
@@ -3815,7 +3780,7 @@ The order of arguments is preserved for the function call.
 | ---------- | -------------------------------- |
 | `CallArgs` | `z.infer<typeof CallArgsSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L44)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L45)
 
 #### :gear: CallResult
 
@@ -3825,7 +3790,7 @@ Defines the type used to decode the result of a canister call.
 | ------------ | ---------------------------------- |
 | `CallResult` | `z.infer<typeof CallResultSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L54)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/call.ts#L55)
 
 <!-- TSDOC_END -->
 

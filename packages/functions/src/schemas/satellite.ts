@@ -1,5 +1,6 @@
+import {j} from '@junobuild/schema';
 import * as z from 'zod';
-import {type RawPrincipal, PrincipalSchema, RawPrincipalSchema} from './candid';
+import {type RawPrincipal, RawPrincipalSchema} from './principal';
 
 /**
  * @see Timestamp
@@ -40,7 +41,7 @@ export type RawUserId = RawPrincipal;
 /**
  * @see UserId
  */
-export const UserIdSchema = PrincipalSchema;
+export const UserIdSchema = j.principal();
 
 /**
  * Represents a user identifier.

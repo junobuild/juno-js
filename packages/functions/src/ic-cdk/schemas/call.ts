@@ -1,7 +1,8 @@
 import {IDL} from '@icp-sdk/core/candid';
 import type {Principal} from '@icp-sdk/core/principal';
+import {j} from '@junobuild/schema';
 import * as z from 'zod';
-import {PrincipalSchema, type RawPrincipal, RawPrincipalSchema} from '../../schemas/candid';
+import {type RawPrincipal, RawPrincipalSchema} from '../../schemas/principal';
 
 /**
  * @see IDLType
@@ -57,7 +58,7 @@ export type CallResult = z.infer<typeof CallResultSchema>;
  * @see CallParams
  */
 export const CallParamsSchema = z.object({
-  canisterId: RawPrincipalSchema.or(PrincipalSchema),
+  canisterId: RawPrincipalSchema.or(j.principal()),
   method: z.string().min(1),
   args: CallArgsSchema.optional(),
   result: CallResultSchema.optional()

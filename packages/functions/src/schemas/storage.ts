@@ -1,5 +1,5 @@
+import {j} from '@junobuild/schema';
 import * as z from 'zod';
-import {Uint8ArraySchema} from './candid';
 import {
   type Collection,
   CollectionSchema,
@@ -36,7 +36,7 @@ export type HeaderFields = HeaderField[];
 /**
  * @see Blob
  */
-export const BlobSchema = Uint8ArraySchema;
+export const BlobSchema = j.uint8Array();
 
 /**
  * Binary content used in asset encoding.

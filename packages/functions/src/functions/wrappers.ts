@@ -14,7 +14,6 @@ const ConfigWithGuardSchema = ConfigSchema.and(
   })
 );
 
-// eslint-disable-next-line local-rules/prefer-object-params
 globalThis.__juno_satellite_fn_guard_sync = (config: Config) => {
   const configWithGuard = ConfigWithGuardSchema.parse(config);
   configWithGuard.guard();

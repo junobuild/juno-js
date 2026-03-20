@@ -1,15 +1,15 @@
 import {Principal} from '@icp-sdk/core/principal';
 import {
-  Controller,
-  ControllerRecordSchema,
-  ControllerSchema,
-  ControllersSchema
-} from '../../../sdk/schemas/controllers';
-import {mockRawUserId, mockUserIdText} from '../../mocks/controllers.mock';
+  AccessKey,
+  AccessKeyRecordSchema,
+  AccessKeySchema,
+  AccessKeysSchema
+} from '../../../sdk/schemas/accessKeys';
+import {mockRawUserId, mockUserIdText} from '../../mocks/user.mock';
 
-describe('controllers', () => {
-  describe('ControllerSchema', () => {
-    const validFullController = {
+describe('accessKeys', () => {
+  describe('AccessKeySchema', () => {
+    const validFullAccessKey = {
       metadata: [
         ['role', 'admin'],
         ['env', 'prod']
@@ -21,8 +21,8 @@ describe('controllers', () => {
       kind: 'automation'
     };
 
-    it('parses a valid controller', () => {
-      const result = ControllerSchema.parse(validFullController);
+    it('parses a valid access key', () => {
+      const result = AccessKeySchema.parse(validFullAccessKey);
       expect(result.scope).toBe('admin');
       expect(result.kind).toBe('automation');
       expect(result.metadata.length).toBe(2);
@@ -30,8 +30,8 @@ describe('controllers', () => {
 
     it('fails if metadata is not an array of tuples', () => {
       expect(() =>
-        ControllerSchema.parse({
-          ...validFullController,
+        AccessKeySchema.parse({
+          ...validFullAccessKey,
           metadata: {role: 'admin'}
         })
       ).toThrow();
@@ -39,29 +39,29 @@ describe('controllers', () => {
 
     it('fails if created_at is not a bigint', () => {
       expect(() =>
-        ControllerSchema.parse({
-          ...validFullController,
+        AccessKeySchema.parse({
+          ...validFullAccessKey,
           created_at: 1234567890
         })
       ).toThrow();
     });
 
     it('accepts missing expires_at (optional)', () => {
-      const {expires_at: _, ...withoutExpires} = validFullController;
-      const result = ControllerSchema.parse(withoutExpires);
+      const {expires_at: _, ...withoutExpires} = validFullAccessKey;
+      const result = AccessKeySchema.parse(withoutExpires);
       expect(result.expires_at).toBeUndefined();
     });
 
     it('accepts missing kind (optional)', () => {
-      const {kind: _, ...withoutKind} = validFullController;
-      const result = ControllerSchema.parse(withoutKind);
+      const {kind: _, ...withoutKind} = validFullAccessKey;
+      const result = AccessKeySchema.parse(withoutKind);
       expect(result.kind).toBeUndefined();
     });
 
     it('fails if scope is not in enum', () => {
       expect(() =>
-        ControllerSchema.parse({
-          ...validFullController,
+        AccessKeySchema.parse({
+          ...validFullAccessKey,
           scope: 'superadmin'
         })
       ).toThrow();
@@ -69,15 +69,15 @@ describe('controllers', () => {
 
     it('fails if kind is not in enum', () => {
       expect(() =>
-        ControllerSchema.parse({
-          ...validFullController,
+        AccessKeySchema.parse({
+          ...validFullAccessKey,
           kind: 'test'
         })
       ).toThrow();
     });
   });
 
-  describe('ControllerRecordSchema', () => {
+  describe('AccessKeyRecordSchema', () => {
     const validRecord = [
       mockRawUserId,
       {
@@ -89,27 +89,27 @@ describe('controllers', () => {
     ];
 
     it('parses a valid record tuple', () => {
-      const result = ControllerRecordSchema.parse(validRecord);
+      const result = AccessKeyRecordSchema.parse(validRecord);
       expect(result[0]).toBe(mockRawUserId);
       expect(result[1].scope).toBe('write');
     });
 
     it('fails if not a tuple', () => {
       expect(() =>
-        ControllerRecordSchema.parse({
+        AccessKeyRecordSchema.parse({
           principal: mockUserIdText,
-          controller: validRecord[1]
+          accessKey: validRecord[1]
         })
       ).toThrow();
     });
   });
 
-  describe('ControllersSchema', () => {
+  describe('AccessKeysSchema', () => {
     const principal = Principal.fromText('aaaaa-aa');
     const rawUserId = principal.toUint8Array();
     const rawAnonymousId = Principal.anonymous().toUint8Array();
 
-    const validControllers = [
+    const validAccessKeys = [
       [
         mockRawUserId,
         {
@@ -141,8 +141,8 @@ describe('controllers', () => {
       ]
     ];
 
-    it('parses a valid array of controller records', () => {
-      const result = ControllersSchema.parse(validControllers);
+    it('parses a valid array of access key records', () => {
+      const result = AccessKeysSchema.parse(validAccessKeys);
       expect(result.length).toBe(3);
       expect(result[0][0]).toBe(mockRawUserId);
       expect(result[1][0]).toBe(rawUserId);
@@ -150,12 +150,12 @@ describe('controllers', () => {
     });
 
     it('fails if any record is invalid', () => {
-      const invalidControllers = [...validControllers];
-      const controller = invalidControllers[1][1] as Controller;
+      const invalidAccessKeys = [...validAccessKeys];
+      const accessKey = invalidAccessKeys[1][1] as AccessKey;
 
-      invalidControllers[1] = [rawUserId, {...controller, scope: 'godmode'}];
+      invalidAccessKeys[1] = [rawUserId, {...accessKey, scope: 'godmode'}];
 
-      expect(() => ControllersSchema.parse(invalidControllers)).toThrow();
+      expect(() => AccessKeysSchema.parse(invalidAccessKeys)).toThrow();
     });
   });
 });

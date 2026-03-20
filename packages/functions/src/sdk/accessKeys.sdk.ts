@@ -1,4 +1,8 @@
-import {type AccessKeyCheckParams, type AccessKeys, AccessKeyCheckParamsSchema} from './schemas/accessKeys';
+import {
+  type AccessKeyCheckParams,
+  type AccessKeys,
+  AccessKeyCheckParamsSchema
+} from './schemas/accessKeys';
 import {normalizeCaller} from './utils/caller.utils';
 
 /**

@@ -2,10 +2,10 @@ import * as z from 'zod';
 import {type RawPrincipal, RawPrincipalSchema} from '../../schemas/principal';
 import {
   type RawUserId,
-  type UserId,
   RawUserIdSchema,
   type Timestamp,
   TimestampSchema,
+  type UserId,
   UserIdSchema
 } from '../../schemas/satellite';
 

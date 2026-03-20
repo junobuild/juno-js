@@ -1,4 +1,4 @@
-import {PrincipalSchema} from '@junobuild/functions';
+import {j} from '@junobuild/schema';
 import * as z from 'zod';
 import {parseFunctions} from '../../../functions/services/parser.services';
 
@@ -164,7 +164,7 @@ describe('parseFunctions', () => {
 
     it('should generate a sync update with args and result', () => {
       const ArgsSchema = z.object({value: z.string()});
-      const ResultSchema = z.object({caller: PrincipalSchema});
+      const ResultSchema = z.object({caller: j.principal()});
 
       const result = parseFunctions({
         queries: [],
@@ -191,7 +191,7 @@ describe('parseFunctions', () => {
 
     it('should generate an async update with args and result', () => {
       const ArgsSchema = z.object({value: z.string()});
-      const ResultSchema = z.object({caller: PrincipalSchema});
+      const ResultSchema = z.object({caller: j.principal()});
 
       const result = parseFunctions({
         queries: [],

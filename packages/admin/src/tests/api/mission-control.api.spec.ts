@@ -28,10 +28,11 @@ const mockActor = {
 };
 
 describe('mission_control.api', () => {
-  const controller: MissionControlDid.SetController = {
+  const accessKey: MissionControlDid.SetAccessKey = {
     scope: {Admin: null},
     expires_at: [],
-    metadata: []
+    metadata: [],
+    kind: []
   };
 
   beforeEach(() => {
@@ -99,13 +100,13 @@ describe('mission_control.api', () => {
         missionControl: {identity: mockIdentity},
         satelliteIds,
         controllerIds,
-        controller
+        controller: accessKey
       });
       expect(res).toBe(result);
       expect(mockActor.set_satellites_controllers).toHaveBeenCalledWith(
         satelliteIds,
         controllerIds,
-        controller
+        accessKey
       );
     });
 
@@ -117,7 +118,7 @@ describe('mission_control.api', () => {
           missionControl: {identity: mockIdentity},
           satelliteIds: [mockSatelliteIdPrincipal],
           controllerIds: [mockSatelliteIdPrincipal],
-          controller
+          controller: accessKey
         })
       ).rejects.toThrow(err);
     });
@@ -132,12 +133,12 @@ describe('mission_control.api', () => {
       const res = await setMissionControlController({
         missionControl: {identity: mockIdentity},
         controllerIds,
-        controller
+        controller: accessKey
       });
       expect(res).toBe(result);
       expect(mockActor.set_mission_control_controllers).toHaveBeenCalledWith(
         controllerIds,
-        controller
+        accessKey
       );
     });
 
@@ -148,7 +149,7 @@ describe('mission_control.api', () => {
         setMissionControlController({
           missionControl: {identity: mockIdentity},
           controllerIds: [mockSatelliteIdPrincipal],
-          controller
+          controller: accessKey
         })
       ).rejects.toThrow(err);
     });

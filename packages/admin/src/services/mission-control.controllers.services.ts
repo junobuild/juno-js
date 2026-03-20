@@ -56,4 +56,4 @@ export const setMissionControlController = ({
  */
 export const listMissionControlControllers = (params: {
   missionControl: MissionControlParameters;
-}): Promise<[Principal, MissionControlDid.Controller][]> => listControllers(params);
+}): Promise<[Principal, MissionControlDid.AccessKey][]> => listControllers(params);

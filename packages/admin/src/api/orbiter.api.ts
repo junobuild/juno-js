@@ -20,7 +20,7 @@ export const listControllers = async ({
 }: {
   orbiter: OrbiterParameters;
   certified?: boolean;
-}): Promise<[Principal, OrbiterDid.Controller][]> => {
+}): Promise<[Principal, OrbiterDid.AccessKey][]> => {
   const {list_controllers} = await getOrbiterActor({...orbiter, certified});
   return list_controllers();
 };
@@ -31,7 +31,7 @@ export const setControllers = async ({
 }: {
   args: OrbiterDid.SetControllersArgs;
   orbiter: OrbiterParameters;
-}): Promise<[Principal, OrbiterDid.Controller][]> => {
+}): Promise<[Principal, OrbiterDid.AccessKey][]> => {
   const {set_controllers} = await getOrbiterActor(orbiter);
   return set_controllers(args);
 };

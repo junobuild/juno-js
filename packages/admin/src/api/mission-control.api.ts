@@ -31,7 +31,7 @@ export const listControllers = async ({
   missionControl
 }: {
   missionControl: MissionControlParameters;
-}): Promise<[Principal, MissionControlDid.Controller][]> => {
+}): Promise<[Principal, MissionControlDid.AccessKey][]> => {
   const {list_mission_control_controllers} = await getMissionControlActor(missionControl);
   return list_mission_control_controllers();
 };
@@ -45,7 +45,7 @@ export const setSatellitesController = async ({
   missionControl: MissionControlParameters;
   satelliteIds: Principal[];
   controllerIds: Principal[];
-  controller: MissionControlDid.SetController;
+  controller: MissionControlDid.SetAccessKey;
 }) => {
   const {set_satellites_controllers} = await getMissionControlActor(missionControl);
   return set_satellites_controllers(satelliteIds, controllerIds, controller);
@@ -58,7 +58,7 @@ export const setMissionControlController = async ({
 }: {
   missionControl: MissionControlParameters;
   controllerIds: Principal[];
-  controller: MissionControlDid.SetController;
+  controller: MissionControlDid.SetAccessKey;
 }) => {
   const {set_mission_control_controllers} = await getMissionControlActor(missionControl);
   return set_mission_control_controllers(controllerIds, controller);

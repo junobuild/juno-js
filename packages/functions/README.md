@@ -51,7 +51,7 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [getAccessKeys](#gear-getaccesskeys)
 - [isWriteAccessKey](#gear-iswriteaccesskey)
 - [isValidAccessKey](#gear-isvalidaccesskey)
-- [isAdminAccessKey](#gear-isadminaccesskey)
+- [isAdminController](#gear-isadmincontroller)
 - [setDocStore](#gear-setdocstore)
 - [deleteDocStore](#gear-deletedocstore)
 - [getDocStore](#gear-getdocstore)
@@ -433,7 +433,7 @@ Returns:
 
 The list of admin acces keys.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L11)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/access-keys.sdk.ts#L15)
 
 #### :gear: getAccessKeys
 
@@ -447,7 +447,7 @@ Returns:
 
 The list of all access keys.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L20)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/access-keys.sdk.ts#L24)
 
 #### :gear: isWriteAccessKey
 
@@ -466,7 +466,7 @@ Returns:
 
 Whether the id is an access key with write permission.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L32)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/access-keys.sdk.ts#L36)
 
 #### :gear: isValidAccessKey
 
@@ -485,15 +485,15 @@ Returns:
 
 Whether the id is an access key.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L52)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/access-keys.sdk.ts#L56)
 
-#### :gear: isAdminAccessKey
+#### :gear: isAdminController
 
-Checks if the given id is an admin among the provided access keys.
+Checks if the given id is an admin among the provided access keys and a controller as known on the Internet Computer.
 
-| Function           | Type                                        |
-| ------------------ | ------------------------------------------- |
-| `isAdminAccessKey` | `(params: AccessKeyCheckParams) => boolean` |
+| Function            | Type                                        |
+| ------------------- | ------------------------------------------- |
+| `isAdminController` | `(params: AccessKeyCheckParams) => boolean` |
 
 Parameters:
 
@@ -502,9 +502,9 @@ Parameters:
 
 Returns:
 
-Whether the id is an admin.
+Whether the id is an admin and a controller of the Satellite on the Internet Computer.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L72)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/access-keys.sdk.ts#L76)
 
 #### :gear: setDocStore
 
@@ -962,6 +962,7 @@ The current timestamp.
 
 - [SatelliteEnvSchema](#gear-satelliteenvschema)
 - [JUNO_FUNCTION_TYPE](#gear-juno_function_type)
+- [CustomFunctionGuardSchema](#gear-customfunctionguardschema)
 - [CustomFunctionWithArgsAndResultSchema](#gear-customfunctionwithargsandresultschema)
 - [CustomFunctionWithArgsSchema](#gear-customfunctionwithargsschema)
 - [CustomFunctionWithResultSchema](#gear-customfunctionwithresultschema)
@@ -1089,71 +1090,79 @@ Not intended for direct use by developers.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/constants.ts#L5)
 
+#### :gear: CustomFunctionGuardSchema
+
+| Constant                    | Type                                                                                                                |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionGuardSchema` | `ZodCustom<$InferInnerFunctionType<$ZodFunctionArgs, ZodVoid>, $InferInnerFunctionType<$ZodFunctionArgs, ZodVoid>>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L15)
+
 #### :gear: CustomFunctionWithArgsAndResultSchema
 
-| Constant                                | Type                                                                                                                                                                                  |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionWithArgsAndResultSchema` | `ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>` |
+| Constant                                | Type                                                                                                                                                                                                           |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionWithArgsAndResultSchema` | `ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; guard: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
 - CustomFunctionWithArgsAndResult
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L18)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L31)
 
 #### :gear: CustomFunctionWithArgsSchema
 
-| Constant                       | Type                                                                                                                                                          |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionWithArgsSchema` | `ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>` |
+| Constant                       | Type                                                                                                                                                                                   |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionWithArgsSchema` | `ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; handler: ZodCustom<...>; guard: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
 - CustomFunctionWithArgs
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L33)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L47)
 
 #### :gear: CustomFunctionWithResultSchema
 
-| Constant                         | Type                                                                                                                                                            |
-| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionWithResultSchema` | `ZodObject<{ result: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>` |
+| Constant                         | Type                                                                                                                                                                                     |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionWithResultSchema` | `ZodObject<{ result: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; handler: ZodCustom<...>; guard: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
 - CustomFunctionWithResult
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L47)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L62)
 
 #### :gear: CustomFunctionWithoutArgsAndResultSchema
 
-| Constant                                   | Type                                                                                                                                                                                            |
-| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionWithoutArgsAndResultSchema` | `ZodObject<{ handler: ZodCustom<$InferInnerFunctionType<ZodTuple<[], null>, ZodUnion<readonly [ZodVoid, ZodPromise<ZodVoid>]>>, $InferInnerFunctionType<...>>; type: ZodEnum<...>; }, $strict>` |
+| Constant                                   | Type                                                                                                                                                                                                                     |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `CustomFunctionWithoutArgsAndResultSchema` | `ZodObject<{ handler: ZodCustom<$InferInnerFunctionType<ZodTuple<[], null>, ZodUnion<readonly [ZodVoid, ZodPromise<ZodVoid>]>>, $InferInnerFunctionType<...>>; guard: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
 - CustomFunctionWithoutArgsAndResult
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L61)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L77)
 
 #### :gear: CustomFunctionSchema
 
-| Constant               | Type                                                                                                                                                                                                                                                       |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionSchema` | `ZodUnion<readonly [ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; type: ZodEnum<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
+| Constant               | Type                                                                                                                                                                                                                                                                                |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionSchema` | `ZodUnion<readonly [ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; guard: ZodOptional<...>; type: ZodEnum<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
 
 References:
 
 - CustomFunction
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L74)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L91)
 
 #### :gear: QuerySchema
 
-| Constant      | Type                                                                                                                                                                                                                                                                              |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `QuerySchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_query">; args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
+| Constant      | Type                                                                                                                                                                                                                                                                                                       |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `QuerySchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_query">; args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; guard: ZodOptional<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
 
 References:
 
@@ -1163,9 +1172,9 @@ References:
 
 #### :gear: UpdateSchema
 
-| Constant       | Type                                                                                                                                                                                                                                                                               |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UpdateSchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_update">; args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
+| Constant       | Type                                                                                                                                                                                                                                                                                                        |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UpdateSchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_update">; args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; guard: ZodOptional<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
 
 References:
 
@@ -1939,7 +1948,7 @@ References:
 
 - AccessKeyScope
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L15)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L15)
 
 #### :gear: AccessKeyKindSchema
 
@@ -1951,7 +1960,7 @@ References:
 
 - AccessKeyKind
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L25)
 
 #### :gear: MetadataSchema
 
@@ -1963,7 +1972,7 @@ References:
 
 - MetadataSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L35)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L35)
 
 #### :gear: AccessKeySchema
 
@@ -1975,7 +1984,7 @@ References:
 
 - AccessKeySchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L45)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L45)
 
 #### :gear: AccessKeyRecordSchema
 
@@ -1987,7 +1996,7 @@ References:
 
 - AccessKeyRecordSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L94)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L94)
 
 #### :gear: AccessKeysSchema
 
@@ -1999,7 +2008,7 @@ References:
 
 - AccessKeysSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L104)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L104)
 
 #### :gear: AccessKeyCheckParamsSchema
 
@@ -2011,7 +2020,7 @@ References:
 
 - AccessKeyCheckParamsSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L114)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L114)
 
 #### :gear: CollectionParamsSchema
 
@@ -2374,7 +2383,7 @@ A serverless function with both input arguments and an output result.
 | `result`  | `ZodObject<TResult, $strip>`                                                                                           | A Zod schema describing the output result.                                                          |
 | `handler` | `(args: $InferObjectOutput<TArgs, {}>) => $InferObjectOutput<TResult, {}> or Promise<$InferObjectOutput<TResult, {}>>` | The function handler. Can be synchronous or asynchronous. param: args - The input arguments.returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L97)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L120)
 
 #### :gear: CustomFunctionWithArgs
 
@@ -2385,7 +2394,7 @@ A serverless function with input arguments but no output result.
 | `args`    | `ZodObject<TArgs, $strip>`                                       | A Zod schema describing the input arguments.                                                        |
 | `handler` | `(args: $InferObjectOutput<TArgs, {}>) => void or Promise<void>` | The function handler. Can be synchronous or asynchronous. param: args - The input arguments.returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L127)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L150)
 
 #### :gear: CustomFunctionWithResult
 
@@ -2396,7 +2405,7 @@ A serverless function with an output result but no input arguments.
 | `result`  | `ZodObject<TResult, $strip>`                                                        | A Zod schema describing the output result.                        |
 | `handler` | `() => $InferObjectOutput<TResult, {}> or Promise<$InferObjectOutput<TResult, {}>>` | The function handler. Can be synchronous or asynchronous. returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L147)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L170)
 
 #### :gear: CustomFunctionWithoutArgsAndResult
 
@@ -2406,7 +2415,7 @@ A serverless function with no input arguments and no output result.
 | --------- | ----------------------------- | ----------------------------------------------------------------- |
 | `handler` | `() => void or Promise<void>` | The function handler. Can be synchronous or asynchronous. returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L166)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L189)
 
 #### :gear: Collections
 
@@ -2676,7 +2685,7 @@ Represents an access key with access scope and associated metadata.
 | `scope`      | `"write" or "admin" or "submit"`          | The scope assigned to the access key.                              |
 | `kind`       | `"automation" or "emulator" or undefined` | An optional kind identifier of the access key.                     |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L59)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L59)
 
 #### :gear: AccessKeyCheckParams
 
@@ -2687,7 +2696,7 @@ Represents the parameters required to perform an access key checks.
 | `id`         | `any`        | The identity to verify against the access keys. |
 | `accessKeys` | `AccessKeys` | The list of access keys to check against.       |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L122)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L122)
 
 #### :gear: CollectionParams
 
@@ -2874,7 +2883,7 @@ of optional input arguments and output result.
 | ---------------- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `CustomFunction` | `    | CustomFunctionWithArgsAndResult<TArgs, TResult> or CustomFunctionWithArgs<TArgs> or CustomFunctionWithResult<TResult> or CustomFunctionWithoutArgsAndResult` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L182)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L205)
 
 #### :gear: Query
 
@@ -3636,7 +3645,7 @@ Represents the permission scope of an access key.
 | ---------------- | -------------------------------------- |
 | `AccessKeyScope` | `z.infer<typeof AccessKeyScopeSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L20)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L20)
 
 #### :gear: AccessKeyKind
 
@@ -3646,7 +3655,7 @@ Represents a specific kind of access key. Meant for informational purposes.
 | --------------- | ------------------------------------- |
 | `AccessKeyKind` | `z.infer<typeof AccessKeyKindSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L30)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L30)
 
 #### :gear: Metadata
 
@@ -3656,7 +3665,7 @@ Represents a single metadata entry as a key-value tuple.
 | ---------- | -------------------------------- |
 | `Metadata` | `z.infer<typeof MetadataSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L40)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L40)
 
 #### :gear: AccessKeyRecord
 
@@ -3666,7 +3675,7 @@ Represents a tuple containing the principal ID and associated access key data.
 | ----------------- | --------------------------------------- |
 | `AccessKeyRecord` | `z.infer<typeof AccessKeyRecordSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L99)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L99)
 
 #### :gear: AccessKeys
 
@@ -3676,7 +3685,7 @@ Represents a list of access keys.
 | ------------ | ----------------------------- |
 | `AccessKeys` | `[RawPrincipal, AccessKey][]` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L109)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/access-keys.ts#L109)
 
 #### :gear: ListStoreParams
 

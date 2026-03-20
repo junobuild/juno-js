@@ -8,14 +8,28 @@ import {JUNO_FUNCTION_TYPE} from '../constants';
  */
 export type CustomFunctionType = (typeof JUNO_FUNCTION_TYPE)[keyof typeof JUNO_FUNCTION_TYPE];
 
-const CustomFunctionBaseSchema = z.strictObject({
+const CustomFunctionTypeSchema = z.strictObject({
   type: z.enum([JUNO_FUNCTION_TYPE.QUERY, JUNO_FUNCTION_TYPE.UPDATE])
+});
+
+export const CustomFunctionGuardSchema = createFunctionSchema(
+  z.function({
+    output: z.void()
+  })
+);
+
+/**
+ * @see CustomFunctionBase
+ */
+const CustomFunctionBaseSchema = z.strictObject({
+  guard: CustomFunctionGuardSchema.optional()
 });
 
 /**
  * @see CustomFunctionWithArgsAndResult
  */
 export const CustomFunctionWithArgsAndResultSchema = z.strictObject({
+  ...CustomFunctionTypeSchema.shape,
   ...CustomFunctionBaseSchema.shape,
   args: z.instanceof(z.ZodObject),
   result: z.instanceof(z.ZodObject),
@@ -31,6 +45,7 @@ export const CustomFunctionWithArgsAndResultSchema = z.strictObject({
  * @see CustomFunctionWithArgs
  */
 export const CustomFunctionWithArgsSchema = z.strictObject({
+  ...CustomFunctionTypeSchema.shape,
   ...CustomFunctionBaseSchema.shape,
   args: z.instanceof(z.ZodObject),
   handler: createFunctionSchema(
@@ -45,6 +60,7 @@ export const CustomFunctionWithArgsSchema = z.strictObject({
  * @see CustomFunctionWithResult
  */
 export const CustomFunctionWithResultSchema = z.strictObject({
+  ...CustomFunctionTypeSchema.shape,
   ...CustomFunctionBaseSchema.shape,
   result: z.instanceof(z.ZodObject),
   handler: createFunctionSchema(
@@ -59,6 +75,7 @@ export const CustomFunctionWithResultSchema = z.strictObject({
  * @see CustomFunctionWithoutArgsAndResult
  */
 export const CustomFunctionWithoutArgsAndResultSchema = z.strictObject({
+  ...CustomFunctionTypeSchema.shape,
   ...CustomFunctionBaseSchema.shape,
   handler: createFunctionSchema(
     z.function({
@@ -86,6 +103,12 @@ interface CustomFunctionBase {
    * The type of the function, either a query or an update.
    */
   type: CustomFunctionType;
+
+  /**
+   * An optional function that runs before the function is executed.
+   * If the guard throws, the function is not executed.
+   */
+  guard?: () => void;
 }
 
 /**

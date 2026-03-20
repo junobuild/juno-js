@@ -128,4 +128,30 @@ describe('wrappers', () => {
       expect(resolved).toBe(true);
     });
   });
+
+  describe('__juno_satellite_fn_guard_sync', () => {
+    it('should call guard when defined', () => {
+      const guard = vi.fn();
+      const config = {...mockQuery, handler: vi.fn(), guard};
+
+      globalThis.__juno_satellite_fn_guard_sync(config);
+
+      expect(guard).toHaveBeenCalledWith();
+    });
+
+    it('should throw when guard is not defined', () => {
+      const config = {...mockQuery, handler: vi.fn()};
+
+      expect(() => globalThis.__juno_satellite_fn_guard_sync(config)).toThrow();
+    });
+
+    it('should throw when guard throws', () => {
+      const guard = vi.fn().mockImplementation(() => {
+        throw new Error('Unauthorized');
+      });
+      const config = {...mockQuery, handler: vi.fn(), guard};
+
+      expect(() => globalThis.__juno_satellite_fn_guard_sync(config)).toThrow('Unauthorized');
+    });
+  });
 });

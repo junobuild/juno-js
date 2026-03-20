@@ -2,7 +2,7 @@ import type {Principal} from '@icp-sdk/core/principal';
 import type {OrbiterDid} from '@junobuild/ic-client/actor';
 import {mockUserIdPrincipal} from './admin.mock';
 
-export const mockController: OrbiterDid.Controller = {
+export const mockController: OrbiterDid.AccessKey = {
   metadata: [['key', 'value']],
   scope: {Admin: null},
   created_at: 1624532700000n,
@@ -10,6 +10,6 @@ export const mockController: OrbiterDid.Controller = {
   expires_at: [1624532900000n]
 };
 
-export const mockControllers: [Principal, OrbiterDid.Controller][] = [
+export const mockControllers: [Principal, OrbiterDid.AccessKey][] = [
   [mockUserIdPrincipal, mockController]
 ];

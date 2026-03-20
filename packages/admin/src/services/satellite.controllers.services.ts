@@ -22,7 +22,7 @@ export const listSatelliteControllers = ({
 }: {
   satellite: SatelliteParameters;
   deprecatedNoScope?: boolean;
-}): Promise<[Principal, SatelliteDid.Controller][]> => {
+}): Promise<[Principal, SatelliteDid.AccessKey][]> => {
   const list = deprecatedNoScope === true ? listDeprecatedNoScopeControllers : listControllers;
   return list(params);
 };
@@ -41,7 +41,7 @@ export const listSatelliteControllers = ({
 export const setSatelliteControllers = (params: {
   satellite: SatelliteParameters;
   args: SatelliteDid.SetControllersArgs;
-}): Promise<[Principal, SatelliteDid.Controller][]> => setControllers(params);
+}): Promise<[Principal, SatelliteDid.AccessKey][]> => setControllers(params);
 
 /**
  * Delete selected controllers from a satellite.
@@ -57,7 +57,7 @@ export const setSatelliteControllers = (params: {
 export const deleteSatelliteControllers = (params: {
   satellite: SatelliteParameters;
   args: SatelliteDid.DeleteControllersArgs;
-}): Promise<[Principal, SatelliteDid.Controller][]> => deleteControllers(params);
+}): Promise<[Principal, SatelliteDid.AccessKey][]> => deleteControllers(params);
 
 /**
  * Delete the calling controller from the satellite.

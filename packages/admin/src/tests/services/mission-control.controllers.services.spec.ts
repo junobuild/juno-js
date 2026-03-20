@@ -83,7 +83,7 @@ describe('mission-control.controllers.services', () => {
     );
   });
 
-  const controller: MissionControlDid.Controller = {
+  const controller: MissionControlDid.AccessKey = {
     updated_at: 123n,
     metadata: [],
     created_at: 4456n,

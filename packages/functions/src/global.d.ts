@@ -13,17 +13,12 @@ import type {
   HeaderFields,
   OptionAsset
 } from './schemas/storage';
+import type {AccessKeys} from './sdk/schemas/accessKeys';
 import type {Memory} from './sdk/schemas/collections';
-import type {Controllers} from './sdk/schemas/controllers';
 
 declare global {
-  function __juno_satellite_get_admin_controllers(): Controllers;
-  function __juno_satellite_get_controllers(): Controllers;
-  function __juno_satellite_is_admin_controller(
-    caller: RawUserId,
-    controllers: Controllers
-  ): boolean;
-  function __juno_satellite_is_controller(caller: RawUserId, controllers: Controllers): boolean;
+  function __juno_satellite_get_admin_access_keys(): AccessKeys;
+  function __juno_satellite_get_access_keys(): AccessKeys;
 
   function __juno_satellite_random(): number;
 

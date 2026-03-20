@@ -46,11 +46,9 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [createListResultsSchema](#gear-createlistresultsschema)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
+- [getAdminAccessKeys](#gear-getadminaccesskeys)
+- [getAccessKeys](#gear-getaccesskeys)
 - [normalizeCaller](#gear-normalizecaller)
-- [getAdminControllers](#gear-getadmincontrollers)
-- [getControllers](#gear-getcontrollers)
-- [isAdminController](#gear-isadmincontroller)
-- [isController](#gear-iscontroller)
 - [setDocStore](#gear-setdocstore)
 - [deleteDocStore](#gear-deletedocstore)
 - [getDocStore](#gear-getdocstore)
@@ -398,6 +396,34 @@ The serialized raw data.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
 
+#### :gear: getAdminAccessKeys
+
+Gets the list of admin access keys from the Satellite.
+
+| Function             | Type                                                                                                                                                                                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getAdminAccessKeys` | `() => [Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
+
+Returns:
+
+The list of admin acces keys.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L10)
+
+#### :gear: getAccessKeys
+
+Gets the list of access keys from the Satellite.
+
+| Function        | Type                                                                                                                                                                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getAccessKeys` | `() => [Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
+
+Returns:
+
+The list of all access keys.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L19)
+
 #### :gear: normalizeCaller
 
 Normalizes a user ID into a raw `Uint8Array` representation.
@@ -416,72 +442,6 @@ Returns:
 The raw user ID as a `Uint8Array`.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/utils/caller.utils.ts#L12)
-
-#### :gear: getAdminControllers
-
-Gets the list of admin controllers from the Satellite.
-
-| Function              | Type                                                                                                                                                                                                                                        |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getAdminControllers` | `() => [Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
-
-Returns:
-
-The list of admin controllers.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L15)
-
-#### :gear: getControllers
-
-Gets the list of controllers from the Satellite.
-
-| Function         | Type                                                                                                                                                                                                                                        |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getControllers` | `() => [Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
-
-Returns:
-
-The list of all controllers.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L24)
-
-#### :gear: isAdminController
-
-Checks if the given caller is an admin among the provided controllers.
-
-| Function            | Type                                         |
-| ------------------- | -------------------------------------------- |
-| `isAdminController` | `(params: ControllerCheckParams) => boolean` |
-
-Parameters:
-
-- `params`: - The parameters including the caller identity
-  and the list of controllers to verify against.
-
-Returns:
-
-Whether the caller is an admin.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L36)
-
-#### :gear: isController
-
-Checks if the given caller exists among the provided controllers.
-
-| Function       | Type                                         |
-| -------------- | -------------------------------------------- |
-| `isController` | `(params: ControllerCheckParams) => boolean` |
-
-Parameters:
-
-- `params`: - The parameters including the caller identity
-  and the list of controllers to verify against.
-
-Returns:
-
-Whether the caller is a controller.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/controllers.sdk.ts#L56)
 
 #### :gear: setDocStore
 
@@ -981,13 +941,12 @@ The current timestamp.
 - [ListOrderFieldSchema](#gear-listorderfieldschema)
 - [ListOrderSchema](#gear-listorderschema)
 - [ListParamsSchema](#gear-listparamsschema)
-- [ControllerScopeSchema](#gear-controllerscopeschema)
-- [ControllerKindSchema](#gear-controllerkindschema)
+- [AccessKeyScopeSchema](#gear-accesskeyscopeschema)
+- [AccessKeyKindSchema](#gear-accesskeykindschema)
 - [MetadataSchema](#gear-metadataschema)
-- [ControllerSchema](#gear-controllerschema)
-- [ControllerRecordSchema](#gear-controllerrecordschema)
-- [ControllersSchema](#gear-controllersschema)
-- [ControllerCheckParamsSchema](#gear-controllercheckparamsschema)
+- [AccessKeySchema](#gear-accesskeyschema)
+- [AccessKeyRecordSchema](#gear-accesskeyrecordschema)
+- [AccessKeysSchema](#gear-accesskeysschema)
 - [CollectionParamsSchema](#gear-collectionparamsschema)
 - [ListStoreParamsSchema](#gear-liststoreparamsschema)
 - [GetDocStoreParamsSchema](#gear-getdocstoreparamsschema)
@@ -1900,29 +1859,29 @@ References:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L103)
 
-#### :gear: ControllerScopeSchema
+#### :gear: AccessKeyScopeSchema
 
-| Constant                | Type                                                             |
-| ----------------------- | ---------------------------------------------------------------- |
-| `ControllerScopeSchema` | `ZodEnum<{ write: "write"; admin: "admin"; submit: "submit"; }>` |
-
-References:
-
-- ControllerScope
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L15)
-
-#### :gear: ControllerKindSchema
-
-| Constant               | Type                                                           |
-| ---------------------- | -------------------------------------------------------------- |
-| `ControllerKindSchema` | `ZodEnum<{ automation: "automation"; emulator: "emulator"; }>` |
+| Constant               | Type                                                             |
+| ---------------------- | ---------------------------------------------------------------- |
+| `AccessKeyScopeSchema` | `ZodEnum<{ write: "write"; admin: "admin"; submit: "submit"; }>` |
 
 References:
 
-- ControllerKind
+- AccessKeyScope
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L25)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L8)
+
+#### :gear: AccessKeyKindSchema
+
+| Constant              | Type                                                           |
+| --------------------- | -------------------------------------------------------------- |
+| `AccessKeyKindSchema` | `ZodEnum<{ automation: "automation"; emulator: "emulator"; }>` |
+
+References:
+
+- AccessKeyKind
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L18)
 
 #### :gear: MetadataSchema
 
@@ -1934,55 +1893,43 @@ References:
 
 - MetadataSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L35)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L28)
 
-#### :gear: ControllerSchema
+#### :gear: AccessKeySchema
 
-| Constant           | Type                                                                                                                                                                                                           |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllerSchema` | `ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; kind: ZodOptional<...>; }, $strict>` |
-
-References:
-
-- ControllerSchema
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L45)
-
-#### :gear: ControllerRecordSchema
-
-| Constant                 | Type                                                                                                                                                                                                         |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `ControllerRecordSchema` | `ZodTuple<[ZodCustom<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; ... 4 more ...; kind: ZodOptional<...>; }, $strict>], null>` |
+| Constant          | Type                                                                                                                                                                                                           |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AccessKeySchema` | `ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; created_at: ZodBigInt; updated_at: ZodBigInt; expires_at: ZodOptional<...>; scope: ZodEnum<...>; kind: ZodOptional<...>; }, $strict>` |
 
 References:
 
-- ControllerRecordSchema
+- AccessKeySchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L94)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L38)
 
-#### :gear: ControllersSchema
+#### :gear: AccessKeyRecordSchema
 
-| Constant            | Type                                                                                                                                                                                                                   |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllersSchema` | `ZodArray<ZodTuple<[ZodCustom<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; ... 4 more ...; kind: ZodOptional<...>; }, $strict>], null>>` |
-
-References:
-
-- ControllersSchema
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L104)
-
-#### :gear: ControllerCheckParamsSchema
-
-| Constant                      | Type                                                                                                                                                                                               |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ControllerCheckParamsSchema` | `ZodObject<{ caller: ZodUnion<[ZodCustom<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>>, ZodPipe<ZodCustom<Principal, Principal>, ZodTransform<...>>]>; controllers: ZodArray<...>; }, $strip>` |
+| Constant                | Type                                                                                                                                                                                                         |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `AccessKeyRecordSchema` | `ZodTuple<[ZodCustom<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; ... 4 more ...; kind: ZodOptional<...>; }, $strict>], null>` |
 
 References:
 
-- ControllerCheckParamsSchema
+- AccessKeyRecordSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L114)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L87)
+
+#### :gear: AccessKeysSchema
+
+| Constant           | Type                                                                                                                                                                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AccessKeysSchema` | `ZodArray<ZodTuple<[ZodCustom<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>>, ZodObject<{ metadata: ZodArray<ZodTuple<[ZodString, ZodString], null>>; ... 4 more ...; kind: ZodOptional<...>; }, $strict>], null>>` |
+
+References:
+
+- AccessKeysSchema
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L97)
 
 #### :gear: CollectionParamsSchema
 
@@ -2328,8 +2275,7 @@ References:
 - [ListOrder](#gear-listorder)
 - [ListParams](#gear-listparams)
 - [ListResults](#gear-listresults)
-- [Controller](#gear-controller)
-- [ControllerCheckParams](#gear-controllercheckparams)
+- [AccessKey](#gear-accesskey)
 - [CollectionParams](#gear-collectionparams)
 - [SetAssetHandlerParams](#gear-setassethandlerparams)
 - [GetContentChunksStoreParams](#gear-getcontentchunksstoreparams)
@@ -2634,31 +2580,20 @@ List results, parameterized by type of returned item.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L142)
 
-#### :gear: Controller
+#### :gear: AccessKey
 
-Represents a controller with access scope and associated metadata.
+Represents an access key with access scope and associated metadata.
 
 | Property     | Type                                      | Description                                                        |
 | ------------ | ----------------------------------------- | ------------------------------------------------------------------ |
-| `metadata`   | `[string, string][]`                      | A list of key-value metadata pairs associated with the controller. |
-| `created_at` | `bigint`                                  | The timestamp when the controller was created.                     |
-| `updated_at` | `bigint`                                  | The timestamp when the controller was last updated.                |
-| `expires_at` | `bigint or undefined`                     | Optional expiration timestamp for the controller.                  |
-| `scope`      | `"write" or "admin" or "submit"`          | The scope assigned to the controller.                              |
-| `kind`       | `"automation" or "emulator" or undefined` | An optional kind identifier of the controller.                     |
+| `metadata`   | `[string, string][]`                      | A list of key-value metadata pairs associated with the access key. |
+| `created_at` | `bigint`                                  | The timestamp when the access key was created.                     |
+| `updated_at` | `bigint`                                  | The timestamp when the access key was last updated.                |
+| `expires_at` | `bigint or undefined`                     | Optional expiration timestamp for the access key.                  |
+| `scope`      | `"write" or "admin" or "submit"`          | The scope assigned to the access key.                              |
+| `kind`       | `"automation" or "emulator" or undefined` | An optional kind identifier of the access key.                     |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L59)
-
-#### :gear: ControllerCheckParams
-
-Represents the parameters required to perform controller checks.
-
-| Property      | Type                                                                                                                                                                                                                                  | Description                                                       |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `caller`      | `any`                                                                                                                                                                                                                                 | The identity of the caller to verify against the controller list. |
-| `controllers` | `[Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` | The list of controllers to check against.                         |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L122)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L52)
 
 #### :gear: CollectionParams
 
@@ -2783,11 +2718,11 @@ Type representing the parameters required to make a canister call.
 - [HookFnOrObject](#gear-hookfnorobject)
 - [TimestampMatcher](#gear-timestampmatcher)
 - [ListOrderField](#gear-listorderfield)
-- [ControllerScope](#gear-controllerscope)
-- [ControllerKind](#gear-controllerkind)
+- [AccessKeyScope](#gear-accesskeyscope)
+- [AccessKeyKind](#gear-accesskeykind)
 - [Metadata](#gear-metadata)
-- [ControllerRecord](#gear-controllerrecord)
-- [Controllers](#gear-controllers)
+- [AccessKeyRecord](#gear-accesskeyrecord)
+- [AccessKeys](#gear-accesskeys)
 - [ListStoreParams](#gear-liststoreparams)
 - [GetDocStoreParams](#gear-getdocstoreparams)
 - [SetDocStoreParams](#gear-setdocstoreparams)
@@ -3610,25 +3545,25 @@ Enum representing possible fields to order by.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/schemas/list.ts#L80)
 
-#### :gear: ControllerScope
+#### :gear: AccessKeyScope
 
-Represents the permission scope of a controller.
-
-| Type              | Type                                    |
-| ----------------- | --------------------------------------- |
-| `ControllerScope` | `z.infer<typeof ControllerScopeSchema>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L20)
-
-#### :gear: ControllerKind
-
-Represents a specific kind of controller. Meant for informational purposes.
+Represents the permission scope of an access key.
 
 | Type             | Type                                   |
 | ---------------- | -------------------------------------- |
-| `ControllerKind` | `z.infer<typeof ControllerKindSchema>` |
+| `AccessKeyScope` | `z.infer<typeof AccessKeyScopeSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L30)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L13)
+
+#### :gear: AccessKeyKind
+
+Represents a specific kind of access key. Meant for informational purposes.
+
+| Type            | Type                                  |
+| --------------- | ------------------------------------- |
+| `AccessKeyKind` | `z.infer<typeof AccessKeyKindSchema>` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L23)
 
 #### :gear: Metadata
 
@@ -3638,27 +3573,27 @@ Represents a single metadata entry as a key-value tuple.
 | ---------- | -------------------------------- |
 | `Metadata` | `z.infer<typeof MetadataSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L40)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L33)
 
-#### :gear: ControllerRecord
+#### :gear: AccessKeyRecord
 
-Represents a tuple containing the principal ID and associated controller data.
+Represents a tuple containing the principal ID and associated access key data.
 
-| Type               | Type                                     |
-| ------------------ | ---------------------------------------- |
-| `ControllerRecord` | `z.infer<typeof ControllerRecordSchema>` |
+| Type              | Type                                    |
+| ----------------- | --------------------------------------- |
+| `AccessKeyRecord` | `z.infer<typeof AccessKeyRecordSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L99)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L92)
 
-#### :gear: Controllers
+#### :gear: AccessKeys
 
-Represents a list of controllers.
+Represents a list of access keys.
 
-| Type          | Type                                |
-| ------------- | ----------------------------------- |
-| `Controllers` | `z.infer<typeof ControllersSchema>` |
+| Type         | Type                               |
+| ------------ | ---------------------------------- |
+| `AccessKeys` | `z.infer<typeof AccessKeysSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/controllers.ts#L109)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L102)
 
 #### :gear: ListStoreParams
 

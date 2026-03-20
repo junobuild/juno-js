@@ -57,6 +57,9 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [countDocsStore](#gear-countdocsstore)
 - [deleteDocsStore](#gear-deletedocsstore)
 - [deleteFilteredDocsStore](#gear-deletefiltereddocsstore)
+- [callerIsAdmin](#gear-callerisadmin)
+- [callerHasWritePermission](#gear-callerhaswritepermission)
+- [callerIsAccessKey](#gear-callerisaccesskey)
 - [countCollectionAssetsStore](#gear-countcollectionassetsstore)
 - [countAssetsStore](#gear-countassetsstore)
 - [setAssetHandler](#gear-setassethandler)
@@ -588,6 +591,36 @@ Returns:
 The context resulting of the deletion of documents that match the provided filters.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/db.sdk.ts#L175)
+
+#### :gear: callerIsAdmin
+
+Guard that succeeds if the caller is an admin access key of this satellite.
+
+| Function        | Type         |
+| --------------- | ------------ |
+| `callerIsAdmin` | `() => void` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/guards.sdk.ts#L10)
+
+#### :gear: callerHasWritePermission
+
+Guard that succeeds if the caller is an access key with write permission.
+
+| Function                   | Type                                                                                                                                                                                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `callerHasWritePermission` | `() => [Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/guards.sdk.ts#L21)
+
+#### :gear: callerIsAccessKey
+
+Guard that succeeds if the caller is any recognized access key of this satellite.
+
+| Function            | Type                                                                                                                                                                                                                                        |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `callerIsAccessKey` | `() => [Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/guards.sdk.ts#L31)
 
 #### :gear: countCollectionAssetsStore
 

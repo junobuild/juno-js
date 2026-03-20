@@ -1,6 +1,13 @@
 import * as z from 'zod';
-import {RawPrincipalSchema} from '../../schemas/principal';
-import {type Timestamp, TimestampSchema} from '../../schemas/satellite';
+import {type RawPrincipal, RawPrincipalSchema} from '../../schemas/principal';
+import {
+  type RawUserId,
+  type UserId,
+  RawUserIdSchema,
+  type Timestamp,
+  TimestampSchema,
+  UserIdSchema
+} from '../../schemas/satellite';
 
 /**
  * @see AccessKeyScope
@@ -99,4 +106,27 @@ export const AccessKeysSchema = z.array(AccessKeyRecordSchema);
 /**
  * Represents a list of access keys.
  */
-export type AccessKeys = z.infer<typeof AccessKeysSchema>;
+export type AccessKeys = [RawPrincipal, AccessKey][];
+
+/**
+ * @see AccessKeyCheckParamsSchema
+ */
+export const AccessKeyCheckParamsSchema = z.object({
+  id: RawUserIdSchema.or(UserIdSchema),
+  accessKeys: AccessKeysSchema
+});
+
+/**
+ * Represents the parameters required to perform an access key checks.
+ */
+export interface AccessKeyCheckParams {
+  /**
+   * The identity to verify against the access keys.
+   */
+  id: RawUserId | UserId;
+
+  /**
+   * The list of access keys to check against.
+   */
+  accessKeys: AccessKeys;
+}

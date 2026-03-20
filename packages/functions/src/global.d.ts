@@ -19,6 +19,15 @@ import type {Memory} from './sdk/schemas/collections';
 declare global {
   function __juno_satellite_get_admin_access_keys(): AccessKeys;
   function __juno_satellite_get_access_keys(): AccessKeys;
+  function __juno_satellite_is_write_access_key(
+    caller: RawUserId,
+    controllers: AccessKeys
+  ): boolean;
+  function __juno_satellite_is_valid_access_key(
+    caller: RawUserId,
+    controllers: AccessKeys
+  ): boolean;
+  function __juno_satellite_is_admin_controller(caller: RawUserId, accessKeys: AccessKeys): boolean;
 
   function __juno_satellite_caller_is_admin();
   function __juno_satellite_caller_has_write_permission();

@@ -1,6 +1,12 @@
-import {getAccessKeys, getAdminAccessKeys} from '../../sdk/accessKeys.sdk';
-import {AccessKeys} from '../../sdk/schemas/accessKeys';
-import {mockRawUserId} from '../mocks/user.mock';
+import {
+  getAccessKeys,
+  getAdminAccessKeys,
+  isAdminAccessKey,
+  isValidAccessKey,
+  isWriteAccessKey
+} from '../../sdk/accessKeys.sdk';
+import {AccessKeyCheckParams, AccessKeys} from '../../sdk/schemas/accessKeys';
+import {mockRawUserId, mockUserIdPrincipal} from '../mocks/user.mock';
 
 describe('accessKeys.sdk', () => {
   const validAccessKeys: AccessKeys = [
@@ -18,8 +24,9 @@ describe('accessKeys.sdk', () => {
   beforeEach(() => {
     globalThis.__juno_satellite_get_admin_access_keys = vi.fn(() => validAccessKeys);
     globalThis.__juno_satellite_get_access_keys = vi.fn(() => validAccessKeys);
+    globalThis.__juno_satellite_is_write_access_key = vi.fn(() => false);
+    globalThis.__juno_satellite_is_valid_access_key = vi.fn(() => false);
     globalThis.__juno_satellite_is_admin_controller = vi.fn(() => true);
-    globalThis.__juno_satellite_is_controller = vi.fn(() => false);
   });
 
   describe('getAdminAccessKeys', () => {
@@ -33,6 +40,52 @@ describe('accessKeys.sdk', () => {
     it('returns the result from the Satellite', () => {
       const result = getAccessKeys();
       expect(result).toEqual(validAccessKeys);
+    });
+  });
+
+  describe('isWriteAccessKey', () => {
+    it('returns false when id is not an access key with write permission', () => {
+      const params: AccessKeyCheckParams = {
+        id: mockUserIdPrincipal,
+        accessKeys: validAccessKeys
+      };
+
+      const result = isWriteAccessKey(params);
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('isValidAccessKey', () => {
+    it('returns false when id is not an access key', () => {
+      const params: AccessKeyCheckParams = {
+        id: mockUserIdPrincipal,
+        accessKeys: validAccessKeys
+      };
+
+      const result = isValidAccessKey(params);
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('isAdminAccessKey', () => {
+    it('returns true when principal is an admin access key', () => {
+      const params: AccessKeyCheckParams = {
+        id: mockUserIdPrincipal,
+        accessKeys: validAccessKeys
+      };
+
+      const result = isAdminAccessKey(params);
+      expect(result).toBe(true);
+    });
+
+    it('returns true when raw principal is an admin access key', () => {
+      const params: AccessKeyCheckParams = {
+        id: mockRawUserId,
+        accessKeys: validAccessKeys
+      };
+
+      const result = isAdminAccessKey(params);
+      expect(result).toBe(true);
     });
   });
 });

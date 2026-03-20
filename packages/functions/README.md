@@ -46,9 +46,12 @@ JavaScript and TypeScript utilities for [Juno] Serverless Functions.
 - [createListResultsSchema](#gear-createlistresultsschema)
 - [decodeDocData](#gear-decodedocdata)
 - [encodeDocData](#gear-encodedocdata)
+- [normalizeCaller](#gear-normalizecaller)
 - [getAdminAccessKeys](#gear-getadminaccesskeys)
 - [getAccessKeys](#gear-getaccesskeys)
-- [normalizeCaller](#gear-normalizecaller)
+- [isWriteAccessKey](#gear-iswriteaccesskey)
+- [isValidAccessKey](#gear-isvalidaccesskey)
+- [isAdminAccessKey](#gear-isadminaccesskey)
 - [setDocStore](#gear-setdocstore)
 - [deleteDocStore](#gear-deletedocstore)
 - [getDocStore](#gear-getdocstore)
@@ -399,34 +402,6 @@ The serialized raw data.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/serializer.sdk.ts#L21)
 
-#### :gear: getAdminAccessKeys
-
-Gets the list of admin access keys from the Satellite.
-
-| Function             | Type                                                                                                                                                                                                                                        |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getAdminAccessKeys` | `() => [Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
-
-Returns:
-
-The list of admin acces keys.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L10)
-
-#### :gear: getAccessKeys
-
-Gets the list of access keys from the Satellite.
-
-| Function        | Type                                                                                                                                                                                                                                        |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getAccessKeys` | `() => [Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
-
-Returns:
-
-The list of all access keys.
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L19)
-
 #### :gear: normalizeCaller
 
 Normalizes a user ID into a raw `Uint8Array` representation.
@@ -445,6 +420,91 @@ Returns:
 The raw user ID as a `Uint8Array`.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/utils/caller.utils.ts#L12)
+
+#### :gear: getAdminAccessKeys
+
+Gets the list of admin access keys from the Satellite.
+
+| Function             | Type               |
+| -------------------- | ------------------ |
+| `getAdminAccessKeys` | `() => AccessKeys` |
+
+Returns:
+
+The list of admin acces keys.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L11)
+
+#### :gear: getAccessKeys
+
+Gets the list of access keys from the Satellite.
+
+| Function        | Type               |
+| --------------- | ------------------ |
+| `getAccessKeys` | `() => AccessKeys` |
+
+Returns:
+
+The list of all access keys.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L20)
+
+#### :gear: isWriteAccessKey
+
+Checks if the given id exists among the provided access keys.
+
+| Function           | Type                                        |
+| ------------------ | ------------------------------------------- |
+| `isWriteAccessKey` | `(params: AccessKeyCheckParams) => boolean` |
+
+Parameters:
+
+- `params`: - The parameters including the id
+  and the list of access keys to verify against.
+
+Returns:
+
+Whether the id is an access key with write permission.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L32)
+
+#### :gear: isValidAccessKey
+
+Checks if the given id exists among the provided access keys.
+
+| Function           | Type                                        |
+| ------------------ | ------------------------------------------- |
+| `isValidAccessKey` | `(params: AccessKeyCheckParams) => boolean` |
+
+Parameters:
+
+- `params`: - The parameters including the id
+  and the list of access keys to verify against.
+
+Returns:
+
+Whether the id is an access key.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L52)
+
+#### :gear: isAdminAccessKey
+
+Checks if the given id is an admin among the provided access keys.
+
+| Function           | Type                                        |
+| ------------------ | ------------------------------------------- |
+| `isAdminAccessKey` | `(params: AccessKeyCheckParams) => boolean` |
+
+Parameters:
+
+- `params`: - The parameters including the id
+  and the list of access keys to verify against.
+
+Returns:
+
+Whether the id is an admin.
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/accessKeys.sdk.ts#L72)
 
 #### :gear: setDocStore
 
@@ -606,9 +666,9 @@ Guard that succeeds if the caller is an admin access key of this satellite.
 
 Guard that succeeds if the caller is an access key with write permission.
 
-| Function                   | Type                                                                                                                                                                                                                                        |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `callerHasWritePermission` | `() => [Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
+| Function                   | Type               |
+| -------------------------- | ------------------ |
+| `callerHasWritePermission` | `() => AccessKeys` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/guards.sdk.ts#L21)
 
@@ -616,9 +676,9 @@ Guard that succeeds if the caller is an access key with write permission.
 
 Guard that succeeds if the caller is any recognized access key of this satellite.
 
-| Function            | Type                                                                                                                                                                                                                                        |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `callerIsAccessKey` | `() => [Uint8Array<ArrayBuffer>, { metadata: [string, string][]; created_at: bigint; updated_at: bigint; scope: "write" or "admin" or "submit"; expires_at?: bigint or undefined; kind?: "automation" or ... 1 more ... or undefined; }][]` |
+| Function            | Type               |
+| ------------------- | ------------------ |
+| `callerIsAccessKey` | `() => AccessKeys` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/guards.sdk.ts#L31)
 
@@ -978,6 +1038,7 @@ The current timestamp.
 - [AccessKeySchema](#gear-accesskeyschema)
 - [AccessKeyRecordSchema](#gear-accesskeyrecordschema)
 - [AccessKeysSchema](#gear-accesskeysschema)
+- [AccessKeyCheckParamsSchema](#gear-accesskeycheckparamsschema)
 - [CollectionParamsSchema](#gear-collectionparamsschema)
 - [ListStoreParamsSchema](#gear-liststoreparamsschema)
 - [GetDocStoreParamsSchema](#gear-getdocstoreparamsschema)
@@ -1878,7 +1939,7 @@ References:
 
 - AccessKeyScope
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L8)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L15)
 
 #### :gear: AccessKeyKindSchema
 
@@ -1890,7 +1951,7 @@ References:
 
 - AccessKeyKind
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L18)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L25)
 
 #### :gear: MetadataSchema
 
@@ -1902,7 +1963,7 @@ References:
 
 - MetadataSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L28)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L35)
 
 #### :gear: AccessKeySchema
 
@@ -1914,7 +1975,7 @@ References:
 
 - AccessKeySchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L38)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L45)
 
 #### :gear: AccessKeyRecordSchema
 
@@ -1926,7 +1987,7 @@ References:
 
 - AccessKeyRecordSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L87)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L94)
 
 #### :gear: AccessKeysSchema
 
@@ -1938,7 +1999,19 @@ References:
 
 - AccessKeysSchema
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L97)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L104)
+
+#### :gear: AccessKeyCheckParamsSchema
+
+| Constant                     | Type                                                                                                                                                                              |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AccessKeyCheckParamsSchema` | `ZodObject<{ id: ZodUnion<[ZodCustom<Uint8Array<ArrayBuffer>, Uint8Array<ArrayBuffer>>, ZodPipe<ZodCustom<any, any>, ZodTransform<...>>]>; accessKeys: ZodArray<...>; }, $strip>` |
+
+References:
+
+- AccessKeyCheckParamsSchema
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L114)
 
 #### :gear: CollectionParamsSchema
 
@@ -2285,6 +2358,7 @@ References:
 - [ListParams](#gear-listparams)
 - [ListResults](#gear-listresults)
 - [AccessKey](#gear-accesskey)
+- [AccessKeyCheckParams](#gear-accesskeycheckparams)
 - [CollectionParams](#gear-collectionparams)
 - [SetAssetHandlerParams](#gear-setassethandlerparams)
 - [GetContentChunksStoreParams](#gear-getcontentchunksstoreparams)
@@ -2602,7 +2676,18 @@ Represents an access key with access scope and associated metadata.
 | `scope`      | `"write" or "admin" or "submit"`          | The scope assigned to the access key.                              |
 | `kind`       | `"automation" or "emulator" or undefined` | An optional kind identifier of the access key.                     |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L52)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L59)
+
+#### :gear: AccessKeyCheckParams
+
+Represents the parameters required to perform an access key checks.
+
+| Property     | Type         | Description                                     |
+| ------------ | ------------ | ----------------------------------------------- |
+| `id`         | `any`        | The identity to verify against the access keys. |
+| `accessKeys` | `AccessKeys` | The list of access keys to check against.       |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L122)
 
 #### :gear: CollectionParams
 
@@ -3551,7 +3636,7 @@ Represents the permission scope of an access key.
 | ---------------- | -------------------------------------- |
 | `AccessKeyScope` | `z.infer<typeof AccessKeyScopeSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L13)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L20)
 
 #### :gear: AccessKeyKind
 
@@ -3561,7 +3646,7 @@ Represents a specific kind of access key. Meant for informational purposes.
 | --------------- | ------------------------------------- |
 | `AccessKeyKind` | `z.infer<typeof AccessKeyKindSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L23)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L30)
 
 #### :gear: Metadata
 
@@ -3571,7 +3656,7 @@ Represents a single metadata entry as a key-value tuple.
 | ---------- | -------------------------------- |
 | `Metadata` | `z.infer<typeof MetadataSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L33)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L40)
 
 #### :gear: AccessKeyRecord
 
@@ -3581,17 +3666,17 @@ Represents a tuple containing the principal ID and associated access key data.
 | ----------------- | --------------------------------------- |
 | `AccessKeyRecord` | `z.infer<typeof AccessKeyRecordSchema>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L92)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L99)
 
 #### :gear: AccessKeys
 
 Represents a list of access keys.
 
-| Type         | Type                               |
-| ------------ | ---------------------------------- |
-| `AccessKeys` | `z.infer<typeof AccessKeysSchema>` |
+| Type         | Type                          |
+| ------------ | ----------------------------- |
+| `AccessKeys` | `[RawPrincipal, AccessKey][]` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L102)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/sdk/schemas/accessKeys.ts#L109)
 
 #### :gear: ListStoreParams
 

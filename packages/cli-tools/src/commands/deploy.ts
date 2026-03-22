@@ -116,7 +116,7 @@ export const deployToCollection = async ({
   upload: UploadIndividually | UploadWithBatch;
   collection: string;
 }): Promise<DeployResult> => {
-  const prepareResult = await prepareDeploy(params);
+  const prepareResult = await prepareDeploy({...params, collection});
 
   if (prepareResult.result === 'skipped') {
     return {result: 'skipped'};
@@ -229,7 +229,7 @@ export const deployWithProposal = async ({
 const prepareDeploy = async ({
   assertMemory,
   ...rest
-}: Omit<DeployParams, 'uploadFn'>): Promise<
+}: Omit<DeployParams, 'uploadFn'> & {collection?: string}): Promise<
   {result: 'skipped'} | {result: 'to-deploy'; files: FileDetails[]; sourceAbsolutePath: string}
 > => {
   const spinner = ora('Preparing deploy...').start();

@@ -1,5 +1,6 @@
 import {isNullish, nonNullish} from '@dfinity/utils';
 import type {CliConfig, EncodingType} from '@junobuild/config';
+import {COLLECTION_DAPP} from '../constants/storage.constants';
 import type {Asset} from '@junobuild/storage';
 import crypto from 'crypto';
 import {fileTypeFromFile} from 'file-type';
@@ -23,10 +24,12 @@ export const prepareDeploy = async ({
   config,
   listAssets,
   assertSourceDirExists,
-  includeAllFiles
+  includeAllFiles,
+  collection
 }: {
   config: CliConfig;
   listAssets: ListAssets;
+  collection?: string;
 } & PrepareDeployOptions): Promise<{
   files: FileDetails[];
   sourceAbsolutePath: string;
@@ -48,7 +51,8 @@ export const prepareDeploy = async ({
     encoding,
     precompress,
     listAssets,
-    includeAllFiles
+    includeAllFiles,
+    collection
   });
 
   return {
@@ -60,16 +64,19 @@ export const prepareDeploy = async ({
 const filterFilesToUpload = async ({
   files,
   sourceAbsolutePath,
-  listAssets
+  listAssets,
+  collection
 }: {
   files: FileDetails[];
   sourceAbsolutePath: string;
   listAssets: ListAssets;
+  collection?: string;
 }): Promise<FileDetails[]> => {
   const existingAssets = await listAssets({});
 
   const promises = files.map(
-    async (file: FileDetails) => await fileNeedUpload({file, sourceAbsolutePath, existingAssets})
+    async (file: FileDetails) =>
+      await fileNeedUpload({file, sourceAbsolutePath, existingAssets, collection})
   );
   const results: Array<{file: FileDetails; upload: boolean}> = await Promise.all(promises);
 
@@ -84,21 +91,30 @@ const computeSha256 = async (file: string): Promise<string> => {
 const fileNeedUpload = async ({
   file,
   existingAssets,
-  sourceAbsolutePath
+  sourceAbsolutePath,
+  collection
 }: {
   file: FileDetails;
   existingAssets: Asset[];
   sourceAbsolutePath: string;
+  collection?: string;
 }): Promise<{
   file: FileDetails;
   upload: boolean;
 }> => {
   const effectiveFilePath = file.alternateFile ?? file.file;
 
+  let computedFullPath = fullPath({file: effectiveFilePath, sourceAbsolutePath});
+
+  // For non-#dapp collections (e.g. storage deploy), remote assets have a
+  // /{collection}/... prefix on their fullPath.  We must apply the same prefix
+  // to the locally-computed path so the comparison matches.
+  if (nonNullish(collection) && collection !== COLLECTION_DAPP) {
+    computedFullPath = `/${collection}${computedFullPath.startsWith('/') ? '' : '/'}${computedFullPath}`;
+  }
+
   // Is it a new file?
-  const asset = existingAssets.find(
-    ({fullPath: f}) => f === fullPath({file: effectiveFilePath, sourceAbsolutePath})
-  );
+  const asset = existingAssets.find(({fullPath: f}) => f === computedFullPath);
 
   if (isNullish(asset)) {
     return {file, upload: true};
@@ -133,9 +149,11 @@ const prepareFiles = async ({
   encoding,
   precompress,
   listAssets,
-  includeAllFiles
+  includeAllFiles,
+  collection
 }: {
   sourceAbsolutePath: string;
+  collection?: string;
 } & {listAssets: ListAssets} & Pick<PrepareDeployOptions, 'includeAllFiles'> &
   Required<Pick<CliConfig, 'ignore' | 'encoding' | 'precompress'>>): Promise<FileDetails[]> => {
   const sourceFiles = listSourceFilesForDeploy({sourceAbsolutePath, ignore});
@@ -264,6 +282,7 @@ const prepareFiles = async ({
   return await filterFilesToUpload({
     files,
     sourceAbsolutePath,
-    listAssets
+    listAssets,
+    collection
   });
 };

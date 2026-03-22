@@ -1,6 +1,5 @@
 import type {SatelliteConfig} from '@junobuild/config';
 import {minimatch} from 'minimatch';
-import {lstatSync} from 'node:fs';
 import {basename} from 'node:path';
 import {IGNORE_OS_FILES} from '../constants/deploy.constants';
 import {files} from './fs.utils';
@@ -18,11 +17,6 @@ const filterFile = ({
   file,
   ignore
 }: {file: string} & Required<Pick<SatelliteConfig, 'ignore'>>): boolean => {
-  // File must not be empty >= 0kb
-  if (lstatSync(file).size <= 0) {
-    return false;
-  }
-
   // Ignore .DS_Store on Mac or Thumbs.db on Windows
   if (IGNORE_OS_FILES.includes(basename(file).toLowerCase())) {
     return false;

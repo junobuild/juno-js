@@ -5,7 +5,7 @@ import type {FileAndPaths} from './deploy';
 export interface UploadFilesParams {
   files: FileAndPaths[];
   sourceAbsolutePath: string;
-  collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES;
+  collection: typeof COLLECTION_DAPP | typeof COLLECTION_CDN_RELEASES | (string & {});
   batchSize: number;
 }
 

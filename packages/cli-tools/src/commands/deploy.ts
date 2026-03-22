@@ -80,6 +80,41 @@ export const deploy = async ({
 }: {
   params: DeployParams;
   upload: UploadIndividually | UploadWithBatch;
+}): Promise<DeployResult> =>
+  await deployToCollection({
+    params,
+    upload,
+    collection: COLLECTION_DAPP
+  });
+
+/**
+ * Prepares and uploads assets to a specified storage collection.
+ *
+ * This is a generalized version of {@link deploy} that accepts a `collection`
+ * parameter instead of targeting the hardcoded `#dapp` collection. It enables
+ * deploying files to arbitrary storage collections (e.g., `audio`, `images`).
+ *
+ * Steps:
+ * 1) Resolve source files to upload.
+ * 2) Ensure enough memory is available (via internal checks).
+ * 3) Upload files using the provided upload function.
+ *
+ * @param {Object} options
+ * @param {DeployParams} options.params - Deployment parameters (paths, config, etc.).
+ * @param {UploadIndividually | UploadWithBatch} options.upload - Upload strategy function.
+ * @param {string} options.collection - The target storage collection name.
+ * @returns {Promise<DeployResult>}
+ *   - `{ result: 'skipped' }` when there are no files to upload.
+ *   - `{ result: 'deployed', files }` when the upload completes.
+ */
+export const deployToCollection = async ({
+  params,
+  upload,
+  collection
+}: {
+  params: DeployParams;
+  upload: UploadIndividually | UploadWithBatch;
+  collection: string;
 }): Promise<DeployResult> => {
   const prepareResult = await prepareDeploy(params);
 
@@ -89,7 +124,17 @@ export const deploy = async ({
 
   const {files, sourceAbsolutePath} = prepareResult;
 
-  const sourceFiles = prepareSourceFiles({files, sourceAbsolutePath});
+  let sourceFiles = prepareSourceFiles({files, sourceAbsolutePath});
+
+  if (collection !== COLLECTION_DAPP) {
+    sourceFiles = sourceFiles.map(({file, paths}) => ({
+      file,
+      paths: {
+        ...paths,
+        fullPath: `/${collection}${paths.fullPath.startsWith('/') ? '' : '/'}${paths.fullPath}`
+      }
+    }));
+  }
 
   const source: Omit<UploadFilesParams, 'collection'> = {
     files: sourceFiles,
@@ -99,7 +144,7 @@ export const deploy = async ({
 
   await uploadFiles({
     ...source,
-    collection: COLLECTION_DAPP,
+    collection,
     upload
   });
 

@@ -16,6 +16,38 @@ import {type DatastoreConfig, DatastoreConfigSchema} from './datastore.config';
 import {type ModuleSettings, ModuleSettingsSchema} from './module.settings';
 
 /**
+ * @see StorageDeployMapping
+ */
+export const StorageDeployMappingSchema = z.strictObject({
+  source: z.string(),
+  collection: z.string()
+});
+
+/**
+ * Maps a local source directory to a Juno Storage collection for deployment.
+ *
+ * Used by `juno storage deploy` to upload files from a local directory
+ * to a specific storage collection.
+ *
+ * @interface StorageDeployMapping
+ * @property {string} source - Local directory path relative to the project root.
+ * @property {string} collection - Target storage collection name.
+ */
+export interface StorageDeployMapping {
+  /**
+   * Local directory path relative to the project root.
+   * @type {string}
+   */
+  source: string;
+
+  /**
+   * Target storage collection name.
+   * @type {string}
+   */
+  collection: string;
+}
+
+/**
  * @see SatelliteId
  */
 export const SatelliteIdSchema = z.object({
@@ -71,7 +103,8 @@ const SatelliteConfigOptionsBaseSchema = z.object({
   automation: AutomationConfigSchema.optional(),
   assertions: SatelliteAssertionsSchema.optional(),
   settings: ModuleSettingsSchema.optional(),
-  collections: CollectionsSchema.optional()
+  collections: CollectionsSchema.optional(),
+  deploy: z.array(StorageDeployMappingSchema).optional()
 });
 
 /**
@@ -163,6 +196,14 @@ export interface SatelliteConfigOptions {
    * @optional
    */
   collections?: Collections;
+
+  /**
+   * Optional configuration that maps local directories to storage collections for deployment.
+   * Used by `juno storage deploy` to upload files from local directories to storage collections.
+   * @type {StorageDeployMapping[]}
+   * @optional
+   */
+  deploy?: StorageDeployMapping[];
 }
 
 /**

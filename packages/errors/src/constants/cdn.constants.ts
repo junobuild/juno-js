@@ -14,8 +14,6 @@ export const JUNO_CDN_PROPOSALS_ERROR_INVALID_HASH = 'juno.cdn.proposals.error.i
 
 export const JUNO_CDN_PROPOSALS_ERROR_UNKNOWN_TYPE = 'juno.cdn.proposals.error.unknown_type';
 
-export const JUNO_CDN_PROPOSALS_ERROR_EMPTY_CONTENT_CHUNKS =
-  'juno.cdn.proposals.error.empty_content_chunks';
 export const JUNO_CDN_PROPOSALS_ERROR_NOT_CONTENT_CHUNKS_AT_INDEX =
   'juno.cdn.proposals.error.no_content_chunks_at_index';
 

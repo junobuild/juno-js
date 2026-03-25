@@ -33,13 +33,21 @@ export class AuthClientStore {
     return this.#authClient;
   };
 
+  /**
+   * Since icp-js-core persists identity keys in IndexedDB by default,
+   * they could be tampered with and affect the next login.
+   * To ensure each session starts clean and safe, we clear the stored keys
+   * before creating a new AuthClient.
+   *
+   * We also remove the delegation because `AuthClient.create` does not
+   * overwrite or discard an existing delegation — it reads it from storage
+   * and pairs it with whatever key is present. Once the key is cleared and
+   * a fresh one generated, the old delegation would reference a different
+   * public key, producing an ECDSA P256 signature / delegation mismatch.
+   */
   safeCreateAuthClient = async (): Promise<AuthClient> => {
-    // Since AgentJS persists the identity key in IndexedDB by default,
-    // it can be tampered with and affect the next login with Internet Identity or NFID.
-    // To ensure each session starts clean and safe, we clear the stored keys before creating a new AuthClient
-    // in case the user is not authenticated.
     const storage = new IdbStorage();
-    await storage.remove(KEY_STORAGE_KEY);
+    await Promise.all([storage.remove(KEY_STORAGE_KEY), storage.remove(KEY_STORAGE_DELEGATION)]);
 
     return await this.createAuthClient();
   };

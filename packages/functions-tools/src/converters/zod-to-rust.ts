@@ -32,11 +32,13 @@ const RUST_KEYWORDS = new Set([
 const sanitizeFieldName = (name: string): {name: string; sanitized: boolean} =>
   RUST_KEYWORDS.has(name) ? {name: `r#${name}`, sanitized: true} : {name, sanitized: false};
 
-const transformFieldName = (name: string): {name: string; renamed: boolean} => {
+const transformFieldName = (
+  name: string
+): {name: string; sanitized: boolean} | {name: string; renamed: boolean} => {
   const {sanitized, ...rest} = sanitizeFieldName(name);
 
   if (sanitized) {
-    return {renamed: true, ...rest};
+    return {sanitized, ...rest};
   }
 
   const snake = convertCamelToSnake(name);
@@ -149,9 +151,10 @@ const schemaToRustType = ({
 
           const fields = nonDiscriminatorFields
             .map((f, fi) => {
-              const {name: fieldName, renamed} = transformFieldName(f.name);
-              const renameAttr = renamed ? `        #[serde(rename = "${f.name}")]\n` : '';
-              return `${renameAttr}        ${fieldName}: ${fieldResults[fi].fieldType},`;
+              const fieldNameDetails = transformFieldName(f.name);
+              const renameAttr =
+                'sanitized' in fieldNameDetails ? `        #[serde(rename = "${f.name}")]\n` : '';
+              return `${renameAttr}        ${fieldNameDetails.name}: ${fieldResults[fi].fieldType},`;
             })
             .join('\n');
 
@@ -197,11 +200,12 @@ const schemaToRustType = ({
       const fields = schema.fields
         .map((f, i) => {
           const result = fieldResults[i];
-          const {name: fieldName, renamed} = transformFieldName(f.name);
-          const renameAttr = renamed ? `    #[serde(rename = "${f.name}")]\n` : '';
+          const fieldNameDetails = transformFieldName(f.name);
+          const renameAttr =
+            'sanitized' in fieldNameDetails ? `    #[serde(rename = "${f.name}")]\n` : '';
           const attr =
             result.kind === 'composite' && result.needsJsonData ? '    #[json_data(nested)]\n' : '';
-          return `${renameAttr}${attr}    pub ${fieldName}: ${result.fieldType},`;
+          return `${renameAttr}${attr}    pub ${fieldNameDetails.name}: ${result.fieldType},`;
         })
         .join('\n');
 

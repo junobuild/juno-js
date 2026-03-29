@@ -284,6 +284,6 @@ describe('camelCase field names', () => {
   rust(
     'myFunction',
     z.object({maxResponseBytes: z.bigint().optional(), isReplicated: z.boolean().optional()}),
-    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[serde(rename = "maxResponseBytes")]\n    pub max_response_bytes: Option<u64>,\n    #[serde(rename = "isReplicated")]\n    pub is_replicated: Option<bool>,\n}'
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub max_response_bytes: Option<u64>,\n    pub is_replicated: Option<bool>,\n}'
   );
 });

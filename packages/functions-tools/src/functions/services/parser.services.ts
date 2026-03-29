@@ -22,48 +22,48 @@ use serde::{Deserialize, Serialize};
 %FUNCTIONS%
 `;
 
-const templateSyncNoArgsNoResult = `#[ic_cdk::%TYPE%%GUARD%]
+const templateSyncNoArgsNoResult = `#[ic_cdk::%TYPE%%TYPE_OPTIONS%]
 fn %RS_FUNCTION%() {
     execute_sync_function::<NoArgs, NoResult>("%JS_FUNCTION%", None).unwrap_or_trap();
 }`;
 
-const templateSyncNoArgsWithResult = `#[ic_cdk::%TYPE%%GUARD%]
+const templateSyncNoArgsWithResult = `#[ic_cdk::%TYPE%%TYPE_OPTIONS%]
 fn %RS_FUNCTION%() -> %RESULT% {
     execute_sync_function::<NoArgs, %RESULT%>("%JS_FUNCTION%", None).unwrap_or_trap_result()
 }`;
 
-const templateSyncWithArgsNoResult = `#[ic_cdk::%TYPE%%GUARD%]
+const templateSyncWithArgsNoResult = `#[ic_cdk::%TYPE%%TYPE_OPTIONS%]
 fn %RS_FUNCTION%(args: %ARGS%) {
     execute_sync_function::<%ARGS%, NoResult>("%JS_FUNCTION%", Some(args)).unwrap_or_trap();
 }`;
 
-const templateSyncWithArgsWithResult = `#[ic_cdk::%TYPE%%GUARD%]
+const templateSyncWithArgsWithResult = `#[ic_cdk::%TYPE%%TYPE_OPTIONS%]
 fn %RS_FUNCTION%(args: %ARGS%) -> %RESULT% {
     execute_sync_function("%JS_FUNCTION%", Some(args)).unwrap_or_trap_result()
 }`;
 
-const templateAsyncNoArgsNoResult = `#[ic_cdk::%TYPE%%GUARD%]
+const templateAsyncNoArgsNoResult = `#[ic_cdk::%TYPE%%TYPE_OPTIONS%]
 async fn %RS_FUNCTION%() {
     execute_async_function::<NoArgs, NoResult>("%JS_FUNCTION%", None)
         .await
         .unwrap_or_trap();
 }`;
 
-const templateAsyncNoArgsWithResult = `#[ic_cdk::%TYPE%%GUARD%]
+const templateAsyncNoArgsWithResult = `#[ic_cdk::%TYPE%%TYPE_OPTIONS%]
 async fn %RS_FUNCTION%() -> %RESULT% {
     execute_async_function::<NoArgs, %RESULT%>("%JS_FUNCTION%", None)
         .await
         .unwrap_or_trap_result()
 }`;
 
-const templateAsyncWithArgsNoResult = `#[ic_cdk::%TYPE%%GUARD%]
+const templateAsyncWithArgsNoResult = `#[ic_cdk::%TYPE%%TYPE_OPTIONS%]
 async fn %RS_FUNCTION%(args: %ARGS%) {
     execute_async_function::<%ARGS%, NoResult>("%JS_FUNCTION%", Some(args))
         .await
         .unwrap_or_trap();
 }`;
 
-const templateAsyncWithArgsWithResult = `#[ic_cdk::%TYPE%%GUARD%]
+const templateAsyncWithArgsWithResult = `#[ic_cdk::%TYPE%%TYPE_OPTIONS%]
 async fn %RS_FUNCTION%(args: %ARGS%) -> %RESULT% {
     execute_async_function("%JS_FUNCTION%", Some(args))
         .await
@@ -74,7 +74,9 @@ const templateGuard = `fn %RS_FUNCTION%_guard() -> Result<(), String> {
     execute_sync_guard("%JS_FUNCTION%")
 }`;
 
-const templateTypeGuard = `(guard = "%RS_FUNCTION%_guard")`;
+const templateTypeGuard = `guard = "%RS_FUNCTION%_guard"`;
+
+const templateTypeHidden = `hidden = true`;
 
 export const parseFunctions = ({
   queries,
@@ -116,6 +118,11 @@ const parseFunction = ({
       }
     : undefined;
 
+  const fnTypeOptions = [
+    ...(fn.hidden === true ? [templateTypeHidden] : []),
+    ...(nonNullish(guard) ? [guard.type] : [])
+  ];
+
   const args =
     'args' in fn
       ? zodToRust({
@@ -153,7 +160,7 @@ const parseFunction = ({
 
   const parsedFn = template
     .replace('%TYPE%', fnType)
-    .replace('%GUARD%', guard?.type ?? '')
+    .replace('%TYPE_OPTIONS%', fnTypeOptions.length > 0 ? `(${fnTypeOptions.join(', ')})` : '')
     .replace('%RS_FUNCTION%', rsFnName)
     .replace('%JS_FUNCTION%', jsFnName)
     .replaceAll('%ARGS%', args?.baseName ?? '') // We assume our templates and resolution is correct

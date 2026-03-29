@@ -97,6 +97,7 @@
     "@dfinity/utils": "^4.1",
     "@icp-sdk/core": "^5",
     "@junobuild/schema": "^1.1",
+    "@junobuild/utils": "^0.3",
     "zod": "^4.3"
   }
 }

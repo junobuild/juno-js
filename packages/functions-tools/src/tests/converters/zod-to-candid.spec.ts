@@ -473,3 +473,11 @@ describe('throws', () => {
     z.array(z.union([z.object({a: z.string()}), z.object({b: z.int()})]))
   );
 });
+
+describe('camelCase field names', () => {
+  candid(
+    'WithCamelCaseFields',
+    z.object({maxResponseBytes: z.bigint().optional(), isReplicated: z.boolean().optional()}),
+    'record { max_response_bytes : opt nat; is_replicated : opt bool }'
+  );
+});

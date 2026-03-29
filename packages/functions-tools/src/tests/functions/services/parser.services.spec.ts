@@ -335,4 +335,33 @@ use serde::{Deserialize, Serialize};`);
       expect(result).not.toContain('fn app_yolo_guard()');
     });
   });
+
+  describe('hidden', () => {
+    it('should generate a hidden query', () => {
+      const result = parseFunctions({
+        queries: [['helloWorld', {handler: () => {}, hidden: true}]],
+        updates: []
+      });
+
+      expect(result).toContain('#[ic_cdk::query(hidden = true)]');
+    });
+
+    it('should generate a hidden update', () => {
+      const result = parseFunctions({
+        queries: [],
+        updates: [['helloWorld', {handler: () => {}, hidden: true}]]
+      });
+
+      expect(result).toContain('#[ic_cdk::update(hidden = true)]');
+    });
+
+    it('should generate a hidden query with a guard', () => {
+      const result = parseFunctions({
+        queries: [['helloWorld', {handler: () => {}, hidden: true, guard: () => {}}]],
+        updates: []
+      });
+
+      expect(result).toContain('#[ic_cdk::query(hidden = true, guard = "app_hello_world_guard")]');
+    });
+  });
 });

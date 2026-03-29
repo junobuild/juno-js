@@ -1,5 +1,5 @@
 import {IDL} from '@icp-sdk/core/candid';
-import {capitalize} from '@junobuild/utils';
+import {capitalize, convertCamelToSnake} from '@junobuild/utils';
 import type {z} from 'zod';
 import {jsonToSputnikSchema, type SputnikSchemaResult} from './_converters';
 import type {SputnikSchema} from './_types';
@@ -29,7 +29,9 @@ const schemaToIdlType = (schema: SputnikSchema): IDL.Type => {
       return IDL.Tuple(...schema.members.map(schemaToIdlType));
     case 'record':
       return IDL.Record(
-        Object.fromEntries(schema.fields.map((f) => [f.name, schemaToIdlType(f.type)]))
+        Object.fromEntries(
+          schema.fields.map((f) => [convertCamelToSnake(f.name), schemaToIdlType(f.type)])
+        )
       );
     case 'variant':
       return IDL.Variant(Object.fromEntries(schema.tags.map((t) => [t, IDL.Null])));

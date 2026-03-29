@@ -126,4 +126,5 @@ declare global {
     method: string,
     args: Uint8Array<ArrayBuffer>
   ): Promise<Uint8Array<ArrayBuffer>>;
+  function __ic_cdk_http_request(args: HttpRequestArgs): Promise<HttpRequestResult>;
 }

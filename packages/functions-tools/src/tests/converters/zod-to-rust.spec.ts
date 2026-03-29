@@ -161,6 +161,15 @@ describe('object with array field', () => {
     z.object({tags: z.array(z.string())}),
     '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub tags: Vec<String>,\n}'
   );
+
+  rust(
+    'myFunction',
+    z.object({headers: z.array(z.object({name: z.string(), value: z.string()}))}),
+    [
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgsHeaders {\n    pub name: String,\n    pub value: String,\n}',
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub headers: Vec<MyFunctionArgsHeaders>,\n}'
+    ].join('\n\n')
+  );
 });
 
 // ─── Tuples ───────────────────────────────────────────────────────────────────
@@ -269,4 +278,12 @@ describe('baseName', () => {
     const result = zodToRust({id: 'query', schema: z.string(), suffix: 'Args'});
     expect(result.baseName).toBe('QueryArgs');
   });
+});
+
+describe('camelCase field names', () => {
+  rust(
+    'myFunction',
+    z.object({maxResponseBytes: z.bigint().optional(), isReplicated: z.boolean().optional()}),
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub max_response_bytes: Option<u64>,\n    pub is_replicated: Option<bool>,\n}'
+  );
 });

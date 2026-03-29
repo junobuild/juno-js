@@ -206,5 +206,36 @@ describe('function', () => {
         ).toThrow();
       });
     });
+
+    describe('hidden', () => {
+      it('should accept hidden: true', () => {
+        expect(() =>
+          CustomFunctionSchema.parse({
+            type: JUNO_FUNCTION_TYPE.QUERY,
+            handler: () => {},
+            hidden: true
+          })
+        ).not.toThrow();
+      });
+
+      it('should accept missing hidden', () => {
+        expect(() =>
+          CustomFunctionSchema.parse({
+            type: JUNO_FUNCTION_TYPE.QUERY,
+            handler: () => {}
+          })
+        ).not.toThrow();
+      });
+
+      it('should reject a non-boolean hidden', () => {
+        expect(() =>
+          CustomFunctionSchema.parse({
+            type: JUNO_FUNCTION_TYPE.QUERY,
+            handler: () => {},
+            hidden: 'true'
+          })
+        ).toThrow();
+      });
+    });
   });
 });

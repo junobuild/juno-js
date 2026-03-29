@@ -1123,69 +1123,69 @@ Not intended for direct use by developers.
 
 #### :gear: CustomFunctionWithArgsAndResultSchema
 
-| Constant                                | Type                                                                                                                                                                                                           |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionWithArgsAndResultSchema` | `ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; guard: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
+| Constant                                | Type                                                                                                                                                 |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionWithArgsAndResultSchema` | `ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; ... 4 more ...; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
 - CustomFunctionWithArgsAndResult
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L31)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L32)
 
 #### :gear: CustomFunctionWithArgsSchema
 
-| Constant                       | Type                                                                                                                                                                                   |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionWithArgsSchema` | `ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; handler: ZodCustom<...>; guard: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
+| Constant                       | Type                                                                                                                                                                                                             |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionWithArgsSchema` | `ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; handler: ZodCustom<...>; guard: ZodOptional<...>; hidden: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
 - CustomFunctionWithArgs
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L47)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L48)
 
 #### :gear: CustomFunctionWithResultSchema
 
-| Constant                         | Type                                                                                                                                                                                     |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionWithResultSchema` | `ZodObject<{ result: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; handler: ZodCustom<...>; guard: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
+| Constant                         | Type                                                                                                                                                                                                               |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `CustomFunctionWithResultSchema` | `ZodObject<{ result: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; handler: ZodCustom<...>; guard: ZodOptional<...>; hidden: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
 - CustomFunctionWithResult
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L62)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L63)
 
 #### :gear: CustomFunctionWithoutArgsAndResultSchema
 
-| Constant                                   | Type                                                                                                                                                                                                                     |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `CustomFunctionWithoutArgsAndResultSchema` | `ZodObject<{ handler: ZodCustom<$InferInnerFunctionType<ZodTuple<[], null>, ZodUnion<readonly [ZodVoid, ZodPromise<ZodVoid>]>>, $InferInnerFunctionType<...>>; guard: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
+| Constant                                   | Type                                                                                                                                                                                                                                               |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionWithoutArgsAndResultSchema` | `ZodObject<{ handler: ZodCustom<$InferInnerFunctionType<ZodTuple<[], null>, ZodUnion<readonly [ZodVoid, ZodPromise<ZodVoid>]>>, $InferInnerFunctionType<...>>; guard: ZodOptional<...>; hidden: ZodOptional<...>; type: ZodEnum<...>; }, $strict>` |
 
 References:
 
 - CustomFunctionWithoutArgsAndResult
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L77)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L78)
 
 #### :gear: CustomFunctionSchema
 
-| Constant               | Type                                                                                                                                                                                                                                                                                |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CustomFunctionSchema` | `ZodUnion<readonly [ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; guard: ZodOptional<...>; type: ZodEnum<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
+| Constant               | Type                                                                                                                                                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CustomFunctionSchema` | `ZodUnion<readonly [ZodObject<{ args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; ... 4 more ...; type: ZodEnum<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
 
 References:
 
 - CustomFunction
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L91)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L92)
 
 #### :gear: QuerySchema
 
-| Constant      | Type                                                                                                                                                                                                                                                                                                       |
-| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `QuerySchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_query">; args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; guard: ZodOptional<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
+| Constant      | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `QuerySchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_query">; args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; guard: ZodOptional<...>; hidden: ZodOptional<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<....` |
 
 References:
 
@@ -1195,9 +1195,9 @@ References:
 
 #### :gear: UpdateSchema
 
-| Constant       | Type                                                                                                                                                                                                                                                                                                        |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UpdateSchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_update">; args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; guard: ZodOptional<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...>]>` |
+| Constant       | Type                                                                                                                                                                                                                                                                                                                               |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UpdateSchema` | `ZodUnion<readonly [ZodObject<{ type: ZodLiteral<"__juno_function_update">; args: ZodCustom<ZodObject<$ZodLooseShape, $strip>, ZodObject<$ZodLooseShape, $strip>>; result: ZodCustom<...>; handler: ZodCustom<...>; guard: ZodOptional<...>; hidden: ZodOptional<...>; }, $strict>, ZodObject<...>, ZodObject<...>, ZodObject<...` |
 
 References:
 
@@ -2457,7 +2457,7 @@ A serverless function with both input arguments and an output result.
 | `result`  | `ZodObject<TResult, $strip>`                                                                                           | A Zod schema describing the output result.                                                          |
 | `handler` | `(args: $InferObjectOutput<TArgs, {}>) => $InferObjectOutput<TResult, {}> or Promise<$InferObjectOutput<TResult, {}>>` | The function handler. Can be synchronous or asynchronous. param: args - The input arguments.returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L120)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L127)
 
 #### :gear: CustomFunctionWithArgs
 
@@ -2468,7 +2468,7 @@ A serverless function with input arguments but no output result.
 | `args`    | `ZodObject<TArgs, $strip>`                                       | A Zod schema describing the input arguments.                                                        |
 | `handler` | `(args: $InferObjectOutput<TArgs, {}>) => void or Promise<void>` | The function handler. Can be synchronous or asynchronous. param: args - The input arguments.returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L150)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L157)
 
 #### :gear: CustomFunctionWithResult
 
@@ -2479,7 +2479,7 @@ A serverless function with an output result but no input arguments.
 | `result`  | `ZodObject<TResult, $strip>`                                                        | A Zod schema describing the output result.                        |
 | `handler` | `() => $InferObjectOutput<TResult, {}> or Promise<$InferObjectOutput<TResult, {}>>` | The function handler. Can be synchronous or asynchronous. returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L170)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L177)
 
 #### :gear: CustomFunctionWithoutArgsAndResult
 
@@ -2489,7 +2489,7 @@ A serverless function with no input arguments and no output result.
 | --------- | ----------------------------- | ----------------------------------------------------------------- |
 | `handler` | `() => void or Promise<void>` | The function handler. Can be synchronous or asynchronous. returns |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L189)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L196)
 
 #### :gear: Collections
 
@@ -2997,7 +2997,7 @@ of optional input arguments and output result.
 | ---------------- | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `CustomFunction` | `    | CustomFunctionWithArgsAndResult<TArgs, TResult> or CustomFunctionWithArgs<TArgs> or CustomFunctionWithResult<TResult> or CustomFunctionWithoutArgsAndResult` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L205)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/functions/schemas/function.ts#L212)
 
 #### :gear: Query
 

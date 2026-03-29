@@ -2386,9 +2386,9 @@ References:
 
 #### :gear: HttpRequestArgsSchema
 
-| Constant                | Type                                                                                                                                                                                                                                                                                                       |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `HttpRequestArgsSchema` | `ZodObject<{ url: ZodURL; method: ZodEnum<{ GET: "GET"; POST: "POST"; HEAD: "HEAD"; }>; headers: ZodArray<ZodObject<{ name: ZodString; value: ZodString; }, $strip>>; body: ZodOptional<...>; maxResponseBytes: ZodOptional<...>; transform: ZodOptional<...>; isReplicated: ZodOptional<...>; }, $strip>` |
+| Constant                | Type                                                                                                                                                                                                                                                                                                          |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `HttpRequestArgsSchema` | `ZodObject<{ url: ZodString; method: ZodEnum<{ GET: "GET"; POST: "POST"; HEAD: "HEAD"; }>; headers: ZodArray<ZodObject<{ name: ZodString; value: ZodString; }, $strip>>; body: ZodOptional<...>; maxResponseBytes: ZodOptional<...>; transform: ZodOptional<...>; isReplicated: ZodOptional<...>; }, $strip>` |
 
 References:
 
@@ -2406,7 +2406,7 @@ References:
 
 - HttpRequestResult
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L32)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L33)
 
 #### :gear: TransformArgsSchema
 
@@ -2418,7 +2418,7 @@ References:
 
 - TransformArgs
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L41)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L42)
 
 ### :factory: CallResponseLengthError
 
@@ -2842,7 +2842,7 @@ An HTTP header consisting of a name and value.
 | `name`   | `string` | The header name.  |
 | `value`  | `string` | The header value. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L49)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L50)
 
 #### :gear: HttpRequestArgs
 
@@ -2858,7 +2858,7 @@ The arguments for an HTTP request.
 | `transform`        | `string or undefined`                  | The name of a query function used to transform the response before consensus - for example, to trim headers. If provided, a corresponding query must be declared using {@link defineQuery }.                                                                                          |
 | `isReplicated`     | `boolean or undefined`                 | Whether all nodes should perform the request and agree on the response, or just one node. Using a single node is cheaper but the response is not verified by others - suitable when you trust the data source or consistency is not critical. Defaults to all nodes if not specified. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L69)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L70)
 
 #### :gear: HttpRequestResult
 
@@ -2870,7 +2870,7 @@ The result of an HTTP request.
 | `headers` | `HttpHeader[]`            | List of HTTP response headers and their corresponding values. |
 | `body`    | `Uint8Array<ArrayBuffer>` | The response's body.                                          |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L112)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L113)
 
 #### :gear: TransformArgs
 
@@ -2881,7 +2881,7 @@ The arguments passed to an HTTP response transform function.
 | `response` | `HttpRequestResult`       | The raw HTTP response to be transformed. |
 | `context`  | `Uint8Array<ArrayBuffer>` | Context for response transformation      |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L132)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L133)
 
 ### :cocktail: Types
 
@@ -4066,7 +4066,7 @@ The HTTP method for the request.
 | ------------ | --------------------------- |
 | `HttpMethod` | `'GET' or 'POST' or 'HEAD'` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L64)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L65)
 
 <!-- TSDOC_END -->
 

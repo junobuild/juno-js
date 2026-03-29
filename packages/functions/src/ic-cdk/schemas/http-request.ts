@@ -39,41 +39,6 @@ export const HttpRequestResultSchema = j.object({
  * An HTTP header consisting of a name and value.
  */
 export interface HttpHeader {
-  name: string;
-  value: string;
-}
-
-/**
- * The HTTP method for the request.
- */
-export type HttpMethod = 'GET' | 'POST' | 'HEAD';
-
-/**
- * The arguments for an HTTP request.
- */
-export interface HttpRequestArgs {
-  url: string;
-  method: HttpMethod;
-  headers: HttpHeader[];
-  body?: Uint8Array;
-  maxResponseBytes?: bigint;
-  transform?: string;
-  isReplicated?: boolean;
-}
-
-/**
- * The result of an HTTP request.
- */
-export interface HttpRequestResult {
-  status: bigint;
-  headers: HttpHeader[];
-  body: Uint8Array;
-}
-
-/**
- * An HTTP header consisting of a name and value.
- */
-export interface HttpHeader {
   /**
    * The header name.
    */
@@ -84,6 +49,11 @@ export interface HttpHeader {
    */
   value: string;
 }
+
+/**
+ * The HTTP method for the request.
+ */
+export type HttpMethod = 'GET' | 'POST' | 'HEAD';
 
 /**
  * The arguments for an HTTP request.
@@ -107,7 +77,7 @@ export interface HttpRequestArgs {
   /**
    * Optionally provide request body.
    */
-  body?: Uint8Array;
+  body?: Uint8Array<ArrayBuffer>;
 
   /**
    * The maximal size of the response in bytes.
@@ -145,5 +115,5 @@ export interface HttpRequestResult {
   /**
    * The response's body.
    */
-  body: Uint8Array;
+  body: Uint8Array<ArrayBuffer>;
 }

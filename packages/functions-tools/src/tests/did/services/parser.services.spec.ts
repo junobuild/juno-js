@@ -89,7 +89,7 @@ describe('did-api-parser', () => {
         updates: []
       });
       expect(result).toContain('type AppHelloWorldArgs = record { name : text; age : opt int32 };');
-      expect(result).toContain('type AppHelloWorldResult = record { value : text; count : nat };');
+      expect(result).toContain('type AppHelloWorldResult = record { value : text; count : nat64 };');
       expect(result).toContain(
         'app_hello_world : (AppHelloWorldArgs) -> (AppHelloWorldResult) query;'
       );
@@ -302,7 +302,7 @@ service : {
 
 type AppHelloWorldArgs = record { name : text; age : opt int32 };
 
-type AppHelloWorldResult = record { value : text; count : nat };
+type AppHelloWorldResult = record { value : text; count : nat64 };
 
 service : {
 \tapp_hello_world : (AppHelloWorldArgs) -> (AppHelloWorldResult) query;
@@ -321,7 +321,7 @@ service : {
 
 type AppHelloWorldArgs = record { name : text; age : opt int32 };
 
-type AppHelloWorldResult = record { value : text; count : nat };
+type AppHelloWorldResult = record { value : text; count : nat64 };
 
 service : {
 \tapp_hello_world : (AppHelloWorldArgs) -> (AppHelloWorldResult);

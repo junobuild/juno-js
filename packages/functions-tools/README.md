@@ -36,7 +36,7 @@ Returns:
 
 An object containing the generated IDL type and the base type name.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-idl.ts#L93)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-idl.ts#L95)
 
 #### :gear: zodToRust
 
@@ -56,7 +56,7 @@ Returns:
 
 An object containing the generated Rust code and the base type name.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L239)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L250)
 
 #### :gear: zodToCandid
 
@@ -91,7 +91,7 @@ An object containing the generated Candid type declaration and the base type nam
 | `baseName` | `string`   |             |
 | `idl`      | `IDL.Type` |             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-idl.ts#L65)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-idl.ts#L67)
 
 #### :gear: RustResult
 
@@ -100,7 +100,7 @@ An object containing the generated Candid type declaration and the base type nam
 | `baseName` | `string` |             |
 | `code`     | `string` |             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L208)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L219)
 
 #### :gear: CandidResult
 

@@ -15,6 +15,7 @@ describe('parseFunctions', () => {
 // Any modifications may be overwritten.
 #![allow(unused)]
 #![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
 
 use crate::functions::{
     execute_async_function, execute_sync_guard, execute_sync_function,

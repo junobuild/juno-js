@@ -1,4 +1,4 @@
-import {capitalize} from '@junobuild/utils';
+import {capitalize, convertCamelToSnake} from '@junobuild/utils';
 import type {z} from 'zod';
 import {jsonToSputnikSchema, type SputnikSchemaResult} from './_converters';
 import type {SputnikSchema} from './_types';
@@ -27,7 +27,7 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
       if (schema.fields.length === 0) {
         return 'record {}';
       }
-      return `record { ${schema.fields.map((f) => `${f.name} : ${sputnikSchemaToDid(f.type)}`).join('; ')} }`;
+      return `record { ${schema.fields.map((f) => `${convertCamelToSnake(f.name)} : ${sputnikSchemaToDid(f.type)}`).join('; ')} }`;
     case 'tuple':
       return `record { ${schema.members.map(sputnikSchemaToDid).join('; ')} }`;
     case 'indexedTuple':

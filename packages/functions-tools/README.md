@@ -56,7 +56,7 @@ Returns:
 
 An object containing the generated Rust code and the base type name.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L250)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L254)
 
 #### :gear: zodToCandid
 
@@ -100,7 +100,7 @@ An object containing the generated Candid type declaration and the base type nam
 | `baseName` | `string` |             |
 | `code`     | `string` |             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L219)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L223)
 
 #### :gear: CandidResult
 

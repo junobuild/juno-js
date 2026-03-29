@@ -22,7 +22,8 @@ export const CustomFunctionGuardSchema = createFunctionSchema(
  * @see CustomFunctionBase
  */
 const CustomFunctionBaseSchema = z.strictObject({
-  guard: CustomFunctionGuardSchema.optional()
+  guard: CustomFunctionGuardSchema.optional(),
+  hidden: z.boolean().optional()
 });
 
 /**
@@ -109,6 +110,12 @@ interface CustomFunctionBase {
    * If the guard throws, the function is not executed.
    */
   guard?: () => void;
+
+  /**
+   * If true, the function is not exposed in the public Candid interface.
+   * Useful for internal functions such as HTTP response transform functions.
+   */
+  hidden?: boolean;
 }
 
 /**

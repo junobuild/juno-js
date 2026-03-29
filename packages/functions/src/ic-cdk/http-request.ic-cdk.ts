@@ -1,3 +1,5 @@
+import {nonNullish} from '@dfinity/utils';
+import {convertCamelToSnake} from '@junobuild/utils';
 import {
   type HttpRequestArgs,
   type HttpRequestResult,
@@ -16,7 +18,15 @@ import {
 export const httpRequest = async (args: HttpRequestArgs): Promise<HttpRequestResult> => {
   HttpRequestArgsSchema.parse(args);
 
-  const result = await __ic_cdk_http_request(args);
+  const {transform, ...rest} = args;
+
+  const normalizedArgs = {
+    ...rest,
+    // TODO: app_ duplicates functions-tools BACKEND_FUNCTION_NAMESPACE constants
+    ...(nonNullish(transform) && {transform: `app_${convertCamelToSnake(transform)}`})
+  };
+
+  const result = await __ic_cdk_http_request(normalizedArgs);
 
   return HttpRequestResultSchema.parse(result);
 };

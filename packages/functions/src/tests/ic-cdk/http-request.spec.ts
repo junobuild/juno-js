@@ -63,5 +63,19 @@ describe('ic-cdk > http-request', () => {
 
       await expect(httpRequest(validArgs)).rejects.toThrow('HTTP request failed');
     });
+
+    it('should convert camelCase transform name to snake_case with app_ prefix', async () => {
+      const mockFn = vi.fn(async () => mockResult);
+      vi.stubGlobal('__ic_cdk_http_request', mockFn);
+
+      await httpRequest({
+        ...validArgs,
+        transform: 'myHttpTransform'
+      });
+
+      expect(mockFn).toHaveBeenCalledWith(
+        expect.objectContaining({transform: 'app_my_http_transform'})
+      );
+    });
   });
 });

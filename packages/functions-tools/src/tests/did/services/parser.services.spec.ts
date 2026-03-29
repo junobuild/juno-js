@@ -89,7 +89,9 @@ describe('did-api-parser', () => {
         updates: []
       });
       expect(result).toContain('type AppHelloWorldArgs = record { name : text; age : opt int32 };');
-      expect(result).toContain('type AppHelloWorldResult = record { value : text; count : nat64 };');
+      expect(result).toContain(
+        'type AppHelloWorldResult = record { value : text; count : nat64 };'
+      );
       expect(result).toContain(
         'app_hello_world : (AppHelloWorldArgs) -> (AppHelloWorldResult) query;'
       );

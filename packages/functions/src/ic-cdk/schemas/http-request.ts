@@ -30,7 +30,7 @@ export const HttpRequestArgsSchema = j.object({
  * @see HttpRequestResult
  */
 export const HttpRequestResultSchema = j.object({
-  status: j.bigint(),
+  status: j.nat(),
   headers: j.array(HttpHeaderSchema),
   body: j.uint8Array()
 });

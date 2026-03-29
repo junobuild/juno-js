@@ -68,7 +68,7 @@ describe('ic-cdk > schemas > http-request', () => {
       expect(() => HttpRequestArgsSchema.parse(validArgs)).not.toThrow();
     });
 
-    it.todo('should reject an invalid URL', () => {
+    it('should reject an invalid URL', () => {
       expect(() => HttpRequestArgsSchema.parse({...validArgs, url: 'not-a-url'})).toThrow();
     });
 

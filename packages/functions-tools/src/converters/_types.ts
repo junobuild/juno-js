@@ -10,7 +10,8 @@ export type SputnikSchema =
   | {kind: 'bool'} // -> bool
   | {kind: 'float64'} // -> f64
   | {kind: 'int32'} // -> i32
-  | {kind: 'nat'} // -> u64
+  | {kind: 'bigint'} // -> u64
+  | {kind: 'nat'} // -> u128
   | {kind: 'opt'; inner: SputnikSchema} // -> Option<T>
   | {kind: 'vec'; inner: SputnikSchema} // -> Vec<T>
   | {kind: 'record'; fields: {name: string; type: SputnikSchema}[]} // -> struct { field: T, ... }

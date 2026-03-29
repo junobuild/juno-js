@@ -87,8 +87,11 @@ const schemaToRustType = ({
     case 'int32':
       return primitive({fieldType: 'i32'});
 
-    case 'nat':
+    case 'bigint':
       return primitive({fieldType: 'u64'});
+
+    case 'nat':
+      return primitive({fieldType: 'u128'});
 
     case 'principal':
       return primitive({fieldType: 'Principal'});

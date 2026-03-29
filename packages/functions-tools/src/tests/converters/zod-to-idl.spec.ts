@@ -1,5 +1,5 @@
 import {IDL} from '@icp-sdk/core/candid';
-import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
+import {NatSchema, PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
 import * as z from 'zod';
 import {zodToIdl} from '../../converters/zod-to-idl';
 
@@ -24,6 +24,7 @@ describe('primitives', () => {
   idl('Number', z.number(), IDL.Float64);
   idl('Int', z.int(), IDL.Int32);
   idl('Bigint', z.bigint(), IDL.Nat64);
+  idl('Nat', NatSchema, IDL.Nat);
 });
 
 // ─── Optional primitives ──────────────────────────────────────────────────────
@@ -32,8 +33,11 @@ describe('optional primitives', () => {
   idl('OptionalString', z.string().optional(), IDL.Opt(IDL.Text));
   idl('OptionalInt', z.int().optional(), IDL.Opt(IDL.Int32));
   idl('OptionalBigint', z.bigint().optional(), IDL.Opt(IDL.Nat64));
+  idl('OptionalNat', NatSchema.optional(), IDL.Opt(IDL.Nat));
   idl('NullableString', z.string().nullable(), IDL.Opt(IDL.Text));
   idl('NullishString', z.string().nullish(), IDL.Opt(IDL.Text));
+  idl('NullableNat', NatSchema.nullable(), IDL.Opt(IDL.Nat));
+  idl('NullishNat', NatSchema.nullish(), IDL.Opt(IDL.Nat));
 });
 
 // ─── Principal ────────────────────────────────────────────────────────────────
@@ -80,6 +84,7 @@ describe('arrays', () => {
   idl('ArrayBool', z.array(z.boolean()), IDL.Vec(IDL.Bool));
   idl('ArrayInt', z.array(z.int()), IDL.Vec(IDL.Int32));
   idl('ArrayBigint', z.array(z.bigint()), IDL.Vec(IDL.Nat64));
+  idl('ArrayNat', z.array(NatSchema), IDL.Vec(IDL.Nat));
   idl('ArrayNested', z.array(z.array(z.string())), IDL.Vec(IDL.Vec(IDL.Text)));
 });
 
@@ -103,6 +108,7 @@ describe('objects', () => {
     z.object({id: z.bigint(), name: z.string()}),
     IDL.Record({id: IDL.Nat64, name: IDL.Text})
   );
+  idl('WithNat', z.object({status: NatSchema}), IDL.Record({status: IDL.Nat}));
 });
 
 // ─── Nested objects ───────────────────────────────────────────────────────────
@@ -141,6 +147,7 @@ describe('object with array field', () => {
 describe('tuples', () => {
   idl('TupleTwo', z.tuple([z.string(), z.int()]), IDL.Tuple(IDL.Text, IDL.Int32));
   idl('TupleWithBigint', z.tuple([z.bigint(), z.string()]), IDL.Tuple(IDL.Nat64, IDL.Text));
+  idl('TupleWithNat', z.tuple([NatSchema, z.string()]), IDL.Tuple(IDL.Nat, IDL.Text));
 });
 
 // ─── Records ──────────────────────────────────────────────────────────────────
@@ -157,6 +164,7 @@ describe('records', () => {
     z.record(z.string(), z.bigint()),
     IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat64))
   );
+  idl('RecordStringNat', z.record(z.string(), NatSchema), IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat)));
 });
 
 // ─── Unions ───────────────────────────────────────────────────────────────────

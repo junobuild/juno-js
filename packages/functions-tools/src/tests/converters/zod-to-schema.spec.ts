@@ -1,4 +1,4 @@
-import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
+import {NatSchema, PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
 import * as z from 'zod';
 import {zodToSchema} from '../../converters/zod-to-schema';
 
@@ -22,6 +22,7 @@ describe('primitives', () => {
   zod('myFunction', z.number(), 'const MyFunctionArgsSchema = j.number();');
   zod('myFunction', z.int(), 'const MyFunctionArgsSchema = j.int();');
   zod('myFunction', z.bigint(), 'const MyFunctionArgsSchema = j.bigint();');
+  zod('myFunction', NatSchema, 'const MyFunctionArgsSchema = j.nat();');
 });
 
 // ─── Optional primitives ──────────────────────────────────────────────────────
@@ -30,6 +31,7 @@ describe('optional primitives', () => {
   zod('myFunction', z.string().optional(), 'const MyFunctionArgsSchema = j.optional(j.string());');
   zod('myFunction', z.int().optional(), 'const MyFunctionArgsSchema = j.optional(j.int());');
   zod('myFunction', z.bigint().optional(), 'const MyFunctionArgsSchema = j.optional(j.bigint());');
+  zod('myFunction', NatSchema.optional(), 'const MyFunctionArgsSchema = j.optional(j.nat());');
   zod('myFunction', z.string().nullable(), 'const MyFunctionArgsSchema = j.optional(j.string());');
   zod('myFunction', z.string().nullish(), 'const MyFunctionArgsSchema = j.optional(j.string());');
 });
@@ -79,6 +81,7 @@ describe('arrays', () => {
   zod('myFunction', z.array(z.boolean()), 'const MyFunctionArgsSchema = j.array(j.boolean());');
   zod('myFunction', z.array(z.int()), 'const MyFunctionArgsSchema = j.array(j.int());');
   zod('myFunction', z.array(z.bigint()), 'const MyFunctionArgsSchema = j.array(j.bigint());');
+  zod('myFunction', z.array(NatSchema), 'const MyFunctionArgsSchema = j.array(j.nat());');
   zod(
     'myFunction',
     z.array(z.array(z.string())),
@@ -109,6 +112,11 @@ describe('objects', () => {
     'myFunction',
     z.object({id: z.bigint(), name: z.string()}),
     'const MyFunctionArgsSchema = j.strictObject({id: j.bigint(), name: j.string()});'
+  );
+  zod(
+    'myFunction',
+    z.object({status: NatSchema}),
+    'const MyFunctionArgsSchema = j.strictObject({status: j.nat()});'
   );
 });
 
@@ -160,6 +168,11 @@ describe('tuples', () => {
     z.tuple([z.bigint(), z.string()]),
     'const MyFunctionArgsSchema = j.tuple([j.bigint(), j.string()]);'
   );
+  zod(
+    'myFunction',
+    z.tuple([NatSchema, z.string()]),
+    'const MyFunctionArgsSchema = j.tuple([j.nat(), j.string()]);'
+  );
 });
 
 // ─── Records ──────────────────────────────────────────────────────────────────
@@ -179,6 +192,11 @@ describe('records', () => {
     'myFunction',
     z.record(z.string(), z.bigint()),
     'const MyFunctionArgsSchema = j.array(j.tuple([j.string(), j.bigint()]));'
+  );
+  zod(
+    'myFunction',
+    z.record(z.string(), NatSchema),
+    'const MyFunctionArgsSchema = j.array(j.tuple([j.string(), j.nat()]));'
   );
 });
 

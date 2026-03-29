@@ -1,4 +1,4 @@
-import {ZodSchemaId} from '@junobuild/schema';
+import {JunoSchemaId, ZodSchemaId} from '@junobuild/schema';
 import * as z from 'zod';
 import type {JSONSchema, JSONSchemaOutput, SputnikSchema} from './_types';
 
@@ -56,6 +56,11 @@ export const jsonToSputnikSchema = ({
         ctx.jsonSchema.type = 'integer';
         // https://json-schema.org/understanding-json-schema/reference/type#format
         ctx.jsonSchema.format = 'bigint';
+      }
+
+      if (ctx.jsonSchema.id === JunoSchemaId.Nat) {
+        ctx.jsonSchema.type = 'integer';
+        ctx.jsonSchema.format = 'nat';
       }
 
       if (ctx.jsonSchema.id === ZodSchemaId.Principal) {
@@ -133,7 +138,11 @@ const jsonToSchema = ({
       return {kind: 'float64'};
 
     case 'integer':
-      return schema.format === 'bigint' ? {kind: 'nat'} : {kind: 'int32'};
+      return schema.format === 'nat'
+        ? {kind: 'nat'}
+        : schema.format === 'bigint'
+          ? {kind: 'bigint'}
+          : {kind: 'int32'};
 
     case 'null':
       throw new Error('null type is not supported');

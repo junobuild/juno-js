@@ -1,4 +1,4 @@
-import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
+import {NatSchema, PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
 import * as z from 'zod';
 import {zodToRust} from '../../converters/zod-to-rust';
 
@@ -22,6 +22,7 @@ describe('primitives', () => {
   rust('myFunction', z.number(), 'pub type MyFunctionArgs = f64;');
   rust('myFunction', z.int(), 'pub type MyFunctionArgs = i32;');
   rust('myFunction', z.bigint(), 'pub type MyFunctionArgs = u64;');
+  rust('myFunction', NatSchema, 'pub type MyFunctionArgs = u128;');
 });
 
 // ─── Optional primitives ──────────────────────────────────────────────────────
@@ -30,6 +31,7 @@ describe('optional primitives', () => {
   rust('myFunction', z.string().optional(), 'pub type MyFunctionArgs = Option<String>;');
   rust('myFunction', z.int().optional(), 'pub type MyFunctionArgs = Option<i32>;');
   rust('myFunction', z.bigint().optional(), 'pub type MyFunctionArgs = Option<u64>;');
+  rust('myFunction', NatSchema.optional(), 'pub type MyFunctionArgs = Option<u128>;');
   rust('myFunction', z.string().nullable(), 'pub type MyFunctionArgs = Option<String>;');
   rust('myFunction', z.string().nullish(), 'pub type MyFunctionArgs = Option<String>;');
 });
@@ -94,6 +96,7 @@ describe('arrays', () => {
   rust('myFunction', z.array(z.boolean()), 'pub type MyFunctionArgs = Vec<bool>;');
   rust('myFunction', z.array(z.int()), 'pub type MyFunctionArgs = Vec<i32>;');
   rust('myFunction', z.array(z.bigint()), 'pub type MyFunctionArgs = Vec<u64>;');
+  rust('myFunction', z.array(NatSchema), 'pub type MyFunctionArgs = Vec<u128>;');
   rust('myFunction', z.array(z.array(z.string())), 'pub type MyFunctionArgs = Vec<Vec<String>>;');
 });
 
@@ -128,6 +131,12 @@ describe('objects', () => {
     'myFunction',
     z.object({id: z.bigint(), name: z.string()}),
     '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub id: u64,\n    pub name: String,\n}'
+  );
+
+  rust(
+    'myFunction',
+    z.object({status: NatSchema}),
+    '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub status: u128,\n}'
   );
 });
 
@@ -177,6 +186,7 @@ describe('object with array field', () => {
 describe('tuples', () => {
   rust('myFunction', z.tuple([z.string(), z.int()]), 'pub type MyFunctionArgs = (String, i32);');
   rust('myFunction', z.tuple([z.bigint(), z.string()]), 'pub type MyFunctionArgs = (u64, String);');
+  rust('myFunction', z.tuple([NatSchema, z.string()]), 'pub type MyFunctionArgs = (u128, String);');
 });
 
 // ─── Should throw ─────────────────────────────────────────────────────────────

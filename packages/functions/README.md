@@ -1089,6 +1089,7 @@ The current timestamp.
 - [HttpMethodSchema](#gear-httpmethodschema)
 - [HttpRequestArgsSchema](#gear-httprequestargsschema)
 - [HttpRequestResultSchema](#gear-httprequestresultschema)
+- [TransformArgsSchema](#gear-transformargsschema)
 
 #### :gear: SatelliteEnvSchema
 
@@ -2407,6 +2408,18 @@ References:
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L32)
 
+#### :gear: TransformArgsSchema
+
+| Constant              | Type                                                                                                                                                                                                       |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TransformArgsSchema` | `ZodObject<{ response: ZodObject<{ status: ZodBigInt; headers: ZodArray<ZodObject<{ name: ZodString; value: ZodString; }, $strip>>; body: ZodCustom<...>; }, $strip>; context: ZodCustom<...>; }, $strip>` |
+
+References:
+
+- TransformArgs
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L41)
+
 ### :factory: CallResponseLengthError
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/types/errors.ts#L1)
@@ -2446,6 +2459,7 @@ References:
 - [HttpHeader](#gear-httpheader)
 - [HttpRequestArgs](#gear-httprequestargs)
 - [HttpRequestResult](#gear-httprequestresult)
+- [TransformArgs](#gear-transformargs)
 
 #### :gear: CustomFunctionWithArgsAndResult
 
@@ -2828,7 +2842,7 @@ An HTTP header consisting of a name and value.
 | `name`   | `string` | The header name.  |
 | `value`  | `string` | The header value. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L41)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L49)
 
 #### :gear: HttpRequestArgs
 
@@ -2844,7 +2858,7 @@ The arguments for an HTTP request.
 | `transform`        | `string or undefined`                  | The name of a query function used to transform the response before consensus - for example, to trim headers. If provided, a corresponding query must be declared using {@link defineQuery }.                                                                                          |
 | `isReplicated`     | `boolean or undefined`                 | Whether all nodes should perform the request and agree on the response, or just one node. Using a single node is cheaper but the response is not verified by others - suitable when you trust the data source or consistency is not critical. Defaults to all nodes if not specified. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L61)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L69)
 
 #### :gear: HttpRequestResult
 
@@ -2856,7 +2870,18 @@ The result of an HTTP request.
 | `headers` | `HttpHeader[]`            | List of HTTP response headers and their corresponding values. |
 | `body`    | `Uint8Array<ArrayBuffer>` | The response's body.                                          |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L104)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L112)
+
+#### :gear: TransformArgs
+
+The arguments passed to an HTTP response transform function.
+
+| Property   | Type                      | Description                              |
+| ---------- | ------------------------- | ---------------------------------------- |
+| `response` | `HttpRequestResult`       | The raw HTTP response to be transformed. |
+| `context`  | `Uint8Array<ArrayBuffer>` | Context for response transformation      |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L132)
 
 ### :cocktail: Types
 
@@ -4041,7 +4066,7 @@ The HTTP method for the request.
 | ------------ | --------------------------- |
 | `HttpMethod` | `'GET' or 'POST' or 'HEAD'` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L56)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions/src/ic-cdk/schemas/http-request.ts#L64)
 
 <!-- TSDOC_END -->
 

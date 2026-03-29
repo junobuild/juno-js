@@ -1,4 +1,4 @@
-import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
+import {NatSchema, PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
 import * as z from 'zod';
 import {jsonToSputnikSchema} from '../../converters/_converters';
 import {SputnikSchema} from '../../converters/_types';
@@ -45,11 +45,11 @@ describe('primitives', () => {
   schema('Int32', z.int32(), {kind: 'int32'});
   schema('IntMin', z.int().min(0), {kind: 'int32'});
 
-  schema('Bigint', z.bigint(), {kind: 'nat'});
-  schema('BigintMin', z.bigint().min(0n), {kind: 'nat'});
-  schema('BigintMax', z.bigint().max(100n), {kind: 'nat'});
-  schema('Int64', z.int64(), {kind: 'nat'});
-  schema('Uint64', z.uint64(), {kind: 'nat'});
+  schema('Bigint', z.bigint(), {kind: 'bigint'});
+  schema('BigintMin', z.bigint().min(0n), {kind: 'bigint'});
+  schema('BigintMax', z.bigint().max(100n), {kind: 'bigint'});
+  schema('Int64', z.int64(), {kind: 'bigint'});
+  schema('Uint64', z.uint64(), {kind: 'bigint'});
 });
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
@@ -123,7 +123,7 @@ describe('objects', () => {
         {name: 'bool', type: {kind: 'bool'}},
         {name: 'float', type: {kind: 'float64'}},
         {name: 'int', type: {kind: 'int32'}},
-        {name: 'nat', type: {kind: 'nat'}}
+        {name: 'nat', type: {kind: 'bigint'}}
       ]
     }
   );
@@ -218,7 +218,7 @@ describe('uint8array', () => {
 describe('optional / nullable', () => {
   schema('OptionalString', z.string().optional(), {kind: 'text'}, true);
   schema('OptionalInt', z.int().optional(), {kind: 'int32'}, true);
-  schema('OptionalBigint', z.bigint().optional(), {kind: 'nat'}, true);
+  schema('OptionalBigint', z.bigint().optional(), {kind: 'bigint'}, true);
   schema('OptionalBool', z.boolean().optional(), {kind: 'bool'}, true);
   schema('OptionalFloat', z.number().optional(), {kind: 'float64'}, true);
   schema(
@@ -237,14 +237,14 @@ describe('optional / nullable', () => {
 
   schema('NullableString', z.string().nullable(), {kind: 'opt', inner: {kind: 'text'}});
   schema('NullableInt', z.int().nullable(), {kind: 'opt', inner: {kind: 'int32'}});
-  schema('NullableBigint', z.bigint().nullable(), {kind: 'opt', inner: {kind: 'nat'}});
+  schema('NullableBigint', z.bigint().nullable(), {kind: 'opt', inner: {kind: 'bigint'}});
   schema('NullableObject', z.object({x: z.string()}).nullable(), {
     kind: 'opt',
     inner: {kind: 'record', fields: [{name: 'x', type: {kind: 'text'}}]}
   });
 
   schema('NullishString', z.string().nullish(), {kind: 'opt', inner: {kind: 'text'}});
-  schema('NullishBigint', z.bigint().nullish(), {kind: 'opt', inner: {kind: 'nat'}});
+  schema('NullishBigint', z.bigint().nullish(), {kind: 'opt', inner: {kind: 'bigint'}});
 });
 
 // ─── Arrays ───────────────────────────────────────────────────────────────────
@@ -254,14 +254,14 @@ describe('arrays', () => {
   schema('ArrayBool', z.array(z.boolean()), {kind: 'vec', inner: {kind: 'bool'}});
   schema('ArrayInt', z.array(z.int()), {kind: 'vec', inner: {kind: 'int32'}});
   schema('ArrayFloat', z.array(z.number()), {kind: 'vec', inner: {kind: 'float64'}});
-  schema('ArrayBigint', z.array(z.bigint()), {kind: 'vec', inner: {kind: 'nat'}});
+  schema('ArrayBigint', z.array(z.bigint()), {kind: 'vec', inner: {kind: 'bigint'}});
   schema('ArrayNested', z.array(z.array(z.string())), {
     kind: 'vec',
     inner: {kind: 'vec', inner: {kind: 'text'}}
   });
   schema('ArrayObject', z.array(z.object({id: z.bigint()})), {
     kind: 'vec',
-    inner: {kind: 'record', fields: [{name: 'id', type: {kind: 'nat'}}]}
+    inner: {kind: 'record', fields: [{name: 'id', type: {kind: 'bigint'}}]}
   });
   schema('ArrayEnum', z.array(z.enum(['x', 'y', 'z'])), {
     kind: 'vec',
@@ -277,7 +277,7 @@ describe('arrays', () => {
   });
   schema('ArrayOfArrayOfBigint', z.array(z.array(z.bigint())), {
     kind: 'vec',
-    inner: {kind: 'vec', inner: {kind: 'nat'}}
+    inner: {kind: 'vec', inner: {kind: 'bigint'}}
   });
 });
 
@@ -295,7 +295,7 @@ describe('tuples', () => {
   });
   schema('TupleWithBigint', z.tuple([z.bigint(), z.string()]), {
     kind: 'indexedTuple',
-    members: [{kind: 'nat'}, {kind: 'text'}]
+    members: [{kind: 'bigint'}, {kind: 'text'}]
   });
   schema('TupleWithObject', z.tuple([z.string(), z.object({x: z.int()})]), {
     kind: 'indexedTuple',
@@ -328,7 +328,7 @@ describe('records', () => {
   });
   schema('RecordStringBigint', z.record(z.string(), z.bigint()), {
     kind: 'vec',
-    inner: {kind: 'tuple', members: [{kind: 'text'}, {kind: 'nat'}]}
+    inner: {kind: 'tuple', members: [{kind: 'text'}, {kind: 'bigint'}]}
   });
   schema('RecordStringBool', z.record(z.string(), z.boolean()), {
     kind: 'vec',
@@ -338,7 +338,7 @@ describe('records', () => {
     kind: 'vec',
     inner: {
       kind: 'tuple',
-      members: [{kind: 'text'}, {kind: 'record', fields: [{name: 'id', type: {kind: 'nat'}}]}]
+      members: [{kind: 'text'}, {kind: 'record', fields: [{name: 'id', type: {kind: 'bigint'}}]}]
     }
   });
   schema('RecordStringArray', z.record(z.string(), z.array(z.string())), {
@@ -428,7 +428,7 @@ describe('intersections', () => {
       fields: [
         {name: 'a', type: {kind: 'text'}},
         {name: 'b', type: {kind: 'bool'}},
-        {name: 'c', type: {kind: 'nat'}}
+        {name: 'c', type: {kind: 'bigint'}}
       ]
     }
   );
@@ -472,7 +472,7 @@ describe('complex', () => {
             inner: {
               kind: 'record',
               fields: [
-                {name: 'id', type: {kind: 'nat'}},
+                {name: 'id', type: {kind: 'bigint'}},
                 {name: 'name', type: {kind: 'text'}},
                 {name: 'role', type: {kind: 'variant', tags: ['admin', 'user']}},
                 {
@@ -496,6 +496,19 @@ describe('complex', () => {
       ]
     }
   );
+});
+
+// ─── Nat ──────────────────────────────────────────────────────────────────────
+
+describe('nat', () => {
+  schema('Nat', NatSchema, {kind: 'nat'});
+  schema('NatOptional', NatSchema.optional(), {kind: 'nat'}, true);
+  schema('NatNullable', NatSchema.nullable(), {kind: 'opt', inner: {kind: 'nat'}});
+  schema('NatNullish', NatSchema.nullish(), {kind: 'opt', inner: {kind: 'nat'}});
+  schema('ObjectWithNat', z.object({status: NatSchema}), {
+    kind: 'record',
+    fields: [{name: 'status', type: {kind: 'nat'}}]
+  });
 });
 
 // ─── Should throw ─────────────────────────────────────────────────────────────

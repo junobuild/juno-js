@@ -14,8 +14,10 @@ const schemaToIdlType = (schema: SputnikSchema): IDL.Type => {
       return IDL.Float64;
     case 'int32':
       return IDL.Int32;
-    case 'nat':
+    case 'bigint':
       return IDL.Nat64;
+    case 'nat':
+      return IDL.Nat;
     case 'principal':
       return IDL.Principal;
     case 'uint8array':

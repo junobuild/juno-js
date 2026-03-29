@@ -1,4 +1,4 @@
-import {PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
+import {NatSchema, PrincipalSchema, Uint8ArraySchema} from '@junobuild/schema';
 import * as z from 'zod';
 import {zodToCandid} from '../../converters/zod-to-candid';
 
@@ -37,11 +37,13 @@ describe('primitives', () => {
   candid('Int32', z.int32(), 'int32');
   candid('IntMin', z.int().min(0), 'int32');
 
-  candid('Bigint', z.bigint(), 'nat');
-  candid('BigintMin', z.bigint().min(0n), 'nat');
-  candid('BigintMax', z.bigint().max(100n), 'nat');
-  candid('Int64', z.int64(), 'nat');
-  candid('Uint64', z.uint64(), 'nat');
+  candid('Bigint', z.bigint(), 'nat64');
+  candid('BigintMin', z.bigint().min(0n), 'nat64');
+  candid('BigintMax', z.bigint().max(100n), 'nat64');
+  candid('Int64', z.int64(), 'nat64');
+  candid('Uint64', z.uint64(), 'nat64');
+
+  candid('Nat', NatSchema, 'nat');
 });
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
@@ -91,7 +93,7 @@ describe('objects', () => {
       int: z.int(),
       nat: z.bigint()
     }),
-    'record { text : text; bool : bool; float : float64; int : int32; nat : nat }'
+    'record { text : text; bool : bool; float : float64; int : int32; nat : nat64 }'
   );
 
   candid(
@@ -155,7 +157,7 @@ describe('objects', () => {
   candid(
     'WithBigint',
     z.object({id: z.bigint(), name: z.string()}),
-    'record { id : nat; name : text }'
+    'record { id : nat64; name : text }'
   );
 
   candid(
@@ -179,7 +181,7 @@ describe('objects', () => {
         })
         .optional()
     }),
-    'record { id : nat; name : text; tags : vec text; metadata : vec record { text; text }; status : variant { active; inactive }; address : opt record { street : text; city : text } }'
+    'record { id : nat64; name : text; tags : vec text; metadata : vec record { text; text }; status : variant { active; inactive }; address : opt record { street : text; city : text } }'
   );
 });
 
@@ -210,7 +212,7 @@ describe('uint8array', () => {
 describe('optional / nullable', () => {
   candid('OptionalString', z.string().optional(), 'opt text');
   candid('OptionalInt', z.int().optional(), 'opt int32');
-  candid('OptionalBigint', z.bigint().optional(), 'opt nat');
+  candid('OptionalBigint', z.bigint().optional(), 'opt nat64');
   candid('OptionalBool', z.boolean().optional(), 'opt bool');
   candid('OptionalFloat', z.number().optional(), 'opt float64');
   candid('OptionalObject', z.object({x: z.string()}).optional(), 'opt record { x : text }');
@@ -219,11 +221,15 @@ describe('optional / nullable', () => {
 
   candid('NullableString', z.string().nullable(), 'opt text');
   candid('NullableInt', z.int().nullable(), 'opt int32');
-  candid('NullableBigint', z.bigint().nullable(), 'opt nat');
+  candid('NullableBigint', z.bigint().nullable(), 'opt nat64');
   candid('NullableObject', z.object({x: z.string()}).nullable(), 'opt record { x : text }');
 
   candid('NullishString', z.string().nullish(), 'opt text');
-  candid('NullishBigint', z.bigint().nullish(), 'opt nat');
+  candid('NullishBigint', z.bigint().nullish(), 'opt nat64');
+
+  candid('OptionalNat', NatSchema.optional(), 'opt nat');
+  candid('NullableNat', NatSchema.nullable(), 'opt nat');
+  candid('NullishNat', NatSchema.nullish(), 'opt nat');
 });
 
 // ─── Arrays ───────────────────────────────────────────────────────────────────
@@ -233,9 +239,9 @@ describe('arrays', () => {
   candid('ArrayBool', z.array(z.boolean()), 'vec bool');
   candid('ArrayInt', z.array(z.int()), 'vec int32');
   candid('ArrayFloat', z.array(z.number()), 'vec float64');
-  candid('ArrayBigint', z.array(z.bigint()), 'vec nat');
+  candid('ArrayBigint', z.array(z.bigint()), 'vec nat64');
   candid('ArrayNested', z.array(z.array(z.string())), 'vec vec text');
-  candid('ArrayObject', z.array(z.object({id: z.bigint()})), 'vec record { id : nat }');
+  candid('ArrayObject', z.array(z.object({id: z.bigint()})), 'vec record { id : nat64 }');
   candid('ArrayEnum', z.array(z.enum(['x', 'y', 'z'])), 'vec variant { x; y; z }');
 
   // TODO: currently not supported. Zod schema to JSON does not provide information to map opt.
@@ -247,7 +253,8 @@ describe('arrays', () => {
     z.array(z.tuple([z.string(), z.int()])),
     'vec record { 0 : text; 1 : int32 }'
   );
-  candid('ArrayOfArrayOfBigint', z.array(z.array(z.bigint())), 'vec vec nat');
+  candid('ArrayOfArrayOfBigint', z.array(z.array(z.bigint())), 'vec vec nat64');
+  candid('ArrayNat', z.array(NatSchema), 'vec nat');
 });
 
 // ─── Tuples ───────────────────────────────────────────────────────────────────
@@ -260,7 +267,7 @@ describe('tuples', () => {
     z.tuple([z.string(), z.int(), z.boolean()]),
     'record { 0 : text; 1 : int32; 2 : bool }'
   );
-  candid('TupleWithBigint', z.tuple([z.bigint(), z.string()]), 'record { 0 : nat; 1 : text }');
+  candid('TupleWithBigint', z.tuple([z.bigint(), z.string()]), 'record { 0 : nat64; 1 : text }');
   candid(
     'TupleWithObject',
     z.tuple([z.string(), z.object({x: z.int()})]),
@@ -284,12 +291,12 @@ describe('records', () => {
   candid('RecordStringString', z.record(z.string(), z.string()), 'vec record { text; text }');
   candid('RecordStringNumber', z.record(z.string(), z.number()), 'vec record { text; float64 }');
   candid('RecordStringInt', z.record(z.string(), z.int()), 'vec record { text; int32 }');
-  candid('RecordStringBigint', z.record(z.string(), z.bigint()), 'vec record { text; nat }');
+  candid('RecordStringBigint', z.record(z.string(), z.bigint()), 'vec record { text; nat64 }');
   candid('RecordStringBool', z.record(z.string(), z.boolean()), 'vec record { text; bool }');
   candid(
     'RecordStringObject',
     z.record(z.string(), z.object({id: z.bigint()})),
-    'vec record { text; record { id : nat } }'
+    'vec record { text; record { id : nat64 } }'
   );
   candid(
     'RecordStringArray',
@@ -346,7 +353,7 @@ describe('intersections', () => {
   candid(
     'IntersectionThreeFields',
     z.intersection(z.object({a: z.string(), b: z.boolean()}), z.object({c: z.bigint()})),
-    'record { a : text; b : bool; c : nat }'
+    'record { a : text; b : bool; c : nat64 }'
   );
 
   candid(
@@ -371,7 +378,7 @@ describe('complex', () => {
       id: z.bigint(),
       kind: z.union([z.literal('foo'), z.literal('bar')])
     }),
-    'record { id : nat; kind : variant { foo; bar } }'
+    'record { id : nat64; kind : variant { foo; bar } }'
   );
 
   candid(
@@ -379,7 +386,7 @@ describe('complex', () => {
     z.object({
       items: z.array(z.object({id: z.bigint(), name: z.string()}))
     }),
-    'record { items : vec record { id : nat; name : text } }'
+    'record { items : vec record { id : nat64; name : text } }'
   );
 
   candid(
@@ -400,7 +407,7 @@ describe('complex', () => {
         })
       )
     }),
-    'record { users : vec record { id : nat; name : text; role : variant { admin; user }; address : opt record { street : text; city : text }; tags : vec text } }'
+    'record { users : vec record { id : nat64; name : text; role : variant { admin; user }; address : opt record { street : text; city : text }; tags : vec text } }'
   );
 
   candid(
@@ -414,7 +421,7 @@ describe('complex', () => {
   candid(
     'IntersectionInsideArray',
     z.array(z.intersection(z.object({id: z.bigint()}), z.object({name: z.string()}))),
-    'vec record { id : nat; name : text }'
+    'vec record { id : nat64; name : text }'
   );
 
   candid(
@@ -422,7 +429,7 @@ describe('complex', () => {
     z.object({
       config: z.record(z.string(), z.array(z.bigint())).optional()
     }),
-    'record { config : opt vec record { text; vec nat } }'
+    'record { config : opt vec record { text; vec nat64 } }'
   );
 });
 
@@ -478,6 +485,6 @@ describe('camelCase field names', () => {
   candid(
     'WithCamelCaseFields',
     z.object({maxResponseBytes: z.bigint().optional(), isReplicated: z.boolean().optional()}),
-    'record { max_response_bytes : opt nat; is_replicated : opt bool }'
+    'record { max_response_bytes : opt nat64; is_replicated : opt bool }'
   );
 });

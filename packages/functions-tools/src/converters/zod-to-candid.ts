@@ -13,6 +13,8 @@ const sputnikSchemaToDid = (schema: SputnikSchema): string => {
       return 'float64';
     case 'int32':
       return 'int32';
+    case 'bigint':
+      return 'nat64';
     case 'nat':
       return 'nat';
     case 'principal':

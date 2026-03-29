@@ -1,11 +1,14 @@
 import {PrincipalSchema, Uint8ArraySchema} from '@dfinity/zod-schemas';
 import * as z from 'zod';
+import {NatSchema} from '../schemas/nat';
 
 export const JunoType = {
   /** Validates a Principal. */
   principal: () => PrincipalSchema,
   /** Validates a Uint8Array (blob, vec<u8>). */
-  uint8Array: () => Uint8ArraySchema
+  uint8Array: () => Uint8ArraySchema,
+  /** Validates an arbitrary precision natural number. */
+  nat: () => NatSchema
 };
 
 // z.union is omitted because object unions can't be reliably serialized to Candid/Rust without a discriminator field.
@@ -33,6 +36,7 @@ export const j = Object.assign({}, rest) as unknown as Omit<typeof z, 'union'> &
 
 j.principal = JunoType.principal;
 j.uint8Array = JunoType.uint8Array;
+j.nat = JunoType.nat;
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 export namespace j {

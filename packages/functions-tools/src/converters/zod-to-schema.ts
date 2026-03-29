@@ -13,8 +13,10 @@ const schemaToString = (schema: SputnikSchema): string => {
       return 'j.number()';
     case 'int32':
       return 'j.int()';
-    case 'nat':
+    case 'bigint':
       return 'j.bigint()';
+    case 'nat':
+      return 'j.nat()';
     case 'principal':
       return 'j.principal()';
     case 'uint8array':

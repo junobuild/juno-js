@@ -17,8 +17,7 @@ export const HttpMethodSchema = j.enum(['GET', 'POST', 'HEAD']);
  * @see HttpRequestArgs
  */
 export const HttpRequestArgsSchema = j.object({
-  // TODO exclude url in j and expose custom
-  url: j.string(),
+  url: j.url(),
   method: HttpMethodSchema,
   headers: j.array(HttpHeaderSchema),
   body: j.uint8Array().optional(),

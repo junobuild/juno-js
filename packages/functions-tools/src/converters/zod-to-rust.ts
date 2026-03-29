@@ -29,20 +29,20 @@ const RUST_KEYWORDS = new Set([
   'crate'
 ]);
 
-const sanitizeFieldName = (name: string): {name: string; sanitized: boolean} =>
+const sanitizeRustReservedKeywords = (name: string): {name: string; sanitized: boolean} =>
   RUST_KEYWORDS.has(name) ? {name: `r#${name}`, sanitized: true} : {name, sanitized: false};
 
-const transformFieldName = (
+const sanitizeFieldName = (
   name: string
-): {name: string; sanitized: boolean} | {name: string; renamed: boolean} => {
-  const {sanitized, ...rest} = sanitizeFieldName(name);
+): {name: string; sanitized?: 'reserved' | 'renamed' | false} => {
+  const {sanitized, ...rest} = sanitizeRustReservedKeywords(name);
 
   if (sanitized) {
-    return {sanitized, ...rest};
+    return {sanitized: 'reserved', ...rest};
   }
 
   const snake = convertCamelToSnake(name);
-  return {name: snake, renamed: snake !== name};
+  return {name: snake, sanitized: snake !== name ? 'renamed' : false};
 };
 
 type RustTypeResult =
@@ -151,10 +151,12 @@ const schemaToRustType = ({
 
           const fields = nonDiscriminatorFields
             .map((f, fi) => {
-              const fieldNameDetails = transformFieldName(f.name);
+              const fieldName = sanitizeFieldName(f.name);
               const renameAttr =
-                'sanitized' in fieldNameDetails ? `        #[serde(rename = "${f.name}")]\n` : '';
-              return `${renameAttr}        ${fieldNameDetails.name}: ${fieldResults[fi].fieldType},`;
+                fieldName.sanitized === 'reserved'
+                  ? `        #[serde(rename = "${f.name}")]\n`
+                  : '';
+              return `${renameAttr}        ${fieldName.name}: ${fieldResults[fi].fieldType},`;
             })
             .join('\n');
 
@@ -200,12 +202,12 @@ const schemaToRustType = ({
       const fields = schema.fields
         .map((f, i) => {
           const result = fieldResults[i];
-          const fieldNameDetails = transformFieldName(f.name);
+          const fieldName = sanitizeFieldName(f.name);
           const renameAttr =
-            'sanitized' in fieldNameDetails ? `    #[serde(rename = "${f.name}")]\n` : '';
+            fieldName.sanitized === 'reserved' ? `    #[serde(rename = "${f.name}")]\n` : '';
           const attr =
             result.kind === 'composite' && result.needsJsonData ? '    #[json_data(nested)]\n' : '';
-          return `${renameAttr}${attr}    pub ${fieldNameDetails.name}: ${result.fieldType},`;
+          return `${renameAttr}${attr}    pub ${fieldName.name}: ${result.fieldType},`;
         })
         .join('\n');
 

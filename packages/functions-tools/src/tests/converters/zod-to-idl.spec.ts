@@ -222,3 +222,11 @@ describe('discriminated union', () => {
     })
   );
 });
+
+describe('camelCase field names', () => {
+  idl(
+    'WithCamelCaseFields',
+    z.object({maxResponseBytes: z.bigint().optional(), isReplicated: z.boolean().optional()}),
+    IDL.Record({max_response_bytes: IDL.Opt(IDL.Nat64), is_replicated: IDL.Opt(IDL.Bool)})
+  );
+});

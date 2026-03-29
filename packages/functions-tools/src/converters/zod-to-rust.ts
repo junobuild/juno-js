@@ -1,4 +1,4 @@
-import {capitalize} from '@junobuild/utils';
+import {capitalize, convertCamelToSnake} from '@junobuild/utils';
 import type {z} from 'zod';
 import {type SputnikSchemaResult, jsonToSputnikSchema} from './_converters';
 import type {SputnikSchema} from './_types';
@@ -31,6 +31,17 @@ const RUST_KEYWORDS = new Set([
 
 const sanitizeFieldName = (name: string): {name: string; sanitized: boolean} =>
   RUST_KEYWORDS.has(name) ? {name: `r#${name}`, sanitized: true} : {name, sanitized: false};
+
+const transformFieldName = (name: string): {name: string; renamed: boolean} => {
+  const {sanitized, ...rest} = sanitizeFieldName(name);
+
+  if (sanitized) {
+    return {renamed: true, ...rest};
+  }
+
+  const snake = convertCamelToSnake(name);
+  return {name: snake, renamed: snake !== name};
+};
 
 type RustTypeResult =
   | {kind: 'primitive'; fieldType: string}
@@ -138,8 +149,8 @@ const schemaToRustType = ({
 
           const fields = nonDiscriminatorFields
             .map((f, fi) => {
-              const {name: fieldName, sanitized} = sanitizeFieldName(f.name);
-              const renameAttr = sanitized ? `        #[serde(rename = "${f.name}")]\n` : '';
+              const {name: fieldName, renamed} = transformFieldName(f.name);
+              const renameAttr = renamed ? `        #[serde(rename = "${f.name}")]\n` : '';
               return `${renameAttr}        ${fieldName}: ${fieldResults[fi].fieldType},`;
             })
             .join('\n');
@@ -186,8 +197,8 @@ const schemaToRustType = ({
       const fields = schema.fields
         .map((f, i) => {
           const result = fieldResults[i];
-          const {name: fieldName, sanitized} = sanitizeFieldName(f.name);
-          const renameAttr = sanitized ? `    #[serde(rename = "${f.name}")]\n` : '';
+          const {name: fieldName, renamed} = transformFieldName(f.name);
+          const renameAttr = renamed ? `    #[serde(rename = "${f.name}")]\n` : '';
           const attr =
             result.kind === 'composite' && result.needsJsonData ? '    #[json_data(nested)]\n' : '';
           return `${renameAttr}${attr}    pub ${fieldName}: ${result.fieldType},`;

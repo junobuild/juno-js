@@ -36,6 +36,14 @@ export const HttpRequestResultSchema = j.object({
 });
 
 /**
+ * @see TransformArgs
+ */
+export const TransformArgsSchema = j.object({
+  response: HttpRequestResultSchema,
+  context: j.uint8Array()
+});
+
+/**
  * An HTTP header consisting of a name and value.
  */
 export interface HttpHeader {
@@ -116,4 +124,19 @@ export interface HttpRequestResult {
    * The response's body.
    */
   body: Uint8Array<ArrayBuffer>;
+}
+
+/**
+ * The arguments passed to an HTTP response transform function.
+ */
+export interface TransformArgs {
+  /**
+   * The raw HTTP response to be transformed.
+   */
+  response: HttpRequestResult;
+
+  /**
+   * Context for response transformation
+   */
+  context: Uint8Array<ArrayBuffer>;
 }

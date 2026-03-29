@@ -2,7 +2,8 @@ import {
   HttpHeaderSchema,
   HttpMethodSchema,
   HttpRequestArgsSchema,
-  HttpRequestResultSchema
+  HttpRequestResultSchema,
+  TransformArgsSchema
 } from '../../../ic-cdk/schemas/http-request';
 
 describe('ic-cdk > schemas > http-request', () => {
@@ -105,6 +106,31 @@ describe('ic-cdk > schemas > http-request', () => {
     it('should reject a result missing body', () => {
       const {body: _, ...rest} = validResult;
       expect(() => HttpRequestResultSchema.parse(rest)).toThrow();
+    });
+  });
+
+  describe('TransformArgsSchema', () => {
+    const validTransformArgs = {
+      response: {
+        status: 200n,
+        headers: [{name: 'Content-Type', value: 'application/json'}],
+        body: new Uint8Array([1, 2, 3])
+      },
+      context: new Uint8Array([])
+    };
+
+    it('should validate valid transform args', () => {
+      expect(() => TransformArgsSchema.parse(validTransformArgs)).not.toThrow();
+    });
+
+    it('should reject missing response', () => {
+      const {response: _, ...rest} = validTransformArgs;
+      expect(() => TransformArgsSchema.parse(rest)).toThrow();
+    });
+
+    it('should reject missing context', () => {
+      const {context: _, ...rest} = validTransformArgs;
+      expect(() => TransformArgsSchema.parse(rest)).toThrow();
     });
   });
 });

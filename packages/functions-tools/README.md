@@ -36,7 +36,7 @@ Returns:
 
 An object containing the generated IDL type and the base type name.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-idl.ts#L95)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-idl.ts#L97)
 
 #### :gear: zodToRust
 
@@ -56,7 +56,7 @@ Returns:
 
 An object containing the generated Rust code and the base type name.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L256)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L259)
 
 #### :gear: zodToCandid
 
@@ -76,7 +76,7 @@ Returns:
 
 An object containing the generated Candid type declaration and the base type name.
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-candid.ts#L93)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-candid.ts#L95)
 
 ### :tropical_drink: Interfaces
 
@@ -91,7 +91,7 @@ An object containing the generated Candid type declaration and the base type nam
 | `baseName` | `string`   |             |
 | `idl`      | `IDL.Type` |             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-idl.ts#L67)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-idl.ts#L69)
 
 #### :gear: RustResult
 
@@ -100,7 +100,7 @@ An object containing the generated Candid type declaration and the base type nam
 | `baseName` | `string` |             |
 | `code`     | `string` |             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L225)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-rust.ts#L228)
 
 #### :gear: CandidResult
 
@@ -109,7 +109,7 @@ An object containing the generated Candid type declaration and the base type nam
 | `baseName` | `string` |             |
 | `code`     | `string` |             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-candid.ts#L65)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/functions-tools/src/converters/zod-to-candid.ts#L67)
 
 <!-- TSDOC_END -->
 

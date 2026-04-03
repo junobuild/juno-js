@@ -3,6 +3,10 @@ import {default as config} from '@dfinity/eslint-config-oisy-wallet';
 export default [
   ...config,
   {
+    linterOptions: {
+      // eslint --fix removes @typescript-eslint/prefer-nullish-coalescing but complains about it in CI 😫
+      reportUnusedDisableDirectives: false
+    },
     rules: {
       'prefer-arrow/prefer-arrow-functions': ['off'],
       'func-style': ['off']

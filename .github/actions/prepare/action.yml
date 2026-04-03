@@ -10,10 +10,6 @@ runs:
         node-version: 24
         registry-url: 'https://registry.npmjs.org'
 
-    - name: Install npm
-      shell: bash
-      run: npm i -g npm@11.11.0
-
     - name: Install dependencies
       shell: bash
       run: npm ci

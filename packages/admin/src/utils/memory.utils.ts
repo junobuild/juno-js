@@ -25,7 +25,7 @@ export const fromMaxMemorySize = (
 
   return {
     ...(nonNullish(memorySize) &&
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+       
       (nonNullish(heap) || nonNullish(stable)) && {
         maxMemorySize: {
           ...(nonNullish(heap) && {heap}),

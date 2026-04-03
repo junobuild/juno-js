@@ -1,4 +1,4 @@
-import {assertNonNullish} from '@dfinity/utils';
+import {assertNonNullish} from '@junobuild/utils';
 import type {ActorMethod, ActorSubclass} from '@icp-sdk/core/agent';
 import type {IDL} from '@icp-sdk/core/candid';
 import {

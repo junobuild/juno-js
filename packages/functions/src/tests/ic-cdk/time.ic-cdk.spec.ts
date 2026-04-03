@@ -1,4 +1,4 @@
-import {nowInBigIntNanoSeconds} from '@dfinity/utils';
+import {nowInBigIntNanoSeconds} from '@junobuild/utils';
 import {time} from '../../ic-cdk/time.ic-cdk';
 
 vi.stubGlobal('__ic_cdk_time', vi.fn());

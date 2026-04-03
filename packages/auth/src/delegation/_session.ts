@@ -1,4 +1,4 @@
-import {fromNullable} from '@dfinity/utils';
+import {fromNullable} from '@junobuild/utils';
 import type {Signature} from '@icp-sdk/core/agent';
 import {Delegation, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import {authenticate as authenticateApi, getDelegation as getDelegationApi} from './api/auth.api';

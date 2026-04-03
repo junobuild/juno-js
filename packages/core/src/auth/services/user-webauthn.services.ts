@@ -1,4 +1,4 @@
-import {nonNullish, uint8ArrayToArrayOfNumber} from '@dfinity/utils';
+import {nonNullish, uint8ArrayToArrayOfNumber} from '@junobuild/utils';
 import type {Identity} from '@icp-sdk/core/agent';
 import type {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
 import type {Environment} from '../../core/types/env';

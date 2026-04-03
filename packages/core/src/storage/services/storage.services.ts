@@ -1,4 +1,4 @@
-import {fromNullable, nonNullish} from '@dfinity/utils';
+import {fromNullable, nonNullish} from '@junobuild/utils';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import type {Asset, AssetEncoding, AssetKey, Storage} from '@junobuild/storage';
 import {DEFAULT_READ_OPTIONS} from '../../core/constants/call-options.constants';

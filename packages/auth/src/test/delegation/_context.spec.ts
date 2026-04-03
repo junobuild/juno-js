@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 
-import {assertNonNullish, base64ToUint8Array} from '@dfinity/utils';
+import {assertNonNullish, base64ToUint8Array} from '@junobuild/utils';
 import {Ed25519KeyIdentity, JsonnableEd25519KeyIdentity} from '@icp-sdk/core/identity';
 import {Principal} from '@icp-sdk/core/principal';
 import {CONTEXT_KEY} from '../../delegation/_constants';

@@ -1,4 +1,4 @@
-import {isNullish, uint8ArrayToBase64} from '@dfinity/utils';
+import {isNullish, uint8ArrayToBase64} from '@junobuild/utils';
 import {IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@icp-sdk/auth/client';
 import {type SignIdentity, AnonymousIdentity} from '@icp-sdk/core/agent';
 import {

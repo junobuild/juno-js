@@ -1,4 +1,4 @@
-import {jsonReviver, uint8ArrayToArrayOfNumber} from '@dfinity/utils';
+import {jsonReviver, uint8ArrayToArrayOfNumber} from '@junobuild/utils';
 import type {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
 import {MockInstance} from 'vitest';
 import {createWebAuthnUser} from '../../../auth/services/user-webauthn.services';

@@ -1,4 +1,4 @@
-import {isNullish, nonNullish} from '@dfinity/utils';
+import {isNullish, nonNullish} from '@junobuild/utils';
 
 // In case an answer is replaced by control+c
 export const assertAnswerCtrlC: (

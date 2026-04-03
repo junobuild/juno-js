@@ -1,4 +1,4 @@
-import {isNullish} from '@dfinity/utils';
+import {isNullish} from '@junobuild/utils';
 import type {Agent, HttpAgent} from '@icp-sdk/core/agent';
 import {type CreateAgentParams, createAgent} from './_agent.factory';
 

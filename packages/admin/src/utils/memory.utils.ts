@@ -1,4 +1,4 @@
-import {fromNullable, nonNullish, toNullable} from '@dfinity/utils';
+import {fromNullable, nonNullish, toNullable} from '@junobuild/utils';
 import type {MaxMemorySizeConfig} from '@junobuild/config';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 

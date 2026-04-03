@@ -1,4 +1,4 @@
-import {nonNullish} from '@dfinity/utils';
+import {nonNullish} from '@junobuild/utils';
 import * as z from 'zod';
 import {decodeDocData, encodeDocData} from '../sdk/serializer.sdk';
 import {QuerySchema} from './query';

@@ -1,4 +1,4 @@
-import {arrayBufferToUint8Array} from '@dfinity/utils';
+import {arrayBufferToUint8Array} from '@junobuild/utils';
 import type {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
 import type {Nonce, Salt} from '../types/nonce';
 import {toBase64URL} from './url.utils';

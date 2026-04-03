@@ -1,4 +1,4 @@
-import {nonNullish, toNullable} from '@dfinity/utils';
+import {nonNullish, toNullable} from '@junobuild/utils';
 import {Principal} from '@icp-sdk/core/principal';
 import type {MissionControlDid} from '@junobuild/ic-client/actor';
 import type {SetControllerParams} from '../types/controllers';

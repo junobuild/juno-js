@@ -1,4 +1,4 @@
-import {toNullable} from '@dfinity/utils';
+import {toNullable} from '@junobuild/utils';
 import * as storageModule from '@junobuild/storage';
 import type {MockInstance} from 'vitest';
 import * as actorApi from '../../../core/api/actor.api';

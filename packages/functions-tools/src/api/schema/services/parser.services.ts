@@ -1,4 +1,4 @@
-import {nonNullish} from '@dfinity/utils';
+import {nonNullish} from '@junobuild/utils';
 import type {Query, Update} from '@junobuild/functions';
 import {capitalize, convertCamelToSnake} from '@junobuild/utils';
 import {BACKEND_FUNCTION_NAMESPACE, FRONTEND_FUNCTION_NAMESPACE} from '../../../constants';

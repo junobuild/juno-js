@@ -1,4 +1,4 @@
-import {isNullish} from '@dfinity/utils';
+import {isNullish} from '@junobuild/utils';
 import {isBrowser} from '@junobuild/utils';
 
 export const popupCenter = ({

@@ -1,4 +1,4 @@
-import {nonNullish, notEmptyString} from '@dfinity/utils';
+import {nonNullish, notEmptyString} from '@junobuild/utils';
 import {readFile} from 'node:fs/promises';
 import {basename} from 'node:path';
 import type {FileAndPaths, FileDetails, UploadFileStorage} from '../../types/deploy';

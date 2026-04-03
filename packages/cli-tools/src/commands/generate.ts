@@ -1,4 +1,4 @@
-import {isNullish} from '@dfinity/utils';
+import {isNullish} from '@junobuild/utils';
 import {generateFunctions, type GenerateFunctionsResult} from '@junobuild/functions-tools';
 import type {Metafile} from 'esbuild';
 import {writeFile} from 'node:fs/promises';

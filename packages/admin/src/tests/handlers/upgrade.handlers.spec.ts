@@ -1,4 +1,4 @@
-import {hexStringToUint8Array} from '@dfinity/utils';
+import {hexStringToUint8Array} from '@junobuild/utils';
 import {IcManagementCanister, type CanisterStatusResponse} from '@icp-sdk/canisters/ic-management';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
 import {mockDeep} from 'vitest-mock-extended';

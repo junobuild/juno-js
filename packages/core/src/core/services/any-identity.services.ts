@@ -1,4 +1,4 @@
-import {nonNullish} from '@dfinity/utils';
+import {nonNullish} from '@junobuild/utils';
 import {AnonymousIdentity, type Identity} from '@icp-sdk/core/agent';
 import {getIdentity as getAuthIdentity} from '../../auth/services/identity.services';
 

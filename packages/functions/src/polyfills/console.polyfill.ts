@@ -1,4 +1,4 @@
-import {jsonReplacer} from '@dfinity/utils';
+import {jsonReplacer} from '@junobuild/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const __juno_satellite_console_log = (v: any[]) => {

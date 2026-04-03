@@ -1,4 +1,4 @@
-import {isNullish} from '@dfinity/utils';
+import {isNullish} from '@junobuild/utils';
 import {requestJwt} from '@junobuild/auth/delegation';
 import {envGoogleClientId} from '../../core/utils/window.env.utils';
 import {SignInMissingClientIdError} from '../types/errors';

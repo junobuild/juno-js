@@ -1,4 +1,4 @@
-import {isNullish} from '@dfinity/utils';
+import {isNullish} from '@junobuild/utils';
 import type {Principal} from '@icp-sdk/core/principal';
 import {type JunoPackage, JunoPackageSchema} from '@junobuild/config';
 import type {ActorParameters} from '@junobuild/ic-client/actor';

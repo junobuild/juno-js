@@ -1,4 +1,4 @@
-import {toNullable} from '@dfinity/utils';
+import {toNullable} from '@junobuild/utils';
 import {IDL} from '@icp-sdk/core/candid';
 import {Principal} from '@icp-sdk/core/principal';
 import {type CallParams, type IDLType, CallParamsSchema} from './schemas/call';

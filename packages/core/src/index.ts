@@ -1,4 +1,4 @@
-import {assertNonNullish, nonNullish} from '@dfinity/utils';
+import {assertNonNullish, nonNullish} from '@junobuild/utils';
 import {isWebAuthnAvailable} from '@junobuild/ic-client/webauthn';
 import type {Asset, AssetEncoding, AssetKey, EncodingType, Storage} from '@junobuild/storage';
 import {initAuthTimeoutWorker} from './auth/services/auth-timout.services';

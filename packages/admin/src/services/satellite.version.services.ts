@@ -1,4 +1,4 @@
-import {assertNonNullish, isNullish, nonNullish} from '@dfinity/utils';
+import {assertNonNullish, isNullish, nonNullish} from '@junobuild/utils';
 import {JUNO_PACKAGE_SATELLITE_ID} from '@junobuild/config';
 import type {SatelliteParameters} from '@junobuild/ic-client/actor';
 import {canisterMetadata} from '../api/ic.api';

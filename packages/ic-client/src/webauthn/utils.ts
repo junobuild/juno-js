@@ -1,4 +1,4 @@
-import {nonNullish} from '@dfinity/utils';
+import {nonNullish} from '@junobuild/utils';
 
 /**
  * Checks if a user-verifying platform authenticator (passkeys) is available on this device / browser.

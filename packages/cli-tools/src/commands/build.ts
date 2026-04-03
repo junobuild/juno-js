@@ -1,4 +1,4 @@
-import {nonNullish} from '@dfinity/utils';
+import {nonNullish} from '@junobuild/utils';
 import type {Message, Metafile, OutputFile} from 'esbuild';
 import {rm} from 'node:fs/promises';
 

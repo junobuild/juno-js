@@ -1,4 +1,4 @@
-import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
+import {fromNullable, isNullish, nonNullish, toNullable} from '@junobuild/utils';
 import {Principal} from '@icp-sdk/core/principal';
 import type {
   AuthenticationConfig,

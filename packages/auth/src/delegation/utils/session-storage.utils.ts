@@ -1,4 +1,4 @@
-import {base64ToUint8Array, uint8ArrayToBase64} from '@dfinity/utils';
+import {base64ToUint8Array, uint8ArrayToBase64} from '@junobuild/utils';
 import {Ed25519KeyIdentity, type JsonnableEd25519KeyIdentity} from '@icp-sdk/core/identity';
 import type {OpenIdAuthContext} from '../types/context';
 

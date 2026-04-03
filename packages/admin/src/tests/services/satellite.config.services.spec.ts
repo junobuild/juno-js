@@ -1,4 +1,4 @@
-import {toNullable} from '@dfinity/utils';
+import {toNullable} from '@junobuild/utils';
 import {Principal} from '@icp-sdk/core/principal';
 import {AuthenticationConfig, AutomationConfig, StorageConfig} from '@junobuild/config';
 import * as actor from '@junobuild/ic-client/actor';

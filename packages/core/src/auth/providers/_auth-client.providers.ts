@@ -1,4 +1,4 @@
-import {isNullish} from '@dfinity/utils';
+import {isNullish} from '@junobuild/utils';
 import {type AuthClient, ERROR_USER_INTERRUPT} from '@icp-sdk/auth/client';
 import {
   ALLOW_PIN_AUTHENTICATION,

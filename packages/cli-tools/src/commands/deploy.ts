@@ -1,4 +1,4 @@
-import {nonNullish, toNullable} from '@dfinity/utils';
+import {nonNullish, toNullable} from '@junobuild/utils';
 import type {CliConfig} from '@junobuild/config';
 import ora from 'ora';
 import {UPLOAD_DEFAULT_BATCH_SIZE} from '../constants/deploy.constants';

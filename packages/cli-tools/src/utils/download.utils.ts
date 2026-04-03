@@ -1,4 +1,4 @@
-import {nonNullish} from '@dfinity/utils';
+import {nonNullish} from '@junobuild/utils';
 import {get as httpGet} from 'http';
 import {get as httpsGet, type RequestOptions} from 'https';
 

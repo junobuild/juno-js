@@ -1,4 +1,4 @@
-import {isNullish} from '@dfinity/utils';
+import {isNullish} from '@junobuild/utils';
 import {Actor, type ActorConfig, type ActorMethod, type ActorSubclass} from '@icp-sdk/core/agent';
 import type {IDL} from '@icp-sdk/core/candid';
 import type {Principal} from '@icp-sdk/core/principal';

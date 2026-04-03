@@ -1,4 +1,4 @@
-import {isNullish, nonNullish, notEmptyString} from '@dfinity/utils';
+import {isNullish, nonNullish, notEmptyString} from '@junobuild/utils';
 import type {BroadcastData} from '../types/auth-broadcast';
 
 // If the user has more than one tab open in the same browser,

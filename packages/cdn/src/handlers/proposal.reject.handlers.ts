@@ -1,4 +1,4 @@
-import {nonNullish} from '@dfinity/utils';
+import {nonNullish} from '@junobuild/utils';
 import {deleteProposalAssets, rejectProposal} from '../api/proposal.api';
 import {type RejectProposalParams, RejectProposalProgressStep} from '../types/proposal.params';
 

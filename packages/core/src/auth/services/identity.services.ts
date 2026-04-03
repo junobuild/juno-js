@@ -1,4 +1,4 @@
-import {isNullish} from '@dfinity/utils';
+import {isNullish} from '@junobuild/utils';
 import type {Identity} from '@icp-sdk/core/agent';
 import {AuthClientStore} from '../stores/auth-client.store';
 import {AuthStore} from '../stores/auth.store';

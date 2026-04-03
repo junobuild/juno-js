@@ -1,4 +1,4 @@
-import {nonNullish, uint8ArrayToHexString} from '@dfinity/utils';
+import {nonNullish, uint8ArrayToHexString} from '@junobuild/utils';
 import type {IcManagementDid} from '@icp-sdk/canisters/ic-management';
 import {
   clearChunkStore,

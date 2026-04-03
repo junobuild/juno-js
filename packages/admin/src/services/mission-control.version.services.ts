@@ -1,4 +1,4 @@
-import {assertNonNullish, isNullish} from '@dfinity/utils';
+import {assertNonNullish, isNullish} from '@junobuild/utils';
 import {JUNO_PACKAGE_MISSION_CONTROL_ID} from '@junobuild/config';
 import type {MissionControlParameters} from '@junobuild/ic-client/actor';
 import {version} from '../api/mission-control.api';

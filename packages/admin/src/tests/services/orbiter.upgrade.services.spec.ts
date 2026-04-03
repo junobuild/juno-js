@@ -1,4 +1,4 @@
-import {hexStringToUint8Array} from '@dfinity/utils';
+import {hexStringToUint8Array} from '@junobuild/utils';
 import type {CanisterStatusResponse} from '@icp-sdk/canisters/ic-management';
 import {IcManagementCanister} from '@icp-sdk/canisters/ic-management';
 import * as actor from '@junobuild/ic-client/actor';

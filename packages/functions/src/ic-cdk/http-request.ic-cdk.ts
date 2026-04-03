@@ -1,4 +1,4 @@
-import {nonNullish} from '@dfinity/utils';
+import {nonNullish} from '@junobuild/utils';
 import {convertCamelToSnake} from '@junobuild/utils';
 import {
   type HttpRequestArgs,

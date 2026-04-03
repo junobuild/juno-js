@@ -1,4 +1,4 @@
-import {isNullish} from '@dfinity/utils';
+import {isNullish} from '@junobuild/utils';
 import {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
 import type {Nonce} from '../types/nonce';
 import {generateNonce} from '../utils/nonce.utils';

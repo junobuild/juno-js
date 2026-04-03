@@ -1,4 +1,4 @@
-import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
+import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {getSatelliteActor} from '../../core/api/actor.api';
 import type {ActorReadParams, ActorUpdateParams} from '../../core/types/actor';

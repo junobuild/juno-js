@@ -1,4 +1,4 @@
-import {toNullable} from '@dfinity/utils';
+import {toNullable} from '@junobuild/utils';
 import type {Principal} from '@icp-sdk/core/principal';
 import {
   type SatelliteDid,

@@ -1,4 +1,4 @@
-import {isEmptyString, isNullish, notEmptyString} from '@dfinity/utils';
+import {isEmptyString, isNullish, notEmptyString} from '@junobuild/utils';
 import {requestJwt} from '@junobuild/auth/delegation';
 import {envApiUrl, envGitHubClientId} from '../../core/utils/window.env.utils';
 import {SignInMissingClientIdError} from '../types/errors';

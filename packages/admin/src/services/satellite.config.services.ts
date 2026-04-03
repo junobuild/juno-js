@@ -1,4 +1,4 @@
-import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
+import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
 import type {
   AuthenticationConfig,
   AutomationConfig,

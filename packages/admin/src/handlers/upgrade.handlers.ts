@@ -1,4 +1,4 @@
-import {fromNullable, isNullish, uint8ArrayToHexString} from '@dfinity/utils';
+import {fromNullable, isNullish, uint8ArrayToHexString} from '@junobuild/utils';
 import {
   canisterStart,
   canisterStatus,

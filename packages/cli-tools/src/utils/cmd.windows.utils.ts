@@ -1,4 +1,4 @@
-import {nonNullish} from '@dfinity/utils';
+import {nonNullish} from '@junobuild/utils';
 import type {SpawnOptions} from 'child_process';
 import {stat} from 'node:fs/promises';
 import path from 'node:path';

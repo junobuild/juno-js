@@ -1,4 +1,4 @@
-import {isNullish, nonNullish} from '@dfinity/utils';
+import {isNullish, nonNullish} from '@junobuild/utils';
 import type {CliConfig, EncodingType} from '@junobuild/config';
 import type {Asset} from '@junobuild/storage';
 import crypto from 'crypto';

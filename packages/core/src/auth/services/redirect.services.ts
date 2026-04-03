@@ -1,4 +1,4 @@
-import {isEmptyString, isNullish, nonNullish, notEmptyString} from '@dfinity/utils';
+import {isEmptyString, isNullish, nonNullish, notEmptyString} from '@junobuild/utils';
 import {authenticate} from '@junobuild/auth/delegation';
 import {EnvStore} from '../../core/stores/env.store';
 import {envApiUrl} from '../../core/utils/window.env.utils';

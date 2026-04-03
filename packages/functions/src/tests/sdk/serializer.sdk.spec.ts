@@ -1,4 +1,4 @@
-import {jsonReplacer} from '@dfinity/utils';
+import {jsonReplacer} from '@junobuild/utils';
 import {Principal} from '@icp-sdk/core/principal';
 import {RawData} from '../../schemas/db';
 import {decodeDocData, encodeDocData} from '../../sdk/serializer.sdk';

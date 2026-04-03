@@ -1,9 +1,9 @@
-import { Principal } from "@icp-sdk/core/principal";
-import { nonNullish } from "./nullish.utils";
+import {Principal} from '@icp-sdk/core/principal';
+import {nonNullish} from './nullish.utils';
 
-const JSON_KEY_BIGINT = "__bigint__";
-const JSON_KEY_PRINCIPAL = "__principal__";
-const JSON_KEY_UINT8ARRAY = "__uint8array__";
+const JSON_KEY_BIGINT = '__bigint__';
+const JSON_KEY_PRINCIPAL = '__principal__';
+const JSON_KEY_UINT8ARRAY = '__uint8array__';
 
 /**
  * A custom replacer for `JSON.stringify` that converts specific types not natively supported
@@ -20,18 +20,18 @@ const JSON_KEY_UINT8ARRAY = "__uint8array__";
  */
 // eslint-disable-next-line local-rules/prefer-object-params
 export const jsonReplacer = (_key: string, value: unknown): unknown => {
-  if (typeof value === "bigint") {
-    return { [JSON_KEY_BIGINT]: `${value}` };
+  if (typeof value === 'bigint') {
+    return {[JSON_KEY_BIGINT]: `${value}`};
   }
 
   if (nonNullish(value) && Principal.isPrincipal(value)) {
     // isPrincipal asserts if a value is a Principal, but does not assert if the object
     // contains functions such as toText(). That's why we construct a new object.
-    return { [JSON_KEY_PRINCIPAL]: Principal.from(value).toText() };
+    return {[JSON_KEY_PRINCIPAL]: Principal.from(value).toText()};
   }
 
   if (nonNullish(value) && value instanceof Uint8Array) {
-    return { [JSON_KEY_UINT8ARRAY]: Array.from(value) };
+    return {[JSON_KEY_UINT8ARRAY]: Array.from(value)};
   }
 
   return value;
@@ -55,27 +55,15 @@ export const jsonReplacer = (_key: string, value: unknown): unknown => {
 export const jsonReviver = (_key: string, value: unknown): unknown => {
   const mapValue = <T>(key: string): T => (value as Record<string, T>)[key];
 
-  if (
-    nonNullish(value) &&
-    typeof value === "object" &&
-    JSON_KEY_BIGINT in value
-  ) {
+  if (nonNullish(value) && typeof value === 'object' && JSON_KEY_BIGINT in value) {
     return BigInt(mapValue(JSON_KEY_BIGINT));
   }
 
-  if (
-    nonNullish(value) &&
-    typeof value === "object" &&
-    JSON_KEY_PRINCIPAL in value
-  ) {
+  if (nonNullish(value) && typeof value === 'object' && JSON_KEY_PRINCIPAL in value) {
     return Principal.fromText(mapValue(JSON_KEY_PRINCIPAL));
   }
 
-  if (
-    nonNullish(value) &&
-    typeof value === "object" &&
-    JSON_KEY_UINT8ARRAY in value
-  ) {
+  if (nonNullish(value) && typeof value === 'object' && JSON_KEY_UINT8ARRAY in value) {
     return Uint8Array.from(mapValue(JSON_KEY_UINT8ARRAY));
   }
 

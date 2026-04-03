@@ -13,7 +13,7 @@ export const uint8ArrayToBase64 = (uint8Array: Uint8Array): string => {
   for (let i = 0; i < uint8Array.length; i += chunkSize) {
     chunks.push(String.fromCharCode(...uint8Array.subarray(i, i + chunkSize)));
   }
-  return btoa(chunks.join(""));
+  return btoa(chunks.join(''));
 };
 
 /**

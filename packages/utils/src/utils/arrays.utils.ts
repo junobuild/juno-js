@@ -1,8 +1,8 @@
-import { assertNonNullish } from "./asserts.utils";
+import {assertNonNullish} from './asserts.utils';
 
 export const uint8ArrayToBigInt = (array: Uint8Array): bigint => {
   const view = new DataView(array.buffer, array.byteOffset, array.byteLength);
-  if (typeof view.getBigUint64 === "function") {
+  if (typeof view.getBigUint64 === 'function') {
     return view.getBigUint64(0);
   }
   const high = BigInt(view.getUint32(0));
@@ -14,7 +14,7 @@ export const uint8ArrayToBigInt = (array: Uint8Array): bigint => {
 export const bigIntToUint8Array = (value: bigint): Uint8Array => {
   const buffer = new ArrayBuffer(8);
   const view = new DataView(buffer);
-  if (typeof view.setBigUint64 === "function") {
+  if (typeof view.setBigUint64 === 'function') {
     view.setBigUint64(0, value);
   } else {
     const high = Number(value >> BigInt(32));
@@ -36,11 +36,9 @@ export const numberToUint8Array = (value: number): Uint8Array => {
   return new Uint8Array(view.buffer);
 };
 
-export const arrayBufferToUint8Array = (buffer: ArrayBuffer): Uint8Array =>
-  new Uint8Array(buffer);
+export const arrayBufferToUint8Array = (buffer: ArrayBuffer): Uint8Array => new Uint8Array(buffer);
 
-export const uint8ArrayToArrayOfNumber = (array: Uint8Array): Array<number> =>
-  Array.from(array);
+export const uint8ArrayToArrayOfNumber = (array: Uint8Array): Array<number> => Array.from(array);
 
 export const arrayOfNumberToUint8Array = (numbers: Array<number>): Uint8Array =>
   new Uint8Array(numbers);
@@ -51,7 +49,7 @@ export const asciiStringToByteArray = (text: string): Array<number> =>
 export const hexStringToUint8Array = (hexString: string): Uint8Array => {
   const matches = hexString.match(/.{1,2}/g);
 
-  assertNonNullish(matches, "Invalid hex string.");
+  assertNonNullish(matches, 'Invalid hex string.');
 
   return Uint8Array.from(matches.map((byte) => parseInt(byte, 16)));
 };
@@ -64,17 +62,14 @@ export const hexStringToUint8Array = (hexString: string): Uint8Array => {
  * @param {Uint8Array} params.b - Second Uint8Array to compare.
  * @returns {boolean} True if both arrays have the same length and identical contents.
  */
-export const uint8ArraysEqual = ({ a, b }: { a: Uint8Array; b: Uint8Array }) =>
+export const uint8ArraysEqual = ({a, b}: {a: Uint8Array; b: Uint8Array}) =>
   a.length === b.length && a.every((byte, i) => byte === b[i]);
 
 export const uint8ArrayToHexString = (bytes: Uint8Array | number[]) => {
   if (!(bytes instanceof Uint8Array)) {
     bytes = Uint8Array.from(bytes);
   }
-  return bytes.reduce(
-    (str, byte) => str + byte.toString(16).padStart(2, "0"),
-    "",
-  );
+  return bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
 };
 
 export const candidNumberArrayToBigInt = (array: number[]): bigint => {

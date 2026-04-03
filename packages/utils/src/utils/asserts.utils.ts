@@ -3,12 +3,9 @@ export class NullishError extends Error {}
 
 export const assertNonNullish: <T>(
   value: T,
-  message?: string,
+  message?: string
   // eslint-disable-next-line local-rules/prefer-object-params
-) => asserts value is NonNullable<T> = <T>(
-  value: T,
-  message?: string,
-): void => {
+) => asserts value is NonNullable<T> = <T>(value: T, message?: string): void => {
   if (value === null || value === undefined) {
     throw new NullishError(message);
   }
@@ -22,9 +19,7 @@ export const asNonNullish = <T>(value: T, message?: string): NonNullable<T> => {
 
 export const assertPercentageNumber = (percentage: number) => {
   if (percentage < 0 || percentage > 100) {
-    throw new InvalidPercentageError(
-      `${percentage} is not a valid percentage number.`,
-    );
+    throw new InvalidPercentageError(`${percentage} is not a valid percentage number.`);
   }
 };
 

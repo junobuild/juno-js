@@ -55,11 +55,11 @@
     "@junobuild/auth": "^4",
     "@junobuild/errors": "*",
     "@junobuild/ic-client": "^8",
-    "@junobuild/storage": "^2.3",
-    "@junobuild/utils": "^0.4"
+    "@junobuild/storage": "^2.3"
   },
   "peerDependencies": {
     "@icp-sdk/auth": "^5",
-    "@icp-sdk/core": "^5"
+    "@icp-sdk/core": "^5",
+    "@junobuild/utils": "^0.4"
   }
 }

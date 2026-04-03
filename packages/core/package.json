@@ -56,10 +56,9 @@
     "@junobuild/errors": "*",
     "@junobuild/ic-client": "^8",
     "@junobuild/storage": "^2.3",
-    "@junobuild/utils": "*"
+    "@junobuild/utils": "^0.4"
   },
   "peerDependencies": {
-    "@dfinity/utils": "^4.1",
     "@icp-sdk/auth": "^5",
     "@icp-sdk/core": "^5"
   }

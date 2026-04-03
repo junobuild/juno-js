@@ -52,10 +52,9 @@
     "@babel/preset-typescript": "7.27.1",
     "@babel/traverse": "7.28.4",
     "@babel/types": "7.28.4",
-    "@dfinity/utils": "^4.1",
     "@junobuild/functions": "^0.7",
-    "@junobuild/utils": "^0.3",
     "@junobuild/schema": "^1.1",
+    "@junobuild/utils": "^0.4",
     "zod": "^4.3"
   }
 }

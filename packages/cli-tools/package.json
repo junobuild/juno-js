@@ -46,11 +46,11 @@
   ],
   "homepage": "https://juno.build",
   "peerDependencies": {
-    "@dfinity/utils": "^4.1",
     "@junobuild/cdn": "^2.3",
     "@junobuild/config": "^2.14",
     "@junobuild/functions-tools": "^0.5.2",
     "@junobuild/storage": "^2.3",
+    "@junobuild/utils": "^0.4",
     "esbuild": "^0.28.0",
     "ora": "^9"
   },

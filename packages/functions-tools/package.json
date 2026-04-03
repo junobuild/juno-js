@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/functions-tools",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "Tools for generating Juno serverless functions code.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -52,9 +52,9 @@
     "@babel/preset-typescript": "7.27.1",
     "@babel/traverse": "7.28.4",
     "@babel/types": "7.28.4",
-    "@junobuild/functions": "^0.7",
-    "@junobuild/schema": "^1.1",
-    "@junobuild/utils": "^0.4",
+    "@junobuild/functions": "^0.8",
+    "@junobuild/schema": "^1.2",
+    "@junobuild/utils": "^1",
     "zod": "^4.3"
   }
 }

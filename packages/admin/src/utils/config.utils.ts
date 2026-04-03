@@ -339,6 +339,8 @@ export const toAutomationConfig = ({
   const controller = fromNullable(github?.controller ?? []);
   const scope = fromNullable(controller?.scope ?? []);
   const maxTimeToLive = fromNullable(controller?.max_time_to_live ?? []);
+
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   const withAccessKeys = nonNullish(scope) || nonNullish(maxTimeToLive);
 
   return {

@@ -25,7 +25,6 @@ export const fromMaxMemorySize = (
 
   return {
     ...(nonNullish(memorySize) &&
-       
       (nonNullish(heap) || nonNullish(stable)) && {
         maxMemorySize: {
           ...(nonNullish(heap) && {heap}),

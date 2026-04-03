@@ -1,4 +1,4 @@
-import {isNullish, nonNullish} from '@dfinity/utils';
+import {isNullish, nonNullish} from '@junobuild/utils';
 import type {FileAndPaths} from '../types/deploy';
 
 // TODO: temporary possible race condition fix until Satellite v0.0.13 is published

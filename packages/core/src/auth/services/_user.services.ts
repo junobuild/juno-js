@@ -1,5 +1,5 @@
-import {isNullish, nonNullish} from '@dfinity/utils';
 import {isSatelliteError, JUNO_DATASTORE_ERROR_USER_CANNOT_UPDATE} from '@junobuild/errors';
+import {isNullish, nonNullish} from '@junobuild/utils';
 import {getDoc, setDoc} from '../../datastore/services/doc.services';
 import {InitError} from '../types/errors';
 import type {ProviderWithoutData} from '../types/provider';

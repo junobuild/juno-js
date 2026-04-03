@@ -1,4 +1,3 @@
-import {isNullish} from '@dfinity/utils';
 import {
   AuthClient,
   IdbStorage,
@@ -6,6 +5,7 @@ import {
   KEY_STORAGE_KEY
 } from '@icp-sdk/auth/client';
 import type {DelegationChain, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
+import {isNullish} from '@junobuild/utils';
 
 export class AuthClientStore {
   static #instance: AuthClientStore | undefined;

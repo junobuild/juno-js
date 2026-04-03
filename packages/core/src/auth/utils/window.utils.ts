@@ -1,5 +1,4 @@
-import {isNullish} from '@dfinity/utils';
-import {isBrowser} from '@junobuild/utils';
+import {isBrowser, isNullish} from '@junobuild/utils';
 
 export const popupCenter = ({
   width,

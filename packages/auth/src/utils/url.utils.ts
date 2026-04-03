@@ -1,4 +1,4 @@
-import {uint8ArrayToBase64} from '@dfinity/utils';
+import {uint8ArrayToBase64} from '@junobuild/utils';
 
 // In the future: uint8Array.toBase64({ alphabet: "base64url" })
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array/toBase64

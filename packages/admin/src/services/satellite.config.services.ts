@@ -1,4 +1,3 @@
-import {fromNullable, isNullish, nonNullish} from '@dfinity/utils';
 import type {
   AuthenticationConfig,
   AutomationConfig,
@@ -6,6 +5,7 @@ import type {
   StorageConfig
 } from '@junobuild/config';
 import type {SatelliteParameters} from '@junobuild/ic-client/actor';
+import {fromNullable, isNullish, nonNullish} from '@junobuild/utils';
 import {
   getAuthConfig as getAuthConfigApi,
   getAutomationConfig as getAutomationConfigApi,

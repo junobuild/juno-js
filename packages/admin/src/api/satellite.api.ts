@@ -1,4 +1,3 @@
-import {toNullable} from '@dfinity/utils';
 import type {Principal} from '@icp-sdk/core/principal';
 import {
   type SatelliteDid,
@@ -8,6 +7,7 @@ import {
   getDeprecatedSatelliteVersionActor,
   getSatelliteActor
 } from '@junobuild/ic-client/actor';
+import {toNullable} from '@junobuild/utils';
 
 export const setStorageConfig = async ({
   config,

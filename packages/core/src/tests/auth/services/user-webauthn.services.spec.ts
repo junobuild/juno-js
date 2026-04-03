@@ -1,5 +1,5 @@
-import {jsonReviver, uint8ArrayToArrayOfNumber} from '@dfinity/utils';
 import type {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
+import {jsonReviver, uint8ArrayToArrayOfNumber} from '@junobuild/utils';
 import {MockInstance} from 'vitest';
 import {createWebAuthnUser} from '../../../auth/services/user-webauthn.services';
 import * as actorApi from '../../../core/api/actor.api';

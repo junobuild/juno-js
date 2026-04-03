@@ -1,6 +1,5 @@
-import {assertNonNullish, toNullable} from '@dfinity/utils';
 import type {ConsoleDid, SatelliteDid} from '@junobuild/ic-client/actor';
-import {isBrowser} from '@junobuild/utils';
+import {assertNonNullish, isBrowser, toNullable} from '@junobuild/utils';
 import {UPLOAD_CHUNK_SIZE} from '../constants/upload.constants';
 import type {EncodingType} from '../types/storage';
 import type {UploadAsset, UploadParams, UploadWithProposalParams} from '../types/upload';

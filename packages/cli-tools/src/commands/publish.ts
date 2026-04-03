@@ -1,4 +1,4 @@
-import {toNullable} from '@dfinity/utils';
+import {toNullable} from '@junobuild/utils';
 import {UPLOAD_DEFAULT_BATCH_SIZE} from '../constants/deploy.constants';
 import {COLLECTION_CDN_RELEASES} from '../constants/storage.constants';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';

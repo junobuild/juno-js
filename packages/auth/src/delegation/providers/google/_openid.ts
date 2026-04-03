@@ -1,4 +1,4 @@
-import {isNullish, notEmptyString} from '@dfinity/utils';
+import {isNullish, notEmptyString} from '@junobuild/utils';
 import {
   FedCMIdentityCredentialInvalidError,
   FedCMIdentityCredentialUndefinedError

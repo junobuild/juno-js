@@ -1,4 +1,4 @@
-import {uint8ArrayToBase64} from '@dfinity/utils';
+import {uint8ArrayToBase64} from '@junobuild/utils';
 import {CosePublicKey} from '../../webauthn/agent-js/cose-key';
 import {WebAuthnExistingCredential, WebAuthnNewCredential} from '../../webauthn/credential';
 import {hexToBytes, makeAuthData} from './_aaguid.mock';

@@ -1,5 +1,5 @@
-import {arrayBufferToUint8Array, isNullish, uint8ArraysEqual} from '@dfinity/utils';
 import {Cbor, type Signature, SignIdentity} from '@icp-sdk/core/agent';
+import {arrayBufferToUint8Array, isNullish, uint8ArraysEqual} from '@junobuild/utils';
 import {AUTHENTICATOR_ABORT_TIMEOUT} from './_constants';
 import {createPasskeyOptions, retrievePasskeyOptions} from './_options';
 import {execute} from './_progress';

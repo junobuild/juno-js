@@ -1,6 +1,5 @@
-import {nonNullish, notEmptyString} from '@junobuild/utils';
 import type {Query, Update} from '@junobuild/functions';
-import {capitalize, convertCamelToSnake} from '@junobuild/utils';
+import {capitalize, convertCamelToSnake, nonNullish, notEmptyString} from '@junobuild/utils';
 import {BACKEND_FUNCTION_NAMESPACE} from '../../constants';
 import {zodToRust} from '../../converters';
 

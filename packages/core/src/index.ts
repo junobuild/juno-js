@@ -1,6 +1,6 @@
-import {assertNonNullish, nonNullish} from '@junobuild/utils';
 import {isWebAuthnAvailable} from '@junobuild/ic-client/webauthn';
 import type {Asset, AssetEncoding, AssetKey, EncodingType, Storage} from '@junobuild/storage';
+import {assertNonNullish, nonNullish} from '@junobuild/utils';
 import {initAuthTimeoutWorker} from './auth/services/auth-timout.services';
 import {initAuthBroadcastListener} from './auth/services/broadcast.services';
 import {loadAuth} from './auth/services/load.services';

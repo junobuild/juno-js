@@ -1,5 +1,5 @@
-import {nonNullish, toNullable} from '@junobuild/utils';
 import type {CliConfig} from '@junobuild/config';
+import {nonNullish, toNullable} from '@junobuild/utils';
 import ora from 'ora';
 import {UPLOAD_DEFAULT_BATCH_SIZE} from '../constants/deploy.constants';
 import {COLLECTION_DAPP} from '../constants/storage.constants';

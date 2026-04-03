@@ -1,6 +1,6 @@
-import {toNullable} from '@junobuild/utils';
 import {IDL} from '@icp-sdk/core/candid';
 import {Principal} from '@icp-sdk/core/principal';
+import {toNullable} from '@junobuild/utils';
 import {type CallParams, type IDLType, CallParamsSchema} from './schemas/call';
 import {CallResponseLengthError} from './types/errors';
 

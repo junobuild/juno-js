@@ -1,6 +1,6 @@
-import {fromNullable} from '@junobuild/utils';
 import type {Signature} from '@icp-sdk/core/agent';
 import {Delegation, ECDSAKeyIdentity} from '@icp-sdk/core/identity';
+import {fromNullable} from '@junobuild/utils';
 import {authenticate as authenticateApi, getDelegation as getDelegationApi} from './api/auth.api';
 import {AuthenticationError, GetDelegationError, GetDelegationRetryError} from './errors';
 import type {AuthenticationData, GetDelegationArgs, SignedDelegation} from './types/actor';

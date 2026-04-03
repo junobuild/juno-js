@@ -1,5 +1,5 @@
-import {isEmptyString, isNullish, notEmptyString} from '@junobuild/utils';
 import {requestJwt} from '@junobuild/auth/delegation';
+import {isEmptyString, isNullish, notEmptyString} from '@junobuild/utils';
 import {envApiUrl, envGitHubClientId} from '../../core/utils/window.env.utils';
 import {SignInMissingClientIdError} from '../types/errors';
 import type {GitHubSignInRedirectOptions} from '../types/github';

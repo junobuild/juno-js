@@ -1,5 +1,5 @@
-import {fromNullable, nonNullish} from '@junobuild/utils';
 import type {SatelliteParameters} from '@junobuild/ic-client/actor';
+import {fromNullable, nonNullish} from '@junobuild/utils';
 import {
   listCustomDomains as listCustomDomainsApi,
   setCustomDomain as setCustomDomainApi

@@ -1,5 +1,5 @@
-import {isNullish} from '@junobuild/utils';
 import {Ed25519KeyIdentity} from '@icp-sdk/core/identity';
+import {isNullish} from '@junobuild/utils';
 import type {Nonce} from '../types/nonce';
 import {generateNonce} from '../utils/nonce.utils';
 import {CONTEXT_KEY} from './_constants';

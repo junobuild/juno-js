@@ -1,4 +1,3 @@
-import {assertNonNullish} from '@junobuild/utils';
 import type {ActorMethod, ActorSubclass} from '@icp-sdk/core/agent';
 import type {IDL} from '@icp-sdk/core/candid';
 import {
@@ -6,6 +5,7 @@ import {
   idlFactorySatellite,
   type SatelliteActor
 } from '@junobuild/ic-client/actor';
+import {assertNonNullish} from '@junobuild/utils';
 import {ActorStore} from '../stores/actor.store';
 import type {ActorKey} from '../types/actor';
 import type {CallOptions} from '../types/call-options';

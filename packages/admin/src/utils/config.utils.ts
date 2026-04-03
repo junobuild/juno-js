@@ -1,4 +1,3 @@
-import {fromNullable, isNullish, nonNullish, toNullable} from '@junobuild/utils';
 import {Principal} from '@icp-sdk/core/principal';
 import type {
   AuthenticationConfig,
@@ -12,6 +11,7 @@ import type {
   StorageConfigRewrite
 } from '@junobuild/config';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
+import {fromNullable, isNullish, nonNullish, toNullable} from '@junobuild/utils';
 import {fromMaxMemorySize, toMaxMemorySize} from './memory.utils';
 
 export const fromStorageConfig = ({

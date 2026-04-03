@@ -1,10 +1,10 @@
-import {fromNullable, toNullable} from '@junobuild/utils';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import {
   uploadAsset as uploadAssetStorage,
   type AssetKey,
   type UploadAsset
 } from '@junobuild/storage';
+import {fromNullable, toNullable} from '@junobuild/utils';
 import {getSatelliteActor} from '../../core/api/actor.api';
 import type {ActorReadParams, ActorUpdateParams} from '../../core/types/actor';
 import type {ListParams, ListResults} from '../../core/types/list';

@@ -1,6 +1,6 @@
-import {hexStringToUint8Array} from '@junobuild/utils';
 import {IcManagementCanister, type CanisterStatusResponse} from '@icp-sdk/canisters/ic-management';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
+import {hexStringToUint8Array} from '@junobuild/utils';
 import {mockDeep} from 'vitest-mock-extended';
 import {UpgradeCodeUnchangedError} from '../../errors/upgrade.errors';
 import {upgrade} from '../../handlers/upgrade.handlers';

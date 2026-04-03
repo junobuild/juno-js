@@ -1,5 +1,4 @@
-import {nonNullish} from '@junobuild/utils';
-import {convertCamelToSnake} from '@junobuild/utils';
+import {convertCamelToSnake, nonNullish} from '@junobuild/utils';
 import {
   type HttpRequestArgs,
   type HttpRequestResult,

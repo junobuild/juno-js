@@ -1,7 +1,7 @@
-import {isNullish} from '@junobuild/utils';
 import {IDL} from '@icp-sdk/core/candid';
 import type {SatelliteParameters} from '@junobuild/ic-client/actor';
 import {toPrincipal} from '@junobuild/ic-client/utils';
+import {isNullish} from '@junobuild/utils';
 import {
   listControllers,
   listDeprecatedControllers,

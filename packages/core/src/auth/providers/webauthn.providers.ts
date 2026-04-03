@@ -1,4 +1,3 @@
-import {isNullish, uint8ArrayToBase64} from '@junobuild/utils';
 import {IdbStorage, KEY_STORAGE_DELEGATION, KEY_STORAGE_KEY} from '@icp-sdk/auth/client';
 import {type SignIdentity, AnonymousIdentity} from '@icp-sdk/core/agent';
 import {
@@ -15,6 +14,7 @@ import {
   WebAuthnIdentity,
   WebAuthnSignProgressStep
 } from '@junobuild/ic-client/webauthn';
+import {isNullish, uint8ArrayToBase64} from '@junobuild/utils';
 import {EnvStore} from '../../core/stores/env.store';
 import {getDoc} from '../../datastore/services/doc.services';
 import {DELEGATION_IDENTITY_EXPIRATION_IN_MILLISECONDS} from '../constants/auth.constants';

@@ -1,5 +1,5 @@
-import {nonNullish} from '@junobuild/utils';
 import type {HttpAgent} from '@icp-sdk/core/agent';
+import {nonNullish} from '@junobuild/utils';
 import type {ActorParameters} from '../types/actor';
 import {createAgent} from '../utils/agent.utils';
 

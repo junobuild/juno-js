@@ -1,5 +1,5 @@
-import {nonNullish, uint8ArrayToHexString} from '@junobuild/utils';
 import type {IcManagementDid} from '@icp-sdk/canisters/ic-management';
+import {nonNullish, uint8ArrayToHexString} from '@junobuild/utils';
 import {
   clearChunkStore,
   installChunkedCode,

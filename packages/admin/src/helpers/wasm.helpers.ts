@@ -1,5 +1,5 @@
-import {isNullish, nonNullish} from '@junobuild/utils';
 import {type JunoPackage, JUNO_PACKAGE_SATELLITE_ID, JunoPackageSchema} from '@junobuild/config';
+import {isNullish, nonNullish} from '@junobuild/utils';
 import type {BuildType} from '../schemas/build';
 import {findJunoPackageDependency} from './package.helpers';
 

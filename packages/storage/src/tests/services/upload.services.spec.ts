@@ -1,6 +1,6 @@
-import {fromNullable} from '@junobuild/utils';
 import {ConsoleDid} from '@junobuild/ic-client/actor';
 import {UploadChunk} from '@junobuild/ic-client/dist/declarations/console/console.did';
+import {fromNullable} from '@junobuild/utils';
 import type {MockInstance} from 'vitest';
 import {mockDeep} from 'vitest-mock-extended';
 import {UPLOAD_CHUNK_SIZE} from '../../constants/upload.constants';

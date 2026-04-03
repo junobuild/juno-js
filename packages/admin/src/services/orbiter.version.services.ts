@@ -1,6 +1,6 @@
-import {assertNonNullish, isNullish} from '@junobuild/utils';
 import {JUNO_PACKAGE_ORBITER_ID} from '@junobuild/config';
 import type {OrbiterParameters} from '@junobuild/ic-client/actor';
+import {assertNonNullish, isNullish} from '@junobuild/utils';
 import {version} from '../api/orbiter.api';
 import {OrbiterVersionError} from '../errors/version.errors';
 import {getJunoPackage} from './package.services';

@@ -1,6 +1,6 @@
-import {isNullish, toNullable} from '@junobuild/utils';
 import {Principal} from '@icp-sdk/core/principal';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
+import {isNullish, toNullable} from '@junobuild/utils';
 import {ListError} from '../../auth/types/errors';
 import type {ListParams, ListTimestampMatcher} from '../types/list';
 

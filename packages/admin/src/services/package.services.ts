@@ -1,7 +1,7 @@
-import {isNullish} from '@junobuild/utils';
 import type {Principal} from '@icp-sdk/core/principal';
 import {type JunoPackage, JunoPackageSchema} from '@junobuild/config';
 import type {ActorParameters} from '@junobuild/ic-client/actor';
+import {isNullish} from '@junobuild/utils';
 import * as z from 'zod';
 import {canisterMetadata} from '../api/ic.api';
 

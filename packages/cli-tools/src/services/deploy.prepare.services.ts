@@ -1,6 +1,6 @@
-import {isNullish, nonNullish} from '@junobuild/utils';
 import type {CliConfig, EncodingType} from '@junobuild/config';
 import type {Asset} from '@junobuild/storage';
+import {isNullish, nonNullish} from '@junobuild/utils';
 import crypto from 'crypto';
 import {fileTypeFromFile} from 'file-type';
 import mime from 'mime-types';

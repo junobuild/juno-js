@@ -1,5 +1,5 @@
-import {fromNullable, isNullish, uint8ArrayToHexString} from '@junobuild/utils';
 import {commitProposal, initProposal, submitProposal} from '@junobuild/cdn';
+import {fromNullable, isNullish, uint8ArrayToHexString} from '@junobuild/utils';
 import ora from 'ora';
 import type {ProposeChangesParams} from '../types/proposal';
 

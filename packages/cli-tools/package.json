@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/cli-tools",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "description": "A collection of tools for Juno CLIs and Plugins.",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -50,7 +50,7 @@
     "@junobuild/config": "^2.14",
     "@junobuild/functions-tools": "^0.6",
     "@junobuild/storage": "^2.4",
-    "@junobuild/utils": "^1",
+    "@junobuild/utils": "^1.0.2",
     "esbuild": "^0.27.0",
     "ora": "^9"
   },

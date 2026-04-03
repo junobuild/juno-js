@@ -1,30 +1,51 @@
-import {jsonReplacer, jsonReviver} from '@dfinity/utils';
+import type { Nullable, NullishNullable } from "../types/did.utils";
+import { assertNonNullish } from "./asserts.utils";
+import { nonNullish } from "./nullish.utils";
 
 /**
- * Converts data to a Uint8Array for transmission or storage.
- * @template T
- * @param {T} data - The data to convert.
- * @returns {Promise<Uint8Array>} A promise that resolves to a Uint8Array representation of the data.
+ * Converts a value into a Candid-style variant representation of an optional value.
+ *
+ * @template T The type of the value.
+ * @param {T | null | undefined} value - The value to convert into a Candid-style variant.
+ * @returns {Nullable<T>} A Candid-style variant representation: an empty array for `null` and `undefined` or an array with the value.
  */
-export const toArray = async <T>(data: T): Promise<Uint8Array> => {
-  const blob = new Blob([JSON.stringify(data, jsonReplacer)], {
-    type: 'application/json; charset=utf-8'
-  });
-  return new Uint8Array(await blob.arrayBuffer());
+export const toNullable = <T>(value?: T | null): Nullable<T> =>
+  nonNullish(value) ? [value] : [];
+
+/**
+ * Extracts the value from a Candid-style variant representation of an optional value.
+ *
+ * @template T The type of the value.
+ * @param {Nullable<T>} value - A Candid-style variant representing an optional value.
+ * @returns {T | undefined} The extracted value, or `undefined` if the array is empty.
+ */
+export const fromNullable = <T>(value: Nullable<T>): T | undefined =>
+  value?.[0];
+
+/**
+ * Extracts the value from a Candid-style variant representation of an optional value,
+ * ensuring the value is defined. Throws an error if the array is empty or the value is nullish.
+ *
+ * @template T The type of the value.
+ * @param {Nullable<T>} value - A Candid-style variant representing an optional value.
+ * @returns {T} The extracted value.
+ * @throws {Error} If the array is empty or the value is nullish.
+ */
+export const fromDefinedNullable = <T>(value: Nullable<T>): T => {
+  const result = fromNullable(value);
+
+  assertNonNullish(result);
+
+  return result;
 };
 
 /**
- * Converts a Uint8Array or number array back to the original data type.
- * @template T
- * @param {(Uint8Array | number[])} data - The array to convert.
- * @returns {Promise<T>} A promise that resolves to the original data.
+ * Extracts the value from a nullish Candid-style variant representation.
+ *
+ * @template T The type of the value.
+ * @param {NullishNullable<T>} value - A Candid-style variant or `undefined`.
+ * @returns {T | undefined} The extracted value, or `undefined` if the input is nullish or the array is empty.
  */
-export const fromArray = async <T>(data: Uint8Array | number[]): Promise<T> => {
-  const blob = new Blob(
-    [data instanceof Uint8Array ? (data as Uint8Array<ArrayBuffer>) : new Uint8Array(data)],
-    {
-      type: 'application/json; charset=utf-8'
-    }
-  );
-  return JSON.parse(await blob.text(), jsonReviver);
-};
+export const fromNullishNullable = <T>(
+  value: NullishNullable<T>,
+): T | undefined => fromNullable(value ?? []);

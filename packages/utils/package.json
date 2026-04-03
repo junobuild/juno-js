@@ -39,8 +39,5 @@
   "bugs": {
     "url": "https://github.com/junobuild/juno-js"
   },
-  "homepage": "https://juno.build",
-  "dependencies": {
-    "@dfinity/utils": "^4.2"
-  }
+  "homepage": "https://juno.build"
 }

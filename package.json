@@ -117,7 +117,7 @@
     {
       "name": "@junobuild/utils",
       "path": "./packages/utils/dist/index.js",
-      "limit": "60 kB"
+      "limit": "10 kB"
     },
     {
       "name": "@junobuild/errors",

@@ -51,7 +51,7 @@
     "@junobuild/config": "^2.14",
     "@junobuild/functions-tools": "^0.5.2",
     "@junobuild/storage": "^2.3",
-    "esbuild": "^0.27.0",
+    "esbuild": "^0.28.0",
     "ora": "^9"
   },
   "dependencies": {

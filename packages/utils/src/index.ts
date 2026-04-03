@@ -2,6 +2,7 @@ export * from './utils/arrays.utils';
 export * from './utils/asserts.utils';
 export * from './utils/base64.utils';
 export * from './utils/date.utils';
+export * from './utils/debounce.utils';
 export * from './utils/did.utils';
 export * from './utils/doc.utils';
 export * from './utils/env.utils';

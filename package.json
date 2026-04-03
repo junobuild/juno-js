@@ -82,6 +82,7 @@
         "@dfinity/utils",
         "@junobuild/config",
         "@junobuild/ic-client",
+        "@junobuild/utils",
         "semver",
         "zod",
         "@junobuild/schema"
@@ -99,7 +100,8 @@
         "@dfinity/auth-client",
         "@icp-sdk/core",
         "@icp-sdk/auth",
-        "@dfinity/utils"
+        "@dfinity/utils",
+        "@junobuild/utils"
       ]
     },
     {
@@ -115,10 +117,7 @@
     {
       "name": "@junobuild/utils",
       "path": "./packages/utils/dist/index.js",
-      "limit": "5 kB",
-      "ignore": [
-        "@dfinity/utils"
-      ]
+      "limit": "60 kB"
     },
     {
       "name": "@junobuild/errors",
@@ -137,7 +136,8 @@
         "@icp-sdk/core",
         "@dfinity/utils",
         "zod",
-        "@junobuild/schema"
+        "@junobuild/schema",
+        "@junobuild/utils"
       ]
     },
     {
@@ -166,7 +166,8 @@
         "@dfinity/principal",
         "@icp-sdk/core",
         "@dfinity/utils",
-        "@junobuild/ic-client"
+        "@junobuild/ic-client",
+        "@junobuild/utils"
       ]
     },
     {
@@ -180,7 +181,8 @@
         "@dfinity/principal",
         "@icp-sdk/core",
         "@dfinity/utils",
-        "@junobuild/ic-client"
+        "@junobuild/ic-client",
+        "@junobuild/utils"
       ]
     },
     {
@@ -198,6 +200,7 @@
         "@junobuild/config",
         "@junobuild/storage",
         "@junobuild/ic-client",
+        "@junobuild/utils",
         "semver"
       ]
     },
@@ -213,7 +216,8 @@
         "@icp-sdk/core",
         "@dfinity/utils",
         "@junobuild/utils",
-        "@junobuild/ic-client"
+        "@junobuild/ic-client",
+        "@junobuild/utils"
       ]
     },
     {
@@ -226,7 +230,8 @@
         "@dfinity/identity",
         "@dfinity/principal",
         "@icp-sdk/core",
-        "@dfinity/utils"
+        "@dfinity/utils",
+        "@junobuild/utils"
       ]
     },
     {
@@ -239,7 +244,8 @@
         "@dfinity/identity",
         "@dfinity/principal",
         "@icp-sdk/core",
-        "@dfinity/utils"
+        "@dfinity/utils",
+        "@junobuild/utils"
       ]
     },
     {
@@ -252,7 +258,8 @@
         "@dfinity/identity",
         "@dfinity/principal",
         "@icp-sdk/core",
-        "@dfinity/utils"
+        "@dfinity/utils",
+        "@junobuild/utils"
       ]
     },
     {
@@ -266,6 +273,7 @@
         "@dfinity/principal",
         "@icp-sdk/core",
         "@dfinity/utils",
+        "@junobuild/utils",
         "zod"
       ]
     },
@@ -280,6 +288,7 @@
         "@dfinity/principal",
         "@icp-sdk/core",
         "@dfinity/utils",
+        "@junobuild/utils",
         "zod"
       ]
     }

@@ -1,5 +1,4 @@
-export const jsTemplateImports = `// @ts-expect-error - generated JS file without type declarations
-import {idlFactory} from './satellite.factory.did.js';
+export const jsTemplateImports = `import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/%CORE_LIB%';
 import {schemaToIdl, schemaFromIdl} from '@junobuild/schema/utils';
 import {j} from '@junobuild/schema';`;

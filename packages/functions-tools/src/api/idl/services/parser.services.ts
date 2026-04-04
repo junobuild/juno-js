@@ -63,14 +63,16 @@ export const parseApi = ({
     })
     .join('\n\n');
 
+  const functionNames = replacers.map(({METHOD_NAME}) => METHOD_NAME).join(',\n\t');
+
   const namespaceExport = templateNamespace
     .replace('%FUNCTION_NAMESPACE%', FRONTEND_FUNCTION_NAMESPACE)
-    .replace('%JS_FUNCTIONS%', replacers.map(({METHOD_NAME}) => METHOD_NAME).join(',\n\t'));
+    .replace('%JS_FUNCTIONS%', functionNames);
 
   return template
     .replace('%CORE_LIB%', coreLib ?? 'core')
     .replace('%METHODS%', methods)
-    .replace('%NAMESPACE%', namespaceExport)
+    .replace('%NAMESPACE%', functionNames.length === 0 ? '' : namespaceExport)
     .replace(
       '%IMPORT%',
       outputLanguage === 'js'

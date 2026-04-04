@@ -81,9 +81,9 @@ export const mockTsFullNoArgsNoResult = `// This file was automatically generate
 
 /* eslint-disable */
 /* prettier-ignore */
+// @ts-nocheck
 
 import type {_SERVICE as SatelliteActor} from './satellite.did';
-// @ts-expect-error - generated JS file without type declarations
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
 import {schemaToIdl, schemaFromIdl} from '@junobuild/schema/utils';
@@ -103,8 +103,8 @@ export const mockJsFullNoArgsNoResult = `// This file was automatically generate
 
 /* eslint-disable */
 /* prettier-ignore */
+// @ts-nocheck
 
-// @ts-expect-error - generated JS file without type declarations
 import {idlFactory} from './satellite.factory.did.js';
 import {getSatelliteExtendedActor} from '@junobuild/core';
 import {schemaToIdl, schemaFromIdl} from '@junobuild/schema/utils';

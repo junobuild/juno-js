@@ -289,6 +289,14 @@ describe('parser.services', () => {
       expect(result).toContain('setUser');
       expect(result).toContain('deleteUser');
     });
+
+    it('should not include namespace if no functions', () => {
+      const result = parseSchemaApi({
+        functions: [],
+        transformerOptions: {outputLanguage: 'ts'}
+      });
+      expect(result).not.toContain('export const functions = {');
+    });
   });
 
   // ─── rs function name ────────────────────────────────────────────────────────

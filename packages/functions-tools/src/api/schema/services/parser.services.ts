@@ -54,7 +54,8 @@ export const parseSchemaApi = ({
     .replace('%IMPORTS%', outputLanguage === 'js' ? jsTemplateImports : tsTemplateImports)
     .replace('%CORE_LIB%', coreLib ?? 'core')
     .replace('%FUNCTIONS%', functions)
-    .replace('%NAMESPACE%', functionNames.length === 0 ? '' : namespaceExport);
+    .replace('%NAMESPACE%', functionNames.length === 0 ? '' : namespaceExport)
+    .trim();
 };
 
 const parseApi = ({

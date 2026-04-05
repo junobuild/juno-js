@@ -17,10 +17,11 @@ import {
 export const httpRequest = async (args: HttpRequestArgs): Promise<HttpRequestResult> => {
   HttpRequestArgsSchema.parse(args);
 
-  const {transform, ...rest} = args;
+  const {transform, headers, ...rest} = args;
 
   const normalizedArgs = {
     ...rest,
+    headers: headers ?? [],
     // TODO: app_ duplicates functions-tools BACKEND_FUNCTION_NAMESPACE constants
     ...(nonNullish(transform) && {transform: `app_${convertCamelToSnake(transform)}`})
   };

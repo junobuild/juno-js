@@ -77,5 +77,11 @@ describe('ic-cdk > http-request', () => {
         expect.objectContaining({transform: 'app_my_http_transform'})
       );
     });
+
+    it('should successfully perform a request without headers', async () => {
+      const {headers: _, ...rest} = validArgs;
+      const result = await httpRequest(rest);
+      expect(result).toEqual(mockResult);
+    });
   });
 });

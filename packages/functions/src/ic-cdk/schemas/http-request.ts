@@ -19,7 +19,7 @@ export const HttpMethodSchema = j.enum(['GET', 'POST', 'HEAD']);
 export const HttpRequestArgsSchema = j.object({
   url: j.url(),
   method: HttpMethodSchema,
-  headers: j.array(HttpHeaderSchema),
+  headers: j.array(HttpHeaderSchema).optional(),
   body: j.uint8Array().optional(),
   maxResponseBytes: j.bigint().optional(),
   transform: j.string().optional(),
@@ -80,7 +80,7 @@ export interface HttpRequestArgs {
   /**
    * List of HTTP request headers and their corresponding values.
    */
-  headers: HttpHeader[];
+  headers?: HttpHeader[];
 
   /**
    * Optionally provide request body.

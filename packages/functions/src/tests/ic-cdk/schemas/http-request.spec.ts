@@ -65,7 +65,8 @@ describe('ic-cdk > schemas > http-request', () => {
     });
 
     it('should validate args without optional fields', () => {
-      expect(() => HttpRequestArgsSchema.parse(validArgs)).not.toThrow();
+      const {headers: _, ...rest} = validArgs;
+      expect(() => HttpRequestArgsSchema.parse(rest)).not.toThrow();
     });
 
     it('should reject an invalid URL', () => {

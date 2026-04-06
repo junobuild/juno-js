@@ -22,6 +22,7 @@ export * from './shared/feature.config';
 export * from './shared/storage.config';
 export * from './types/cli.config';
 export * from './types/encoding';
+export * from './types/hosting.config';
 export * from './types/juno.env';
 export * from './types/juno.package';
 export type * from './types/utility.types';

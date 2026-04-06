@@ -7,6 +7,8 @@ import {
 import {type AutomationConfig, AutomationConfigSchema} from '../../shared/automation.config';
 import {type StorageConfig, StorageConfigSchema} from '../../shared/storage.config';
 import type {CliConfig} from '../../types/cli.config';
+import type {HostingConfig} from '../../types/hosting.config';
+import { HostingConfigSchema} from '../../types/hosting.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../../types/juno.env';
 import type {Either} from '../../types/utility.types';
 import {StrictPrincipalTextSchema} from '../../utils/principal.utils';
@@ -65,6 +67,7 @@ export interface SatelliteIds {
  * @see SatelliteConfigOptions
  */
 const SatelliteConfigOptionsBaseSchema = z.object({
+  hosting: HostingConfigSchema.optional(),
   storage: StorageConfigSchema.optional(),
   datastore: DatastoreConfigSchema.optional(),
   authentication: AuthenticationConfigSchema.optional(),
@@ -110,6 +113,13 @@ export const SatelliteConfigOptionsSchema = z.union([
  * @property {ModuleSettings} [settings] - General settings governing module behavior and resource management.
  */
 export interface SatelliteConfigOptions {
+  /**
+   * Optional configuration for deploying the assets of a frontend application to a satellite.
+   * @type {HostingConfig}
+   * @optional
+   */
+  hosting?: HostingConfig;
+
   /**
    * Optional configuration parameters for the satellite, affecting the operational behavior of its Storage.
    * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
@@ -168,10 +178,9 @@ export interface SatelliteConfigOptions {
 /**
  * Represents the configuration for a satellite.
  *
- * @typedef {Either<SatelliteId, SatelliteIds> & CliConfig & SatelliteConfigOptions} SatelliteConfig
+ * @typedef {Either<SatelliteId, SatelliteIds> & SatelliteConfigOptions} SatelliteConfig
  * @property {SatelliteId | SatelliteIds} SatelliteId or SatelliteIds - Defines a unique Satellite or a collection of Satellites.
- * @property {CliConfig} CliConfig - Configuration specific to the CLI interface.
- * @property {SatelliteConfigOptions} SatelliteConfigOptions - Additional configuration options for the Satellite.
+ * @property {SatelliteConfigOptions} SatelliteConfigOptions - The configuration options for the Satellite.
  */
 export type SatelliteConfig = Either<SatelliteId, SatelliteIds> &
   CliConfig &

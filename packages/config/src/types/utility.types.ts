@@ -6,3 +6,8 @@ export type Only<T, U> = {
 };
 
 export type Either<T, U> = Only<T, U> | Only<U, T>;
+
+export type Deprecated<T> = {
+  /** @deprecated */
+  [K in keyof T]: T[K];
+};

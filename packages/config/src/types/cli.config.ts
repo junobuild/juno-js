@@ -1,5 +1,4 @@
-import type {HostingConfig} from './hosting.config';
-import {HostingConfigSchema} from './hosting.config';
+import {type HostingConfig, HostingConfigSchema} from './hosting.config';
 import type {Deprecated} from './utility.types';
 
 /**

@@ -333,13 +333,13 @@ see EncodingType
 
 | Constant          | Type                                                                                                                                                                                                                                                                                                                               |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CliConfigSchema` | `ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString>>; precompress: ZodOptional<ZodUnion<readonly [ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<...>; algorithm: ZodOptional<...>; }, $strict>, ZodArray<...>, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: Zo...` |
+| `CliConfigSchema` | `ZodObject<{ ignore: ZodOptional<ZodArray<ZodString>>; precompress: ZodOptional<ZodUnion<readonly [ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<ZodEnum<{ both: "both"; replace: "replace"; }>>; algorithm: ZodOptional<...>; }, $strict>, ZodArray<...>, ZodLiteral<...>]>>; encoding: ZodOptional<...>; pr...` |
 
 References:
 
 - CliConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L8)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L11)
 
 #### :gear: SatelliteIdSchema
 
@@ -369,7 +369,7 @@ References:
 
 | Constant                       | Type                                                                                                                                                                                                                                                                                                                               |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ hosting: ZodOptional<ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString>>; precompress: ZodOptional<ZodUnion<readonly [ZodObject<...>, ZodArray<...>, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: ZodOptional<...>; postdeploy: ZodOptional<......` |
+| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ hosting: ZodOptional<ZodObject<{ source: ZodString; ignore: ZodOptional<ZodArray<ZodString>>; precompress: ZodOptional<ZodUnion<readonly [ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<...>; algorithm: ZodOptional<...>; }, $strict>, ZodArray<...>, ZodLiteral<...>]>>; en...` |
 
 References:
 
@@ -822,7 +822,7 @@ The configuration for running the Juno emulator.
 | ----------- | --------------------------- |
 | `CliConfig` | `Deprecated<HostingConfig>` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L13)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L19)
 
 #### :gear: SatelliteConfig
 

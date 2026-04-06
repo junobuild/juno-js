@@ -14,7 +14,7 @@ export const PrecompressSchema = z.strictObject({
  * @see HostingConfig
  */
 export const HostingConfigSchema = z.strictObject({
-  source: z.string().optional(),
+  source: z.string(),
   ignore: z.array(z.string()).optional(),
   precompress: z
     .union([PrecompressSchema, z.array(PrecompressSchema), z.literal(false)])
@@ -61,7 +61,7 @@ export interface HostingConfig {
    * @default 'build'
    * @type {string}
    */
-  source?: string;
+  source: string;
 
   /**
    * Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore.

@@ -8,7 +8,7 @@ import {type AutomationConfig, AutomationConfigSchema} from '../../shared/automa
 import {type StorageConfig, StorageConfigSchema} from '../../shared/storage.config';
 import type {CliConfig} from '../../types/cli.config';
 import type {HostingConfig} from '../../types/hosting.config';
-import { HostingConfigSchema} from '../../types/hosting.config';
+import {HostingConfigSchema} from '../../types/hosting.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../../types/juno.env';
 import type {Either} from '../../types/utility.types';
 import {StrictPrincipalTextSchema} from '../../utils/principal.utils';

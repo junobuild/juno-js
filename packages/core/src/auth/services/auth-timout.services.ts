@@ -8,7 +8,7 @@ import {emit} from '../utils/events.utils';
 import {signOut} from './sign-out.services';
 
 export const initAuthTimeoutWorker = (auth: EnvironmentWorker): Unsubscribe => {
-  const workerUrl = auth === true ? './workers/auth.worker.js' : auth;
+  const workerUrl = auth === true ? '/workers/auth.worker.js' : auth;
   const worker = new Worker(workerUrl);
 
   const timeoutSignOut = async () => {

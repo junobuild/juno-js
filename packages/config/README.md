@@ -339,7 +339,7 @@ References:
 
 - CliConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L11)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L10)
 
 #### :gear: SatelliteIdSchema
 
@@ -399,6 +399,7 @@ References:
 - [StorageConfigRewrite](#gear-storageconfigrewrite)
 - [StorageConfigRedirect](#gear-storageconfigredirect)
 - [StorageConfig](#gear-storageconfig)
+- [CliConfig](#gear-cliconfig)
 - [SatelliteId](#gear-satelliteid)
 - [SatelliteIds](#gear-satelliteids)
 - [SatelliteConfigOptions](#gear-satelliteconfigoptions)
@@ -657,6 +658,19 @@ Configures the hosting behavior of the Storage.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L128)
 
+#### :gear: CliConfig
+
+| Property      | Type                                                 | Description                               |
+| ------------- | ---------------------------------------------------- | ----------------------------------------- |
+| `source`      | `string or undefined`                                | deprecated: use HostingConfig.source      |
+| `ignore`      | `string[] or undefined`                              | deprecated: use HostingConfig.ignore      |
+| `precompress` | `false or Precompress or Precompress[] or undefined` | deprecated: use HostingConfig.precompress |
+| `encoding`    | `[string, EncodingType][] or undefined`              | deprecated: use HostingConfig.encoding    |
+| `predeploy`   | `string[] or undefined`                              | deprecated: use HostingConfig.predeploy   |
+| `postdeploy`  | `string[] or undefined`                              | deprecated: use HostingConfig.postdeploy  |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L18)
+
 #### :gear: SatelliteId
 
 Represents the unique identifier for a satellite.
@@ -713,7 +727,6 @@ changes, typically through CLI commands (e.g., `juno config`).
 - [OrbiterConfig](#gear-orbiterconfig)
 - [StorageConfigSourceGlob](#gear-storageconfigsourceglob)
 - [EncodingType](#gear-encodingtype)
-- [CliConfig](#gear-cliconfig)
 - [SatelliteConfig](#gear-satelliteconfig)
 
 #### :gear: PermissionText
@@ -815,14 +828,6 @@ The configuration for running the Juno emulator.
 | `EncodingType` | `'identity' or 'gzip' or 'compress' or 'deflate' or 'br'` |
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L12)
-
-#### :gear: CliConfig
-
-| Type        | Type                        |
-| ----------- | --------------------------- |
-| `CliConfig` | `Deprecated<HostingConfig>` |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L19)
 
 #### :gear: SatelliteConfig
 

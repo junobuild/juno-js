@@ -113,15 +113,18 @@ export const SatelliteConfigOptionsSchema = z.union([
  */
 export interface SatelliteConfigOptions {
   /**
-   * Optional configuration for deploying the assets of a frontend application to a satellite.
+   * Optional deploy-time configuration for bundling and uploading your frontend assets to the satellite.
+   * Controls the source folder, file ignoring, compression, encoding, and pre/post deploy hooks.
+   * Runs on your machine during `juno deploy`.
    * @type {HostingConfig}
    * @optional
    */
   hosting?: HostingConfig;
 
   /**
-   * Optional configuration parameters for the satellite, affecting the operational behavior of its Storage.
-   * Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands.
+   * Optional serve-time configuration for how the satellite's Storage module handles HTTP requests.
+   * Controls headers, rewrites, redirects, iframe policy, and memory limits.
+   * Changes must be applied manually afterwards, for example with `juno config apply`.
    * @type {StorageConfig}
    * @optional
    */

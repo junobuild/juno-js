@@ -55,7 +55,7 @@ export interface Precompress {
  */
 export interface HostingConfig {
   /**
-   * Specifies the directory from which to deploy to Storage.
+   * Specifies the directory from which to deploy your app bundle.
    * For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`.
    *
    * @default 'build'

@@ -206,5 +206,40 @@ describe('satellite.config', () => {
         }
       });
     });
+
+    describe('hosting', () => {
+      it('accepts config with hosting', () => {
+        const result = SatelliteConfigOptionsSchema.safeParse({
+          id: mockModuleIdText,
+          hosting: {
+            source: 'dist'
+          }
+        });
+        expect(result.success).toBe(true);
+      });
+
+      it('accepts config with hosting and options', () => {
+        const result = SatelliteConfigOptionsSchema.safeParse({
+          id: mockModuleIdText,
+          hosting: {
+            source: 'dist',
+            ignore: ['*.map'],
+            predeploy: ['npm run build']
+          }
+        });
+        expect(result.success).toBe(true);
+      });
+
+      it('rejects hosting with unknown fields', () => {
+        const result = SatelliteConfigOptionsSchema.safeParse({
+          id: mockModuleIdText,
+          hosting: {
+            source: 'dist',
+            unexpected: true
+          }
+        });
+        expect(result.success).toBe(false);
+      });
+    });
   });
 });

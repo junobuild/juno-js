@@ -1,8 +1,8 @@
-import type {CliConfig} from '@junobuild/config';
 import type {Asset} from '@junobuild/storage';
 import {join} from 'node:path';
 import {DEPLOY_DEFAULT_IGNORE, DEPLOY_DEFAULT_SOURCE} from '../constants/deploy.constants';
 import type {ListAssets} from '../types/assets';
+import type {DeployConfig} from '../types/config';
 import type {PreparePruneOptions, PruneFileStorage} from '../types/prune';
 import {listSourceFilesForPrune} from '../utils/prune.utils';
 
@@ -11,7 +11,7 @@ export const preparePrune = async ({
   listAssets,
   assertSourceDirExists
 }: {
-  config: CliConfig;
+  config: DeployConfig;
   listAssets: ListAssets;
 } & PreparePruneOptions): Promise<{files: PruneFileStorage[]}> => {
   const {source = DEPLOY_DEFAULT_SOURCE, ignore = DEPLOY_DEFAULT_IGNORE} = config;

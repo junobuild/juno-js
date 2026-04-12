@@ -1,4 +1,4 @@
-import type {CliConfig, EncodingType} from '@junobuild/config';
+import type {EncodingType} from '@junobuild/config';
 import type {Asset} from '@junobuild/storage';
 import {isNullish, nonNullish} from '@junobuild/utils';
 import crypto from 'crypto';
@@ -14,6 +14,7 @@ import {
   DEPLOY_DEFAULT_SOURCE
 } from '../constants/deploy.constants';
 import type {ListAssets} from '../types/assets';
+import type {DeployConfig} from '../types/config';
 import type {FileDetails, FileExtension, PrepareDeployOptions} from '../types/deploy';
 import {fullPath} from '../utils/assets.utils';
 import {compressFiles} from '../utils/compress.utils';
@@ -25,7 +26,7 @@ export const prepareDeploy = async ({
   assertSourceDirExists,
   includeAllFiles
 }: {
-  config: CliConfig;
+  config: DeployConfig;
   listAssets: ListAssets;
 } & PrepareDeployOptions): Promise<{
   files: FileDetails[];
@@ -137,7 +138,7 @@ const prepareFiles = async ({
 }: {
   sourceAbsolutePath: string;
 } & {listAssets: ListAssets} & Pick<PrepareDeployOptions, 'includeAllFiles'> &
-  Required<Pick<CliConfig, 'ignore' | 'encoding' | 'precompress'>>): Promise<FileDetails[]> => {
+  Required<Pick<DeployConfig, 'ignore' | 'encoding' | 'precompress'>>): Promise<FileDetails[]> => {
   const sourceFiles = listSourceFilesForDeploy({sourceAbsolutePath, ignore});
 
   const allCompressedFiles = await compressFiles({sourceFiles, precompress});

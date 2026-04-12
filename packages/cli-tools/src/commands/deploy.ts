@@ -1,4 +1,3 @@
-import type {CliConfig} from '@junobuild/config';
 import {nonNullish, toNullable} from '@junobuild/utils';
 import ora from 'ora';
 import {UPLOAD_DEFAULT_BATCH_SIZE} from '../constants/deploy.constants';
@@ -7,6 +6,7 @@ import {executeHooks} from '../services/deploy.hook.services';
 import {prepareDeploy as prepareDeployServices} from '../services/deploy.prepare.services';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';
 import {uploadFiles} from '../services/upload.services';
+import type {DeployConfig} from '../types/config';
 import type {
   DeployParams,
   DeployResult,
@@ -30,10 +30,10 @@ import {fullPath} from '../utils/assets.utils';
  * perform validations, code generation, or other preparatory tasks.
  *
  * @param {Object} options - The function parameters.
- * @param {CliConfig} options.config - The full configuration object containing hook definitions.
+ * @param {DeployConfig} options.config - The configuration object containing hook definitions.
  * @returns {Promise<void>} Resolves once all predeploy hooks have been executed.
  */
-export const preDeploy = async ({config: {predeploy}}: {config: CliConfig}) => {
+export const preDeploy = async ({config: {predeploy}}: {config: DeployConfig}) => {
   await executeHooks(predeploy);
 };
 
@@ -44,10 +44,10 @@ export const preDeploy = async ({config: {predeploy}}: {config: CliConfig}) => {
  * logging, or integration tasks (e.g., sending Slack notifications).
  *
  * @param {Object} options - The function parameters.
- * @param {CliConfig} options.config - The full configuration object containing hook definitions.
+ * @param {DeployConfig} options.config - The full configuration object containing hook definitions.
  * @returns {Promise<void>} Resolves once all postdeploy hooks have been executed.
  */
-export const postDeploy = async ({config: {postdeploy}}: {config: CliConfig}) => {
+export const postDeploy = async ({config: {postdeploy}}: {config: DeployConfig}) => {
   await executeHooks(postdeploy);
 };
 

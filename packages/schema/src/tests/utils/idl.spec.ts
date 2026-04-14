@@ -52,10 +52,10 @@ describe('idl', () => {
         expect(
           schemaToIdl({
             schema: Schema,
-            value: {username: 'David', status: {type: 'active', owner: 'abc'}}
+            value: {username: 'Hello', status: {type: 'active', owner: 'abc'}}
           })
         ).toEqual({
-          username: 'David',
+          username: 'Hello',
           status: {active: {owner: 'abc'}}
         });
       });
@@ -132,12 +132,93 @@ describe('idl', () => {
         expect(
           schemaFromIdl({
             schema: Schema,
-            value: {username: 'David', status: {active: {owner: 'abc'}}}
+            value: {username: 'Hello', status: {active: {owner: 'abc'}}}
           })
         ).toEqual({
-          username: 'David',
+          username: 'Hello',
           status: {type: 'active', owner: 'abc'}
         });
+      });
+    });
+  });
+
+  describe('camel case', () => {
+    describe('object with camelCase fields', () => {
+      const Schema = z.object({firstName: z.string(), lastName: z.string()});
+
+      it('converts camelCase keys to snake_case', () => {
+        expect(
+          schemaToIdl({schema: Schema, value: {firstName: 'Hello', lastName: 'World'}})
+        ).toEqual({
+          first_name: 'Hello',
+          last_name: 'World'
+        });
+      });
+    });
+
+    describe('object with camelCase fields', () => {
+      const Schema = z.object({firstName: z.string(), lastName: z.string()});
+
+      it('converts snake_case keys back to camelCase', () => {
+        expect(
+          schemaFromIdl({schema: Schema, value: {first_name: 'Hello', last_name: 'World'}})
+        ).toEqual({
+          firstName: 'Hello',
+          lastName: 'World'
+        });
+      });
+    });
+
+    describe('nested object with camelCase fields', () => {
+      const Schema = z.object({
+        userId: z.string(),
+        userProfile: z.object({displayName: z.string()})
+      });
+
+      it('converts nested camelCase keys to snake_case', () => {
+        expect(
+          schemaToIdl({
+            schema: Schema,
+            value: {userId: 'abc', userProfile: {displayName: 'Hello'}}
+          })
+        ).toEqual({
+          user_id: 'abc',
+          user_profile: {display_name: 'Hello'}
+        });
+      });
+
+      it('converts nested snake_case keys back to camelCase', () => {
+        expect(
+          schemaFromIdl({
+            schema: Schema,
+            value: {user_id: 'abc', user_profile: {display_name: 'Hello'}}
+          })
+        ).toEqual({
+          userId: 'abc',
+          userProfile: {displayName: 'Hello'}
+        });
+      });
+    });
+  });
+
+  describe('snake_case fields', () => {
+    const Schema = z.object({first_name: z.string(), last_name: z.string()});
+
+    it('keeps snake_case keys unchanged in schemaToIdl', () => {
+      expect(
+        schemaToIdl({schema: Schema, value: {first_name: 'Hello', last_name: 'World'}})
+      ).toEqual({
+        first_name: 'Hello',
+        last_name: 'World'
+      });
+    });
+
+    it('keeps snake_case keys unchanged in schemaFromIdl', () => {
+      expect(
+        schemaFromIdl({schema: Schema, value: {first_name: 'Hello', last_name: 'World'}})
+      ).toEqual({
+        first_name: 'Hello',
+        last_name: 'World'
       });
     });
   });

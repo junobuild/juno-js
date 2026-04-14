@@ -5,6 +5,10 @@ export interface IdlParams {
   value: unknown;
 }
 
+// Duplicate utils to avoid to reference library utils in schema
+const convertCamelToSnake = (str: string): string =>
+  str.replace(/([a-zA-Z])(?=[A-Z])/g, '$1_').toLowerCase();
+
 /**
  * Recursively converts a JavaScript value to its Candid IDL representation,
  * guided by a Zod schema.
@@ -53,7 +57,7 @@ export const schemaToIdl = ({schema, value}: IdlParams): unknown => {
   if (schema instanceof z.ZodObject) {
     return Object.fromEntries(
       Object.entries(schema._zod.def.shape).map(([k, t]) => [
-        k,
+        convertCamelToSnake(k),
         schemaToIdl({schema: t as z.core.$ZodType, value: (value as Record<string, unknown>)[k]})
       ])
     );
@@ -129,7 +133,10 @@ export const schemaFromIdl = ({schema, value}: IdlParams): unknown => {
     return Object.fromEntries(
       Object.entries(schema._zod.def.shape).map(([k, t]) => [
         k,
-        schemaFromIdl({schema: t as z.core.$ZodType, value: (value as Record<string, unknown>)[k]})
+        schemaFromIdl({
+          schema: t as z.core.$ZodType,
+          value: (value as Record<string, unknown>)[convertCamelToSnake(k)]
+        })
       ])
     );
   }

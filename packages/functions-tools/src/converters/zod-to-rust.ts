@@ -103,7 +103,7 @@ const schemaToRustType = ({
       const inner = schemaToRustType({schema: schema.inner, structName});
       const fieldType = `Option<${inner.fieldType}>`;
       return inner.kind === 'composite'
-        ? composite({fieldType, structs: inner.structs})
+        ? composite({fieldType, structs: inner.structs, needsJsonData: inner.needsJsonData})
         : primitive({fieldType});
     }
 

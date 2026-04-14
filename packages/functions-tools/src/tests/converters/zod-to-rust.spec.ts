@@ -87,6 +87,15 @@ describe('object with enum field', () => {
       '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub status: MyFunctionArgsStatus,\n}'
     ].join('\n\n')
   );
+
+  rust(
+    'myFunction',
+    z.object({role: z.enum(['admin', 'user']).optional()}),
+    [
+      '#[derive(CandidType, Serialize, Deserialize, Clone)]\npub enum MyFunctionArgsRole {\n    #[serde(rename = "admin")]\n    Admin,\n    #[serde(rename = "user")]\n    User,\n}',
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub role: Option<MyFunctionArgsRole>,\n}'
+    ].join('\n\n')
+  );
 });
 
 // ─── Arrays ───────────────────────────────────────────────────────────────────

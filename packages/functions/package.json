@@ -95,7 +95,7 @@
   "homepage": "https://juno.build",
   "peerDependencies": {
     "@icp-sdk/core": "^5",
-    "@junobuild/schema": "^1.2",
+    "@junobuild/schema": "^1.2.3",
     "@junobuild/utils": "^1.0.2",
     "zod": "^4.3"
   }

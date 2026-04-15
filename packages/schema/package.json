@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/schema",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "The type system and utilities for validation on Juno",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",

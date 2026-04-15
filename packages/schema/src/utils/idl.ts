@@ -69,6 +69,14 @@ export const schemaToIdl = ({schema, value}: IdlParams): unknown => {
     );
   }
 
+  if (schema instanceof z.ZodDefault) {
+    return schemaToIdl({schema: schema._zod.def.innerType, value});
+  }
+
+  if (schema instanceof z.ZodEnum) {
+    return {[value as string]: null};
+  }
+
   return value;
 };
 
@@ -145,6 +153,19 @@ export const schemaFromIdl = ({schema, value}: IdlParams): unknown => {
     return (value as unknown[]).map((v) =>
       schemaFromIdl({schema: schema._zod.def.element, value: v})
     );
+  }
+
+  if (schema instanceof z.ZodDefault) {
+    return schemaFromIdl({schema: schema._zod.def.innerType, value});
+  }
+
+  if (schema instanceof z.ZodEnum) {
+    const obj = value as Record<string, unknown>;
+    const keys = Object.keys(obj);
+    if (keys.length === 1) {
+      return keys[0];
+    }
+    return value;
   }
 
   return value;

@@ -222,4 +222,24 @@ describe('idl', () => {
       });
     });
   });
+
+  describe('object with enum field with default', () => {
+    const Schema = z.object({
+      visibility: z
+        .enum(['public', 'friends_and_followers', 'friends_only'])
+        .default('friends_only')
+    });
+
+    it('converts enum with default to IDL', () => {
+      expect(schemaToIdl({schema: Schema, value: {visibility: 'friends_and_followers'}})).toEqual({
+        visibility: {friends_and_followers: null}
+      });
+    });
+
+    it('converts enum with default from IDL', () => {
+      expect(
+        schemaFromIdl({schema: Schema, value: {visibility: {friends_and_followers: null}}})
+      ).toEqual({visibility: 'friends_and_followers'});
+    });
+  });
 });

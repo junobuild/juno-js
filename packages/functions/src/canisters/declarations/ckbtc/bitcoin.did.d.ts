@@ -14,6 +14,13 @@ export type address = string;
 export type block_hash = Uint8Array;
 export type block_header = Uint8Array;
 export type block_height = number;
+export interface blockchain_info {
+  'height' : block_height,
+  'block_hash' : block_hash,
+  'difficulty' : bigint,
+  'timestamp' : number,
+  'utxos_length' : bigint,
+}
 export type canister_arg = { 'init' : init_config } |
   { 'upgrade' : [] | [set_config_request] };
 export interface config {
@@ -127,6 +134,7 @@ export interface _SERVICE {
     [send_transaction_request],
     undefined
   >,
+  'get_blockchain_info' : ActorMethod<[], blockchain_info>,
   'get_config' : ActorMethod<[], config>,
   'set_config' : ActorMethod<[set_config_request], undefined>,
 }

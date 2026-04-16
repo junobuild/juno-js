@@ -122,6 +122,7 @@ export type Duration = bigint;
 export interface FeatureFlags { 'icrc2' : boolean }
 export interface FeeCollector {
   'ts' : [] | [bigint],
+  'mthd' : [] | [string],
   'fee_collector' : [] | [Account],
   'caller' : [] | [Principal],
 }

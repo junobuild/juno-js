@@ -3,6 +3,7 @@ import * as CkBTCMinterIdl from './ckbtc/minter.did.idl';
 import * as CkETHMinterIdl from './cketh/minter.did.idl';
 import * as CkETHOrchestratorIdl from './cketh/orchestrator.did.idl';
 import * as CmcIdl from './cmc/cmc.did.idl';
+import * as CyclesLedgerIdl from './cycles-ledger/cycles-ledger.did.idl';
 import * as IcManagementIdl from './ic-management/ic-management.did.idl';
 import * as IcpIndexIdl from './ledger-icp/index.did.idl';
 import * as IcpLedgerIdl from './ledger-icp/ledger.did.idl';
@@ -20,6 +21,7 @@ export {
   CkETHMinterIdl,
   CkETHOrchestratorIdl,
   CmcIdl,
+  CyclesLedgerIdl,
   IcManagementIdl,
   IcpIndexIdl,
   IcpLedgerIdl,

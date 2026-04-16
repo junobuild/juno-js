@@ -41,6 +41,10 @@
       "types": "./canisters/ic-management/index.d.ts",
       "import": "./canisters/ic-management/index.js"
     },
+    "./canisters/ledger/cycles": {
+      "types": "./canisters/ledger/cycles/index.d.ts",
+      "import": "./canisters/ledger/cycles/index.js"
+    },
     "./canisters/ledger/icp": {
       "types": "./canisters/ledger/icp/index.d.ts",
       "import": "./canisters/ledger/icp/index.js"

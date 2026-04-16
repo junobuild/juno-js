@@ -61,7 +61,7 @@ function generate_did_idl() {
 
 # Canisters
 
-CANISTERS=cmc,ledger-icp,ledger-icrc,nns,sns,ic-management,ckbtc,cketh
+CANISTERS=cmc,ledger-icp,ledger-icrc,nns,sns,ic-management,ckbtc,cketh,cycles-ledger
 
 for canister in $(echo $CANISTERS | sed "s/,/ /g")
 do

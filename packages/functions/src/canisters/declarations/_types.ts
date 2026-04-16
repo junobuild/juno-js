@@ -3,6 +3,7 @@ import type * as CkBTCMinterDid from './ckbtc/minter.did';
 import type * as CkETHMinterDid from './cketh/minter.did';
 import type * as CkETHOrchestratorDid from './cketh/orchestrator.did';
 import type * as CmcDid from './cmc/cmc.did';
+import type * as CyclesLedgerDid from './cycles-ledger/cycles-ledger.did';
 import type * as IcManagementDid from './ic-management/ic-management.did';
 import type * as IcpIndexDid from './ledger-icp/index.did';
 import type * as IcpLedgerDid from './ledger-icp/ledger.did';
@@ -20,6 +21,7 @@ export type {
   CkETHMinterDid,
   CkETHOrchestratorDid,
   CmcDid,
+  CyclesLedgerDid,
   IcManagementDid,
   IcpIndexDid,
   IcpLedgerDid,

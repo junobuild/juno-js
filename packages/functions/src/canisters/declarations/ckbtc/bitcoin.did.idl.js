@@ -104,6 +104,13 @@ export const send_transaction_request = IDL.Record({
   transaction: IDL.Vec(IDL.Nat8),
   network: network
 });
+export const blockchain_info = IDL.Record({
+  height: block_height,
+  block_hash: block_hash,
+  difficulty: IDL.Nat,
+  timestamp: IDL.Nat32,
+  utxos_length: IDL.Nat64
+});
 export const config = IDL.Record({
   api_access: flag,
   lazily_evaluate_fee_percentiles: flag,
@@ -133,6 +140,7 @@ export const idlService = IDL.Service({
   bitcoin_get_utxos: IDL.Func([get_utxos_request], [get_utxos_response], []),
   bitcoin_get_utxos_query: IDL.Func([get_utxos_request], [get_utxos_response], ['query']),
   bitcoin_send_transaction: IDL.Func([send_transaction_request], [], []),
+  get_blockchain_info: IDL.Func([], [blockchain_info], ['query']),
   get_config: IDL.Func([], [config], ['query']),
   set_config: IDL.Func([set_config_request], [], [])
 });
@@ -238,6 +246,13 @@ export const idlFactory = ({IDL}) => {
     transaction: IDL.Vec(IDL.Nat8),
     network: network
   });
+  const blockchain_info = IDL.Record({
+    height: block_height,
+    block_hash: block_hash,
+    difficulty: IDL.Nat,
+    timestamp: IDL.Nat32,
+    utxos_length: IDL.Nat64
+  });
   const config = IDL.Record({
     api_access: flag,
     lazily_evaluate_fee_percentiles: flag,
@@ -267,6 +282,7 @@ export const idlFactory = ({IDL}) => {
     bitcoin_get_utxos: IDL.Func([get_utxos_request], [get_utxos_response], []),
     bitcoin_get_utxos_query: IDL.Func([get_utxos_request], [get_utxos_response], ['query']),
     bitcoin_send_transaction: IDL.Func([send_transaction_request], [], []),
+    get_blockchain_info: IDL.Func([], [blockchain_info], ['query']),
     get_config: IDL.Func([], [config], ['query']),
     set_config: IDL.Func([set_config_request], [], [])
   });

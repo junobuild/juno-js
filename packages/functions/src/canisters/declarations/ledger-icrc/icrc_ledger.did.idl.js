@@ -150,6 +150,7 @@ export const Approve = IDL.Record({
 });
 export const FeeCollector = IDL.Record({
   ts: IDL.Opt(IDL.Nat64),
+  mthd: IDL.Opt(IDL.Text),
   fee_collector: IDL.Opt(Account),
   caller: IDL.Opt(IDL.Principal)
 });
@@ -575,6 +576,7 @@ export const idlFactory = ({IDL}) => {
   });
   const FeeCollector = IDL.Record({
     ts: IDL.Opt(IDL.Nat64),
+    mthd: IDL.Opt(IDL.Text),
     fee_collector: IDL.Opt(Account),
     caller: IDL.Opt(IDL.Principal)
   });

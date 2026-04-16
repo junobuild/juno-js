@@ -35,6 +35,9 @@ export const NeuronBasketConstructionParameters = IDL.Record({
 });
 export const Canister = IDL.Record({id: IDL.Opt(IDL.Principal)});
 export const DappCanisters = IDL.Record({canisters: IDL.Vec(Canister)});
+export const CustomProposalCriticality = IDL.Record({
+  additional_critical_native_action_ids: IDL.Vec(IDL.Nat64)
+});
 export const LinearScalingCoefficient = IDL.Record({
   slope_numerator: IDL.Opt(IDL.Nat64),
   intercept_icp_e8s: IDL.Opt(IDL.Nat64),
@@ -102,6 +105,7 @@ export const SnsInitPayload = IDL.Record({
   wait_for_quiet_deadline_increase_seconds: IDL.Opt(IDL.Nat64),
   transaction_fee_e8s: IDL.Opt(IDL.Nat64),
   dapp_canisters: IDL.Opt(DappCanisters),
+  custom_proposal_criticality: IDL.Opt(CustomProposalCriticality),
   neurons_fund_participation_constraints: IDL.Opt(NeuronsFundParticipationConstraints),
   max_age_bonus_percentage: IDL.Opt(IDL.Nat64),
   initial_token_distribution: IDL.Opt(InitialTokenDistribution),
@@ -320,6 +324,9 @@ export const idlFactory = ({IDL}) => {
   });
   const Canister = IDL.Record({id: IDL.Opt(IDL.Principal)});
   const DappCanisters = IDL.Record({canisters: IDL.Vec(Canister)});
+  const CustomProposalCriticality = IDL.Record({
+    additional_critical_native_action_ids: IDL.Vec(IDL.Nat64)
+  });
   const LinearScalingCoefficient = IDL.Record({
     slope_numerator: IDL.Opt(IDL.Nat64),
     intercept_icp_e8s: IDL.Opt(IDL.Nat64),
@@ -387,6 +394,7 @@ export const idlFactory = ({IDL}) => {
     wait_for_quiet_deadline_increase_seconds: IDL.Opt(IDL.Nat64),
     transaction_fee_e8s: IDL.Opt(IDL.Nat64),
     dapp_canisters: IDL.Opt(DappCanisters),
+    custom_proposal_criticality: IDL.Opt(CustomProposalCriticality),
     neurons_fund_participation_constraints: IDL.Opt(NeuronsFundParticipationConstraints),
     max_age_bonus_percentage: IDL.Opt(IDL.Nat64),
     initial_token_distribution: IDL.Opt(InitialTokenDistribution),

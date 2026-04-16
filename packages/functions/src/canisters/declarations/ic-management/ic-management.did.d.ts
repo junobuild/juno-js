@@ -155,13 +155,25 @@ export type change_details = {
       'snapshot_id' : snapshot_id,
     }
   } |
+  {
+    'rename_canister' : {
+      'rename_to' : {
+        'canister_id' : canister_id,
+        'version' : bigint,
+        'total_num_changes' : bigint,
+      },
+      'canister_id' : canister_id,
+      'requested_by' : Principal,
+      'total_num_changes' : bigint,
+    }
+  } |
   { 'controllers_change' : { 'controllers' : Array<Principal> } } |
   { 'code_uninstall' : null };
 export type change_origin = { 'from_user' : { 'user_id' : Principal } } |
   {
     'from_canister' : {
       'canister_version' : [] | [bigint],
-      'canister_id' : Principal,
+      'canister_id' : canister_id,
     }
   };
 export interface chunk_hash { 'hash' : Uint8Array }
@@ -207,8 +219,10 @@ export interface http_header { 'value' : string, 'name' : string }
 export interface http_request_args {
   'url' : string,
   'method' : { 'get' : null } |
+    { 'put' : null } |
     { 'head' : null } |
-    { 'post' : null },
+    { 'post' : null } |
+    { 'delete' : null },
   'max_response_bytes' : [] | [bigint],
   'body' : [] | [Uint8Array],
   'transform' : [] | [
@@ -366,7 +380,7 @@ export interface uninstall_code_args {
   'sender_canister_version' : [] | [bigint],
 }
 export interface update_settings_args {
-  'canister_id' : Principal,
+  'canister_id' : canister_id,
   'settings' : canister_settings,
   'sender_canister_version' : [] | [bigint],
 }
@@ -405,7 +419,7 @@ export interface upload_canister_snapshot_metadata_response {
 }
 export interface upload_chunk_args {
   'chunk' : Uint8Array,
-  'canister_id' : Principal,
+  'canister_id' : canister_id,
 }
 export type upload_chunk_result = chunk_hash;
 export interface utxo {

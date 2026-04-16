@@ -40,6 +40,40 @@ export type BtcNetwork = {
      */
     'Testnet' : null
   };
+export type BurnMemo = {
+    /**
+     * The minter consolidated UTXOs.
+     */
+    'Consolidate' : {
+      /**
+       * The total value of the consolidated UTXOs.
+       */
+      'value' : bigint,
+      /**
+       * The number of input UTXOs that were consolidated.
+       */
+      'inputs' : bigint,
+    }
+  } |
+  {
+    /**
+     * The minter processed a retrieve_btc request.
+     */
+    'Convert' : {
+      /**
+       * The status of the Bitcoin check.
+       */
+      'status' : [] | [Status],
+      /**
+       * The destination of the retrieve BTC request.
+       */
+      'address' : [] | [string],
+      /**
+       * The check fee for the burn.
+       */
+      'kyt_fee' : [] | [bigint],
+    }
+  };
 export interface CanisterStatusResponse {
   'memory_metrics' : MemoryMetrics,
   'status' : CanisterStatusType,
@@ -56,6 +90,48 @@ export interface CanisterStatusResponse {
 export type CanisterStatusType = { 'stopped' : null } |
   { 'stopping' : null } |
   { 'running' : null };
+export interface DecodeLedgerMemoArgs {
+  /**
+   * The encoded memo type
+   */
+  'memo_type' : MemoType,
+  /**
+   * The encoded memo from a minter transaction on the ledger
+   */
+  'encoded_memo' : Uint8Array,
+}
+export type DecodeLedgerMemoError = {
+    /**
+     * The provided memo could not be decoded.
+     */
+    'InvalidMemo' : string
+  };
+export type DecodeLedgerMemoResult = {
+    /**
+     * The decoded memo, if the minter was able to decode it. This field is `opt`, so that other memo types can be
+     * added in the future.
+     */
+    'Ok' : [] | [DecodedMemo]
+  } |
+  {
+    /**
+     * An error in case the minter was not able to decode the provided memo. This field is `opt`, so that other error
+     * types can be added in the future.
+     */
+    'Err' : [] | [DecodeLedgerMemoError]
+  };
+export type DecodedMemo = {
+    /**
+     * The decoded BurnMemo - `opt` since other variants of `BurnMemo` could be added in the future.
+     */
+    'Burn' : [] | [BurnMemo]
+  } |
+  {
+    /**
+     * The decoded MintMemo - `opt` since other variants of `MintMemo` could be added in the future.
+     */
+    'Mint' : [] | [MintMemo]
+  };
 export interface DefiniteCanisterSettings {
   'freezing_threshold' : bigint,
   'wasm_memory_threshold' : bigint,
@@ -88,6 +164,7 @@ export type EventType = {
       'fee' : [] | [bigint],
       'change_output' : [] | [{ 'value' : bigint, 'vout' : number }],
       'txid' : Uint8Array,
+      'signed_tx' : [] | [Uint8Array],
       'withdrawal_fee' : [] | [WithdrawalFee],
       'utxos' : Array<Utxo>,
       'requests' : BigUint64Array,
@@ -165,6 +242,14 @@ export type EventType = {
   { 'ignored_utxo' : { 'utxo' : Utxo } } |
   { 'checked_utxo_mint_unknown' : { 'utxo' : Utxo, 'account' : Account } } |
   {
+    'created_consolidate_utxos_request' : {
+      'received_at' : bigint,
+      'block_index' : bigint,
+      'address' : BitcoinAddress,
+      'amount' : bigint,
+    }
+  } |
+  {
     'reimbursed_failed_deposit' : {
       'burn_block_index' : bigint,
       'mint_block_index' : bigint,
@@ -202,6 +287,11 @@ export interface InitArgs {
    */
   'retrieve_btc_min_amount' : bigint,
   /**
+   * The minimal amount of BTC that can be converted to ckBTC.
+   * UTXOs with lower values will be ignored.
+   */
+  'deposit_btc_min_amount' : [] | [bigint],
+  /**
    * The principal of the ledger that handles ckBTC transfers.
    * The default account of the ckBTC minter must be configured as
    * the minting account of the ledger.
@@ -220,6 +310,14 @@ export interface InitArgs {
    * / The fee paid per Bitcoin check.
    */
   'check_fee' : [] | [bigint],
+  /**
+   * / The maximum number of input UTXOs allowed in a transaction.
+   */
+  'max_num_inputs_in_transaction' : [] | [bigint],
+  /**
+   * / The minimum number of available UTXOs to trigger a consolidation.
+   */
+  'utxo_consolidation_threshold' : [] | [bigint],
   /**
    * / The canister id of the Bitcoin checker canister.
    */
@@ -240,6 +338,8 @@ export type InvalidTransactionError = {
 export type LogVisibility = { 'controllers' : null } |
   { 'public' : null } |
   { 'allowed_viewers' : Array<Principal> };
+export type MemoType = { 'Burn' : null } |
+  { 'Mint' : null };
 export interface MemoryMetrics {
   'wasm_binary_size' : bigint,
   'wasm_chunk_store_size' : bigint,
@@ -250,6 +350,57 @@ export interface MemoryMetrics {
   'global_memory_size' : bigint,
   'custom_sections_size' : bigint,
 }
+export type MintMemo = {
+    /**
+     * [deprecated] The minter minted accumulated check fees to the KYT provider.
+     */
+    'Kyt' : null
+  } |
+  {
+    'ReimburseWithdrawal' : {
+      /**
+       * The id corresponding to the withdrawal request,
+       * which corresponds to the ledger burn index.
+       */
+      'withdrawal_id' : bigint,
+    }
+  } |
+  {
+    /**
+     * [deprecated] The minter failed to check retrieve btc destination address
+     * or the destination address is tainted.
+     */
+    'KytFail' : {
+      /**
+       * The status of the Bitcoin check.
+       */
+      'status' : [] | [Status],
+      'associated_burn_index' : [] | [bigint],
+      /**
+       * The Bitcoin check fee.
+       */
+      'kyt_fee' : [] | [bigint],
+    }
+  } |
+  {
+    /**
+     * The minter converted a single UTXO to ckBTC.
+     */
+    'Convert' : {
+      /**
+       * The transaction ID of the accepted UTXO.
+       */
+      'txid' : [] | [Uint8Array],
+      /**
+       * UTXO's output index within the BTC transaction.
+       */
+      'vout' : [] | [number],
+      /**
+       * The Bitcoin check fee.
+       */
+      'kyt_fee' : [] | [bigint],
+    }
+  };
 export type MinterArg = { 'Upgrade' : [] | [UpgradeArgs] } |
   { 'Init' : InitArgs };
 export interface MinterInfo {
@@ -258,6 +409,11 @@ export interface MinterInfo {
    * initialization or upgrades, but may vary according to current network fees.
    */
   'retrieve_btc_min_amount' : bigint,
+  /**
+   * Minimal amount of BTC that can be deposited to be converted into ckBTC.
+   * UTXOs with lower values will be ignored.
+   */
+  'deposit_btc_min_amount' : [] | [bigint],
   'min_confirmations' : number,
   /**
    * The same as `check_fee`, but the old name is kept here to be backward compatible.
@@ -546,6 +702,19 @@ export type RetrieveBtcWithApprovalError = {
      */
     'InsufficientFunds' : { 'balance' : bigint }
   };
+export type Status = { 'CallFailed' : null } |
+  {
+    /**
+     * The minter rejected a retrieve_btc due to a failed Bitcoin check.
+     */
+    'Rejected' : null
+  } |
+  {
+    /**
+     * The minter accepted a retrieve_btc request.
+     */
+    'Accepted' : null
+  };
 export type SuspendedReason = {
     /**
      * The minter ignored this UTXO because UTXO's value is too small to pay
@@ -619,6 +788,11 @@ export interface UpgradeArgs {
    */
   'retrieve_btc_min_amount' : [] | [bigint],
   /**
+   * The minimal amount of BTC that can be converted to ckBTC.
+   * UTXOs with lower values will be ignored.
+   */
+  'deposit_btc_min_amount' : [] | [bigint],
+  /**
    * / Maximum time in nanoseconds that a transaction should spend in the queue
    * / before being sent.
    */
@@ -627,6 +801,14 @@ export interface UpgradeArgs {
    * / The fee per Bitcoin check.
    */
   'check_fee' : [] | [bigint],
+  /**
+   * / The maximum number of input UTXOs allowed in a transaction.
+   */
+  'max_num_inputs_in_transaction' : [] | [bigint],
+  /**
+   * / The minimum number of available UTXOs to trigger a consolidation.
+   */
+  'utxo_consolidation_threshold' : [] | [bigint],
   /**
    * / The principal of the Bitcoin checker canister.
    */
@@ -686,6 +868,14 @@ export type WithdrawalReimbursementReason = {
   };
 export interface environment_variable { 'value' : string, 'name' : string }
 export interface _SERVICE {
+  /**
+   * Section "Transaction Information" {{{
+   * Returns information related to minter transactions.
+   */
+  'decode_ledger_memo' : ActorMethod<
+    [DecodeLedgerMemoArgs],
+    DecodeLedgerMemoResult
+  >,
   /**
    * / Returns an estimate of the user's fee (in Satoshi) for a
    * / retrieve_btc request based on the current status of the Bitcoin network.

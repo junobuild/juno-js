@@ -59,7 +59,17 @@ export interface HttpResponse {
   'headers' : Array<[string, string]>,
   'status_code' : number,
 }
-export interface InitArg { 'ledger_id' : Principal }
+export type IndexArg = { 'Upgrade' : UpgradeArg } |
+  { 'Init' : InitArg };
+export interface InitArg {
+  'ledger_id' : Principal,
+  /**
+   * The interval in seconds in which to retrieve blocks from the ledger. A lower value makes the index more
+   * responsive in showing new blocks, but increases the consumption of cycles of both the index and ledger canisters.
+   * A higher values means that it takes longer for new blocks to show up in the index.
+   */
+  'retrieve_blocks_from_ledger_interval_seconds' : [] | [bigint],
+}
 export type Operation = {
     'Approve' : {
       'fee' : Tokens,
@@ -96,6 +106,15 @@ export interface Transaction {
 export interface TransactionWithId {
   'id' : bigint,
   'transaction' : Transaction,
+}
+export interface UpgradeArg {
+  'ledger_id' : [] | [Principal],
+  /**
+   * The interval in seconds in which to retrieve blocks from the ledger. A lower value makes the index more
+   * responsive in showing new blocks, but increases the consumption of cycles of both the index and ledger canisters.
+   * A higher values means that it takes longer for new blocks to show up in the index.
+   */
+  'retrieve_blocks_from_ledger_interval_seconds' : [] | [bigint],
 }
 export interface _SERVICE {
   'get_account_identifier_balance' : ActorMethod<[string], bigint>,

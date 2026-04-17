@@ -4,10 +4,9 @@ import {Canister} from '../_canister';
 import {CMC_ID} from '../_constants';
 import {CmcIdl} from '../declarations';
 import {type CanisterOptions, CanisterOptionsSchema} from '../schema';
-import type {
-  NotifyTopUpArg,
-  NotifyTopUpResult} from './schema';
 import {
+  type NotifyTopUpArg,
+  type NotifyTopUpResult,
   NotifyTopUpArgSchema,
   NotifyTopUpResultSchema
 } from './schema';

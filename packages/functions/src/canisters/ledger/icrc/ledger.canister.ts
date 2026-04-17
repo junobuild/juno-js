@@ -3,18 +3,18 @@ import {call} from '../../../ic-cdk/call.ic-cdk';
 import {Canister} from '../../_canister';
 import {IcrcLedgerIdl} from '../../declarations';
 import {
-  Account,
   AccountSchema,
-  type IcrcCanisterOptions,
   IcrcCanisterOptionsSchema,
-  TransferArg,
   TransferArgSchema,
-  TransferFromArg,
   TransferFromArgSchema,
-  TransferFromResult,
   TransferFromResultSchema,
-  TransferResult,
-  TransferResultSchema
+  TransferResultSchema,
+  type Account,
+  type IcrcCanisterOptions,
+  type TransferArg,
+  type TransferFromArg,
+  type TransferFromResult,
+  type TransferResult
 } from './schema';
 
 /**

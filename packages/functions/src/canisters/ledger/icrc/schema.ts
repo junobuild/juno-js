@@ -20,7 +20,7 @@ export const AccountSchema = j.strictObject({
   subaccount: SubaccountSchema.optional()
 });
 
-export const TokensSchema = j.bigint();
+export const TokensSchema = j.nat();
 
 // icrc1_transfer
 export const TransferArgSchema = j.strictObject({
@@ -184,3 +184,8 @@ export interface TransferFromArg {
   /** The amount to transfer. */
   amount: bigint;
 }
+
+/**
+ * Amount of ICRC tokens, represented as a natural number.
+ */
+export type Tokens = bigint;

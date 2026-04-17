@@ -4,8 +4,12 @@ import {Canister} from '../../_canister';
 import {ICP_LEDGER_ID} from '../../_constants';
 import {IcpLedgerIdl} from '../../declarations';
 import {type CanisterOptions, CanisterOptionsSchema} from '../../schemas';
-import type {TransferArgs, TransferResult} from './schema';
-import { TransferArgsSchema, TransferResultSchema} from './schema';
+import {
+  type TransferArgs,
+  type TransferResult,
+  TransferArgsSchema,
+  TransferResultSchema
+} from './schema';
 
 /**
  * Provides a simple interface to interact with the ICP Ledger,

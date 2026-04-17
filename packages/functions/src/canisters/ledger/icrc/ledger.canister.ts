@@ -2,9 +2,6 @@ import {schemaFromIdl, schemaToIdl} from '@junobuild/schema/utils';
 import {call} from '../../../ic-cdk/call.ic-cdk';
 import {Canister} from '../../_canister';
 import {IcrcLedgerIdl} from '../../declarations';
-import type {
-  ApproveArgs,
-  ApproveResult} from './schema';
 import {
   AccountSchema,
   ApproveArgsSchema,
@@ -15,6 +12,8 @@ import {
   TransferFromResultSchema,
   TransferResultSchema,
   type Account,
+  type ApproveArgs,
+  type ApproveResult,
   type IcrcCanisterOptions,
   type TransferArgs,
   type TransferFromArgs,

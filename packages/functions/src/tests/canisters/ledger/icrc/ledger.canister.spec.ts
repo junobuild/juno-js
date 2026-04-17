@@ -4,6 +4,8 @@ import {IcrcLedgerIdl} from '../../../../canisters/declarations';
 import {IcrcLedgerCanister} from '../../../../canisters/ledger/icrc';
 import {
   type Account,
+  type ApproveArgs,
+  type ApproveResult,
   type TransferArgs,
   type TransferFromArgs,
   type TransferFromResult,
@@ -28,6 +30,9 @@ describe('IcrcLedgerCanister', () => {
 
   const mockIdlTransferFromResult = (result: TransferFromResult) =>
     new Uint8Array(IDL.encode([IcrcLedgerIdl.TransferFromResult], [result]));
+
+  const mockIdlApproveResult = (result: ApproveResult) =>
+    new Uint8Array(IDL.encode([IcrcLedgerIdl.ApproveResult], [result]));
 
   describe('constructor', () => {
     it('should create instance with provided canister ID', () => {
@@ -517,6 +522,206 @@ describe('IcrcLedgerCanister', () => {
       expect(result2).toEqual(mockResponse);
       expect(ledger1.canisterId).toEqual(canisterId1);
       expect(ledger2.canisterId).toEqual(canisterId2);
+    });
+  });
+
+  describe('icrc2Approve', () => {
+    const mockApproveArgs: ApproveArgs = {
+      spender: {owner: mockSpender, subaccount: undefined},
+      amount: 1000000000n,
+      fee: undefined,
+      memo: undefined,
+      from_subaccount: undefined,
+      created_at_time: undefined,
+      expected_allowance: undefined,
+      expires_at: undefined
+    };
+
+    it('should successfully approve and return block index', async () => {
+      const mockResponse: ApproveResult = {Ok: 12345n};
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult(mockResponse))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: mockApproveArgs});
+
+      expect(result).toEqual(mockResponse);
+      if ('Ok' in result) {
+        expect(result.Ok).toBe(12345n);
+        return;
+      }
+
+      expect(true).toBeFalsy();
+    });
+
+    it('should handle ApproveError.GenericError', async () => {
+      const mockResponse: ApproveResult = {
+        Err: {GenericError: {message: 'Generic error', error_code: 500n}}
+      };
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult(mockResponse))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: mockApproveArgs});
+
+      expect(result).toEqual(mockResponse);
+      expect(result).toHaveProperty('Err');
+    });
+
+    it('should handle ApproveError.TemporarilyUnavailable', async () => {
+      const mockResponse: ApproveResult = {Err: {TemporarilyUnavailable: null}};
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult(mockResponse))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: mockApproveArgs});
+
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle ApproveError.Duplicate', async () => {
+      const mockResponse: ApproveResult = {Err: {Duplicate: {duplicate_of: 5000n}}};
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult(mockResponse))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: mockApproveArgs});
+
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle ApproveError.BadFee', async () => {
+      const mockResponse: ApproveResult = {Err: {BadFee: {expected_fee: 10000n}}};
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult(mockResponse))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: mockApproveArgs});
+
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle ApproveError.AllowanceChanged', async () => {
+      const mockResponse: ApproveResult = {Err: {AllowanceChanged: {current_allowance: 500000n}}};
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult(mockResponse))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: mockApproveArgs});
+
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle ApproveError.CreatedInFuture', async () => {
+      const mockResponse: ApproveResult = {
+        Err: {CreatedInFuture: {ledger_time: 1700000000000000000n}}
+      };
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult(mockResponse))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: mockApproveArgs});
+
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle ApproveError.TooOld', async () => {
+      const mockResponse: ApproveResult = {Err: {TooOld: null}};
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult(mockResponse))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: mockApproveArgs});
+
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle ApproveError.Expired', async () => {
+      const mockResponse: ApproveResult = {Err: {Expired: {ledger_time: 1600000000000000000n}}};
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult(mockResponse))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: mockApproveArgs});
+
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle ApproveError.InsufficientFunds', async () => {
+      const mockResponse: ApproveResult = {Err: {InsufficientFunds: {balance: 50000000n}}};
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult(mockResponse))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: mockApproveArgs});
+
+      expect(result).toEqual(mockResponse);
+    });
+
+    it('should handle approve with all optional fields', async () => {
+      const fullArgs: ApproveArgs = {
+        spender: {owner: mockSpender, subaccount: mockSubaccount},
+        amount: 1000000000n,
+        fee: 10000n,
+        memo: new Uint8Array([1, 2, 3, 4]),
+        from_subaccount: mockSubaccount,
+        created_at_time: 1700000000000000000n,
+        expected_allowance: 500000000n,
+        expires_at: 1800000000000000000n
+      };
+
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => mockIdlApproveResult({Ok: 99999n}))
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+      const result = await ledger.icrc2Approve({args: fullArgs});
+
+      expect(result).toEqual({Ok: 99999n});
+    });
+
+    it('should throw error if canister call fails', async () => {
+      vi.stubGlobal(
+        '__ic_cdk_call_raw',
+        vi.fn(async () => {
+          throw new Error('Network error');
+        })
+      );
+
+      const ledger = new IcrcLedgerCanister({canisterId: mockCanisterId});
+
+      await expect(ledger.icrc2Approve({args: mockApproveArgs})).rejects.toThrow('Network error');
     });
   });
 });

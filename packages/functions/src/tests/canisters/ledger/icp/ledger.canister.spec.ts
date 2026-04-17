@@ -3,7 +3,7 @@ import {Principal} from '@icp-sdk/core/principal';
 import {ICP_LEDGER_ID} from '../../../../canisters/_constants';
 import {IcpLedgerIdl} from '../../../../canisters/declarations';
 import {IcpLedgerCanister} from '../../../../canisters/ledger/icp';
-import {type TransferArgs, type TransferResult} from '../../../../canisters/ledger/icp/schemas';
+import {type TransferArgs, type TransferResult} from '../../../../canisters/ledger/icp/schema';
 import {mockCanisterId} from '../../../mocks/ic-cdk.mock';
 
 describe('IcpLedgerCanister', () => {

@@ -15,7 +15,7 @@ import {
   TransferFromResultSchema,
   TransferResult,
   TransferResultSchema
-} from './schemas';
+} from './schema';
 
 /**
  * Provides a simple interface to interact with an ICRC Ledger,

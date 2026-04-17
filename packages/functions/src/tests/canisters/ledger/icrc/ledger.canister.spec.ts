@@ -8,7 +8,7 @@ import {
   type TransferFromArg,
   type TransferFromResult,
   type TransferResult
-} from '../../../../canisters/ledger/icrc/schemas';
+} from '../../../../canisters/ledger/icrc/schema';
 import {mockCanisterId} from '../../../mocks/ic-cdk.mock';
 
 describe('IcrcLedgerCanister', () => {

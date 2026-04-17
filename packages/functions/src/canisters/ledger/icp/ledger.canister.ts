@@ -9,7 +9,7 @@ import {
   type TransferResult,
   TransferArgsSchema,
   TransferResultSchema
-} from './schema';
+} from './schemas';
 
 /**
  * Provides a simple interface to interact with the ICP Ledger,

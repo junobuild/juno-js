@@ -1,8 +1,9 @@
 import {IDL} from '@icp-sdk/core/candid';
 import {Principal} from '@icp-sdk/core/principal';
 import {ICP_LEDGER_ID} from '../../../../canisters/_constants';
-import {type IcpLedgerDid, IcpLedgerIdl} from '../../../../canisters/declarations';
+import {IcpLedgerIdl} from '../../../../canisters/declarations';
 import {IcpLedgerCanister} from '../../../../canisters/ledger/icp';
+import {type TransferArgs, type TransferResult} from '../../../../canisters/ledger/icp/schema';
 import {mockCanisterId} from '../../../mocks/ic-cdk.mock';
 
 describe('IcpLedgerCanister', () => {
@@ -12,6 +13,9 @@ describe('IcpLedgerCanister', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
+
+  const mockIdlResult = (result: TransferResult) =>
+    new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [result]));
 
   describe('constructor', () => {
     it('should create instance with default ICP Ledger canister ID', () => {
@@ -35,24 +39,22 @@ describe('IcpLedgerCanister', () => {
   });
 
   describe('transfer', () => {
-    const mockTransferArgs: IcpLedgerDid.TransferArgs = {
+    const mockTransferArgs: TransferArgs = {
       to: mockToAccountIdentifier,
       fee: {e8s: 10000n},
       memo: 0n,
-      from_subaccount: [],
-      created_at_time: [],
+      from_subaccount: undefined,
+      created_at_time: undefined,
       amount: {e8s: 100000000n}
     };
 
     it('should successfully transfer and return block index', async () => {
       const expectedBlockIndex = 12345n;
-      const mockResponse: IcpLedgerDid.TransferResult = {Ok: expectedBlockIndex};
+      const mockResponse: TransferResult = {Ok: expectedBlockIndex};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockResponse]));
-        })
+        vi.fn(async () => mockIdlResult(mockResponse))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -69,19 +71,13 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle TransferError.TxTooOld response', async () => {
-      const mockError: IcpLedgerDid.TransferResult = {
-        Err: {
-          TxTooOld: {
-            allowed_window_nanos: 86400000000000n
-          }
-        }
+      const mockError: TransferResult = {
+        Err: {TxTooOld: {allowed_window_nanos: 86400000000000n}}
       };
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockError]));
-        })
+        vi.fn(async () => mockIdlResult(mockError))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -98,19 +94,11 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle TransferError.BadFee response', async () => {
-      const mockError: IcpLedgerDid.TransferResult = {
-        Err: {
-          BadFee: {
-            expected_fee: {e8s: 10000n}
-          }
-        }
-      };
+      const mockError: TransferResult = {Err: {BadFee: {expected_fee: {e8s: 10000n}}}};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockError]));
-        })
+        vi.fn(async () => mockIdlResult(mockError))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -128,19 +116,11 @@ describe('IcpLedgerCanister', () => {
 
     it('should handle TransferError.TxDuplicate response', async () => {
       const duplicateOf = 5000n;
-      const mockError: IcpLedgerDid.TransferResult = {
-        Err: {
-          TxDuplicate: {
-            duplicate_of: duplicateOf
-          }
-        }
-      };
+      const mockError: TransferResult = {Err: {TxDuplicate: {duplicate_of: duplicateOf}}};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockError]));
-        })
+        vi.fn(async () => mockIdlResult(mockError))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -157,15 +137,11 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle TransferError.TxCreatedInFuture response', async () => {
-      const mockError: IcpLedgerDid.TransferResult = {
-        Err: {TxCreatedInFuture: null}
-      };
+      const mockError: TransferResult = {Err: {TxCreatedInFuture: null}};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockError]));
-        })
+        vi.fn(async () => mockIdlResult(mockError))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -176,19 +152,11 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle TransferError.InsufficientFunds response', async () => {
-      const mockError: IcpLedgerDid.TransferResult = {
-        Err: {
-          InsufficientFunds: {
-            balance: {e8s: 50000000n}
-          }
-        }
-      };
+      const mockError: TransferResult = {Err: {InsufficientFunds: {balance: {e8s: 50000000n}}}};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockError]));
-        })
+        vi.fn(async () => mockIdlResult(mockError))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -218,18 +186,15 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle transfer with from_subaccount', async () => {
-      const argsWithSubaccount: IcpLedgerDid.TransferArgs = {
+      const argsWithSubaccount: TransferArgs = {
         ...mockTransferArgs,
-        from_subaccount: [mockFromSubaccount]
+        from_subaccount: mockFromSubaccount
       };
-
-      const mockResponse: IcpLedgerDid.TransferResult = {Ok: 99999n};
+      const mockResponse: TransferResult = {Ok: 99999n};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockResponse]));
-        })
+        vi.fn(async () => mockIdlResult(mockResponse))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -239,18 +204,15 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle transfer with created_at_time', async () => {
-      const argsWithTime: IcpLedgerDid.TransferArgs = {
+      const argsWithTime: TransferArgs = {
         ...mockTransferArgs,
-        created_at_time: [{timestamp_nanos: 1234567890000000000n}]
+        created_at_time: {timestamp_nanos: 1234567890000000000n}
       };
-
-      const mockResponse: IcpLedgerDid.TransferResult = {Ok: 88888n};
+      const mockResponse: TransferResult = {Ok: 88888n};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockResponse]));
-        })
+        vi.fn(async () => mockIdlResult(mockResponse))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -260,18 +222,12 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle transfer with custom memo', async () => {
-      const argsWithMemo: IcpLedgerDid.TransferArgs = {
-        ...mockTransferArgs,
-        memo: 123456789n
-      };
-
-      const mockResponse: IcpLedgerDid.TransferResult = {Ok: 77777n};
+      const argsWithMemo: TransferArgs = {...mockTransferArgs, memo: 123456789n};
+      const mockResponse: TransferResult = {Ok: 77777n};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockResponse]));
-        })
+        vi.fn(async () => mockIdlResult(mockResponse))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -281,18 +237,15 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle very large amount transfer', async () => {
-      const largeAmountArgs: IcpLedgerDid.TransferArgs = {
+      const largeAmountArgs: TransferArgs = {
         ...mockTransferArgs,
         amount: {e8s: 999999999999999999n}
       };
-
-      const mockResponse: IcpLedgerDid.TransferResult = {Ok: 66666n};
+      const mockResponse: TransferResult = {Ok: 66666n};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockResponse]));
-        })
+        vi.fn(async () => mockIdlResult(mockResponse))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -302,9 +255,7 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should pass correct arguments to call function', async () => {
-      const mockCallRaw = vi.fn(async () => {
-        return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [{Ok: 1000n}]));
-      });
+      const mockCallRaw = vi.fn(async () => mockIdlResult({Ok: 1000n}));
 
       vi.stubGlobal('__ic_cdk_call_raw', mockCallRaw);
 
@@ -315,22 +266,19 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle minimal transfer args', async () => {
-      const minimalArgs: IcpLedgerDid.TransferArgs = {
+      const minimalArgs: TransferArgs = {
         to: mockToAccountIdentifier,
         fee: {e8s: 10000n},
         memo: 0n,
-        from_subaccount: [],
-        created_at_time: [],
+        from_subaccount: undefined,
+        created_at_time: undefined,
         amount: {e8s: 10000n}
       };
-
-      const mockResponse: IcpLedgerDid.TransferResult = {Ok: 1n};
+      const mockResponse: TransferResult = {Ok: 1n};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockResponse]));
-        })
+        vi.fn(async () => mockIdlResult(mockResponse))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -342,13 +290,11 @@ describe('IcpLedgerCanister', () => {
     it('should work with different canister IDs', async () => {
       const canisterId1 = Principal.fromText('ryjl3-tyaaa-aaaaa-aaaba-cai');
       const canisterId2 = Principal.fromText('qoctq-giaaa-aaaaa-aaaea-cai');
-      const mockResponse: IcpLedgerDid.TransferResult = {Ok: 100n};
+      const mockResponse: TransferResult = {Ok: 100n};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockResponse]));
-        })
+        vi.fn(async () => mockIdlResult(mockResponse))
       );
 
       const ledger1 = new IcpLedgerCanister({canisterId: canisterId1});
@@ -364,18 +310,12 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle zero amount transfer', async () => {
-      const zeroAmountArgs: IcpLedgerDid.TransferArgs = {
-        ...mockTransferArgs,
-        amount: {e8s: 0n}
-      };
-
-      const mockResponse: IcpLedgerDid.TransferResult = {Ok: 0n};
+      const zeroAmountArgs: TransferArgs = {...mockTransferArgs, amount: {e8s: 0n}};
+      const mockResponse: TransferResult = {Ok: 0n};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockResponse]));
-        })
+        vi.fn(async () => mockIdlResult(mockResponse))
       );
 
       const ledger = new IcpLedgerCanister();
@@ -385,22 +325,19 @@ describe('IcpLedgerCanister', () => {
     });
 
     it('should handle all optional fields populated', async () => {
-      const fullArgs: IcpLedgerDid.TransferArgs = {
+      const fullArgs: TransferArgs = {
         to: mockToAccountIdentifier,
         fee: {e8s: 10000n},
         memo: 999999n,
-        from_subaccount: [mockFromSubaccount],
-        created_at_time: [{timestamp_nanos: 1700000000000000000n}],
+        from_subaccount: mockFromSubaccount,
+        created_at_time: {timestamp_nanos: 1700000000000000000n},
         amount: {e8s: 500000000n}
       };
-
-      const mockResponse: IcpLedgerDid.TransferResult = {Ok: 55555n};
+      const mockResponse: TransferResult = {Ok: 55555n};
 
       vi.stubGlobal(
         '__ic_cdk_call_raw',
-        vi.fn(async () => {
-          return new Uint8Array(IDL.encode([IcpLedgerIdl.TransferResult], [mockResponse]));
-        })
+        vi.fn(async () => mockIdlResult(mockResponse))
       );
 
       const ledger = new IcpLedgerCanister();

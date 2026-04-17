@@ -1,8 +1,15 @@
+import {schemaFromIdl, schemaToIdl} from '@junobuild/schema/utils';
 import {call} from '../../ic-cdk/call.ic-cdk';
 import {Canister} from '../_canister';
 import {CMC_ID} from '../_constants';
-import {type CmcDid, CmcIdl} from '../declarations';
-import {type CanisterOptions, CanisterOptionsSchema} from '../schemas';
+import {CmcIdl} from '../declarations';
+import {type CanisterOptions, CanisterOptionsSchema} from '../schema';
+import {
+  type NotifyTopUpArgs,
+  type NotifyTopUpResult,
+  NotifyTopUpArgsSchema,
+  NotifyTopUpResultSchema
+} from './schema';
 
 /**
  * Provides a simple interface to interact with the Cycle Minting Canister,
@@ -27,14 +34,21 @@ export class CMCCanister extends Canister {
    * The CMC will then convert the ICP from the given ledger block into cycles and add
    * them to the specified canister.
    *
-   * @param {CmcDid.NotifyTopUpArg} args - Arguments containing the ledger block index and the canister ID that should receive the cycles.
-   * @returns {Promise<CmcDid.NotifyTopUpResult>} The result of the CMC conversion and deposit.
+   * @param {NotifyTopUpArgs} args - Arguments containing the ledger block index and the canister ID that should receive the cycles.
+   * @returns {Promise<NotifyTopUpResult>} The result of the CMC conversion and deposit.
    */
-  notifyTopUp = async ({args}: {args: CmcDid.NotifyTopUpArg}): Promise<CmcDid.NotifyTopUpResult> =>
-    await call<CmcDid.NotifyTopUpResult>({
+  notifyTopUp = async ({args}: {args: NotifyTopUpArgs}): Promise<NotifyTopUpResult> => {
+    const parsed = NotifyTopUpArgsSchema.parse(args);
+
+    const idlArgs = schemaToIdl({schema: NotifyTopUpArgsSchema, value: parsed});
+
+    const idlResult = await call<NotifyTopUpResult>({
       canisterId: this.canisterId,
       method: 'notify_top_up',
-      args: [[CmcIdl.NotifyTopUpArg, args]],
+      args: [[CmcIdl.NotifyTopUpArg, idlArgs]],
       result: CmcIdl.NotifyTopUpResult
     });
+
+    return schemaFromIdl({schema: NotifyTopUpResultSchema, value: idlResult}) as NotifyTopUpResult;
+  };
 }

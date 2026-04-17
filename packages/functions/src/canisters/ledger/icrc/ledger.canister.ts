@@ -4,6 +4,10 @@ import {Canister} from '../../_canister';
 import {IcrcLedgerIdl} from '../../declarations';
 import {
   AccountSchema,
+  ApproveArgs,
+  ApproveArgsSchema,
+  ApproveResult,
+  ApproveResultSchema,
   IcrcCanisterOptionsSchema,
   TransferArgsSchema,
   TransferFromArgsSchema,
@@ -95,5 +99,25 @@ export class IcrcLedgerCanister extends Canister {
       schema: TransferFromResultSchema,
       value: idlResult
     }) as TransferFromResult;
+  };
+
+  /**
+   * Approves a spender to transfer tokens on behalf of the caller using the ICRC-2 `icrc2_approve` method.
+   *
+   * @param {ApproveArgs} args - Approve arguments (amount, spender, fee, expires_at, etc.).
+   * @returns {Promise<ApproveResult>} The result of the approval.
+   */
+  icrc2Approve = async ({args}: {args: ApproveArgs}): Promise<ApproveResult> => {
+    const parsed = ApproveArgsSchema.parse(args);
+    const idlArgs = schemaToIdl({schema: ApproveArgsSchema, value: parsed});
+
+    const idlResult = await call<ApproveResult>({
+      canisterId: this.canisterId,
+      method: 'icrc2_approve',
+      args: [[IcrcLedgerIdl.ApproveArgs, idlArgs]],
+      result: IcrcLedgerIdl.ApproveResult
+    });
+
+    return schemaFromIdl({schema: ApproveResultSchema, value: idlResult}) as ApproveResult;
   };
 }

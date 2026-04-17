@@ -76,6 +76,35 @@ export const TransferFromResultSchema = z.union([
   z.strictObject({Err: TransferFromErrorSchema})
 ]);
 
+// icrc2_approve
+export const ApproveArgsSchema = j.strictObject({
+  fee: TokensSchema.optional(),
+  memo: j.uint8Array().optional(),
+  from_subaccount: SubaccountSchema.optional(),
+  created_at_time: j.bigint().optional(),
+  amount: TokensSchema,
+  expected_allowance: TokensSchema.optional(),
+  expires_at: j.bigint().optional(),
+  spender: AccountSchema
+});
+
+export const ApproveErrorSchema = z.union([
+  z.strictObject({GenericError: z.strictObject({message: z.string(), error_code: z.bigint()})}),
+  z.strictObject({TemporarilyUnavailable: z.null()}),
+  z.strictObject({Duplicate: z.strictObject({duplicate_of: z.bigint()})}),
+  z.strictObject({BadFee: z.strictObject({expected_fee: z.bigint()})}),
+  z.strictObject({AllowanceChanged: z.strictObject({current_allowance: z.bigint()})}),
+  z.strictObject({CreatedInFuture: z.strictObject({ledger_time: z.bigint()})}),
+  z.strictObject({TooOld: z.null()}),
+  z.strictObject({Expired: z.strictObject({ledger_time: z.bigint()})}),
+  z.strictObject({InsufficientFunds: z.strictObject({balance: z.bigint()})})
+]);
+
+export const ApproveResultSchema = z.union([
+  z.strictObject({Ok: z.bigint()}),
+  z.strictObject({Err: ApproveErrorSchema})
+]);
+
 /**
  * Subaccount is an arbitrary 32-byte array used to compute the source address.
  */
@@ -189,3 +218,45 @@ export interface TransferFromArgs {
  * Amount of ICRC tokens, represented as a natural number.
  */
 export type Tokens = bigint;
+
+/**
+ * Arguments for the ICRC-2 `icrc2_approve` call.
+ */
+export interface ApproveArgs {
+  /** An optional fee. Uses the default ledger fee if not provided. */
+  fee?: bigint;
+  /** An optional memo for the transaction. */
+  memo?: Uint8Array;
+  /** An optional subaccount of the approver. */
+  from_subaccount?: Subaccount;
+  /** An optional timestamp. Uses current IC time if not provided. */
+  created_at_time?: bigint;
+  /** The amount to approve. */
+  amount: bigint;
+  /** An optional expected current allowance for optimistic concurrency control. */
+  expected_allowance?: bigint;
+  /** An optional expiry timestamp for the approval. */
+  expires_at?: bigint;
+  /** The spender account being approved. */
+  spender: Account;
+}
+
+/**
+ * Errors that can occur during an ICRC-2 approve.
+ */
+export type ApproveError =
+  | {GenericError: {message: string; error_code: bigint}}
+  | {TemporarilyUnavailable: null}
+  | {Duplicate: {duplicate_of: bigint}}
+  | {BadFee: {expected_fee: bigint}}
+  | {AllowanceChanged: {current_allowance: bigint}}
+  | {CreatedInFuture: {ledger_time: bigint}}
+  | {TooOld: null}
+  | {Expired: {ledger_time: bigint}}
+  | {InsufficientFunds: {balance: bigint}};
+
+/**
+ * The result of an ICRC-2 `icrc2_approve` call.
+ * Returns the block index of the approval on success.
+ */
+export type ApproveResult = {Ok: bigint} | {Err: ApproveError};

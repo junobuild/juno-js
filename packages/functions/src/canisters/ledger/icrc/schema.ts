@@ -1,7 +1,7 @@
 import type {Principal} from '@icp-sdk/core/principal';
 import {j} from '@junobuild/schema';
 import * as z from 'zod';
-import {CanisterOptionsSchema} from '../../schemas';
+import {CanisterOptionsSchema} from '../../schema';
 
 /**
  * @see CanisterOptions

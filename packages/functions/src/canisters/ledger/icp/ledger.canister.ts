@@ -3,7 +3,7 @@ import {call} from '../../../ic-cdk/call.ic-cdk';
 import {Canister} from '../../_canister';
 import {ICP_LEDGER_ID} from '../../_constants';
 import {IcpLedgerIdl} from '../../declarations';
-import {type CanisterOptions, CanisterOptionsSchema} from '../../schemas';
+import {type CanisterOptions, CanisterOptionsSchema} from '../../schema';
 import {
   type TransferArgs,
   type TransferResult,

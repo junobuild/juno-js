@@ -23,7 +23,7 @@ export const AccountSchema = j.strictObject({
 export const TokensSchema = j.nat();
 
 // icrc1_transfer
-export const TransferArgSchema = j.strictObject({
+export const TransferArgsSchema = j.strictObject({
   to: AccountSchema,
   fee: TokensSchema.optional(),
   memo: j.uint8Array().optional(),
@@ -49,7 +49,7 @@ export const TransferResultSchema = z.union([
 ]);
 
 // icrc2_transfer_from
-export const TransferFromArgSchema = j.strictObject({
+export const TransferFromArgsSchema = j.strictObject({
   to: AccountSchema,
   fee: TokensSchema.optional(),
   spender_subaccount: SubaccountSchema.optional(),
@@ -121,7 +121,7 @@ export type TransferResult = {Ok: bigint} | {Err: TransferError};
 /**
  * Arguments for the ICRC-1 `icrc1_transfer` call.
  */
-export interface TransferArg {
+export interface TransferArgs {
   /** The destination account. */
   to: Account;
   /** An optional fee. Uses the default ledger fee if not provided. */
@@ -168,7 +168,7 @@ export type TransferFromResult = {Ok: bigint} | {Err: TransferFromError};
 /**
  * Arguments for the ICRC-2 `icrc2_transfer_from` call.
  */
-export interface TransferFromArg {
+export interface TransferFromArgs {
   /** The destination account. */
   to: Account;
   /** An optional fee. Uses the default ledger fee if not provided. */

@@ -4,8 +4,8 @@ import {IcrcLedgerIdl} from '../../../../canisters/declarations';
 import {IcrcLedgerCanister} from '../../../../canisters/ledger/icrc';
 import {
   type Account,
-  type TransferArg,
-  type TransferFromArg,
+  type TransferArgs,
+  type TransferFromArgs,
   type TransferFromResult,
   type TransferResult
 } from '../../../../canisters/ledger/icrc/schema';
@@ -112,7 +112,7 @@ describe('IcrcLedgerCanister', () => {
   });
 
   describe('icrc1Transfer', () => {
-    const mockTransferArgs: TransferArg = {
+    const mockTransferArgs: TransferArgs = {
       to: {owner: mockSpender, subaccount: undefined},
       fee: undefined,
       memo: undefined,
@@ -260,7 +260,7 @@ describe('IcrcLedgerCanister', () => {
     });
 
     it('should handle transfer with all optional fields', async () => {
-      const fullArgs: TransferArg = {
+      const fullArgs: TransferArgs = {
         to: {owner: mockSpender, subaccount: mockSubaccount},
         fee: 10000n,
         memo: new Uint8Array([1, 2, 3, 4]),
@@ -297,7 +297,7 @@ describe('IcrcLedgerCanister', () => {
   });
 
   describe('icrc2TransferFrom', () => {
-    const mockTransferFromArgs: TransferFromArg = {
+    const mockTransferFromArgs: TransferFromArgs = {
       from: {owner: mockOwner, subaccount: undefined},
       to: {owner: mockSpender, subaccount: undefined},
       fee: undefined,
@@ -459,7 +459,7 @@ describe('IcrcLedgerCanister', () => {
     });
 
     it('should handle transfer from with all optional fields', async () => {
-      const fullArgs: TransferFromArg = {
+      const fullArgs: TransferFromArgs = {
         from: {owner: mockOwner, subaccount: mockSubaccount},
         to: {owner: mockSpender, subaccount: mockSubaccount},
         fee: 15000n,

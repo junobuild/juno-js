@@ -5,14 +5,14 @@ import {IcrcLedgerIdl} from '../../declarations';
 import {
   AccountSchema,
   IcrcCanisterOptionsSchema,
-  TransferArgSchema,
-  TransferFromArgSchema,
+  TransferArgsSchema,
+  TransferFromArgsSchema,
   TransferFromResultSchema,
   TransferResultSchema,
   type Account,
   type IcrcCanisterOptions,
-  type TransferArg,
-  type TransferFromArg,
+  type TransferArgs,
+  type TransferFromArgs,
   type TransferFromResult,
   type TransferResult
 } from './schema';
@@ -54,12 +54,12 @@ export class IcrcLedgerCanister extends Canister {
    * Use this to send tokens from the caller's account to another account
    * when writing Juno Serverless Functions in TypeScript.
    *
-   * @param {TransferArg} args - Transfer arguments (amount, fee, to, memo, created_at_time, etc.).
+   * @param {TransferArgs} args - Transfer arguments (amount, fee, to, memo, created_at_time, etc.).
    * @returns {Promise<TransferResult>} The result of the transfer.
    */
-  icrc1Transfer = async ({args}: {args: TransferArg}): Promise<TransferResult> => {
-    const parsed = TransferArgSchema.parse(args);
-    const idlArgs = schemaToIdl({schema: TransferArgSchema, value: parsed});
+  icrc1Transfer = async ({args}: {args: TransferArgs}): Promise<TransferResult> => {
+    const parsed = TransferArgsSchema.parse(args);
+    const idlArgs = schemaToIdl({schema: TransferArgsSchema, value: parsed});
 
     const idlResult = await call<TransferResult>({
       canisterId: this.canisterId,
@@ -77,12 +77,12 @@ export class IcrcLedgerCanister extends Canister {
    * Allows transferring tokens from another user's account when an approval
    * has previously been granted via `icrc2_approve`.
    *
-   * @param {TransferFromArg} args - Transfer-from arguments (amount, from_subaccount, spender, etc.).
+   * @param {TransferFromArgs} args - Transfer-from arguments (amount, from_subaccount, spender, etc.).
    * @returns {Promise<TransferFromResult>} The result of the transfer-from operation.
    */
-  icrc2TransferFrom = async ({args}: {args: TransferFromArg}): Promise<TransferFromResult> => {
-    const parsed = TransferFromArgSchema.parse(args);
-    const idlArgs = schemaToIdl({schema: TransferFromArgSchema, value: parsed});
+  icrc2TransferFrom = async ({args}: {args: TransferFromArgs}): Promise<TransferFromResult> => {
+    const parsed = TransferFromArgsSchema.parse(args);
+    const idlArgs = schemaToIdl({schema: TransferFromArgsSchema, value: parsed});
 
     const idlResult = await call<TransferFromResult>({
       canisterId: this.canisterId,

@@ -2,7 +2,7 @@ import {IDL} from '@icp-sdk/core/candid';
 import {Principal} from '@icp-sdk/core/principal';
 import {CMC_ID} from '../../../canisters/_constants';
 import {CMCCanister} from '../../../canisters/cmc';
-import {type NotifyTopUpArg} from '../../../canisters/cmc/schema';
+import {type NotifyTopUpArgs} from '../../../canisters/cmc/schema';
 import {type CmcDid, CmcIdl} from '../../../canisters/declarations';
 import {mockCanisterId} from '../../mocks/ic-cdk.mock';
 
@@ -17,7 +17,7 @@ describe('CMCCanister', () => {
   const mockIdlResult = (result: CmcDid.NotifyTopUpResult) =>
     new Uint8Array(IDL.encode([CmcIdl.NotifyTopUpResult], [result]));
 
-  const mockArgs: NotifyTopUpArg = {
+  const mockArgs: NotifyTopUpArgs = {
     block_index: mockBlockIndex,
     canister_id: mockTargetCanisterId
   };

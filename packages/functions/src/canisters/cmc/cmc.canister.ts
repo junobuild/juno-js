@@ -5,9 +5,9 @@ import {CMC_ID} from '../_constants';
 import {CmcIdl} from '../declarations';
 import {type CanisterOptions, CanisterOptionsSchema} from '../schema';
 import {
-  type NotifyTopUpArg,
+  type NotifyTopUpArgs,
   type NotifyTopUpResult,
-  NotifyTopUpArgSchema,
+  NotifyTopUpArgsSchema,
   NotifyTopUpResultSchema
 } from './schema';
 
@@ -34,13 +34,13 @@ export class CMCCanister extends Canister {
    * The CMC will then convert the ICP from the given ledger block into cycles and add
    * them to the specified canister.
    *
-   * @param {NotifyTopUpArg} args - Arguments containing the ledger block index and the canister ID that should receive the cycles.
+   * @param {NotifyTopUpArgs} args - Arguments containing the ledger block index and the canister ID that should receive the cycles.
    * @returns {Promise<NotifyTopUpResult>} The result of the CMC conversion and deposit.
    */
-  notifyTopUp = async ({args}: {args: NotifyTopUpArg}): Promise<NotifyTopUpResult> => {
-    const parsed = NotifyTopUpArgSchema.parse(args);
+  notifyTopUp = async ({args}: {args: NotifyTopUpArgs}): Promise<NotifyTopUpResult> => {
+    const parsed = NotifyTopUpArgsSchema.parse(args);
 
-    const idlArgs = schemaToIdl({schema: NotifyTopUpArgSchema, value: parsed});
+    const idlArgs = schemaToIdl({schema: NotifyTopUpArgsSchema, value: parsed});
 
     const idlResult = await call<NotifyTopUpResult>({
       canisterId: this.canisterId,

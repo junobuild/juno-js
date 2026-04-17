@@ -2,7 +2,7 @@ import type {Principal} from '@icp-sdk/core/principal';
 import {j} from '@junobuild/schema';
 import * as z from 'zod';
 
-export const NotifyTopUpArgSchema = j.strictObject({
+export const NotifyTopUpArgsSchema = j.strictObject({
   block_index: j.bigint(),
   canister_id: j.principal()
 });
@@ -28,7 +28,7 @@ export const NotifyTopUpResultSchema = z.union([
 /**
  * Arguments for the CMC `notify_top_up` call.
  */
-export interface NotifyTopUpArg {
+export interface NotifyTopUpArgs {
   /** Index of the block on the ICP ledger that contains the payment. */
   block_index: bigint;
   /** The canister to top up. */

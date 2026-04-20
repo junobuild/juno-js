@@ -121,7 +121,7 @@ export type Hostname = string;
  * @see EmulatorRunner
  */
 const EmulatorRunnerSchema = z.strictObject({
-  type: z.enum(['docker', 'podman']),
+  type: z.enum(['docker', 'podman', 'container']),
   image: z.string().optional(),
   name: z.string().optional(),
   volume: z.string().optional(),
@@ -145,7 +145,7 @@ export interface EmulatorRunner {
   /**
    * The containerization tool to run the emulator.
    */
-  type: 'docker' | 'podman';
+  type: 'docker' | 'podman' | 'container';
 
   /**
    * Image reference.

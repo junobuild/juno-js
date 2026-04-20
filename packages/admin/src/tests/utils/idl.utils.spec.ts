@@ -21,7 +21,7 @@ describe('idl-encode.utils', () => {
     const viewerPrincipal = Principal.fromText(mockUserIdText);
 
     it('encodes only Admin-scoped principals', () => {
-      const controllers: [Principal, SatelliteDid.Controller][] = [
+      const controllers: [Principal, SatelliteDid.AccessKey][] = [
         [
           adminPrincipal,
           {
@@ -52,7 +52,7 @@ describe('idl-encode.utils', () => {
     });
 
     it('returns an empty list if no Admins are present', () => {
-      const controllers: [Principal, SatelliteDid.Controller][] = [
+      const controllers: [Principal, SatelliteDid.AccessKey][] = [
         [
           viewerPrincipal,
           {

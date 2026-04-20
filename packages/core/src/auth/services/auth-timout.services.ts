@@ -1,4 +1,4 @@
-import {isNullish} from '@dfinity/utils';
+import {isNullish} from '@junobuild/utils';
 import type {EnvironmentWorker} from '../../core/types/env';
 import type {Unsubscribe} from '../../core/types/subscription';
 import {AuthStore} from '../stores/auth.store';
@@ -8,7 +8,7 @@ import {emit} from '../utils/events.utils';
 import {signOut} from './sign-out.services';
 
 export const initAuthTimeoutWorker = (auth: EnvironmentWorker): Unsubscribe => {
-  const workerUrl = auth === true ? './workers/auth.worker.js' : auth;
+  const workerUrl = auth === true ? '/workers/auth.worker.js' : auth;
   const worker = new Worker(workerUrl);
 
   const timeoutSignOut = async () => {

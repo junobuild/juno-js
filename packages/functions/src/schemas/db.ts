@@ -1,5 +1,5 @@
+import {j} from '@junobuild/schema';
 import * as z from 'zod';
-import {Uint8ArraySchema} from './candid';
 import {
   type Description,
   DescriptionSchema,
@@ -14,14 +14,14 @@ import {
 /**
  * @see RawData
  */
-export const RawDataSchema = Uint8ArraySchema;
+export const RawDataSchema = j.uint8Array();
 
 /**
  * Represents raw binary data.
  *
  * This is used to store structured data in a document.
  */
-export type RawData = z.infer<typeof Uint8ArraySchema>;
+export type RawData = Uint8Array;
 
 /**
  * @see Doc

@@ -1,6 +1,6 @@
-import {fromNullable, nonNullish, toNullable} from '@dfinity/utils';
 import type {MaxMemorySizeConfig} from '@junobuild/config';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
+import {fromNullable, nonNullish, toNullable} from '@junobuild/utils';
 
 export const toMaxMemorySize = (
   configMaxMemorySize?: MaxMemorySizeConfig
@@ -25,6 +25,7 @@ export const fromMaxMemorySize = (
 
   return {
     ...(nonNullish(memorySize) &&
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       (nonNullish(heap) || nonNullish(stable)) && {
         maxMemorySize: {
           ...(nonNullish(heap) && {heap}),

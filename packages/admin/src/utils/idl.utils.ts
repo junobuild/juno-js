@@ -13,7 +13,7 @@ export const encoreIDLUser = (user: Principal): Uint8Array =>
   );
 
 export const encodeAdminAccessKeysToIDL = (
-  controllers: [Principal, SatelliteDid.Controller][]
+  controllers: [Principal, SatelliteDid.AccessKey][]
 ): Uint8Array =>
   IDL.encode(
     [

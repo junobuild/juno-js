@@ -28,6 +28,12 @@ const functionsInputFiles = [
   './packages/functions/src/ic-cdk.ts'
 ];
 
+const functionsToolsInputFiles = [
+  './packages/functions-tools/src/converters/zod-to-idl.ts',
+  './packages/functions-tools/src/converters/zod-to-rust.ts',
+  './packages/functions-tools/src/converters/zod-to-candid.ts'
+];
+
 const buildOptions = {
   repo: {url: 'https://github.com/junobuild/juno-js'}
 };
@@ -48,4 +54,11 @@ generateDocumentation({
   outputFile: './packages/functions/README.md',
   markdownOptions,
   buildOptions: {...buildOptions, explore: true, types: true}
+});
+
+generateDocumentation({
+  inputFiles: functionsToolsInputFiles,
+  outputFile: './packages/functions-tools/README.md',
+  markdownOptions,
+  buildOptions: {...buildOptions, explore: false, types: true}
 });

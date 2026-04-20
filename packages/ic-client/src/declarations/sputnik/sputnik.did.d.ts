@@ -10,6 +10,16 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface AccessKey {
+	updated_at: bigint;
+	metadata: Array<[string, string]>;
+	kind: [] | [AccessKeyKind];
+	created_at: bigint;
+	scope: AccessKeyScope;
+	expires_at: [] | [bigint];
+}
+export type AccessKeyKind = { Emulator: null } | { Automation: null };
+export type AccessKeyScope = { Write: null } | { Admin: null } | { Submit: null };
 export interface AssetEncodingNoContent {
 	modified: bigint;
 	sha256: Uint8Array;
@@ -94,6 +104,21 @@ export interface AutomationController {
 	expires_at: bigint;
 }
 export type AutomationScope = { Write: null } | { Submit: null };
+export interface CertifyAssetsArgs {
+	cursor: CertifyAssetsCursor;
+	strategy: CertifyAssetsStrategy;
+	chunk_size: [] | [number];
+}
+export type CertifyAssetsCursor =
+	| { Heap: { offset: bigint } }
+	| { Stable: { key: [] | [AssetKey] } };
+export interface CertifyAssetsResult {
+	next_cursor: [] | [CertifyAssetsCursor];
+}
+export type CertifyAssetsStrategy =
+	| { Append: null }
+	| { Clear: null }
+	| { AppendWithRouting: null };
 export type CollectionType = { Db: null } | { Storage: null };
 export interface CommitBatch {
 	batch_id: bigint;
@@ -114,16 +139,6 @@ export interface ConfigMaxMemorySize {
 	stable: [] | [bigint];
 	heap: [] | [bigint];
 }
-export interface Controller {
-	updated_at: bigint;
-	metadata: Array<[string, string]>;
-	kind: [] | [ControllerKind];
-	created_at: bigint;
-	scope: ControllerScope;
-	expires_at: [] | [bigint];
-}
-export type ControllerKind = { Emulator: null } | { Automation: null };
-export type ControllerScope = { Write: null } | { Admin: null } | { Submit: null };
 export interface CustomDomain {
 	updated_at: bigint;
 	created_at: bigint;
@@ -407,6 +422,12 @@ export interface SegmentsDeploymentOptions {
 	mission_control_version: [] | [string];
 	satellite_version: [] | [string];
 }
+export interface SetAccessKey {
+	metadata: Array<[string, string]>;
+	kind: [] | [AccessKeyKind];
+	scope: AccessKeyScope;
+	expires_at: [] | [bigint];
+}
 export interface SetAuthenticationConfig {
 	openid: [] | [AuthenticationConfigOpenId];
 	version: [] | [bigint];
@@ -417,14 +438,8 @@ export interface SetAutomationConfig {
 	openid: [] | [AutomationConfigOpenId];
 	version: [] | [bigint];
 }
-export interface SetController {
-	metadata: Array<[string, string]>;
-	kind: [] | [ControllerKind];
-	scope: ControllerScope;
-	expires_at: [] | [bigint];
-}
 export interface SetControllersArgs {
-	controller: SetController;
+	controller: SetAccessKey;
 	controllers: Array<Principal>;
 }
 export interface SetDbConfig {
@@ -455,6 +470,13 @@ export interface SetStorageConfig {
 	max_memory_size: [] | [ConfigMaxMemorySize];
 	raw_access: [] | [StorageConfigRawAccess];
 	redirects: [] | [Array<[string, StorageConfigRedirect]>];
+}
+export interface SetStorageConfigOptions {
+	skip_certification: [] | [boolean];
+}
+export interface SetStorageConfigWithOptions {
+	config: SetStorageConfig;
+	options: SetStorageConfigOptions;
 }
 export interface SignedDelegation {
 	signature: Uint8Array;
@@ -515,6 +537,7 @@ export interface _SERVICE {
 		[AuthenticateAutomationArgs],
 		AuthenticateAutomationResultResponse
 	>;
+	certify_assets_chunk: ActorMethod<[CertifyAssetsArgs], CertifyAssetsResult>;
 	commit_asset_upload: ActorMethod<[CommitBatch], undefined>;
 	commit_proposal: ActorMethod<[CommitProposal], null>;
 	commit_proposal_asset_upload: ActorMethod<[CommitBatch], undefined>;
@@ -527,7 +550,7 @@ export interface _SERVICE {
 	del_asset: ActorMethod<[string, string], undefined>;
 	del_assets: ActorMethod<[string], undefined>;
 	del_controller_self: ActorMethod<[], undefined>;
-	del_controllers: ActorMethod<[DeleteControllersArgs], Array<[Principal, Controller]>>;
+	del_controllers: ActorMethod<[DeleteControllersArgs], Array<[Principal, AccessKey]>>;
 	del_custom_domain: ActorMethod<[string], undefined>;
 	del_doc: ActorMethod<[string, string, DelDoc], undefined>;
 	del_docs: ActorMethod<[string], undefined>;
@@ -563,7 +586,7 @@ export interface _SERVICE {
 		Array<[string, InitUploadResult]>
 	>;
 	list_assets: ActorMethod<[string, ListParams], ListResults>;
-	list_controllers: ActorMethod<[], Array<[Principal, Controller]>>;
+	list_controllers: ActorMethod<[], Array<[Principal, AccessKey]>>;
 	list_custom_domains: ActorMethod<[], Array<[string, CustomDomain]>>;
 	list_docs: ActorMethod<[string, ListParams], ListResults_1>;
 	list_proposals: ActorMethod<[ListProposalsParams], ListProposalResults>;
@@ -573,13 +596,14 @@ export interface _SERVICE {
 	set_asset_token: ActorMethod<[string, string, [] | [string]], undefined>;
 	set_auth_config: ActorMethod<[SetAuthenticationConfig], AuthenticationConfig>;
 	set_automation_config: ActorMethod<[SetAutomationConfig], AutomationConfig>;
-	set_controllers: ActorMethod<[SetControllersArgs], Array<[Principal, Controller]>>;
+	set_controllers: ActorMethod<[SetControllersArgs], Array<[Principal, AccessKey]>>;
 	set_custom_domain: ActorMethod<[string, [] | [string]], undefined>;
 	set_db_config: ActorMethod<[SetDbConfig], DbConfig>;
 	set_doc: ActorMethod<[string, string, SetDoc], Doc>;
 	set_many_docs: ActorMethod<[Array<[string, string, SetDoc]>], Array<[string, Doc]>>;
 	set_rule: ActorMethod<[CollectionType, string, SetRule], Rule>;
 	set_storage_config: ActorMethod<[SetStorageConfig], StorageConfig>;
+	set_storage_config_with_options: ActorMethod<[SetStorageConfigWithOptions], StorageConfig>;
 	submit_proposal: ActorMethod<[bigint], [bigint, Proposal]>;
 	switch_storage_system_memory: ActorMethod<[], undefined>;
 	upload_asset_chunk: ActorMethod<[UploadChunk], UploadChunkResult>;

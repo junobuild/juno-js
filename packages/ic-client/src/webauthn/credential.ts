@@ -1,4 +1,4 @@
-import {uint8ArrayToBase64} from '@dfinity/utils';
+import {uint8ArrayToBase64} from '@junobuild/utils';
 import {extractAAGUID} from './aaguid';
 import {type CoseEncodedKey, CosePublicKey} from './agent-js/cose-key';
 import type {PublicKeyWithToRaw} from './types/identity';

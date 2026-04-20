@@ -1,4 +1,4 @@
-import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
+import {type PrincipalText, PrincipalTextSchema} from '@junobuild/schema';
 import * as z from 'zod';
 
 /**

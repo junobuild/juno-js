@@ -10,7 +10,7 @@ import {listControllers, setControllers} from '../api/orbiter.api';
  */
 export const listOrbiterControllers = (params: {
   orbiter: OrbiterParameters;
-}): Promise<[Principal, MissionControlDid.Controller][]> => listControllers(params);
+}): Promise<[Principal, MissionControlDid.AccessKey][]> => listControllers(params);
 
 /**
  * Sets the controllers of an orbiter.
@@ -22,4 +22,4 @@ export const listOrbiterControllers = (params: {
 export const setOrbiterControllers = (params: {
   orbiter: OrbiterParameters;
   args: OrbiterDid.SetControllersArgs;
-}): Promise<[Principal, OrbiterDid.Controller][]> => setControllers(params);
+}): Promise<[Principal, OrbiterDid.AccessKey][]> => setControllers(params);

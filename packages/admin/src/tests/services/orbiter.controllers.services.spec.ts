@@ -41,7 +41,7 @@ describe('orbiter.controllers.services', () => {
   });
 
   it('returns the list of controllers from the orbiter actor', async () => {
-    const controller: OrbiterDid.Controller = {
+    const controller: OrbiterDid.AccessKey = {
       updated_at: 123n,
       metadata: [],
       created_at: 4456n,

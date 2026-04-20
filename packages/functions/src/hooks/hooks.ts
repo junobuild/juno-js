@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import {SatelliteEnvSchema} from '../schemas/satellite.env';
 import {createFunctionSchema} from '../utils/zod.utils';
 import {type Collections, CollectionsSchema} from './schemas/collections';
 import {type RunFunction, RunFunctionSchema} from './schemas/context';
@@ -14,7 +15,6 @@ import {
   type OnSetManyDocsContext,
   OnSetManyDocsContextSchema
 } from './schemas/db/context';
-import {SatelliteEnvSchema} from './schemas/satellite.env';
 import {
   type OnDeleteAssetContext,
   OnDeleteAssetContextSchema,

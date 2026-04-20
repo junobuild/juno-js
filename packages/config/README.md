@@ -38,7 +38,6 @@ Configuration options for [Juno] CLI.
 - [StorageConfigRedirectSchema](#gear-storageconfigredirectschema)
 - [StorageConfigSchema](#gear-storageconfigschema)
 - [EncodingTypeSchema](#gear-encodingtypeschema)
-- [PrecompressSchema](#gear-precompressschema)
 - [CliConfigSchema](#gear-cliconfigschema)
 - [SatelliteIdSchema](#gear-satelliteidschema)
 - [SatelliteIdsSchema](#gear-satelliteidsschema)
@@ -168,13 +167,13 @@ References:
 
 | Constant               | Type                                                                                                                                                                                                                                                                                                                               |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; podman: "podman"; container: "container"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; }, $strict>>; network: ZodOptiona...` |
+| `EmulatorConfigSchema` | `ZodUnion<readonly [ZodObject<{ runner: ZodOptional<ZodObject<{ type: ZodEnum<{ docker: "docker"; podman: "podman"; }>; image: ZodOptional<ZodString>; name: ZodOptional<ZodString>; volume: ZodOptional<...>; target: ZodOptional<...>; platform: ZodOptional<...>; extraHosts: ZodOptional<...>; }, $strict>>; network: ZodO...` |
 
 References:
 
 - EmulatorConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L249)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L288)
 
 #### :gear: ModuleLogVisibilitySchema
 
@@ -330,29 +329,17 @@ see EncodingType
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/encoding.ts#L6)
 
-#### :gear: PrecompressSchema
-
-| Constant            | Type                                                                                                                                                                                                |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PrecompressSchema` | `ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<ZodEnum<{ both: "both"; replace: "replace"; }>>; algorithm: ZodOptional<ZodEnum<{ gzip: "gzip"; brotli: "brotli"; }>>; }, $strict>` |
-
-References:
-
-- Precompress
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L7)
-
 #### :gear: CliConfigSchema
 
 | Constant          | Type                                                                                                                                                                                                                                                                                                                               |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CliConfigSchema` | `ZodObject<{ source: ZodOptional<ZodString>; ignore: ZodOptional<ZodArray<ZodString>>; precompress: ZodOptional<ZodUnion<readonly [ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<...>; algorithm: ZodOptional<...>; }, $strict>, ZodArray<...>, ZodLiteral<...>]>>; encoding: ZodOptional<...>; predeploy: Zo...` |
+| `CliConfigSchema` | `ZodObject<{ ignore: ZodOptional<ZodArray<ZodString>>; precompress: ZodOptional<ZodUnion<readonly [ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<ZodEnum<{ both: "both"; replace: "replace"; }>>; algorithm: ZodOptional<...>; }, $strict>, ZodArray<...>, ZodLiteral<...>]>>; encoding: ZodOptional<...>; pr...` |
 
 References:
 
 - CliConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L16)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L10)
 
 #### :gear: SatelliteIdSchema
 
@@ -364,7 +351,7 @@ References:
 
 - SatelliteId
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L21)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L22)
 
 #### :gear: SatelliteIdsSchema
 
@@ -376,19 +363,19 @@ References:
 
 - SatelliteIds
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L40)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L41)
 
 #### :gear: SatelliteConfigOptionsSchema
 
-| Constant                       | Type                                                                                                                                                                                                                                                                                                                          |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ storage: ZodOptional<ZodObject<{ headers: ZodOptional<ZodArray<ZodObject<{ source: ZodString; headers: ZodArray<ZodTuple<[ZodString, ZodString], null>>; }, $strict>>>; ... 5 more ...; version: ZodOptional<...>; }, $strip>>; ... 6 more ...; id: ZodString; }, $strict>, ZodObject<...>]>` |
+| Constant                       | Type                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SatelliteConfigOptionsSchema` | `ZodUnion<readonly [ZodObject<{ hosting: ZodOptional<ZodObject<{ source: ZodString; ignore: ZodOptional<ZodArray<ZodString>>; precompress: ZodOptional<ZodUnion<readonly [ZodObject<{ pattern: ZodOptional<ZodString>; mode: ZodOptional<...>; algorithm: ZodOptional<...>; }, $strict>, ZodArray<...>, ZodLiteral<...>]>>; en...` |
 
 References:
 
 - JunoConsoleConfig
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L80)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L82)
 
 ### :tropical_drink: Interfaces
 
@@ -412,7 +399,6 @@ References:
 - [StorageConfigRewrite](#gear-storageconfigrewrite)
 - [StorageConfigRedirect](#gear-storageconfigredirect)
 - [StorageConfig](#gear-storageconfig)
-- [Precompress](#gear-precompress)
 - [CliConfig](#gear-cliconfig)
 - [SatelliteId](#gear-satelliteid)
 - [SatelliteIds](#gear-satelliteids)
@@ -530,16 +516,17 @@ Configuration for the Satellite emulator.
 
 Shared options for all runner variants.
 
-| Property   | Type                                          | Description                                                                                           |
-| ---------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `type`     | `"docker" or "podman" or "container"`         | The containerization tool to run the emulator.                                                        |
-| `image`    | `string or undefined`                         | Image reference. default: depends on emulator type, e.g. "junobuild/skylab:latest"                    |
-| `name`     | `string or undefined`                         | Optional container name to use for the emulator. Useful for reusing or managing a specific container. |
-| `volume`   | `string or undefined`                         | Persistent volume to store internal state. default: "juno"                                            |
-| `target`   | `string or undefined`                         | Shared folder for deploying and hot-reloading serverless functions.                                   |
-| `platform` | `"linux/amd64" or "linux/arm64" or undefined` | The platform to use when running the emulator container.                                              |
+| Property     | Type                                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------ | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`       | `"docker" or "podman"`                        | The containerization tool to run the emulator.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `image`      | `string or undefined`                         | Image reference. default: depends on emulator type, e.g. "junobuild/skylab:latest"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `name`       | `string or undefined`                         | Optional container name to use for the emulator. Useful for reusing or managing a specific container.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `volume`     | `string or undefined`                         | Persistent volume to store internal state. default: "juno"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `target`     | `string or undefined`                         | Shared folder for deploying and hot-reloading serverless functions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `platform`   | `"linux/amd64" or "linux/arm64" or undefined` | The platform to use when running the emulator container.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `extraHosts` | `[string, string][] or undefined`             | Additional host-to-IP mappings to inject into the container via `--add-host`. Each entry is a `[hostname, destination]` tuple where destination is an IPv4 address, an IPv6 address, `"host-gateway"`, or an arbitrary host string. This is useful for making host-machine services (e.g. a local Ethereum RPC node) reachable from within the container under a stable DNS name such as `host.docker.internal`. example: `ts runner: { extraHosts: [['host.docker.internal', 'host-gateway']] } `see: https://docs.docker.com/reference/cli/docker/container/run/#add-host |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L125)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L144)
 
 #### :gear: NetworkServices
 
@@ -559,7 +546,7 @@ in the local Internet Computer network when the emulator starts.
 | `internet_identity` | `boolean or undefined` | Internet Identity: Deploys the II canister for authentication.                                                                                                                                                           |
 | `nns_dapp`          | `boolean or undefined` | NNS dapp: Deploys the NNS UI canister and frontend application Requires cmc, icp, nns, sns, internet_identity to be enabled.                                                                                             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L180)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L219)
 
 #### :gear: Network
 
@@ -570,7 +557,7 @@ by the emulator.
 | ---------- | ----------------- | ----------------------------------------------------------- |
 | `services` | `NetworkServices` | System canisters and applications available in the network. |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L239)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L278)
 
 #### :gear: ModuleSettings
 
@@ -671,32 +658,18 @@ Configures the hosting behavior of the Storage.
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/shared/storage.config.ts#L128)
 
-#### :gear: Precompress
-
-Configuration for compressing files during deployment.
-
-| Property    | Type                               | Description                                                                                                                                                                                                                      |
-| ----------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | --- | ---- |
-| `pattern`   | `string or undefined`              | Glob pattern for files to precompress. default: any css                                                                                                                                                                          | js  | mjs | html |
-| `mode`      | `"both" or "replace" or undefined` | Determines what happens to the original files after compression: - `"both"` — upload both original and compressed versions. - `"replace"` — upload only the compressed version (served with `Content-Encoding`). default: "both" |
-| `algorithm` | `"gzip" or "brotli" or undefined`  | Compression algorithm. default: "gzip"                                                                                                                                                                                           |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L30)
-
 #### :gear: CliConfig
 
-The configuration used by the CLI to resolve, prepare and deploy your app.
+| Property      | Type                                                 | Description                               |
+| ------------- | ---------------------------------------------------- | ----------------------------------------- |
+| `source`      | `string or undefined`                                | deprecated: use HostingConfig.source      |
+| `ignore`      | `string[] or undefined`                              | deprecated: use HostingConfig.ignore      |
+| `precompress` | `false or Precompress or Precompress[] or undefined` | deprecated: use HostingConfig.precompress |
+| `encoding`    | `[string, EncodingType][] or undefined`              | deprecated: use HostingConfig.encoding    |
+| `predeploy`   | `string[] or undefined`                              | deprecated: use HostingConfig.predeploy   |
+| `postdeploy`  | `string[] or undefined`                              | deprecated: use HostingConfig.postdeploy  |
 
-| Property      | Type                                                 | Description                                                                                                                                                                                                                                                                                                                                                                                   |
-| ------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `source`      | `string or undefined`                                | Specifies the directory from which to deploy to Storage. For instance, if `npm run build` outputs files to a `dist` folder, use `source: 'dist'`. default: 'build'type: {string}                                                                                                                                                                                                              |
-| `ignore`      | `string[] or undefined`                              | Specifies files or patterns to ignore during deployment, using glob patterns similar to those in .gitignore. type: {string[]}optional                                                                                                                                                                                                                                                         |
-| `precompress` | `false or Precompress or Precompress[] or undefined` | Controls compression optimization for files in the source folder. By default, JavaScript (.js), ES Modules (.mjs), CSS (.css), and HTML (.html) are compressed, and both the original and compressed versions are uploaded. Set to `false` to disable, or provide one or more {@link Precompress} objects to customize. type: {Precompress or Precompress[] or false}optional                 |
-| `encoding`    | `[string, EncodingType][] or undefined`              | Customizes file encoding mapping for HTTP response headers `Content-Encoding` based on file extension: - `.Z` for compress, - `.gz` for gzip, - `.br` for brotli, - `.zlib` for deflate, - anything else defaults to `identity`. The "encoding" attribute allows overriding default mappings with an array of glob patterns and encoding types. type: {Array<[string, EncodingType]>}optional |
-| `predeploy`   | `string[] or undefined`                              | Defines a list of scripts or commands to be run before the deployment process begins. This can be useful for tasks such as compiling assets, running tests, or building production-ready files. Example: `json { "predeploy": ["npm run build", "npm run lint"] } ` type: {string[]}optional                                                                                                  |
-| `postdeploy`  | `string[] or undefined`                              | Defines a list of scripts or commands to be run after the deployment process completes. This can be used for tasks such as notifications, cleanup, or sending confirmation messages to services or team members. Example: `json { "postdeploy": ["./scripts/notify-admins.sh", "echo 'Deployment complete'"] } ` type: {string[]}optional                                                     |
-
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L56)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/types/cli.config.ts#L18)
 
 #### :gear: SatelliteId
 
@@ -706,7 +679,7 @@ Represents the unique identifier for a satellite.
 | -------- | -------- | -------------------------------------------------------------------------------- |
 | `id`     | `string` | The unique identifier (ID) of the satellite for this application. type: {string} |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L29)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L30)
 
 #### :gear: SatelliteIds
 
@@ -716,7 +689,7 @@ Represents a mapping of satellite identifiers to different configurations based 
 | -------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ids`    | `Record<string, string>` | A mapping of satellite identifiers (IDs) to different configurations based on the mode of the application. This allows the application to use different satellite IDs, such as production, staging, etc. Example: { "production": "xo2hm-lqaaa-aaaal-ab3oa-cai", "staging": "gl6nx-5maaa-aaaaa-qaaqq-cai" } type: {Record<JunoConfigMode, string>} |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L48)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L49)
 
 #### :gear: SatelliteConfigOptions
 
@@ -727,17 +700,18 @@ authentication, automation, and deployment assertions.
 These options affect specific modules of the Satellite and may require manual application of
 changes, typically through CLI commands (e.g., `juno config`).
 
-| Property         | Type                                | Description                                                                                                                                                                                                                                                                 |
-| ---------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `storage`        | `StorageConfig or undefined`        | Optional configuration parameters for the satellite, affecting the operational behavior of its Storage. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {StorageConfig}optional               |
-| `datastore`      | `DatastoreConfig or undefined`      | Optional configuration parameters for the satellite, affecting the operational behavior of its Datastore. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {DatastoreConfig}optional           |
-| `authentication` | `AuthenticationConfig or undefined` | Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {AuthenticationConfig}optional |
-| `automation`     | `AutomationConfig or undefined`     | Optional configuration parameters for the behavior of the automation. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {AutomationConfig}optional                                              |
-| `assertions`     | `SatelliteAssertions or undefined`  | Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions. type: {SatelliteAssertions}optional                                                                                                                       |
-| `settings`       | `ModuleSettings or undefined`       | Optional configuration parameters for the Satellite. These settings control various aspects of the module's behavior and resource usage. type: {ModuleSettings}optional                                                                                                     |
-| `collections`    | `Collections or undefined`          | Optional configuration for the Datastore and Storage collections. type: {Collections}optional                                                                                                                                                                               |
+| Property         | Type                                | Description                                                                                                                                                                                                                                                                               |
+| ---------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hosting`        | `HostingConfig or undefined`        | Optional deploy-time configuration for bundling and uploading your frontend assets to the satellite. Controls the source folder, file ignoring, compression, encoding, and pre/post deploy hooks. Runs on your machine during `juno deploy`. type: {HostingConfig}optional                |
+| `storage`        | `StorageConfig or undefined`        | Optional serve-time configuration for how the satellite's Storage module handles HTTP requests. Controls headers, rewrites, redirects, iframe policy, and memory limits. Changes must be applied manually afterwards, for example with `juno config apply`. type: {StorageConfig}optional |
+| `datastore`      | `DatastoreConfig or undefined`      | Optional configuration parameters for the satellite, affecting the operational behavior of its Datastore. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {DatastoreConfig}optional                         |
+| `authentication` | `AuthenticationConfig or undefined` | Optional configuration parameters for the satellite, affecting the operational behavior of its Authentication. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {AuthenticationConfig}optional               |
+| `automation`     | `AutomationConfig or undefined`     | Optional configuration parameters for the behavior of the automation. Changes to these parameters must be applied manually afterwards, for example with the CLI using `juno config` commands. type: {AutomationConfig}optional                                                            |
+| `assertions`     | `SatelliteAssertions or undefined`  | Optional configurations to override default assertions made by the CLI regarding satellite deployment conditions. type: {SatelliteAssertions}optional                                                                                                                                     |
+| `settings`       | `ModuleSettings or undefined`       | Optional configuration parameters for the Satellite. These settings control various aspects of the module's behavior and resource usage. type: {ModuleSettings}optional                                                                                                                   |
+| `collections`    | `Collections or undefined`          | Optional configuration for the Datastore and Storage collections. type: {Collections}optional                                                                                                                                                                                             |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L112)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L114)
 
 ### :cocktail: Types
 
@@ -746,6 +720,7 @@ changes, typically through CLI commands (e.g., `juno config`).
 - [RulesType](#gear-rulestype)
 - [DatastoreCollection](#gear-datastorecollection)
 - [StorageCollection](#gear-storagecollection)
+- [Hostname](#gear-hostname)
 - [EmulatorConfig](#gear-emulatorconfig)
 - [ModuleLogVisibility](#gear-modulelogvisibility)
 - [JunoConfigMode](#gear-junoconfigmode)
@@ -794,6 +769,16 @@ changes, typically through CLI commands (e.g., `juno config`).
 
 [:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/collections.ts#L32)
 
+#### :gear: Hostname
+
+A non-empty hostname string.
+
+| Type       | Type |
+| ---------- | ---- |
+| `Hostname` |      |
+
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L118)
+
 #### :gear: EmulatorConfig
 
 The configuration for running the Juno emulator.
@@ -802,7 +787,7 @@ The configuration for running the Juno emulator.
 | ---------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `EmulatorConfig` | `    | {runner?: EmulatorRunner; network?: Network; skylab: EmulatorSkylab} or {runner?: EmulatorRunner; network?: Network; console: EmulatorConsole} or {runner?: EmulatorRunner; network?: Network; satellite: EmulatorSatellite}` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L272)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/emulator.config.ts#L311)
 
 #### :gear: ModuleLogVisibility
 
@@ -850,7 +835,7 @@ The configuration for running the Juno emulator.
 | ----------------- | ---------------------------------------------------------------------------- |
 | `SatelliteConfig` | `Either<SatelliteId, SatelliteIds> and CliConfig and SatelliteConfigOptions` |
 
-[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L176)
+[:link: Source](https://github.com/junobuild/juno-js/tree/main/packages/config/src/satellite/configs/satellite.config.ts#L187)
 
 <!-- TSDOC_END -->
 

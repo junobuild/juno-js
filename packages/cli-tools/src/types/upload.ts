@@ -1,5 +1,5 @@
 import type {OnUploadProgress} from '@junobuild/storage';
-import type {COLLECTION_CDN_RELEASES, COLLECTION_DAPP} from '../constants/deploy.constants';
+import type {COLLECTION_CDN_RELEASES, COLLECTION_DAPP} from '../constants/storage.constants';
 import type {FileAndPaths} from './deploy';
 
 export interface UploadFilesParams {

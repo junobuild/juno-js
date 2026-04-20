@@ -1,0 +1,63 @@
+{
+  "name": "@junobuild/schema",
+  "version": "1.2.4",
+  "description": "The type system and utilities for validation on Juno",
+  "author": "David Dal Busco (https://daviddalbusco.com)",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.mjs"
+    },
+    "./utils": {
+      "types": "./utils.d.ts",
+      "import": "./utils.js",
+      "require": "./utils.mjs"
+    }
+  },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "**/*.js",
+    "**/*.js.map",
+    "**/*.mjs",
+    "**/*.mjs.map",
+    "**/*.d.ts",
+    "**/*.d.ts.map"
+  ],
+  "scripts": {
+    "clean": "git ls-files --others --ignored --exclude-standard | grep -v \"LICENSE\" | xargs rm -rf",
+    "ts-declaration": "tsc --emitDeclarationOnly -outDir .",
+    "build": "npm run clean && tsc --noEmit && node esbuild.mjs && npm run ts-declaration",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/junobuild/juno-js.git",
+    "directory": "packages/schema"
+  },
+  "bugs": {
+    "url": "https://github.com/junobuild/juno-js"
+  },
+  "keywords": [
+    "schema",
+    "validation",
+    "zod",
+    "type-system"
+  ],
+  "homepage": "https://juno.build",
+  "peerDependencies": {
+    "zod": "^4.3"
+  },
+  "dependencies": {
+    "@dfinity/zod-schemas": "^3.2"
+  },
+  "devDependencies": {
+    "@icp-sdk/core": "^5"
+  }
+}

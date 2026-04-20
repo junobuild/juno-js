@@ -20,8 +20,6 @@ export const JUNO_STORAGE_ERROR_BATCH_NOT_FOUND = 'juno.storage.error.batch_not_
 export const JUNO_STORAGE_ERROR_CHUNK_NOT_FOUND = 'juno.storage.error.chunk_not_found';
 export const JUNO_STORAGE_ERROR_CHUNK_NOT_INCLUDED_IN_BATCH =
   'juno.storage.error.chunk_not_included_in_batch';
-export const JUNO_STORAGE_ERROR_CHUNK_TO_COMMIT_NOT_FOUND =
-  'juno.storage.error.chunk_to_commit_not_found';
 export const JUNO_STORAGE_ERROR_ASSET_MAX_ALLOWED_SIZE =
   'juno.storage.error.asset_max_allowed_size';
 

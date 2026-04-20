@@ -1,7 +1,25 @@
+import {schemaFromIdl, schemaToIdl} from '@junobuild/schema/utils';
 import {call} from '../../../ic-cdk/call.ic-cdk';
 import {Canister} from '../../_canister';
-import {type IcrcLedgerDid, IcrcLedgerIdl} from '../../declarations';
-import {type IcrcCanisterOptions, IcrcCanisterOptionsSchema} from './schemas';
+import {IcrcLedgerIdl} from '../../declarations';
+import {
+  AccountSchema,
+  ApproveArgsSchema,
+  ApproveResultSchema,
+  IcrcCanisterOptionsSchema,
+  TransferArgsSchema,
+  TransferFromArgsSchema,
+  TransferFromResultSchema,
+  TransferResultSchema,
+  type Account,
+  type ApproveArgs,
+  type ApproveResult,
+  type IcrcCanisterOptions,
+  type TransferArgs,
+  type TransferFromArgs,
+  type TransferFromResult,
+  type TransferResult
+} from './schema';
 
 /**
  * Provides a simple interface to interact with an ICRC Ledger,
@@ -19,20 +37,20 @@ export class IcrcLedgerCanister extends Canister {
   /**
    * Returns the balance of an ICRC account.
    *
-   * @param {IcrcLedgerDid.Account} account - The account to query.
-   * @returns {Promise<IcrcLedgerDid.Tokens>} The token balance for the account.
+   * @param {Account} account - The account to query.
+   * @returns {Promise<bigint>} The token balance for the account.
    */
-  icrc1BalanceOf = async ({
-    account
-  }: {
-    account: IcrcLedgerDid.Account;
-  }): Promise<IcrcLedgerDid.Tokens> =>
-    await call<IcrcLedgerDid.Tokens>({
+  icrc1BalanceOf = async ({account}: {account: Account}): Promise<bigint> => {
+    const parsed = AccountSchema.parse(account);
+    const idlArgs = schemaToIdl({schema: AccountSchema, value: parsed});
+
+    return await call<bigint>({
       canisterId: this.canisterId,
       method: 'icrc1_balance_of',
-      args: [[IcrcLedgerIdl.Account, account]],
+      args: [[IcrcLedgerIdl.Account, idlArgs]],
       result: IcrcLedgerIdl.Tokens
     });
+  };
 
   /**
    * Transfers tokens using the ICRC-1 `icrc1_transfer` method.
@@ -40,20 +58,22 @@ export class IcrcLedgerCanister extends Canister {
    * Use this to send tokens from the caller's account to another account
    * when writing Juno Serverless Functions in TypeScript.
    *
-   * @param {IcrcLedgerDid.TransferArg} args - Transfer arguments (amount, fee, to, memo, created_at_time, etc.).
-   * @returns {Promise<IcrcLedgerDid.TransferResult>} The result of the transfer.
+   * @param {TransferArgs} args - Transfer arguments (amount, fee, to, memo, created_at_time, etc.).
+   * @returns {Promise<TransferResult>} The result of the transfer.
    */
-  icrc1Transfer = async ({
-    args
-  }: {
-    args: IcrcLedgerDid.TransferArg;
-  }): Promise<IcrcLedgerDid.TransferResult> =>
-    await call<IcrcLedgerDid.TransferResult>({
+  icrc1Transfer = async ({args}: {args: TransferArgs}): Promise<TransferResult> => {
+    const parsed = TransferArgsSchema.parse(args);
+    const idlArgs = schemaToIdl({schema: TransferArgsSchema, value: parsed});
+
+    const idlResult = await call<TransferResult>({
       canisterId: this.canisterId,
       method: 'icrc1_transfer',
-      args: [[IcrcLedgerIdl.TransferArg, args]],
+      args: [[IcrcLedgerIdl.TransferArg, idlArgs]],
       result: IcrcLedgerIdl.TransferResult
     });
+
+    return schemaFromIdl({schema: TransferResultSchema, value: idlResult}) as TransferResult;
+  };
 
   /**
    * Transfers tokens using the ICRC-2 `icrc2_transfer_from` method.
@@ -61,18 +81,43 @@ export class IcrcLedgerCanister extends Canister {
    * Allows transferring tokens from another user's account when an approval
    * has previously been granted via `icrc2_approve`.
    *
-   * @param {IcrcLedgerDid.TransferFromArgs} args - Transfer-from arguments (amount, from_subaccount, spender, etc.).
-   * @returns {Promise<IcrcLedgerDid.TransferFromResult>} The result of the transfer-from operation.
+   * @param {TransferFromArgs} args - Transfer-from arguments (amount, from_subaccount, spender, etc.).
+   * @returns {Promise<TransferFromResult>} The result of the transfer-from operation.
    */
-  icrc2TransferFrom = async ({
-    args
-  }: {
-    args: IcrcLedgerDid.TransferFromArgs;
-  }): Promise<IcrcLedgerDid.TransferFromResult> =>
-    await call<IcrcLedgerDid.TransferFromResult>({
+  icrc2TransferFrom = async ({args}: {args: TransferFromArgs}): Promise<TransferFromResult> => {
+    const parsed = TransferFromArgsSchema.parse(args);
+    const idlArgs = schemaToIdl({schema: TransferFromArgsSchema, value: parsed});
+
+    const idlResult = await call<TransferFromResult>({
       canisterId: this.canisterId,
       method: 'icrc2_transfer_from',
-      args: [[IcrcLedgerIdl.TransferFromArgs, args]],
+      args: [[IcrcLedgerIdl.TransferFromArgs, idlArgs]],
       result: IcrcLedgerIdl.TransferFromResult
     });
+
+    return schemaFromIdl({
+      schema: TransferFromResultSchema,
+      value: idlResult
+    }) as TransferFromResult;
+  };
+
+  /**
+   * Approves a spender to transfer tokens on behalf of the caller using the ICRC-2 `icrc2_approve` method.
+   *
+   * @param {ApproveArgs} args - Approve arguments (amount, spender, fee, expires_at, etc.).
+   * @returns {Promise<ApproveResult>} The result of the approval.
+   */
+  icrc2Approve = async ({args}: {args: ApproveArgs}): Promise<ApproveResult> => {
+    const parsed = ApproveArgsSchema.parse(args);
+    const idlArgs = schemaToIdl({schema: ApproveArgsSchema, value: parsed});
+
+    const idlResult = await call<ApproveResult>({
+      canisterId: this.canisterId,
+      method: 'icrc2_approve',
+      args: [[IcrcLedgerIdl.ApproveArgs, idlArgs]],
+      result: IcrcLedgerIdl.ApproveResult
+    });
+
+    return schemaFromIdl({schema: ApproveResultSchema, value: idlResult}) as ApproveResult;
+  };
 }

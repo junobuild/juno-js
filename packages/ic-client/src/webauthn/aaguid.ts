@@ -1,4 +1,4 @@
-import {uint8ArrayToArrayOfNumber} from '@dfinity/utils';
+import {uint8ArrayToArrayOfNumber} from '@junobuild/utils';
 
 /**
  * Extracts the AAGUID (Authenticator Attestation GUID) from a WebAuthn data buffer.

@@ -1,4 +1,4 @@
-import {jsonReplacer, jsonReviver} from '@dfinity/utils';
+import {jsonReplacer, jsonReviver} from '@junobuild/utils';
 import type {RawData} from '../schemas/db';
 
 /**

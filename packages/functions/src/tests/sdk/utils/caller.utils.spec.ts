@@ -1,6 +1,6 @@
 import {RawUserId} from '../../../schemas/satellite';
 import {normalizeCaller} from '../../../sdk/utils/caller.utils';
-import {mockUserIdPrincipal} from '../../mocks/controllers.mock';
+import {mockUserIdPrincipal} from '../../mocks/user.mock';
 
 describe('caller.utils', () => {
   describe('normalizeCaller', () => {

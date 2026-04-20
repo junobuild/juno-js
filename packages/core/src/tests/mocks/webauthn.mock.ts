@@ -1,6 +1,5 @@
-import {arrayOfNumberToUint8Array} from '@dfinity/utils';
 import {WebAuthnIdentity, WebAuthnNewCredential} from '@junobuild/ic-client/webauthn';
-import {toArray} from '@junobuild/utils';
+import {arrayOfNumberToUint8Array, toArray} from '@junobuild/utils';
 import {mockIdentity, mockUserIdPrincipal} from './core.mock';
 
 export const mockWebAuthnDataProvider = {provider: 'webauthn'};

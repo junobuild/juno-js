@@ -1,4 +1,3 @@
-import {toNullable} from '@dfinity/utils';
 import type {Principal} from '@icp-sdk/core/principal';
 import {
   type SatelliteDid,
@@ -8,6 +7,7 @@ import {
   getDeprecatedSatelliteVersionActor,
   getSatelliteActor
 } from '@junobuild/ic-client/actor';
+import {toNullable} from '@junobuild/utils';
 
 export const setStorageConfig = async ({
   config,
@@ -153,9 +153,9 @@ export const listDeprecatedNoScopeControllers = async ({
   satellite
 }: {
   satellite: SatelliteParameters;
-}): Promise<[Principal, SatelliteDid.Controller][]> => {
+}): Promise<[Principal, SatelliteDid.AccessKey][]> => {
   const {list_controllers} = await getDeprecatedSatelliteNoScopeActor(satellite);
-  return list_controllers() as Promise<[Principal, SatelliteDid.Controller][]>;
+  return list_controllers() as Promise<[Principal, SatelliteDid.AccessKey][]>;
 };
 
 export const listControllers = async ({
@@ -164,7 +164,7 @@ export const listControllers = async ({
 }: {
   satellite: SatelliteParameters;
   certified?: boolean;
-}): Promise<[Principal, SatelliteDid.Controller][]> => {
+}): Promise<[Principal, SatelliteDid.AccessKey][]> => {
   const {list_controllers} = await getSatelliteActor({...satellite, certified});
   return list_controllers();
 };
@@ -250,7 +250,7 @@ export const setControllers = async ({
 }: {
   args: SatelliteDid.SetControllersArgs;
   satellite: SatelliteParameters;
-}): Promise<[Principal, SatelliteDid.Controller][]> => {
+}): Promise<[Principal, SatelliteDid.AccessKey][]> => {
   const {set_controllers} = await getSatelliteActor(satellite);
   return set_controllers(args);
 };
@@ -261,7 +261,7 @@ export const deleteControllers = async ({
 }: {
   args: SatelliteDid.DeleteControllersArgs;
   satellite: SatelliteParameters;
-}): Promise<[Principal, SatelliteDid.Controller][]> => {
+}): Promise<[Principal, SatelliteDid.AccessKey][]> => {
   const {del_controllers} = await getSatelliteActor(satellite);
   return del_controllers(args);
 };

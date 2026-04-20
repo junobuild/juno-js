@@ -1,0 +1,1 @@
+export const PRUNE_DEFAULT_BATCH_SIZE = 100;

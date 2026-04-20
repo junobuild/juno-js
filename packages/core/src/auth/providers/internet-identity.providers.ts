@@ -1,4 +1,4 @@
-import {isEmptyString, isNullish, nonNullish} from '@dfinity/utils';
+import {isEmptyString, isNullish, nonNullish} from '@junobuild/utils';
 import {
   DOCKER_CONTAINER_URL,
   DOCKER_INTERNET_IDENTITY_ID

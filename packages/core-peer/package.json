@@ -1,6 +1,6 @@
 {
   "name": "@junobuild/core-peer",
-  "version": "5.2.0",
+  "version": "5.4.0",
   "description": "JavaScript core client for Juno (deprecated, use @junobuild/core)",
   "author": "David Dal Busco (https://daviddalbusco.com)",
   "license": "MIT",
@@ -54,14 +54,13 @@
   ],
   "homepage": "https://juno.build",
   "dependencies": {
-    "@junobuild/auth": "^4",
+    "@junobuild/auth": "^4.1",
     "@junobuild/errors": "*",
-    "@junobuild/ic-client": "^8",
-    "@junobuild/storage": "^2.3",
-    "@junobuild/utils": "*"
+    "@junobuild/ic-client": "^8.1",
+    "@junobuild/storage": "^2.4",
+    "@junobuild/utils": "^1"
   },
   "peerDependencies": {
-    "@dfinity/utils": "^4.1",
     "@icp-sdk/auth": "^5",
     "@icp-sdk/core": "^5"
   }

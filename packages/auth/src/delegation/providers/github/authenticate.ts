@@ -1,4 +1,4 @@
-import {isEmptyString} from '@dfinity/utils';
+import {isEmptyString} from '@junobuild/utils';
 import {authenticateSession} from '../../_session';
 import {AuthenticationUndefinedJwtError} from '../../errors';
 import type {AuthenticatedSession, AuthParameters} from '../../types/authenticate';

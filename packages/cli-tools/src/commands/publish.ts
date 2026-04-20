@@ -1,5 +1,6 @@
-import {toNullable} from '@dfinity/utils';
-import {COLLECTION_CDN_RELEASES, UPLOAD_DEFAULT_BATCH_SIZE} from '../constants/deploy.constants';
+import {toNullable} from '@junobuild/utils';
+import {UPLOAD_DEFAULT_BATCH_SIZE} from '../constants/deploy.constants';
+import {COLLECTION_CDN_RELEASES} from '../constants/storage.constants';
 import {deployAndProposeChanges} from '../services/deploy.proposal.services';
 import type {DeployResultWithProposal, FileAndPaths} from '../types/deploy';
 import type {ProposeChangesParams} from '../types/proposal';

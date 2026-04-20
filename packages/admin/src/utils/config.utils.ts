@@ -1,4 +1,3 @@
-import {fromNullable, isNullish, nonNullish, toNullable} from '@dfinity/utils';
 import {Principal} from '@icp-sdk/core/principal';
 import type {
   AuthenticationConfig,
@@ -12,6 +11,7 @@ import type {
   StorageConfigRewrite
 } from '@junobuild/config';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
+import {fromNullable, isNullish, nonNullish, toNullable} from '@junobuild/utils';
 import {fromMaxMemorySize, toMaxMemorySize} from './memory.utils';
 
 export const fromStorageConfig = ({
@@ -339,6 +339,8 @@ export const toAutomationConfig = ({
   const controller = fromNullable(github?.controller ?? []);
   const scope = fromNullable(controller?.scope ?? []);
   const maxTimeToLive = fromNullable(controller?.max_time_to_live ?? []);
+
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   const withAccessKeys = nonNullish(scope) || nonNullish(maxTimeToLive);
 
   return {

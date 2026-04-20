@@ -2,9 +2,9 @@
  * @vitest-environment jsdom
  */
 
-import {assertNonNullish, base64ToUint8Array} from '@dfinity/utils';
 import {Ed25519KeyIdentity, JsonnableEd25519KeyIdentity} from '@icp-sdk/core/identity';
 import {Principal} from '@icp-sdk/core/principal';
+import {assertNonNullish, base64ToUint8Array} from '@junobuild/utils';
 import {CONTEXT_KEY} from '../../delegation/_constants';
 import {initContext} from '../../delegation/_context';
 import {generateGoogleState} from '../../delegation/providers/google/_context';

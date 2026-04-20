@@ -1,4 +1,4 @@
-import {type PrincipalText, PrincipalTextSchema} from '@dfinity/zod-schemas';
+import {type PrincipalText, PrincipalTextSchema} from '@junobuild/schema';
 import * as z from 'zod';
 import {type ApiConfig, ApiConfigSchema} from '../shared/api.config';
 import {
@@ -6,7 +6,7 @@ import {
   AuthenticationConfigSchema
 } from '../shared/authentication.config';
 import {type StorageConfig, StorageConfigSchema} from '../shared/storage.config';
-import {type CliConfig, CliConfigSchema} from '../types/cli.config';
+import {type HostingConfig, HostingConfigSchema} from '../types/hosting.config';
 import {type JunoConfigMode, JunoConfigModeSchema} from '../types/juno.env';
 import type {Either} from '../types/utility.types';
 import {StrictPrincipalTextSchema} from '../utils/principal.utils';
@@ -52,7 +52,7 @@ export interface ConsoleIds {
 }
 
 const JunoConsoleConfigBaseSchema = z.object({
-  ...CliConfigSchema.shape,
+  hosting: HostingConfigSchema.optional(),
   storage: StorageConfigSchema.optional(),
   authentication: AuthenticationConfigSchema.optional(),
   api: ApiConfigSchema.optional()
@@ -80,26 +80,31 @@ export const JunoConsoleConfigSchema = z.union([
  * Represents the configuration for a console.
  * @typedef {Either<ConsoleId, ConsoleIds>} ConsoleConfig
  */
-export type JunoConsoleConfig = Either<ConsoleId, ConsoleIds> &
-  CliConfig & {
-    /**
-     * Optional configuration parameters for the console, affecting the operational behavior of its Storage.
-     * @type {StorageConfig}
-     * @optional
-     */
-    storage?: StorageConfig;
+export type JunoConsoleConfig = Either<ConsoleId, ConsoleIds> & {
+  /**
+   * The optional configuration used by the tooling to deploy the assets of the Console.
+   * @type {HostingConfig}
+   */
+  hosting?: HostingConfig;
 
-    /**
-     * Optional configuration parameters for the console, affecting the operational behavior of its Authentication.
-     * @type {AuthenticationConfig}
-     * @optional
-     */
-    authentication?: AuthenticationConfig;
+  /**
+   * Optional configuration parameters for the console, affecting the operational behavior of its Storage.
+   * @type {StorageConfig}
+   * @optional
+   */
+  storage?: StorageConfig;
 
-    /**
-     * Optional configuration for the Juno API.
-     * @type {ApiConfig}
-     * @optional
-     */
-    api?: ApiConfig;
-  };
+  /**
+   * Optional configuration parameters for the console, affecting the operational behavior of its Authentication.
+   * @type {AuthenticationConfig}
+   * @optional
+   */
+  authentication?: AuthenticationConfig;
+
+  /**
+   * Optional configuration for the Juno API.
+   * @type {ApiConfig}
+   * @optional
+   */
+  api?: ApiConfig;
+};

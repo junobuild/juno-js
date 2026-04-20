@@ -1,12 +1,12 @@
 import type {Principal} from '@icp-sdk/core/principal';
+import {j} from '@junobuild/schema';
 import * as z from 'zod';
-import {PrincipalSchema} from '../schemas/candid';
 
 /**
  * @see CanisterParameters
  */
 export const CanisterParametersSchema = z.strictObject({
-  canisterId: PrincipalSchema
+  canisterId: j.principal()
 });
 
 /**

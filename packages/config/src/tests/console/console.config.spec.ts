@@ -21,13 +21,15 @@ describe('console.config', () => {
       expect(result.success).toBe(true);
     });
 
-    it('accepts full config with id and CLI options', () => {
+    it('accepts full config with id and hosting options', () => {
       const result = JunoConsoleConfigSchema.safeParse({
         id: mockModuleIdText,
-        source: 'dist',
-        precompress: false,
-        predeploy: ['npm run build'],
-        postdeploy: ['echo done']
+        hosting: {
+          source: 'dist',
+          precompress: false,
+          predeploy: ['npm run build'],
+          postdeploy: ['echo done']
+        }
       });
       expect(result.success).toBe(true);
     });
@@ -148,7 +150,9 @@ describe('console.config', () => {
     it('accepts full config with all options', () => {
       const result = JunoConsoleConfigSchema.safeParse({
         id: mockModuleIdText,
-        source: 'dist',
+        hosting: {
+          source: 'dist'
+        },
         storage: {
           redirects: [
             {
@@ -232,7 +236,9 @@ describe('console.config', () => {
     it('rejects config with invalid precompress type', () => {
       const result = JunoConsoleConfigSchema.safeParse({
         id: mockModuleIdText,
-        precompress: 123
+        hosting: {
+          precompress: 123
+        }
       });
       expect(result.success).toBe(false);
     });

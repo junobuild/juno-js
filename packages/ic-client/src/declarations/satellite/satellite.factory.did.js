@@ -111,6 +111,31 @@ export const idlFactory = ({IDL}) => {
     Ok: IDL.Tuple(IDL.Principal, AutomationController),
     Err: AuthenticationAutomationError
   });
+  const AssetKey = IDL.Record({
+    token: IDL.Opt(IDL.Text),
+    collection: IDL.Text,
+    owner: IDL.Principal,
+    name: IDL.Text,
+    description: IDL.Opt(IDL.Text),
+    full_path: IDL.Text
+  });
+  const CertifyAssetsCursor = IDL.Variant({
+    Heap: IDL.Record({offset: IDL.Nat64}),
+    Stable: IDL.Record({key: IDL.Opt(AssetKey)})
+  });
+  const CertifyAssetsStrategy = IDL.Variant({
+    Append: IDL.Null,
+    Clear: IDL.Null,
+    AppendWithRouting: IDL.Null
+  });
+  const CertifyAssetsArgs = IDL.Record({
+    cursor: CertifyAssetsCursor,
+    strategy: CertifyAssetsStrategy,
+    chunk_size: IDL.Opt(IDL.Nat32)
+  });
+  const CertifyAssetsResult = IDL.Record({
+    next_cursor: IDL.Opt(CertifyAssetsCursor)
+  });
   const CommitBatch = IDL.Record({
     batch_id: IDL.Nat,
     headers: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
@@ -151,21 +176,21 @@ export const idlFactory = ({IDL}) => {
   const DeleteControllersArgs = IDL.Record({
     controllers: IDL.Vec(IDL.Principal)
   });
-  const ControllerKind = IDL.Variant({
+  const AccessKeyKind = IDL.Variant({
     Emulator: IDL.Null,
     Automation: IDL.Null
   });
-  const ControllerScope = IDL.Variant({
+  const AccessKeyScope = IDL.Variant({
     Write: IDL.Null,
     Admin: IDL.Null,
     Submit: IDL.Null
   });
-  const Controller = IDL.Record({
+  const AccessKey = IDL.Record({
     updated_at: IDL.Nat64,
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
-    kind: IDL.Opt(ControllerKind),
+    kind: IDL.Opt(AccessKeyKind),
     created_at: IDL.Nat64,
-    scope: ControllerScope,
+    scope: AccessKeyScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
   const DelDoc = IDL.Record({version: IDL.Opt(IDL.Nat64)});
@@ -177,14 +202,6 @@ export const idlFactory = ({IDL}) => {
   const DepositCyclesArgs = IDL.Record({
     cycles: IDL.Nat,
     destination_id: IDL.Principal
-  });
-  const AssetKey = IDL.Record({
-    token: IDL.Opt(IDL.Text),
-    collection: IDL.Text,
-    owner: IDL.Principal,
-    name: IDL.Text,
-    description: IDL.Opt(IDL.Text),
-    full_path: IDL.Text
   });
   const AssetEncodingNoContent = IDL.Record({
     modified: IDL.Nat64,
@@ -469,14 +486,14 @@ export const idlFactory = ({IDL}) => {
     openid: IDL.Opt(AutomationConfigOpenId),
     version: IDL.Opt(IDL.Nat64)
   });
-  const SetController = IDL.Record({
+  const SetAccessKey = IDL.Record({
     metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text)),
-    kind: IDL.Opt(ControllerKind),
-    scope: ControllerScope,
+    kind: IDL.Opt(AccessKeyKind),
+    scope: AccessKeyScope,
     expires_at: IDL.Opt(IDL.Nat64)
   });
   const SetControllersArgs = IDL.Record({
-    controller: SetController,
+    controller: SetAccessKey,
     controllers: IDL.Vec(IDL.Principal)
   });
   const SetDbConfig = IDL.Record({
@@ -508,6 +525,13 @@ export const idlFactory = ({IDL}) => {
     raw_access: IDL.Opt(StorageConfigRawAccess),
     redirects: IDL.Opt(IDL.Vec(IDL.Tuple(IDL.Text, StorageConfigRedirect)))
   });
+  const SetStorageConfigOptions = IDL.Record({
+    skip_certification: IDL.Opt(IDL.Bool)
+  });
+  const SetStorageConfigWithOptions = IDL.Record({
+    config: SetStorageConfig,
+    options: SetStorageConfigOptions
+  });
   const UploadChunk = IDL.Record({
     content: IDL.Vec(IDL.Nat8),
     batch_id: IDL.Nat,
@@ -522,6 +546,7 @@ export const idlFactory = ({IDL}) => {
       [AuthenticateAutomationResultResponse],
       []
     ),
+    certify_assets_chunk: IDL.Func([CertifyAssetsArgs], [CertifyAssetsResult], []),
     commit_asset_upload: IDL.Func([CommitBatch], [], []),
     commit_proposal: IDL.Func([CommitProposal], [IDL.Null], []),
     commit_proposal_asset_upload: IDL.Func([CommitBatch], [], []),
@@ -536,7 +561,7 @@ export const idlFactory = ({IDL}) => {
     del_controller_self: IDL.Func([], [], []),
     del_controllers: IDL.Func(
       [DeleteControllersArgs],
-      [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))],
+      [IDL.Vec(IDL.Tuple(IDL.Principal, AccessKey))],
       []
     ),
     del_custom_domain: IDL.Func([IDL.Text], [], []),
@@ -584,7 +609,7 @@ export const idlFactory = ({IDL}) => {
       []
     ),
     list_assets: IDL.Func([IDL.Text, ListParams], [ListResults], ['query']),
-    list_controllers: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))], ['query']),
+    list_controllers: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Principal, AccessKey))], ['query']),
     list_custom_domains: IDL.Func([], [IDL.Vec(IDL.Tuple(IDL.Text, CustomDomain))], ['query']),
     list_docs: IDL.Func([IDL.Text, ListParams], [ListResults_1], ['query']),
     list_proposals: IDL.Func([ListProposalsParams], [ListProposalResults], ['query']),
@@ -596,7 +621,7 @@ export const idlFactory = ({IDL}) => {
     set_automation_config: IDL.Func([SetAutomationConfig], [AutomationConfig], []),
     set_controllers: IDL.Func(
       [SetControllersArgs],
-      [IDL.Vec(IDL.Tuple(IDL.Principal, Controller))],
+      [IDL.Vec(IDL.Tuple(IDL.Principal, AccessKey))],
       []
     ),
     set_custom_domain: IDL.Func([IDL.Text, IDL.Opt(IDL.Text)], [], []),
@@ -609,6 +634,7 @@ export const idlFactory = ({IDL}) => {
     ),
     set_rule: IDL.Func([CollectionType, IDL.Text, SetRule], [Rule], []),
     set_storage_config: IDL.Func([SetStorageConfig], [StorageConfig], []),
+    set_storage_config_with_options: IDL.Func([SetStorageConfigWithOptions], [StorageConfig], []),
     submit_proposal: IDL.Func([IDL.Nat], [IDL.Nat, Proposal], []),
     switch_storage_system_memory: IDL.Func([], [], []),
     upload_asset_chunk: IDL.Func([UploadChunk], [UploadChunkResult], []),

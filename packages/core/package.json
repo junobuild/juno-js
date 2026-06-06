@@ -58,7 +58,7 @@
     "@junobuild/storage": "^2.4"
   },
   "peerDependencies": {
-    "@icp-sdk/auth": "^5",
+    "@icp-sdk/auth": "^7",
     "@icp-sdk/core": "^5",
     "@junobuild/utils": "^1"
   }

@@ -42,7 +42,7 @@ export const initUser = async ({provider}: {provider: ProviderWithoutData}): Pro
 };
 
 export const loadUser = async (): Promise<{userId: UserId; user: User | undefined}> => {
-  const identity = getIdentity();
+  const identity = await getIdentity();
 
   if (isNullish(identity)) {
     throw new InitError('No identity to initialize the user. Have you initialized Juno?');

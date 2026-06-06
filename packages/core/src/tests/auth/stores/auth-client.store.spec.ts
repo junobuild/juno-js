@@ -6,15 +6,14 @@ import {ECDSAKeyIdentity} from '@icp-sdk/core/identity';
 import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
+import {ctorReturning} from '../../mocks/auth-client.mocks';
 
 vi.mock('@icp-sdk/auth/client', async () => {
   const actual = (await import('@icp-sdk/auth/client')) as typeof import('@icp-sdk/auth/client');
   return {
     ...actual,
-    AuthClient: {
-      ...actual.AuthClient,
-      create: vi.fn()
-    }
+    // v7 replaced the `AuthClient.create()` factory with a synchronous constructor.
+    AuthClient: vi.fn()
   };
 });
 
@@ -22,8 +21,8 @@ describe('auth-client.store', () => {
   const authClientMock = mock<AuthClient>();
 
   beforeEach(() => {
-    (AuthClient.create as Mock).mockReset();
-    (AuthClient.create as Mock).mockResolvedValue(authClientMock);
+    (AuthClient as unknown as Mock).mockReset();
+    (AuthClient as unknown as Mock).mockImplementation(ctorReturning(authClientMock));
   });
 
   afterEach(() => {
@@ -56,7 +55,7 @@ describe('auth-client.store', () => {
 
       await store.createAuthClient();
 
-      expect(AuthClient.create).toHaveBeenCalledWith({
+      expect(AuthClient).toHaveBeenCalledWith({
         idleOptions: {
           disableIdle: true,
           disableDefaultIdleCallback: true
@@ -77,7 +76,7 @@ describe('auth-client.store', () => {
 
       await store.safeCreateAuthClient();
 
-      expect(AuthClient.create).toHaveBeenCalledWith({
+      expect(AuthClient).toHaveBeenCalledWith({
         idleOptions: {
           disableIdle: true,
           disableDefaultIdleCallback: true
@@ -90,15 +89,15 @@ describe('auth-client.store', () => {
       expect(store.getAuthClient()).toBe(authClientMock);
     });
 
-    it('logout calls underlying logout and nullifies the cached client', async () => {
+    it('logout calls underlying signOut and nullifies the cached client', async () => {
       const store = AuthClientStore.getInstance();
 
-      authClientMock.logout.mockResolvedValue();
+      authClientMock.signOut.mockResolvedValue();
 
       await store.createAuthClient();
       await store.logout();
 
-      expect(authClientMock.logout).toHaveBeenCalled();
+      expect(authClientMock.signOut).toHaveBeenCalled();
       expect(store.getAuthClient()).toBeNull();
     });
 
@@ -108,9 +107,9 @@ describe('auth-client.store', () => {
       const client1 = mock<AuthClient>();
       const client2 = mock<AuthClient>();
 
-      (AuthClient.create as Mock)
-        .mockResolvedValueOnce(client1 as unknown as AuthClient)
-        .mockResolvedValueOnce(client2 as unknown as AuthClient);
+      (AuthClient as unknown as Mock)
+        .mockImplementationOnce(ctorReturning(client1))
+        .mockImplementationOnce(ctorReturning(client2));
 
       await store.createAuthClient();
       expect(store.getAuthClient()).toBe(client1);
@@ -118,7 +117,7 @@ describe('auth-client.store', () => {
       await store.createAuthClient();
       expect(store.getAuthClient()).toBe(client2);
 
-      expect(AuthClient.create).toHaveBeenCalledTimes(2);
+      expect(AuthClient).toHaveBeenCalledTimes(2);
     });
   });
 });

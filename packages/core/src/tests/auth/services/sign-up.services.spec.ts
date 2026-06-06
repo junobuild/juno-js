@@ -15,6 +15,7 @@ import {AuthStore} from '../../../auth/stores/auth.store';
 import {SignInInitError, SignUpProviderNotSupportedError} from '../../../auth/types/errors';
 import * as actorApi from '../../../core/api/actor.api';
 import {EnvStore} from '../../../core/stores/env.store';
+import {ctorReturning} from '../../mocks/auth-client.mocks';
 import {mockSatelliteId, mockUser, mockUserIdText} from '../../mocks/core.mock';
 import {
   mockPasskeyIdentity,
@@ -27,10 +28,7 @@ vi.mock('@icp-sdk/auth/client', async () => {
 
   return {
     ...actual,
-    AuthClient: {
-      ...actual.AuthClient,
-      create: vi.fn()
-    }
+    AuthClient: vi.fn()
   };
 });
 
@@ -42,7 +40,7 @@ describe('sign-up.services', () => {
 
     vi.resetModules();
 
-    (AuthClient.create as Mock).mockResolvedValue(authClientMock);
+    (AuthClient as unknown as Mock).mockImplementation(ctorReturning(authClientMock));
     vi.spyOn(userServices, 'initUser').mockResolvedValue(mockUser);
     vi.spyOn(userServices, 'loadUser').mockResolvedValue({user: mockUser, userId: mockUserIdText});
   });
@@ -54,7 +52,7 @@ describe('sign-up.services', () => {
 
   describe('signUp', () => {
     beforeEach(async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
     });
 
     it('throws SignUpProviderNotSupportedError when provider is unknown', async () => {
@@ -154,7 +152,7 @@ describe('sign-up.services', () => {
       });
 
       it('it should call webauthn provider on signUp', async () => {
-        const loginSpy = authClientMock.login.mockImplementation(async () => {
+        const loginSpy = authClientMock.signIn.mockImplementation(async () => {
           throw new Error('authClient.login must not be called for webauthn signUp');
         });
 

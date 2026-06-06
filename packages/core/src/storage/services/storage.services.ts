@@ -1,3 +1,4 @@
+import {AnonymousIdentity} from '@icp-sdk/core/agent';
 import type {SatelliteDid} from '@junobuild/ic-client/actor';
 import type {Asset, AssetEncoding, AssetKey, Storage} from '@junobuild/storage';
 import {fromNullable, nonNullish} from '@junobuild/utils';
@@ -56,7 +57,7 @@ const uploadAssetIC = async ({
   encoding,
   description
 }: Storage & {satellite?: SatelliteOptions}): Promise<AssetKey> => {
-  const identity = getAnyIdentity(satelliteOptions?.identity);
+  const identity = await getAnyIdentity(satelliteOptions?.identity);
 
   // The IC certification does not currently support encoding
   const filename: string = decodeURI(storageFilename);
@@ -114,7 +115,10 @@ export const listAssets = async ({
   satellite?: SatelliteOptions;
   options?: ReadOptions;
 }): Promise<Assets> => {
-  const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
+  const satellite = {
+    ...satelliteOptions,
+    identity: await getAnyIdentity(satelliteOptions?.identity)
+  };
 
   const {items, ...rest} = await listAssetsApi({
     collection,
@@ -189,7 +193,10 @@ export const countAssets = async ({
   satellite?: SatelliteOptions;
   options?: ReadOptions;
 }): Promise<bigint> => {
-  const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
+  const satellite = {
+    ...satelliteOptions,
+    identity: await getAnyIdentity(satelliteOptions?.identity)
+  };
 
   return await countAssetsApi({
     collection,
@@ -208,7 +215,7 @@ export const countAssets = async ({
  * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<void>} A promise that resolves when the asset is deleted.
  */
-export const deleteAsset = ({
+export const deleteAsset = async ({
   collection,
   fullPath,
   satellite
@@ -219,7 +226,7 @@ export const deleteAsset = ({
   deleteAssetApi({
     collection,
     fullPath,
-    satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)},
+    satellite: {...satellite, identity: await getAnyIdentity(satellite?.identity)},
     options: {certified: true}
   });
 
@@ -233,7 +240,7 @@ export const deleteAsset = ({
  * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<void>} A promise that resolves when the access token has been set to the asset.
  */
-export const setAssetToken = ({
+export const setAssetToken = async ({
   collection,
   fullPath,
   token,
@@ -247,7 +254,7 @@ export const setAssetToken = ({
     collection,
     fullPath,
     token,
-    satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)},
+    satellite: {...satellite, identity: await getAnyIdentity(satellite?.identity)},
     options: {certified: true}
   });
 
@@ -259,7 +266,7 @@ export const setAssetToken = ({
  * @param {SatelliteOptions} [params.satellite] - Options to specify a satellite in a NodeJS environment only. In browser environments, the satellite configuration is inherited from the initialization through `initSatellite()`.
  * @returns {Promise<void>} A promise that resolves when the assets are deleted.
  */
-export const deleteManyAssets = ({
+export const deleteManyAssets = async ({
   assets,
   satellite
 }: {
@@ -268,7 +275,7 @@ export const deleteManyAssets = ({
 }): Promise<void> =>
   deleteManyAssetsApi({
     assets,
-    satellite: {...satellite, identity: getAnyIdentity(satellite?.identity)},
+    satellite: {...satellite, identity: await getAnyIdentity(satellite?.identity)},
     options: {certified: true}
   });
 
@@ -290,7 +297,10 @@ export const deleteFilteredAssets = async ({
   satellite?: SatelliteOptions;
   filter?: ListParams;
 }): Promise<void> => {
-  const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
+  const satellite = {
+    ...satelliteOptions,
+    identity: await getAnyIdentity(satelliteOptions?.identity)
+  };
 
   return await deleteFilteredAssetsApi({
     collection,
@@ -319,7 +329,7 @@ export const getAsset = async ({
   satellite?: SatelliteOptions;
   options?: ReadOptions;
 } & Pick<AssetKey, 'fullPath'>): Promise<SatelliteDid.AssetNoContent | undefined> => {
-  const identity = getAnyIdentity(satellite?.identity);
+  const identity = await getAnyIdentity(satellite?.identity);
 
   return await getAssetApi({
     ...rest,
@@ -346,7 +356,7 @@ export const getManyAssets = async ({
   satellite?: SatelliteOptions;
   options?: ReadOptions;
 }): Promise<(SatelliteDid.AssetNoContent | undefined)[]> => {
-  const identity = getAnyIdentity(satellite?.identity);
+  const identity = await getAnyIdentity(satellite?.identity);
 
   return await getManyAssetsApi({
     ...rest,
@@ -388,7 +398,13 @@ export const downloadUrl = ({
 }: {
   assetKey: Pick<AssetKey, 'fullPath' | 'token'>;
 } & {satellite?: SatelliteOptions}): string => {
-  const satellite = {...satelliteOptions, identity: getAnyIdentity(satelliteOptions?.identity)};
+  // `satelliteUrl` only reads `satelliteId`/`container`, never `identity`, so we
+  // keep `downloadUrl` synchronous (avoiding the now-async `getAnyIdentity`) and
+  // fall back to an anonymous identity purely to satisfy the context shape.
+  const satellite = {
+    ...satelliteOptions,
+    identity: satelliteOptions?.identity ?? new AnonymousIdentity()
+  };
 
   return `${satelliteUrl(satellite)}${fullPath}${nonNullish(token) ? `?token=${token}` : ''}`;
 };

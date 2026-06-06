@@ -10,6 +10,7 @@ import {loadAuth} from '../../../auth/services/load.services';
 import {resetAuth, signOut} from '../../../auth/services/sign-out.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
 import {EnvStore} from '../../../core/stores/env.store';
+import {ctorReturning} from '../../mocks/auth-client.mocks';
 import {mockUser, mockUserIdText} from '../../mocks/core.mock';
 
 vi.mock('@icp-sdk/auth/client', async () => {
@@ -17,10 +18,7 @@ vi.mock('@icp-sdk/auth/client', async () => {
 
   return {
     ...actual,
-    AuthClient: {
-      ...actual.AuthClient,
-      create: vi.fn()
-    }
+    AuthClient: vi.fn()
   };
 });
 
@@ -30,7 +28,7 @@ describe('sign-out.services', () => {
   beforeEach(async () => {
     await resetAuth();
 
-    (AuthClient.create as Mock).mockResolvedValue(authClientMock);
+    (AuthClient as unknown as Mock).mockImplementation(ctorReturning(authClientMock));
     vi.spyOn(userServices, 'initUser').mockResolvedValue(mockUser);
     vi.spyOn(userServices, 'loadUser').mockResolvedValue({user: mockUser, userId: mockUserIdText});
   });
@@ -69,17 +67,17 @@ describe('sign-out.services', () => {
     });
 
     it('should logs out and resets stores', async () => {
-      authClientMock.logout.mockResolvedValue();
+      authClientMock.signOut.mockResolvedValue();
 
       await signOut();
 
-      expect(authClientMock.logout).toHaveBeenCalled();
+      expect(authClientMock.signOut).toHaveBeenCalled();
       expect(createAuthClientSpy).toHaveBeenCalled();
       expect(reloadSpy).toHaveBeenCalled();
     });
 
     it('should not reload window when windowReload is false', async () => {
-      authClientMock.logout.mockResolvedValue();
+      authClientMock.signOut.mockResolvedValue();
 
       await signOut({windowReload: false});
 
@@ -87,7 +85,7 @@ describe('sign-out.services', () => {
     });
 
     it('should still recreates auth client when windowReload is false', async () => {
-      authClientMock.logout.mockResolvedValue();
+      authClientMock.signOut.mockResolvedValue();
 
       await signOut({windowReload: false});
 
@@ -95,7 +93,7 @@ describe('sign-out.services', () => {
     });
 
     it('should not reload if resetAuth fails', async () => {
-      authClientMock.logout.mockRejectedValue(new Error('logout failed'));
+      authClientMock.signOut.mockRejectedValue(new Error('logout failed'));
 
       createAuthClientSpy.mockClear();
 
@@ -105,7 +103,7 @@ describe('sign-out.services', () => {
     });
 
     it('should not reload if createAuthClient fails', async () => {
-      authClientMock.logout.mockResolvedValue();
+      authClientMock.signOut.mockResolvedValue();
       createAuthClientSpy.mockRejectedValue(new Error('create client failed'));
 
       await expect(signOut()).rejects.toThrow('create client failed');

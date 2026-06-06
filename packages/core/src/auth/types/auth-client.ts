@@ -35,13 +35,6 @@ export interface AuthClientSignInOptions {
   windowed?: boolean;
 
   /**
-   * Whether to allow the infamous PIN authentication.
-   * @default false
-   * @type {boolean}
-   */
-  allowPin?: boolean;
-
-  /**
    * Optional callback to receive progress updates about the sign-in flow.
    * Useful for showing UI feedback such as loading indicators or status messages.
    */

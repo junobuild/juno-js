@@ -98,7 +98,7 @@ export const signIn = async (options: SignInOptions): Promise<void> => {
     const fn = (): Promise<void> =>
       new InternetIdentityProvider({domain}).signIn({
         options: signInOptions,
-        authClient: AuthClientStore.getInstance().getAuthClient(),
+        createAuthClient: AuthClientStore.getInstance().createAuthClient,
         initAuth: createAuth
       });
 

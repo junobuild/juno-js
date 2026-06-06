@@ -27,7 +27,7 @@ describe('_auth-client.services', () => {
 
   describe('authenticateWithAuthClient', () => {
     it('does nothing and resets the AuthClient when not authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(false);
+      authClientMock.isAuthenticated.mockReturnValue(false);
       const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
 
       const fn = vi.fn();
@@ -40,7 +40,7 @@ describe('_auth-client.services', () => {
     });
 
     it('executes fn when authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
       const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
       const fn = vi.fn().mockResolvedValue(undefined);
 
@@ -53,7 +53,7 @@ describe('_auth-client.services', () => {
 
     it('always creates a fresh AuthClient', async () => {
       const createSpy = vi.spyOn(AuthClientStore.getInstance(), 'createAuthClient');
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const fn = vi.fn().mockResolvedValue(undefined);
 
@@ -64,7 +64,7 @@ describe('_auth-client.services', () => {
     });
 
     it('does not broadcast when syncTabsOnSuccess=false', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const broadcaster = AuthBroadcastChannel.getInstance();
       const postSpy = vi.spyOn(broadcaster, 'postLoginSuccess');
@@ -75,7 +75,7 @@ describe('_auth-client.services', () => {
     });
 
     it('broadcasts when syncTabsOnSuccess=true', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const broadcaster = AuthBroadcastChannel.getInstance();
       const postSpy = vi.spyOn(broadcaster, 'postLoginSuccess');
@@ -86,7 +86,7 @@ describe('_auth-client.services', () => {
     });
 
     it('does not broadcast when not authenticated even if syncTabsOnSuccess=true', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(false);
+      authClientMock.isAuthenticated.mockReturnValue(false);
 
       const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
       const broadcaster = AuthBroadcastChannel.getInstance();
@@ -103,7 +103,7 @@ describe('_auth-client.services', () => {
     });
 
     it('does not broadcast when env.syncTabs === false even if syncTabsOnSuccess=true', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       EnvStore.getInstance().set({
         satelliteId: 'sat-123',
@@ -126,7 +126,7 @@ describe('_auth-client.services', () => {
 
   describe('authenticateWithNewAuthClient', () => {
     it('executes fn with authenticated=false when auth client is not authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(false);
+      authClientMock.isAuthenticated.mockReturnValue(false);
 
       const fn = vi.fn().mockResolvedValue(undefined);
 
@@ -138,7 +138,7 @@ describe('_auth-client.services', () => {
     });
 
     it('executes fn with authenticated=true when auth client is authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const fn = vi.fn().mockResolvedValue(undefined);
 
@@ -151,7 +151,7 @@ describe('_auth-client.services', () => {
 
     it('always creates a fresh AuthClient in authenticateWithNewAuthClient', async () => {
       const createSpy = vi.spyOn(AuthClientStore.getInstance(), 'createAuthClient');
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const fn = vi.fn().mockResolvedValue(undefined);
 

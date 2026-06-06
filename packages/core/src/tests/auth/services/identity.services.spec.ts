@@ -17,6 +17,7 @@ import {resetAuth} from '../../../auth/services/sign-out.services';
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import {EnvStore} from '../../../core/stores/env.store';
+import {ctorReturning} from '../../mocks/auth-client.mocks';
 import {mockIdentity, mockUser, mockUserIdText} from '../../mocks/core.mock';
 
 vi.mock('@icp-sdk/auth/client', async () => {
@@ -24,10 +25,7 @@ vi.mock('@icp-sdk/auth/client', async () => {
 
   return {
     ...actual,
-    AuthClient: {
-      ...actual.AuthClient,
-      create: vi.fn()
-    }
+    AuthClient: vi.fn()
   };
 });
 
@@ -39,7 +37,7 @@ describe('identity.services', () => {
 
     vi.resetModules();
 
-    (AuthClient.create as Mock).mockResolvedValue(authClientMock);
+    (AuthClient as unknown as Mock).mockImplementation(ctorReturning(authClientMock));
     vi.spyOn(userServices, 'initUser').mockResolvedValue(mockUser);
     vi.spyOn(userServices, 'loadUser').mockResolvedValue({user: mockUser, userId: mockUserIdText});
   });
@@ -50,18 +48,18 @@ describe('identity.services', () => {
   });
 
   describe('getIdentity', () => {
-    it('returns undefined if authClient is null', () => {
-      const identity = getIdentity();
+    it('returns undefined if authClient is null', async () => {
+      const identity = await getIdentity();
 
       expect(identity).toBeUndefined();
     });
 
     it('returns identity if available', async () => {
-      authClientMock.getIdentity.mockReturnValue(mockIdentity);
+      authClientMock.getIdentity.mockResolvedValue(mockIdentity);
 
       await loadAuth();
 
-      const identity = getIdentity();
+      const identity = await getIdentity();
 
       expect(identity?.getPrincipal().toText()).toBe(mockIdentity.getPrincipal().toText());
     });
@@ -71,7 +69,7 @@ describe('identity.services', () => {
     const anonymous = new AnonymousIdentity();
 
     it('returns an identity', async () => {
-      authClientMock.getIdentity.mockReturnValue(anonymous);
+      authClientMock.getIdentity.mockResolvedValue(anonymous);
 
       const identity = await unsafeIdentity();
 
@@ -79,7 +77,7 @@ describe('identity.services', () => {
     });
 
     it('creates authClient if not initialized and returns identity', async () => {
-      authClientMock.getIdentity.mockReturnValue(anonymous);
+      authClientMock.getIdentity.mockResolvedValue(anonymous);
 
       const createSpy = vi.spyOn(AuthClientStore.getInstance(), 'createAuthClient');
 
@@ -102,7 +100,7 @@ describe('identity.services', () => {
     it('returns null if not authenticated', async () => {
       AuthStore.getInstance().set(mockUser);
 
-      authClientMock.isAuthenticated.mockResolvedValue(false);
+      authClientMock.isAuthenticated.mockReturnValue(false);
 
       const identity = await getIdentityOnce();
 
@@ -114,8 +112,8 @@ describe('identity.services', () => {
 
       await loadAuth();
 
-      authClientMock.isAuthenticated.mockResolvedValue(true);
-      authClientMock.getIdentity.mockReturnValue(mockIdentity);
+      authClientMock.isAuthenticated.mockReturnValue(true);
+      authClientMock.getIdentity.mockResolvedValue(mockIdentity);
 
       const identity = await getIdentityOnce();
 

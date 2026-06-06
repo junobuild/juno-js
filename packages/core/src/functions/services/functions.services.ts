@@ -29,7 +29,7 @@ export const getSatelliteExtendedActor = async <T = Record<string, ActorMethod>>
   idlFactory: IDL.InterfaceFactory;
   satellite?: SatelliteOptions;
 }): Promise<ActorSubclass<T>> => {
-  const identity = getAnyIdentity(satellite?.identity);
+  const identity = await getAnyIdentity(satellite?.identity);
 
   return await getSatelliteExtendedActorApi({
     idlFactory,

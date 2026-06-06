@@ -2,21 +2,18 @@
  * @vitest-environment jsdom
  */
 import type {AuthClient} from '@icp-sdk/auth/client';
-import {ERROR_USER_INTERRUPT} from '@icp-sdk/auth/client';
 import {mock} from 'vitest-mock-extended';
 import {AuthClientProvider} from '../../../auth/providers/_auth-client.providers';
 import {AuthClientSignInProgressStep} from '../../../auth/types/auth-client';
-import {SignInError, SignInInitError, SignInUserInterruptError} from '../../../auth/types/errors';
+import {SignInError} from '../../../auth/types/errors';
 import {ProviderWithoutData} from '../../../auth/types/provider';
 
 vi.mock('@icp-sdk/auth/client', async () => {
   const actual = (await import('@icp-sdk/auth/client')) as typeof import('@icp-sdk/auth/client');
   return {
     ...actual,
-    AuthClient: {
-      ...actual.AuthClient,
-      create: vi.fn()
-    }
+    // v7: `AuthClient` is a constructor, not a `create()` factory.
+    AuthClient: vi.fn()
   };
 });
 
@@ -28,23 +25,23 @@ class TestProvider extends AuthClientProvider {
   signInOptions({windowed}: {windowed?: boolean}) {
     return {
       identityProvider: 'https://identity.ic0.app',
-      windowOpenerFeatures: windowed
-        ? 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=500, height=600'
-        : undefined
+      windowOpenerFeatures: windowed ? 'width=500, height=600' : undefined
     };
   }
 }
 
 describe('_auth-client.provider', () => {
   const authClientMock = mock<AuthClient>();
+  const createAuthClient = vi.fn();
   let provider: TestProvider;
 
   beforeEach(() => {
-    vi.resetModules();
     vi.clearAllMocks();
 
     provider = new TestProvider();
-    authClientMock.login.mockReset();
+    authClientMock.signIn.mockReset();
+    createAuthClient.mockReset();
+    createAuthClient.mockResolvedValue(authClientMock);
   });
 
   afterEach(() => {
@@ -55,19 +52,17 @@ describe('_auth-client.provider', () => {
     const onProgress = vi.fn();
     const initAuth = vi.fn().mockResolvedValue(undefined);
 
-    authClientMock.login.mockImplementation(async (options: any) => {
-      options?.onSuccess?.();
-    });
+    authClientMock.signIn.mockResolvedValue(mock());
 
     await expect(
       provider.signIn({
         options: {onProgress},
-        authClient: authClientMock,
+        createAuthClient,
         initAuth
       })
     ).resolves.toBeUndefined();
 
-    expect(authClientMock.login).toHaveBeenCalledTimes(1);
+    expect(authClientMock.signIn).toHaveBeenCalledTimes(1);
     expect(initAuth).toHaveBeenCalledTimes(1);
     expect(initAuth).toHaveBeenCalledWith({provider: provider.id});
 
@@ -89,70 +84,16 @@ describe('_auth-client.provider', () => {
     });
   });
 
-  it('rejects with SignInInitError when authClient is null and emits progress error for first step', async () => {
+  it('maps a thrown sign-in error to SignInError and emits error for first step', async () => {
     const onProgress = vi.fn();
     const initAuth = vi.fn().mockResolvedValue(undefined);
+
+    authClientMock.signIn.mockRejectedValue(new Error('Boom'));
 
     await expect(
       provider.signIn({
         options: {onProgress},
-        authClient: null,
-        initAuth
-      })
-    ).rejects.toBeInstanceOf(SignInInitError);
-
-    expect(onProgress).toHaveBeenNthCalledWith(1, {
-      step: AuthClientSignInProgressStep.AuthorizingWithProvider,
-      state: 'in_progress'
-    });
-    expect(onProgress).toHaveBeenNthCalledWith(2, {
-      step: AuthClientSignInProgressStep.AuthorizingWithProvider,
-      state: 'error'
-    });
-
-    expect(initAuth).not.toHaveBeenCalled();
-  });
-
-  it('maps ERROR_USER_INTERRUPT to SignInUserInterruptError and emits error for first step', async () => {
-    const onProgress = vi.fn();
-    const initAuth = vi.fn().mockResolvedValue(undefined);
-
-    authClientMock.login.mockImplementation(async (options: any) => {
-      options?.onError?.(ERROR_USER_INTERRUPT);
-    });
-
-    await expect(
-      provider.signIn({
-        options: {onProgress},
-        authClient: authClientMock,
-        initAuth
-      })
-    ).rejects.toBeInstanceOf(SignInUserInterruptError);
-
-    expect(onProgress).toHaveBeenNthCalledWith(1, {
-      step: AuthClientSignInProgressStep.AuthorizingWithProvider,
-      state: 'in_progress'
-    });
-    expect(onProgress).toHaveBeenNthCalledWith(2, {
-      step: AuthClientSignInProgressStep.AuthorizingWithProvider,
-      state: 'error'
-    });
-
-    expect(initAuth).not.toHaveBeenCalled();
-  });
-
-  it('maps generic auth-client error to SignInError and emits error for first step', async () => {
-    const onProgress = vi.fn();
-    const initAuth = vi.fn().mockResolvedValue(undefined);
-
-    authClientMock.login.mockImplementation(async (options: any) => {
-      options?.onError?.('Boom');
-    });
-
-    await expect(
-      provider.signIn({
-        options: {onProgress},
-        authClient: authClientMock,
+        createAuthClient,
         initAuth
       })
     ).rejects.toBeInstanceOf(SignInError);
@@ -169,23 +110,11 @@ describe('_auth-client.provider', () => {
     expect(initAuth).not.toHaveBeenCalled();
   });
 
-  it('forwards options to auth-client.login and signInOptions()', async () => {
+  it('builds the AuthClient with provider options and signs in with maxTimeToLive', async () => {
     const onProgress = vi.fn();
     const initAuth = vi.fn().mockResolvedValue(undefined);
 
-    authClientMock.login.mockImplementation(async (options: any) => {
-      expect(options).toEqual(
-        expect.objectContaining({
-          identityProvider: 'https://identity.ic0.app',
-          windowOpenerFeatures:
-            'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=500, height=600',
-          maxTimeToLive: 123n,
-          allowPinAuthentication: false,
-          derivationOrigin: 'https://example.com'
-        })
-      );
-      options?.onSuccess?.();
-    });
+    authClientMock.signIn.mockResolvedValue(mock());
 
     await expect(
       provider.signIn({
@@ -193,15 +122,20 @@ describe('_auth-client.provider', () => {
           onProgress,
           windowed: true,
           maxTimeToLiveInNanoseconds: 123n,
-          allowPin: false,
           derivationOrigin: 'https://example.com'
         },
-        authClient: authClientMock,
+        createAuthClient,
         initAuth
       })
     ).resolves.toBeUndefined();
 
-    expect(authClientMock.login).toHaveBeenCalledTimes(1);
+    // v7: provider options are passed at construction, not to signIn().
+    expect(createAuthClient).toHaveBeenCalledWith({
+      identityProvider: 'https://identity.ic0.app',
+      windowOpenerFeatures: 'width=500, height=600',
+      derivationOrigin: 'https://example.com'
+    });
+    expect(authClientMock.signIn).toHaveBeenCalledWith({maxTimeToLive: 123n});
     expect(initAuth).toHaveBeenCalledTimes(1);
   });
 });

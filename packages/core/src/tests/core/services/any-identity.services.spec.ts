@@ -8,24 +8,24 @@ describe('any-identity.services', () => {
     vi.restoreAllMocks();
   });
 
-  it('returns provided identity if passed', () => {
-    const identity = getAnyIdentity(mockIdentity);
+  it('returns provided identity if passed', async () => {
+    const identity = await getAnyIdentity(mockIdentity);
 
     expect(identity).toBe(mockIdentity);
   });
 
-  it('returns auth identity if available', () => {
-    vi.spyOn(identityServices, 'getIdentity').mockReturnValue(mockIdentity);
+  it('returns auth identity if available', async () => {
+    vi.spyOn(identityServices, 'getIdentity').mockResolvedValue(mockIdentity);
 
-    const identity = getAnyIdentity();
+    const identity = await getAnyIdentity();
 
     expect(identity).toBe(mockIdentity);
   });
 
-  it('returns AnonymousIdentity if no identity', () => {
-    vi.spyOn(identityServices, 'getIdentity').mockReturnValue(undefined);
+  it('returns AnonymousIdentity if no identity', async () => {
+    vi.spyOn(identityServices, 'getIdentity').mockResolvedValue(undefined);
 
-    const identity = getAnyIdentity();
+    const identity = await getAnyIdentity();
 
     expect(identity).toBeInstanceOf(AnonymousIdentity);
   });

@@ -185,7 +185,7 @@ describe('object with array field', () => {
     z.object({headers: z.array(z.object({name: z.string(), value: z.string()}))}),
     [
       '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgsHeaders {\n    pub name: String,\n    pub value: String,\n}',
-      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    pub headers: Vec<MyFunctionArgsHeaders>,\n}'
+      '#[derive(CandidType, Serialize, Deserialize, Clone, JsonData)]\npub struct MyFunctionArgs {\n    #[json_data(nested)]\n    pub headers: Vec<MyFunctionArgsHeaders>,\n}'
     ].join('\n\n')
   );
 });

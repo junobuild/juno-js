@@ -111,7 +111,7 @@ const schemaToRustType = ({
       const inner = schemaToRustType({schema: schema.inner, structName});
       const fieldType = `Vec<${inner.fieldType}>`;
       return inner.kind === 'composite'
-        ? composite({fieldType, structs: inner.structs, needsJsonData: false})
+        ? composite({fieldType, structs: inner.structs, needsJsonData: inner.needsJsonData})
         : primitive({fieldType});
     }
 

@@ -11,6 +11,7 @@ import {loadAuth, loadAuthWithUser, reloadAuth} from '../../../auth/services/loa
 import {AuthClientStore} from '../../../auth/stores/auth-client.store';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import {EnvStore} from '../../../core/stores/env.store';
+import {ctorReturning} from '../../mocks/auth-client.mocks';
 import {mockUser, mockUserIdText} from '../../mocks/core.mock';
 
 vi.mock('@icp-sdk/auth/client', async () => {
@@ -18,10 +19,7 @@ vi.mock('@icp-sdk/auth/client', async () => {
 
   return {
     ...actual,
-    AuthClient: {
-      ...actual.AuthClient,
-      create: vi.fn()
-    }
+    AuthClient: vi.fn()
   };
 });
 
@@ -31,7 +29,7 @@ describe('load.services', () => {
   beforeEach(async () => {
     vi.resetModules();
 
-    (AuthClient.create as Mock).mockResolvedValue(authClientMock);
+    (AuthClient as unknown as Mock).mockImplementation(ctorReturning(authClientMock));
     vi.spyOn(userServices, 'initUser').mockResolvedValue(mockUser);
     vi.spyOn(userServices, 'loadUser').mockResolvedValue({user: mockUser, userId: mockUserIdText});
 
@@ -47,7 +45,7 @@ describe('load.services', () => {
 
   describe('loadAuth', () => {
     it('does nothing if not authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(false);
+      authClientMock.isAuthenticated.mockReturnValue(false);
 
       await loadAuth();
 
@@ -55,7 +53,7 @@ describe('load.services', () => {
     });
 
     it('loads user if authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const authStore = AuthStore.getInstance();
       authStore.reset();
@@ -67,7 +65,7 @@ describe('load.services', () => {
     });
 
     it('should not reset the AuthClient if authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
 
@@ -77,7 +75,7 @@ describe('load.services', () => {
     });
 
     it('resets the AuthClient when not authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(false);
+      authClientMock.isAuthenticated.mockReturnValue(false);
 
       const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
 
@@ -89,7 +87,7 @@ describe('load.services', () => {
     it('always re-creates a new AuthClient on every authenticate call', async () => {
       const createSpy = vi.spyOn(AuthClientStore.getInstance(), 'createAuthClient');
 
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       await loadAuth();
       await loadAuth();
@@ -98,7 +96,7 @@ describe('load.services', () => {
     });
 
     it('does not broadcast when syncTabsOnSuccess=false', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const postSpy = vi.spyOn(AuthBroadcastChannel.getInstance(), 'postLoginSuccess');
 
@@ -108,7 +106,7 @@ describe('load.services', () => {
     });
 
     it('broadcasts when syncTabsOnSuccess=true', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const postSpy = vi.spyOn(AuthBroadcastChannel.getInstance(), 'postLoginSuccess');
 
@@ -123,7 +121,7 @@ describe('load.services', () => {
       const authStore = AuthStore.getInstance();
       authStore.set(mockUser);
 
-      authClientMock.isAuthenticated.mockResolvedValue(false);
+      authClientMock.isAuthenticated.mockReturnValue(false);
 
       const loadUserSpy = vi.spyOn(userServices, 'loadUser');
 
@@ -138,7 +136,7 @@ describe('load.services', () => {
       const authStore = AuthStore.getInstance();
       authStore.reset();
 
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const loadUserSpy = vi.spyOn(userServices, 'loadUser');
 
@@ -156,7 +154,7 @@ describe('load.services', () => {
       const authStore = AuthStore.getInstance();
       authStore.reset();
 
-      authClientMock.isAuthenticated.mockResolvedValue(false);
+      authClientMock.isAuthenticated.mockReturnValue(false);
 
       const postSpy = vi.spyOn(AuthBroadcastChannel.getInstance(), 'postLoginSuccess');
 
@@ -172,7 +170,7 @@ describe('load.services', () => {
       const authStore = AuthStore.getInstance();
       authStore.reset();
 
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const loadUserSpy = vi.spyOn(userServices, 'loadUser');
 
@@ -184,7 +182,7 @@ describe('load.services', () => {
     });
 
     it('should not reset the AuthClient if authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
 
@@ -194,7 +192,7 @@ describe('load.services', () => {
     });
 
     it('resets the AuthClient when not authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(false);
+      authClientMock.isAuthenticated.mockReturnValue(false);
 
       const resetSpy = vi.spyOn(AuthClientStore.getInstance(), 'safeCreateAuthClient');
 
@@ -206,7 +204,7 @@ describe('load.services', () => {
     it('always re-creates a new AuthClient on every authenticate call', async () => {
       const createSpy = vi.spyOn(AuthClientStore.getInstance(), 'createAuthClient');
 
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       await loadAuthWithUser({user: mockUser});
       await loadAuthWithUser({user: mockUser});
@@ -215,7 +213,7 @@ describe('load.services', () => {
     });
 
     it('always broadcasts when authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const postSpy = vi.spyOn(AuthBroadcastChannel.getInstance(), 'postLoginSuccess');
 

@@ -1,3 +1,4 @@
+import type {OpenIdProvider} from '@icp-sdk/auth/client';
 import type {SignProgressFn} from './progress';
 
 /**
@@ -28,18 +29,19 @@ export interface AuthClientSignInOptions {
   derivationOrigin?: string | URL;
 
   /**
+   * One-click sign-in: when set, the identity provider authenticates the user
+   * directly with the chosen OpenID provider (e.g. Google) instead of showing
+   * the Internet Identity method screen first.
+   * @type {OpenIdProvider}
+   */
+  openIdProvider?: OpenIdProvider;
+
+  /**
    * Whether to open the sign-in window.
    * @default true
    * @type {boolean}
    */
   windowed?: boolean;
-
-  /**
-   * Whether to allow the infamous PIN authentication.
-   * @default false
-   * @type {boolean}
-   */
-  allowPin?: boolean;
 
   /**
    * Optional callback to receive progress updates about the sign-in flow.

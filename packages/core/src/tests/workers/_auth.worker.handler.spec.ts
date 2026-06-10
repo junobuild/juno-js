@@ -4,16 +4,14 @@ import {Principal} from '@icp-sdk/core/principal';
 import type {Mock} from 'vitest';
 import {mock} from 'vitest-mock-extended';
 import * as workerModule from '../../auth/workers/auth.worker';
+import {ctorReturning} from '../mocks/auth-client.mocks';
 
 vi.mock('@icp-sdk/auth/client', async () => {
   const actual =
     await vi.importActual<typeof import('@icp-sdk/auth/client')>('@icp-sdk/auth/client');
   return {
     ...actual,
-    AuthClient: {
-      ...actual.AuthClient,
-      create: vi.fn()
-    }
+    AuthClient: vi.fn()
   };
 });
 
@@ -23,7 +21,7 @@ describe('_auth.worker.handler', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.restoreAllMocks();
-    (AuthClient.create as Mock).mockResolvedValue(authClientMock);
+    (AuthClient as unknown as Mock).mockImplementation(ctorReturning(authClientMock));
     globalThis.postMessage = vi.fn();
   });
 
@@ -56,7 +54,7 @@ describe('_auth.worker.handler', () => {
     });
 
     it('emits junoDelegationRemainingTime when authenticated and delegation is valid with expiration', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       await workerModule.onTimerSignOut();
 
@@ -72,7 +70,7 @@ describe('_auth.worker.handler', () => {
     });
 
     it('emits junoSignOutAuthTimer when delegation is invalid', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       await workerModule.onTimerSignOut();
 
@@ -81,7 +79,7 @@ describe('_auth.worker.handler', () => {
   });
 
   it('emits junoSignOutAuthTimer when not authenticated', async () => {
-    authClientMock.isAuthenticated.mockResolvedValue(false);
+    authClientMock.isAuthenticated.mockReturnValue(false);
 
     await workerModule.onTimerSignOut();
 

@@ -3,7 +3,10 @@ import {isNullish} from '@junobuild/utils';
 import {AuthClientStore} from '../stores/auth-client.store';
 import {AuthStore} from '../stores/auth.store';
 
-export const getIdentity = (): Identity | undefined =>
+// `async` to match the now-async `AuthClient.getIdentity()` return; the optional
+// chain forwards its promise (or `undefined`) directly.
+// eslint-disable-next-line require-await
+export const getIdentity = async (): Promise<Identity | undefined> =>
   AuthClientStore.getInstance().getAuthClient()?.getIdentity();
 
 /**

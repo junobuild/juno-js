@@ -17,15 +17,11 @@ import {resetAuth} from '../../../auth/services/sign-out.services';
 import {AuthStore} from '../../../auth/stores/auth.store';
 import type {SignInOptions} from '../../../auth/types/auth';
 import {DevIdentitySignInOptions} from '../../../auth/types/dev-identity';
-import {
-  SignInError,
-  SignInInitError,
-  SignInProviderNotSupportedError,
-  SignInUserInterruptError
-} from '../../../auth/types/errors';
+import {SignInError, SignInProviderNotSupportedError} from '../../../auth/types/errors';
 import type {GitHubSignInRedirectOptions} from '../../../auth/types/github';
 import type {GoogleSignInRedirectOptions} from '../../../auth/types/google';
 import {EnvStore} from '../../../core/stores/env.store';
+import {ctorReturning} from '../../mocks/auth-client.mocks';
 import {mockSatelliteId, mockUser, mockUserIdText} from '../../mocks/core.mock';
 
 vi.mock('@icp-sdk/auth/client', async () => {
@@ -33,10 +29,7 @@ vi.mock('@icp-sdk/auth/client', async () => {
 
   return {
     ...actual,
-    AuthClient: {
-      ...actual.AuthClient,
-      create: vi.fn()
-    }
+    AuthClient: vi.fn()
   };
 });
 
@@ -48,7 +41,7 @@ describe('sign-in.services', () => {
 
     vi.resetModules();
 
-    (AuthClient.create as Mock).mockResolvedValue(authClientMock);
+    (AuthClient as unknown as Mock).mockImplementation(ctorReturning(authClientMock));
     vi.spyOn(userServices, 'initUser').mockResolvedValue(mockUser);
     vi.spyOn(userServices, 'loadUser').mockResolvedValue({user: mockUser, userId: mockUserIdText});
   });
@@ -60,7 +53,7 @@ describe('sign-in.services', () => {
 
   describe('createAuth', () => {
     it('does nothing if not authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(false);
+      authClientMock.isAuthenticated.mockReturnValue(false);
 
       await createAuth({provider: 'internet_identity'});
 
@@ -68,7 +61,7 @@ describe('sign-in.services', () => {
     });
 
     it('initializes user if authenticated', async () => {
-      authClientMock.isAuthenticated.mockResolvedValue(true);
+      authClientMock.isAuthenticated.mockReturnValue(true);
 
       const authStore = AuthStore.getInstance();
       authStore.reset();
@@ -96,13 +89,9 @@ describe('sign-in.services', () => {
   describe('signIn', () => {
     const mockSignInOptions: SignInOptions = {internet_identity: {}};
 
-    it('throws SignInInitError if authClient is null', async () => {
-      await expect(signIn(mockSignInOptions)).rejects.toThrowError(
-        new SignInInitError(
-          'No client is ready to perform a sign-in. Have you initialized the Satellite?'
-        )
-      );
-    });
+    // v7 always constructs a fresh AuthClient at sign-in (provider options moved
+    // to the constructor), so the previous "authClient is null" guard and its
+    // `SignInInitError` no longer apply.
 
     describe('Initialized', () => {
       beforeEach(async () => {
@@ -110,8 +99,8 @@ describe('sign-in.services', () => {
       });
 
       it('resolves if login succeeds', async () => {
-        authClientMock.isAuthenticated.mockResolvedValue(false);
-        authClientMock.login.mockImplementation(async (options) => {
+        authClientMock.isAuthenticated.mockReturnValue(false);
+        authClientMock.signIn.mockImplementation(async (options) => {
           // @ts-ignore
           options?.onSuccess?.();
         });
@@ -133,8 +122,8 @@ describe('sign-in.services', () => {
           .spyOn(window, 'removeEventListener')
           .mockImplementation(() => undefined);
 
-        authClientMock.isAuthenticated.mockResolvedValue(false);
-        authClientMock.login.mockImplementation(async (options) => {
+        authClientMock.isAuthenticated.mockReturnValue(false);
+        authClientMock.signIn.mockImplementation(async (options) => {
           // @ts-ignore
           options?.onSuccess?.();
         });
@@ -151,8 +140,8 @@ describe('sign-in.services', () => {
           .spyOn(window, 'removeEventListener')
           .mockImplementation(() => undefined);
 
-        authClientMock.isAuthenticated.mockResolvedValue(false);
-        authClientMock.login.mockImplementation(async (options) => {
+        authClientMock.isAuthenticated.mockReturnValue(false);
+        authClientMock.signIn.mockImplementation(async (options) => {
           // @ts-ignore
           options?.onSuccess?.();
         });
@@ -169,8 +158,8 @@ describe('sign-in.services', () => {
           .spyOn(window, 'removeEventListener')
           .mockImplementation(() => undefined);
 
-        authClientMock.isAuthenticated.mockResolvedValue(false);
-        authClientMock.login.mockImplementation(async (options) => {
+        authClientMock.isAuthenticated.mockReturnValue(false);
+        authClientMock.signIn.mockImplementation(async (options) => {
           // @ts-ignore
           options?.onSuccess?.();
         });
@@ -193,8 +182,8 @@ describe('sign-in.services', () => {
           .spyOn(window, 'removeEventListener')
           .mockImplementation(() => undefined);
 
-        authClientMock.isAuthenticated.mockResolvedValue(false);
-        authClientMock.login.mockImplementation(async (options) => {
+        authClientMock.isAuthenticated.mockReturnValue(false);
+        authClientMock.signIn.mockImplementation(async (options) => {
           // @ts-ignore
           options?.onSuccess?.();
         });
@@ -211,12 +200,9 @@ describe('sign-in.services', () => {
         expect(removeSpy).not.toHaveBeenCalled();
       });
 
-      it('call auth client with internet identity options', async () => {
-        authClientMock.isAuthenticated.mockResolvedValue(false);
-        const spy = authClientMock.login.mockImplementation(async (options) => {
-          // @ts-ignore
-          options?.onSuccess?.();
-        });
+      it('builds the auth client with internet identity options and signs in', async () => {
+        authClientMock.isAuthenticated.mockReturnValue(false);
+        authClientMock.signIn.mockResolvedValue(mock());
 
         await expect(
           signIn({
@@ -229,22 +215,21 @@ describe('sign-in.services', () => {
           })
         ).resolves.toBeUndefined();
 
-        expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy).toHaveBeenCalledWith(
+        // v7: provider options are passed to the constructor, not to signIn().
+        expect(AuthClient).toHaveBeenCalledWith(
           expect.objectContaining({
-            allowPinAuthentication: false,
             identityProvider: 'https://identity.ic0.app',
-            maxTimeToLive: 111n,
             windowOpenerFeatures:
               'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=576, height=576, top=96, left=224'
           })
         );
+        expect(authClientMock.signIn).toHaveBeenCalledWith({maxTimeToLive: 111n});
       });
 
       it('should call webauthn provider with options', async () => {
         EnvStore.getInstance().set({satelliteId: mockSatelliteId});
 
-        const loginSpy = authClientMock.login.mockImplementation(async () => {
+        const loginSpy = authClientMock.signIn.mockImplementation(async () => {
           throw new Error('authClient.login must not be called for webauthn');
         });
 
@@ -260,7 +245,7 @@ describe('sign-in.services', () => {
           getDelegation: () => ({toJSON: () => ({})})
         } as any);
 
-        authClientMock.isAuthenticated.mockResolvedValue(true);
+        authClientMock.isAuthenticated.mockReturnValue(true);
 
         await expect(signIn({webauthn: {}})).resolves.toBeUndefined();
 
@@ -335,7 +320,7 @@ describe('sign-in.services', () => {
           delegationChain: {toJSON: vi.fn().mockReturnValue({})} as any
         });
 
-        authClientMock.isAuthenticated.mockResolvedValue(true);
+        authClientMock.isAuthenticated.mockReturnValue(true);
 
         const options: DevIdentitySignInOptions = {
           identifier: 'alice',
@@ -354,22 +339,12 @@ describe('sign-in.services', () => {
         expect(userServices.loadUser).toHaveBeenCalled();
       });
 
-      it('rejects with SignInUserInterruptError if interrupted', async () => {
-        authClientMock.isAuthenticated.mockResolvedValue(false);
-        authClientMock.login.mockImplementation(async (options) => {
-          options?.onError?.('UserInterrupt');
-        });
-
-        await expect(signIn(mockSignInOptions)).rejects.toSatisfy((error) => {
-          return error instanceof SignInUserInterruptError && error.message === 'UserInterrupt';
-        });
-      });
-
-      it('rejects with SignInError on generic error', async () => {
-        authClientMock.isAuthenticated.mockResolvedValue(false);
-        authClientMock.login.mockImplementation(async (options) => {
-          options?.onError?.('AnotherError');
-        });
+      // v7 `signIn()` throws on failure (including user cancellation) and the
+      // `ERROR_USER_INTERRUPT` distinction was removed upstream, so every failure
+      // now surfaces as a `SignInError`.
+      it('rejects with SignInError when the auth client throws', async () => {
+        authClientMock.isAuthenticated.mockReturnValue(false);
+        authClientMock.signIn.mockRejectedValue(new Error('AnotherError'));
 
         await expect(signIn(mockSignInOptions)).rejects.toSatisfy((error) => {
           return error instanceof SignInError && error.message === 'AnotherError';
